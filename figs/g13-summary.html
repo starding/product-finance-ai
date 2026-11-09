@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：认知劳动的成本骤降</p><p class="figsub">四条结论，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="g13summary">重播</button></div>
+    <div class="g13summary" id="g13summary" data-anim><div class="g13summary-c" style="--i:0"><em>价格</em><b>认知劳动几乎免费</b><p>阅读、计算与写作的价格降到原来的几百分之一，其余一切不变。</p></div><div class="g13summary-c" style="--i:1"><em>构成</em><b>核对与担责降不下来</b><p>认知劳动越便宜，核对与担责在委托成本中占的比例越高。</p></div><div class="g13summary-c warn" style="--i:2"><em>边界</em><b>能力参差，核对不能只看难易</b><p>最危险的，是看上去容易、书记员却会做错的事。</p></div><div class="g13summary-c warn" style="--i:3"><em>木桶</em><b>最慢的环节决定整体</b><p>只加速可以加速的部分，整体倍数有上限；可达份额取决于配套。</p></div></div>
+  </div>
+</figure>
+<style>
+.g13summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g13summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g13summary-c.warn{border-left-color:var(--warm)}
+.g13summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g13summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g13summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g13summary.in .g13summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g13summary{grid-template-columns:1fr}}
+</style>

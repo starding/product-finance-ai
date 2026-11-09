@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>责任与利益冲突</title>
+<meta name="description" content="《产品×金融×AI：AI 时代的金融产品》第 27 章：金融代理同时服务于用户与提供它的平台，冲突会写进它的目标；披露不足以消除冲突，要靠收费方式、目标约束与审计在结构上对齐；责任应落在最能以低成本避免损失的一方，并依靠完整的记录追溯">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="ch27">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="全书目录">
+<div class="side-head"><a class="sidetitle" href="index.html">产品×金融×AI<small>AI 时代的金融产品</small></a></div>
+<div class="side-view" role="group" aria-label="阅读方式"><a href="preface.html" class="on" aria-current="true">分解式</a><a href="g-preface.html">生成式</a></div>
+<a class="side-about" href="index.html#about">关于本书</a>
+<a class="" href="preface.html"><span class="n">序</span>为什么金融产品在 AI 时代需要重新学</a>
+<a class="side-part" href="part1.html"><span class="pn">第一部分</span>市场：收益与风险从何而来</a>
+<a class="" href="ch01.html"><span class="n">1</span>金融产品卖的是什么</a>
+<a class="" href="ch02.html"><span class="n">2</span>利率与期限</a>
+<a class="" href="ch03.html"><span class="n">3</span>风险长什么样</a>
+<a class="" href="ch04.html"><span class="n">4</span>分散：哪些风险有补偿</a>
+<a class="" href="ch05.html"><span class="n">5</span>复利与波动拖累</a>
+<a class="" href="ch06.html"><span class="n">6</span>因子：风险补偿可以分解</a>
+<a class="" href="ch07.html"><span class="n">7</span>价格为什么难以预测</a>
+<a class="" href="ch08.html"><span class="n">8</span>信息如何进入价格</a>
+<a class="" href="ch09.html"><span class="n">9</span>市场里的交易者</a>
+<a class="" href="ch10.html"><span class="n">10</span>流动性与买卖价差</a>
+<a class="" href="ch11.html"><span class="n">11</span>订单、规则与市场结构</a>
+<a class="" href="ch12.html"><span class="n">12</span>主动管理的算术</a>
+<a class="" href="ch13.html"><span class="n">13</span>承诺如何被兑现</a>
+<a class="" href="ch14.html"><span class="n">14</span>监管为何存在</a>
+<a class="side-part" href="part2.html"><span class="pn">第二部分</span>用户：人要什么、能承受什么</a>
+<a class="" href="ch15.html"><span class="n">15</span>用户要完成的任务</a>
+<a class="" href="ch16.html"><span class="n">16</span>用户如何做决定</a>
+<a class="" href="ch17.html"><span class="n">17</span>用户能承受什么</a>
+<a class="" href="ch18.html"><span class="n">18</span>用户如何判断与信任</a>
+<a class="side-part" href="part3.html"><span class="pn">第三部分</span>AI：代理能替人做多少</a>
+<a class="" href="ch19.html"><span class="n">19</span>放大倍数：理论与实测</a>
+<a class="" href="ch20.html"><span class="n">20</span>哪些事务能交给 AI</a>
+<a class="" href="ch21.html"><span class="n">21</span>能力从哪里来、在哪里失效</a>
+<a class="" href="ch22.html"><span class="n">22</span>可验证性：核对的成本</a>
+<a class="" href="ch23.html"><span class="n">23</span>金融场景的特殊约束</a>
+<a class="side-part" href="part4.html"><span class="pn">第四部分</span>设计：在三组约束下设计金融产品</a>
+<a class="" href="ch24.html"><span class="n">24</span>承诺什么</a>
+<a class="" href="ch25.html"><span class="n">25</span>委托参数：交代的目标与约束</a>
+<a class="" href="ch26.html"><span class="n">26</span>授权与不可逆敞口</a>
+<a class=" cur" href="ch27.html" aria-current="page"><span class="n">27</span>责任与利益冲突</a>
+<a class="" href="ch28.html"><span class="n">28</span>能力装配与过程可见</a>
+<a class="" href="ch29.html"><span class="n">29</span>保障强度</a>
+<a class="" href="ch30.html"><span class="n">30</span>信任如何建立</a>
+<a class="" href="ch31.html"><span class="n">31</span>设计原则</a>
+<a class="side-app" href="estimates.html"><span class="n">附录</span>作者估算的方法与数据</a>
+<a class="side-app" href="method.html"><span class="n">附录</span>本书的写法</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="展开目录" title="目录"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">产品×金融×AI：AI 时代的金融产品</a><span>第四部分 · 契约层　按什么条件</span><a class="langlink" href="en/ch27.html" hreflang="en">English</a></header>
+
+<div class="chapno">第 27 章</div><h1>责任与利益冲突<small>代理为谁工作，出了错谁负责</small></h1>
+<blockquote><p>一个金融代理名义上为用户工作，却由平台提供、由平台付费、按平台设定的目标训练与评价。如果平台的收入来自交易量与使用时长，这种利益就会写进代理的目标：多一点提醒，多一次交易，多一项付费服务。披露冲突并不能消除它，研究甚至发现，披露之后建议可能更偏，听取建议的人也没有相应地打折。更可靠的办法在结构上：收入不随交易量增减，代理的目标以用户的净价值衡量，并接受独立的审计。代理出了错，责任应当落在最能以低成本避免这次损失的一方；而要分清责任，前提是每一步都有完整的记录。</p></blockquote>
+<h2 id="sec-1">一、代理为谁工作</h2>
+<p>经典的委托—代理关系只有一个委托人。金融代理至少同时面对几方：使用它的用户，提供并运营它的平台，平台上销售产品的发行方，以及提供底层模型的公司。伯恩海姆与温斯顿（1986）把一个代理人同时服务于多个委托人的情形称为共同代理：每一方都通过付费或设定目标影响代理的行为，而代理最终的选择，是在这些影响之间取得的平衡。用户是名义上的委托人，却往往不是付费最直接、对目标影响最大的那一方。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">一个代理，几个委托人</p><p class="figsub">切换视图：钱从哪里流向哪里，谁在设定代理的目标，以及代理应当服务于谁。线越粗，影响越大（示意）。</p></div><button class="replay" type="button" data-replay="pt">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="视图">
+      <button type="button" data-pt="m" aria-pressed="true">钱的流向</button>
+      <button type="button" data-pt="g" aria-pressed="false">目标由谁设定</button>
+      <button type="button" data-pt="s" aria-pressed="false">应当服务于谁</button>
+    </div>
+    <div class="pt" id="pt" data-anim>
+      <svg viewBox="0 0 640 260" role="img" aria-label="代理与各方的关系"><defs><marker id="pt-ar" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" fill="context-stroke"/></marker></defs><g id="pt-e"></g><g id="pt-n"></g></svg>
+      <p class="pt-msg" id="pt-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意结构。一个代理人同时受多个委托人影响的情形称为共同代理，见 Bernheim 与 Whinston（1986）。</figcaption>
+</figure>
+<style>
+.pt svg{width:100%;height:auto;display:block}
+.pt-ln{fill:none;transition:stroke-width .5s,opacity .5s}
+.pt-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.pt svg text{font-size:17px}}
+</style>
+<script>
+(function(){
+  const N={a:[320,130,'代理','var(--ink)'],u:[90,130,'用户','var(--accent)'],p:[550,130,'平台','var(--blue)'],i:[430,235,'产品发行方','var(--gold)'],m:[210,235,'模型提供方','var(--faint)']};
+  const E={m:[['u','p',5,'订阅费、交易佣金'],['i','p',6,'销售分成'],['p','m',3,'调用费用'],['p','a',2,'']],
+    g:[['p','a',7,'目标与评价指标'],['m','a',4,'模型的训练目标'],['u','a',2,'委托书'],['i','a',2,'产品信息与推广']],
+    s:[['a','u',8,'按用户的委托书与净价值行事'],['a','p',1,''],['a','i',1,'']]};
+  const M={m:'用户付的钱流向平台，平台还从产品发行方获得分成，再向模型提供方付费。代理本身不收钱，但它的提供者从多处收钱。',g:'设定代理目标影响最大的是平台：用什么指标评价代理，代理就朝什么方向优化。用户通过委托书影响它，但往往不是影响最大的一方。',s:'代理应当服务的是用户：按用户的委托书与净价值行事。前两张图与这张图之间的差距，就是利益冲突。'};
+  const $=id=>document.getElementById(id);
+  $('pt-n').innerHTML=Object.entries(N).map(([k,[x,y,t,c]])=>`<g><circle cx="${x}" cy="${y}" r="${k==='a'?38:30}" fill="var(--surface)" stroke="${c}" stroke-width="2.5"/><text x="${x}" y="${y+4}" text-anchor="middle" font-size="${k==='a'?14:12}" class="t-ink">${t}</text></g>`).join('');
+  function set(k){document.querySelectorAll('[data-pt]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.pt===k)));
+    $('pt-e').innerHTML=E[k].map(([f,t,w,l])=>{const [x1,y1]=N[f],[x2,y2]=N[t],dx=x2-x1,dy=y2-y1,L=Math.hypot(dx,dy),r1=f==='a'?40:32,r2=t==='a'?42:34,sx=x1+dx/L*r1,sy=y1+dy/L*r1,ex=x2-dx/L*r2,ey=y2-dy/L*r2,mx=(sx+ex)/2-dy/L*18,my=(sy+ey)/2+dx/L*18;
+      return `<path class="pt-ln" d="M${sx},${sy}Q${mx},${my} ${ex},${ey}" stroke="${N[k==='s'?t:f][3]}" stroke-width="${w*1.3}" opacity="${w>1?.85:.25}" marker-end="url(#pt-ar)"/>${l?`<text x="${mx}" y="${my-6}" text-anchor="middle" font-size="11" class="t-muted">${l}</text>`:''}`;}).join('');
+    $('pt-msg').textContent=M[k];}
+  document.querySelectorAll('[data-pt]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.pt)));
+  $('pt').addEventListener('anim-in',()=>{['m','g','s'].forEach((k,i)=>setTimeout(()=>set(k),i*2600));});
+  set('m');
+})();
+</script>
+
+<h2 id="sec-2">二、冲突会写进目标</h2>
+<p>AI 代理的行为由它被设定与评价的目标决定。霍姆斯特罗姆与米尔格罗姆（1991）指出，当代理人的工作有多个方面、只有一部分被衡量和奖励时，代理人会把精力转向被衡量的那部分。如果平台以交易量、点击与使用时长评价代理，代理就会更频繁地提醒、更积极地建议交易；这些指标的提高，不等于用户的结果变好。美国证券交易委员会 2021 年就券商与投资顾问使用数字化互动手段公开征求意见，关注的正是游戏化设计、推送与提示对投资者行为的影响。</p>
+<figure>
+  <div class="card">
+    <p class="figtitle">评价指标里，平台的分量有多大</p>
+    <p class="figsub">代理的评价由两部分加权：用户的净价值，与平台的交易量和使用时长。拖动平台指标的权重，看代理的行为与用户的结果（示意）。</p>
+    <div class="ob" id="ob" data-anim>
+      <svg viewBox="0 0 640 200" role="img" aria-label="权重与结果"><g id="ob-ax"></g><path id="ob-u" class="ob-l u"/><path id="ob-p" class="ob-l p"/><line id="ob-c" class="ob-c"/></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>用户每年的净回报</span><span><i style="background:var(--blue)"></i>平台每年从该用户获得的收入</span></div>
+      <div class="sl"><label for="ob-w">平台指标的权重 <b id="ob-wv"></b></label><input id="ob-w" type="range" min="0" max="100" step="5" value="0"></div>
+      <div class="ob-out"><div><span>每月的交易建议</span><b id="ob-n"></b></div><div><span>用户的净回报</span><b id="ob-r"></b></div><div><span>平台的收入</span><b id="ob-q"></b></div></div>
+    </div>
+  </div>
+  <figcaption>示意模型：每增加一次交易建议，用户约有一半照做，每次交易的成本约占资产的 0.05%，平台获得其中一部分；交易本身不提高预期回报。只衡量一部分工作时代理会把精力转向被衡量的部分，见 Holmström 与 Milgrom（1991）。</figcaption>
+</figure>
+<style>
+.ob svg{width:100%;height:auto;display:block}
+.ob-l{fill:none;stroke-width:2.5} .ob-l.u{stroke:var(--accent)} .ob-l.p{stroke:var(--blue)}
+.ob-c{stroke:var(--ink);stroke-dasharray:3 3}
+.ob-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.ob-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.ob-out span{display:block;font-size:12px;color:var(--faint)} .ob-out b{font-size:19px;font-variant-numeric:tabular-nums}
+@media (max-width:640px){.ob-out{grid-template-columns:1fr}.ob svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const n=w=>1+w/100*11,cost=w=>n(w)*12*.5*.05,R=w=>6-cost(w),P=w=>.3+cost(w)*.4;
+  const X0=50,X1=620,YT=14,YB=170,x=w=>X0+w/100*(X1-X0),y=v=>YB-(v+.5)/7*(YB-YT);
+  const $=id=>document.getElementById(id),sl=$('ob-w');
+  $('ob-ax').innerHTML=`<line x1="${X0}" y1="${y(0)}" x2="${X1}" y2="${y(0)}" class="s-faint"/>`+[0,2,4,6].map(v=>`<text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}%</text>`).join('')+[0,50,100].map(w=>`<text x="${x(w)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${w}%</text>`).join('');
+  let a='',b='';for(let w=0;w<=100;w+=2){a+=(w?'L':'M')+x(w).toFixed(1)+','+y(R(w)).toFixed(1);b+=(w?'L':'M')+x(w).toFixed(1)+','+y(P(w)).toFixed(1);}$('ob-u').setAttribute('d',a);$('ob-p').setAttribute('d',b);
+  function r(){const w=+sl.value;$('ob-wv').textContent=w+'%';$('ob-c').setAttribute('x1',x(w));$('ob-c').setAttribute('x2',x(w));$('ob-c').setAttribute('y1',YT);$('ob-c').setAttribute('y2',YB);
+    $('ob-n').textContent=n(w).toFixed(0)+' 次';$('ob-r').textContent=R(w).toFixed(1)+'%';$('ob-q').textContent=P(w).toFixed(2)+'%';}
+  sl.addEventListener('input',r);
+  $('ob').addEventListener('anim-in',()=>{let w=0;sl.value=0;r();const id=setInterval(()=>{w+=5;sl.value=w;r();if(w>=100){clearInterval(id);setTimeout(()=>{sl.value=0;r();},700);}},110);});
+  r();
+})();
+</script>
+
+<h2 id="sec-3">三、披露为什么不够</h2>
+<p>最常见的处理方式，是把利益冲突告诉用户。凯恩、勒文施泰因与穆尔（2005）的实验却发现，披露可能适得其反：建议者在披露之后觉得自己已经尽到了告知义务，给出的建议反而更偏；接受建议的人虽然知道存在冲突，却没有把建议打足够的折扣。结果是，披露之后，接受建议的一方得到的结果更差。披露是必要的，但它把识别冲突的负担交给了最难识别冲突的人。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">披露之后，结果为什么可能更差</p><p class="figsub">建议者与接受建议者之间存在利益冲突。切换是否披露冲突，看建议的偏差、接受者打的折扣，以及接受者最终的误差（示意）。</p></div><button class="replay" type="button" data-replay="ds2">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="是否披露"><button type="button" data-ds2="0" aria-pressed="true">不披露</button><button type="button" data-ds2="1" aria-pressed="false">披露冲突</button></div>
+    <div class="ds2" id="ds2" data-anim>
+      <div class="ds2-r"><span>建议偏离真实的程度</span><div class="ds2-t"><i id="ds2-a" style="background:var(--warm)"></i></div><b id="ds2-av"></b></div>
+      <div class="ds2-r"><span>接受者自行扣除的部分</span><div class="ds2-t"><i id="ds2-b" style="background:var(--accent)"></i></div><b id="ds2-bv"></b></div>
+      <div class="ds2-r tot"><span>接受者最终的误差</span><div class="ds2-t"><i id="ds2-c" style="background:var(--ink)"></i></div><b id="ds2-cv"></b></div>
+      <p class="ds2-msg" id="ds2-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意数字，方向依据 Cain、Loewenstein 与 Moore（2005）的实验：披露后建议者给出的建议更偏，接受者的折扣不足以抵消。</figcaption>
+</figure>
+<style>
+.ds2-r{display:grid;grid-template-columns:150px 1fr 50px;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.ds2-r span{color:var(--muted)} .ds2-r.tot span{color:var(--ink);font-weight:700}
+.ds2-t{height:16px;background:var(--quote);border-radius:8px;overflow:hidden}
+.ds2-t i{display:block;height:100%;border-radius:8px;transition:width .6s ease}
+.ds2-r b{text-align:right;font-variant-numeric:tabular-nums}
+.ds2-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.ds2-r{grid-template-columns:110px 1fr 40px}}
+</style>
+<script>
+(function(){
+  const S=[[30,0,'不披露时，建议偏离真实 30 个单位，接受者没有察觉，误差 30。'],[48,12,'披露之后，建议者觉得已经告知，建议偏得更多；接受者知道有冲突，却只扣除了一小部分，最终误差反而更大。']];
+  function set(k){document.querySelectorAll('[data-ds2]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.ds2===k)));const [a,b,m]=S[k],c=a-b;
+    [['a',a],['b',b],['c',c]].forEach(([id,v])=>{document.getElementById('ds2-'+id).style.width=v/50*100+'%';document.getElementById('ds2-'+id+'v').textContent=v;});document.getElementById('ds2-msg').textContent=m;}
+  document.querySelectorAll('[data-ds2]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.ds2)));
+  document.getElementById('ds2').addEventListener('anim-in',()=>{set(0);setTimeout(()=>set(1),2400);});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-4">四、在结构上对齐</h2>
+<p>比披露更可靠的，是让冲突在结构上难以发生。第一，收费方式：代理的收入不随交易次数或推荐的产品而变化，例如按固定订阅收费。第二，目标约束：代理的评价指标是用户的净价值与对委托书的遵守，而不是交易量与使用时长。第三，信息隔离：代理在作出建议时看不到各产品给平台带来的收入。第四，独立审计：定期检查代理的建议是否系统性地偏向对平台有利的选项。美国证券交易委员会 2023 年曾提出规则草案，要求券商与投资顾问识别并消除预测性数据分析中的利益冲突，该草案后于 2025 年撤回；但它提出的问题，正是 AI 代理必须回答的问题。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">在结构上对齐，而不只是披露</p><p class="figsub">逐项加入四种结构安排，看代理偏向平台利益的余地还剩多少（示意）。</p></div><button class="replay" type="button" data-replay="al2">重播</button></div>
+    <div class="al2-sl" id="al2-sl"></div>
+    <div class="al2" id="al2" data-anim>
+      <div class="al2-m"><span>代理偏向平台利益的余地</span><div class="al2-t"><i id="al2-bar"></i></div><b id="al2-v"></b></div>
+      <div class="al2-list" id="al2-list"></div>
+    </div>
+  </div>
+  <figcaption>示意。美国证券交易委员会 2023 年的规则草案（Release No. 34-97990，后于 2025 年撤回）要求识别并消除预测性数据分析中的利益冲突。</figcaption>
+</figure>
+<style>
+.al2-sl{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px;margin-bottom:8px}
+.al2-sl label{display:flex;gap:6px;align-items:center;font-size:13.5px;cursor:pointer}
+.al2-sl input{accent-color:var(--accent);width:16px;height:16px}
+.al2-m{display:grid;grid-template-columns:150px 1fr 50px;gap:10px;align-items:center;font-size:13px}
+.al2-m span{color:var(--muted)}
+.al2-t{height:18px;background:var(--quote);border-radius:9px;overflow:hidden}
+.al2-t i{display:block;height:100%;border-radius:9px;background:var(--warm);transition:width .6s ease}
+.al2-m b{text-align:right;font-variant-numeric:tabular-nums}
+.al2-list{display:grid;gap:5px;margin-top:10px}
+.al2-i{font-size:13px;line-height:1.6;background:var(--quote);border-radius:8px;padding:7px 10px;border-left:3px solid var(--line);transition:all .3s}
+.al2-i.on{border-left-color:var(--accent);background:var(--accent-soft)}
+.al2-i b{font-size:13.5px}
+@media (max-width:640px){.al2-sl{grid-template-columns:1fr}.al2-m{grid-template-columns:100px 1fr 40px}}
+</style>
+<script>
+(function(){
+  const S=[['收入不随交易与推荐变化',35,'固定订阅：代理多建议一次交易、多推荐一款产品，平台的收入都不变。'],['以用户的净价值与守约评价代理',30,'代理的评价指标不再包含交易量与使用时长，优化方向转向用户的结果。'],['建议时看不到产品带来的收入',15,'代理在作出建议时无法知道哪款产品给平台带来更多收入。'],['定期独立审计建议的偏向',12,'检查代理的建议是否系统性地偏向对平台有利的选项，并公开结果。']];
+  const box=document.getElementById('al2-sl');box.innerHTML=S.map(([n],i)=>`<label><input type="checkbox" data-al2="${i}"> ${n}</label>`).join('');
+  document.getElementById('al2-list').innerHTML=S.map(([n,,d])=>`<div class="al2-i"><b>${n}</b>：${d}</div>`).join('');
+  const cb=[...document.querySelectorAll('[data-al2]')],li=[...document.querySelectorAll('.al2-i')];
+  function r(){let v=100;cb.forEach((c,i)=>{if(c.checked)v-=S[i][1];li[i].classList.toggle('on',c.checked);});document.getElementById('al2-bar').style.width=v+'%';document.getElementById('al2-v').textContent=v;}
+  cb.forEach(c=>c.addEventListener('change',r));
+  document.getElementById('al2').addEventListener('anim-in',()=>{cb.forEach(c=>c.checked=false);r();cb.forEach((c,i)=>setTimeout(()=>{c.checked=true;r();},900*(i+1)));});
+  r();
+})();
+</script>
+
+<h2 id="sec-5">五、出了错，谁负责</h2>
+<p>代理出错的原因各不相同：代理理解错了委托书，数据源给了错误的价格，执行层没有拦下越界的指令，或者代理按用户明确的指令执行而结果不好。卡拉布雷西（1970）提出，事故的责任应当落在能够以最低成本避免它的一方。按这个原则：执行越界的损失应由平台承担，因为平台控制着执行层的检查；数据错误由提供数据的一方承担；代理误解了写得清楚的委托书，由平台承担；而按用户自己明确的指令执行、结果不如预期，则由用户承担。责任跟随控制：谁能避免，谁就负责。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">谁最能以低成本避免，谁就负责</p><p class="figsub">六起代理出错的情形。点按“判定责任”，看按“最低成本避免者”原则，损失应当由谁承担。</p></div><button class="replay" type="button" id="lb-go">判定责任</button></div>
+    <div class="lb" id="lb" data-anim></div>
+    <p class="lb-msg" id="lb-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>示意判断，不构成法律意见。最低成本避免者原则见 Calabresi（1970）；实际的责任划分取决于各地法律与合同约定。</figcaption>
+</figure>
+<style>
+.lb{display:grid;gap:5px}
+.lb-r{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr) 90px;gap:10px;align-items:center;font-size:12.5px;background:var(--quote);border-radius:8px;padding:7px 10px}
+.lb-r span:nth-child(2){color:var(--muted);font-size:12px}
+.lb-r b{text-align:center;font-size:12px;border-radius:6px;padding:3px 6px;opacity:0;transform:scale(.8);transition:opacity .3s,transform .3s;transition-delay:calc(var(--i)*.2s)}
+.lb.on .lb-r b{opacity:1;transform:none}
+.lb-r b.p{background:rgba(47,95,158,.14);color:var(--blue)} .lb-r b.u{background:var(--accent-soft);color:var(--accent)} .lb-r b.d{background:rgba(160,120,24,.15);color:var(--gold)}
+.lb-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.lb-r{grid-template-columns:1fr 80px}.lb-r span:nth-child(2){grid-column:1/-1;grid-row:2}}
+</style>
+<script>
+(function(){
+  const C=[['执行层没有拦下超出单笔上限的指令','平台控制执行层的检查','平台','p'],['代理误解了写得清楚的委托书','平台选择与评测代理','平台','p'],['数据源推送了错误的价格','数据提供方控制数据质量','数据提供方','d'],['委托书写得含糊，代理按合理理解执行','委托人最能把要求写清楚','双方分担','u'],['按用户明确的指令执行，结果不如预期','决定来自用户本人','用户','u'],['代理按时提醒，用户未处理而错过截止','提醒已送达，决定在用户','用户','u']];
+  const box=document.getElementById('lb');
+  box.innerHTML=C.map(([a,b,c,k],i)=>`<div class="lb-r"><span>${a}</span><span>${b}</span><b class="${k}" style="--i:${i}">${c}</b></div>`).join('');
+  function go(){box.classList.remove('on');void box.offsetWidth;box.classList.add('on');document.getElementById('lb-msg').textContent='责任跟随控制：能以最低成本避免这次损失的一方承担它。这样分配，也让每一方都有动机做好自己控制的那一环。';}
+  document.getElementById('lb-go').addEventListener('click',go);
+  box.addEventListener('anim-in',()=>setTimeout(go,600));
+})();
+</script>
+
+<h2 id="sec-6">六、责任要能追溯</h2>
+<p>分清责任的前提，是事后能够还原发生了什么：代理当时看到了什么数据，依据委托书的哪一条，经过了谁的授权，执行层做了哪些检查。证券行业对记录的保存早有要求，例如美国证券交易委员会第 17a-4 条规则规定了券商须保存的记录及其保存方式。对 AI 代理而言，记录要覆盖到每一次关键行动：输入的数据与时点，依据的条款，授权的级别，执行的结果。记录完整，责任才能分清，补偿才有依据，同样的错误也才能被避免。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">记录决定了责任能否分清</p><p class="figsub">一起事件：代理卖出了一笔超出约定比例的持仓。事后要回答六个问题。切换记录的完整程度，看能回答多少。</p></div><button class="replay" type="button" data-replay="tr">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="记录"><button type="button" data-tr="0" aria-pressed="true">只有成交记录</button><button type="button" data-tr="1" aria-pressed="false">每一次关键行动都有记录</button></div>
+    <div class="tr" id="tr" data-anim></div>
+    <p class="tr-msg" id="tr-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>示意。券商须保存的记录及其方式见美国证券交易委员会第 17a-4 条规则；对 AI 代理，记录还要覆盖输入、依据与授权。</figcaption>
+</figure>
+<style>
+.tr{display:grid;gap:5px}
+.tr-r{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:10px;align-items:center;font-size:12.5px;background:var(--quote);border-radius:8px;padding:7px 10px;opacity:0;transform:translateY(4px);transition:opacity .3s,transform .3s;transition-delay:calc(var(--i)*.12s)}
+.tr-r.on{opacity:1;transform:none}
+.tr-r span:last-child{border-radius:6px;padding:3px 8px}
+.tr-r .k{background:var(--accent-soft);color:var(--ink)} .tr-r .n{background:var(--surface);color:var(--faint);border:1px dashed var(--line)}
+.tr-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.tr-r{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const Q=[['卖出了什么、何时成交','卖出 1200 股，10:32 成交',1],['代理当时看到的价格与持仓比例','行情数据 10:31:58，持仓比例 38%（委托书上限 30%）',0],['依据委托书的哪一条','第 3 条：单一持仓超过 30% 时减仓至 30%',0],['为什么卖出的数量超过了需要','代理把“减至 30%”误读为“减少 30%”',0],['执行层是否做了检查','检查了品种与单笔金额，未检查调整后的比例（检查项缺失）',0],['是否通知了委托人','10:33 发送通知，10:40 委托人已读',0]];
+  const box=document.getElementById('tr');
+  function set(k){document.querySelectorAll('[data-tr]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.tr===k)));
+    box.innerHTML=Q.map(([q,a,base],i)=>{const ok=k||base;return `<div class="tr-r" style="--i:${i}"><span>${q}</span><span class="${ok?'k':'n'}">${ok?a:'无法还原'}</span></div>`;}).join('');
+    setTimeout(()=>box.querySelectorAll('.tr-r').forEach(e=>e.classList.add('on')),40);
+    document.getElementById('tr-msg').textContent=k?'六个问题都能回答：错误来自代理误读条款，执行层缺少一项检查。责任由平台承担，补偿有依据，检查项也可以补上。':'只有成交记录时，只知道卖出了什么，不知道为什么。责任无法分清，同样的错误也无从避免。';}
+  document.querySelectorAll('[data-tr]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.tr)));
+  box.addEventListener('anim-in',()=>{set(0);setTimeout(()=>set(1),2600);});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-7">七、对产品设计的含义</h2>
+<p>让代理的收入与目标站在用户一边，用结构而不是披露处理冲突；责任跟随控制，并以完整的记录为依据。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：让代理站在用户一边</p><p class="figsub">四条设计要求，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="ch27summary">重播</button></div>
+    <div class="ch27summary" id="ch27summary" data-anim><div class="ch27summary-c" style="--i:0"><em>代理有几个委托人</em><b>明确代理服务于用户</b><p>把委托书与用户的净价值写进代理的目标，并向用户说明平台从哪里赚钱。</p></div><div class="ch27summary-c" style="--i:1"><em>冲突会写进目标</em><b>不以交易量与使用时长评价代理</b><p>评价指标以用户的净价值与守约为主，交易建议的频率接受监测。</p></div><div class="ch27summary-c warn" style="--i:2"><em>披露不够</em><b>用结构处理冲突</b><p>收入不随交易与推荐变化，建议时隔离产品收入信息，并定期独立审计建议的偏向。</p></div><div class="ch27summary-c warn" style="--i:3"><em>责任跟随控制</em><b>按最低成本避免者分配责任，并完整记录</b><p>执行与数据错误由控制方承担；每次关键行动记录输入、依据、授权与检查，出错时据此补偿与改进。</p></div></div>
+  </div>
+</figure>
+<style>
+.ch27summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch27summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch27summary-c.warn{border-left-color:var(--warm)}
+.ch27summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch27summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch27summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch27summary.in .ch27summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch27summary{grid-template-columns:1fr}}
+</style>
+
+<h2 id="sec-8">参考文献</h2>
+<ul class="refs"><li>Bernheim, B. D., &amp; Whinston, M. D. (1986). Common agency. <i>Econometrica</i>, 54(4), 923–942.</li><li>Holmström, B., &amp; Milgrom, P. (1991). Multitask principal-agent analyses: Incentive contracts, asset ownership, and job design. <i>Journal of Law, Economics, &amp; Organization</i>, 7(Special Issue), 24–52.</li><li>U.S. Securities and Exchange Commission (2021). Request for Information and Comments on Broker-Dealer and Investment Adviser Digital Engagement Practices. Release No. 34-92766; IA-5833.</li><li>Cain, D. M., Loewenstein, G., &amp; Moore, D. A. (2005). The dirt on coming clean: Perverse effects of disclosing conflicts of interest. <i>Journal of Legal Studies</i>, 34(1), 1–25.</li><li>U.S. Securities and Exchange Commission (2023). Conflicts of Interest Associated with the Use of Predictive Data Analytics by Broker-Dealers and Investment Advisers (proposed rule). Release No. 34-97990; IA-6353.</li><li>Calabresi, G. (1970). <i>The Costs of Accidents: A Legal and Economic Analysis</i>. Yale University Press.</li><li>U.S. Securities and Exchange Commission. Rule 17a-4: Records to be preserved by certain exchange members, brokers and dealers.</li></ul>
+<footer class="nav"><a href="ch26.html">← 第 26 章　授权与不可逆敞口</a><a href="ch28.html">第 28 章　能力装配与过程可见 →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

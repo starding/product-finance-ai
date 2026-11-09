@@ -1,0 +1,56 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">Two measures, fifty times apart</p>
+    <p class="figsub">The same report: written yourself, it takes 8 hours; handed to an agent, the agent runs for 2 minutes, but the principal still has to explain, check and rework.</p>
+    <div class="seg-btns" role="group" aria-label="Measure">
+      <button type="button" data-cb="vendor" aria-pressed="true">Vendor's measure</button>
+      <button type="button" data-cb="principal" aria-pressed="false">Principal's measure</button>
+    </div>
+    <div class="cb" id="cb" data-anim data-cb="vendor">
+      <div class="cb-row"><span>Do it yourself</span><div class="cb-track"><i class="cb-self" style="width:100%"><em>480 minutes</em></i></div></div>
+      <div class="cb-row"><span>Hand to agent</span><div class="cb-track">
+        <i class="cb-run" title="Agent running"></i>
+        <i class="cb-p brief" style="--w:3.125%"></i><i class="cb-p check" style="--w:12.5%"></i><i class="cb-p redo" style="--w:6.25%"></i>
+      </div></div>
+      <div class="legend"><span><i style="background:var(--ink)"></i>Agent runs 2 minutes</span><span><i style="background:var(--blue)"></i>Explaining the task 15 minutes</span><span><i style="background:var(--accent)"></i>Checking 60 minutes</span><span><i style="background:var(--warm)"></i>Rework 30 minutes</span></div>
+      <div class="cb-res">
+        <div class="cb-eq"><span id="cb-f"></span><b id="cb-m"></b></div>
+        <p id="cb-msg"></p>
+      </div>
+    </div>
+  </div>
+  <figcaption>Illustrative figures. The vendor's measure compares a person's working time with the agent's running time; this book's measure compares the principal's input to do the task alone with the input the principal still spends after handing it to an agent.</figcaption>
+</figure>
+<style>
+.cb-row{display:grid;grid-template-columns:76px 1fr;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.cb-track{height:28px;background:var(--quote);border-radius:6px;display:flex;overflow:hidden}
+.cb-track i{display:block;height:100%}
+.cb-self{background:var(--gray-mark);display:flex!important;align-items:center;padding-left:10px}
+.cb-self em{font-style:normal;color:#fff;font-size:12px}
+.cb-run{width:5px;background:var(--ink);flex:none}
+.cb-p{width:0;transition:width .7s ease,opacity .3s}
+.cb.in .cb-p{width:var(--w)}
+.cb-p.brief{background:var(--blue)} .cb-p.check{background:var(--accent);transition-delay:.2s} .cb-p.redo{background:var(--warm);transition-delay:.4s}
+.cb[data-cb="vendor"] .cb-p{opacity:.25}
+.cb[data-cb="vendor"] .cb-run{box-shadow:0 0 0 3px var(--warm-soft)}
+.cb-res{margin-top:14px;display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center}
+.cb-eq{display:flex;flex-direction:column;align-items:flex-start}
+.cb-eq span{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.cb-eq b{font-size:40px;line-height:1.1;font-variant-numeric:tabular-nums}
+.cb[data-cb="vendor"] .cb-eq b{color:var(--faint)}
+.cb[data-cb="principal"] .cb-eq b{color:var(--accent)}
+.cb-res p{margin:0;font-size:14px}
+@media (max-width:640px){.cb-res{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const cb=document.getElementById('cb'), btns=[...document.querySelectorAll('[data-cb]')].filter(b=>b.tagName==='BUTTON');
+  const M={vendor:{f:'480 ÷ 2',m:'240×',t:'Only the agent\'s running time is compared; the 105 minutes the principal spends explaining, checking and reworking are left out.'},
+           principal:{f:'480 ÷ (15 + 60 + 30)',m:'4.6×',t:'All of the principal\'s input is counted. What determines the factor is explaining, checking and rework, not how fast the agent runs.'}};
+  let t;
+  const set=k=>{cb.dataset.cb=k;btns.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.cb===k)));document.getElementById('cb-f').textContent=M[k].f;document.getElementById('cb-m').textContent=M[k].m;document.getElementById('cb-msg').textContent=M[k].t;};
+  btns.forEach(b=>b.addEventListener('click',()=>{clearTimeout(t);set(b.dataset.cb);}));
+  cb.addEventListener('anim-in',()=>{set('vendor');clearTimeout(t);t=setTimeout(()=>set('principal'),2600);});
+  set('vendor');
+})();
+</script>

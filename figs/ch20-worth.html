@@ -1,0 +1,38 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">交代一件事的固定成本</p>
+    <p class="figsub">第一次交给代理，要先花时间说清目标、约束与所需信息；此后每做一次，都比自己做节省一些时间。拖动参数，看做多少次之后才开始划算。</p>
+    <div class="wt" id="wt" data-anim>
+      <svg viewBox="0 0 640 220" role="img" aria-label="累计节省的时间"><g id="wt-ax"></g><path id="wt-p" class="wt-l"/><circle id="wt-be" r="6" fill="var(--ink)"/><text id="wt-bt" font-size="12" class="t-ink" text-anchor="middle"></text></svg>
+      <div class="wt-sl">
+        <div class="sl"><label for="wt-c">第一次说清楚要花 <b id="wt-cv"></b></label><input id="wt-c" type="range" min="10" max="120" step="5" value="60"></div>
+        <div class="sl"><label for="wt-s">此后每次节省 <b id="wt-sv"></b></label><input id="wt-s" type="range" min="2" max="40" step="1" value="8"></div>
+      </div>
+      <p class="wt-msg" id="wt-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意计算：累计节省 ＝ 每次节省 × 次数 － 第一次说清楚的成本。交易成本解释组织边界的思路见 Coase（1937）。</figcaption>
+</figure>
+<style>
+.wt svg{width:100%;height:auto;display:block}
+.wt-l{fill:none;stroke:var(--accent);stroke-width:2.5}
+.wt-sl{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.wt-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.wt-sl{grid-template-columns:1fr}.wt svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const N=30,X0=56,X1=620,YT=14,YB=190,x=n=>X0+n/N*(X1-X0),Y={min:-120,max:600},y=v=>YT+(Y.max-v)/(Y.max-Y.min)*(YB-YT);
+  const $=id=>document.getElementById(id),c=$('wt-c'),s=$('wt-s');
+  const axis=()=>{$('wt-ax').innerHTML=`<line x1="${X0}" y1="${y(0)}" x2="${X1}" y2="${y(0)}" class="s-faint"/>`+[0,10,20,30].map(n=>`<text x="${x(n)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${n} 次</text>`).join('')+
+    [0,Math.round(Y.max/2/50)*50].map(v=>`<text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+`<text x="${X0}" y="${YT-2}" font-size="11" class="t-faint">累计节省（分钟）</text>`;};
+  function r(){const C=+c.value,S=+s.value;Y.min=-C*1.15;Y.max=Math.max(100,S*N-C)*1.1;axis();$('wt-cv').textContent=C+' 分钟';$('wt-sv').textContent=S+' 分钟';
+    let d='';for(let n=0;n<=N;n++)d+=(n?'L':'M')+x(n).toFixed(1)+','+y(S*n-C).toFixed(1);$('wt-p').setAttribute('d',d);
+    const be=C/S;const show=be<=N;$('wt-be').setAttribute('opacity',show?1:0);$('wt-be').setAttribute('cx',x(Math.min(be,N)));$('wt-be').setAttribute('cy',y(0));
+    $('wt-bt').setAttribute('x',x(Math.min(be,N)));$('wt-bt').setAttribute('y',y(0)-12);$('wt-bt').textContent=show?'第 '+Math.ceil(be)+' 次起划算':'';
+    $('wt-msg').textContent=be<=1?'第一次就划算：说明的成本低于一次节省的时间。':be<=N?`要做到第 ${Math.ceil(be)} 次才开始划算。只做一两次的小事，自己做更省事；反复发生的事，一次说清，此后持续受益。`:`三十次之内都不划算：这件事要么太少发生，要么交代起来太费事。`;}
+  c.addEventListener('input',r);s.addEventListener('input',r);
+  $('wt').addEventListener('anim-in',()=>{let v=40;s.value=v;r();const id=setInterval(()=>{v-=2;s.value=v;r();if(v<=8)clearInterval(id);},150);});
+  r();
+})();
+</script>

@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">One share, or three accounts</p><p class="figsub">Switch between two arrangements and see how likely the house and retirement goals are to fall far short when they come due.</p></div><button class="replay" type="button" data-replay="sp20">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Arrangement">
+      <button type="button" data-sp20="one" aria-pressed="true">Combined, one share</button>
+      <button type="button" data-sp20="three" aria-pressed="false">Three accounts by goal</button>
+    </div>
+    <div class="sp20" id="sp20" data-anim>
+      <div class="sp20-g" id="sp20-g"></div>
+      <p class="sp20-msg" id="sp20-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: ship shares return 6% a year on average with 16% volatility; safe holdings return 2% with 3% volatility. The house money is needed in five years, the retirement money in thirty. "Falling far short" means having less than 80% of the expected amount calculated at 2% when the goal comes due. Probabilities are computed from two thousand runs of years.</figcaption>
+</figure>
+<style>
+.sp20-g{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.sp20-c{background:var(--quote);border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.55}
+.sp20-c em{display:block;font-style:normal;font-size:11.5px;color:var(--faint)}
+.sp20-c b{display:block;font-size:20px;margin:2px 0;font-variant-numeric:tabular-nums}
+.sp20-c .bar{height:8px;border-radius:4px;background:var(--line);overflow:hidden;margin-top:4px}
+.sp20-c .bar i{display:block;height:100%;background:var(--warm);transition:width .5s}
+.sp20-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.sp20-g{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('sp20'+id);let mode='one';
+  function short(w,H,n=2000){let s=2020;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};const g=()=>{let u=0;while(!u)u=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r());};
+    const tgt=.8*Math.pow(1.02,H);let bad=0;for(let k=0;k<n;k++){let v=1;for(let t=0;t<H;t++)v*=1+w*(.06+.16*g())+(1-w)*(.02+.03*g());if(v<tgt)bad++;}return bad/n;}
+  const A={one:[[0,'Emergency'],[.6,'House'],[.6,'Retirement']],three:[[0,'Emergency'],[.15,'House'],[.8,'Retirement']]};
+  function set(m){mode=m;document.querySelectorAll('[data-sp20]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.sp20===m)));
+    const R=A[m].map(([w,n],i)=>[n,w,i===0?0:short(w,i===1?5:30)]);
+    $('-g').innerHTML=R.map(([n,w,p],i)=>`<div class="sp20-c"><em>${n} · ship shares ${Math.round(w*100)}%</em>${i===0?'<b>Available any time</b>Kept in the granary':`<b>${(p*100).toFixed(0)}%</b>Chance of falling far short when due<div class="bar"><i style="width:${p*100}%"></i></div>`}</div>`).join('');
+    $('-msg').textContent=m==='one'?`Combined, with 60% in ship shares: the retirement money is fine, but the house money has a ${(R[1][2]*100).toFixed(0)}% chance of falling far short in five years.`:`Accounts by goal: the house money has only 15% in ship shares, and its chance of falling far short drops to ${(R[1][2]*100).toFixed(0)}%; the retirement money has thirty years, with 80% in ship shares and a ${(R[2][2]*100).toFixed(0)}% chance of falling far short. Each account uses the standard it cares about most.`;}
+  document.querySelectorAll('[data-sp20]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.sp20)));
+  $('').addEventListener('anim-in',()=>{set('one');setTimeout(()=>set('three'),2400);});
+  set('one');
+})();
+</script>

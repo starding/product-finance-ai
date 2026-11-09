@@ -1,0 +1,47 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Civilization Simulator · Chapter 19: what changed and what did not</p><p class="figsub">Forty households save for thirty years, and the simulation runs once under each of eight different runs of years. Each run compares two cases: cognitive labour at its original price, with each household managing its own affairs; and cognitive labour almost free, with every household having a personal agent that acts on its plan. Pick a run of years to see the details.</p></div><button class="replay" type="button" data-replay="cs19">Replay</button></div>
+    <div class="cs-rules"><span class="on">Saving and seed</span><span class="on">Lending</span><span class="on">Insurance</span><span class="on">Parameter: price of cognitive labour</span><span class="on">Personal agent</span><span class="on">Guaranteeing agents</span><span class="on">Analysts for all</span><span class="on">Agents as market participants</span><span class="on">Agents and human bias</span><span class="on">What did not change</span></div>
+    <div class="cs19" id="cs19" data-anim>
+      <svg viewBox="0 0 660 230" role="img" aria-label="Median savings under eight runs of years"><g id="cs19-g"></g></svg>
+      <div class="legend"><span><i style="background:var(--faint)"></i>Cognitive labour at original price, self-managed</span><span><i style="background:var(--accent)"></i>Everyone has a personal agent acting on their plan</span></div>
+      <div class="cs19-out" id="cs19-out"></div>
+      <p class="cs19-msg" id="cs19-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model: the runs of years are generated as in the "keeping to the plan" simulator, and below each run is the annualized return of ship shares over thirty years. When self-managed, every household saves the single rate of 12%, affected by its weight on the present, buys more after gains and sells in a panic after falls, and pays fees of 1.2% a year. With a personal agent, each household saves on time at its own suitable rate, panic selling falls to one fifth, and fees are 0.2% a year. The vertical axis is median savings in year 30, measured in years of income.</figcaption>
+</figure>
+<style>
+.cs19 svg{width:100%;height:auto;display:block}
+.cs19 rect{cursor:pointer}
+.cs19-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.cs19-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs19-out span{display:block;font-size:11.5px;color:var(--faint)} .cs19-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.cs19-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs19-out{grid-template-columns:1fr}.cs19 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs19'+id),N=40,Y=30,K=8,X0=44,X1=628,YT=12,YB=180;
+  function sim(seed,agent){let s=seed;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};const g=()=>{let u=0;while(!u)u=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r());};
+    const R=[];for(let t=0;t<Y;t++){let v=.07+.12*g();if(r()<.08)v-=.25;R.push(v);}
+    const H=[];for(let i=0;i<N;i++)H.push({b:Math.max(.3,Math.min(1,.7+.15*(r()*2-1))),pz:r(),ideal:.06+.12*r(),out:-1,W:0,cash:0});
+    for(let t=0;t<Y;t++){for(const h of H){let sv=agent?h.ideal:.12*h.b;if(!agent&&t>0)sv*=Math.max(0,Math.min(2,1+5*(R[t-1]-.07)));
+      if(t>0&&R[t-1]<-.12&&h.out<0&&r()<.6*h.pz*(agent?.2:1)){h.cash+=h.W;h.W=0;h.out=3;}
+      if(h.out>0){h.cash+=sv;h.out--;if(h.out===0){h.W+=h.cash;h.cash=0;h.out=-1;}}else h.W+=sv;
+      h.W*=1+R[t]-(agent?.002:.012);}}
+    const f=H.map(h=>h.W+h.cash).sort((a,b)=>a-b);return {med:f[20],gm:Math.pow(R.reduce((a,b)=>a*(1+b),1),1/Y)-1};}
+  const D=Array.from({length:K},(_,k)=>{const sd=(k+1)*7919+11;return {a:sim(sd,0),b:sim(sd,1)};});
+  const order=D.map((d,i)=>i).sort((i,j)=>D[i].a.gm-D[j].a.gm),mx=Math.max(...D.map(d=>d.b.med))*1.1,y=v=>YB-v/mx*(YB-YT),bw=(X1-X0)/K;
+  let sel=-1;
+  function draw(){let h='';for(let v=0;v<=mx;v+=2)h+=`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v} yr</text>`;
+    order.forEach((i,k)=>{const d=D[i],cx=X0+k*bw;h+=`<rect data-i="${i}" x="${cx+bw*.12}" y="${y(d.a.med)}" width="${bw*.34}" height="${YB-y(d.a.med)}" fill="var(--faint)" opacity="${sel<0||sel===i?1:.35}"/><rect data-i="${i}" x="${cx+bw*.5}" y="${y(d.b.med)}" width="${bw*.34}" height="${YB-y(d.b.med)}" fill="var(--accent)" opacity="${sel<0||sel===i?1:.35}"/><text x="${cx+bw/2}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${(d.a.gm*100).toFixed(1)}%</text>`;});
+    h+=`<text x="${X1}" y="${YB+32}" text-anchor="end" font-size="11" class="t-faint">Eight runs of years, ordered by the 30-year annualized return of ship shares →</text>`;
+    $('-g').innerHTML=h;$('-g').querySelectorAll('rect').forEach(r=>r.addEventListener('click',()=>{sel=+r.dataset.i;draw();}));
+    const up=D.map(d=>d.b.med/d.a.med),aMin=Math.min(...D.map(d=>d.a.med)),aMax=Math.max(...D.map(d=>d.a.med)),bMin=Math.min(...D.map(d=>d.b.med)),bMax=Math.max(...D.map(d=>d.b.med));
+    $('-out').innerHTML=[['Improvement from the agent (average)','about '+(up.reduce((a,b)=>a+b,0)/K).toFixed(1)+'×'],['Self-managed: worst to best',aMin.toFixed(1)+'–'+aMax.toFixed(1)+' yrs'],['With an agent: worst to best',bMin.toFixed(1)+'–'+bMax.toFixed(1)+' yrs']].map(([a,v])=>`<div><span>${a}</span><b>${v}</b></div>`).join('');
+    $('-msg').textContent=sel>=0?`In this run of years, ship shares returned ${(D[sel].a.gm*100).toFixed(1)}% a year over thirty years: self-managed, median savings equal ${D[sel].a.med.toFixed(1)} years of income; with a personal agent, ${D[sel].b.med.toFixed(1)} years.`:`${D.every(d=>d.b.med>d.a.med)?'In every run of years, the personal agent helps households save more':'In most runs of years, the personal agent helps households save more'}; but how good or bad the years are has not changed at all. ${bMin<aMax?`With an agent in the worst run (${bMin.toFixed(1)} years), households still do worse than self-managed in the best run (${aMax.toFixed(1)} years). `:`With an agent, the runs of years still differ by ${(bMax-bMin).toFixed(1)} years of income. `}The agent improves fees, mistakes and execution; it cannot change time or risk.`;}
+  $('').addEventListener('anim-in',()=>{sel=-1;draw();order.forEach((i,k)=>setTimeout(()=>{sel=i;draw();},1200+k*700));setTimeout(()=>{sel=-1;draw();},1200+K*700+600);});
+  draw();
+})();
+</script>

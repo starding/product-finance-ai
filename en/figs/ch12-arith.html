@@ -1,0 +1,40 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">The addition and subtraction of active management</p>
+    <p class="figsub">The market rises 8% in a year. Drag the share of active investors and compare the two groups' returns before and after costs.</p>
+    <div class="ar12" id="ar12" data-anim>
+      <div class="ar12-split"><i id="ar12-p" class="p"></i><i id="ar12-a" class="a"></i></div>
+      <div class="ar12-lbl"><span>Passive investors: hold the whole market at market weights</span><span>Active investors: try to beat the market</span></div>
+      <div class="sl"><label for="ar12-s">Share of active investors <b id="ar12-sv"></b></label><input id="ar12-s" type="range" min="10" max="90" step="10" value="50"></div>
+      <div class="ar12-tbl">
+        <div class="h"></div><div class="h">Before costs</div><div class="h">Costs</div><div class="h">After costs</div>
+        <div class="n">Passive investors</div><div>8.0%</div><div>0.1%</div><div><b>7.9%</b></div>
+        <div class="n">Active investors as a whole</div><div>8.0%</div><div>1.0%</div><div><b class="w">7.0%</b></div>
+        <div class="n">All investors</div><div>8.0%</div><div id="ar12-c"></div><div id="ar12-t"></div>
+      </div>
+      <p class="ar12-msg">Whatever their share, active investors together can only equal the market before costs; their costs are higher, so after costs they must fall behind.</p>
+    </div>
+  </div>
+  <figcaption>Example numbers: passive investing costs 0.1% a year; active investing costs (fees and trading costs) 1% a year. The argument is in Sharpe (1991).</figcaption>
+</figure>
+<style>
+.ar12-split{display:flex;height:34px;border-radius:8px;overflow:hidden}
+.ar12-split i{display:block;height:100%;transition:width .5s ease}
+.ar12-split i.p{background:var(--accent)} .ar12-split i.a{background:var(--warm)}
+.ar12-lbl{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin:4px 0 10px}
+.ar12-tbl{display:grid;grid-template-columns:150px repeat(3,1fr);gap:4px;font-size:13px;font-variant-numeric:tabular-nums}
+.ar12-tbl div{background:var(--quote);padding:6px 10px;border-radius:6px}
+.ar12-tbl .h{background:transparent;color:var(--faint);font-size:12px}
+.ar12-tbl .n{font-weight:500}
+.ar12-tbl b.w{color:var(--warm)}
+.ar12-msg{font-size:14px;margin:10px 0 0}
+</style>
+<script>
+(function(){
+  const s=document.getElementById('ar12-s');
+  function r(){const a=+s.value/100;document.getElementById('ar12-sv').textContent=s.value+'%';
+    document.getElementById('ar12-p').style.width=((1-a)*100)+'%';document.getElementById('ar12-a').style.width=(a*100)+'%';
+    const c=(1-a)*0.1+a*1.0;document.getElementById('ar12-c').textContent=c.toFixed(2)+'%';document.getElementById('ar12-t').innerHTML='<b>'+(8-c).toFixed(2)+'%</b>';}
+  s.addEventListener('input',r); r();
+})();
+</script>

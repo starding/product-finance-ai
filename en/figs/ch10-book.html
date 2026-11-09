@@ -1,0 +1,79 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">The order book: four dimensions of liquidity</p>
+    <p class="figsub">Sell orders are above, buy orders below. Drag the size of a market buy order to see how many ask levels it eats through and what its average price is; then see how the book recovers.</p>
+    <div class="ob" id="ob" data-anim>
+      <div class="ob-book" id="ob-book"></div>
+      <div class="ob-side">
+        <div class="sl"><label for="ob-q">Market buy <b id="ob-qv"></b></label><input id="ob-q" type="range" min="100" max="6000" step="100" value="300"></div>
+        <div class="ob-out">
+          <div><span>Average price</span><b id="ob-avg"></b></div>
+          <div><span>Paid above mid</span><b id="ob-cost"></b></div>
+          <div><span>Levels taken</span><b id="ob-lv"></b></div>
+        </div>
+        <button type="button" class="replay" id="ob-rec">After the fill, see how the book recovers</button>
+        <ul class="ob-dim">
+          <li><b>Width</b>: the gap between the lowest ask and the highest bid, 0.10 in this example</li>
+          <li><b>Depth</b>: the quantity of orders resting at each price</li>
+          <li><b>Immediacy</b>: a market order can be filled at once</li>
+          <li><b>Resiliency</b>: how fast new orders refill the book after a large order hits it</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <figcaption>Example order book: midpoint 100.00, levels 0.05 apart, order quantities illustrative. The four dimensions follow Harris (2003).</figcaption>
+</figure>
+<style>
+.ob{display:grid;grid-template-columns:minmax(0,1fr) 1fr;gap:18px;align-items:start}
+.ob-book{font-size:12px;font-variant-numeric:tabular-nums}
+.ob-r{display:grid;grid-template-columns:56px 1fr 52px;gap:8px;align-items:center;height:22px}
+.ob-r .p{text-align:right}
+.ob-r .bar{position:relative;height:14px;background:var(--quote);border-radius:3px;overflow:hidden}
+.ob-r .bar i{position:absolute;left:0;top:0;bottom:0;border-radius:3px;transition:width .4s ease}
+.ob-r.ask .p{color:var(--warm)} .ob-r.ask .bar i.full{background:var(--warm-soft)} .ob-r.ask .bar i.eat{background:var(--warm)}
+.ob-r.bid .p{color:var(--accent)} .ob-r.bid .bar i.full{background:var(--accent-soft)}
+.ob-r .n{color:var(--muted)}
+.ob-mid{display:grid;grid-template-columns:56px 1fr;gap:8px;height:22px;align-items:center;color:var(--faint);font-size:11px}
+.ob-mid span:last-child{border-top:1px dashed var(--faint);padding-top:2px}
+.ob-out{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
+.ob-out div{background:var(--quote);border-radius:8px;padding:6px 8px}
+.ob-out span{display:block;font-size:11px;color:var(--faint)}
+.ob-out b{font-size:16px;font-variant-numeric:tabular-nums}
+.ob-dim{font-size:12.5px;color:var(--muted);padding-left:1.1em;margin:12px 0 0;line-height:1.7}
+@media (max-width:640px){.ob{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const MID=100, STEP=0.05, L=8;
+  const askQ=[300,500,700,900,1100,1200,1300,1500], bidQ=[400,500,800,900,1000,1200,1400,1500];
+  let ask=askQ.slice();
+  const book=document.getElementById('ob-book'), q=document.getElementById('ob-q');
+  const maxQ=1600;
+  function render(eatN){
+    let h='';
+    for(let i=L-1;i>=0;i--){const p=(MID+STEP*(i+1)).toFixed(2), full=ask[i], eat=Math.min(full,Math.max(0,eatN[i]||0));
+      h+=`<div class="ob-r ask"><span class="p">${p}</span><span class="bar"><i class="full" style="width:${full/maxQ*100}%"></i><i class="eat" style="width:${eat/maxQ*100}%"></i></span><span class="n">${full}</span></div>`;}
+    h+=`<div class="ob-mid"><span>Mid</span><span>${MID.toFixed(2)}</span></div>`;
+    for(let i=0;i<L;i++){const p=(MID-STEP*(i+1)).toFixed(2);h+=`<div class="ob-r bid"><span class="p">${p}</span><span class="bar"><i class="full" style="width:${bidQ[i]/maxQ*100}%"></i></span><span class="n">${bidQ[i]}</span></div>`;}
+    book.innerHTML=h;
+  }
+  function calc(){
+    const Q=+q.value; let rem=Q, cost=0, lv=0; const eat=[];
+    for(let i=0;i<L&&rem>0;i++){const t=Math.min(rem,ask[i]);eat[i]=t;cost+=t*(MID+STEP*(i+1));rem-=t;if(t>0)lv++;}
+    const filled=Q-rem, avg=cost/filled;
+    document.getElementById('ob-qv').textContent=Q.toLocaleString()+' shares';
+    document.getElementById('ob-avg').textContent=avg.toFixed(3);
+    document.getElementById('ob-cost').textContent=((avg-MID)/MID*10000).toFixed(1)+' bp';
+    document.getElementById('ob-lv').textContent=lv+(lv===1?' level':' levels');
+    render(eat);
+    return eat;
+  }
+  q.addEventListener('input',()=>{ask=askQ.slice();calc();});
+  document.getElementById('ob-rec').addEventListener('click',()=>{
+    const eat=calc(); ask=askQ.map((v,i)=>v-(eat[i]||0)); render([]);
+    let k=0; const id=setInterval(()=>{k++;ask=ask.map((v,i)=>Math.min(askQ[i],v+Math.round(askQ[i]/6)));render([]);if(k>=6){clearInterval(id);ask=askQ.slice();calc();}},450);
+  });
+  document.getElementById('ob').addEventListener('anim-in',()=>{let v=100;q.value=v;calc();const id=setInterval(()=>{v+=200;q.value=v;ask=askQ.slice();calc();if(v>=2500)clearInterval(id);},120);});
+  calc();
+})();
+</script>

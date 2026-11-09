@@ -1,0 +1,52 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">交易只重新分配市场收益</p><p class="figsub">假设三类交易者合起来持有整个市场，市场一年共创造 100 份收益。看交易如何改变各自分到的份额。</p></div><button class="replay" type="button" data-replay="zs">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="阶段">
+      <button type="button" data-zs="0" aria-pressed="true">只持有，不交易</button>
+      <button type="button" data-zs="1" aria-pressed="false">交易之后，扣除成本前</button>
+      <button type="button" data-zs="2" aria-pressed="false">扣除成本后</button>
+    </div>
+    <div class="zs" id="zs" data-anim>
+      <div class="zs-row" data-g="u"><span>效用型</span><div class="zs-t"><i></i></div><b></b></div>
+      <div class="zs-row" data-g="p"><span>盈利型</span><div class="zs-t"><i></i></div><b></b></div>
+      <div class="zs-row" data-g="f"><span>徒劳型</span><div class="zs-t"><i></i></div><b></b></div>
+      <div class="zs-row" data-g="c"><span>交易成本</span><div class="zs-t"><i></i></div><b></b></div>
+      <div class="zs-sum"><span>交易者合计</span><b id="zs-sum"></b></div>
+      <p class="zs-msg" id="zs-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意数字。真实规模可参考 French（2008）：1980—2006 年，美国投资者每年为主动投资支付的费用、交易成本与价差约占股票市值的 0.67%。</figcaption>
+</figure>
+<style>
+.zs-row{display:grid;grid-template-columns:72px 1fr 96px;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.zs-row b{text-align:right;white-space:nowrap;font-size:15px;font-variant-numeric:tabular-nums}
+.zs-t{height:22px;background:var(--quote);border-radius:6px;overflow:hidden}
+.zs-t i{display:block;height:100%;width:0;border-radius:6px;transition:width .8s ease}
+.zs-row[data-g="u"] i{background:var(--blue)} .zs-row[data-g="p"] i{background:var(--accent)} .zs-row[data-g="f"] i{background:var(--warm)} .zs-row[data-g="c"] i{background:var(--gray-mark)}
+.zs-row b.up{color:var(--accent)} .zs-row b.dn{color:var(--warm)}
+.zs-sum{display:flex;justify-content:space-between;border-top:1px solid var(--line);margin-top:10px;padding-top:8px;font-size:14px}
+.zs-sum b{font-size:18px;font-variant-numeric:tabular-nums}
+.zs-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const S=[
+    {u:50,p:30,f:20,c:0,m:'不交易时，每类交易者按持有的比例分到市场收益：合计 100。'},
+    {u:47,p:37,f:16,c:0,m:'交易之后，盈利型多得 7 份，正好是效用型少得的 3 份与徒劳型少得的 4 份之和。合计仍是 100：交易只是重新分配。'},
+    {u:46,p:35.5,f:15,c:3.5,m:'扣除交易成本后，三类交易者合计只剩 96.5，少掉的 3.5 份流向经纪商、交易所与做市商。零和变成了负和。'}
+  ];
+  const rows=[...document.querySelectorAll('#zs .zs-row')], base={u:50,p:30,f:20,c:0};
+  const btns=[...document.querySelectorAll('[data-zs]')];
+  function set(k){
+    btns.forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.zs===k)));
+    const s=S[k];
+    rows.forEach(r=>{const g=r.dataset.g,v=s[g];r.querySelector('i').style.width=(v/60*100)+'%';
+      const b=r.querySelector('b');const dv=g==='c'?0:v-base[g];b.textContent=v+(g!=='c'&&k>0&&dv!==0?(dv>0?'（+':'（')+dv+'）':'');b.className=g==='c'?'':dv>0?'up':dv<0?'dn':'';});
+    document.getElementById('zs-sum').textContent=(s.u+s.p+s.f);
+    document.getElementById('zs-msg').textContent=s.m;
+  }
+  btns.forEach(b=>b.addEventListener('click',()=>set(+b.dataset.zs)));
+  document.getElementById('zs').addEventListener('anim-in',()=>{set(0);setTimeout(()=>set(1),1800);setTimeout(()=>set(2),4200);});
+  set(0);
+})();
+</script>

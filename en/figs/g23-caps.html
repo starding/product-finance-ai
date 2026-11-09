@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Limits determine the worst loss</p><p class="figsub">The scribe makes 20 mistakes a year. The losses vary in size, and now and then one is very large. Add three layers of limits one by one, and see the total loss for the year and the worst single loss.</p></div><button class="replay" type="button" data-replay="cp23b">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Limits">
+      <button type="button" data-cpb="0" aria-pressed="true">No limit</button>
+      <button type="button" data-cpb="1" aria-pressed="false">Each step at most 2% of household wealth</button>
+      <button type="button" data-cpb="2" aria-pressed="false">Plus at most 5% cumulatively per day</button>
+    </div>
+    <div class="cpb" id="cpb" data-anim>
+      <svg viewBox="0 0 660 180" role="img" aria-label="Losses from twenty mistakes"><g id="cpb-g"></g></svg>
+      <div class="cpb-out" id="cpb-out"></div>
+    </div>
+  </div>
+  <figcaption>Illustrative: the losses from the twenty mistakes are expressed as a percentage of household wealth. Most are below 1%, with the occasional very large one; the 13th and 14th mistakes occur on the same day. The vertical axis is drawn up to 30%.</figcaption>
+</figure>
+<style>
+.cpb svg{width:100%;height:auto;display:block}
+.cpb rect{transition:height .5s,y .5s}
+.cpb-out{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.cpb-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cpb-out span{display:block;font-size:11.5px;color:var(--faint)} .cpb-out b{font-size:18px;font-variant-numeric:tabular-nums}
+@media (max-width:640px){.cpb-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cpb'+id),E=[.3,.8,.2,1.1,.5,.4,2.6,.3,.6,.2,.9,.4,4,3.5,.3,.7,28,.5,.2,.6],X0=40,X1=628,YB=160,YT=10,bw=(X1-X0)/20,y=v=>YB-Math.min(30,v)/30*(YB-YT);
+  function set(k){document.querySelectorAll('[data-cpb]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.cpb===k)));
+    let L=E.map(v=>k>=1?Math.min(2,v):v);if(k>=2){const d=L[12]+L[13];if(d>5){L[13]=Math.max(0,5-L[12]);}}
+    let h=[0,10,20,30].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}%</text>`).join('');
+    L.forEach((v,i)=>{h+=`<rect x="${X0+i*bw+4}" y="${y(v)}" width="${bw-8}" height="${YB-y(v)}" fill="var(--warm)"/>`;});
+    $('-g').innerHTML=h;const tot=L.reduce((a,b)=>a+b,0),mx=Math.max(...L);
+    $('-out').innerHTML=[['Total loss for the year',tot.toFixed(1)+'%'],['Worst single loss',mx.toFixed(1)+'%']].map(([a,b])=>`<div><span>${a}</span><b>${b}</b></div>`).join('');}
+  document.querySelectorAll('[data-cpb]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.cpb)));
+  $('').addEventListener('anim-in',()=>{[0,1,2].forEach((k,i)=>setTimeout(()=>set(k),300+i*2000));});
+  set(0);
+})();
+</script>

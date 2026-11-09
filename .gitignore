@@ -1,0 +1,8 @@
+# 工作稿与内部工具不进仓库
+书稿规划.md
+书稿核实报告.md
+生成式目录草案.md
+tools/
+design/
+__pycache__/
+.DS_Store

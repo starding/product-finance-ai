@@ -1,0 +1,15 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">分解式全书的核实结果</p><p class="figsub">约 520 条引用与数字逐条核实；有误与无法核实的条目全部修订或删去。</p></div><button class="replay" type="button" data-replay="mc">重播</button></div>
+    <div class="mc" id="mc" data-anim>
+      <div class="mc-bar"><i style="--w:89%;background:var(--accent)"></i><i style="--w:7.9%;background:var(--warm)"></i><i style="--w:3.3%;background:var(--gold)"></i></div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>正确 463</span><span><i style="background:var(--warm)"></i>有误 41：已改正</span><span><i style="background:var(--gold)"></i>无法核实 17：已补出处、改写或删去</span></div>
+    </div>
+  </div>
+  <figcaption>按六批核实，详见书稿核实报告。“有误”包括文献著录错误、转述与原文不符、示意数字被写成实证结果，以及正文引用与参考文献不对应。</figcaption>
+</figure>
+<style>
+.mc-bar{display:flex;height:26px;border-radius:6px;overflow:hidden;background:var(--quote)}
+.mc-bar i{display:block;height:100%;width:0;transition:width 1s ease}
+.mc.in .mc-bar i{width:var(--w)}
+</style>

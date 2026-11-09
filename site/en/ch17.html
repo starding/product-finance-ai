@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What users can bear</title>
+<meta name="description" content="Product × Finance × AI: Financial Products in the Age of AI, Chapter 17: risk tolerance has three faces: how much a person can objectively bear, how much they are subjectively willing to bear, and how much they actually bore in a decline; when the three disagree, the lowest governs; a profile can only be a statistical description, never a claim about an individual">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="ch17">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="Contents">
+<div class="side-head"><a class="sidetitle" href="index.html">Product × Finance × AI<small>Financial Products in the Age of AI</small></a></div>
+<div class="side-view" role="group" aria-label="Way of reading"><a href="preface.html" class="on" aria-current="true">Decomposition</a><a href="g-preface.html">Derivation</a></div>
+<a class="side-about" href="index.html#about">About this book</a>
+<a class="" href="preface.html"><span class="n">Preface</span>Why financial products must be relearned in the age of AI</a>
+<a class="side-part" href="part1.html"><span class="pn">Part One</span>Markets: where returns and risks come from</a>
+<a class="" href="ch01.html"><span class="n">1</span>What financial products sell</a>
+<a class="" href="ch02.html"><span class="n">2</span>Interest rates and maturity</a>
+<a class="" href="ch03.html"><span class="n">3</span>What risk looks like</a>
+<a class="" href="ch04.html"><span class="n">4</span>Diversification</a>
+<a class="" href="ch05.html"><span class="n">5</span>Compounding and volatility drag</a>
+<a class="" href="ch06.html"><span class="n">6</span>Factors</a>
+<a class="" href="ch07.html"><span class="n">7</span>Why prices are hard to predict</a>
+<a class="" href="ch08.html"><span class="n">8</span>How information gets into prices</a>
+<a class="" href="ch09.html"><span class="n">9</span>Traders in the market</a>
+<a class="" href="ch10.html"><span class="n">10</span>Liquidity and the bid-ask spread</a>
+<a class="" href="ch11.html"><span class="n">11</span>Orders, rules and market structure</a>
+<a class="" href="ch12.html"><span class="n">12</span>The arithmetic of active management</a>
+<a class="" href="ch13.html"><span class="n">13</span>How promises are kept</a>
+<a class="" href="ch14.html"><span class="n">14</span>Why regulation exists</a>
+<a class="side-part" href="part2.html"><span class="pn">Part Two</span>Users: what people want and what they can bear</a>
+<a class="" href="ch15.html"><span class="n">15</span>The jobs users need done</a>
+<a class="" href="ch16.html"><span class="n">16</span>How users make decisions</a>
+<a class=" cur" href="ch17.html" aria-current="page"><span class="n">17</span>What users can bear</a>
+<a class="" href="ch18.html"><span class="n">18</span>How users judge and trust</a>
+<a class="side-part" href="part3.html"><span class="pn">Part Three</span>AI: how much an agent can do on people&#x27;s behalf</a>
+<a class="" href="ch19.html"><span class="n">19</span>The amplification factor</a>
+<a class="" href="ch20.html"><span class="n">20</span>Which tasks can be handed to AI</a>
+<a class="" href="ch21.html"><span class="n">21</span>Where capability comes from, and where it fails</a>
+<a class="" href="ch22.html"><span class="n">22</span>Verifiability: the cost of checking</a>
+<a class="" href="ch23.html"><span class="n">23</span>The special constraints of finance</a>
+<a class="side-part" href="part4.html"><span class="pn">Part Four</span>Design: financial products under three sets of constraints</a>
+<a class="" href="ch24.html"><span class="n">24</span>What to promise</a>
+<a class="" href="ch25.html"><span class="n">25</span>Mandate parameters</a>
+<a class="" href="ch26.html"><span class="n">26</span>Authority and irreversible exposure</a>
+<a class="" href="ch27.html"><span class="n">27</span>Liability and conflicts of interest</a>
+<a class="" href="ch28.html"><span class="n">28</span>Capability assembly and process visibility</a>
+<a class="" href="ch29.html"><span class="n">29</span>Assurance level</a>
+<a class="" href="ch30.html"><span class="n">30</span>How trust is built</a>
+<a class="" href="ch31.html"><span class="n">31</span>Design principles</a>
+<a class="side-app" href="estimates.html"><span class="n">Appendix</span>Methods and data behind the author&#x27;s estimates</a>
+<a class="side-app" href="method.html"><span class="n">Appendix</span>How this book was written</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="Open contents" title="Contents"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">Product × Finance × AI: Financial Products in the Age of AI</a><span>Part Two  Users: what people want and what they can bear</span><a class="langlink" href="../ch17.html" hreflang="zh-CN">中文</a></header>
+
+<div class="chapno">Chapter 17</div><h1>What users can bear<small>Capacity, willingness and behaviour</small></h1>
+<blockquote><p>Whether a plan is carried through to the end depends on what the user can bear. Risk tolerance has three faces: capacity, the loss a person can objectively bear without harming their livelihood and goals; willingness, the risk they are subjectively willing to take; and behaviour, what they actually do when a decline comes. The three often disagree, and the plan can only be set by the lowest of them. Capacity changes with age and income, willingness changes as markets rise and fall, and behaviour can be seen only after a decline has been lived through. Any measurement of risk tolerance is therefore a statistical judgment: it describes how investors similar in the past have usually behaved, and cannot assert how any one person will behave.</p></blockquote>
+<h2 id="sec-1">1. The three faces of risk tolerance</h2>
+<p>Two people fill in the same questionnaire, and both choose "willing to take relatively high risk". One is thirty, with a stable income and no debts, and will not need the money for twenty years. The other is fifty-eight; this money is their entire savings, and they retire in two years. For the first, willingness matches capacity; for the second, willingness far exceeds capacity. Even if two people had the same capacity and the same willingness, they might react quite differently to a sharp fall. Investment practice therefore divides risk tolerance into two aspects, capacity and willingness (Klement, 2015), and research in behavioural finance has added a third: actual behaviour.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The three faces of risk tolerance</p><p class="figsub">Three investors all chose "willing to take relatively high risk" on the questionnaire. Switch between them to compare the level of each face and the level at which the plan can finally be carried out.</p></div><button class="replay" type="button" data-replay="fc">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Investor">
+      <button type="button" data-fc="a" aria-pressed="true">Age 30, stable income</button>
+      <button type="button" data-fc="b" aria-pressed="false">Age 58, retiring in two years</button>
+      <button type="button" data-fc="c" aria-pressed="false">Sold in the last crash</button>
+    </div>
+    <div class="fc" id="fc" data-anim>
+      <div class="fc-bars" id="fc-bars"></div>
+      <p class="fc-msg" id="fc-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative. Five levels from low to high; the dashed line marks the lowest of the three faces, which is the ceiling at which the plan can be carried out.</figcaption>
+</figure>
+<style>
+.fc-bars{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:18px;height:200px;align-items:end;padding:0 8px;border-bottom:1px solid var(--faint)}
+.fc-b{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.fc-b i{display:block;width:70%;max-width:110px;border-radius:6px 6px 0 0;height:0;transition:height .6s ease}
+.fc-b b{font-size:13px;margin-bottom:4px}
+.fc-cap{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;padding:0 8px;margin-top:6px;text-align:center;font-size:13px}
+.fc-cap span{color:var(--faint);font-size:11.5px;display:block}
+.fc-line{position:absolute;left:0;right:0;border-top:2px dashed var(--ink);transition:bottom .6s ease}
+.fc-line em{position:absolute;left:0;top:-18px;font-style:normal;font-size:11.5px;background:var(--surface);padding:0 4px}
+.fc-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const N=['Capacity','Willingness','Behaviour'],D=['How much can objectively be borne','How much risk one is subjectively willing to take','How much was actually borne in a decline'],C=['var(--blue)','var(--accent)','var(--warm)'],L=['','very low','low','medium','high','very high'];
+  const P={a:[5,4,4,'All three faces are fairly high and broadly consistent: the plan can be carried out at a fairly high level. The behaviour face has not yet been tested by a crash and still needs to be reviewed in a decline.'],
+    b:[2,4,3,'Willingness is fairly high, but capacity is low: this money is the person\'s entire savings and will be needed in two years. The plan can only be carried out at the capacity level; otherwise a single decline could directly affect retirement.'],
+    c:[5,5,2,'Capacity and willingness are both very high, but in the last crash this investor sold before the fall was even half over. The actual tolerance shown in the behavioural record is the lowest, and the plan should be based on it.']};
+  const box=document.getElementById('fc');
+  box.querySelector('.fc-bars').innerHTML=N.map((n,i)=>`<div class="fc-b"><i id="fc-i${i}" style="background:${C[i]}"></i></div>`).join('')+'<div class="fc-line" id="fc-line"><em id="fc-le"></em></div>';
+  box.querySelector('.fc-bars').insertAdjacentHTML('afterend','<div class="fc-cap">'+N.map((n,i)=>`<div>${n}: <b id="fc-v${i}"></b><span>${D[i]}</span></div>`).join('')+'</div>');
+  function set(k,anim){document.querySelectorAll('[data-fc]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.fc===k)));
+    const v=P[k];if(anim)N.forEach((n,i)=>document.getElementById('fc-i'+i).style.height='0');
+    setTimeout(()=>{N.forEach((n,i)=>{document.getElementById('fc-i'+i).style.height=v[i]/5*180+'px';document.getElementById('fc-v'+i).textContent=L[v[i]];});
+      const m=Math.min(v[0],v[1],v[2]);document.getElementById('fc-line').style.bottom=m/5*180+'px';document.getElementById('fc-le').textContent='Plan ceiling: '+L[m];},anim?60:0);
+    document.getElementById('fc-msg').textContent=v[3];}
+  document.querySelectorAll('[data-fc]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.fc,false)));
+  box.addEventListener('anim-in',()=>{set('a',true);setTimeout(()=>set('b'),2600);setTimeout(()=>set('c'),5200);});
+  set('a',false);
+})();
+</script>
+
+<h2 id="sec-2">2. Capacity: a person's wealth is not only financial assets</h2>
+<p>A person's total wealth includes, besides the financial assets in their accounts, the present value of their future earnings: human capital. Young people have few financial assets but a great deal of human capital; with age, human capital is gradually converted into financial assets, until by retirement it is largely used up. Research by Bodie, Merton and Samuelson (1992) and by Viceira (2001) shows that if earnings are stable and only loosely related to the stock market, human capital behaves much like a bond, and a young person's financial assets can bear somewhat more equity risk; if earnings themselves rise and fall with the economy, for example when they depend on bonuses or sales commissions, human capital behaves more like a stock, and financial assets should be more conservative. How much risk a person can bear depends on the composition of their total wealth, not only on the figure in their account.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Total wealth: financial assets and human capital</p><p class="figsub">Drag the age to see the composition of total wealth; switch the nature of earnings to see how the suitable share of stocks within financial assets changes.</p></div><button class="replay" type="button" data-replay="hc">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Nature of earnings">
+      <button type="button" data-hc="s" aria-pressed="true">Stable earnings, bond-like</button>
+      <button type="button" data-hc="c" aria-pressed="false">Earnings move with the economy, stock-like</button>
+    </div>
+    <div class="hc" id="hc" data-anim>
+      <div class="sl"><label for="hc-a">Age <b id="hc-av"></b></label><input id="hc-a" type="range" min="25" max="65" step="1" value="30"></div>
+      <div class="hc-w"><span>Total wealth</span><div class="hc-t"><i id="hc-h" style="background:var(--blue)"></i><i id="hc-f" style="background:var(--accent)"></i></div></div>
+      <div class="legend"><span><i style="background:var(--blue)"></i>Human capital: present value of future earnings</span><span><i style="background:var(--accent)"></i>Financial assets</span></div>
+      <svg viewBox="0 0 640 180" role="img" aria-label="Share of stocks in financial assets by age"><g id="hc-g"></g></svg>
+      <p class="hc-msg" id="hc-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model: annual earnings of 1, retirement at 65, discount rate 2%; 15% of earnings saved each year, financial assets growing 4% a year; the stock target for total wealth is 60%, with human capital from stable earnings treated as 10% stock and from earnings that move with the economy as 50% stock. For the reasoning, see Bodie, Merton and Samuelson (1992) and Viceira (2001).</figcaption>
+</figure>
+<style>
+.hc-w{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:center;font-size:12.5px;color:var(--faint);margin:6px 0}
+.hc-t{display:flex;height:22px;border-radius:5px;overflow:hidden;background:var(--quote)}
+.hc-t i{display:block;height:100%;transition:width .4s}
+.hc svg{width:100%;height:auto;display:block;margin-top:6px}
+.hc-msg{font-size:14px;margin:4px 0 0;min-height:3.4em}
+@media (max-width:640px){.hc svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const H=a=>{let s=0;for(let k=1;k<=65-a;k++)s+=1/Math.pow(1.02,k);return s;};
+  const F=a=>{let f=.5;for(let k=25;k<a;k++)f=f*1.04+.15;return f;};
+  const S=(a,b)=>Math.max(0,Math.min(1,(.6*(F(a)+H(a))-b*H(a))/F(a)));
+  const B={s:.1,c:.5},X0=50,X1=620,YT=14,YB=150,x=a=>X0+(a-25)/40*(X1-X0),y=v=>YB-v*(YB-YT);
+  const $=id=>document.getElementById(id),sl=$('hc-a');let k='s';
+  const path=b=>{let d='';for(let a=25;a<=65;a++)d+=(a===25?'M':'L')+x(a).toFixed(1)+','+y(S(a,b)).toFixed(1);return d;};
+  function draw(){const a=+sl.value;let g=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`;
+    [0,.5,1].forEach(v=>g+=`<text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text>`);
+    [25,35,45,55,65].forEach(v=>g+=`<text x="${x(v)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${v===25?'Age ':''}${v}</text>`);
+    ['s','c'].forEach(j=>g+=`<path d="${path(B[j])}" fill="none" stroke="${j==='s'?'var(--blue)':'var(--warm)'}" stroke-width="${j===k?3:1.5}" opacity="${j===k?1:.35}"/>`);
+    g+=`<text x="${X1}" y="${YT+4}" text-anchor="end" font-size="11" class="t-faint">Stock share of financial assets</text>`;
+    const s=S(a,B[k]);g+=`<line x1="${x(a)}" y1="${YT}" x2="${x(a)}" y2="${YB}" class="s-faint" stroke-dasharray="3 3"/><circle cx="${x(a)}" cy="${y(s)}" r="6" fill="var(--ink)"/>`;
+    $('hc-g').innerHTML=g;
+    const h=H(a),f=F(a),t=h+f;$('hc-h').style.width=h/t*100+'%';$('hc-f').style.width=f/t*100+'%';$('hc-av').textContent=a;
+    $('hc-msg').textContent=`At age ${a}, human capital makes up about ${(h/t*100).toFixed(0)}% of total wealth. ${k==='s'?'With stable earnings, human capital behaves like a bond':'With earnings that move with the economy, human capital already carries a good deal of equity risk'}, and the suitable share of stocks within financial assets is about ${(S(a,B[k])*100).toFixed(0)}%.`;}
+  function set(j){k=j;document.querySelectorAll('[data-hc]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.hc===j)));draw();}
+  document.querySelectorAll('[data-hc]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.hc)));
+  sl.addEventListener('input',draw);
+  $('hc').addEventListener('anim-in',()=>{let a=25;sl.value=a;draw();const id=setInterval(()=>{a+=1;sl.value=a;draw();if(a>=65){clearInterval(id);sl.value=30;draw();}},90);});
+  set('s');
+})();
+</script>
+
+<h2 id="sec-3">3. Willingness: measurable, but not stable</h2>
+<p>A common way to measure willingness to take risk is to have people choose between a series of certain payoffs and risky alternatives. Holt and Laury (2002) designed a set of paired lotteries: as the probability of the high payoff rises row by row, the row at which a person switches from the safe option to the risky one reflects their degree of risk aversion. Yet willingness measured by questionnaire is not stable. Guiso, Sapienza and Zingales (2018), surveying clients of an Italian bank, found that clients' risk aversion rose markedly after the 2008 financial crisis, even among clients who had suffered no losses. Willingness shifts with market moves and recent experience: people overestimate themselves after a rise and underestimate themselves after a fall.</p>
+<figure>
+  <div class="card">
+    <p class="figtitle">Measuring willingness to take risk with a set of lotteries</p>
+    <p class="figsub">In each row, choose between the safe option A and the risky option B. Going down the rows, B's chance of the high prize rises step by step. Tap the row at which you switch to B.</p>
+    <div class="ht" id="ht" data-anim>
+      <div class="ht-tb" id="ht-tb"></div>
+      <label class="ht-chk"><input type="checkbox" id="ht-x"> Just lived through a sharp fall</label>
+      <p class="ht-msg" id="ht-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Options follow the design of Holt and Laury (2002), with amounts in dollars. A risk-neutral person switches to B at row 5; the later the switch, the more risk-averse the person. The effect of "a sharp fall" is illustrative; its direction follows Guiso, Sapienza and Zingales (2018).</figcaption>
+</figure>
+<style>
+.ht-tb{display:grid;gap:3px}
+.ht-r{font:inherit;display:grid;grid-template-columns:30px 1fr 1fr 100px;gap:8px;align-items:center;font-size:12.5px;border:1.5px solid transparent;border-radius:7px;padding:4px 8px;background:var(--quote);color:var(--ink);cursor:pointer;text-align:left}
+.ht-r em{font-style:normal;color:var(--faint)}
+.ht-r span{border-radius:5px;padding:2px 6px}
+.ht-r .on{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.ht-r .onb{background:var(--warm-soft);color:var(--warm);font-weight:600}
+.ht-r.sw{border-color:var(--ink)}
+.ht-r b{white-space:nowrap;font-weight:400;font-size:11.5px;color:var(--faint);text-align:right}
+.ht-chk{display:flex;gap:6px;align-items:center;font-size:14px;margin-top:10px}
+.ht-chk input{accent-color:var(--accent);width:16px;height:16px}
+.ht-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.ht-r{grid-template-columns:22px 1fr 1fr;font-size:11.5px}.ht-r b{display:none}}
+</style>
+<script>
+(function(){
+  const tb=document.getElementById('ht-tb'),x=document.getElementById('ht-x');let sw=5;
+  tb.innerHTML=Array.from({length:10},(_,i)=>{const p=(i+1)/10,ea=p*2+(1-p)*1.6,eb=p*3.85+(1-p)*.1;
+    return `<button type="button" class="ht-r" data-i="${i+1}"><em>${i+1}</em><span>A: ${i+1}/10 chance of 2.00, else 1.60</span><span>B: ${i+1}/10 chance of 3.85, else 0.10</span><b>EV gap ${(eb-ea>=0?'+':'−')+Math.abs(eb-ea).toFixed(2)}</b></button>`;}).join('');
+  const rs=[...tb.children];
+  function show(){const s=Math.min(11,sw+(x.checked?2:0));
+    rs.forEach((r,i)=>{const n=i+1,[a,b]=r.querySelectorAll('span');a.className=n<s?'on':'';b.className=n>=s?'onb':'';r.classList.toggle('sw',n===s);});
+    const t=s<=4?'risk-seeking':s===5?'close to risk-neutral':s<=7?'moderately risk-averse':'strongly risk-averse';
+    document.getElementById('ht-msg').textContent=(s>10?'A chosen in all ten rows: extremely risk-averse. ':`Switching to B from row ${s}: ${t}. `)+(x.checked?'After a sharp fall, the same person\'s switching point often moves down; measured willingness reflects the person\'s state at the time.':'From row 5 on, B\'s expected value already exceeds A\'s.');}
+  rs.forEach(r=>r.addEventListener('click',()=>{sw=+r.dataset.i-(x.checked?2:0);sw=Math.max(1,sw);show();}));
+  x.addEventListener('change',show);
+  document.getElementById('ht').addEventListener('anim-in',()=>{x.checked=false;sw=7;show();setTimeout(()=>{x.checked=true;show();},2200);setTimeout(()=>{x.checked=false;show();},4400);});
+  sw=7;show();
+})();
+</script>
+
+<h2 id="sec-4">4. Behaviour: what people actually did in a decline</h2>
+<p>A plan may say "can bear a 30% decline", but when a decline actually comes, some people sell on the way down. Hoffmann, Post and Pennings (2013) tracked the perceptions and trading of a group of Dutch individual investors during the financial crisis: their return expectations and risk tolerance fell, and their risk perception rose, at the worst point of the crisis, and then gradually recovered; changes in trading and risk taking moved with these perceptions. Selling during a decline often means turning a paper loss into a realized one and missing the recovery that follows. For a product, behaviour is the hardest face to measure in advance, yet it is the one that ultimately decides what the user gets.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Tolerance on paper and tolerance in a decline</p><p class="figsub">A portfolio first falls by about half, then takes several years to recover and reach a new high. Drag the "decline actually tolerable": once the fall exceeds it, the investor sells and holds cash. See how far the final result falls short of holding to the end.</p></div><button class="replay" type="button" data-replay="dd">Replay</button></div>
+    <div class="dd" id="dd" data-anim>
+      <svg viewBox="0 0 640 230" role="img" aria-label="Decline and recovery path"><g id="dd-ax"></g><path id="dd-p" class="dd-l"/><path id="dd-c" class="dd-c"/><line id="dd-th" class="dd-th"/><text id="dd-tt" font-size="11" class="t-warm"></text><circle id="dd-s" r="6" fill="var(--warm)"/></svg>
+      <div class="sl"><label for="dd-r">Decline actually tolerable <b id="dd-rv"></b></label><input id="dd-r" type="range" min="10" max="60" step="5" value="25"></div>
+      <div class="dd-out"><div><span>Held to the end</span><b id="dd-h"></b></div><div><span>By actual tolerance</span><b id="dd-a"></b></div></div>
+      <p class="dd-msg" id="dd-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative path, shaped like a severe bear market and its recovery, not any specific index; simplified so that the investor does not buy back after selling. On individual investors' perceptions and trading during a crisis, see Hoffmann, Post and Pennings (2013).</figcaption>
+</figure>
+<style>
+.dd svg{width:100%;height:auto;display:block}
+.dd-l{fill:none;stroke:var(--accent);stroke-width:2.5;stroke-dasharray:1500;stroke-dashoffset:1500;transition:stroke-dashoffset 2s ease}
+.dd.in .dd-l{stroke-dashoffset:0}
+.dd-c{fill:none;stroke:var(--warm);stroke-width:2.5;stroke-dasharray:5 4}
+.dd-th{stroke:var(--warm);stroke-dasharray:3 3;opacity:.6}
+.dd-out{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.dd-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.dd-out span{display:block;font-size:12px;color:var(--faint)} .dd-out b{font-size:19px;font-variant-numeric:tabular-nums}
+.dd-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.dd svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const K=[[0,100],[6,106],[12,88],[17,70],[22,58],[26,52],[30,60],[36,72],[44,82],[52,95],[60,108],[72,128]];
+  const v=t=>{for(let i=1;i<K.length;i++)if(t<=K[i][0]){const [a,va]=K[i-1],[b,vb]=K[i];return va+(vb-va)*(t-a)/(b-a);}return K[K.length-1][1];};
+  const X0=50,X1=620,YT=12,YB=200,x=t=>X0+t/72*(X1-X0),y=p=>YB-(p-40)/(140-40)*(YB-YT);
+  const $=id=>document.getElementById(id);
+  let a=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`;
+  [40,70,100,130].forEach(p=>a+=`<text x="${X0-6}" y="${y(p)+4}" text-anchor="end" font-size="11" class="t-faint">${p}</text>`);
+  [0,1,2,3,4,5,6].forEach(k=>a+=`<text x="${x(k*12)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${k?'Year '+k:'Start'}</text>`);
+  $('dd-ax').innerHTML=a;
+  let d='';for(let t=0;t<=72;t+=.5)d+=(t?'L':'M')+x(t).toFixed(1)+','+y(v(t)).toFixed(1);$('dd-p').setAttribute('d',d);
+  const sl=$('dd-r');
+  function r(){const tol=+sl.value/100;let pk=0,ts=null;for(let t=0;t<=72;t+=.5){pk=Math.max(pk,v(t));if(v(t)<=pk*(1-tol)){ts=t;break;}}
+    $('dd-rv').textContent=sl.value+'%';$('dd-h').textContent=v(72).toFixed(0);
+    const th=106*(1-tol);$('dd-th').setAttribute('x1',X0);$('dd-th').setAttribute('x2',X1);$('dd-th').setAttribute('y1',y(th));$('dd-th').setAttribute('y2',y(th));
+    $('dd-tt').setAttribute('x',X1);$('dd-tt').setAttribute('text-anchor','end');$('dd-tt').setAttribute('y',y(th)-5);$('dd-tt').textContent=th>=40?'Tolerance line':'';
+    if(ts===null){$('dd-s').setAttribute('opacity',0);$('dd-c').setAttribute('d','');$('dd-a').textContent=v(72).toFixed(0);
+      $('dd-msg').textContent='Actual tolerance exceeded the size of this decline; the investor held on through the recovery, and the result is the same as holding to the end.';return;}
+    const sv=v(ts);$('dd-s').setAttribute('opacity',1);$('dd-s').setAttribute('cx',x(ts));$('dd-s').setAttribute('cy',y(sv));
+    $('dd-c').setAttribute('d',`M${x(ts)},${y(sv)}L${X1},${y(sv)}`);$('dd-a').textContent=sv.toFixed(0);
+    $('dd-msg').textContent=`Selling once the decline reached ${sl.value}% turned a paper loss into a realized one and missed the entire recovery: the final value is ${sv.toFixed(0)}, against ${v(72).toFixed(0)} for holding to the end.${+sl.value<=30?' If the tolerance written in the plan is higher than the real one, the gap is paid at the worst possible moment.':''}`;}
+  sl.addEventListener('input',r);
+  $('dd').addEventListener('anim-in',()=>{sl.value=60;r();setTimeout(()=>{let k=60;const id=setInterval(()=>{k-=5;sl.value=k;r();if(k<=25)clearInterval(id);},300);},2000);});
+  r();
+})();
+</script>
+
+<h2 id="sec-5">5. When the three faces disagree, the lowest governs</h2>
+<p>When capacity, willingness and behaviour disagree, the plan can only be set by the lowest of them. When willingness exceeds capacity, the allocation should not follow willingness even if the user wants it to, because a single decline could endanger their livelihood and goals; this is the starting point of suitability rules. When capacity exceeds willingness, one can explain the long-term benefits of taking more risk, but should not force it, because a plan beyond the user's willingness is likely to be abandoned in a decline. And the actual tolerance shown in the behavioural record is the most direct test of the other two.</p>
+<figure>
+  <div class="card">
+    <p class="figtitle">When the three faces disagree, the lowest governs</p>
+    <p class="figsub">Adjust capacity, willingness and behaviour separately to see the risk level at which the plan can be carried out and how the product should respond.</p>
+    <div class="mn" id="mn" data-anim>
+      <div class="mn-s" id="mn-s"></div>
+      <div class="mn-out"><span>Risk level at which the plan can be carried out</span><div class="mn-lv" id="mn-lv"></div></div>
+      <p class="mn-msg" id="mn-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative. Five levels from low to high. The constraint that applies when willingness exceeds capacity is the starting point of suitability rules.</figcaption>
+</figure>
+<style>
+.mn-s{display:grid;gap:6px}
+.mn-s .sl label b{font-variant-numeric:tabular-nums}
+.mn-out{margin-top:10px;background:var(--quote);border-radius:10px;padding:10px 12px}
+.mn-out>span{font-size:12px;color:var(--faint)}
+.mn-lv{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-top:6px}
+.mn-lv i{font-style:normal;text-align:center;font-size:12px;padding:6px 0;border-radius:6px;background:var(--surface);color:var(--faint);border:1.5px solid var(--line);transition:all .3s}
+.mn-lv i.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.mn-msg{font-size:14px;margin:10px 0 0;min-height:5.1em}
+</style>
+<script>
+(function(){
+  const N=[['ab','Capacity',2],['wi','Willingness',4],['be','Behaviour',3]],L=['','Very low','Low','Medium','High','Very high'];
+  const box=document.getElementById('mn-s');
+  box.innerHTML=N.map(([k,n,v])=>`<div class="sl"><label for="mn-${k}">${n} <b id="mn-${k}v"></b></label><input id="mn-${k}" type="range" min="1" max="5" step="1" value="${v}"></div>`).join('');
+  document.getElementById('mn-lv').innerHTML=L.slice(1).map(l=>`<i>${l}</i>`).join('');
+  const lv=[...document.querySelectorAll('#mn-lv i')];
+  function r(){const v=N.map(([k])=>+document.getElementById('mn-'+k).value);N.forEach(([k],i)=>document.getElementById('mn-'+k+'v').textContent=L[v[i]]);
+    const m=Math.min(...v);lv.forEach((e,i)=>e.classList.toggle('on',i+1===m));
+    const [a,w,b]=v,t=[];
+    if(a===m)t.push(w>a?'Willingness exceeds capacity: even if the user wants it, do not allocate according to willingness, and explain why. ':'Capacity is the lowest face: the allocation is limited to what does not harm the user\'s livelihood and goals. ');
+    if(w===m&&w<a)t.push('Willingness is below capacity: the long-term benefits of taking more risk can be explained, but not forced; a plan beyond the user\'s willingness is likely to be abandoned in a decline. ');
+    if(b===m&&b<Math.min(a,w))t.push('Behaviour is the lowest: in past declines the user actually bore less. Go by the behavioural record, and talk it through before the next decline. ');
+    if(a===w&&w===b)t.push('The three faces agree: the plan can be carried out at this level and reviewed in a decline. ');
+    document.getElementById('mn-msg').textContent=t.join('').trim();}
+  N.forEach(([k])=>document.getElementById('mn-'+k).addEventListener('input',r));
+  document.getElementById('mn').addEventListener('anim-in',()=>{const S=[[2,4,3],[5,2,4],[5,5,2],[3,3,3]];S.forEach((s,j)=>setTimeout(()=>{N.forEach(([k],i)=>document.getElementById('mn-'+k).value=s[i]);r();},j*1800));});
+  r();
+})();
+</script>
+
+<h2 id="sec-6">6. A profile is a statistical description, not a claim about an individual</h2>
+<p>Combining questionnaire answers, assets and behavioural records into a risk grade or an investor profile makes communication easier and helps match products. But a profile is in essence a statistical description: it states how "investors who answered similarly have usually behaved in the past", and the differences within one category are often large. Klement's (2015) review notes that common risk questionnaires explain only a limited part of actual allocations to risky assets. A profile should therefore be phrased in terms of a statistical group, for example "among investors similar to this in the past, about one third sold during a 30% decline" (illustrative figure), rather than as a conclusion about the individual, for example "you can bear a 30% decline". The first offers a point of reference; the second makes the judgment on the user's behalf, and makes a promise on the institution's behalf that it cannot keep.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Within one profile, differences are large</p><p class="figsub">100 investors with similar questionnaire answers, placed in the same risk grade: how far each let a 30% decline go before selling. Switch between two ways of phrasing it.</p></div><button class="replay" type="button" data-replay="pf">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Phrasing">
+      <button type="button" data-pf="ind" aria-pressed="true">A conclusion about the individual</button>
+      <button type="button" data-pf="stat" aria-pressed="false">A description of a statistical group</button>
+    </div>
+    <div class="pf" id="pf" data-anim>
+      <svg viewBox="0 0 640 170" role="img" aria-label="Distribution of actually tolerated declines within one grade"><g id="pf-g"></g></svg>
+      <div class="pf-say" id="pf-say"></div>
+    </div>
+  </div>
+  <figcaption>Illustrative distribution. Each dot is the decline at which an investor sold; those still holding at 30% are placed at the right end. Common risk questionnaires explain only a limited part of actual allocations to risky assets; see Klement (2015).</figcaption>
+</figure>
+<style>
+.pf svg{width:100%;height:auto;display:block}
+.pf-d{opacity:0;transition:opacity .3s}
+.pf.in .pf-d{opacity:1}
+.pf-say{border-radius:10px;padding:12px 14px;font-size:14px;line-height:1.7;border-left:3px solid var(--accent);background:var(--quote);min-height:5.4em}
+.pf-say.bad{border-left-color:var(--warm)}
+.pf-say em{display:block;font-style:normal;font-size:12px;color:var(--faint)}
+@media (max-width:640px){.pf svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  let s=7;const rnd=()=>{s=(s*9301+49297)%233280;return s/233280;};
+  const D=Array.from({length:100},()=>{const u=rnd(),v=rnd();const z=Math.sqrt(-2*Math.log(u+1e-9))*Math.cos(2*Math.PI*v);return Math.max(6,Math.min(30,20+z*7));}).sort((a,b)=>a-b);
+  const X0=40,X1=600,x=v=>X0+(v-5)/(30-5)*(X1-X0),YB=130;
+  const bins={};let g=`<line x1="${X0}" y1="${YB+8}" x2="${X1}" y2="${YB+8}" class="s-faint"/>`;
+  [5,10,15,20,25,30].forEach(v=>g+=`<text x="${x(v)}" y="${YB+24}" text-anchor="middle" font-size="11" class="t-faint">${v===30?'Held':v+'%'}</text>`);
+  D.forEach((v,i)=>{const b=v>=30?30:Math.round(v);bins[b]=(bins[b]||0)+1;g+=`<circle class="pf-d" style="transition-delay:${i*12}ms" cx="${x(b)}" cy="${YB-(bins[b]-1)*8.5}" r="3.6" fill="${b>=30?'var(--accent)':'var(--warm)'}"/>`;});
+  const hold=D.filter(v=>v>=30).length,sold=D.filter(v=>v<30),p10=sold[Math.floor(sold.length*.1)],p90=sold[Math.floor(sold.length*.9)];
+  g+=`<rect x="${x(p10)}" y="${YB+3}" width="${x(p90)-x(p10)}" height="4" rx="2" fill="var(--ink)" opacity=".5"/>`;
+  document.getElementById('pf-g').innerHTML=g;
+  const T={ind:['A conclusion about the individual (should not be used)','You are a balanced investor and can bear a 30% decline.'],
+    stat:['A description of a statistical group',`Among investors whose answers were similar to these in the past, about ${hold} held on through a 30% decline; of the other ${100-hold}, eight in ten sold at some point between declines of ${Math.round(p10)}% and ${Math.round(p90)}%. This is only a statistic for similar investors and does not represent the outcome for any one person.`]};
+  function set(k){document.querySelectorAll('[data-pf]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.pf===k)));const e=document.getElementById('pf-say');
+    e.classList.toggle('bad',k==='ind');e.innerHTML=`<em>${T[k][0]}</em>${T[k][1]}${k==='ind'?'<br><span style="font-size:12.5px;color:var(--warm)">Only '+hold+' people in the same grade managed this; the sentence makes the judgment on the user\'s behalf and makes a promise that cannot be kept.</span>':''}`;}
+  document.querySelectorAll('[data-pf]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.pf)));
+  document.getElementById('pf').addEventListener('anim-in',()=>{set('ind');setTimeout(()=>set('stat'),3000);});
+  set('ind');
+})();
+</script>
+
+<h2 id="sec-7">7. Implications for product design</h2>
+<p>Risk tolerance should be understood through each of its three faces, acted on according to the lowest, and reviewed over time. When it is described, it should be described only as a statistical judgment.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: designing for real risk tolerance</p><p class="figsub">Four design requirements, each corresponding to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="ch17summary">Replay</button></div>
+    <div class="ch17summary" id="ch17summary" data-anim><div class="ch17summary-c" style="--i:0"><em>Risk tolerance has three faces</em><b>Understand capacity, willingness and behaviour separately</b><p>Beyond the questionnaire, take in assets, income, horizon and actual trading records from past declines.</p></div><div class="ch17summary-c" style="--i:1"><em>Wealth is more than financial assets</em><b>Count human capital and the timing of spending in capacity</b><p>Ask about the stability of income and plans for using the money, and let age and the nature of income shape the recommended risk level.</p></div><div class="ch17summary-c warn" style="--i:2"><em>Willingness shifts with the market</em><b>Act on the lowest face, and review regularly</b><p>When willingness exceeds capacity, explain why and set limits; reassess after a sharp rise or fall and as the goal approaches.</p></div><div class="ch17summary-c warn" style="--i:3"><em>A profile is a statistical description</em><b>Phrase it only in statistical terms</b><p>Say "how similar investors have usually behaved in the past", show the differences within the group, and do not assert how much any individual can bear.</p></div></div>
+  </div>
+</figure>
+<style>
+.ch17summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch17summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch17summary-c.warn{border-left-color:var(--warm)}
+.ch17summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch17summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch17summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch17summary.in .ch17summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch17summary{grid-template-columns:1fr}}
+</style>
+
+<h2 id="sec-8">References</h2>
+<ul class="refs"><li>Klement, J. (2015). <i>Investor Risk Profiling: An Overview</i>. CFA Institute Research Foundation.</li><li>Bodie, Z., Merton, R. C., &amp; Samuelson, W. F. (1992). Labor supply flexibility and portfolio choice in a life cycle model. <i>Journal of Economic Dynamics and Control</i>, 16(3–4), 427–449.</li><li>Viceira, L. M. (2001). Optimal portfolio choice for long-horizon investors with nontradable labor income. <i>Journal of Finance</i>, 56(2), 433–470.</li><li>Holt, C. A., &amp; Laury, S. K. (2002). Risk aversion and incentive effects. <i>American Economic Review</i>, 92(5), 1644–1655.</li><li>Guiso, L., Sapienza, P., &amp; Zingales, L. (2018). Time varying risk aversion. <i>Journal of Financial Economics</i>, 128(3), 403–421.</li><li>Hoffmann, A. O. I., Post, T., &amp; Pennings, J. M. E. (2013). Individual investor perceptions and behavior during the financial crisis. <i>Journal of Banking &amp; Finance</i>, 37(1), 60–74.</li></ul>
+<footer class="nav"><a href="ch16.html">← Chapter 16: How users make decisions</a><a href="ch18.html">Chapter 18: How users judge and trust →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

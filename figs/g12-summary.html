@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：偏差、惯性与默认选项</p><p class="figsub">四条结论，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="g12summary">重播</button></div>
+    <div class="g12summary" id="g12summary" data-anim><div class="g12summary-c" style="--i:0"><em>偏重眼前</em><b>计划与行动不一致</b><p>春天打算存一半，秋天只存下更少；事先锁住才能守住计划。</p></div><div class="g12summary-c" style="--i:1"><em>惯性</em><b>什么都不做也是选择</b><p>是否参加、存多少，很大程度上取决于默认是什么。</p></div><div class="g12summary-c" style="--i:2"><em>承诺与定投</em><b>把好的安排设成默认</b><p>先承诺、从以后的加薪里增加；按时买入，不追着去年的涨跌。</p></div><div class="g12summary-c warn" style="--i:3"><em>选择的架构</em><b>默认为谁而设</b><p>同一份惯性，可以帮人守住本意，也可以变成卖方的收入。</p></div></div>
+  </div>
+</figure>
+<style>
+.g12summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g12summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g12summary-c.warn{border-left-color:var(--warm)}
+.g12summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g12summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g12summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g12summary.in .g12summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g12summary{grid-template-columns:1fr}}
+</style>

@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：金融代理的价值与边界</p><p class="figsub">四条设计要求，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="ch23summary">重播</button></div>
+    <div class="ch23summary" id="ch23summary" data-anim><div class="ch23summary-c" style="--i:0"><em>基准是实际行为</em><b>按用户原本的做法衡量价值</b><p>研究代理的价值在深度，组合代理的价值在让不做配置的人做到，而不是省下几分钟。</p></div><div class="ch23summary-c" style="--i:1"><em>预测的价值随普及递减</em><b>不以预测为卖点</b><p>把价值落在维持分散、降低成本与减少行为偏差上，这些不因同类代理普及而消失。</p></div><div class="ch23summary-c warn" style="--i:2"><em>交易错误难以撤回</em><b>分级授权，设上限与停止开关</b><p>信息与建议可以自主；改变持仓与划转资金需本人确认，并设单笔与累计上限。</p></div><div class="ch23summary-c warn" style="--i:3"><em>代理会一起行动</em><b>避免同质规则同时触发</b><p>错开执行时间、分散规则参数，并在市场剧烈波动时提示风险、放慢执行。</p></div></div>
+  </div>
+</figure>
+<style>
+.ch23summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch23summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch23summary-c.warn{border-left-color:var(--warm)}
+.ch23summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch23summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch23summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch23summary.in .ch23summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch23summary{grid-template-columns:1fr}}
+</style>

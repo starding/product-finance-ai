@@ -1,0 +1,53 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">八类典型任务：频率与做错的后果</p>
+    <p class="figsub">横轴是任务发生的频率，纵轴是做错的后果。实心为一次完成的任务，空心为持续的任务。点按一项，查看输入、输出与完成标准。</p>
+    <div class="tm" id="tm" data-anim>
+      <svg viewBox="0 0 640 300" role="img" aria-label="典型任务的频率与后果">
+        <g id="tm-ax"></g><g id="tm-pts"></g>
+      </svg>
+      <div class="tm-d" id="tm-d"><p>点按一项任务。</p></div>
+    </div>
+  </div>
+  <figcaption>示意位置，表示相对关系。左上角的任务要求确认、证据与可撤销；右下角的任务追求便捷。</figcaption>
+</figure>
+<style>
+.tm svg{width:100%;height:auto;display:block}
+.tm-p{cursor:pointer;opacity:0;transition:opacity .4s;transition-delay:calc(var(--i)*.15s)}
+.tm.in .tm-p{opacity:1}
+.tm-p circle{stroke-width:2.5;transition:r .2s}
+.tm-p.sel circle{r:11}
+.tm-p text{font-size:12.5px}
+.tm-zone{fill:var(--quote)}
+.tm-d{background:var(--quote);border-radius:8px;padding:10px 12px;margin-top:6px;min-height:5.6em;font-size:13.5px;line-height:1.65}
+.tm-d p{margin:0} .tm-d b{font-size:14.5px}
+.tm-d dl{display:grid;grid-template-columns:72px 1fr;gap:2px 10px;margin:4px 0 0}
+@media (max-width:640px){.tm-p text{font-size:20px}.tm svg text.t-faint{font-size:17px}}
+.tm-d dt{color:var(--faint);font-size:12.5px} .tm-d dd{margin:0}
+</style>
+<script>
+(function(){
+  const X0=60,X1=620,YT=16,YB=260,px=v=>X0+v/100*(X1-X0),py=v=>YB-v/100*(YB-YT);
+  const T=[['查一个数据',90,10,1,'一个问题','一个数字及其来源与时间','数字正确、口径清楚'],
+    ['理解一件事',72,22,1,'一个现象或一条新闻','一段有依据的解释','解释与事实一致，标明哪些是推测'],
+    ['研究公司或观点',38,46,1,'一家公司或一个判断','一份可以被检验的分析','依据可追溯，结论说明在什么条件下会被推翻'],
+    ['筛选与比较',55,36,1,'一组条件','一份候选清单与比较','条件被准确执行，遗漏与排序依据清楚'],
+    ['制定计划并下单',30,88,1,'目标、资金与约束','一份计划与执行结果','符合约束与适当性，用户确认后执行，可撤销'],
+    ['持续跟踪',80,52,0,'关注的资产与条件','每个周期的检查结果','每个周期都有交代：有变化、无变化或检查受阻'],
+    ['按目标管理组合',12,95,0,'目标、期限与风险约束','组合与调整记录','持续符合约束，偏离时请示，结果按目标衡量'],
+    ['复盘',18,60,0,'一段时间的决定与结果','对过程与结果的拆解','区分决定的质量与运气，形成可执行的改进']];
+  const $=id=>document.getElementById(id);
+  let ax=`<rect class="tm-zone" x="${X0}" y="${YT}" width="${(X1-X0)/2}" height="${(YB-YT)/2}" rx="6"/>`+
+    `<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/><line x1="${X0}" y1="${YT}" x2="${X0}" y2="${YB}" class="s-faint"/>`+
+    `<text x="${X1}" y="${YB+18}" text-anchor="end" font-size="11" class="t-faint">更频繁 →</text><text x="${X0}" y="${YB+18}" font-size="11" class="t-faint">很少发生</text>`+
+    `<text x="${X0-8}" y="${YT+8}" text-anchor="end" font-size="11" class="t-faint">严重</text><text x="${X0-8}" y="${YB}" text-anchor="end" font-size="11" class="t-faint">轻微</text>`+
+    `<text transform="translate(16,${(YT+YB)/2}) rotate(-90)" text-anchor="middle" font-size="11" class="t-faint">做错的后果</text>`;
+  $('tm-ax').innerHTML=ax;
+  $('tm-pts').innerHTML=T.map(([n,f,c,once],i)=>{const left=f>70;return `<g class="tm-p" data-i="${i}" style="--i:${i}"><circle cx="${px(f)}" cy="${py(c)}" r="8" fill="${once?'var(--accent)':'var(--surface)'}" stroke="var(--accent)"/><text x="${px(f)+(left?-14:14)}" y="${py(c)+4}" text-anchor="${left?'end':'start'}" class="t-ink">${n}</text></g>`;}).join('');
+  const ps=[...document.querySelectorAll('.tm-p')];
+  function sel(i){ps.forEach((p,j)=>p.classList.toggle('sel',j===i));const [n,,,once,inp,out,done]=T[i];
+    $('tm-d').innerHTML=`<b>${n}</b>　<span style="color:var(--faint);font-size:12px">${once?'一次完成':'持续进行'}</span><dl><dt>输入</dt><dd>${inp}</dd><dt>输出</dt><dd>${out}</dd><dt>完成标准</dt><dd>${done}</dd></dl>`;}
+  ps.forEach((p,i)=>p.addEventListener('click',()=>sel(i)));
+  sel(4);
+})();
+</script>

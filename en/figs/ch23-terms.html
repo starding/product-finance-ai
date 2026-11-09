@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Which terms of return an agent can affect</p><p class="figsub">Each row is one term of realized return. The bar is the improvement an agent might bring (illustrative). Switch to "After similar agents spread" to see which value competition consumes.</p></div><button class="replay" type="button" data-replay="tm2">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Point in time">
+      <button type="button" data-tm2="a" aria-pressed="true">Used by a few</button>
+      <button type="button" data-tm2="b" aria-pressed="false">After similar agents spread</button>
+    </div>
+    <div class="tm2" id="tm2" data-anim></div>
+    <p class="tm2-msg" id="tm2-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>Illustrative. "Behaviour gap" means the gap between the return investors actually earn and the return of the products they hold, which comes mainly from buying high, selling low and market timing.</figcaption>
+</figure>
+<style>
+.tm2{display:grid;gap:6px}
+.tm2-r{display:grid;grid-template-columns:30px 110px 1fr 1.6fr;gap:10px;align-items:center;font-size:13px;background:var(--quote);border-radius:8px;padding:7px 10px}
+.tm2-r em{font-style:normal;font-weight:700;color:var(--faint);text-align:center}
+.tm2-r b{font-size:13.5px}
+.tm2-t{height:14px;background:var(--surface);border-radius:7px;overflow:hidden}
+.tm2-t i{display:block;height:100%;width:0;border-radius:7px;transition:width .7s ease,background .3s}
+.tm2-r span{font-size:12px;color:var(--muted);line-height:1.5}
+.tm2-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.tm2-r{grid-template-columns:24px 1fr 1fr}.tm2-r span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const R=[['＋','Time compensation',0,0,'The reward for waiting is set by the market; an agent cannot create it.'],['＋','Risk compensation',45,45,'Staying diversified, rebalancing as planned and not giving up in volatility let users actually collect the risk compensation.'],
+    ['＋','Information advantage',55,8,'Once analysis is cheap, the same kind of analysis spreads quickly and competition consumes the excess return.'],['－','Trading costs',40,40,'Choosing order types and timing and avoiding needless trades saves costs that do not depend on being cleverer than others.'],
+    ['＋','Luck',0,0,'An agent cannot change luck; it can only help users tell how much of a result came from luck.'],['','Behaviour gap',60,60,'Less buying high and selling low narrows the gap between users\' actual return and the products\' return.']];
+  const box=document.getElementById('tm2');
+  box.innerHTML=R.map(([s,n,a,b,d])=>`<div class="tm2-r"><em>${s}</em><b>${n}</b><div class="tm2-t"><i></i></div><span>${d}</span></div>`).join('');
+  const is=[...box.querySelectorAll('.tm2-t i')];
+  function set(k){document.querySelectorAll('[data-tm2]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.tm2===k)));
+    is.forEach((e,i)=>{const v=k==='a'?R[i][2]:R[i][3];setTimeout(()=>e.style.width=v+'%',40);e.style.background=i===2?(k==='a'?'var(--blue)':'var(--warm)'):'var(--accent)';});
+    document.getElementById('tm2-msg').textContent=k==='a'?'When only a few people use it, an agent can also bring some advantage in information.':'Once similar agents spread, the advantage in information almost disappears; the improvements in risk compensation, trading costs and the behaviour gap remain, because they do not depend on predicting better than others.';}
+  document.querySelectorAll('[data-tm2]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.tm2)));
+  box.addEventListener('anim-in',()=>{is.forEach(e=>e.style.width='0');set('a');setTimeout(()=>set('b'),2600);});
+  set('a');
+})();
+</script>

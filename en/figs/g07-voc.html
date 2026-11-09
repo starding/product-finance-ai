@@ -1,0 +1,33 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">A partnership for one voyage, and a permanent company</p><p class="figsub">Switch between the two forms of organization and see what happens to the capital from investment to exit.</p></div><button class="replay" type="button" data-replay="vc">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Form of organization">
+      <button type="button" data-vc="p" aria-pressed="true">Partnership for one voyage</button>
+      <button type="button" data-vc="c" aria-pressed="false">Permanent company</button>
+    </div>
+    <div class="vc" id="vc" data-anim></div>
+    <p class="vc-msg" id="vc-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>The form of the Dutch East India Company took shape step by step as defects were repaired; even the limited liability of its managers was established only after years of trial and error (Gelderblom, de Jong and Jonker, 2013).</figcaption>
+</figure>
+<style>
+.vc{display:flex;gap:6px;flex-wrap:wrap}
+.vc-s{flex:1 1 110px;background:var(--quote);border-radius:9px;padding:10px;font-size:13px;line-height:1.5;opacity:0;transform:translateY(6px);transition:opacity .4s,transform .4s;transition-delay:calc(var(--i)*.3s)}
+.vc.in .vc-s{opacity:1;transform:none}
+.vc-s em{display:block;font-style:normal;font-size:11px;color:var(--faint)}
+.vc-s.end{background:var(--accent-soft)}
+.vc-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const T={p:[['Invest','A few households pool money for one ship'],['Voyage','The ship sails once'],['Count','The ship returns and the cargo is counted'],['Dissolve','Divided by holdings; the partnership ends']],
+    c:[['Invest','Many people subscribe for shares'],['Retain','Capital stays in the company for the long term'],['Operate','The company runs many voyages over many years'],['Exit','Those who want out sell their shares to others']]};
+  const M={p:'In a partnership for one voyage, the capital is returned when the voyage ends: it cannot take on undertakings spanning many years, and investors must wait for the ship to return before they can leave.',c:'A permanent company keeps its capital for the long term and can take on undertakings spanning many years; investors who want to leave simply sell their shares to others, and the company itself is unaffected. This calls for a place to buy and sell shares.'};
+  const box=document.getElementById('vc'),msg=document.getElementById('vc-msg');
+  function set(k){document.querySelectorAll('[data-vc]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.vc===k)));
+    box.innerHTML=T[k].map(([a,b],i)=>`<div class="vc-s${i===3?' end':''}" style="--i:${i}"><em>${a}</em>${b}</div>`).join('');msg.textContent=M[k];box.classList.remove('in');void box.offsetWidth;box.classList.add('in');}
+  document.querySelectorAll('[data-vc]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.vc)));
+  box.addEventListener('anim-in',()=>{set('p');setTimeout(()=>set('c'),2600);});
+  set('p');box.classList.remove('in');
+})();
+</script>

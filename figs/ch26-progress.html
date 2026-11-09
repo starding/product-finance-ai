@@ -1,0 +1,35 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">授权随记录提升，随变化收回</p><p class="figsub">两年里一个代理的授权等级。良好的可核验记录让等级逐步提高；越权、模型版本更新与委托人情况变化，让等级降下来。点按事件查看说明。</p></div><button class="replay" type="button" data-replay="pg">重播</button></div>
+    <div class="pg" id="pg" data-anim>
+      <svg viewBox="0 0 640 230" role="img" aria-label="授权等级随时间变化"><g id="pg-g"></g><path id="pg-p" class="pg-l"/><g id="pg-e"></g></svg>
+      <p class="pg-msg" id="pg-msg" aria-live="polite">点按图中的事件。</p>
+    </div>
+  </div>
+  <figcaption>示意时间线。等级对应授权的六级阶梯。提升授权的依据是可核验的过程记录，而不是收益。</figcaption>
+</figure>
+<style>
+.pg svg{width:100%;height:auto;display:block}
+.pg-l{fill:none;stroke:var(--accent);stroke-width:3;stroke-dasharray:1500;stroke-dashoffset:1500;transition:stroke-dashoffset 2.4s ease}
+.pg.in .pg-l{stroke-dashoffset:0}
+.pg-ev{cursor:pointer}
+.pg-ev.sel circle{stroke:var(--ink);stroke-width:2.5}
+.pg-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.pg svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const S=[[0,2],[3,3],[7,4],[11,5],[14,2],[16,3],[18,4],[20,3],[22,3],[22.5,2],[24,2]];
+  const EV=[[3,'up','三个月的过程记录完整，升为逐笔确认','代理在起草方案阶段的记录完整：费用、约束与每个周期的交代都可以核对，于是允许它在本人逐笔确认后下单。'],[7,'up','升为方案批准','逐笔确认期间没有一次越界，委托人批准了“每月定投与季度再平衡”的方案。'],[11,'up','升为限时可否决','方案内执行一年无越界，再平衡改为提前一天通知、未否决即执行。'],[14,'down','一次越权，降到起草方案','代理在一次再平衡中超出了约定的单笔上限（被执行层拦下）。授权立即降级，原因与处理过程向委托人说明。'],[20,'down','模型版本更新，降一级','代理换了模型版本，过去的记录只部分适用；在新版本积累记录之前，先降一级运行。'],[22.5,'down','委托人换了工作，重新确认','委托人的收入与用钱计划变化，委托书需要复核；复核完成前，保守地降到起草方案。']];
+  const X0=70,X1=620,YT=14,YB=190,x=m=>X0+m/24*(X1-X0),y=l=>YB-(l-1)/5*(YB-YT);
+  const N=['','信息','起草','逐笔','方案','否决','自主'];
+  let g=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`;
+  for(let l=1;l<=6;l++)g+=`<text x="${X0-8}" y="${y(l)+4}" text-anchor="end" font-size="11" class="t-faint">${l} ${N[l]}</text><line x1="${X0}" x2="${X1}" y1="${y(l)}" y2="${y(l)}" class="s-line"/>`;
+  [0,6,12,18,24].forEach(m=>g+=`<text x="${x(m)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">第 ${m} 月</text>`);
+  document.getElementById('pg-g').innerHTML=g;
+  let d='';S.forEach(([m,l],i)=>{d+=(i?`L${x(m)},${y(S[i-1][1])}L`:'M')+`${x(m)},${y(l)}`;});document.getElementById('pg-p').setAttribute('d',d);
+  document.getElementById('pg-e').innerHTML=EV.map(([m,k,t],i)=>{const l=S.find(s=>s[0]===m)[1];return `<g class="pg-ev" data-i="${i}"><circle cx="${x(m)}" cy="${y(l)}" r="7" fill="${k==='up'?'var(--accent)':'var(--warm)'}"/></g>`;}).join('');
+  const es=[...document.querySelectorAll('.pg-ev')];
+  es.forEach((e,i)=>e.addEventListener('click',()=>{es.forEach(z=>z.classList.toggle('sel',z===e));document.getElementById('pg-msg').textContent=EV[i][2]+'：'+EV[i][3];}));
+})();
+</script>

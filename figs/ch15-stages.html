@@ -1,0 +1,42 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">一次完整的交付：八个阶段</p><p class="figsub">以“按目标管理一个组合”为例。点按任一阶段把它去掉，看交付会在哪里出问题。</p></div><button class="replay" type="button" data-replay="st">重播</button></div>
+    <div class="st" id="st" data-anim></div>
+    <p class="st-msg" id="st-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>前五个阶段决定事情能否做成、做对；后三个阶段决定委托人能否知情并管得住。代理成本的分析见 Jensen 与 Meckling（1976），可观察性与激励见 Holmström（1979）。</figcaption>
+</figure>
+<style>
+.st{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.st-s{font:inherit;text-align:left;position:relative;border:1.5px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--surface);color:var(--ink);cursor:pointer;opacity:.35;transition:opacity .35s,background .35s,border-color .35s}
+.st-s.on{opacity:1;background:var(--accent-soft);border-color:var(--accent)}
+.st-s.off{opacity:1;background:var(--warm-soft);border-color:var(--warm);border-style:dashed}
+.st-s.off b{text-decoration:line-through;text-decoration-color:var(--warm)}
+.st-s em{font-style:normal;font-size:11px;color:var(--faint)}
+.st-s b{display:block;font-size:14px;margin:1px 0 3px}
+.st-s span{font-size:12px;color:var(--muted);line-height:1.5;display:block}
+.st-s.g2{box-shadow:inset 0 3px 0 var(--gold)}
+.st-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.st{grid-template-columns:repeat(2,1fr)}}
+</style>
+<script>
+(function(){
+  const S=[['接下任务','说清目标、期限、约束与完成标准','没有说清完成标准，事后无法判断任务是否完成，只能用涨跌来评价。'],
+    ['具备手段','数据、工具、账户与必要的授权','缺少数据或权限，计划写得再好也无法执行。'],
+    ['组织过程','把目标分解为步骤并安排顺序','步骤缺乏组织，重复、遗漏与互相冲突的操作随之出现。'],
+    ['保证做对','检查约束、适当性与计算是否正确','没有检查，一次超出风险约束的调整就可能直接执行。'],
+    ['留下证据','记录依据、版本与每一次操作','没有记录，出了问题无法追溯原因，也无法证明按约定做了事。'],
+    ['持续与主动','按周期检查，在需要时主动行动','只在用户想起时才做事，组合偏离目标也无人察觉。'],
+    ['状态可见与请示','让委托人看到进度，超出授权时先请示','委托人不知道做了什么，越权的操作在事后才被发现。'],
+    ['控制与退出','可以暂停、接管、撤销，并带走成果','用户无法叫停，也带不走记录，只能继续信任或者彻底放弃。']];
+  const box=document.getElementById('st'),msg=document.getElementById('st-msg');
+  box.innerHTML=S.map(([n,d],i)=>`<button type="button" class="st-s${i>=5?' g2':''}" data-i="${i}"><em>阶段 ${i+1}</em><b>${n}</b><span>${d}</span></button>`).join('');
+  const bs=[...box.children];let off=-1;
+  function show(){bs.forEach((b,i)=>{b.classList.toggle('on',i!==off);b.classList.toggle('off',i===off);});
+    msg.textContent=off<0?'八个阶段都具备：任务被说清、做成、做对，委托人知情并管得住。':`去掉「${S[off][0]}」：${S[off][2]}`;}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>{off=off===i?-1:i;show();}));
+  box.addEventListener('anim-in',()=>{off=-1;bs.forEach(b=>b.classList.remove('on','off'));msg.textContent='';
+    bs.forEach((b,i)=>setTimeout(()=>b.classList.add('on'),200+i*260));setTimeout(show,200+S.length*260);});
+  show();
+})();
+</script>

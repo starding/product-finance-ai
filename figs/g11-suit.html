@@ -1,0 +1,35 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">适当性：卖给能承受的人</p><p class="figsub">十户人家能承受的损失各不相同，三种船股的风险与佣金也不同。切换卖方推荐的依据，看有多少户买到了超出自己承受能力的船股。</p></div><button class="replay" type="button" data-replay="su">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="推荐依据">
+      <button type="button" data-su="fee" aria-pressed="true">按佣金推荐</button>
+      <button type="button" data-su="fit" aria-pressed="false">按适当性推荐</button>
+    </div>
+    <div class="su" id="su" data-anim></div>
+    <div class="legend"><span><i style="background:var(--accent)"></i>稳妥的船股：佣金 1%</span><span><i style="background:var(--gold)"></i>中等风险：佣金 2%</span><span><i style="background:var(--warm)"></i>高风险：佣金 4%</span></div>
+    <p class="su-msg" id="su-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>示意：每户的承受能力分为低、中、高三档；买到风险高于承受能力的船股，即为不适当。</figcaption>
+</figure>
+<style>
+.su{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.su-h{background:var(--quote);border-radius:9px;padding:8px;font-size:12px;text-align:center;border:2px solid transparent;transition:border-color .3s;opacity:0;transform:translateY(5px);transition:opacity .35s,transform .35s,border-color .3s;transition-delay:calc(var(--i)*.07s)}
+.su.in .su-h{opacity:1;transform:none}
+.su-h b{display:block;font-size:12.5px} .su-h i{display:block;height:10px;border-radius:3px;margin-top:6px}
+.su-h.bad{border-color:var(--warm)}
+.su-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.su{grid-template-columns:repeat(2,1fr)}}
+</style>
+<script>
+(function(){
+  const T=[0,0,0,1,1,1,1,2,2,0],L=['低','中','高'],C=['var(--accent)','var(--gold)','var(--warm)'],box=document.getElementById('su');
+  function set(m){document.querySelectorAll('[data-su]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.su===m)));
+    const P=T.map((t,i)=>m==='fee'?(i%3===0?1:2):t);let bad=0,com=0;
+    box.innerHTML=T.map((t,i)=>{const p=P[i],x=p>t;if(x)bad++;com+=[1,2,4][p];return `<div class="su-h${x?' bad':''}" style="--i:${i}"><b>第 ${i+1} 户</b>能承受：${L[t]}<i style="background:${C[p]}"></i></div>`;}).join('');
+    box.classList.remove('in');void box.offsetWidth;box.classList.add('in');
+    document.getElementById('su-msg').textContent=m==='fee'?`按佣金推荐，卖方多收佣金（共 ${com}%），却有 ${bad} 户买到了超出承受能力的船股，其中最扛不住损失的人家受害最深。`:`按适当性推荐，每户买到的都与承受能力相称，没有一户不适当；卖方的佣金少了一些（共 ${com}%）。`;}
+  document.querySelectorAll('[data-su]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.su)));
+  box.addEventListener('anim-in',()=>{set('fee');setTimeout(()=>set('fit'),2600);});
+  set('fee');box.classList.remove('in');
+})();
+</script>

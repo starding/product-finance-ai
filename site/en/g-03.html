@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What if a loan is not repaid</title>
+<meta name="description" content="Product × Finance × AI: Derived from Zero, Chapter 3. A loan buys back only a promise about the future. In a one-off encounter, not repaying is rational, so lending cannot happen. Reputation, collateral and third-party enforcement make promises credible, each at a cost. Interest rates cannot replace trust.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="g-03">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="Contents">
+<div class="side-head"><a class="sidetitle" href="index.html">Product × Finance × AI<small>Financial Products in the Age of AI</small></a></div>
+<div class="side-view" role="group" aria-label="Way of reading"><a href="preface.html">Decomposition</a><a href="g-preface.html" class="on" aria-current="true">Derivation</a></div>
+<a class="side-about" href="index.html#about">About this book</a>
+<a class="" href="g-preface.html"><span class="n">Preface</span>The best way to understand financial products is to build them from zero</a>
+<a class="side-part" href="g-part1.html"><span class="pn">Part One</span>From 0 to 1: how a world without finance grows finance</a>
+<a class="" href="g-01.html"><span class="n">1</span>One person, one year&#x27;s harvest</a>
+<a class="" href="g-02.html"><span class="n">2</span>Two people, short of grain at different times</a>
+<a class=" cur" href="g-03.html" aria-current="page"><span class="n">3</span>What if a loan is not repaid</a>
+<a class="" href="g-04.html"><span class="n">4</span>Exchange among many</a>
+<a class="" href="g-05.html"><span class="n">5</span>Harvests good and bad</a>
+<a class="" href="g-06.html"><span class="n">6</span>Savers may need their grain at any time; borrowers need it for years</a>
+<a class="" href="g-07.html"><span class="n">7</span>No one household can pay for a ship</a>
+<a class="" href="g-08.html"><span class="n">8</span>Securities must be saleable</a>
+<a class="" href="g-09.html"><span class="n">9</span>Prices carry everyone&#x27;s information</a>
+<a class="" href="g-10.html"><span class="n">10</span>Ordinary people have neither the time nor the expertise</a>
+<a class="" href="g-11.html"><span class="n">11</span>Trustees may not do their duty</a>
+<a class="" href="g-12.html"><span class="n">12</span>The institutions are in place, and people still make mistakes</a>
+<a class="side-part" href="g-part2.html"><span class="pn">Part Two</span>Changing one parameter: when agency becomes almost free</a>
+<a class="" href="g-13.html"><span class="n">13</span>A new parameter: the cost of cognitive labour collapses</a>
+<a class="" href="g-14.html"><span class="n">14</span>Can everyone have a personal agent?</a>
+<a class="" href="g-15.html"><span class="n">15</span>Who guarantees an agent&#x27;s promises</a>
+<a class="" href="g-16.html"><span class="n">16</span>If everyone has an analyst</a>
+<a class="" href="g-17.html"><span class="n">17</span>Agents become the main market participants</a>
+<a class="" href="g-18.html"><span class="n">18</span>Can an agent correct human bias?</a>
+<a class="" href="g-19.html"><span class="n">19</span>What did not change</a>
+<a class="side-part" href="g-part3.html"><span class="pn">Part Three</span>Deriving a product in the new world</a>
+<a class="" href="g-20.html"><span class="n">20</span>One person and one sum of money</a>
+<a class="" href="g-21.html"><span class="n">21</span>The user is not present</a>
+<a class="" href="g-22.html"><span class="n">22</span>The user cannot see the process</a>
+<a class="" href="g-23.html"><span class="n">23</span>Agents make mistakes</a>
+<a class="" href="g-24.html"><span class="n">24</span>Trust takes time</a>
+<a class="side-app" href="g-epilogue.html"><span class="n">Epilogue</span>Back to the governing rule</a>
+<a class="side-app" href="method.html"><span class="n">Appendix</span>How this book was written</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="Open contents" title="Contents"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">Product × Finance × AI: Financial Products in the Age of AI</a><span>Part One  From 0 to 1</span><a class="langlink" href="../g-03.html" hreflang="zh-CN">中文</a></header>
+
+<div class="chapno">Chapter 3</div><h1>What if a loan is not repaid<small>Making promises credible</small></h1>
+<blockquote><p>What is lent is today's grain; what comes back is only a promise about the future. If the borrower does not repay after the harvest and the lender has no recourse, no one will lend in the first place, and all the gains from lending are lost. There are three ways to make a promise credible: make the borrower care about the future, which is reputation; give the borrower something to lose, which is collateral; or let a third party enforce it, which is contracts and rulings. All three have costs, and all three shut some people out. Raising the interest rate cannot replace trust: the higher the rate, the more likely those who still come to borrow are not to repay.</p></blockquote>
+<h2 id="sec-1">1. Loans not repaid: unable or unwilling</h2>
+<p>The island has grown more populous, and it has become customary for those who harvest in autumn to lend grain to those who harvest in spring. Yet when spring comes, some people always fail to repay. There are two kinds of failure. One is inability: the spring harvest was poor and the borrower has no grain to give. The other is unwillingness: the grain is in the store, but the borrower does not want to hand it over.</p>
+<p>The two kinds of default differ in nature. Inability comes from uncertain harvests and is a matter of risk. This chapter assumes that harvests always arrive as expected and considers only unwillingness. Default then becomes a choice: the borrower weighs what repaying and not repaying would each bring, and decides.</p>
+<p><strong>Today's counterpart.</strong> When lenders assess a borrower, they usually look at two things separately: ability to repay and willingness to repay. The first is judged from income and debts, the second from whether the borrower has kept past agreements.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Unable to repay, unwilling to repay</p><p class="figsub">Click a situation to see which kind of default it is. This chapter considers only unwillingness; inability comes from uncertain harvests and is left until risk is discussed.</p></div><button class="replay" type="button" data-replay="w2">Replay</button></div>
+    <div class="w2" id="w2" data-anim>
+      <div class="w2-bins"><div class="w2-bin" data-b="0"><b>Unable to repay</b><span>Has nothing to give: a matter of risk</span><div class="w2-in" id="w2-b0"></div></div><div class="w2-bin on" data-b="1"><b>Unwilling to repay</b><span>Could give, chooses not to: this chapter's problem</span><div class="w2-in" id="w2-b1"></div></div></div>
+      <div class="w2-pool" id="w2-pool"></div>
+      <p class="w2-msg" id="w2-msg" aria-live="polite"></p>
+    </div>
+  </div>
+</figure>
+<style>
+.w2-bins{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.w2-bin{background:var(--quote);border-radius:10px;padding:10px 12px;min-height:130px;border-top:3px solid var(--line)}
+.w2-bin.on{border-top-color:var(--accent)}
+.w2-bin b{font-size:15px;display:block} .w2-bin>span{font-size:12px;color:var(--muted)}
+.w2-in{display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.w2-pool{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;min-height:34px}
+.w2-c{font:inherit;font-size:12.5px;cursor:pointer;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 10px;color:var(--ink);text-align:left}
+.w2-in .w2-c{cursor:default}
+.w2-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.w2-bins{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const C=[['Poor spring harvest, no grain in store',0,'The harvest failed, so the borrower cannot repay even if he wants to: this is risk, not a problem of commitment.'],['Grain in store, but the borrower moved to another island',1,'The grain is there; once he has left, not repaying simply has no consequences: this is a problem of commitment.'],['The borrower fell ill and could not work the fields',0,'Illness meant no harvest, so there is nothing to give: this is inability to repay.'],['The borrower thinks the lender will not pursue him',1,'The grain is there, and he has worked out that not repaying costs nothing: a typical case of unwillingness.'],['The borrower lent the grain on to someone else',1,'He diverted the grain owed in repayment; he could have repaid and did not: this is unwillingness.'],['A storm destroyed the whole island\'s harvest',0,'Everyone\'s harvest failed at once and no one can repay: this is risk, and risk that cannot be diversified away.']];
+  const $=id=>document.getElementById(id);let placed=[];
+  function draw(){$('w2-b0').innerHTML='';$('w2-b1').innerHTML='';$('w2-pool').innerHTML='';
+    C.forEach((c,i)=>{const b=`<button type="button" class="w2-c" data-i="${i}">${c[0]}</button>`;if(placed.includes(i))$('w2-b'+c[1]).insertAdjacentHTML('beforeend',b);else $('w2-pool').insertAdjacentHTML('beforeend',b);});
+    $('w2-pool').querySelectorAll('.w2-c').forEach(b=>b.addEventListener('click',()=>put(+b.dataset.i)));}
+  function put(i){if(!placed.includes(i))placed.push(i);draw();$('w2-msg').textContent=C[i][2];}
+  $('w2').addEventListener('anim-in',()=>{placed=[];draw();$('w2-msg').textContent='';C.forEach((_,i)=>setTimeout(()=>put(i),600+i*1100));});
+  draw();$('w2-msg').textContent='Click a situation below to sort it into a category.';
+})();
+</script>
+
+<h2 id="sec-2">2. In a one-off encounter, not repaying is rational</h2>
+<p>Imagine two people who will never meet again. When spring comes, the borrower has two choices: repay and lose the principal and interest, or not repay and lose nothing. As long as not repaying has no consequences, it is the better choice. The lender can foresee this, so in autumn he does not lend. Both of them lose the gains from lending, gains that would have been enough to make both better off.</p>
+<p>This reasoning reveals the structure of the commitment problem. The question is not whether the borrower is a good person; it is that at the moment of repayment, repaying no longer does him any good. For lending to happen, his gains and losses at that moment must be changed.</p>
+<p><strong>Today's counterpart.</strong> Strangers rarely lend money to each other, and when they do, only small sums.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Reasoning back from the moment of repayment</p><p class="figsub">The lender first decides whether to lend; the borrower decides in spring whether to repay. Switch between "Deal only once" and "Deal every year" to see the borrower's gains and losses at the moment of repayment, and the lender's choice beforehand.</p></div><button class="replay" type="button" data-replay="gm3">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Dealings">
+      <button type="button" data-gm3="once" aria-pressed="true">Deal only once</button>
+      <button type="button" data-gm3="rep" aria-pressed="false">Deal every year</button>
+    </div>
+    <div class="gm3" id="gm3" data-anim>
+      <svg viewBox="0 0 640 230" role="img" aria-label="Game tree for a loan"><g id="gm3-t"></g></svg>
+      <p class="gm3-msg" id="gm3-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: figures in brackets are (lender, borrower) gains or losses relative to not lending, in portions. When the two deal every year, a borrower who does not repay can never borrow again and loses the gains from borrowing in every later year, counted here as 5 portions.</figcaption>
+</figure>
+<style>
+.gm3 svg{width:100%;height:auto;display:block}
+.gm3-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.gm3 svg text{font-size:17px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  function node(x,y,t){return `<circle cx="${x}" cy="${y}" r="7" fill="var(--ink)"/><text x="${x}" y="${y-14}" text-anchor="middle" font-size="12.5" class="t-ink">${t}</text>`;}
+  function edge(x1,y1,x2,y2,lab,on){return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${on?'var(--accent)':'var(--line)'}" stroke-width="${on?3.5:2}"/><text x="${(x1+x2)/2+(x2>x1?8:-8)}" y="${(y1+y2)/2}" text-anchor="${x2>x1?'start':'end'}" font-size="12" class="${on?'t-accent':'t-muted'}">${lab}</text>`;}
+  function leaf(x,y,a,b,on){return `<rect x="${x-58}" y="${y}" width="116" height="34" rx="8" fill="${on?'var(--accent-soft)':'var(--quote)'}"/><text x="${x}" y="${y+22}" text-anchor="middle" font-size="13" class="t-ink">(${a}, ${b})</text>`;}
+  function set(k){document.querySelectorAll('[data-gm3]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.gm3===k)));
+    const rep=k==='rep',defB=rep?'4 − 5 = −1':'+4',repay=rep;
+    let h=node(320,34,'Lender: lend?')+edge(320,34,150,110,'Don\'t lend',!repay)+edge(320,34,470,110,'Lend',repay)+leaf(150,116,0,0,!repay)+node(470,110,'Borrower: repay?')+
+      edge(470,110,370,180,'Repay',repay)+edge(470,110,570,180,'Default',!repay)+leaf(370,184,'+1','+1',repay)+leaf(570,184,'−3',defB,false);
+    $('gm3-t').innerHTML=h;
+    $('gm3-msg').textContent=rep?'When the two deal every year, not repaying gains 4 portions now but loses borrowing in every later year, 1 portion less in total: repaying pays better. The lender foresees this and lends, and each side gains 1 portion.':'When the two deal only once, in spring not repaying gains 4 portions while repaying gains only 1, so the borrower will not repay. The lender foresees this and does not lend in autumn; both get 0. A loan that could have given each side 1 more portion never happens.';}
+  document.querySelectorAll('[data-gm3]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.gm3)));
+  $('gm3').addEventListener('anim-in',()=>{set('once');setTimeout(()=>set('rep'),3200);});
+  set('once');
+})();
+</script>
+
+<h2 id="sec-3">3. Reputation: making the borrower care about the future</h2>
+<p>If the two must deal with each other year after year, the situation changes. Fail to repay this time, and there will be no loan next time. At the moment of repayment, the borrower is no longer weighing only the principal and interest; he is weighing them against the gains from all future borrowing. As long as those future gains are large enough and the borrower cares enough about the future, repaying is worth more than not repaying.</p>
+<p>The force of reputation also depends on how far the record travels. If only the person who was cheated knows about a default, the defaulter can simply borrow from someone else. If the whole village knows, the defaulter will never borrow again.</p>
+<aside class="principle"><p class="pr-k">Derived so far: a principle</p><p class="pr-n">Reputation mechanism</p><p class="pr-c"><span><em>Discipline</em>Economics › Game theory (repeated games)</span><span><em>Type</em>Theoretical model</span></p><p class="pr-s">When dealings repeat and a default is seen and passed on, the gain from defaulting now cannot outweigh the cooperation lost in the future, so a promise can be credible without outside enforcement.</p><dl><div><dt>Standing in the field</dt><dd>Part of the theory of repeated games. In its explanation of the 2005 Nobel Prize in Economic Sciences, the Royal Swedish Academy of Sciences noted that repeated-game theory had deepened understanding of the prerequisites for cooperation; Aumann shared that prize with Schelling "for having enhanced our understanding of conflict and cooperation through game-theory analysis"</dd></div><div><dt>Constraint it answers</dt><dd>Promises may not be kept, and no one can enforce them</dd></div><div><dt>Premises</dt><dd>Dealings repeat; records of default can spread; the borrower cares enough about the future</dd></div><div><dt>Proposed by</dt><dd>Kreps, Milgrom, Roberts and Wilson, 1982. They showed that even when dealings are finite in number, as long as each side is slightly uncertain about the other's type, concern for reputation is enough to sustain cooperation</dd></div><div><dt>Open question</dt><dd>When records do not travel far and dealings happen only once, reputation loses its force</dd></div></dl></aside>
+<p>Traces of this mechanism can be found in history. Greif (1993) used the letters of eleventh-century Maghribi traders in the Mediterranean to argue that traders shared information about who had cheated whom, which kept distant agents from cheating. This interpretation is disputed: Edwards and Ogilvie (2012) argue that these traders also relied heavily on courts and formal contracts.</p>
+<p><strong>Today's counterpart.</strong> Credit records make a single default visible to every lender, and a credit score compresses a history of kept agreements into one number. The easier records are to obtain and the more reliable they are, the stronger the discipline of reputation.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The force of reputation: caring about the future, records that travel</p><p class="figsub">Not repaying once gains 4 portions now. Drag how much the borrower cares about the future, switch how far a record of default travels, and compare what default gains with the future it loses.</p></div><button class="replay" type="button" data-replay="rp">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Record">
+      <button type="button" data-rp="1" aria-pressed="false">Only the cheated lender knows</button>
+      <button type="button" data-rp="10" aria-pressed="true">The whole village knows</button>
+    </div>
+    <div class="rp" id="rp" data-anim>
+      <div class="rp-b"><span>Default gains now</span><div><i id="rp-g" style="background:var(--warm)"></i></div><b id="rp-gv"></b></div>
+      <div class="rp-b"><span>Default loses in future</span><div><i id="rp-l" style="background:var(--accent)"></i></div><b id="rp-lv"></b></div>
+      <div class="sl"><label for="rp-d">How much the borrower cares about the future <b id="rp-dv"></b></label><input id="rp-d" type="range" min="0" max="95" step="5" value="80"></div>
+      <p class="rp-msg" id="rp-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the village has 10 households able to lend, and the borrower gains 1 portion a year from borrowing. "How much the borrower cares about the future" is what one portion next year is worth as a percentage of one portion today. When only the cheated lender knows, the defaulter loses only his dealings with that household and can still borrow from the other 9.</figcaption>
+</figure>
+<style>
+.rp-b{display:grid;grid-template-columns:9em 1fr 6em;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.rp-b div{height:16px;background:var(--quote);border-radius:4px;overflow:hidden}
+.rp-b i{display:block;height:100%;transition:width .3s}
+.rp-b b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.rp-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);let share=10;
+  function draw(){const d=+$('rp-d').value/100,V=d>=.999?99:d/(1-d)*1,lost=V*share/10,G=4,M=12;
+    $('rp-g').style.width=G/M*100+'%';$('rp-l').style.width=Math.min(lost,M)/M*100+'%';$('rp-gv').textContent=G+' portions';$('rp-lv').textContent=lost.toFixed(1)+' portions';
+    $('rp-dv').textContent=Math.round(d*100)+'%';
+    $('rp-msg').textContent=lost>=G?`The future lost (${lost.toFixed(1)} portions) is no less than the gain now: keeping the promise pays better, and the promise is credible.`:share<10?`Only the cheated household knows of the default, so the defaulter borrows from another household as before, and the future lost is only ${lost.toFixed(1)} portions: not repaying pays better. The farther records travel, the stronger reputation is.`:`The borrower does not care enough about the future, and the future lost is only ${lost.toFixed(1)} portions: not repaying pays better.`;}
+  document.querySelectorAll('[data-rp]').forEach(b=>b.addEventListener('click',()=>{share=+b.dataset.rp;document.querySelectorAll('[data-rp]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  $('rp-d').addEventListener('input',draw);
+  $('rp').addEventListener('anim-in',()=>{let v=0;$('rp-d').value=0;draw();const id=setInterval(()=>{v+=5;$('rp-d').value=v;draw();if(v>=90)clearInterval(id);},180);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-4">4. Collateral: giving the borrower something to lose</h2>
+<p>Reputation depends on the future; collateral replaces the promise with something present. The borrower pledges a plot of land, an ox or part of his stored grain to the lender, and if he does not repay, the pledged item goes to the lender. As long as the collateral is worth at least the principal and interest owed, not repaying does not pay, and even if the borrower defaults, the lender recovers the loss. Collateral has a second role. The lender can offer two sets of terms at once: more collateral and lower interest, or less collateral and higher interest. Those confident they will repay are not afraid of losing the collateral and choose the first; those who are not confident choose the second. Which one a borrower picks reveals how confident he is.</p>
+<aside class="principle"><p class="pr-k">Derived so far: a principle</p><p class="pr-n">Collateral as incentive and screen</p><p class="pr-c"><span><em>Discipline</em>Economics › Information economics (credit markets)</span><span><em>Type</em>Theoretical model</span></p><p class="pr-s">Collateral makes a defaulter lose more than default gains; and letting borrowers choose for themselves between more collateral and lower interest separates borrowers of different confidence.</p><dl><div><dt>Standing in the field</dt><dd>A direct response to the theory of credit rationing, in a paper titled "Screening vs. rationing": as long as collateral and interest rates can be combined, a lender can screen borrowers instead of rationing them</dd></div><div><dt>Constraint it answers</dt><dd>Promises may not be kept, and the lender cannot see how confident the borrower is</dd></div><div><dt>Premises</dt><dd>The collateral is worth enough and can be disposed of in a default</dd></div><div><dt>Proposed by</dt><dd>Bester, 1985, proposed the screening role of collateral</dd></div><div><dt>Open question</dt><dd>Those with nothing to pledge are shut out, and those who most need to borrow are often precisely those with no land and no ox</dd></div></dl></aside>
+<p><strong>Today's counterpart.</strong> Mortgages are secured on the house, car loans on the car, and securities-backed lending and margin trading on the securities held. Young people without assets get worse terms on both the amount they can borrow and the interest rate.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Collateral: safer, and it shuts some people out</p><p class="figsub">Each household borrows 4 portions and must repay 4.4 in spring. Drag the share of principal and interest the collateral must be worth, and see who can borrow and how much the lender loses on default.</p></div><button class="replay" type="button" data-replay="cl">Replay</button></div>
+    <div class="cl" id="cl" data-anim>
+      <div class="cl-hh" id="cl-hh"></div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Can borrow</span><span><i style="background:var(--quote);border:1px solid var(--line)"></i>Not enough collateral, cannot borrow</span></div>
+      <div class="sl"><label for="cl-r">Collateral must be worth at least this share of principal and interest: <b id="cl-rv"></b></label><input id="cl-r" type="range" min="0" max="150" step="10" value="100"></div>
+      <div class="cl-out"><div><span>Households that can borrow</span><b id="cl-n"></b></div><div><span>Of those, households for whom default pays</span><b id="cl-d"></b></div></div>
+      <p class="cl-msg" id="cl-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the 20 households own collateral worth from 0 to 9 portions; the number in each cell is the value of that household's collateral. When the collateral is worth less than the principal and interest owed, not repaying pays.</figcaption>
+</figure>
+<style>
+.cl-hh{display:grid;grid-template-columns:repeat(10,1fr);gap:5px}
+.cl-hh i{display:flex;align-items:center;justify-content:center;font-style:normal;font-size:11.5px;height:34px;border-radius:7px;transition:background .3s,color .3s}
+.cl-out{display:flex;gap:24px;flex-wrap:wrap;margin-top:10px}
+.cl-out div{display:flex;flex-direction:column} .cl-out span{font-size:12px;color:var(--faint)} .cl-out b{font-size:20px;font-variant-numeric:tabular-nums}
+.cl-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),W=[0,0,0,0.5,1,1,1.5,2,2.5,3,3,3.5,4,4.5,5,5.5,6,7,8,9],due=4.4;
+  $('cl-hh').innerHTML=W.map(w=>`<i>${w}</i>`).join('');const cs=[...$('cl-hh').children];
+  function draw(){const q=+$('cl-r').value/100,need=due*q;let n=0,bad=0;
+    W.forEach((w,i)=>{const ok=w>=need-1e-9;if(ok){n++;if(w<due)bad++;}cs[i].style.background=ok?'var(--accent)':'var(--quote)';cs[i].style.color=ok?'#fff':'var(--faint)';});
+    $('cl-rv').textContent=Math.round(q*100)+'%';$('cl-n').textContent=n;$('cl-d').textContent=bad;
+    $('cl-msg').textContent=q===0?'With no collateral required, everyone can borrow, but for those whose collateral is worth less than principal and interest, not repaying pays; the promise is not credible.':q<1?`Collateral must be worth ${Math.round(q*100)}% of principal and interest: ${n} households can borrow, of which ${bad} have collateral worth less than principal and interest and still have a motive not to repay.`:`Collateral must be worth at least the principal and interest: no one who borrows has a motive not to repay, and the promise is credible; but ${20-n} households cannot borrow because their collateral is not enough.`;}
+  $('cl-r').addEventListener('input',draw);
+  $('cl').addEventListener('anim-in',()=>{let v=0;$('cl-r').value=0;draw();const id=setInterval(()=>{v+=10;$('cl-r').value=v;draw();if(v>=100)clearInterval(id);},260);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-5">5. Third-party enforcement, and the three approaches compared</h2>
+<p>The third approach is to ask a third party that both sides recognise to enforce the agreement: write it down as a contract, and in case of default let elders, a court or the authorities rule on it and compel the borrower to repay. Third-party enforcement does not depend on the borrower caring about the future, nor does it require him to have something to pledge. But it has its own costs: someone must record contracts, hear disputes and enforce rulings, and the enforcer must itself be trustworthy.</p>
+<p>Each of the three approaches has its own range: reputation suits acquaintances who deal repeatedly, collateral suits people with assets, and third-party enforcement suits large transactions between strangers. They can also be used together.</p>
+<p><strong>Today's counterpart.</strong> Loan contracts, notarisation and court judgments are third-party enforcement. Lenders usually check credit records, require collateral or a guarantee, and sign a contract, all at once.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Three ways to make a promise credible</p><p class="figsub">Click an approach to see what it relies on, whom it suits, what it costs and whom it shuts out.</p></div><button class="replay" type="button" data-replay="th3">Replay</button></div>
+    <div class="th3" id="th3" data-anim>
+      <button type="button" class="th3-c" data-i="0" style="--i:0"><b>Reputation</b><span>Make the borrower care about the future</span></button>
+      <button type="button" class="th3-c" data-i="1" style="--i:1"><b>Collateral</b><span>Give the borrower something to lose</span></button>
+      <button type="button" class="th3-c" data-i="2" style="--i:2"><b>Third-party enforcement</b><span>Enforced by someone both sides recognise</span></button>
+    </div>
+    <dl class="th3-d" id="th3-d" aria-live="polite"></dl>
+  </div>
+</figure>
+<style>
+.th3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.th3-c{font:inherit;text-align:left;cursor:pointer;background:var(--quote);border:1px solid transparent;border-radius:10px;padding:10px 12px;color:var(--ink);opacity:0;transform:translateY(6px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.25s)}
+.th3.in .th3-c{opacity:1;transform:none}
+.th3-c b{display:block;font-size:15px} .th3-c span{font-size:12.5px;color:var(--muted)}
+.th3-c.sel{border-color:var(--accent);background:var(--accent-soft)}
+.th3-d{display:grid;grid-template-columns:7em 1fr;gap:6px 14px;margin:14px 0 0;font-size:13.5px;line-height:1.6}
+.th3-d dt{color:var(--faint);font-size:12px;padding-top:2px} .th3-d dd{margin:0}
+@media (max-width:640px){.th3{grid-template-columns:1fr}.th3-d{grid-template-columns:1fr;gap:1px}.th3-d dd{margin-bottom:6px}}
+</style>
+<script>
+(function(){
+  const K=['Relies on','Suits','Cost','Shut out','Today\'s counterpart'];
+  const D=[['Repeated dealings, and records of default that spread','Small, recurring loans between acquaintances','Requires long-term relationships and shared records; newcomers have no record','Newcomers with no record','Credit records, credit scores'],
+    ['Something the borrower owns and is willing to pledge','People with assets; larger loans','Collateral must be valued and kept; its value can change','People without assets','Mortgages, car loans, securities-backed lending and margin'],
+    ['A contract, and elders, a court or authorities able to enforce it','Larger loans between strangers','Recording, hearing and enforcing all cost something; the enforcer must itself be trustworthy','Small loans that cannot bear the cost of enforcement','Loan contracts, notarisation, court judgments']];
+  const d=document.getElementById('th3-d'),bs=[...document.querySelectorAll('.th3-c')];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));d.innerHTML=K.map((k,j)=>`<dt>${k}</dt><dd>${D[i][j]}</dd>`).join('');}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('th3').addEventListener('anim-in',()=>{[0,1,2].forEach((i,k)=>setTimeout(()=>set(i),400+k*1800));});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-6">6. Interest rates cannot replace trust</h2>
+<p>Since some people do not repay, can the lender simply raise the interest rate and use the extra interest to cover losses from default? Work through how the pool of borrowers changes. As the rate rises, prudent borrowers find the loan no longer worthwhile and drop out first. Those still willing to pay high interest are mostly people planning to take big risks: if the venture succeeds they earn a great deal, and if it fails they do not repay. The higher the rate, the larger the share of such people among those who remain. Beyond a certain point, a further rise brings in less extra interest than it adds in defaults, and the lender's expected return actually falls. The lender therefore prefers not to raise the price, and instead limits whom he lends to and how much.</p>
+<aside class="principle"><p class="pr-k">Derived so far: a principle</p><p class="pr-n">Credit rationing</p><p class="pr-c"><span><em>Discipline</em>Economics › Information economics (credit markets)</span><span><em>Type</em>Theoretical model</span></p><p class="pr-s">When borrowers' risk cannot be seen, raising the interest rate drives out prudent borrowers and leaves riskier ones; lenders therefore prefer to lend limited amounts at a lower rate rather than raise the price until the supply of and demand for loans are equal.</p><dl><div><dt>Standing in the field</dt><dd>The 2001 Nobel Prize in Economic Sciences was awarded to Akerlof, Spence and Stiglitz for their analyses of markets with asymmetric information; the prize announcement lists credit rationing among the phenomena explained by this work of Stiglitz</dd></div><div><dt>Constraint it answers</dt><dd>Promises may not be kept, and lenders cannot tell borrowers' risk apart</dd></div><div><dt>Premises</dt><dd>Lenders cannot distinguish borrowers; borrowers can choose how much risk to take</dd></div><div><dt>Proposed by</dt><dd>Stiglitz and Weiss, 1981</dd></div><div><dt>Open question</dt><dd>Whether collateral and reputation can replace screening; how those rationed out can borrow</dd></div></dl></aside>
+<p><strong>Today's counterpart.</strong> Faced with higher-risk applicants, lenders commonly decline the application or lower the credit limit rather than simply raising the interest rate.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The higher the rate, the more likely borrowers are not to repay</p><p class="figsub">70% of the village are prudent borrowers and 30% are risk-takers. Drag the interest rate to see who still comes to borrow, and how much the lender recovers on average for each portion lent.</p></div><button class="replay" type="button" data-replay="sw">Replay</button></div>
+    <div class="sw" id="sw" data-anim>
+      <svg viewBox="0 0 640 220" role="img" aria-label="Interest rate and the lender's expected return"><g id="sw-ax"></g><path id="sw-c" class="sw-c"/><circle id="sw-p" r="6" fill="var(--ink)"/></svg>
+      <div class="sw-who"><span id="sw-s">Prudent borrowers</span><span id="sw-r">Risk-taking borrowers</span></div>
+      <div class="sl"><label for="sw-i">Interest rate <b id="sw-iv"></b></label><input id="sw-i" type="range" min="0" max="100" step="2" value="20"></div>
+      <p class="sw-msg" id="sw-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: prudent borrowers always repay but will not borrow at rates above 30%; only half of risk-taking borrowers can repay, but they will accept rates of up to 100%. The vertical axis is the lender's average net return per portion lent.</figcaption>
+</figure>
+<style>
+.sw svg{width:100%;height:auto;display:block}
+.sw-c{fill:none;stroke:var(--accent);stroke-width:2.5}
+.sw-who{display:flex;gap:8px;margin:6px 0 10px}
+.sw-who span{font-size:12.5px;padding:4px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent);transition:opacity .3s}
+.sw-who span.out{opacity:.3;text-decoration:line-through}
+.sw-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.sw svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),X0=50,X1=630,YT=12,YB=186,x=r=>X0+r*(X1-X0),y=v=>YB-(v+.4)/.6*(YB-YT);
+  const E=r=>r<=.3+1e-9?(.7+.3*.5)*(1+r)-1:.5*(1+r)-1;
+  $('sw-ax').innerHTML=[-.4,-.2,0,.2].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="${v===0?'s-faint':'s-line'}"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v>0?'+':v<0?'−':''}${Math.abs(Math.round(v*100))}%</text>`).join('')+
+    [0,.2,.4,.6,.8,1].map(r=>`<text x="${x(r)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${Math.round(r*100)}%</text>`).join('');
+  let d='';for(let r=0;r<=1.0001;r+=.005){d+=(r?'L':'M')+x(r).toFixed(1)+','+y(E(r)).toFixed(1);}$('sw-c').setAttribute('d',d);
+  function draw(){const r=+$('sw-i').value/100,e=E(r);$('sw-p').setAttribute('cx',x(r));$('sw-p').setAttribute('cy',y(e));$('sw-iv').textContent=Math.round(r*100)+'%';
+    $('sw-s').classList.toggle('out',r>.3);
+    const pc=v=>(v<0?'−':'+')+Math.abs(v*100).toFixed(1)+'%';
+    $('sw-msg').textContent=r<=.3?`At ${Math.round(r*100)}% interest, both kinds of borrower come, and the lender's average net return per portion lent is ${pc(e)}. It is highest at 30%.`:`Above 30%, prudent borrowers drop out, leaving only risk-takers, half of whom default; the average net return falls to ${pc(e)}. Raising the price does not make up for defaults; it attracts more of them.`;}
+  $('sw-i').addEventListener('input',draw);
+  $('sw').addEventListener('anim-in',()=>{let v=0;$('sw-i').value=0;draw();const id=setInterval(()=>{v+=4;$('sw-i').value=v;draw();if(v>=80)clearInterval(id);},150);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-7">7. A village that keeps its word: Civilization Simulator, version 3</h2>
+<p>The simulator unlocks the rule of "Commitment". In the village, twenty households that harvest in spring borrow grain from households that harvest in autumn. Some of them keep their word; the rest are opportunists, who will not repay as long as not repaying has no consequences. You can choose the approach used to make promises credible, and adjust the share of borrowers who keep their word, how much people care about the future and the share who have collateral, then see whether lending can be sustained over twenty years.</p>
+<p>With no approach in place, as long as fewer than 80% keep their word, the defaults of the first year frighten lenders away, lending stops at once and all its gains are lost. With reputation, when borrowers care enough about the future, even opportunists repay on time; when they do not care enough, defaulters are excluded in the first year and those who keep their word go on borrowing. With collateral, the 7 households with enough collateral can all borrow, while the other 13 can never borrow, whether or not they would keep their word.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Civilization Simulator · Chapter 3: A village that keeps its word</p><p class="figsub">Twenty households that harvest in spring borrow grain each year from households that harvest in autumn. Choose an approach to making promises credible, adjust the share of borrowers who keep their word and how much people care about the future, and see whether lending can be sustained over twenty years.</p></div><button class="replay" type="button" data-replay="cs3">Replay</button></div>
+    <div class="cs-rules"><span class="on">Saving</span><span class="on">Seed</span><span class="on">Lending</span><span class="on">Commitment</span><span class="lock">Money · Ch. 4</span><span class="lock">Insurance · Ch. 5</span></div>
+    <div class="seg-btns" role="group" aria-label="Approach to making promises credible">
+      <button type="button" data-cs3="none" aria-pressed="false">None</button>
+      <button type="button" data-cs3="rep" aria-pressed="true">Reputation</button>
+      <button type="button" data-cs3="col" aria-pressed="false">Collateral</button>
+      <button type="button" data-cs3="both" aria-pressed="false">Reputation + collateral</button>
+    </div>
+    <div class="cs3" id="cs3" data-anim>
+      <svg viewBox="0 0 660 200" role="img" aria-label="Lending in each of twenty years"><g id="cs3-ax"></g><g id="cs3-b"></g></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Borrowed and repaid on time</span><span><i style="background:var(--warm)"></i>Borrowed but did not repay</span><span><i style="background:var(--quote);border:1px solid var(--line)"></i>Could not borrow</span></div>
+      <div class="cs3-ctl">
+        <div class="sl"><label for="cs3-h">Share who keep their word <b id="cs3-hv"></b></label><input id="cs3-h" type="range" min="0" max="100" step="5" value="60"></div>
+        <div class="sl"><label for="cs3-d">How much people care about the future <b id="cs3-dv"></b></label><input id="cs3-d" type="range" min="50" max="95" step="5" value="85"></div>
+      </div>
+      <div class="cs3-out" id="cs3-out"></div>
+      <p class="cs3-msg" id="cs3-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model: each household borrows 4 portions a year and repays 4.4 in spring; each loan repaid on time brings the two sides 1 portion of gain in total; not repaying gains 4 portions now. Opportunists default only when defaulting pays better. With no approach, they always default. With reputation, they default if the future lost (care for the future ÷ (1 − care for the future) × 1 portion) is less than 4 portions, and are then refused by the whole village. With collateral, they repay if the collateral is worth at least the principal and interest. With no approach, lenders decide whether to keep lending by last year's repayment rate, and stop if it falls below 80%. Of the twenty households, 7 have collateral worth at least the principal and interest.</figcaption>
+</figure>
+<style>
+.cs3 svg{width:100%;height:auto;display:block}
+.cs3-ctl{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px}
+.cs3-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cs3-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs3-out span{display:block;font-size:11.5px;color:var(--faint)} .cs3-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.cs3-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs3-ctl{grid-template-columns:1fr;gap:4px}.cs3-out{grid-template-columns:1fr}.cs3 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs3'+id),N=20,Y=20,DUE=4.4,G=4,W=[0,0,0,0.5,1,1,1.5,2,2.5,3,3,3.5,4,4.5,5,5.5,6,7,8,9];
+  const X0=40,X1=650,YT=10,YB=168,bw=(X1-X0)/Y,y=v=>YB-v/N*(YB-YT);let mode='rep';
+  $('-ax').innerHTML=[0,5,10,15,20].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+
+    [1,5,10,15,20].map(t=>`<text x="${X0+bw*(t-.5)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">Year ${t}</text>`).join('');
+  function sim(h,d){const honest=Array.from({length:N},(_,i)=>((i*7)%N)<Math.round(h*N)),col=W.map(w=>w>=DUE),bad=Array(N).fill(false);
+    const future=d/(1-d)*1,repRepays=future>=G;let belief=.9;const rows=[];
+    for(let t=0;t<Y;t++){let ok=0,def=0;
+      for(let i=0;i<N;i++){let can;
+        if(mode==='none')can=belief>=.8;else if(mode==='rep')can=!bad[i];else if(mode==='col')can=col[i];else can=!bad[i];
+        if(!can)continue;
+        let repay;if(honest[i])repay=true;else if(mode==='none')repay=false;else if(mode==='rep')repay=repRepays;else if(mode==='col')repay=true;else repay=col[i]||repRepays;
+        if(repay)ok++;else{def++;bad[i]=true;}}
+      if(mode==='none'&&ok+def>0)belief=ok/(ok+def);
+      rows.push([ok,def]);}
+    return rows;}
+  function draw(){const h=+$('-h').value/100,d=+$('-d').value/100,R=sim(h,d);
+    $('-hv').textContent=Math.round(h*100)+'%';$('-dv').textContent=Math.round(d*100)+'%';
+    $('-b').innerHTML=R.map(([ok,def],t)=>{const x=X0+bw*t+bw*.15,w=bw*.7;return `<rect x="${x}" y="${y(N)}" width="${w}" height="${YB-y(N)}" rx="2" fill="var(--quote)"/><rect x="${x}" y="${y(ok)}" width="${w}" height="${YB-y(ok)}" rx="2" fill="var(--accent)"/><rect x="${x}" y="${y(ok+def)}" width="${w}" height="${y(ok)-y(ok+def)}" fill="var(--warm)"/>`;}).join('');
+    const tot=R.reduce((a,r)=>a+r[0],0),defs=R.reduce((a,r)=>a+r[1],0),last=R[Y-1][0]+R[Y-1][1];
+    $('-out').innerHTML=[['Gains from lending realised',Math.round(tot/(N*Y)*100)+'%'],['Defaults over twenty years (household-years)',defs],['Households able to borrow in year 20',last]].map(([a,b])=>`<div><span>${a}</span><b>${b}</b></div>`).join('');
+    const fut=d/(1-d);let m='';
+    if(mode==='none')m=h>=.8?`With ${Math.round(h*100)}% keeping their word, lenders barely keep lending, but every year ${Math.round((1-h)*N)} households do not repay, and those who keep their word indirectly bear the loss.`:`In the first year ${Math.round((1-h)*N)} households do not repay, and lenders stop lending for good: lending halts completely, and all its gains are lost.`;
+    else if(mode==='rep')m=fut>=G?`Borrowers care enough about the future: the future lost (about ${fut.toFixed(1)} portions) is no less than the 4 portions gained now. Even opportunists repay on time, and lending is sustained throughout.`:`Borrowers do not care enough about the future: opportunists default in the first year and are then refused by the whole village; those who keep their word go on borrowing.`;
+    else if(mode==='col')m=`Only the 7 households with enough collateral can borrow, and they have no motive not to repay; the other 13 can never borrow, whether or not they would keep their word.`;
+    else m=fut>=G?'Those with collateral and those who care about the future all repay on time: lending is sustained almost in full.':'Those with collateral always repay; opportunists with no collateral who do not care about the future default in the first year and are then excluded.';
+    $('-msg').textContent=m;}
+  document.querySelectorAll('[data-cs3]').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.cs3;document.querySelectorAll('[data-cs3]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  ['-h','-d'].forEach(k=>$(k).addEventListener('input',draw));
+  $('').addEventListener('anim-in',()=>{['none','rep','col','both'].forEach((k,i)=>setTimeout(()=>{mode=k;document.querySelectorAll('[data-cs3]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.cs3===k)));draw();},300+i*2400));});
+  draw();
+})();
+</script>
+
+<h2 id="sec-8">8. What this step leaves open</h2>
+<p>Once promises have become credible, several problems remain unsolved:</p>
+<ol><li><strong>Finding the right counterparty is still hard.</strong> The more people there are, the harder it is to match those with surplus grain to those who lack it, and exchange itself has a cost.</li><li><strong>Old age is still unsolved.</strong> However credible promises are, the youngest generation cannot find anyone younger to lend to.</li><li><strong>Default from inability remains.</strong> This chapter assumed harvests always arrive as expected; once a harvest fails, even the most trustworthy cannot repay.</li><li><strong>People without assets are shut out.</strong> Collateral makes lending safe, and also leaves those who most need to borrow unable to.</li></ol>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">What this step leaves open</p><p class="figsub">Four problems still unsolved once promises are credible. Click a problem to see the assumption it hides.</p></div><button class="replay" type="button" data-replay="nx3">Replay</button></div>
+    <div class="nx" id="nx3" data-anim>
+      <div class="nx-src"><b>A village that keeps its word</b><span>Reputation, collateral and enforcement</span></div>
+      <div class="nx-list" id="nx3-l"></div>
+    </div>
+    <p class="nx-msg" id="nx3-msg" aria-live="polite"></p>
+  </div>
+</figure>
+<style>
+.nx{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:center}
+.nx-src{background:var(--ink);color:var(--bg);border-radius:10px;padding:14px 10px;text-align:center}
+.nx-src b{display:block;font-size:16px} .nx-src span{font-size:12px;opacity:.75}
+.nx-list{display:grid;gap:6px}
+.nx-i{font:inherit;text-align:left;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:9px 12px;color:var(--ink);opacity:0;transform:translateX(-8px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.3s)}
+.nx.in .nx-i{opacity:1;transform:none}
+.nx-i span{font-size:13.5px} .nx-i em{font-style:normal;font-size:11.5px;color:var(--faint);white-space:nowrap}
+.nx-i.sel{border-color:var(--accent)}
+.nx-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.nx{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const Q=[['Finding the right counterparty is still hard','Chapter 4 Money','Hidden assumption: everyone knows who has surplus grain and who lacks it. With many people, exchange itself has a cost.'],
+    ['Old age is still unsolved','Chapter 4 Money','Hidden assumption: the other party will still have income decades from now. However credible promises are, the youngest generation cannot find anyone younger to lend to.'],
+    ['Default from inability remains','Chapter 5 Insurance','Hidden assumption: harvests always arrive as expected. Once a harvest fails, even the most trustworthy cannot repay.'],
+    ['People without assets are shut out','Chapter 6 Banks','Hidden assumption: lenders can only judge household by household. Could pooling many people\'s stored grain and lending it out across many households lower both the risk and the barrier to borrowing?']];
+  const l=document.getElementById('nx3-l'),msg=document.getElementById('nx3-msg');
+  l.innerHTML=Q.map((q,i)=>`<button type="button" class="nx-i" style="--i:${i}" data-i="${i}"><span>${q[0]}</span><em>→ ${q[1]}</em></button>`).join('');
+  const bs=[...l.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));msg.textContent=Q[i][2];}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('nx3').addEventListener('anim-in',()=>{[0,1,2,3].forEach((i,k)=>setTimeout(()=>set(i),1600+k*1800));});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-9">9. Implications for products</h2>
+<p>Almost every credit product today is some combination of the three approaches in this chapter. Three implications follow. First, a lending product must begin by answering why anyone should believe the borrower will repay; the only answers are reputation, collateral, third-party enforcement, or a combination of them. Second, the force of reputation depends on the reach and reliability of records: the more complete and the harder to forge the records, the more credible the promise and the cheaper the loan. Third, interest rates cannot replace trust. Covering risk by raising the price drives prudent users away; the better course is to improve identification and constraint.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: making promises credible</p><p class="figsub">Four conclusions, each tied to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="g03summary">Replay</button></div>
+    <div class="g03summary" id="g03summary" data-anim><div class="g03summary-c" style="--i:0"><em>The commitment problem</em><b>At the moment of repayment, repaying no longer pays</b><p>In a one-off encounter not repaying is rational, so lending never happens at all.</p></div><div class="g03summary-c" style="--i:1"><em>Three approaches</em><b>Reputation, collateral and third-party enforcement</b><p>Make the borrower care about the future, give him something to lose, or let a third party enforce the promise.</p></div><div class="g03summary-c warn" style="--i:2"><em>Costs</em><b>Every approach shuts some people out</b><p>Newcomers have no record, people without assets have no collateral, and small loans cannot bear the cost of enforcement.</p></div><div class="g03summary-c warn" style="--i:3"><em>Interest rates</em><b>Interest rates cannot replace trust</b><p>The higher the rate, the sooner prudent borrowers leave, and the more likely those who remain are not to repay.</p></div></div>
+  </div>
+</figure>
+<style>
+.g03summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g03summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g03summary-c.warn{border-left-color:var(--warm)}
+.g03summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g03summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g03summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g03summary.in .g03summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g03summary{grid-template-columns:1fr}}
+</style>
+
+<h2 id="sec-10">References</h2>
+<ul class="refs"><li>Bester, H. (1985). Screening vs. rationing in credit markets with imperfect information. <i>American Economic Review</i>, 75(4), 850–855.</li><li>Edwards, J., &amp; Ogilvie, S. (2012). Contract enforcement, institutions, and social capital: The Maghribi traders reappraised. <i>Economic History Review</i>, 65(2), 421–444.</li><li>Greif, A. (1993). Contract enforceability and economic institutions in early trade: The Maghribi traders' coalition. <i>American Economic Review</i>, 83(3), 525–548.</li><li>Kreps, D. M., Milgrom, P., Roberts, J., &amp; Wilson, R. (1982). Rational cooperation in the finitely repeated prisoners' dilemma. <i>Journal of Economic Theory</i>, 27(2), 245–252.</li><li>Nobel Prize Outreach. <i>The Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel 2001</i>. NobelPrize.org.</li><li>Nobel Prize Outreach. <i>The Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel 2005</i>. NobelPrize.org.</li><li>Stiglitz, J. E., &amp; Weiss, A. (1981). Credit rationing in markets with imperfect information. <i>American Economic Review</i>, 71(3), 393–410.</li></ul>
+<footer class="nav"><a href="g-02.html">← Chapter 2: Two people, short of grain at different times</a><a href="g-04.html">Chapter 4: Exchange among many →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

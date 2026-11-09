@@ -1,0 +1,73 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">From handovers to all present at once</p>
+    <p class="figsub">The five stages an investment passes through, and which disciplines each stage needs.</p>
+    <div class="seg-btns" role="group" aria-label="Switch view">
+      <button type="button" data-dv="past" aria-pressed="true">Before: each handles a segment</button>
+      <button type="button" data-dv="now" aria-pressed="false">Now: the agent covers the whole process</button>
+    </div>
+    <div class="dv-scroll"><div class="dv" id="dv" data-anim data-dv="past">
+      <div></div><div class="dv-h">Account opening</div><div class="dv-h">Market data</div><div class="dv-h">Ordering</div><div class="dv-h">Holdings</div><div class="dv-h">Reconciliation</div>
+      <div class="dv-band"><span>Agent: read materials → judge → place orders → track → report</span></div>
+
+      <div class="dv-r fin"><b>Finance</b><span>Research and financial engineering</span></div>
+      <div class="dv-c fin"><span>Basis for risk tolerance</span></div>
+      <div class="dv-c fin own"><span>What is already in the price</span></div>
+      <div class="dv-c fin"><span>Execution cost and timing</span></div>
+      <div class="dv-c fin"><span>Diversification and risk exposure</span></div>
+      <div class="dv-c fin"><span>Performance attribution</span></div>
+
+      <div class="dv-r prod"><b>Product</b><span>Product and design</span></div>
+      <div class="dv-c prod"><span>Help users state their goals</span></div>
+      <div class="dv-c prod"><span>How to present changes</span></div>
+      <div class="dv-c prod own"><span>Confirmation and reversibility</span></div>
+      <div class="dv-c prod own"><span>Ongoing reporting</span></div>
+      <div class="dv-c prod"><span>Results that can be checked</span></div>
+
+      <div class="dv-r comp"><b>Compliance</b><span>Compliance and operations</span></div>
+      <div class="dv-c comp own"><span>Identity and suitability</span></div>
+      <div class="dv-c comp"><span>Not personalized advice</span></div>
+      <div class="dv-c comp"><span>Scope of authority</span></div>
+      <div class="dv-c comp"><span>Conflict-of-interest disclosure</span></div>
+      <div class="dv-c comp own"><span>Record keeping</span></div>
+    </div></div>
+    <p class="dv-msg" id="dv-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>Illustrative. Stages and division of labour vary by institution; the figure shows only the main responsible party.</figcaption>
+</figure>
+<style>
+.dv-scroll{overflow-x:auto}
+.dv{display:grid;grid-template-columns:96px repeat(5,minmax(84px,1fr));gap:6px;min-width:540px;position:relative;font-size:12px}
+.dv-h{text-align:center;color:var(--faint);padding-bottom:2px}
+.dv-band{grid-column:2/-1;height:26px;border-radius:13px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;transform-origin:left;transform:scaleX(0);opacity:0;transition:transform .7s ease,opacity .3s}
+.dv[data-dv="now"] .dv-band{transform:none;opacity:1}
+.dv-band span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 10px}
+.dv-r{display:flex;flex-direction:column;justify-content:center;line-height:1.3}
+.dv-r b{font-size:14px}
+.dv-r span{font-size:11px;color:var(--faint)}
+.dv-c{min-height:52px;border-radius:8px;border:1.5px dashed var(--line);display:flex;align-items:center;justify-content:center;text-align:center;padding:6px;line-height:1.4;color:var(--muted);transition:background .4s,border-color .4s,color .4s}
+.dv-c span{opacity:0;transition:opacity .4s}
+.dv-c.own{border-style:solid}
+.dv[data-dv="past"] .dv-c.own span{opacity:1}
+.dv[data-dv="past"] .dv-c.own.fin{background:var(--accent-soft);border-color:var(--accent)}
+.dv[data-dv="past"] .dv-c.own.prod{background:rgba(47,95,158,.14);border-color:var(--blue)}
+.dv[data-dv="past"] .dv-c.own.comp{background:rgba(160,120,24,.14);border-color:var(--gold)}
+.dv[data-dv="now"] .dv-c{border-style:solid;color:var(--ink)}
+.dv[data-dv="now"] .dv-c span{opacity:1}
+.dv[data-dv="now"] .dv-c.fin{background:var(--accent-soft);border-color:var(--accent)}
+.dv[data-dv="now"] .dv-c.prod{background:rgba(47,95,158,.14);border-color:var(--blue)}
+.dv[data-dv="now"] .dv-c.comp{background:rgba(160,120,24,.14);border-color:var(--gold)}
+.dv-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const dv=document.getElementById('dv'), btns=[...document.querySelectorAll('[data-dv]')].filter(b=>b.tagName==='BUTTON');
+  const MSG={past:'While product forms are stable, each stage is mainly the responsibility of one kind of specialist, and the parties hand over at the boundaries.',
+             now:'The agent carries the user through all five stages, and every judgement along the way involves finance, product and compliance at once. The three disciplines must be present together, not hand over at the boundaries.'};
+  let t;
+  const set=m=>{dv.dataset.dv=m;btns.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.dv===m)));document.getElementById('dv-msg').textContent=MSG[m];};
+  btns.forEach(b=>b.addEventListener('click',()=>{clearTimeout(t);set(b.dataset.dv);}));
+  dv.addEventListener('anim-in',()=>{set('past');clearTimeout(t);t=setTimeout(()=>set('now'),2600);});
+  set('past');
+})();
+</script>

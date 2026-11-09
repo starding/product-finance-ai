@@ -1,0 +1,61 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">文明模拟器 · 第 6 章：村里的粮仓</p><p class="figsub">五十户人家把余粮存进粮仓，种果园的人向粮仓借五年期的粮食。打开或关掉粮仓与存款保险，调整留下应付提取的比例与流言来时惊慌来取的人，看三十年里的果园与粮仓。</p></div><button class="replay" type="button" data-replay="cs6">重播</button></div>
+    <div class="cs-rules"><span class="on">储蓄</span><span class="on">借贷</span><span class="on">承诺</span><span class="on">货币</span><span class="on">保险</span><span class="on">银行</span><span class="lock">股份 · 第 7 章</span></div>
+    <div class="cs6" id="cs6" data-anim>
+      <svg viewBox="0 0 660 210" role="img" aria-label="三十年里粮仓的贷款与留存"><g id="cs6-ax"></g><g id="cs6-b"></g><g id="cs6-m"></g></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>借给果园的粮食</span><span><i style="background:var(--gold)"></i>留下应付提取的粮食</span><span><i style="background:var(--warm)"></i>流言传开的年份</span></div>
+      <div class="cs-sw"><label><input type="checkbox" id="cs6-bank" checked> 规则：银行（粮仓）</label><label><input type="checkbox" id="cs6-ins"> 规则：存款保险</label></div>
+      <div class="cs6-ctl">
+        <div class="sl"><label for="cs6-r">留下应付提取的比例 <b id="cs6-rv"></b></label><input id="cs6-r" type="range" min="5" max="60" step="5" value="20"></div>
+        <div class="sl"><label for="cs6-f">流言来时惊慌来取的人 <b id="cs6-fv"></b></label><input id="cs6-f" type="range" min="0" max="100" step="5" value="60"></div>
+      </div>
+      <button type="button" class="replay" id="cs6-re">换一组年景</button>
+      <div class="cs6-out" id="cs6-out"></div>
+      <p class="cs6-msg" id="cs6-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意模型：五十户各存 10 份；每户每年有一成的可能急用并取回，次年再存入；约每十年传开一次流言。果园借款期限五年，到期多收三成；提前收回只能折价一半。没有粮仓时，各户自己储藏，每年损耗一成，没有人借给果园。粮仓付不出提取即倒下，此后不再放贷。</figcaption>
+</figure>
+<style>
+.cs6 svg{width:100%;height:auto;display:block}
+.cs6-ctl{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:8px 0}
+.cs6-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cs6-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs6-out span{display:block;font-size:11.5px;color:var(--faint)} .cs6-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.cs6-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs6-ctl{grid-template-columns:1fr;gap:4px}.cs6-out{grid-template-columns:1fr}.cs6 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs6'+id),N=50,DEP=10,Y=30,T=5;let seed=1606;
+  const X0=40,X1=650,YT=10,YB=180,bw=(X1-X0)/Y,y=v=>YB-v/500*(YB-YT);
+  function draws(){let s=seed;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};return {u:Array.from({length:Y},()=>Array.from({length:N},()=>r())),rum:Array.from({length:Y},()=>r()<.1)};}
+  function sim(o){const R=draws(),rows=[];let book=Array(T).fill(0),alive=true,out=0,unmet=0,runs=0,fail=-1,lost=0;
+    if(o.bank){const L=(1-o.rho)*N*DEP;book=book.map(()=>L/T);}
+    for(let t=0;t<Y;t++){const urgent=R.u[t].filter(u=>u<.1).length;
+      if(!o.bank){lost+=N*DEP*.1;rows.push([0,0,R.rum[t],false]);continue;}
+      if(!alive){rows.push([0,0,R.rum[t],false]);continue;}
+      // 到期的果园贷款收回，并按原规模重新借出
+      const mat=book.shift();out+=mat*.3;book.push(mat);
+      let loans=book.reduce((a,b)=>a+b,0),reserve=N*DEP-loans;
+      const panic=R.rum[t]&&!o.ins?Math.round((N-urgent)*o.f):0;if(R.rum[t]&&panic>0)runs++;
+      const demand=(urgent+panic)*DEP;
+      if(demand<=reserve){rows.push([loans,reserve,R.rum[t],false]);continue;}
+      const need=demand-reserve,cap=loans*.5;
+      if(need<=cap){const cut=need/.5,k=1-cut/loans;book=book.map(v=>v*k);rows.push([loans*k,0,R.rum[t],false]);
+        // 惊慌取走的存粮次年回存，粮仓按留存比例重新放贷
+        const L=(1-o.rho)*N*DEP,cur=book.reduce((a,b)=>a+b,0);book[T-1]+=Math.max(0,L-cur);continue;}
+      const paid=reserve+cap;unmet+=N-Math.floor(paid/DEP);alive=false;fail=t;rows.push([0,0,R.rum[t],true]);}
+    return {rows,out,unmet,runs,fail,lost};}
+  function draw(){const o={bank:$('-bank').checked,ins:$('-ins').checked,rho:+$('-r').value/100,f:+$('-f').value/100},S=sim(o);
+    $('-rv').textContent=Math.round(o.rho*100)+'%';$('-fv').textContent=Math.round(o.f*100)+'%';
+    $('-ax').innerHTML=[0,250,500].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+[1,10,20,30].map(t=>`<text x="${X0+bw*(t-.5)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">第 ${t} 年</text>`).join('');
+    $('-b').innerHTML=S.rows.map(([l,r,rum,f],t)=>{const x=X0+bw*t+bw*.15,w=bw*.7;return `<rect x="${x}" y="${y(l)}" width="${w}" height="${YB-y(l)}" fill="var(--accent)" rx="1"/><rect x="${x}" y="${y(l+r)}" width="${w}" height="${y(l)-y(l+r)}" fill="var(--gold)"/>`+(rum?`<rect x="${x}" y="${YT}" width="${w}" height="4" fill="var(--warm)"/>`:'')+(f?`<text x="${x+w/2}" y="${YB-6}" text-anchor="middle" font-size="11" class="t-warm">倒下</text>`:'');}).join('');
+    $('-out').innerHTML=[['三十年果园多收的粮食',Math.round(S.out)+' 份'],["没能取回存粮的户数",S.unmet],[o.bank?'流言引发的挤兑':'各户储藏三十年的损耗',o.bank?S.runs+' 次':Math.round(S.lost)+' 份']].map(([a,b])=>`<div><span>${a}</span><b>${b}</b></div>`).join('');
+    $('-msg').textContent=!o.bank?`没有粮仓，没有人愿意把粮食一借五年，果园种不起来；各户自己储藏，三十年损耗约 ${Math.round(S.lost)} 份。`:S.fail>=0?`第 ${S.fail+1} 年流言传开，${Math.round(o.f*100)}% 的人抢先来取，粮仓即使砍掉果树也付不出，就此倒下，${S.unmet} 户没能取回存粮，此后再没有人借给果园。`:o.ins?`有了存款保险，流言来时没有人抢先来取，粮仓三十年平稳运行，果园多收约 ${Math.round(S.out)} 份。`:S.runs?`流言来过 ${S.runs} 次，粮仓靠折价收回贷款撑了过去，但砍掉的果树少收了粮食。留下的比例越高越稳，借给果园的就越少。`:`这组年景里没有发生挤兑，果园多收约 ${Math.round(S.out)} 份。换一组年景试试。`;}
+  ['-bank','-ins','-r','-f'].forEach(k=>$(k).addEventListener('input',draw));$('-re').addEventListener('click',()=>{seed=(seed*48271)%2147483647;draw();});
+  $('').addEventListener('anim-in',()=>{const s=[[false,false],[true,false],[true,true]];s.forEach(([b,i],k)=>setTimeout(()=>{$('-bank').checked=b;$('-ins').checked=i;draw();},300+k*2600));});
+  draw();
+})();
+</script>

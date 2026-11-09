@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: finance in a world of one person</p><p class="figsub">Four conclusions, each corresponding to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="g01summary">Replay</button></div>
+    <div class="g01summary" id="g01summary" data-anim><div class="g01summary-c" style="--i:0"><em>The need to save</em><b>First ask when the user will need the money</b><p>Income and consumption not happening at the same time is the first need every financial product serves.</p></div><div class="g01summary-c" style="--i:1"><em>Store of value</em><b>Not losing value is itself valuable</b><p>A means of storage that does not lose value already makes people better off, even if it earns nothing.</p></div><div class="g01summary-c warn" style="--i:2"><em>Where returns come from</em><b>Positive returns originally come from production</b><p>The return on seed comes from the extra grain the land grows, not from anyone's promise.</p></div><div class="g01summary-c warn" style="--i:3"><em>The limit of one person</em><b>Spanning decades requires other people</b><p>Storage spoils and there is no harvest in old age: one person alone cannot save across a lifetime.</p></div></div>
+  </div>
+</figure>
+<style>
+.g01summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g01summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g01summary-c.warn{border-left-color:var(--warm)}
+.g01summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g01summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g01summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g01summary.in .g01summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g01summary{grid-template-columns:1fr}}
+</style>

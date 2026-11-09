@@ -1,0 +1,35 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">集中竞价：让成交最多的价格</p><p class="figsub">八位买方各有最高愿付的价格，八位卖方各有最低肯卖的价格。拖动成交价，看能成交几笔，以及买卖双方从交易中得到的好处之和。</p></div><button class="replay" type="button" data-replay="au">重播</button></div>
+    <div class="au" id="au" data-anim>
+      <svg viewBox="0 0 640 230" role="img" aria-label="买方出价与卖方要价"><g id="au-ax"></g><path id="au-d" class="au-d"/><path id="au-s" class="au-s"/><g id="au-g"></g><line id="au-p" class="au-pl"/></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>买方出价，从高到低</span><span><i style="background:var(--warm)"></i>卖方要价，从低到高</span><span><i style="background:var(--accent-soft)"></i>交易带来的好处</span></div>
+      <div class="sl"><label for="au-x">成交价 <b id="au-xv"></b></label><input id="au-x" type="range" min="5" max="15" step="0.5" value="7"></div>
+      <p class="au-msg" id="au-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：在某一价格上，出价不低于它的买方愿意买，要价不高于它的卖方愿意卖，成交笔数取两者之小；好处之和为成交的各笔中买方出价减卖方要价的总和。</figcaption>
+</figure>
+<style>
+.au svg{width:100%;height:auto;display:block}
+.au-d{fill:none;stroke:var(--accent);stroke-width:2.5}
+.au-s{fill:none;stroke:var(--warm);stroke-width:2.5}
+.au-pl{stroke:var(--ink);stroke-width:1.6;stroke-dasharray:5 4}
+.au-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.au svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),Bv=[14,13,12,11,10.5,9,8,6.5],Sv=[6,7,8,8.5,9.5,11,12.5,14],X0=46,X1=630,YT=12,YB=196,W=(X1-X0)/8,x=i=>X0+i*W,y=v=>YB-(v-5)/10*(YB-YT);
+  $('au-ax').innerHTML=[5,7.5,10,12.5,15].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+[1,2,3,4,5,6,7,8].map(i=>`<text x="${x(i)-W/2}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">第 ${i} 笔</text>`).join('');
+  const step=v=>v.map((p,i)=>`${i?'L':'M'}${x(i)},${y(p)}L${x(i+1)},${y(p)}`).join('');$('au-d').setAttribute('d',step(Bv));$('au-s').setAttribute('d',step(Sv));
+  function at(p){const d=Bv.filter(b=>b>=p).length,s=Sv.filter(c=>c<=p).length,q=Math.min(d,s);let g=0;for(let i=0;i<q;i++)g+=Bv[i]-Sv[i];return [q,g];}
+  let best=[0,0,0];for(let p=5;p<=15;p+=.5){const [q,g]=at(p);if(q>best[1]||(q===best[1]&&g>best[2]))best=[p,q,g];}
+  function draw(){const p=+$('au-x').value,[q,g]=at(p);$('au-p').setAttribute('x1',X0);$('au-p').setAttribute('x2',X1);$('au-p').setAttribute('y1',y(p));$('au-p').setAttribute('y2',y(p));
+    $('au-g').innerHTML=Array.from({length:q},(_,i)=>`<rect x="${x(i)+1}" y="${y(Bv[i])}" width="${W-2}" height="${y(Sv[i])-y(Bv[i])}" fill="var(--accent-soft)"/>`).join('');$('au-xv').textContent=p+' 份';
+    $('au-msg').textContent=`成交价 ${p} 份：愿意买的 ${Bv.filter(b=>b>=p).length} 人，愿意卖的 ${Sv.filter(c=>c<=p).length} 人，成交 ${q} 笔，好处之和 ${g.toFixed(1)} 份。${q===best[1]?'这已是成交最多的价格区间。':`把价格调到 ${best[0]} 份左右，可以成交 ${best[1]} 笔。`}`;}
+  $('au-x').addEventListener('input',draw);
+  $('au').addEventListener('anim-in',()=>{let v=5;$('au-x').value=5;draw();const id=setInterval(()=>{v+=.5;$('au-x').value=v;draw();if(v>=15){clearInterval(id);setTimeout(()=>{$('au-x').value=best[0];draw();},500);}},180);});
+  draw();
+})();
+</script>

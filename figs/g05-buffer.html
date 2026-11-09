@@ -1,0 +1,33 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">自己扛：储备多少才够</p><p class="figsub">一户人家每年想吃 12 份，收成随机波动。拖动常年保有的储备，看一千年里挨饿的年份比例，以及储备每年白白损耗的粮食。</p></div><button class="replay" type="button" data-replay="bf">重播</button></div>
+    <div class="bf" id="bf" data-anim>
+      <div class="bf-b"><span>挨饿的年份</span><div><i id="bf-h" style="background:var(--warm)"></i></div><b id="bf-hv"></b></div>
+      <div class="bf-b"><span>每年损耗的粮食</span><div><i id="bf-l" style="background:var(--gold)"></i></div><b id="bf-lv"></b></div>
+      <div class="sl"><label for="bf-s">常年保有的储备 <b id="bf-sv"></b></label><input id="bf-s" type="range" min="0" max="24" step="2" value="0"></div>
+      <p class="bf-msg" id="bf-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：收成平均 12 份、波动约四成；储备每年损耗一成，丰年补足到设定的数量；一年吃到不足 9 份即算挨饿。按同一组一千年的随机收成计算。</figcaption>
+</figure>
+<style>
+.bf-b{display:grid;grid-template-columns:7.5em 1fr 4.5em;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.bf-b div{height:16px;background:var(--quote);border-radius:4px;overflow:hidden}
+.bf-b i{display:block;height:100%;transition:width .3s}
+.bf-b b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.bf-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);let s=7;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};
+  const g=()=>{let u=0;while(!u)u=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r());};
+  const H=Array.from({length:1000},()=>Math.max(0,12*(1+.4*g())));
+  function run(B){let st=B,hungry=0,lost=0;for(const h of H){let have=h+st,c=Math.min(12,have);if(c<9)hungry++;have-=c;st=Math.min(B,have);lost+=st*.1;st*=.9;}return [hungry/H.length,lost/H.length];}
+  function draw(){const B=+$('bf-s').value,[h,l]=run(B);$('bf-h').style.width=h/.3*100+'%';$('bf-l').style.width=l/2.4*100+'%';
+    $('bf-hv').textContent=Math.round(h*100)+'%';$('bf-lv').textContent=l.toFixed(1)+' 份';$('bf-sv').textContent=B+' 份';
+    $('bf-msg').textContent=B===0?`不留储备，大约每 ${Math.round(1/h)} 年就有一年挨饿。`:`常年保有 ${B} 份储备，挨饿的年份降到 ${Math.round(h*100)}%，代价是每年白白损耗约 ${l.toFixed(1)} 份。${h>.02?'储备再多，荒年连着荒年时仍可能挨饿。':''}`;}
+  $('bf-s').addEventListener('input',draw);
+  $('bf').addEventListener('anim-in',()=>{let v=0;$('bf-s').value=0;draw();const id=setInterval(()=>{v+=2;$('bf-s').value=v;draw();if(v>=24)clearInterval(id);},260);});
+  draw();
+})();
+</script>

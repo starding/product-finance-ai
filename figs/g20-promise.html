@@ -1,0 +1,32 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">能承诺的，与不能承诺的</p><p class="figsub">点选一项，看它为什么能承诺或不能承诺。</p></div><button class="replay" type="button" data-replay="pm20">重播</button></div>
+    <div class="pm20" id="pm20" data-anim>
+      <div class="pm20-two"><div><p class="pm20-h">能承诺，且可以核对</p><div id="pm20-y"></div></div><div><p class="pm20-h">不能承诺</p><div id="pm20-n"></div></div></div>
+      <p class="pm20-msg" id="pm20-msg" aria-live="polite"></p>
+    </div>
+  </div>
+</figure>
+<style>
+.pm20-two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pm20-h{margin:0 0 6px;font-size:12.5px;color:var(--muted)}
+.pm20-two button{font:inherit;display:block;width:100%;text-align:left;cursor:pointer;margin-bottom:5px;padding:7px 10px;border-radius:8px;border:1px solid transparent;font-size:13px;color:var(--ink);opacity:0;transform:translateY(6px);transition:opacity .35s,transform .35s,border-color .3s;transition-delay:calc(var(--i)*.12s)}
+.pm20.in .pm20-two button{opacity:1;transform:none}
+#pm20-y button{background:var(--accent-soft)} #pm20-n button{background:var(--warm-soft)}
+.pm20-two button.sel{border-color:var(--ink)}
+.pm20-msg{font-size:14px;margin:10px 0 0;min-height:4.6em;background:var(--quote);border-radius:9px;padding:10px 12px}
+@media (max-width:640px){.pm20-two{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const Y=[['按约定的配置持有','配置写在约定里，持仓每天都可以比对。'],['按时存入与调整','每一次存入与调整都有记录，时间与数额可以核对。'],['费用不超过约定的上限','费用逐笔记录，合计可以与上限比对。'],['每本账的风险不超过约定的边界','边界用船股比例与最大跌幅写明，超出即提醒或调整。'],['如实告诉每个目标达到的把握','把握有多大、最坏的年景会怎样，按同一套方法计算并公开方法。']];
+  const N=[['盖房的粮食一定够','全村一起遇到的风暴可能就在第五年到来：系统风险不会消失。'],['养老的回报一定高','高回报只来自承担分散不掉的风险，承担它就可能遇上坏年景。'],['不会亏损','承诺保本保收益的产品，要么在隐藏风险，要么把风险转给了别人。'],['比别人赚得多','扣除成本之前，主动挑选者整体只能得到平均。']];
+  const y=document.getElementById('pm20-y'),n=document.getElementById('pm20-n'),m=document.getElementById('pm20-msg');
+  y.innerHTML=Y.map((t,i)=>`<button type="button" style="--i:${i}">${t[0]}</button>`).join('');n.innerHTML=N.map((t,i)=>`<button type="button" style="--i:${i+5}">${t[0]}</button>`).join('');
+  const all=[...y.children,...n.children],D=[...Y,...N];
+  function set(i){all.forEach((b,j)=>b.classList.toggle('sel',j===i));m.textContent=D[i][0]+'：'+D[i][1];}
+  all.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('pm20').addEventListener('anim-in',()=>{[0,3,5,7].forEach((i,k)=>setTimeout(()=>set(i),1800+k*1800));});
+  set(0);
+})();
+</script>

@@ -1,0 +1,32 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Falls that cause falls</p><p class="figsub">After an initial fall of 2%, scribes' losses, tightening margins and rules for cutting positions bring new selling. Drag how much buying is done with borrowed money, and see the additional fall in each round and the final total fall.</p></div><button class="replay" type="button" data-replay="sr17">Replay</button></div>
+    <div class="sr17" id="sr17" data-anim>
+      <div class="sr17-loop"><span>Prices fall</span><b>→</b><span>Scribes lose money</span><b>→</b><span>Margins tighten, rules require cuts</span><b>→</b><span>Selling</span><b>↺</b></div>
+      <svg viewBox="0 0 660 170" role="img" aria-label="Fall in each round"><g id="sr17-g"></g></svg>
+      <div class="sl"><label for="sr17-l">Buying with borrowed money (leverage) <b id="sr17-lv"></b></label><input id="sr17-l" type="range" min="1" max="6" step="0.5" value="2"></div>
+      <p class="sr17-msg" id="sr17-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the selling caused by each round's fall makes the next round fall by k times this round's fall, where k = 0.15 × leverage. When k is less than 1, the total fall is 2% ÷ (1 − k); when k is 1 or more, the spiral does not stop by itself, and the chart shows only the first ten rounds (a simplification of the liquidity spiral described by Brunnermeier and Pedersen, 2009).</figcaption>
+</figure>
+<style>
+.sr17-loop{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12.5px;margin:4px 0 8px}
+.sr17-loop span{background:var(--quote);border-radius:999px;padding:3px 10px} .sr17-loop b{color:var(--warm)}
+.sr17 svg{width:100%;height:auto;display:block}
+.sr17-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.sr17 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('sr17'+id),X0=50,X1=628,YT=10,YB=140;
+  function draw(){const L=+$('-l').value,k=.15*L,R=[];let d=2;for(let i=0;i<10;i++){R.push(d);d*=k;}const tot=R.reduce((a,b)=>a+b,0),mx=Math.max(2,...R),bw=(X1-X0)/10;$('-lv').textContent=L.toFixed(1)+'×';
+    let h=`<line x1="${X0}" x2="${X1}" y1="${YB}" y2="${YB}" class="s-line"/>`;
+    R.forEach((v,i)=>{const hh=v/mx*(YB-YT);h+=`<rect x="${X0+i*bw+6}" y="${YB-hh}" width="${bw-12}" height="${hh}" fill="${i?'var(--warm)':'var(--faint)'}"/><text x="${X0+i*bw+bw/2}" y="${YB-hh-4}" text-anchor="middle" font-size="11">${v<10?v.toFixed(1):Math.round(v)}%</text><text x="${X0+i*bw+bw/2}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">Round ${i+1}</text>`;});
+    $('-g').innerHTML=h;
+    $('-msg').textContent=k<1?`Leverage ${L.toFixed(1)}×: each round's fall sets off a further fall of ${Math.round(k*100)}% of it in the next round, and the initial 2% is eventually amplified to about ${(2/(1-k)).toFixed(1)}%.`:`Leverage ${L.toFixed(1)}×: each round's fall sets off a next round at least as large, so the spiral does not stop by itself; the first ten rounds already add up to a fall of ${Math.min(100,tot).toFixed(0)}%. Only an outside force (a halt, or buyers with funds) can break it.`;}
+  $('-l').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{let v=1;$('-l').value=1;draw();const id=setInterval(()=>{v+=.5;$('-l').value=v;draw();if(v>=6.5)clearInterval(id);},400);});
+  draw();
+})();
+</script>

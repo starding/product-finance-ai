@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: make checking cheap and reliable</p><p class="figsub">Six design requirements, each tied to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="ch22summary">Replay</button></div>
+    <div class="ch22summary" id="ch22summary" data-anim><div class="ch22summary-c" style="--i:0"><em>Checking caps the factor</em><b>Start with tasks cheaper to check than to produce</b><p>Take on first the tasks that can be checked by testing, recomputing and comparing with the source.</p></div><div class="ch22summary-c" style="--i:1"><em>An unchecked factor is illusory</em><b>Do not inflate the factor by skipping checks</b><p>When results are hard to verify, either count checking as part of the effort or state clearly the risk of leaving them unchecked.</p></div><div class="ch22summary-c" style="--i:2"><em>Daring to hand over</em><b>Sequence authority by consequences and verifiability</b><p>Hand off first what can be verified on the spot; confirm trade execution item by item; base advice and discretionary management on the agreement and process records.</p></div><div class="ch22summary-c" style="--i:3"><em>Unclear requests cost more later</em><b>Write acceptance criteria in advance</b><p>Put the objects, period, measures and format in a checklist, and accept the result item by item against it.</p></div><div class="ch22summary-c warn" style="--i:4"><em>Reasoning is hard to check</em><b>Use key actions and evidence as the unit of display</b><p>Every figure and conclusion can be opened at its source, and the checker looks only at the few points relevant to the conclusion.</p></div><div class="ch22summary-c warn" style="--i:5"><em>Checking grows lax</em><b>Check in tiers by risk, and check the checking</b><p>Confirm item by item results that involve funds and positions, and sample the rest; mix in test items regularly and record the results of checking.</p></div></div>
+  </div>
+</figure>
+<style>
+.ch22summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch22summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.25s)}
+.ch22summary-c.warn{border-left-color:var(--warm)}
+.ch22summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch22summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch22summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch22summary.in .ch22summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch22summary{grid-template-columns:1fr}}
+</style>

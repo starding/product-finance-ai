@@ -1,0 +1,699 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The institutions are in place, and people still make mistakes</title>
+<meta name="description" content="&quot;Product × Finance × AI: Derived from Zero&quot;, Chapter 12. All the institutions are in place, yet people still eat too much in autumn, chase last year&#x27;s best ship shares, and sell in panic after a storm. People weight the present too heavily, and they have inertia. Inertia can be turned to their advantage: good defaults, committing now and increasing later, and automatic regular investment all help people keep to their own plans. The architecture of choice can also be used against them.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="g-12">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="Contents">
+<div class="side-head"><a class="sidetitle" href="index.html">Product × Finance × AI<small>Financial Products in the Age of AI</small></a></div>
+<div class="side-view" role="group" aria-label="Way of reading"><a href="preface.html">Decomposition</a><a href="g-preface.html" class="on" aria-current="true">Derivation</a></div>
+<a class="side-about" href="index.html#about">About this book</a>
+<a class="" href="g-preface.html"><span class="n">Preface</span>The best way to understand financial products is to build them from zero</a>
+<a class="side-part" href="g-part1.html"><span class="pn">Part One</span>From 0 to 1: how a world without finance grows finance</a>
+<a class="" href="g-01.html"><span class="n">1</span>One person, one year&#x27;s harvest</a>
+<a class="" href="g-02.html"><span class="n">2</span>Two people, short of grain at different times</a>
+<a class="" href="g-03.html"><span class="n">3</span>What if a loan is not repaid</a>
+<a class="" href="g-04.html"><span class="n">4</span>Exchange among many</a>
+<a class="" href="g-05.html"><span class="n">5</span>Harvests good and bad</a>
+<a class="" href="g-06.html"><span class="n">6</span>Savers may need their grain at any time; borrowers need it for years</a>
+<a class="" href="g-07.html"><span class="n">7</span>No one household can pay for a ship</a>
+<a class="" href="g-08.html"><span class="n">8</span>Securities must be saleable</a>
+<a class="" href="g-09.html"><span class="n">9</span>Prices carry everyone&#x27;s information</a>
+<a class="" href="g-10.html"><span class="n">10</span>Ordinary people have neither the time nor the expertise</a>
+<a class="" href="g-11.html"><span class="n">11</span>Trustees may not do their duty</a>
+<a class=" cur" href="g-12.html" aria-current="page"><span class="n">12</span>The institutions are in place, and people still make mistakes</a>
+<a class="side-part" href="g-part2.html"><span class="pn">Part Two</span>Changing one parameter: when agency becomes almost free</a>
+<a class="" href="g-13.html"><span class="n">13</span>A new parameter: the cost of cognitive labour collapses</a>
+<a class="" href="g-14.html"><span class="n">14</span>Can everyone have a personal agent?</a>
+<a class="" href="g-15.html"><span class="n">15</span>Who guarantees an agent&#x27;s promises</a>
+<a class="" href="g-16.html"><span class="n">16</span>If everyone has an analyst</a>
+<a class="" href="g-17.html"><span class="n">17</span>Agents become the main market participants</a>
+<a class="" href="g-18.html"><span class="n">18</span>Can an agent correct human bias?</a>
+<a class="" href="g-19.html"><span class="n">19</span>What did not change</a>
+<a class="side-part" href="g-part3.html"><span class="pn">Part Three</span>Deriving a product in the new world</a>
+<a class="" href="g-20.html"><span class="n">20</span>One person and one sum of money</a>
+<a class="" href="g-21.html"><span class="n">21</span>The user is not present</a>
+<a class="" href="g-22.html"><span class="n">22</span>The user cannot see the process</a>
+<a class="" href="g-23.html"><span class="n">23</span>Agents make mistakes</a>
+<a class="" href="g-24.html"><span class="n">24</span>Trust takes time</a>
+<a class="side-app" href="g-epilogue.html"><span class="n">Epilogue</span>Back to the governing rule</a>
+<a class="side-app" href="method.html"><span class="n">Appendix</span>How this book was written</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="Open contents" title="Contents"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">Product × Finance × AI: Financial Products in the Age of AI</a><span>Part One  From 0 to 1</span><a class="langlink" href="../g-12.html" hreflang="zh-CN">中文</a></header>
+
+<div class="chapno">Chapter 12</div><h1>The institutions are in place, and people still make mistakes<small>Bias, inertia and defaults</small></h1>
+<blockquote><p>Saving, lending, insurance, banks, shares, markets and delegation are all in place, and custody, disclosure and suitability have their rules. Yet people themselves still make mistakes. In spring a household resolves to store half the harvest, and when autumn comes it eats a good deal more than planned. Seeing which ship earned the most last year, people switch all their ship shares into it. After a storm they rush to sell their ship shares cheaply. People weight the present too heavily, and they have inertia: when they do not want to make a decision, they do nothing. Inertia can be turned to their advantage. Make a good arrangement the default that happens when nothing is done; let people commit now and increase later; let purchases happen automatically on schedule. The architecture of choice can also be used against people. What matters is who sets the default, and for whom.</p></blockquote>
+<h2 id="sec-1">1. Planned saving abandoned halfway</h2>
+<p>At sowing time in spring, a household works it out clearly: after this autumn's harvest it will store half, for its own old age. But once the harvest is in and the granary is full, a good meal or a new piece of clothing seems more pressing than old age decades away, and what gets stored is usually far less than planned. Next spring the household makes the same plan, and in autumn the plan fails in the same way.</p>
+<p>The new constraint is this: people do not always act on their own plans.</p>
+<p>The problem is that people do not weigh the present against the future consistently over time. Ask the household: would you rather eat 1 extra portion of grain next autumn, or 1.5 extra portions the autumn after? It is willing to wait the extra year. But when next autumn arrives, the same question becomes 1 extra portion today or 1.5 extra portions next year, and it no longer wants to wait. The plan it makes today for next year is one it will not want to carry out when next year comes. If it knows it will behave this way, it will be willing to lock itself in beforehand, for example by storing grain in a granary that is hard to draw from.</p>
+<aside class="principle"><p class="pr-k">Derived so far: a principle</p><p class="pr-n">Quasi-hyperbolic discounting</p><p class="pr-c"><span><em>Discipline</em>Economics › Behavioural economics (intertemporal choice)</span><span><em>Type</em>Theoretical model</span></p><p class="pr-s">People are especially impatient about the immediate future and comparatively patient about the more distant future; so plans made today for the future are ones they will not want to carry out when the future arrives, which gives them a motive to restrict their own choices in advance.</p><dl><div><dt>Standing in the field</dt><dd>Commonly called "quasi-hyperbolic discounting" or the "β–δ model"; the paper uses it to show that people with time-inconsistent preferences have a motive to constrain their future selves, which makes illiquid assets a commitment device</dd></div><div><dt>Constraint it answers</dt><dd>People do not always act on their own plans</dd></div><div><dt>Premises</dt><dd>The trade-off between present and future is inconsistent across points in time; people know, at least in part, that their future selves will behave this way</dd></div><div><dt>Proposed by</dt><dd>Laibson, 1997; this form of discounting was first used by Phelps and Pollak (1968) for intergenerational saving, and Laibson applied it to the choices of one person at different points in time</dd></div><div><dt>Open question</dt><dd>If people are willing to lock themselves in, who provides a suitable lock, and how can it be kept from locking too tightly?</dd></div></dl></aside>
+<p><strong>Today's counterpart.</strong> Many people resolve every year to save more, yet find little left at the end of each month.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Planning to save half every year, falling short every year</p><p class="figsub">When the plan is made in spring, this year seems as far away as the future, and a household intends to save half its harvest; at harvest time in autumn, the grain in front of it weighs more. Drag "weight on the present" to see the gap between plan and outcome over five years; tick "lock in beforehand" to see what happens if half is put in spring into a granary it cannot draw from.</p></div><button class="replay" type="button" data-replay="pb12">Replay</button></div>
+    <div class="pb12" id="pb12" data-anim>
+      <svg viewBox="0 0 660 200" role="img" aria-label="Share planned and share actually saved over five years"><g id="pb12-g"></g></svg>
+      <div class="legend"><span><i style="background:var(--quote);border:1px dashed var(--faint)"></i>Share planned in spring</span><span><i style="background:var(--accent)"></i>Share actually saved in autumn</span></div>
+      <div class="sl"><label for="pb12-b">Weight on the present <b id="pb12-bv"></b></label><input id="pb12-b" type="range" min="0" max="60" step="5" value="30"></div>
+      <div class="cs-sw"><label><input type="checkbox" id="pb12-l"> Lock in beforehand: in spring, put half into a granary that requires a year's notice to draw from</label></div>
+      <p class="pb12-msg" id="pb12-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: logarithmic utility, two periods, no interest or spoilage. With no extra weight on the present, half is saved; when present consumption is given extra weight (Laibson's 1997 quasi-hyperbolic discounting, with β the weight on the future relative to the present), the share actually saved in autumn is β/(1+β). Here "weight on the present" is 1−β.</figcaption>
+</figure>
+<style>
+.pb12 svg{width:100%;height:auto;display:block}
+.pb12-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.pb12 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('pb12'+id),X0=50,X1=650,YT=12,YB=170,y=v=>YB-v/.6*(YB-YT);
+  function draw(){const d=+$('-b').value/100,b=1-d,lock=$('-l').checked,act=lock?.5:b/(1+b);$('-bv').textContent=Math.round(d*100)+'%';
+    const w=(X1-X0)/5;let h=[0,.1,.2,.3,.4,.5,.6].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${Math.round(v*100)}%</text>`).join('');
+    for(let k=0;k<5;k++){const cx=X0+w*k+w/2;h+=`<rect x="${cx-34}" y="${y(.5)}" width="68" height="${YB-y(.5)}" fill="var(--quote)" stroke="var(--faint)" stroke-dasharray="4 3"/><rect class="pb12-a" x="${cx-24}" y="${y(act)}" width="48" height="${YB-y(act)}" fill="var(--accent)" style="transition-delay:${k*.12}s"/><text x="${cx}" y="${y(act)-6}" text-anchor="middle" font-size="12">${Math.round(act*100)}%</text><text x="${cx}" y="${YB+18}" text-anchor="middle" font-size="11" class="t-faint">Year ${k+1}</text>`;}
+    $('-g').innerHTML=h;
+    $('-msg').textContent=lock?'The grain was locked in the granary in spring, and in autumn it cannot be drawn out even if he wants to eat more: the plan is carried out. The cost is that it cannot be drawn out in an emergency either.':d===0?'With no extra weight on the present, the spring plan and the autumn action agree, and half is saved every year.':`Weight on the present ${Math.round(d*100)}%: each autumn only ${Math.round(act*100)}% is saved, ${Math.round((.5-act)*100)} percentage points short of the plan. Next spring he will again plan to save half, and again fall short.`;}
+  $('-b').addEventListener('input',draw);$('-l').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{$('-l').checked=false;let v=0;$('-b').value=0;draw();const id=setInterval(()=>{v+=5;$('-b').value=v;draw();if(v>=40){clearInterval(id);setTimeout(()=>{$('-l').checked=true;draw();},1400);}},220);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-2">2. Inertia: doing nothing is also a choice</h2>
+<p>Another common tendency is inertia. Joining a savings plan means filling in a form, choosing a rate and choosing which ship shares to buy. When people do not want to make these decisions, they do nothing, putting it off to next month and then to next year. As a result, whether people save depends to a large extent on what happens when they do nothing.</p>
+<p>Madrian and Shea (2001) studied a US company that changed its retirement savings plan from "opt in voluntarily" to "enrolled automatically, free to opt out". Participation among new employees rose sharply. Most also stayed at the default contribution rate and default fund the company had set, and few adjusted them.</p>
+<p><strong>Today's counterpart.</strong> Many countries have moved their workplace pension plans to automatic enrolment: employees who make no choice are enrolled by default.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">What happens when people do nothing</p><p class="figsub">A hundred new employees, eight in ten of whom want to join the savings plan. Each month, each person has only a certain probability of actually acting to change their status. On the left, "opt in voluntarily"; on the right, "enrolled automatically, free to opt out".</p></div><button class="replay" type="button" data-replay="in12">Replay</button></div>
+    <div class="in12" id="in12" data-anim>
+      <div class="in12-two"><div><p class="in12-h">Opt in voluntarily</p><div class="in12-dots" id="in12-a"></div><b id="in12-av"></b></div><div><p class="in12-h">Enrolled automatically, free to opt out</p><div class="in12-dots" id="in12-b"></div><b id="in12-bv"></b></div></div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Saving</span><span><i style="background:var(--quote);border:1px solid var(--line)"></i>Not saving</span><span><i style="outline:2px solid var(--warm);outline-offset:-2px;background:transparent"></i>Status differs from the person's wish</span></div>
+      <div class="sl"><label for="in12-m">Months since joining <b id="in12-mv"></b></label><input id="in12-m" type="range" min="0" max="36" step="1" value="12"></div>
+      <div class="sl"><label for="in12-p">Monthly probability of actually acting <b id="in12-pv"></b></label><input id="in12-p" type="range" min="2" max="40" step="2" value="6"></div>
+      <p class="in12-msg" id="in12-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model: those who want to join and those who do not change their status only in the month they "act", and the probability of acting is the same every month. Madrian and Shea (2001) found that after a US company switched to automatic enrolment, participation among new employees rose sharply, and most stayed at the default contribution rate and fund.</figcaption>
+</figure>
+<style>
+.in12-two{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.in12-h{margin:0 0 6px;font-size:13px;color:var(--muted)}
+.in12-dots{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;max-width:260px}
+.in12-dots i{aspect-ratio:1;border-radius:50%;background:var(--quote);border:1px solid var(--line);transition:background .35s}
+.in12-dots i.on{background:var(--accent);border-color:var(--accent)}
+.in12-dots i.bad{outline:2px solid var(--warm);outline-offset:1px}
+.in12-two b{display:block;font-size:18px;margin-top:6px;font-variant-numeric:tabular-nums}
+.in12-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.in12-two{gap:12px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('in12'+id);let s=1201;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};
+  // Each person: whether they want to join, and a sequence of random draws for acting
+  const P=Array.from({length:100},(_,i)=>({want:i%5!==4,u:Array.from({length:37},r)}));
+  const st=(auto,m,p)=>P.map(q=>{let on=auto;for(let t=0;t<m;t++)if(on!==q.want&&q.u[t]<p)on=q.want;return on;});
+  function box(el,arr){el.innerHTML=arr.map((on,i)=>`<i class="${on?'on':''}${on!==P[i].want?' bad':''}"></i>`).join('');}
+  function draw(){const m=+$('-m').value,p=+$('-p').value/100;$('-mv').textContent=m+(m===1?' month':' months');$('-pv').textContent=Math.round(p*100)+'%';
+    const A=st(false,m,p),B=st(true,m,p),a=A.filter(Boolean).length,b=B.filter(Boolean).length;box($('-a'),A);box($('-b'),B);
+    $('-av').textContent=`Saving ${a}%`;$('-bv').textContent=`Saving ${b}%`;
+    $('-msg').textContent=m===0?'On the first day: with voluntary opt-in nobody is saving; with automatic enrolment everyone is. After that, only those who actually act change their status.':`Month ${m}: ${a}% are saving under voluntary opt-in, ${b}% under automatic enrolment. People on both sides have exactly the same wishes; the only difference is what happens when they do nothing.`;}
+  ['-m','-p'].forEach(k=>$(k).addEventListener('input',draw));
+  $('').addEventListener('anim-in',()=>{let m=0;$('-m').value=0;draw();const id=setInterval(()=>{m+=1;$('-m').value=m;draw();if(m>=24)clearInterval(id);},160);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-3">3. The two sides of defaults</h2>
+<p>Inertia makes defaults especially powerful: whatever is set, most people stay with it. This can help people, and it can also harm them. If the default contribution rate is too low, many people save too little for good. If the default investment is too conservative, many people earn very low returns for decades. A default is not neutral; whoever sets it is in effect deciding for most people.</p>
+<p>Defaults are not the only thing at work. For the same set of options, which one is listed first, which one is already selected, and which step requires the person to fill something in all change what people end up choosing, and no arrangement is entirely neutral. Since someone has to decide on the arrangement anyway, it can be arranged deliberately in people's favour, while leaving everyone free to choose otherwise.</p>
+<aside class="principle"><p class="pr-k">Derived so far: a principle</p><p class="pr-n">Choice architecture</p><p class="pr-c"><span><em>Discipline</em>Economics › Behavioural economics (behavioural public policy)</span><span><em>Type</em>Theory</span></p><p class="pr-s">How options are presented, including their order, the default and the steps required, systematically affects what people choose; since no presentation is neutral, people can be steered, without forbidding any option or appreciably changing incentives, towards the option they would choose after thinking it through, a design known as a nudge.</p><dl><div><dt>Standing in the field</dt><dd>The 2017 Nobel Memorial Prize in Economic Sciences was awarded to Thaler "for his contributions to behavioural economics"; the prize announcement noted that he coined the term nudge and that nudges can help people exercise better self-control in settings such as saving for retirement</dd></div><div><dt>Constraint it answers</dt><dd>People do not always act on their own plans</dd></div><div><dt>Premises</dt><dd>People have inertia and limited attention; the cost of choosing otherwise is low enough</dd></div><div><dt>Proposed by</dt><dd>Thaler and Sunstein, 2008</dd></div><div><dt>Open question</dt><dd>Who designs the architecture of choice, and how can it be made to serve the person choosing?</dd></div></dl></aside>
+<p><strong>Today's counterpart.</strong> Automatic-enrolment retirement plans usually also set a default contribution rate and a default investment, such as a target-date fund that adjusts the stock–bond mix automatically with age.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Whatever the default, most people stay with it</p><p class="figsub">A hundred employees each have the contribution rate they would choose after thinking it through, about 8% on average. Six in ten never change the default. Choose different default rates to see the resulting distribution and how many save less than they themselves want.</p></div><button class="replay" type="button" data-replay="df12">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Default contribution rate">
+      <button type="button" data-df12="0" aria-pressed="false">No default (0%)</button>
+      <button type="button" data-df12="3" aria-pressed="true">Default 3%</button>
+      <button type="button" data-df12="8" aria-pressed="false">Default 8%</button>
+      <button type="button" data-df12="14" aria-pressed="false">Default 14%</button>
+    </div>
+    <div class="df12" id="df12" data-anim>
+      <svg viewBox="0 0 660 200" role="img" aria-label="Distribution of contribution rates"><g id="df12-g"></g></svg>
+      <div class="legend"><span><i style="background:var(--warm)"></i>Stayed at the default</span><span><i style="background:var(--accent)"></i>Chose for themselves</span></div>
+      <div class="df12-out" id="df12-out"></div>
+      <p class="df12-msg" id="df12-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: each person's desired rate lies between 2% and 14%; the six in ten who never change the default are chosen at random, unrelated to the rate they want. "Default 14%" is higher than most people want, to show that a default set too high also pulls people away from their own intentions.</figcaption>
+</figure>
+<style>
+.df12 svg{width:100%;height:auto;display:block}
+.df12-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.df12-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.df12-out span{display:block;font-size:11.5px;color:var(--faint)} .df12-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.df12-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.df12-out{grid-template-columns:1fr}.df12 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('df12'+id);let s=1202;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};
+  const W=Array.from({length:100},()=>Math.max(2,Math.min(14,Math.round(8+2.6*(r()+r()+r()-1.5)*2)))),stick=Array.from({length:100},()=>r()<.6);
+  let d=3;const X0=40,X1=650,YT=10,YB=168,bw=(X1-X0)/16;
+  function draw(){const v=W.map((w,i)=>stick[i]?d:w),cnt=Array.from({length:16},()=>[0,0]);v.forEach((x,i)=>cnt[x][stick[i]?0:1]++);
+    const mx=Math.max(20,...cnt.map(c=>c[0]+c[1])),y=n=>YB-n/mx*(YB-YT);
+    let h=[0,.5,1].map(k=>`<line x1="${X0}" x2="${X1}" y1="${y(mx*k)}" y2="${y(mx*k)}" class="s-line"/><text x="${X0-6}" y="${y(mx*k)+4}" text-anchor="end" font-size="11" class="t-faint">${Math.round(mx*k)}</text>`).join('');
+    cnt.forEach(([a,b],x)=>{const bx=X0+x*bw+3;h+=`<rect x="${bx}" y="${y(b)}" width="${bw-6}" height="${YB-y(b)}" fill="var(--accent)"/><rect x="${bx}" y="${y(a+b)}" width="${bw-6}" height="${YB-y(a)}" fill="var(--warm)"/>`;if(x%2===0)h+=`<text x="${bx+(bw-6)/2}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${x}%</text>`;});
+    $('-g').innerHTML=h;const avg=v.reduce((a,b)=>a+b,0)/100,low=v.filter((x,i)=>x<W[i]).length,off=v.filter((x,i)=>x!==W[i]).length;
+    $('-out').innerHTML=[['Average contribution rate',avg.toFixed(1)+'%'],['Saving less than they want',low+' people'],['Away from their own intention',off+' people']].map(([a,b])=>`<div><span>${a}</span><b>${b}</b></div>`).join('');
+    $('-msg').textContent=d===0?`No default means a default of saving nothing: the six in ten who never act save nothing at all, and the average is only ${avg.toFixed(1)}%.`:d===3?`A 3% default gets everyone saving, but most of those who stay at the default save less than they want, and the average is only ${avg.toFixed(1)}%.`:d===8?`With the default set near what most people would choose after thinking it through, the average is ${avg.toFixed(1)}%, and the fewest people save too little.`:`A 14% default is higher than most people want: the average saved is higher, but ${off} people are pulled away from their own intention, and some will find their current living too tight.`;}
+  const bs=[...document.querySelectorAll('[data-df12]')];
+  function set(x){d=x;bs.forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.df12===x)));draw();}
+  bs.forEach(b=>b.addEventListener('click',()=>set(+b.dataset.df12)));
+  $('').addEventListener('anim-in',()=>{[0,3,8,14].forEach((x,i)=>setTimeout(()=>set(x),300+i*2000));});
+  draw();
+})();
+</script>
+
+<h2 id="sec-4">4. Commit now, increase later</h2>
+<p>Since people weight the present too heavily and have inertia, both tendencies can be put to work: commit now to raising the savings rate step by step out of future pay rises. The commitment is made today, but nobody has to eat less today. At each future pay rise the savings rate goes up automatically, and those who do not want to change anything need do nothing. Thaler and Benartzi (2004) introduced this "Save More Tomorrow" plan at one company. Participants' average savings rate rose from 3.5% to 13.6% within 40 months, and most stayed in the plan. A research review by the US Department of Labor noted that the study did not randomly assign participants, that the decision to join may itself reflect a willingness to save, and that the causal evidence is therefore limited.</p>
+<p><strong>Today's counterpart.</strong> Some retirement plans offer an option to raise the contribution rate automatically each year; regular fixed-amount investment plans make purchases happen automatically on schedule.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Commit now, increase out of future pay rises</p><p class="figsub">An employee currently saves 3.5% of pay and gets a 3.5% pay rise each year. Compare two approaches: raising saving to 10% right now; or committing now to save a few more percentage points automatically at each future pay rise. The upper panel shows the savings rate; the lower panel shows monthly take-home pay.</p></div><button class="replay" type="button" data-replay="sm12">Replay</button></div>
+    <div class="sm12" id="sm12" data-anim>
+      <svg viewBox="0 0 660 300" role="img" aria-label="Savings rate and take-home pay"><g id="sm12-g"></g></svg>
+      <div class="legend"><span><i style="background:var(--faint)"></i>No change</span><span><i style="background:var(--warm)"></i>Raise to 10% now</span><span><i style="background:var(--accent)"></i>Save more at each pay rise</span></div>
+      <div class="sl"><label for="sm12-s">Extra saved at each pay rise <b id="sm12-sv"></b></label><input id="sm12-s" type="range" min="1" max="5" step="0.5" value="3"></div>
+      <p class="sm12-msg" id="sm12-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: pay starts at 100 and rises 3.5% at the start of each year; the savings rate is capped at 15%. Thaler and Benartzi (2004) report that at a company that actually introduced this plan, participants' average savings rate rose from 3.5% to 13.6% within 40 months; a research review by the US Department of Labor found that the study did not randomly assign participants, so the causal evidence is limited.</figcaption>
+</figure>
+<style>
+.sm12 svg{width:100%;height:auto;display:block}
+.sm12-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.sm12 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('sm12'+id),Y=5,X0=50,X1=628,x=t=>X0+t/Y*(X1-X0);
+  const A={t:26,b:130},B={t:170,b:280};
+  function paths(st){const R={keep:[],now:[],smart:[]},H={keep:[],now:[],smart:[]};let sm=.035;
+    for(let t=0;t<=Y;t++){const S=100*Math.pow(1.035,t);if(t>0)sm=Math.min(.15,sm+st);
+      const rs={keep:.035,now:.10,smart:sm};for(const k in rs){R[k].push(rs[k]);H[k].push(S*(1-rs[k]));}}return {R,H};}
+  function draw(){const st=+$('-s').value/100,{R,H}=paths(st);$('-sv').textContent=(st*100).toFixed(1)+' percentage points';
+    const yr=v=>A.b-v/.16*(A.b-A.t),hmin=85,hmax=120,yh=v=>B.b-(v-hmin)/(hmax-hmin)*(B.b-B.t);
+    let h=[0,.05,.1,.15].map(v=>`<line x1="${X0}" x2="${X1}" y1="${yr(v)}" y2="${yr(v)}" class="s-line"/><text x="${X0-6}" y="${yr(v)+4}" text-anchor="end" font-size="11" class="t-faint">${Math.round(v*100)}%</text>`).join('')
+      +[90,100,110,120].map(v=>`<line x1="${X0}" x2="${X1}" y1="${yh(v)}" y2="${yh(v)}" class="s-line"/><text x="${X0-6}" y="${yh(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')
+      +[0,1,2,3,4,5].map(t=>`<text x="${x(t)}" y="${B.b+16}" text-anchor="middle" font-size="11" class="t-faint">Year ${t}</text>`).join('')
+      +`<text x="${X0}" y="12" font-size="11" class="t-faint">Savings rate</text><text x="${X0}" y="${B.t-4}" font-size="11" class="t-faint">Take-home pay</text>`;
+    const C={keep:'var(--faint)',now:'var(--warm)',smart:'var(--accent)'};
+    for(const k of ['keep','now','smart']){h+=`<path d="${R[k].map((v,t)=>(t?'L':'M')+x(t)+','+yr(v)).join('')}" fill="none" stroke="${C[k]}" stroke-width="${k==='smart'?3:2}"/><path d="${H[k].map((v,t)=>(t?'L':'M')+x(t)+','+yh(v)).join('')}" fill="none" stroke="${C[k]}" stroke-width="${k==='smart'?3:2}"/>`;}
+    $('-g').innerHTML=h;const minChg=Math.min(...H.smart.slice(1).map((v,t)=>v/H.smart[t]-1));
+    $('-msg').textContent=`Raising saving to 10% now cuts take-home pay this year from ${H.keep[0].toFixed(1)} to ${H.now[0].toFixed(1)}, a drop of ${((1-H.now[0]/H.keep[0])*100).toFixed(1)}%. Saving ${(st*100).toFixed(1)} percentage points more at each pay rise reaches ${(R.smart[Y]*100).toFixed(1)}% by year 5; `+(minChg>=0?'take-home pay never falls from one year to the next; it only rises more slowly.':`but in some years take-home pay is ${(-minChg*100).toFixed(1)}% lower than the year before, because the extra saving is larger than the pay rise.`);}
+  $('-s').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{let v=1;$('-s').value=1;draw();const id=setInterval(()=>{v+=.5;$('-s').value=v;draw();if(v>=3)clearInterval(id);},700);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-5">5. Chasing gains and selling into losses: getting less than the product itself</h2>
+<p>Bias also shows up in buying and selling. Whichever ship earned the most last year, people pile into it, often buying near the top. After a storm, when ship shares fall sharply, people rush to sell, often near the bottom. The return on the ship shares themselves is one thing; the return principals actually receive, given when they bought and sold, is another. Dichev (2007) compared returns that take the timing of money flowing in and out into account with buy-and-hold returns, and found that on the New York and American stock exchanges from 1926 to 2002 the former were about 1.3 percentage points a year lower. Keswani and Stolin (2008) argue that this result is not robust: over the last two-thirds of the sample, the sign of the difference for the New York and American exchanges even reverses.</p>
+<p><strong>Today's counterpart.</strong> Fund investors buy heavily after good performance and redeem heavily after declines, so the return investors as a whole receive is often lower than the return of the fund itself.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chasing gains and selling into losses: the principal gets less than the ship shares</p><p class="figsub">The price of ship shares fluctuates around a long-run trend of 6% a year. A principal intends to invest 10 portions each year; when chasing gains and selling into losses, the principal invests more after a strong year and less, or even sells, after a fall. Drag how strongly the principal chases, and compare three returns.</p></div><button class="replay" type="button" data-replay="gp12">Replay</button></div>
+    <div class="gp12" id="gp12" data-anim>
+      <svg viewBox="0 0 660 240" role="img" aria-label="Ship share price and yearly investment"><g id="gp12-g"></g></svg>
+      <div class="legend"><span><i style="background:var(--ink)"></i>Ship share price</span><span><i style="background:var(--accent)"></i>Invested that year</span><span><i style="background:var(--warm)"></i>Sold that year</span></div>
+      <div class="sl"><label for="gp12-k">How strongly the principal chases <b id="gp12-kv"></b></label><input id="gp12-k" type="range" min="0" max="2" step="0.25" value="1"></div>
+      <div class="gp12-out" id="gp12-out"></div>
+      <p class="gp12-msg" id="gp12-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: price = long-run trend × (1 + 0.3 × cyclical swing), with an eight-year cycle. "The ship shares themselves" is the annualized buy-and-hold return; the principal's return is calculated from the timing of money flowing in and out (internal rate of return), which is what Dichev (2007) calls the return that takes the timing of flows into account. The difference between regular scheduled investment and the ship shares themselves comes only from when money goes in, not from any judgement.</figcaption>
+</figure>
+<style>
+.gp12 svg{width:100%;height:auto;display:block}
+.gp12-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.gp12-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.gp12-out span{display:block;font-size:11.5px;color:var(--faint)} .gp12-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.gp12-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.gp12-out{grid-template-columns:1fr}.gp12 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('gp12'+id),T=20,X0=44,X1=628,x=t=>X0+t/T*(X1-X0);
+  const P=[1];for(let t=1;t<=T;t++)P.push(Math.pow(1.06,t)*(1+.3*Math.sin(2*Math.PI*t/8)));const r=P.slice(1).map((v,t)=>v/P[t]-1);
+  function irr(f,end){let lo=-.5,hi=.5;for(let k=0;k<80;k++){const m=(lo+hi)/2;let v=0;f.forEach((c,t)=>v+=c*Math.pow(1+m,T-t));if(v>end)hi=m;else lo=m;}return (lo+hi)/2;}
+  function run(k){let H=0;const f=[];for(let t=0;t<T;t++){let c=10*(1+k*4*(t?r[t-1]-.06:0));if(c<-H)c=-H;f.push(c);H=(H+c)*(1+r[t]);}return {f,irr:irr(f,H)};}
+  const prod=Math.pow(P[T],1/T)-1,dca=run(0).irr;
+  function draw(){const k=+$('-k').value,R=run(k);$('-kv').textContent=k===0?'Not at all (regular scheduled investment)':k<=.75?'Mildly':k<=1.25?'Moderately':'Heavily';
+    const yp=v=>130-(v-.8)/(4-.8)*120,yf=c=>200-c*1.1;
+    let h=[1,2,3,4].map(v=>`<line x1="${X0}" x2="${X1}" y1="${yp(v)}" y2="${yp(v)}" class="s-line"/><text x="${X0-6}" y="${yp(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')
+      +`<line x1="${X0}" x2="${X1}" y1="200" y2="200" class="s-line"/>`+[0,5,10,15,20].map(t=>`<text x="${x(t)}" y="236" text-anchor="middle" font-size="11" class="t-faint">Year ${t}</text>`).join('');
+    h+=`<path d="${P.map((v,t)=>(t?'L':'M')+x(t).toFixed(1)+','+yp(v).toFixed(1)).join('')}" fill="none" stroke="var(--ink)" stroke-width="2.2"/>`;
+    const bw=(X1-X0)/T*.6;R.f.forEach((c,t)=>{const cx=x(t)+bw*.3;h+=c>=0?`<rect x="${cx}" y="${yf(c)}" width="${bw}" height="${200-yf(c)}" fill="var(--accent)"/>`:`<rect x="${cx}" y="200" width="${bw}" height="${yf(c)-200}" fill="var(--warm)"/>`;});
+    $('-g').innerHTML=h;const pc=v=>(v*100).toFixed(1)+'%';
+    $('-out').innerHTML=[['The ship shares themselves (buy and hold)',pc(prod)],['Principal investing on schedule',pc(dca)],['What this principal actually gets',pc(R.irr)]].map(([a,b])=>`<div><span>${a}</span><b>${b}</b></div>`).join('');
+    $('-msg').textContent=k===0?'Investing 10 portions on schedule every year, ignoring last year\'s rise or fall: the return received is almost the same as that of the ship shares themselves.':`After a strong year the principal invests more, often buying near the top of the cycle; after a fall the principal invests less or sells, selling near the bottom. This principal gets ${((dca-R.irr)*100).toFixed(1)} percentage points a year less than investing on schedule, which adds up to a sizeable gap over twenty years.`;}
+  $('-k').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{let v=0;$('-k').value=0;draw();const id=setInterval(()=>{v+=.25;$('-k').value=v;draw();if(v>=1.5)clearInterval(id);},500);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-6">6. The architecture of choice can help people or harm them</h2>
+<p>Defaults, ordering and the steps required can help people keep to their plans, and sellers can also use them for profit: pre-ticking an add-on service nobody needs, hiding the cancel button deep in a menu, putting high-fee products at the top of the list. The power of a default comes from people's inertia, so who sets it and for whom matters more than the default itself. A default set for the principal should be the one most people would choose after thinking it through. A default set for the seller turns inertia into the seller's revenue.</p>
+<p><strong>Today's counterpart.</strong> The EU Consumer Rights Directive requires the consumer's express consent before any extra payment beyond the price of the main contract. If a trader infers consent through a default option, meaning the consumer must untick a box to avoid the payment, the consumer is entitled to have that payment refunded.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The same options, two architectures</p><p class="figsub">Two account-opening pages offer exactly the same options; only the defaults, ordering and steps differ. Switch between the two designs to see what a hundred principals end up choosing.</p></div><button class="replay" type="button" data-replay="ar12">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Page design">
+      <button type="button" data-ar12="p" aria-pressed="true">Designed for the principal</button>
+      <button type="button" data-ar12="s" aria-pressed="false">Designed for the seller</button>
+    </div>
+    <div class="ar12" id="ar12" data-anim>
+      <div class="ar12-two">
+        <div class="ar12-form" id="ar12-f"></div>
+        <div class="ar12-res" id="ar12-r"></div>
+      </div>
+      <p class="ar12-msg" id="ar12-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: assume seven in ten people accept the page's defaults and its first option, while the rest choose according to their own needs; when leaving takes three extra steps, only three in ten of those who want to leave actually complete it.</figcaption>
+</figure>
+<style>
+.ar12-two{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.ar12-form{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--bg);font-size:13px;display:grid;gap:8px}
+.ar12-form p{margin:0;font-size:11.5px;color:var(--faint)}
+.ar12-row{display:flex;gap:8px;align-items:center;padding:6px 8px;border-radius:8px;background:var(--quote);transition:outline-color .3s}
+.ar12-row i{width:14px;height:14px;border-radius:4px;border:1.5px solid var(--faint);flex:none;display:grid;place-items:center;font-style:normal;font-size:10px;line-height:1}
+.ar12-row.on i{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.ar12-row.mark{outline:2px solid var(--warm);outline-offset:1px}
+.ar12-row span{flex:1} .ar12-row em{font-style:normal;color:var(--faint);font-size:11.5px}
+.ar12-exit{font-size:11.5px;color:var(--faint);text-align:right}
+.ar12-res{display:grid;gap:8px}
+.ar12-bar span{display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:3px}
+.ar12-bar div{height:10px;border-radius:5px;background:var(--quote);overflow:hidden}
+.ar12-bar div i{display:block;height:100%;background:var(--accent);transition:width .6s}
+.ar12-bar.w div i{background:var(--warm)}
+.ar12-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.ar12-two{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('ar12'+id);let mode='p';
+  const D={p:{rows:[['Low-fee whole-market portfolio','0.1%',1,0],['Actively selected portfolio','1.5%',0,0],['Add-on advisory service','30 portions a month',0,0]],exit:'Leave at any time: top right of this page',res:[['Chose the low-fee portfolio',.7+.3*.6,0],['Chose the high-fee portfolio',.3*.4,1],['Signed up for the add-on',.3*.2,1],['Wanted to leave and did',1,0]],
+      msg:'The default is the low-fee portfolio most people would choose after thinking it through, the add-on service has to be ticked deliberately, and leaving is as easy as joining: inertia helps principals keep to what they intended.'},
+    s:{rows:[['Actively selected portfolio','1.5%',1,1],['Low-fee whole-market portfolio','0.1%',0,0],['Add-on advisory service','30 portions a month',1,1]],exit:'Leave: Settings › Account › More › Request',res:[['Chose the low-fee portfolio',.3*.6,0],['Chose the high-fee portfolio',.7+.3*.4,1],['Signed up for the add-on',.7+.3*.2,1],['Wanted to leave and did',.3,1]],
+      msg:'The options are exactly the same; the high-fee portfolio is simply listed first and set as the default, the add-on is pre-ticked, and leaving takes three extra steps: the same inertia becomes the seller\'s revenue.'}};
+  function draw(){const d=D[mode];
+    $('-f').innerHTML='<p>Choose how to invest</p>'+d.rows.map(([a,b,on,mk])=>`<div class="ar12-row${on?' on':''}${mk?' mark':''}"><i>${on?'✓':''}</i><span>${a}</span><em>${b}</em></div>`).join('')+`<div class="ar12-exit${mode==='s'?' ':''}">${d.exit}</div>`;
+    $('-r').innerHTML=d.res.map(([a,v,w])=>`<div class="ar12-bar${w?' w':''}"><span>${a}<b>${Math.round(v*100)}%</b></span><div><i style="width:${v*100}%"></i></div></div>`).join('');
+    $('-msg').textContent=d.msg;}
+  const bs=[...document.querySelectorAll('[data-ar12]')];
+  function set(m){mode=m;bs.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.ar12===m)));draw();}
+  bs.forEach(b=>b.addEventListener('click',()=>set(b.dataset.ar12)));
+  $('').addEventListener('anim-in',()=>{set('p');setTimeout(()=>set('s'),2600);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-7">7. Keeping to the plan: Civilization Simulator, version 12</h2>
+<p>The simulator unlocks the last rule of Part One: "Defaults". Forty households must save for old age thirty years from now. You can turn automatic saving, automatic regular investment and a cooling-off period during declines on or off, and adjust how strongly people weight the present and how readily they sell in panic. Then see how much each household has saved after thirty years, and how far the return principals actually receive falls short of the return on the ship shares themselves.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Civilization Simulator · Chapter 12: Keeping to the plan</p><p class="figsub">Forty households save for old age thirty years from now, and each intends to save 12% of its income. Turn automatic saving, automatic regular investment and the cooling-off period on or off, and adjust how strongly people weight the present and how readily they sell in panic. See how much each household has saved after thirty years, and the return principals actually receive.</p></div><button class="replay" type="button" data-replay="cs12">Replay</button></div>
+    <div class="cs-rules"><span class="on">Shares</span><span class="on">Market</span><span class="on">Information in prices</span><span class="on">Delegation</span><span class="on">Regulation &amp; custody</span><span class="on">Defaults</span><span class="lock">Agency costs fall · Part Two</span></div>
+    <div class="cs12" id="cs12" data-anim>
+      <svg viewBox="0 0 660 220" role="img" aria-label="Median household savings over thirty years"><g id="cs12-ax"></g><path id="cs12-band" class="cs12-band"/><path id="cs12-base" class="cs12-base"/><path id="cs12-p" class="cs12-p"/><g id="cs12-e"></g></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Median savings</span><span><i style="background:var(--quote);border:1px solid var(--line)"></i>Households from the 10th to the 90th percentile</span><span><i style="background:var(--faint)"></i>Median with all three rules off</span><span><i style="background:var(--warm-soft)"></i>Years of sharp declines</span></div>
+      <div class="cs-sw"><label><input type="checkbox" id="cs12-au"> Rule: automatic saving (enrolled by default, 12% set aside)</label><label><input type="checkbox" id="cs12-dc"> Rule: automatic regular investment (buy on schedule every year)</label><label><input type="checkbox" id="cs12-co"> Rule: cooling-off period (selling after a sharp decline must wait a while)</label></div>
+      <div class="cs12-ctl">
+        <div class="sl"><label for="cs12-b">Weight on the present <b id="cs12-bv"></b></label><input id="cs12-b" type="range" min="0" max="50" step="5" value="30"></div>
+        <div class="sl"><label for="cs12-q">Tendency to sell in panic <b id="cs12-qv"></b></label><input id="cs12-q" type="range" min="0" max="60" step="5" value="30"></div>
+      </div>
+      <button type="button" class="replay" id="cs12-re">Another run of years</button>
+      <div class="cs12-out" id="cs12-out"></div>
+      <p class="cs12-msg" id="cs12-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model: each household earns 1 portion a year, and savings are measured in "years of income". Ship shares return 7% a year on average with 12% volatility, and about once every twelve years suffer an extra 25% decline. Without automatic saving, households must join on their own; the more they weight the present, the later they start and the smaller the share they save. With automatic saving, 12% is set aside from the first year. Without automatic regular investment, households save and buy more after a strong year and buy less after a fall. After a sharp decline, households prone to panic sell, hold cash for three years and then buy back; with a cooling-off period, only one in five actually sells. The return from "investing on schedule and never selling" is the internal rate of return of a household that buys 12% on schedule every year in the same run of years.</figcaption>
+</figure>
+<style>
+.cs12 svg{width:100%;height:auto;display:block}
+.cs12-p{fill:none;stroke:var(--accent);stroke-width:2.8}
+.cs12-base{fill:none;stroke:var(--faint);stroke-width:1.6;stroke-dasharray:5 4}
+.cs12-band{fill:var(--quote);stroke:none}
+.cs12-ctl{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px}
+.cs12-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cs12-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs12-out span{display:block;font-size:11.5px;color:var(--faint)} .cs12-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.cs12-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs12-ctl{grid-template-columns:1fr;gap:4px}.cs12-out{grid-template-columns:1fr}.cs12 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs12'+id),N=40,Y=30;let seed=15838;
+  const X0=44,X1=628,YT=10,YB=186,x=t=>X0+t/Y*(X1-X0);
+  function irr(f,end){let lo=-.5,hi=.5;for(let k=0;k<80;k++){const m=(lo+hi)/2;let v=0;f.forEach((c,t)=>v+=c*Math.pow(1+m,Y-t));if(v>end)hi=m;else lo=m;}return (lo+hi)/2;}
+  function sim(beta,panic,auto,dca,cool){let s=seed;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};const g=()=>{let u=0;while(!u)u=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r());};
+    const R=[],crash=[];for(let t=0;t<Y;t++){let v=.07+.12*g();if(r()<.08)v-=.25;R.push(v);if(v<-.12)crash.push(t);}
+    const H=[];for(let i=0;i<N;i++)H.push({b:Math.max(.3,Math.min(1,beta+.15*(r()*2-1))),pz:r(),start:auto?0:-1,out:-1,W:0,cash:0});
+    const agg=Array(Y).fill(0),Q=[[0,0,0]];
+    for(let t=0;t<Y;t++){for(const h of H){
+        // Joining on one's own: the more weight on the present, the later the start
+        if(h.start<0&&r()<.3*h.b)h.start=t;
+        let sv=h.start>=0?(auto?.12:.12*h.b):0;
+        // Without automatic regular investment: buy more after a strong year
+        if(!dca&&t>0)sv*=Math.max(0,Math.min(2,1+5*(R[t-1]-.07)));
+        // Panic selling after a sharp decline
+        if(t>0&&R[t-1]<-.12&&h.out<0&&r()<panic*2*h.pz*(cool?.2:1)){h.cash+=h.W;agg[t]-=h.W;h.W=0;h.out=3;}
+        if(h.out>0){h.cash+=sv;h.out--;if(h.out===0){h.W+=h.cash;agg[t]+=h.cash;h.cash=0;h.out=-1;}}
+        else{h.W+=sv;agg[t]+=sv;}
+        h.W*=1+R[t];}
+      const v=H.map(h=>h.W+h.cash).sort((a,b)=>a-b);Q.push([v[4],v[20],v[35]]);}
+    // Investing on schedule and never selling, in the same run of years
+    let D=0;const fd=[];for(let t=0;t<Y;t++){fd.push(.12);D=(D+.12)*(1+R[t]);}
+    const end=H.reduce((a,h)=>a+h.W+h.cash,0);
+    return {Q,crash,inv:irr(agg,end),ref:irr(fd,D),fin:H.map(h=>h.W+h.cash)};}
+  function draw(){const beta=1-$('-b').value/100,pq=$('-q').value/100,au=$('-au').checked,dc=$('-dc').checked,co=$('-co').checked;
+    $('-bv').textContent=$('-b').value+'%';$('-qv').textContent=$('-q').value+'%';
+    const S=sim(beta,pq,au,dc,co),B=sim(beta,pq,false,false,false),mx=Math.max(4,...S.Q.map(q=>q[2]),...B.Q.map(q=>q[1]))*1.05,y=v=>YB-v/mx*(YB-YT);
+    const step=mx>12?4:2;let ax='';for(let v=0;v<=mx;v+=step)ax+=`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v} yrs</text>`;
+    $('-ax').innerHTML=ax+[0,10,20,30].map(t=>`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">Year ${t}</text>`).join('');
+    $('-e').innerHTML=S.crash.map(t=>`<rect x="${x(t)}" y="${YT}" width="${(X1-X0)/Y}" height="${YB-YT}" fill="var(--warm-soft)" opacity=".7"/>`).join('');
+    const L=(a,k)=>a.map((q,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(q[k]).toFixed(1)).join('');
+    $('-p').setAttribute('d',L(S.Q,1));$('-base').setAttribute('d',(au||dc||co)?L(B.Q,1):'');
+    $('-band').setAttribute('d','M'+S.Q.map((q,t)=>x(t)+','+y(q[2])).join('L')+'L'+S.Q.map((q,t)=>x(t)+','+y(q[0])).reverse().join('L')+'Z');
+    const m=S.Q[Y][1],lo=S.Q[Y][0],pc=v=>(v*100).toFixed(1)+'%';
+    $('-out').innerHTML=[['Median savings in year 30',m.toFixed(1)+' years of income'],['Lowest tenth of households',lo.toFixed(1)+' years of income'],['Principals\' actual / on schedule',pc(S.inv)+' / '+pc(S.ref)]].map(([a,b])=>`<div><span>${a}</span><b>${b}</b></div>`).join('');
+    const n=[au,dc,co].filter(Boolean).length,gap=(S.ref-S.inv)*100;
+    $('-msg').textContent=n===0?`All three rules off: many households are slow to start, and they save a smaller share than they intended; chasing gains, selling into losses and panic selling also leave their return ${gap.toFixed(1)} percentage points below investing on schedule. After thirty years the median is only ${m.toFixed(1)} years of income.`:n===3?`All three rules on: every household saves to plan from the first year, buys on schedule and rarely sells even after a sharp decline. The median rises to ${m.toFixed(1)} years of income, and even the lowest tenth of households have ${lo.toFixed(1)} years; the actual return differs from investing on schedule by ${gap.toFixed(1)} percentage points.`:`${au?'Automatic saving has every household saving to plan from the first year':'Without automatic saving, many households are slow to start'}; ${dc?'automatic regular investment stops purchases from chasing last year\'s gains and losses':'without automatic regular investment, people buy more after gains and less after falls'}; ${co?'the cooling-off period sharply reduces selling after sharp declines':'without a cooling-off period, quite a few households sell near the bottom after sharp declines'}. Each of the three rules addresses one bias: automatic saving governs how much is saved, and the other two govern how much is received.`;}
+  ['-au','-dc','-co','-b','-q'].forEach(k=>$(k).addEventListener('input',draw));$('-re').addEventListener('click',()=>{seed=(seed*48271)%2147483647;draw();});
+  $('').addEventListener('anim-in',()=>{[[0,0,0],[1,0,0],[1,1,0],[1,1,1]].forEach(([a,b,c],i)=>setTimeout(()=>{$('-au').checked=!!a;$('-dc').checked=!!b;$('-co').checked=!!c;draw();},300+i*2200));});
+  draw();
+})();
+</script>
+
+<h2 id="sec-8">8. What this step leaves open</h2>
+<p>Starting from one person's harvest in one year, today's financial system has grown step by step. Looking back, each institution carries a cost:</p>
+<ol><li><strong>The cost of delegation.</strong> Research, monitoring, checking and fees all require someone's time and attention, so ordinary people can only hand their money to a small number of professional institutions.</li><li><strong>The cost of checking.</strong> Custody, disclosure and audit all exist to make the invisible visible, and seeing clearly itself takes labour.</li><li><strong>The cost of information.</strong> Gathering news and analysing fleets take time, so information advantages are worn away by competition.</li><li><strong>The cost of keeping to plans.</strong> Defaults and commitment devices help people overcome bias, but someone has to design and run them, and they can also be used against people.</li></ol>
+<p>A large part of these costs is the cost of paying someone to think and act on your behalf. If this cost fell sharply, which of these institutions would change, and which would not?</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">What this step leaves open</p><p class="figsub">Every institution carries a cost. Select a cost to see the assumption behind it.</p></div><button class="replay" type="button" data-replay="nx12">Replay</button></div>
+    <div class="nx" id="nx12" data-anim>
+      <div class="nx-src"><b>Part One</b><span>Institutions derived in twelve steps</span></div>
+      <div class="nx-list" id="nx12-l"></div>
+    </div>
+    <p class="nx-msg" id="nx12-msg" aria-live="polite"></p>
+  </div>
+</figure>
+<style>
+.nx{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:center}
+.nx-src{background:var(--ink);color:var(--bg);border-radius:10px;padding:14px 10px;text-align:center}
+.nx-src b{display:block;font-size:16px} .nx-src span{font-size:12px;opacity:.75}
+.nx-list{display:grid;gap:6px}
+.nx-i{font:inherit;text-align:left;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:9px 12px;color:var(--ink);opacity:0;transform:translateX(-8px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.3s)}
+.nx.in .nx-i{opacity:1;transform:none}
+.nx-i span{font-size:13.5px} .nx-i em{font-style:normal;font-size:11.5px;color:var(--faint);white-space:nowrap}
+.nx-i.sel{border-color:var(--accent)}
+.nx-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.nx{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const Q=[['The cost of delegation','Part Two','The assumption: research, monitoring and execution all depend on people\'s time and attention, so ordinary people can only hand their money to a small number of professional institutions and pay for it.'],
+    ['The cost of checking','Part Two','The assumption: custody, disclosure and audit all depend on people doing the checking, and seeing clearly what a fiduciary has done is itself expensive labour.'],
+    ['The cost of information','Part Two','The assumption: gathering news and analysing fleets take time, and because few people do it, information advantages can exist at all, before competition wears them away.'],
+    ['The cost of keeping to plans','Part Two','The assumption: defaults and commitment devices can only be designed around the circumstances of the majority; they cannot be adjusted for each household at any moment, and they can also be used against people.']];
+  const l=document.getElementById('nx12-l'),msg=document.getElementById('nx12-msg');
+  l.innerHTML=Q.map((q,i)=>`<button type="button" class="nx-i" style="--i:${i}" data-i="${i}"><span>${q[0]}</span><em>→ ${q[1]}</em></button>`).join('');
+  const bs=[...l.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));msg.textContent=Q[i][2];}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('nx12').addEventListener('anim-in',()=>{[0,1,2,3].forEach((i,k)=>setTimeout(()=>set(i),1600+k*1800));});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-9">9. Implications for products</h2>
+<p>Regular investment plans, automatic-enrolment retirement plans and target-date funds all rest on the mechanisms in this chapter. Three implications follow. First, a product's value lies not only in the returns it can deliver but also in how far it helps users keep to their own plans; the return users actually receive is the test of a product. Second, the default is the most powerful design element in a product. It should be set to the option most users would choose after thinking it through, and changing it should be easy enough. Third, the architecture of choice can help people or harm them; any design that relies on inertia should be asked whose interest it serves.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: bias, inertia and defaults</p><p class="figsub">Four conclusions, each tied to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="g12summary">Replay</button></div>
+    <div class="g12summary" id="g12summary" data-anim><div class="g12summary-c" style="--i:0"><em>Weighting the present</em><b>Plans and actions diverge</b><p>In spring the plan is to save half; in autumn less gets saved. Locking in beforehand is what keeps the plan.</p></div><div class="g12summary-c" style="--i:1"><em>Inertia</em><b>Doing nothing is also a choice</b><p>Whether people join and how much they save depend largely on what the default is.</p></div><div class="g12summary-c" style="--i:2"><em>Commitment and regular investment</em><b>Make the good arrangement the default</b><p>Commit now and increase out of future pay rises; buy on schedule rather than chasing last year's gains and losses.</p></div><div class="g12summary-c warn" style="--i:3"><em>The architecture of choice</em><b>Whom the default is set for</b><p>The same inertia can help people keep to their intentions, or become the seller's revenue.</p></div></div>
+  </div>
+</figure>
+<style>
+.g12summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g12summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g12summary-c.warn{border-left-color:var(--warm)}
+.g12summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g12summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g12summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g12summary.in .g12summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g12summary{grid-template-columns:1fr}}
+</style>
+
+<h2 id="sec-10">References</h2>
+<ul class="refs"><li>European Parliament and Council of the European Union (2011). Directive 2011/83/EU on consumer rights, Article 22.</li><li>Dichev, I. D. (2007). What are stock investors' actual historical returns? Evidence from dollar-weighted returns. <i>American Economic Review</i>, 97(1), 386–401.</li><li>Keswani, A., &amp; Stolin, D. (2008). Dollar-weighted returns to stock investors: A new look at the evidence. <i>Finance Research Letters</i>, 5(4), 228–235.</li><li>Laibson, D. (1997). Golden eggs and hyperbolic discounting. <i>Quarterly Journal of Economics</i>, 112(2), 443–477.</li><li>Madrian, B. C., &amp; Shea, D. F. (2001). The power of suggestion: Inertia in 401(k) participation and savings behavior. <i>Quarterly Journal of Economics</i>, 116(4), 1149–1187.</li><li>Nobel Prize Outreach. <i>The Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel 2017</i>. NobelPrize.org.</li><li>Phelps, E. S., &amp; Pollak, R. A. (1968). On second-best national saving and game-equilibrium growth. <i>Review of Economic Studies</i>, 35(2), 185–199.</li><li>Thaler, R. H., &amp; Benartzi, S. (2004). Save More Tomorrow: Using behavioral economics to increase employee saving. <i>Journal of Political Economy</i>, 112(S1), S164–S187.</li><li>Thaler, R. H., &amp; Sunstein, C. R. (2008). <i>Nudge: Improving Decisions about Health, Wealth, and Happiness</i>. New Haven: Yale University Press.</li><li>U.S. Department of Labor, Clearinghouse for Labor Evaluation and Research. Study review: Save More Tomorrow (Thaler &amp; Benartzi, 2004).</li></ul>
+<footer class="nav"><a href="g-11.html">← Chapter 11: Trustees may not do their duty</a><a href="g-part2.html">Part Two: Changing one parameter: when agency becomes almost free →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

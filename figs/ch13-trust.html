@@ -1,0 +1,53 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">让承诺可信的六种机制</p><p class="figsub">每种机制作用在承诺链条的不同位置。点按查看说明。</p></div><button class="replay" type="button" data-replay="tr">重播</button></div>
+    <div class="tr" id="tr" data-anim>
+      <div class="tr-reg tr-b" style="--i:4" data-t="对违背承诺者施加法律与经济后果，让守约成为更有利的选择。"><b>监管与执法</b><span>覆盖整条链条</span></div>
+      <div class="tr-chain">
+        <div class="tr-node"><b>承诺方</b><span>发行公司、银行</span>
+          <div class="tr-b" style="--i:0" data-t="承诺方公开经营与财务状况，并由独立的审计机构核查。"><b>信息披露与审计</b></div></div>
+        <div class="tr-link"><div class="tr-b" style="--i:1" data-t="专业机构集中评估承诺方，单个投资者无需各自核查。"><b>评级与研究</b></div><i></i></div>
+        <div class="tr-node"><b>中介机构</b><span>券商、基金、托管行</span>
+          <div class="tr-b" style="--i:2" data-t="客户资产与中介机构自有资产分开保管，中介机构倒闭不殃及客户资产。"><b>资产托管与隔离</b></div></div>
+        <div class="tr-link"><i></i></div>
+        <div class="tr-node"><b>用户</b><span>存款人、投资者</span></div>
+      </div>
+      <div class="tr-net tr-b" style="--i:3" data-t="在限额内为特定承诺兜底，例如存款保险与投资者保护基金。"><b>存款保险与投资者保护</b><span>托底的安全网</span></div>
+      <div class="tr-time tr-b" style="--i:5" data-t="长期经营者一旦违约，损失的是未来所有的生意，因此更有动力守约。"><b>声誉</b><span>随时间积累：今天守约，是为了明天还能做生意</span><i></i></div>
+    </div>
+    <p class="tr-msg" id="tr-msg" aria-live="polite">点按任一机制。</p>
+  </div>
+</figure>
+<style>
+.tr{display:grid;gap:10px}
+.tr-b{cursor:pointer;opacity:0;transform:translateY(6px);transition:opacity .4s,transform .4s,box-shadow .2s;transition-delay:calc(var(--i)*.35s)}
+.tr.in .tr-b{opacity:1;transform:none}
+.tr-b.sel{box-shadow:0 0 0 2px var(--accent)}
+.tr-reg{border:1.5px solid var(--gold);background:rgba(160,120,24,.1);border-radius:10px;padding:8px 12px;display:flex;justify-content:space-between;font-size:13px}
+.tr-reg span,.tr-net span,.tr-time span{color:var(--faint);font-size:12px}
+.tr-chain{display:grid;grid-template-columns:1fr 90px 1fr 40px 1fr;align-items:stretch;gap:0}
+.tr-node{border:1.5px solid var(--line);background:var(--surface);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:2px;font-size:13px}
+.tr-node>b{font-size:15px}
+.tr-node>span{font-size:12px;color:var(--faint)}
+.tr-node .tr-b{margin-top:8px;background:var(--accent-soft);border-radius:8px;padding:6px 8px;font-size:12px}
+.tr-link{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px;position:relative}
+.tr-link i{display:block;width:100%;height:2px;background:var(--faint)}
+.tr-link .tr-b{background:var(--accent-soft);border-radius:8px;padding:4px 6px;font-size:12px;text-align:center}
+.tr-net{border:1.5px dashed var(--accent);border-radius:10px;padding:8px 12px;display:flex;justify-content:space-between;font-size:13px;background:var(--accent-soft)}
+.tr-time{position:relative;border-radius:10px;padding:8px 12px;font-size:13px;background:var(--quote);display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.tr-time i{position:absolute;left:12px;right:12px;bottom:4px;height:2px;background:linear-gradient(90deg,var(--line),var(--warm));transform-origin:left;transform:scaleX(0);transition:transform 1.4s ease 2s}
+.tr.in .tr-time i{transform:none}
+.tr-msg{font-size:14px;margin:12px 0 0;min-height:1.7em}
+@media (max-width:640px){
+  .tr-chain{grid-template-columns:1fr;gap:6px}
+  .tr-link{flex-direction:row}
+  .tr-link i{width:2px;height:16px}
+  .tr-reg,.tr-net{flex-direction:column}
+}
+</style>
+<script>
+(function(){
+  const msg=document.getElementById('tr-msg');
+  document.querySelectorAll('#tr .tr-b').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();document.querySelectorAll('#tr .tr-b').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');msg.innerHTML='<b>'+b.querySelector('b').textContent+'</b>：'+b.dataset.t;}));
+})();
+</script>

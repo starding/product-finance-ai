@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">哪种东西会成为货币</p><p class="figsub">岛上有三种东西可以充当交换的媒介。越多人接受的东西越容易转手，于是有更多人接受它。切换最初的信念，看最后谁成为货币。</p></div><button class="replay" type="button" data-replay="em">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="最初的信念">
+      <button type="button" data-em="0" aria-pressed="true">起初三者差不多</button>
+      <button type="button" data-em="1" aria-pressed="false">起初更多人收盐</button>
+      <button type="button" data-em="2" aria-pressed="false">起初更多人收粮</button>
+    </div>
+    <div class="em" id="em" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="三种东西被接受的比例"><g id="em-ax"></g><g id="em-l"></g></svg>
+      <div class="legend" id="em-lg"></div>
+      <p class="em-msg" id="em-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：每一轮，人们按别人接受的比例与东西本身是否耐存，调整自己愿意收下什么。贝壳耐存、易分、难以伪造；盐耐存但会受潮；粮食会腐坏。</figcaption>
+</figure>
+<style>
+.em svg{width:100%;height:auto;display:block}
+.em-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.em svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),G=[['贝壳',1.0,'var(--accent)'],['盐',.95,'var(--gold)'],['粮食',.8,'var(--warm)']];
+  const S0=[[.32,.34,.34],[.22,.56,.22],[.2,.2,.6]],X0=40,X1=630,YT=12,YB=180,T=30,x=t=>X0+t/T*(X1-X0),y=v=>YB-v*(YB-YT);
+  $('em-lg').innerHTML=G.map(g=>`<span><i style="background:${g[2]}"></i>${g[0]}</span>`).join('');
+  $('em-ax').innerHTML=[0,.5,1].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text>`).join('')+[0,10,20,30].map(t=>`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">第 ${t} 轮</text>`).join('');
+  function run(k){let s=S0[k].slice();const P=[s.slice()];for(let t=0;t<T;t++){const w=s.map((v,i)=>Math.pow(v,1.6)*G[i][1]);const z=w.reduce((a,b)=>a+b,0);s=s.map((v,i)=>.6*v+.4*w[i]/z);P.push(s.slice());}return P;}
+  function set(k){document.querySelectorAll('[data-em]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.em===k)));const P=run(k);
+    $('em-l').innerHTML=G.map((g,i)=>`<path d="${P.map((s,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(s[i]).toFixed(1)).join('')}" fill="none" stroke="${g[2]}" stroke-width="2.5"/>`).join('');
+    const end=P[T],w=end.indexOf(Math.max(...end));
+    $('em-msg').textContent=k===0?`起初三者差不多时，最耐存的${G[w][0]}逐渐胜出：东西本身的性质起了作用。`:`起初更多人收${G[k][0]}，最后胜出的是${G[w][0]}：${w===k?'信念先占了优势，即使它不是最耐存的东西。':'东西本身的性质压过了最初的信念。'}`;}
+  document.querySelectorAll('[data-em]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.em)));
+  $('em').addEventListener('anim-in',()=>{[0,1,2].forEach((k,i)=>setTimeout(()=>set(k),300+i*2400));});
+  set(0);
+})();
+</script>

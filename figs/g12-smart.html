@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">先承诺，从以后的加薪里增加</p><p class="figsub">一位员工目前存下工资的 3.5%，每年加薪 3.5%。比较两种做法：现在就把储蓄提高到 10%；现在承诺，以后每次加薪时自动多存几个百分点。上图是储蓄比例，下图是每月到手的工资。</p></div><button class="replay" type="button" data-replay="sm12">重播</button></div>
+    <div class="sm12" id="sm12" data-anim>
+      <svg viewBox="0 0 660 300" role="img" aria-label="储蓄比例与到手工资"><g id="sm12-g"></g></svg>
+      <div class="legend"><span><i style="background:var(--faint)"></i>不变</span><span><i style="background:var(--warm)"></i>现在就提高到 10%</span><span><i style="background:var(--accent)"></i>以后每次加薪时多存</span></div>
+      <div class="sl"><label for="sm12-s">每次加薪时多存 <b id="sm12-sv"></b></label><input id="sm12-s" type="range" min="1" max="5" step="0.5" value="3"></div>
+      <p class="sm12-msg" id="sm12-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：工资起点为 100，每年年初加薪 3.5%，储蓄比例的上限为 15%。塞勒与贝纳茨（2004）报告，实际推行这一计划的公司中，参加者的平均储蓄率在 40 个月内从 3.5% 升到 13.6%；美国劳工部的研究评审认为，该研究没有随机分组，因果证据有限。</figcaption>
+</figure>
+<style>
+.sm12 svg{width:100%;height:auto;display:block}
+.sm12-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.sm12 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('sm12'+id),Y=5,X0=50,X1=628,x=t=>X0+t/Y*(X1-X0);
+  const A={t:26,b:130},B={t:170,b:280};
+  function paths(st){const R={keep:[],now:[],smart:[]},H={keep:[],now:[],smart:[]};let sm=.035;
+    for(let t=0;t<=Y;t++){const S=100*Math.pow(1.035,t);if(t>0)sm=Math.min(.15,sm+st);
+      const rs={keep:.035,now:.10,smart:sm};for(const k in rs){R[k].push(rs[k]);H[k].push(S*(1-rs[k]));}}return {R,H};}
+  function draw(){const st=+$('-s').value/100,{R,H}=paths(st);$('-sv').textContent=(st*100).toFixed(1)+' 个百分点';
+    const yr=v=>A.b-v/.16*(A.b-A.t),hmin=85,hmax=120,yh=v=>B.b-(v-hmin)/(hmax-hmin)*(B.b-B.t);
+    let h=[0,.05,.1,.15].map(v=>`<line x1="${X0}" x2="${X1}" y1="${yr(v)}" y2="${yr(v)}" class="s-line"/><text x="${X0-6}" y="${yr(v)+4}" text-anchor="end" font-size="11" class="t-faint">${Math.round(v*100)}%</text>`).join('')
+      +[90,100,110,120].map(v=>`<line x1="${X0}" x2="${X1}" y1="${yh(v)}" y2="${yh(v)}" class="s-line"/><text x="${X0-6}" y="${yh(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')
+      +[0,1,2,3,4,5].map(t=>`<text x="${x(t)}" y="${B.b+16}" text-anchor="middle" font-size="11" class="t-faint">第 ${t} 年</text>`).join('')
+      +`<text x="${X0}" y="12" font-size="11" class="t-faint">储蓄比例</text><text x="${X0}" y="${B.t-4}" font-size="11" class="t-faint">到手工资</text>`;
+    const C={keep:'var(--faint)',now:'var(--warm)',smart:'var(--accent)'};
+    for(const k of ['keep','now','smart']){h+=`<path d="${R[k].map((v,t)=>(t?'L':'M')+x(t)+','+yr(v)).join('')}" fill="none" stroke="${C[k]}" stroke-width="${k==='smart'?3:2}"/><path d="${H[k].map((v,t)=>(t?'L':'M')+x(t)+','+yh(v)).join('')}" fill="none" stroke="${C[k]}" stroke-width="${k==='smart'?3:2}"/>`;}
+    $('-g').innerHTML=h;const minChg=Math.min(...H.smart.slice(1).map((v,t)=>v/H.smart[t]-1));
+    $('-msg').textContent=`现在就提高到 10%，到手的工资当年就从 ${H.keep[0].toFixed(1)} 降到 ${H.now[0].toFixed(1)}，少了 ${((1-H.now[0]/H.keep[0])*100).toFixed(1)}%。以后每次加薪时多存 ${(st*100).toFixed(1)} 个百分点，第 5 年存到 ${(R.smart[Y]*100).toFixed(1)}%；`+(minChg>=0?'到手的工资年年不降，只是涨得慢一些。':`但有的年份到手的工资会比上一年少 ${(-minChg*100).toFixed(1)}%，多存的幅度超过了加薪的幅度。`);}
+  $('-s').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{let v=1;$('-s').value=1;draw();const id=setInterval(()=>{v+=.5;$('-s').value=v;draw();if(v>=3)clearInterval(id);},700);});
+  draw();
+})();
+</script>

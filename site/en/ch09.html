@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Traders in the market</title>
+<meta name="description" content="Product × Finance × AI: Financial Products in the Age of AI, Chapter 9: traders sorted by motive into utilitarian, profit-motivated and futile traders; before costs, trading is a zero-sum game">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="ch09">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="Contents">
+<div class="side-head"><a class="sidetitle" href="index.html">Product × Finance × AI<small>Financial Products in the Age of AI</small></a></div>
+<div class="side-view" role="group" aria-label="Way of reading"><a href="preface.html" class="on" aria-current="true">Decomposition</a><a href="g-preface.html">Derivation</a></div>
+<a class="side-about" href="index.html#about">About this book</a>
+<a class="" href="preface.html"><span class="n">Preface</span>Why financial products must be relearned in the age of AI</a>
+<a class="side-part" href="part1.html"><span class="pn">Part One</span>Markets: where returns and risks come from</a>
+<a class="" href="ch01.html"><span class="n">1</span>What financial products sell</a>
+<a class="" href="ch02.html"><span class="n">2</span>Interest rates and maturity</a>
+<a class="" href="ch03.html"><span class="n">3</span>What risk looks like</a>
+<a class="" href="ch04.html"><span class="n">4</span>Diversification</a>
+<a class="" href="ch05.html"><span class="n">5</span>Compounding and volatility drag</a>
+<a class="" href="ch06.html"><span class="n">6</span>Factors</a>
+<a class="" href="ch07.html"><span class="n">7</span>Why prices are hard to predict</a>
+<a class="" href="ch08.html"><span class="n">8</span>How information gets into prices</a>
+<a class=" cur" href="ch09.html" aria-current="page"><span class="n">9</span>Traders in the market</a>
+<a class="" href="ch10.html"><span class="n">10</span>Liquidity and the bid-ask spread</a>
+<a class="" href="ch11.html"><span class="n">11</span>Orders, rules and market structure</a>
+<a class="" href="ch12.html"><span class="n">12</span>The arithmetic of active management</a>
+<a class="" href="ch13.html"><span class="n">13</span>How promises are kept</a>
+<a class="" href="ch14.html"><span class="n">14</span>Why regulation exists</a>
+<a class="side-part" href="part2.html"><span class="pn">Part Two</span>Users: what people want and what they can bear</a>
+<a class="" href="ch15.html"><span class="n">15</span>The jobs users need done</a>
+<a class="" href="ch16.html"><span class="n">16</span>How users make decisions</a>
+<a class="" href="ch17.html"><span class="n">17</span>What users can bear</a>
+<a class="" href="ch18.html"><span class="n">18</span>How users judge and trust</a>
+<a class="side-part" href="part3.html"><span class="pn">Part Three</span>AI: how much an agent can do on people&#x27;s behalf</a>
+<a class="" href="ch19.html"><span class="n">19</span>The amplification factor</a>
+<a class="" href="ch20.html"><span class="n">20</span>Which tasks can be handed to AI</a>
+<a class="" href="ch21.html"><span class="n">21</span>Where capability comes from, and where it fails</a>
+<a class="" href="ch22.html"><span class="n">22</span>Verifiability: the cost of checking</a>
+<a class="" href="ch23.html"><span class="n">23</span>The special constraints of finance</a>
+<a class="side-part" href="part4.html"><span class="pn">Part Four</span>Design: financial products under three sets of constraints</a>
+<a class="" href="ch24.html"><span class="n">24</span>What to promise</a>
+<a class="" href="ch25.html"><span class="n">25</span>Mandate parameters</a>
+<a class="" href="ch26.html"><span class="n">26</span>Authority and irreversible exposure</a>
+<a class="" href="ch27.html"><span class="n">27</span>Liability and conflicts of interest</a>
+<a class="" href="ch28.html"><span class="n">28</span>Capability assembly and process visibility</a>
+<a class="" href="ch29.html"><span class="n">29</span>Assurance level</a>
+<a class="" href="ch30.html"><span class="n">30</span>How trust is built</a>
+<a class="" href="ch31.html"><span class="n">31</span>Design principles</a>
+<a class="side-app" href="estimates.html"><span class="n">Appendix</span>Methods and data behind the author&#x27;s estimates</a>
+<a class="side-app" href="method.html"><span class="n">Appendix</span>How this book was written</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="Open contents" title="Contents"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">Product × Finance × AI: Financial Products in the Age of AI</a><span>Part One · Section Three  Information advantage: the zero-sum part</span><a class="langlink" href="../ch09.html" hreflang="zh-CN">中文</a></header>
+
+<div class="chapno">Chapter 9</div><h1>Traders in the market<small>Who trades, why, and who wins and loses</small></h1>
+<div class="eqstrip" aria-label="Where this chapter sits in the return equation"><span class="lbl">Realized return =</span><a class="" href="ch02.html">Time compensation</a><a class="" href="ch03.html">＋Risk compensation</a><span class="cur">＋Information advantage</span><a class="" href="ch10.html">－Trading costs</a><span class="">＋Luck</span><span class="keep"><a href="ch13.html">Premise: promises kept</a></span></div>
+<blockquote><p>Information advantage is zero-sum: whatever one side gains, another side must lose. So who gains and who loses? Sorted by why they trade, traders fall into three groups: utilitarian traders, who trade for benefits other than trading profit; profit-motivated traders, who trade for the profit itself; and futile traders, who believe they can make money but on average do not. Before costs, the money that profit-motivated traders make comes from the other two groups. The losses of utilitarian traders buy them real benefits; the losses of futile traders buy them nothing.</p></blockquote>
+<h2 id="sec-1">1. Why people trade</h2>
+<p>In <i>Trading and Exchanges: Market Microstructure for Practitioners</i> (2003), Harris argues that to understand a market, one must first understand why the people in it trade. He sorts traders into three groups by motive:</p>
+<ul><li><strong>Utilitarian traders</strong> trade for benefits other than trading profit: moving today's money into the future, hedging risk, obtaining an asset they need, or simply enjoying the act of trading.</li><li><strong>Profit-motivated traders</strong> trade for the profit from trading itself. They include informed traders who hold information, parasitic traders who anticipate other people's orders, and dealers and arbitrageurs who supply liquidity.</li><li><strong>Futile traders</strong> believe they can make money but on average do not, for example because the information they act on is already reflected in the price.</li></ul>
+<p>In a 2015 monograph written for the CFA Institute Research Foundation, Harris revised this classification and no longer lists futile traders as a separate group. This chapter follows the 2015 version as its backbone, but takes futile traders and their subtypes from the earlier versions (the 1993 working paper and the 2003 book), because that category best explains the position of individual investors.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Traders sorted by motive</p><p class="figsub">Tap any type to see why they trade and whom they profit from or lose to.</p></div><button class="replay" type="button" data-replay="tx">Replay</button></div>
+    <div class="tx" id="tx" data-anim>
+      <div class="tx-col u" style="--i:0"><h5>Utilitarian<span>For benefits other than trading profit</span></h5>
+        <button data-k="inv">Investors and borrowers</button><button data-k="exc">Asset exchangers</button><button data-k="hed">Hedgers</button><button data-k="app">Apprentice traders</button><button data-k="fun">Trading for fun</button></div>
+      <div class="tx-col p" style="--i:1"><h5>Profit-motivated<span>For the profit from trading itself</span></h5>
+        <div class="tx-sub">Speculators · informed traders</div><button data-k="val">Value traders</button><button data-k="new">News traders</button>
+        <div class="tx-sub">Speculators · parasitic</div><button data-k="par">Front-runners, quote matchers and sentiment-oriented traders</button>
+        <div class="tx-sub">Speculators · manipulators</div><button data-k="man" class="bad">Market manipulators</button>
+        <div class="tx-sub">Liquidity suppliers</div><button data-k="dea">Dealers</button><button data-k="arb">Arbitrageurs</button></div>
+      <div class="tx-col f" style="--i:2"><h5>Futile<span>Believe they can profit; on average do not</span><em>Based on the 1993 working paper</em></h5>
+        <button data-k="ine">Inefficient traders</button>
+        <div class="tx-sub">A subtype of inefficient traders</div><button data-k="pse">Pseudo-informed traders</button></div>
+    </div>
+    <div class="tx-d" id="tx-d" aria-live="polite">Tap any type of trader.</div>
+  </div>
+  <figcaption>The main types of utilitarian and profit-motivated traders follow Harris (2015). Market manipulators follow Harris (1993), where they sit alongside parasitic traders as profit-motivated traders. Futile traders and their subtypes follow Harris (1993): futile traders divide into inefficient traders and victimised traders (the latter not shown here), and pseudo-informed traders are a kind of inefficient trader; the 2015 version no longer lists futile traders separately. Apprentice traders are listed as utilitarian in the 1993 paper.</figcaption>
+</figure>
+<style>
+.tx{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tx-col{border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:6px;opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.tx.in .tx-col{opacity:1;transform:none}
+.tx-col.u{background:rgba(47,95,158,.1)} .tx-col.p{background:var(--accent-soft)} .tx-col.f{background:var(--warm-soft)}
+.tx-col h5{margin:0 0 4px;font-size:16px}
+.tx-col h5 span{display:block;font-size:12px;font-weight:400;color:var(--muted)}
+.tx-col h5 em{font-style:normal;font-size:11px;font-weight:400;color:var(--faint)}
+.tx-sub{font-size:11px;color:var(--faint);margin-top:4px}
+.tx button{font:inherit;font-size:13px;text-align:left;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:6px 9px;cursor:pointer}
+.tx button:hover{border-color:var(--ink)}
+.tx button.sel{border-color:var(--ink);box-shadow:0 0 0 2px var(--line)}
+.tx button.bad{border-style:dashed;color:var(--warm)}
+.tx-d{margin-top:12px;font-size:14px;line-height:1.7;min-height:5.2em;background:var(--quote);border-radius:10px;padding:10px 14px}
+.tx-d dl{display:grid;grid-template-columns:92px 1fr;gap:2px 10px;margin:4px 0 0}
+.tx-d dt{font-size:12px;color:var(--faint);padding-top:3px}
+.tx-d dd{margin:0}
+@media (max-width:640px){.tx{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const D={
+    inv:['Investors and borrowers','Move today\'s money into the future, or bring future income forward.','Trading costs are the price of moving money across time; on average they lose slightly to profit-motivated traders.','Buying an index fund regularly for retirement; selling holdings when the money is needed.'],
+    exc:['Asset exchangers','Need to swap into another asset: exchanging currency, cashing out, rebalancing.','Pay the spread for immediate execution.','Exchanging currency before going abroad; redeeming a fund to pay tuition.'],
+    hed:['Hedgers','Reduce an existing risk exposure.','Pay a small cost on average in exchange for certainty of outcome.','An exporter sells foreign currency forward to lock in its revenue.'],
+    app:['Apprentice traders','Trade in order to learn how to trade.','Pay their tuition to more experienced counterparties; those who learn become winners, those who do not usually quit.','Practising with a small sum of money.'],
+    fun:['Trading for fun','Trading itself is enjoyable.','Pay for entertainment, but often underestimate how much.','Favouring low-priced, highly volatile "lottery-type" stocks.'],
+    val:['Value traders','Estimate an asset\'s true value and trade when the price departs from it.','Profit from those who trade with them when price departs from value; make prices more efficient.','Buying an undervalued company after studying its financial statements.'],
+    new:['News traders','Trade before prices fully reflect the news.','Profit from those who react more slowly; speed decides success.','An institution that places orders within seconds of an announcement.'],
+    par:['Parasitic traders','Anticipate other people\'s orders and trade ahead of them, or follow large orders.','Profit from the trading costs of those they anticipate; bring no new information and harm liquidity.','Spotting a large buy order, buying first, then selling to it at a higher price.'],
+    man:['Market manipulators','Spread rumours, place fake orders, corner and squeeze, and the like.','Profit from traders they mislead; prohibited by law in every major jurisdiction.','Buying first, spreading favourable rumours, then selling.'],
+    dea:['Dealers','Quote both a bid and an ask and wait for others to trade with them.','Earn the bid-ask spread from those in a hurry to trade; supply liquidity.','A market maker on an exchange.'],
+    arb:['Arbitrageurs','Buy and sell at once when the price gap between related assets moves out of line.','Profit from the traders who created the gap; carry liquidity from one market to another.','Buying an asset where it is cheap and selling it where it is dear, on two exchanges at once.'],
+    pse:['Pseudo-informed traders','A subtype of inefficient traders: believe they hold valuable information that is in fact already in the price or has no predictive power.','Lose to the truly informed and to dealers, and bear trading costs.','Chasing a rising stock after seeing a news alert.'],
+    ine:['Inefficient traders','Trade in poor ways and pay unnecessary costs.','Leave the extra spread and market-impact costs to dealers and parasitic traders.','Trading a large amount with a market order when liquidity is very poor.']
+  };
+  const d=document.getElementById('tx-d'), bs=[...document.querySelectorAll('#tx button')];
+  bs.forEach(b=>b.addEventListener('click',()=>{bs.forEach(x=>x.classList.toggle('sel',x===b));const v=D[b.dataset.k];
+    d.innerHTML=`<b>${v[0]}</b><dl><dt>Why they trade</dt><dd>${v[1]}</dd><dt>Win or lose</dt><dd>${v[2]}</dd><dt>Example</dt><dd>${v[3]}</dd></dl>`;}));
+})();
+</script>
+
+<h2 id="sec-2">2. Trading is a zero-sum game</h2>
+<p>Taken together, all investors hold the whole market, so their combined return can only equal the market return. Trading merely redistributes that return among investors: whatever one side gains through trading, another side must lose. Once trading costs are deducted, traders as a whole earn less than the market, and the zero-sum game becomes a negative-sum game. French estimated in 2008 that from 1980 to 2006, the fees, trading costs and spreads that US investors paid each year for active investing averaged about 0.67% of the market value of stocks.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Trading only redistributes the market return</p><p class="figsub">Suppose the three types of trader together hold the whole market, and the market produces 100 units of return in a year. See how trading changes each group's share.</p></div><button class="replay" type="button" data-replay="zs">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Stage">
+      <button type="button" data-zs="0" aria-pressed="true">Hold only, no trading</button>
+      <button type="button" data-zs="1" aria-pressed="false">After trading, before costs</button>
+      <button type="button" data-zs="2" aria-pressed="false">After costs</button>
+    </div>
+    <div class="zs" id="zs" data-anim>
+      <div class="zs-row" data-g="u"><span>Utilitarian</span><div class="zs-t"><i></i></div><b></b></div>
+      <div class="zs-row" data-g="p"><span>Profit-motivated</span><div class="zs-t"><i></i></div><b></b></div>
+      <div class="zs-row" data-g="f"><span>Futile</span><div class="zs-t"><i></i></div><b></b></div>
+      <div class="zs-row" data-g="c"><span>Trading costs</span><div class="zs-t"><i></i></div><b></b></div>
+      <div class="zs-sum"><span>All traders</span><b id="zs-sum"></b></div>
+      <p class="zs-msg" id="zs-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative numbers. For the real scale, see French (2008): from 1980 to 2006, the fees, trading costs and spreads US investors paid each year for active investing came to about 0.67% of the market value of stocks.</figcaption>
+</figure>
+<style>
+.zs-row{display:grid;grid-template-columns:118px 1fr 96px;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.zs-row b{text-align:right;white-space:nowrap;font-size:15px;font-variant-numeric:tabular-nums}
+.zs-t{height:22px;background:var(--quote);border-radius:6px;overflow:hidden}
+.zs-t i{display:block;height:100%;width:0;border-radius:6px;transition:width .8s ease}
+.zs-row[data-g="u"] i{background:var(--blue)} .zs-row[data-g="p"] i{background:var(--accent)} .zs-row[data-g="f"] i{background:var(--warm)} .zs-row[data-g="c"] i{background:var(--gray-mark)}
+.zs-row b.up{color:var(--accent)} .zs-row b.dn{color:var(--warm)}
+.zs-sum{display:flex;justify-content:space-between;border-top:1px solid var(--line);margin-top:10px;padding-top:8px;font-size:14px}
+.zs-sum b{font-size:18px;font-variant-numeric:tabular-nums}
+.zs-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const S=[
+    {u:50,p:30,f:20,c:0,m:'Without trading, each type of trader receives the market return in proportion to its holdings: 100 in total.'},
+    {u:47,p:37,f:16,c:0,m:'After trading, profit-motivated traders gain 7 units, exactly the 3 units utilitarian traders lose plus the 4 units futile traders lose. The total is still 100: trading only redistributes.'},
+    {u:46,p:35.5,f:15,c:3.5,m:'After trading costs, the three types together keep only 96.5; the missing 3.5 units go to brokers, exchanges and market makers. Zero-sum has become negative-sum.'}
+  ];
+  const rows=[...document.querySelectorAll('#zs .zs-row')], base={u:50,p:30,f:20,c:0};
+  const btns=[...document.querySelectorAll('[data-zs]')];
+  function set(k){
+    btns.forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.zs===k)));
+    const s=S[k];
+    rows.forEach(r=>{const g=r.dataset.g,v=s[g];r.querySelector('i').style.width=(v/60*100)+'%';
+      const b=r.querySelector('b');const dv=g==='c'?0:v-base[g];b.textContent=v+(g!=='c'&&k>0&&dv!==0?(dv>0?' (+':' (')+dv+')':'');b.className=g==='c'?'':dv>0?'up':dv<0?'dn':'';});
+    document.getElementById('zs-sum').textContent=(s.u+s.p+s.f);
+    document.getElementById('zs-msg').textContent=s.m;
+  }
+  btns.forEach(b=>b.addEventListener('click',()=>set(+b.dataset.zs)));
+  document.getElementById('zs').addEventListener('anim-in',()=>{set(0);setTimeout(()=>set(1),1800);setTimeout(()=>set(2),4200);});
+  set(0);
+})();
+</script>
+
+<p>In this game, the winners are the part of the profit-motivated traders who have a genuine edge; the losers are utilitarian and futile traders. Trading costs are borne by everyone and flow to brokers, exchanges and market makers.</p>
+<h2 id="sec-3">3. Why utilitarian traders are willing to "lose"</h2>
+<p>Utilitarian traders lose on their trades on average, but that does not make their trades mistakes. An exporter will receive a payment in US dollars in three months. To lock in what that payment will be worth in its home currency, it sells dollars forward today. On average this costs a little, but the firm buys certainty: however exchange rates move, its profit will not swing because of them.</p>
+<figure>
+  <div class="card">
+    <p class="figtitle">Hedging: a little less on average, in exchange for certainty</p>
+    <p class="figsub">An exporter will receive a payment of US$1 million in three months. Simulate 400 possible exchange-rate paths and see the distribution of the income in yuan.</p>
+    <div class="seg-btns" role="group" aria-label="Hedge or not">
+      <button type="button" data-hg="0" aria-pressed="true">No hedge</button>
+      <button type="button" data-hg="1" aria-pressed="false">Sell dollars forward today</button>
+    </div>
+    <div class="hg" id="hg" data-anim>
+      <svg viewBox="0 0 640 200" role="img" aria-label="Distribution of income in yuan">
+        <g id="hg-axis"></g>
+        <g id="hg-dots"></g>
+        <line id="hg-mean" class="hg-mean" y1="20" y2="160"/>
+      </svg>
+      <div class="hg-out">
+        <div><span>Average income</span><b id="hg-m"></b></div>
+        <div><span>Worst 5% of cases</span><b id="hg-w"></b></div>
+        <div><span>Best minus worst</span><b id="hg-r"></b></div>
+      </div>
+    </div>
+  </div>
+  <figcaption>Example parameters: spot rate 7.10 yuan per dollar, three-month exchange-rate volatility about 3%; the forward price is 0.02 below the expected future spot rate, representing the cost of hedging (including the spread the dealer earns). It does not correspond to any real quote.</figcaption>
+</figure>
+<style>
+.hg svg{width:100%;height:auto;display:block}
+.hg-dot{fill:var(--blue);opacity:.55;transition:cx .8s ease,cy .8s ease}
+.hg-mean{stroke:var(--ink);stroke-width:2}
+.hg-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.hg-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.hg-out span{display:block;font-size:12px;color:var(--faint)}
+.hg-out b{font-size:19px;font-variant-numeric:tabular-nums}
+@media (max-width:640px){.hg-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const N=400, S0=7.10, VOL=0.03, F=S0-0.02, X0=40, X1=620, L=650, H=770, x=v=>X0+(v-L)/(H-L)*(X1-X0);
+  let seed=3; const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
+  const g=()=>{let u=0,v=0;while(!u)u=rnd();v=rnd();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);};
+  const rates=Array.from({length:N},()=>S0*Math.exp(VOL*g()-VOL*VOL/2));
+  let a=`<line x1="${X0}" y1="160" x2="${X1}" y2="160" class="s-faint"/>`;
+  [660,680,700,720,740,760].forEach(v=>a+=`<text x="${x(v)}" y="178" text-anchor="middle" font-size="11" class="t-faint">${(v/100).toFixed(1)}</text>`);
+  a+=`<text x="${X1}" y="196" text-anchor="end" font-size="11" class="t-faint">Income in yuan (millions)</text>`;
+  document.getElementById('hg-axis').innerHTML=a;
+  // Jittered layout: bin by income, then stack vertically
+  const dots=document.getElementById('hg-dots');
+  dots.innerHTML=rates.map(()=>'<circle class="hg-dot" r="3"/>').join('');
+  const cs=[...dots.children];
+  function place(vals){
+    const bins={};vals.forEach((v,i)=>{const b=Math.round(x(v)/7);bins[b]=(bins[b]||0)+1;const k=bins[b];cs[i].setAttribute('cx',(b*7).toFixed(1));cs[i].setAttribute('cy',(156-((k-1)%22)*6.4-Math.floor((k-1)/22)*1.5).toFixed(1));});
+  }
+  function set(h){
+    document.querySelectorAll('[data-hg]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.hg===h)));
+    const vals=rates.map(r=>100*(h?F:r));
+    place(vals);
+    const m=vals.reduce((s,v)=>s+v,0)/N, srt=vals.slice().sort((p,q)=>p-q);
+    const ml=document.getElementById('hg-mean');ml.setAttribute('x1',x(m));ml.setAttribute('x2',x(m));
+    document.getElementById('hg-m').textContent=(m/100).toFixed(3)+' m';
+    document.getElementById('hg-w').textContent=(srt[Math.floor(N*0.05)]/100).toFixed(3)+' m';
+    document.getElementById('hg-r').textContent=((srt[N-1]-srt[0])/100).toFixed(3)+' m';
+  }
+  document.querySelectorAll('[data-hg]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.hg)));
+  document.getElementById('hg').addEventListener('anim-in',()=>{set(0);setTimeout(()=>set(1),2200);});
+  set(0);
+})();
+</script>
+
+<p>The logic is the same as buying insurance. Expected payouts on insurance are lower than the premium, yet people still buy it, because what they are buying is protection against bad outcomes. Investors who buy in order to carry money into the future, and sell because they need the money, are likewise trading for purposes other than trading itself; the trading costs they pay are the price of those benefits.</p>
+<p>Trading for enjoyment also counts as utilitarian. Dorn and Sengmueller (2009) found that investors who say they enjoy investing or gambling turn over their portfolios about twice as often as others. Kumar (2009) found that individual investors favour "lottery-type" stocks: low-priced, highly volatile stocks that occasionally soar. The price they pay buys entertainment; the problem is that many of them do not know how much they are paying.</p>
+<h2 id="sec-4">4. Profit-motivated traders: where the profit comes from</h2>
+<p>Profit-motivated traders earn their profits from different sources and play very different roles in the market. In his 1993 working paper, Harris compared the types of trader by whom they profit from, how they affect price efficiency and how they affect liquidity. This is the best way to understand them.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Profit-motivated traders: where profits come from and how they affect the market</p><p class="figsub">Green means improves, orange means harms, grey means the effect is unclear.</p></div><button class="replay" type="button" data-replay="pf4">Replay</button></div>
+    <div class="pf4-wrap"><div class="pf4" id="pf4" data-anim>
+      <div class="h"></div><div class="h">Profits from</div><div class="h">Effect on price efficiency</div><div class="h">Effect on liquidity</div>
+      <div class="r" style="--i:0"><b>Informed traders</b><span>Value, news</span></div>
+      <div class="c" style="--i:0">Those who trade with them when price departs from value</div><div class="c good" style="--i:0">Improves: pushes price towards value</div><div class="c mid" style="--i:0">Unclear: market makers widen spreads for fear of them</div>
+      <div class="r" style="--i:1"><b>Dealers</b><span>Market making</span></div>
+      <div class="c" style="--i:1">Those in a hurry who will pay the spread</div><div class="c mid" style="--i:1">Neutral</div><div class="c good" style="--i:1">Improves: quotes bids and asks at all times</div>
+      <div class="r" style="--i:2"><b>Arbitrageurs</b><span>Across related assets</span></div>
+      <div class="c" style="--i:2">Traders who push related prices out of line</div><div class="c good" style="--i:2">Improves: keeps related prices consistent</div><div class="c good" style="--i:2">Improves: carries liquidity to another market</div>
+      <div class="r" style="--i:3"><b>Parasitic</b><span>Front-running, quote matching</span></div>
+      <div class="c" style="--i:3">Traders whose orders they anticipate</div><div class="c mid" style="--i:3">Brings no new information</div><div class="c bad" style="--i:3">Harms: raises the cost of large trades</div>
+      <div class="r" style="--i:4"><b>Manipulators</b><span>Rumours, fake orders</span></div>
+      <div class="c" style="--i:4">Traders they mislead</div><div class="c bad" style="--i:4">Harms: pushes price away from value</div><div class="c bad" style="--i:4">Harms: creates false liquidity</div>
+    </div></div>
+  </div>
+  <figcaption>The dimensions of comparison follow the comparison table in the Harris (1993) working paper; each judgment is based on the discussion in Harris (2003, 2015), as summarised by this book.</figcaption>
+</figure>
+<style>
+.pf4-wrap{overflow-x:auto}
+.pf4{display:grid;grid-template-columns:120px repeat(3,minmax(130px,1fr));gap:6px;min-width:540px;font-size:13px}
+.pf4 .h{font-size:12px;color:var(--faint);padding:0 4px 4px}
+.pf4 .r{display:flex;flex-direction:column;justify-content:center;line-height:1.3}
+.pf4 .r b{font-size:14px}
+.pf4 .r span{font-size:11px;color:var(--faint)}
+.pf4 .c{border-radius:8px;padding:8px 10px;background:var(--quote);line-height:1.5;opacity:0;transform:translateX(-6px);transition:opacity .4s,transform .4s;transition-delay:calc(var(--i)*.3s)}
+.pf4 .r{opacity:0;transition:opacity .4s;transition-delay:calc(var(--i)*.3s)}
+.pf4.in .c,.pf4.in .r{opacity:1;transform:none}
+.pf4 .c.good{background:var(--accent-soft);color:var(--ink)}
+.pf4 .c.bad{background:var(--warm-soft);color:var(--ink)}
+.pf4 .c.mid{background:var(--quote);color:var(--muted)}
+</style>
+
+<p>Informed traders push prices towards value and make prices more efficient. Dealers and arbitrageurs supply liquidity to people in a hurry to trade and are paid with the bid-ask spread. Parasitic traders are different: they bring no information, but try to anticipate other people's large orders and trade ahead of them, profiting from other people's trading costs. Market manipulators mislead others by spreading rumours, placing fake orders and similar methods; these practices are expressly prohibited by law in every major jurisdiction.</p>
+<h2 id="sec-5">5. Futile traders: believing they are informed</h2>
+<p>The most common position of futile traders is that of the "pseudo-informed": they believe they hold valuable information, but the information is either already reflected in the price or has no predictive power at all. A large body of evidence on individual investors points to this group.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The more trading, the lower the return</p><p class="figsub">Two large-sample studies of individual investors.</p></div><button class="replay" type="button" data-replay="ft">Replay</button></div>
+    <div class="ft" id="ft" data-anim>
+      <div class="ft-p">
+        <p class="ft-h">About 66,000 US household accounts, 1991–1996: average annual net return</p>
+        <div class="ft-row" style="--i:0;--v:17.9"><span>Market, same period</span><div class="ft-t"><i></i></div><b>17.9%</b></div>
+        <div class="ft-row" style="--i:1;--v:11.4"><span>20% of households trading most</span><div class="ft-t"><i class="w"></i></div><b>11.4%</b></div>
+        <p class="ft-src">Barber and Odean (2000)</p>
+      </div>
+      <div class="ft-p">
+        <p class="ft-h">Share of day traders in Taiwan who earn consistent profits after fees</p>
+        <div class="ft-dots" id="ft-dots" aria-label="Fewer than one in a hundred"></div>
+        <p class="ft-src">Each dot is 1% of day traders; the orange part is less than one dot. Barber, Lee, Liu and Odean (2014)</p>
+      </div>
+    </div>
+  </div>
+</figure>
+<style>
+.ft{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ft-p{background:var(--quote);border-radius:10px;padding:12px 14px}
+.ft-h{margin:0 0 10px;font-size:13px;font-weight:700;line-height:1.5}
+.ft-row{display:grid;grid-template-columns:118px 1fr 52px;gap:8px;align-items:center;font-size:12px;margin:8px 0}
+.ft-row b{text-align:right;font-size:15px;font-variant-numeric:tabular-nums}
+.ft-t{height:18px;background:var(--surface);border-radius:5px;overflow:hidden}
+.ft-t i{display:block;height:100%;width:0;background:var(--accent);border-radius:5px;transition:width .9s ease;transition-delay:calc(var(--i)*.5s)}
+.ft-t i.w{background:var(--warm)}
+.ft.in .ft-t i{width:calc(var(--v)/20*100%)}
+.ft-src{margin:8px 0 0;font-size:11px;color:var(--faint)}
+.ft-dots{display:grid;grid-template-columns:repeat(20,1fr);gap:3px}
+.ft-dots i{aspect-ratio:1;border-radius:50%;background:var(--gray-mark);opacity:0;transition:opacity .2s}
+.ft.in .ft-dots i{opacity:.6;transition-delay:calc(var(--k)*10ms)}
+.ft-dots i.w{background:linear-gradient(90deg,var(--warm) 70%,var(--gray-mark) 70%);opacity:1}
+.ft.in .ft-dots i.w{opacity:1}
+@media (max-width:640px){.ft{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  document.getElementById('ft-dots').innerHTML=Array.from({length:100},(_,k)=>`<i class="${k===0?'w':''}" style="--k:${k}"></i>`).join('');
+})();
+</script>
+
+<p>Barber and Odean (2000) studied about 66,000 household accounts at a US discount broker. From 1991 to 1996, the 20% of households that traded most earned an average net return of 11.4% a year, against a market return of 17.9% over the same period. Barber and colleagues (2014) studied day traders in Taiwan and found that fewer than 1% earned consistent profits after fees. Barber and Odean (2008) also found that individual investors' purchases are driven largely by attention: stocks that are in the news, show unusually heavy trading volume or have the largest price moves are the ones individuals are most likely to buy.</p>
+<p>Futile traders do not stay futile forever. Seru and colleagues (2010) found that individual investors' trading performance improves with experience, but an important source of the improvement is that people who lack the skill reduce their trading, or stop altogether, once they realise it.</p>
+<h2 id="sec-6">6. Implications for product design</h2>
+<p>Different trading motives call for different kinds of help from a product.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: designing products around trading motives</p><p class="figsub">Four design requirements, each tied to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="s04">Replay</button></div>
+    <div class="s04" id="s04" data-anim>
+      <div class="s04-c" style="--i:0"><em>Motive gives winning and losing their meaning</em><b>First find out why the user trades</b><p>Whether for retirement, currency exchange, hedging or entertainment decides what help is useful; motive is used only to serve the user, never to label them.</p></div>
+      <div class="s04-c" style="--i:1"><em>What utilitarian traders pay is a cost</em><b>Lower costs for utilitarian traders</b><p>Trades that are not urgent can be filled patiently; show the spread and fees before an order is placed, and calculate the cost actually paid in the review afterwards.</p></div>
+      <div class="s04-c warn" style="--i:2"><em>Futile traders' losses buy nothing</em><b>Do not encourage trading without an edge</b><p>Do not use number of trades or turnover as product metrics; do not use leaderboards or streak rewards to stimulate trading; mark news with its time and the price change since it was published.</p></div>
+      <div class="s04-c warn" style="--i:3"><em>Parasitic trading and manipulation harm others</em><b>Do not make parasitic trading or manipulation easier</b><p>Refuse to help spread rumours, place fake orders and the like, and keep records.</p></div>
+    </div>
+  </div>
+</figure>
+<style>
+.s04{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.s04-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.s04-c.warn{border-left-color:var(--warm)}
+.s04-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.s04-c b{display:block;font-size:15px;margin:2px 0 4px}
+.s04-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.s04.in .s04-c{opacity:1;transform:none}
+@media (max-width:640px){.s04{grid-template-columns:1fr}}
+</style>
+
+<h2 id="sec-7">References</h2>
+<ul class="refs"><li>Harris, L. (1993). The winners and losers of the zero-sum game: The origins of trading profits, price efficiency and market liquidity. Working paper, University of Southern California.</li><li>Harris, L. (2003). <i>Trading and exchanges: Market microstructure for practitioners</i>. Oxford University Press.</li><li>Harris, L. (2015). <i>Trading and electronic markets: What investment professionals need to know</i>. CFA Institute Research Foundation.</li><li>Barber, B. &amp; Odean, T. (2000). Trading is hazardous to your wealth: The common stock investment performance of individual investors. <i>Journal of Finance</i>, 55(2), 773–806.</li><li>French, K. (2008). Presidential address: The cost of active investing. <i>Journal of Finance</i>, 63(4), 1537–1573.</li><li>Barber, B. &amp; Odean, T. (2008). All that glitters: The effect of attention and news on the buying behavior of individual and institutional investors. <i>Review of Financial Studies</i>, 21(2), 785–818.</li><li>Kumar, A. (2009). Who gambles in the stock market? <i>Journal of Finance</i>, 64(4), 1889–1933.</li><li>Dorn, D. &amp; Sengmueller, P. (2009). Trading as entertainment? <i>Management Science</i>, 55(4), 591–603.</li><li>Seru, A., Shumway, T. &amp; Stoffman, N. (2010). Learning by trading. <i>Review of Financial Studies</i>, 23(2), 705–739.</li><li>Barber, B., Lee, Y.-T., Liu, Y.-J. &amp; Odean, T. (2014). The cross-section of speculator skill: Evidence from day trading. <i>Journal of Financial Markets</i>, 18, 1–24.</li></ul>
+<footer class="nav"><a href="ch08.html">← Chapter 8: How information gets into prices</a><a href="ch10.html">Chapter 10: Liquidity and the bid-ask spread →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

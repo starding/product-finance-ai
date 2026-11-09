@@ -1,0 +1,36 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">只赚不赔的分成会鼓励冒险</p><p class="figsub">经理拿走每年收益的两成，亏损由委托人承担。拖动经理选择的风险大小，看经理期望拿到的分成与委托人扣除分成后的期望所得。</p></div><button class="replay" type="button" data-replay="op">重播</button></div>
+    <div class="op" id="op" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="风险大小与双方的期望所得"><g id="op-ax"></g><path id="op-m" class="op-m"/><path id="op-i" class="op-i"/><line id="op-v" class="s-faint"/></svg>
+      <div class="legend"><span><i style="background:var(--warm)"></i>经理期望拿到的分成</span><span><i style="background:var(--accent)"></i>委托人扣除分成后的期望所得</span></div>
+      <div class="sl"><label for="op-s">风险大小（每年收益的波动） <b id="op-sv"></b></label><input id="op-s" type="range" min="0" max="50" step="1" value="10"></div>
+      <div class="cs-sw"><label><input type="checkbox" id="op-h"> 高水位线：亏损补回之前不计提分成</label></div>
+      <p class="op-msg" id="op-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：每年收益服从平均 5%、波动为所选大小的正态分布；分成 ＝ 20% × 正收益部分。高水位线按一年期简化为分成基数扣除上一年的亏损，结论方向相同。</figcaption>
+</figure>
+<style>
+.op svg{width:100%;height:auto;display:block}
+.op-m{fill:none;stroke:var(--warm);stroke-width:2.5}
+.op-i{fill:none;stroke:var(--accent);stroke-width:2.5}
+.op-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.op svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),X0=46,X1=630,YT=12,YB=178,x=s=>X0+s/.5*(X1-X0),y=v=>YB-(v+.01)/.07*(YB-YT);
+  const phi=z=>Math.exp(-z*z/2)/Math.sqrt(2*Math.PI),Phi=z=>{const t=1/(1+.2316419*Math.abs(z)),d=.3989423*Math.exp(-z*z/2),p=d*t*(.3193815+t*(-.3565638+t*(1.781478+t*(-1.821256+t*1.330274))));return z>0?1-p:p;};
+  const Epos=(m,s)=>s<1e-6?Math.max(m,0):m*Phi(m/s)+s*phi(m/s);
+  function fee(s,h){const m=.05;if(!h)return .2*Epos(m,s);return .2*Math.max(0,Epos(m,s)-.5*Math.max(0,s*phi(m/s)-m*(1-Phi(m/s))));}
+  $('op-ax').innerHTML=[0,.02,.04,.06].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${Math.round(v*100)}%</text>`).join('')+[0,.1,.2,.3,.4,.5].map(s=>`<text x="${x(s)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${Math.round(s*100)}%</text>`).join('');
+  function draw(){const h=$('op-h').checked;let pm='',pi='';for(let s=0;s<=.5;s+=.005){const f=fee(s,h);pm+=(s?'L':'M')+x(s).toFixed(1)+','+y(f).toFixed(1);pi+=(s?'L':'M')+x(s).toFixed(1)+','+y(.05-f).toFixed(1);}
+    $('op-m').setAttribute('d',pm);$('op-i').setAttribute('d',pi);const s=+$('op-s').value/100,f=fee(s,h);
+    $('op-v').setAttribute('x1',x(s));$('op-v').setAttribute('x2',x(s));$('op-v').setAttribute('y1',YT);$('op-v').setAttribute('y2',YB);$('op-sv').textContent=Math.round(s*100)+'%';
+    $('op-msg').textContent=`波动 ${Math.round(s*100)}% 时，经理期望拿到 ${(f*100).toFixed(2)}%，委托人期望得到 ${((.05-f)*100).toFixed(2)}%。平均收益不变，波动越大，经理分得越多、委托人得到越少：经理有理由去押风险更高的船。${h?'高水位线让经理先补回亏损，冒险的好处随之减小。':''}`;}
+  ['op-s','op-h'].forEach(k=>$(k).addEventListener('input',draw));
+  $('op').addEventListener('anim-in',()=>{let v=0;$('op-s').value=0;draw();const id=setInterval(()=>{v+=2;$('op-s').value=v;draw();if(v>=50)clearInterval(id);},100);});
+  draw();
+})();
+</script>

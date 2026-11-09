@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: delegation</p><p class="figsub">Four conclusions, each corresponding to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="g10summary">Replay</button></div>
+    <div class="g10summary" id="g10summary" data-anim><div class="g10summary-c" style="--i:0"><em>Value of delegation</em><b>Saves time, shares research</b><p>Research once and use it on every principal's money; the price is agency costs.</p></div><div class="g10summary-c" style="--i:1"><em>Ability is hard to see</em><b>A few years of results are mostly luck</b><p>Reliably telling true skill apart often takes more years than a career.</p></div><div class="g10summary-c warn" style="--i:2"><em>Incentives</em><b>Results-linked pay and a visible process</b><p>Linking pay makes the manager try, and also makes him bear luck; the more can be seen, the cheaper the constraint; a share of gains without losses encourages risk.</p></div><div class="g10summary-c warn" style="--i:3"><em>The cheapest delegation</em><b>Hold everything in proportion</b><p>The benefit of skill mostly goes to the manager; fees compound year after year into a large sum over decades.</p></div></div>
+  </div>
+</figure>
+<style>
+.g10summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g10summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g10summary-c.warn{border-left-color:var(--warm)}
+.g10summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g10summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g10summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g10summary.in .g10summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g10summary{grid-template-columns:1fr}}
+</style>

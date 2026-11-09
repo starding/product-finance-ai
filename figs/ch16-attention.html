@@ -1,0 +1,38 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">注意力只够看几条信息</p><p class="figsub">一位用户打开账户，面前有十二条信息，注意力只够处理其中四条。切换排序方式，看哪些信息进入了决定。</p></div><button class="replay" type="button" data-replay="at">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="排序方式">
+      <button type="button" data-at="sal" aria-pressed="true">按显眼程度</button>
+      <button type="button" data-at="rel" aria-pressed="false">按与目标的相关程度</button>
+    </div>
+    <div class="at" id="at" data-anim></div>
+    <p class="at-msg" id="at-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>示意。显眼程度与相关程度为说明而设定。注意力分散会减慢信息进入决定的速度，见 DellaVigna 与 Pollet（2009）。</figcaption>
+</figure>
+<style>
+.at{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.at-i{border:1.5px solid var(--line);border-radius:8px;padding:7px 9px;font-size:12.5px;line-height:1.45;background:var(--surface);opacity:.45;transition:opacity .4s,background .4s,border-color .4s}
+.at-i em{display:block;font-style:normal;font-size:10.5px;color:var(--faint)}
+.at-i.on{opacity:1;background:var(--accent-soft);border-color:var(--accent)}
+.at-i.on.w{background:var(--warm-soft);border-color:var(--warm)}
+.at-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.at{grid-template-columns:repeat(2,1fr)}}
+</style>
+<script>
+(function(){
+  const I=[['今日涨幅榜第一名',95,10],['一条突发新闻推送',90,15],['持仓今日涨跌',88,30],['热门讨论帖',80,5],['某只股票创新高',75,12],
+    ['组合每年的总费用',15,85],['前三大持仓占比',20,80],['距离目标还差多少',18,95],['组合的最大回撤',25,75],['计划的再平衡日期',10,70],
+    ['分红与利息到账',35,40],['资金加权收益',12,78]];
+  const box=document.getElementById('at');
+  function set(k){document.querySelectorAll('[data-at]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.at===k)));
+    const ix=I.map((x,i)=>i).sort((a,b)=>k==='sal'?I[b][1]-I[a][1]:I[b][2]-I[a][2]);
+    box.innerHTML=ix.map(i=>`<div class="at-i" data-i="${i}"><em>显眼 ${I[i][1]} · 相关 ${I[i][2]}</em>${I[i][0]}</div>`).join('');
+    const els=[...box.children];els.slice(0,4).forEach((e,j)=>setTimeout(()=>e.classList.add('on',k==='sal'?'w':'x'),200+j*250));
+    const rel=ix.slice(0,4).reduce((s,i)=>s+I[i][2],0)/4;
+    document.getElementById('at-msg').textContent=k==='sal'?`按显眼程度，进入决定的四条信息平均相关程度只有 ${rel.toFixed(0)}：决定被最先看到的东西牵着走。`:`按与目标的相关程度，进入决定的四条信息平均相关程度为 ${rel.toFixed(0)}。这些信息本身并不显眼，需要产品主动把它们放到前面。`;}
+  document.querySelectorAll('[data-at]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.at)));
+  box.addEventListener('anim-in',()=>{set('sal');setTimeout(()=>set('rel'),3200);});
+  set('sal');
+})();
+</script>

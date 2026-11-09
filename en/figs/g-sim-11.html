@@ -1,0 +1,53 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Civilization Simulator · Chapter 11: a village that sets rules</p><p class="figsub">Some of the twenty managers are unreliable. Switch custody, disclosure and suitability on or off separately to see principals' losses over twenty years and how many households are willing to delegate.</p></div><button class="replay" type="button" data-replay="cs11">Replay</button></div>
+    <div class="cs-rules"><span class="on">Shares</span><span class="on">Market</span><span class="on">Information in prices</span><span class="on">Delegation</span><span class="on">Regulation &amp; custody</span><span class="lock">Defaults · Ch. 12</span></div>
+    <div class="cs11" id="cs11" data-anim>
+      <svg viewBox="0 0 660 210" role="img" aria-label="Share of households willing to delegate"><g id="cs11-ax"></g><path id="cs11-p" class="cs11-p"/><g id="cs11-e"></g></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Households willing to delegate</span><span><i style="background:var(--warm)"></i>Years with a fraud collapse or risk event</span></div>
+      <div class="cs-sw"><label><input type="checkbox" id="cs11-cu"> Rule: independent custody</label><label><input type="checkbox" id="cs11-di"> Rule: mandatory disclosure</label><label><input type="checkbox" id="cs11-su"> Rule: suitability</label></div>
+      <div class="sl"><label for="cs11-b">Unreliable managers <b id="cs11-bv"></b></label><input id="cs11-b" type="range" min="0" max="60" step="5" value="25"></div>
+      <button type="button" class="replay" id="cs11-re">Another run of years</button>
+      <div class="cs11-out" id="cs11-out"></div>
+      <p class="cs11-msg" id="cs11-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model: forty households, 80% of them willing to delegate at the start; households that do not delegate store their grain themselves and earn nothing. The fleet's average return is 6% a year. Without custody, unreliable managers take 8% a year and cover it with false reports; once the cumulative theft exceeds 30%, the fraud collapses. With disclosure, principals have an even chance each year of seeing through them and switching managers. 30% of households cannot bear a large loss; without a suitability requirement, unreliable managers sell them high-risk ship shares, which suffer a 30% loss about once every seven years. With each loss, fewer households are willing to delegate, and the number recovers slowly in quiet years.</figcaption>
+</figure>
+<style>
+.cs11 svg{width:100%;height:auto;display:block}
+.cs11-p{fill:none;stroke:var(--accent);stroke-width:2.6}
+.cs11-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cs11-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs11-out span{display:block;font-size:11.5px;color:var(--faint)} .cs11-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.cs11-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs11-out{grid-template-columns:1fr}.cs11 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs11'+id),Y=20,NM=20;let seed=1111;
+  const X0=44,X1=650,YT=10,YB=176,x=t=>X0+t/Y*(X1-X0),y=v=>YB-v*(YB-YT);
+  function sim(b,cu,di,su){let s=seed;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};
+    const nB=Math.round(b*NM);let P=.8,bad=nB/NM,gap=0,theft=0,mis=0;const Ps=[P],ev=[];
+    for(let t=0;t<Y;t++){let loss=0;
+      // Theft: happens only without custody; collapses once cumulative theft exceeds 30%
+      if(!cu&&bad>0){gap+=.08;theft+=.08*bad*P;if(gap>=.3){loss+=gap*bad;if(gap*bad>.01)ev.push(t);gap=0;}}
+      // Disclosure: half of the unreliable managers are seen through each year
+      if(di)bad*=.5;
+      // Suitability: without it, the 30% of households who cannot bear losses are sold high-risk ship shares
+      if(r()<.15){const hit=su?0:.3*Math.min(1,bad*2+.1);if(hit>0){loss+=hit*.3;mis+=hit*.3*P;if(hit*.3>.01)ev.push(t+.5);}}
+      P=Math.max(.05,Math.min(.95,P+.06*(.9-P)-2.2*loss));Ps.push(P);}
+    return {Ps,ev:[...new Set(ev.map(Math.floor))],theft,mis};}
+  function draw(){const b=+$('-b').value/100,cu=$('-cu').checked,di=$('-di').checked,su=$('-su').checked,S=sim(b,cu,di,su);$('-bv').textContent=Math.round(b*100)+'%';
+    $('-ax').innerHTML=[0,.25,.5,.75,1].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text>`).join('')+[0,5,10,15,20].map(t=>`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">Year ${t}</text>`).join('');
+    $('-p').setAttribute('d',S.Ps.map((v,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(v).toFixed(1)).join(''));
+    $('-e').innerHTML=S.ev.map(t=>`<rect x="${x(t)}" y="${YT}" width="${(X1-X0)/Y}" height="${YB-YT}" fill="var(--warm-soft)"/>`).join('');
+    const end=S.Ps[Y];
+    $('-out').innerHTML=[['Households willing to delegate in year 20',Math.round(end*100)+'%'],['Assets misappropriated (relative to the village)',(S.theft*100).toFixed(0)+'%'],['Losses from selling to the wrong people',(S.mis*100).toFixed(1)+'%']].map(([a,v])=>`<div><span>${a}</span><b>${v}</b></div>`).join('');
+    const n=[cu,di,su].filter(Boolean).length;
+    $('-msg').textContent=b===0?'With no unreliable managers, the rules are barely needed, and the number of households willing to delegate rises steadily.':n===0?`No rules at all: frauds collapse again and again, households that cannot bear losses buy ship shares they should not have, the share of households willing to delegate falls to ${Math.round(end*100)}%, and even reliable managers cannot find mandates.`:n===3?`Custody, disclosure and suitability are all in place: assets cannot be misappropriated, unreliable managers are quickly seen through, ship shares are sold only to those who can bear the risk, and the share of households willing to delegate rises to ${Math.round(end*100)}%.`:`${cu?'With custody, assets cannot be misappropriated':'Without custody, theft still happens'}; ${di?'with disclosure, unreliable managers are gradually seen through':'without disclosure, principals cannot tell good from bad'}; ${su?'with a suitability requirement, ship shares are sold only to those who can bear the risk':'without a suitability requirement, households that cannot bear losses still buy high-risk ship shares'}. Each of the three lines of defence handles one thing; when one is missing, the corresponding losses appear.`;}
+  ['-cu','-di','-su','-b'].forEach(k=>$(k).addEventListener('input',draw));$('-re').addEventListener('click',()=>{seed=(seed*48271)%2147483647;draw();});
+  $('').addEventListener('anim-in',()=>{const s=[[0,0,0],[1,0,0],[1,1,0],[1,1,1]];s.forEach(([a,b,c],i)=>setTimeout(()=>{$('-cu').checked=!!a;$('-di').checked=!!b;$('-su').checked=!!c;draw();},300+i*2200));});
+  draw();
+})();
+</script>

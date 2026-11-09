@@ -1,0 +1,62 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">期限错配的代价</p>
+    <p class="figsub">10,000 元存三年定期。拖动用钱的时间，看提前支取损失多少利息。</p>
+    <div class="mm" id="mm" data-anim>
+      <svg viewBox="0 0 640 96" role="img" aria-label="存款期限与用钱时间">
+        <line x1="40" y1="44" x2="600" y2="44" class="s-faint"/>
+        <g id="mm-ticks"></g>
+        <rect id="mm-term" y="34" height="20" rx="10" class="mm-term"/>
+        <text id="mm-tl" y="26" font-size="12" text-anchor="middle" class="t-accent">定期三年，到期才按 2% 计息</text>
+        <line id="mm-need" y1="32" y2="74" class="mm-need"/>
+        <text id="mm-nl" y="90" font-size="12" text-anchor="middle" class="t-warm">需要用钱</text>
+      </svg>
+      <div class="sl"><label for="mm-t">需要用钱的时间 <b id="mm-tv"></b></label><input id="mm-t" type="range" min="0.5" max="5" step="0.5" value="1.5"></div>
+      <div class="mm-bars">
+        <div class="mm-row"><span>期限匹配时可得</span><div class="mm-track"><i id="mm-b1" class="ok"></i></div><b id="mm-v1"></b></div>
+        <div class="mm-row"><span>实际得到</span><div class="mm-track"><i id="mm-b2"></i></div><b id="mm-v2"></b></div>
+      </div>
+      <p class="mm-msg" id="mm-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示例利率：三年定期年利率 2%，提前支取按活期年利率 0.2% 计息；“期限匹配时可得”指选择与用钱时间一致的存款期限、按 2% 计息的结果。实际规则以各银行为准。债券提前卖出时不损失利息，但卖出价格取决于当时的市场利率，可能低于买入价。</figcaption>
+</figure>
+<style>
+.mm svg{width:100%;height:auto;display:block;margin-bottom:6px}
+.mm-term{fill:var(--accent-soft);stroke:var(--accent)}
+.mm-need{stroke:var(--warm);stroke-width:2;stroke-dasharray:4 3}
+.mm-bars{display:grid;gap:8px;margin:6px 0}
+.mm-row{display:grid;grid-template-columns:110px 1fr 80px;gap:10px;align-items:center;font-size:13px}
+.mm-row b{text-align:right;font-variant-numeric:tabular-nums}
+.mm-track{height:16px;background:var(--quote);border-radius:4px;overflow:hidden}
+.mm-track i{display:block;height:100%;background:var(--warm);transition:width .3s}
+.mm-track i.ok{background:var(--accent)}
+.mm-msg{font-size:14px;margin:8px 0 0;min-height:1.7em}
+</style>
+<script>
+(function(){
+  const X0=40,X1=600,T=5,x=t=>X0+t/T*(X1-X0), P=10000;
+  let tk='';for(let t=0;t<=5;t++)tk+=`<line x1="${x(t)}" y1="40" x2="${x(t)}" y2="48" class="s-faint"/><text x="${x(t)}" y="62" text-anchor="middle" font-size="11" class="t-faint">${t===0?'今天':t+' 年'}</text>`;
+  document.getElementById('mm-ticks').innerHTML=tk;
+  const term=document.getElementById('mm-term');term.setAttribute('x',x(0));term.setAttribute('width',x(3)-x(0));
+  document.getElementById('mm-tl').setAttribute('x',(x(0)+x(3))/2);
+  const s=document.getElementById('mm-t'), fmt=v=>Math.round(v).toLocaleString('zh-CN');
+  function render(){
+    const t=+s.value;
+    document.getElementById('mm-tv').textContent=t+' 年后';
+    const nd=document.getElementById('mm-need');nd.setAttribute('x1',x(t));nd.setAttribute('x2',x(t));
+    document.getElementById('mm-nl').setAttribute('x',x(t));
+    const ideal=P*Math.pow(1.02,t);
+    const act=t<3?P*Math.pow(1.002,t):P*Math.pow(1.02,3)*Math.pow(1.002,t-3);
+    const max=P*Math.pow(1.02,5), lo=P*0.98, w=v=>((v-lo)/(max-lo)*100)+'%';
+    document.getElementById('mm-b1').style.width=w(ideal);document.getElementById('mm-b2').style.width=w(act);
+    document.getElementById('mm-v1').textContent=fmt(ideal)+' 元';document.getElementById('mm-v2').textContent=fmt(act)+' 元';
+    document.getElementById('mm-msg').textContent=t<3
+      ?`用钱早于到期：只能提前支取，按活期计息，少得 ${fmt(ideal-act)} 元。`
+      :t===3?'用钱时间与期限一致：拿到全部承诺的利息。'
+      :`到期后钱闲置在活期里：少得 ${fmt(ideal-act)} 元。期限过短同样有代价。`;
+  }
+  s.addEventListener('input',render); render();
+  document.getElementById('mm').addEventListener('anim-in',()=>{let v=0.5;const id=setInterval(()=>{v+=0.5;s.value=v;render();if(v>=4.5){clearInterval(id);setTimeout(()=>{s.value=1.5;render();},700);}},350);});
+})();
+</script>

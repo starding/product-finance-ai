@@ -1,0 +1,72 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">From tool to agent</p>
+    <p class="figsub">The link between user and market changes from following orders to deciding for itself.</p>
+    <div class="seg-btns" role="group" aria-label="Switch view">
+      <button type="button" data-mode="tool" aria-pressed="true">Before: tool</button>
+      <button type="button" data-mode="agent" aria-pressed="false">Now: agent</button>
+    </div>
+    <div class="ag" id="ag" data-anim data-mode="tool">
+      <svg viewBox="0 0 640 250" role="img" aria-label="How the user, the tool or agent, and the market relate">
+        <defs>
+          <marker id="ag-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ag-mk"/></marker>
+        </defs>
+        <!-- nodes -->
+        <g class="ag-node"><rect x="20" y="95" width="110" height="56" rx="12"/><text x="75" y="129" text-anchor="middle" class="t-ink" font-size="16" font-weight="700">User</text></g>
+        <g class="ag-node mid"><rect x="265" y="95" width="110" height="56" rx="12"/>
+          <text x="320" y="129" text-anchor="middle" font-size="16" font-weight="700" class="ag-mid-t tool-only">Tool</text>
+          <text x="320" y="129" text-anchor="middle" font-size="16" font-weight="700" class="ag-mid-t agent-only">Agent</text></g>
+        <g class="ag-node"><rect x="510" y="95" width="110" height="56" rx="12"/><text x="565" y="129" text-anchor="middle" class="t-ink" font-size="16" font-weight="700">Market</text></g>
+        <!-- before -->
+        <g class="tool-only">
+          <line x1="132" y1="123" x2="261" y2="123" class="ag-flow" marker-end="url(#ag-arr)"/>
+          <text x="196" y="112" text-anchor="middle" font-size="12" class="t-muted">Every step by hand</text>
+          <line x1="377" y1="123" x2="506" y2="123" class="ag-flow" marker-end="url(#ag-arr)"/>
+          <text x="441" y="112" text-anchor="middle" font-size="12" class="t-muted">Follows orders</text>
+          <text x="320" y="200" text-anchor="middle" font-size="13" class="t-faint">Judgement and responsibility stay with the user</text>
+        </g>
+        <!-- now -->
+        <g class="agent-only">
+          <line x1="132" y1="113" x2="261" y2="113" class="ag-flow" marker-end="url(#ag-arr)"/>
+          <text x="196" y="102" text-anchor="middle" font-size="12" class="t-muted">Sets the goal</text>
+          <line x1="261" y1="135" x2="132" y2="135" class="ag-flow back" marker-end="url(#ag-arr)"/>
+          <text x="196" y="153" text-anchor="middle" font-size="12" class="t-muted">Reports back</text>
+          <line x1="377" y1="123" x2="506" y2="123" class="ag-flow" marker-end="url(#ag-arr)"/>
+          <text x="441" y="112" text-anchor="middle" font-size="12" class="t-muted">Decides and acts</text>
+          <g class="ag-q" style="--d:.3s"><rect x="128" y="34" width="164" height="28" rx="14"/><text x="210" y="53" text-anchor="middle" font-size="12">① How much can it do?</text></g>
+          <g class="ag-q" style="--d:.7s"><rect x="350" y="34" width="164" height="28" rx="14"/><text x="432" y="53" text-anchor="middle" font-size="12">② What is handed over?</text></g>
+          <g class="ag-q" style="--d:1.1s"><rect x="128" y="186" width="164" height="28" rx="14"/><text x="210" y="205" text-anchor="middle" font-size="12">③ Who answers for errors?</text></g>
+          <g class="ag-q" style="--d:1.5s"><rect x="350" y="186" width="164" height="28" rx="14"/><text x="432" y="205" text-anchor="middle" font-size="12">④ Why trust it?</text></g>
+        </g>
+      </svg>
+    </div>
+  </div>
+  <figcaption>A tool carries out each of the user's instructions; an agent accepts a goal and decides the steps itself. The four questions this raises are discussed in Parts Three and Four.</figcaption>
+</figure>
+<style>
+.ag svg{width:100%;height:auto;display:block}
+.ag-node rect{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+.ag-node.mid rect{transition:fill .4s,stroke .4s}
+.ag[data-mode="agent"] .ag-node.mid rect{fill:var(--accent-soft);stroke:var(--accent)}
+.ag-mid-t{fill:var(--ink)}
+.ag-mk{fill:var(--faint)}
+.ag-flow{stroke:var(--faint);stroke-width:1.6;stroke-dasharray:5 5;animation:agflow 1.2s linear infinite}
+.ag-flow.back{stroke:var(--accent)}
+@keyframes agflow{to{stroke-dashoffset:-20}}
+.tool-only,.agent-only{transition:opacity .45s}
+.ag[data-mode="tool"] .agent-only{opacity:0}
+.ag[data-mode="agent"] .tool-only{opacity:0}
+.ag-q{opacity:0;transform:translateY(6px);transform-box:fill-box;transition:opacity .4s,transform .4s}
+.ag[data-mode="agent"] .ag-q{opacity:1;transform:none;transition-delay:var(--d)}
+.ag-q rect{fill:var(--warm-soft);stroke:var(--warm);stroke-width:1}
+.ag-q text{fill:var(--warm);font-weight:500}
+</style>
+<script>
+(function(){
+  const ag=document.getElementById('ag'), btns=[...ag.parentElement.querySelectorAll('[data-mode]')].filter(b=>b.tagName==='BUTTON');
+  let timer;
+  const set=m=>{ag.dataset.mode=m;btns.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===m)));};
+  btns.forEach(b=>b.addEventListener('click',()=>{clearTimeout(timer);set(b.dataset.mode);}));
+  ag.addEventListener('anim-in',()=>{set('tool');clearTimeout(timer);timer=setTimeout(()=>set('agent'),2200);});
+})();
+</script>

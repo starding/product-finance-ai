@@ -1,0 +1,36 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">整体准确率掩盖了关键情形</p><p class="figsub">一千道评测题按实际使用的比例抽取。切换查看整体准确率与分情形的准确率；关键情形的门槛是 99%。</p></div><button class="replay" type="button" data-replay="st2">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="视图"><button type="button" data-st2="all" aria-pressed="true">整体</button><button type="button" data-st2="s" aria-pressed="false">按情形分层</button></div>
+    <div class="st2" id="st2" data-anim></div>
+    <p class="st2-msg" id="st2-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>示意数字。有组织地寻找失败输入的红队测试见 Ganguli 等（2022）。</figcaption>
+</figure>
+<style>
+.st2{display:grid;gap:5px}
+.st2-r{display:grid;grid-template-columns:minmax(0,1.2fr) 56px minmax(0,1.6fr) 54px;gap:10px;align-items:center;font-size:12.5px;background:var(--quote);border-radius:8px;padding:6px 10px}
+.st2-r span:nth-child(2){color:var(--faint);font-size:11.5px;text-align:right}
+.st2-t{position:relative;height:14px;background:var(--surface);border-radius:7px;overflow:hidden}
+.st2-t i{display:block;height:100%;width:0;border-radius:7px;transition:width .6s ease}
+.st2-t s{position:absolute;top:0;bottom:0;border-left:2px dashed var(--ink);left:99%}
+.st2-r b{text-align:right;font-variant-numeric:tabular-nums}
+.st2-r.key{border-left:3px solid var(--warm)}
+.st2-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.st2-r{grid-template-columns:1fr 54px}.st2-r span:nth-child(2){display:none}.st2-t{grid-column:1/-1;grid-row:2}}
+</style>
+<script>
+(function(){
+  const S=[['常规问答',800,.97,0],['财报解读',120,.93,0],['到期日当天',30,.70,1],['市场剧烈波动',30,.73,1],['停牌与重组',10,.50,1],['数据缺失',10,.40,1]];
+  const tot=S.reduce((a,s)=>a+s[1],0),acc=S.reduce((a,s)=>a+s[1]*s[2],0)/tot;
+  const box=document.getElementById('st2');
+  function set(k){document.querySelectorAll('[data-st2]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.st2===k)));
+    const R=k==='all'?[['全部情形',tot,acc,0]]:S;
+    box.innerHTML=R.map(([n,c,a,key])=>`<div class="st2-r${key?' key':''}"><span>${n}</span><span>${c} 道</span><div class="st2-t"><i data-w="${a*100}" style="background:${a>=.95?'var(--accent)':a>=.8?'var(--gold)':'var(--warm)'}"></i>${key?'<s></s>':''}</div><b>${(a*100).toFixed(1)}%</b></div>`).join('');
+    setTimeout(()=>box.querySelectorAll('.st2-t i').forEach(i=>i.style.width=i.dataset.w+'%'),40);
+    document.getElementById('st2-msg').textContent=k==='all'?`整体准确率 ${(acc*100).toFixed(1)}%，看起来可以上线。`:'按情形分层之后，四类关键情形的准确率只有四成到七成，远低于 99% 的门槛；它们只占评测题的 8%，在整体数字里几乎看不出来。';}
+  document.querySelectorAll('[data-st2]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.st2)));
+  box.addEventListener('anim-in',()=>{set('all');setTimeout(()=>set('s'),2400);});
+  set('all');
+})();
+</script>

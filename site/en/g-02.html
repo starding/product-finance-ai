@@ -1,0 +1,561 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Two people, short of grain at different times</title>
+<meta name="description" content="Product × Finance × AI: Derived from Zero, Chapter 2: a second person arrives on the island and the two run short of grain at different times, so lending appears; lending out is storage without losses, and interest is the price of time, lying between the lender&#x27;s other options and the borrower&#x27;s circumstances">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="g-02">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="Contents">
+<div class="side-head"><a class="sidetitle" href="index.html">Product × Finance × AI<small>Financial Products in the Age of AI</small></a></div>
+<div class="side-view" role="group" aria-label="Way of reading"><a href="preface.html">Decomposition</a><a href="g-preface.html" class="on" aria-current="true">Derivation</a></div>
+<a class="side-about" href="index.html#about">About this book</a>
+<a class="" href="g-preface.html"><span class="n">Preface</span>The best way to understand financial products is to build them from zero</a>
+<a class="side-part" href="g-part1.html"><span class="pn">Part One</span>From 0 to 1: how a world without finance grows finance</a>
+<a class="" href="g-01.html"><span class="n">1</span>One person, one year&#x27;s harvest</a>
+<a class=" cur" href="g-02.html" aria-current="page"><span class="n">2</span>Two people, short of grain at different times</a>
+<a class="" href="g-03.html"><span class="n">3</span>What if a loan is not repaid</a>
+<a class="" href="g-04.html"><span class="n">4</span>Exchange among many</a>
+<a class="" href="g-05.html"><span class="n">5</span>Harvests good and bad</a>
+<a class="" href="g-06.html"><span class="n">6</span>Savers may need their grain at any time; borrowers need it for years</a>
+<a class="" href="g-07.html"><span class="n">7</span>No one household can pay for a ship</a>
+<a class="" href="g-08.html"><span class="n">8</span>Securities must be saleable</a>
+<a class="" href="g-09.html"><span class="n">9</span>Prices carry everyone&#x27;s information</a>
+<a class="" href="g-10.html"><span class="n">10</span>Ordinary people have neither the time nor the expertise</a>
+<a class="" href="g-11.html"><span class="n">11</span>Trustees may not do their duty</a>
+<a class="" href="g-12.html"><span class="n">12</span>The institutions are in place, and people still make mistakes</a>
+<a class="side-part" href="g-part2.html"><span class="pn">Part Two</span>Changing one parameter: when agency becomes almost free</a>
+<a class="" href="g-13.html"><span class="n">13</span>A new parameter: the cost of cognitive labour collapses</a>
+<a class="" href="g-14.html"><span class="n">14</span>Can everyone have a personal agent?</a>
+<a class="" href="g-15.html"><span class="n">15</span>Who guarantees an agent&#x27;s promises</a>
+<a class="" href="g-16.html"><span class="n">16</span>If everyone has an analyst</a>
+<a class="" href="g-17.html"><span class="n">17</span>Agents become the main market participants</a>
+<a class="" href="g-18.html"><span class="n">18</span>Can an agent correct human bias?</a>
+<a class="" href="g-19.html"><span class="n">19</span>What did not change</a>
+<a class="side-part" href="g-part3.html"><span class="pn">Part Three</span>Deriving a product in the new world</a>
+<a class="" href="g-20.html"><span class="n">20</span>One person and one sum of money</a>
+<a class="" href="g-21.html"><span class="n">21</span>The user is not present</a>
+<a class="" href="g-22.html"><span class="n">22</span>The user cannot see the process</a>
+<a class="" href="g-23.html"><span class="n">23</span>Agents make mistakes</a>
+<a class="" href="g-24.html"><span class="n">24</span>Trust takes time</a>
+<a class="side-app" href="g-epilogue.html"><span class="n">Epilogue</span>Back to the governing rule</a>
+<a class="side-app" href="method.html"><span class="n">Appendix</span>How this book was written</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="Open contents" title="Contents"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">Product × Finance × AI: Financial Products in the Age of AI</a><span>Part One  From 0 to 1</span><a class="langlink" href="../g-02.html" hreflang="zh-CN">中文</a></header>
+
+<div class="chapno">Chapter 2</div><h1>Two people, short of grain at different times<small>Lending and interest</small></h1>
+<blockquote><p>As soon as there is a second person on the island who runs short of grain at different times from me, storage is no longer the only way to keep grain for tomorrow. I lend him what I cannot eat today, and he repays me after his own harvest. Grain that is lent out does not spoil in the granary, so lending benefits both sides. The further apart their times of shortage, the larger the benefit; if the times are exactly the same, lending cannot help. Interest is the price of time. It lies between the lowest return the lender will accept and the highest cost the borrower is willing to pay.</p></blockquote>
+<h2 id="sec-1">1. A second person, short at a different time</h2>
+<p>A second person arrives on the island. He grows a different crop and harvests in spring; I still harvest in autumn. In autumn my granary is full and his is empty; in spring it is the other way round.</p>
+<p>If each stores his own grain, both of us keep grain in the granary for a whole year, losing some all the way. If in autumn I lend him part of what I cannot eat, and in spring he repays me from his harvest, then this grain is eaten by him during the half year it is on loan instead of spoiling in my granary; what I get back in spring is his newly harvested grain. For me, lending out is a form of storage without losses.</p>
+<p><strong>Today's counterpart.</strong> Being short of money before payday and having some left over after it is the same thing within a single person. Put many people together and someone always has a surplus while someone else is short. Seasonal businesses are a clearer example: they collect revenue in the busy season and pay rent and wages in the slack season, and what they need is exactly lending across mismatched times.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Lending out is storage without losses</p><p class="figsub">I harvest 12 portions in autumn; he harvests 12 portions in spring. Switch lending on or off and see the grain in both granaries and how much is lost over the year.</p></div><button class="replay" type="button" data-replay="tw2">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Lending">
+      <button type="button" data-tw2="0" aria-pressed="true">Each stores his own</button>
+      <button type="button" data-tw2="1" aria-pressed="false">Lend in autumn, repay in spring, and the reverse</button>
+    </div>
+    <div class="tw2" id="tw2" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="Monthly stock of both people"><g id="tw2-ax"></g><path id="tw2-a" class="tw2-a"/><path id="tw2-b" class="tw2-b"/><g id="tw2-l"></g></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>My granary (autumn harvest)</span><span><i style="background:var(--warm)"></i>His granary (spring harvest)</span></div>
+      <div class="sl"><label for="tw2-d">Monthly loss <b id="tw2-dv"></b></label><input id="tw2-d" type="range" min="0" max="5" step="0.5" value="3"></div>
+      <div class="tw2-out"><div><span>Lost by both over the year</span><b id="tw2-lost"></b></div><div><span>Each can eat per month</span><b id="tw2-c"></b></div></div>
+      <p class="tw2-msg" id="tw2-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: each person eats the same amount every month. With lending, the one who has just harvested feeds both for half a year, and the other repays after his own harvest, so grain stays in a granary for at most six months.</figcaption>
+</figure>
+<style>
+.tw2 svg{width:100%;height:auto;display:block}
+.tw2-a{fill:none;stroke:var(--accent);stroke-width:2.4}
+.tw2-b{fill:none;stroke:var(--warm);stroke-width:2.4}
+.tw2-out{display:flex;gap:24px;flex-wrap:wrap;margin-top:8px}
+.tw2-out div{display:flex;flex-direction:column} .tw2-out span{font-size:12px;color:var(--faint)} .tw2-out b{font-size:20px;font-variant-numeric:tabular-nums}
+.tw2-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.tw2 svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),X0=40,X1=630,YB=176,YT=12,x=t=>X0+t/12*(X1-X0),y=v=>YB-v/12*(YB-YT);
+  const MN=['Aut','','','Win','','','Spr','','','Sum','','',''];
+  $('tw2-ax').innerHTML=[0,4,8,12].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+
+    MN.map((m,i)=>`<text x="${x(i)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${m||''}</text>`).join('');
+  let lend=0;const sl=$('tw2-d');
+  function draw(){const d=+sl.value/100,k=1-d;let S12=0;for(let t=0;t<12;t++)S12+=Math.pow(k,-t);let S6=0;for(let t=0;t<6;t++)S6+=Math.pow(k,-t);
+    const c=lend?6/S6:12/S12,lost=24-24*c;
+    // 稳态库存：各自储藏时，每人收获后 12 个月吃完；借贷时，收获方供两人吃 6 个月
+    const st=(h)=>{const r=[];let s=0;for(let t=0;t<=24;t++){const tt=((t-h)%12+12)%12;if(tt===0&&t<24)s+=12;r.push(s);const out=lend?(tt<6?2*c:0):c;s=Math.max(0,(s-out)*k);}return r.slice(12,25);};
+    const A=st(0),B=st(6);
+    const path=r=>r.map((v,i)=>(i?'L':'M')+x(i).toFixed(1)+','+y(v).toFixed(1)).join('');
+    $('tw2-a').setAttribute('d',path(A));$('tw2-b').setAttribute('d',path(B));
+    $('tw2-dv').textContent=(d*100).toFixed(1)+'%';$('tw2-lost').textContent=lost.toFixed(1)+' portions';$('tw2-c').textContent=c.toFixed(2)+' portions';
+    $('tw2-msg').textContent=d===0?'With no losses, lending makes no difference.':lend?`Grain stays in a granary for at most six months; together the two lose only ${lost.toFixed(1)} portions a year, and each can eat ${c.toFixed(2)} portions a month.`:`Grain must stay in the granary for a whole year; together the two lose ${lost.toFixed(1)} portions a year, and each can eat only ${c.toFixed(2)} portions a month.`;}
+  document.querySelectorAll('[data-tw2]').forEach(b=>b.addEventListener('click',()=>{lend=+b.dataset.tw2;document.querySelectorAll('[data-tw2]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  sl.addEventListener('input',draw);
+  $('tw2').addEventListener('anim-in',()=>{lend=0;document.querySelectorAll('[data-tw2]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.tw2==='0')));draw();setTimeout(()=>{lend=1;document.querySelectorAll('[data-tw2]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.tw2==='1')));draw();},2400);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-2">2. Lending benefits both sides</h2>
+<p>In autumn I have 12 portions of grain, and one more portion brings little extra satisfaction; he has only 1 portion left, and one more portion brings great satisfaction. In spring the situation is reversed. Move one portion from my autumn to his autumn, then from his spring back to my spring, and both of us are more satisfied. This is the same reasoning as one person smoothing consumption, except that the smoothing now spans two people.</p>
+<p>How much to lend and how much to repay must be agreed between the two. If the repayment is too small, the lender would do better storing grain himself; if it is too large, the borrower would do better not borrowing. Any agreement between these two bounds leaves both better off than not lending at all.</p>
+<p><strong>Today's counterpart.</strong> The depositor is me, harvesting in autumn; the borrower is him, harvesting in spring. The depositor hands over money he does not need for now, and the borrower uses future income in advance.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Lending makes both sides better off</p><p class="figsub">In autumn I lend him some grain; in spring he repays me with interest. Drag the amount lent and the interest rate to see whether each person's satisfaction is higher or lower than without lending.</p></div><button class="replay" type="button" data-replay="gn">Replay</button></div>
+    <div class="gn" id="gn" data-anim>
+      <div class="gn-bars">
+        <div class="gn-b"><span>Me (lender)</span><div class="gn-t"><i id="gn-a"></i></div><b id="gn-av"></b></div>
+        <div class="gn-b"><span>Him (borrower)</span><div class="gn-t"><i id="gn-b"></i></div><b id="gn-bv"></b></div>
+      </div>
+      <div class="gn-band"><div class="gn-ax" id="gn-ax"></div><div class="gn-ok" id="gn-ok"></div><i class="gn-r" id="gn-r"></i></div>
+      <div class="gn-sl">
+        <div class="sl"><label for="gn-l">Lent in autumn <b id="gn-lv"></b></label><input id="gn-l" type="range" min="1" max="8" step="0.5" value="6"></div>
+        <div class="sl"><label for="gn-i">Interest rate (half-year) <b id="gn-iv"></b></label><input id="gn-i" type="range" min="-20" max="60" step="1" value="10"></div>
+      </div>
+      <p class="gn-msg" id="gn-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: I have 12 portions in autumn and none in spring, and storing grain myself for half a year loses 5% (about a tenth a year); he has only 1 portion left in autumn and 12 in spring. Satisfaction is the logarithm of the portions eaten in each half-year, compared with each person's best arrangement without lending. Interest rates within the green range make both better off.</figcaption>
+</figure>
+<style>
+.gn-bars{display:grid;gap:8px}
+.gn-b{display:grid;grid-template-columns:8em 1fr 4.5em;gap:10px;align-items:center;font-size:13px}
+.gn-t{position:relative;height:16px;background:var(--quote);border-radius:4px}
+.gn-t::before{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;border-left:1px solid var(--faint)}
+.gn-t i{position:absolute;top:0;height:100%;border-radius:4px;transition:left .3s,width .3s,background .3s}
+.gn-b b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.gn-band{position:relative;height:40px;margin:18px 0 6px}
+.gn-ax{position:absolute;left:0;right:0;top:18px;border-top:1px solid var(--line)}
+.gn-ax span{position:absolute;top:6px;transform:translateX(-50%);font-size:10.5px;color:var(--faint)}
+.gn-ok{position:absolute;top:12px;height:12px;background:var(--accent-soft);border:1px solid var(--accent);border-radius:4px;transition:left .3s,width .3s}
+.gn-r{position:absolute;top:6px;width:3px;height:24px;margin-left:-1.5px;background:var(--ink);border-radius:2px;transition:left .2s}
+.gn-sl{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:10px}
+.gn-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.gn-sl{grid-template-columns:1fr;gap:4px}}
+</style>
+<script>
+(function(){
+  const pc=v=>(v<0?'−':'')+Math.abs(Math.round(v*100))+'%',$=id=>document.getElementById(id),a=0.95,U0a=Math.log(6)+Math.log(6*a),U0b=Math.log(1)+Math.log(12),R0=-20,R1=60,px=r=>(r-R0)/(R1-R0)*100;
+  const Ua=(L,r)=>Math.log(12-L)+Math.log(L*(1+r)),Ub=(L,r)=>{const rest=12-L*(1+r);return rest<=0?-99:Math.log(1+L)+Math.log(rest);};
+  function root(f,lo,hi){for(let i=0;i<50;i++){const m=(lo+hi)/2;if(f(m)>0)hi=m;else lo=m;}return (lo+hi)/2;}
+  $('gn-ax').innerHTML=[-20,0,20,40,60].map(v=>`<span style="left:${px(v)}%">${v<0?'−'+(-v):v}%</span>`).join('');
+  function bar(el,d){const w=Math.min(50,Math.abs(d)/1.0*50);el.style.left=(d>=0?50:50-w)+'%';el.style.width=w+'%';el.style.background=d>=0?'var(--accent)':'var(--warm)';}
+  function draw(){const L=+$('gn-l').value,r=+$('gn-i').value/100;
+    const da=Ua(L,r)-U0a,db=Math.max(-3,Ub(L,r)-U0b);
+    bar($('gn-a'),da);bar($('gn-b'),db);$('gn-av').textContent=(da>=0?'+':'')+da.toFixed(2);$('gn-bv').textContent=(db>=0?'+':'')+db.toFixed(2);
+    const rmin=root(x=>Ua(L,x)-U0a,-0.99,3),rmax=root(x=>-(Ub(L,x)-U0b),-0.99,(12/L)-1-1e-6);
+    const lo=Math.max(R0,rmin*100),hi=Math.min(R1,rmax*100);$('gn-ok').style.left=px(lo)+'%';$('gn-ok').style.width=Math.max(0,px(hi)-px(lo))+'%';$('gn-r').style.left=px(r*100)+'%';
+    $('gn-lv').textContent=L+(L===1?' portion':' portions');$('gn-iv').textContent=pc(r);
+    $('gn-msg').textContent=rmin>rmax?`When ${L} portions are lent, no interest rate makes both sides better off.`:da>=0&&db>=0?`Lending ${L} portions at ${pc(r)}: both are better off than without lending. Any rate from ${pc(rmin)} to ${pc(rmax)} works; where exactly it falls depends on how the two agree.`:da<0?`Below ${pc(rmin)}, I would do better storing the grain myself. Note that this lower bound is negative, because storage itself involves losses.`:`Above ${pc(rmax)}, he has too little left after repaying and would do better not borrowing.`;}
+  ['gn-l','gn-i'].forEach(k=>$(k).addEventListener('input',draw));
+  $('gn').addEventListener('anim-in',()=>{let v=-20;$('gn-i').value=v;draw();const id=setInterval(()=>{v+=4;$('gn-i').value=v;draw();if(v>=56){clearInterval(id);setTimeout(()=>{$('gn-i').value=10;draw();},700);}},160);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-3">3. Interest: the price of time</h2>
+<p>Borrow one portion and repay more than one; the extra is interest. It is the price of today's grain expressed in tomorrow's grain. The interest rate is not arbitrary; it has a lower bound and an upper bound. The lower bound is set by the lender's other options. If storing grain himself loses a tenth each year, then getting back slightly less than he lent is still better than storage, and the interest rate can even be negative. If the grain could also be kept as seed, the lower bound is the return on seed. The upper bound is set by the borrower's circumstances: the more urgent his need, the more he is willing to pay. The two can strike a deal because the same portion of grain at the same moment is worth different amounts to each of them. A portion of grain in autumn is worth more to him, with an empty granary, than to me, with a full one. He is willing to exchange more of his spring grain for it, and I am happy to accept.</p>
+<aside class="principle"><p class="pr-k">Derived so far: a principle</p><p class="pr-n">Present goods are worth more than future goods</p><p class="pr-c"><span><em>Discipline</em>Economics › Theory of capital and interest</span><span><em>Type</em>Theory</span></p><p class="pr-s">Goods of the same kind and quantity are generally worth more today than in the future. One reason is that people's needs and supplies differ at different moments; those who are short now and expect plenty later value present goods especially highly. Interest is the expression of this difference in value.</p><dl><div><dt>Standing in the field</dt><dd>The book calls the proposition that "present goods are, as a rule, worth more than future goods of like kind and number" the kernel of its theory of interest. It is the second volume of <i>Capital and Interest</i>; the first volume (1884) is a historical survey and critique of earlier theories of interest</dd></div><div><dt>Constraint it answers</dt><dd>The two run short of grain at different times</dd></div><div><dt>Premises</dt><dd>People's degree of scarcity differs at different moments; grain lent out can be recovered in the future</dd></div><div><dt>Proposed by</dt><dd>Böhm-Bawerk, 1889, <i>The Positive Theory of Capital</i>; the book gives three reasons, the other two being that people tend to underestimate future needs and that present goods can be put into production</dd></div><div><dt>Open question</dt><dd>When lent grain cannot be recovered, this difference in value cannot be realized; when storage involves losses, the interest rate the lender will accept can be below zero</dd></div></dl></aside>
+<p>Writing lending and interest into rules has a long history. The Code of Hammurabi set the maximum interest rate on loans of grain at one third a year, and on loans of silver at one fifth (Homer and Sylla, 2005). The Code does not explain why the two differ.</p>
+<p><strong>Today's counterpart.</strong> Deposit rates and lending rates sit near these two bounds respectively: the deposit rate must exceed what savers could earn by putting their money elsewhere, and the lending rate cannot exceed what borrowers can bear. The law still caps lending rates today. For example, the judicial interpretation on private lending revised by the Supreme People's Court of China in 2020 sets four times the one-year Loan Prime Rate as the upper limit for judicial protection.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The lower and upper bounds of the interest rate</p><p class="figsub">The lender's other options set the lower bound; the borrower's circumstances set the upper bound. Switch the lender's options and drag how urgently the borrower needs grain to see the range of rates at which a deal can be struck.</p></div><button class="replay" type="button" data-replay="rt">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Lender's other options">
+      <button type="button" data-rt="store" aria-pressed="true">Storage only</button>
+      <button type="button" data-rt="seed" aria-pressed="false">Can also keep seed</button>
+    </div>
+    <div class="rt" id="rt" data-anim>
+      <div class="rt-band"><div class="rt-ax" id="rt-ax"></div><div class="rt-zone" id="rt-z"></div><div class="rt-mk lo" id="rt-lo"><span></span></div><div class="rt-mk hi" id="rt-hi"><span></span></div></div>
+      <div class="sl"><label for="rt-u">How urgently the borrower needs grain <b id="rt-uv"></b></label><input id="rt-u" type="range" min="0" max="100" value="50"></div>
+      <p class="rt-msg" id="rt-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: storage loses a tenth a year; the return on seed is 25%; the more urgent the need, the higher the maximum rate the borrower is willing to pay.</figcaption>
+</figure>
+<style>
+.rt-band{position:relative;height:96px;margin:6px 0 8px}
+.rt-ax{position:absolute;left:0;right:0;top:56px;border-top:1px solid var(--line)}
+.rt-ax span{position:absolute;top:6px;transform:translateX(-50%);font-size:10.5px;color:var(--faint)}
+.rt-zone{position:absolute;top:44px;height:24px;background:var(--accent-soft);border-radius:4px;transition:left .4s,width .4s}
+.rt-mk{position:absolute;top:30px;height:52px;border-left:2px solid var(--ink);transition:left .4s}
+.rt-mk span{position:absolute;top:-28px;white-space:nowrap;font-size:12px;transform:translateX(-50%)}
+.rt-mk.hi{border-color:var(--warm)} .rt-mk.hi span{color:var(--warm)}
+.rt-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),R0=-20,R1=100,px=r=>(r-R0)/(R1-R0)*100;let alt='store';
+  $('rt-ax').innerHTML=[-20,0,20,40,60,80,100].map(v=>`<span style="left:${px(v)}%">${v<0?'−'+(-v):v}%</span>`).join('');
+  function draw(){const u=+$('rt-u').value,lo=alt==='store'?-10:25,hi=-5+u*1.0;
+    $('rt-uv').textContent=u<30?'not very urgent':u<70?'fairly urgent':'very urgent';
+    $('rt-lo').style.left=px(lo)+'%';$('rt-lo').querySelector('span').textContent=`Lower ${lo<0?'−'+(-lo):lo}%`;
+    $('rt-hi').style.left=px(Math.min(hi,R1))+'%';$('rt-hi').querySelector('span').textContent=`Upper ${Math.round(hi)}%`;
+    $('rt-z').style.left=px(lo)+'%';$('rt-z').style.width=Math.max(0,px(Math.min(hi,R1))-px(lo))+'%';
+    $('rt-msg').textContent=hi<lo?'The highest rate the borrower is willing to pay is below the lender\'s lower bound: this loan will not happen.':alt==='store'?`When the lender can only store grain, lending is better than storage even if slightly less comes back, so the lower bound is −10%. Deals can be struck between −10% and ${Math.round(hi)}%.`:`The lender can also keep seed, which returns 25%, so lending must earn at least 25%. Deals can be struck between 25% and ${Math.round(hi)}%.`;}
+  document.querySelectorAll('[data-rt]').forEach(b=>b.addEventListener('click',()=>{alt=b.dataset.rt;document.querySelectorAll('[data-rt]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  $('rt-u').addEventListener('input',draw);
+  $('rt').addEventListener('anim-in',()=>{let v=0;$('rt-u').value=0;draw();const id=setInterval(()=>{v+=5;$('rt-u').value=v;draw();if(v>=80)clearInterval(id);},150);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-4">4. Two people's year: Civilization Simulator, version 2</h2>
+<p>The simulator adds a second person and the rule of lending. Each harvests 12 portions a year, and you can adjust the number of months between their harvests. With a six-month gap, lending keeps grain in the granary for the shortest time and both eat more; with no gap, both run short at the same time and lending does nothing at all. The benefit of lending comes precisely from the constraint this chapter introduces: shortages at different times.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Civilization Simulator · Chapter 2: two people's year</p><p class="figsub">Each person harvests 12 portions a year. Drag the number of months between their harvests and switch lending on or off to see how much each can eat per month and how much is lost over the year.</p></div><button class="replay" type="button" data-replay="cs2">Replay</button></div>
+    <div class="cs-rules"><span class="on">Saving</span><span class="on">Seed</span><span class="on">Lending</span><span class="lock">Commitment · Ch. 3</span><span class="lock">Money · Ch. 4</span></div>
+    <div class="cs2" id="cs2" data-anim>
+      <svg viewBox="0 0 660 220" role="img" aria-label="Grain in the two granaries over time"><g id="cs2-ax"></g><path id="cs2-a" class="cs2-a"/><path id="cs2-b" class="cs2-b"/><path id="cs2-p" class="cs2-p"/></svg>
+      <div class="legend" id="cs2-lg"></div>
+      <div class="cs2-ctl">
+        <div class="sl"><label for="cs2-o">Gap between harvests <b id="cs2-ov"></b></label><input id="cs2-o" type="range" min="0" max="6" step="1" value="6"></div>
+        <div class="sl"><label for="cs2-d">Monthly loss <b id="cs2-dv"></b></label><input id="cs2-d" type="range" min="0" max="5" step="0.5" value="3"></div>
+      </div>
+      <div class="cs-sw"><label><input type="checkbox" id="cs2-lend" checked> Rule: lending</label></div>
+      <div class="cs2-out" id="cs2-out"></div>
+      <p class="cs2-msg" id="cs2-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model: both have the same harvest and each eats the same amount every month, calculated in the steady state of a yearly cycle. With lending, whoever has grain in the granary feeds both first, and the other repays after his harvest. With equal harvests and a symmetric gap, each is lender to the other, the interest cancels out, and the interest rate does not affect the result.</figcaption>
+</figure>
+<style>
+.cs2 svg{width:100%;height:auto;display:block}
+.cs2-a{fill:none;stroke:var(--accent);stroke-width:2.2}
+.cs2-b{fill:none;stroke:var(--warm);stroke-width:2.2}
+.cs2-p{fill:var(--faint);fill-opacity:.16;stroke:none}
+.cs2-ctl{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px}
+.cs2-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cs2-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs2-out span{display:block;font-size:11.5px;color:var(--faint)} .cs2-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.cs2-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs2-ctl{grid-template-columns:1fr;gap:4px}.cs2-out{grid-template-columns:1fr}.cs2 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs2'+id),X0=40,X1=630,YT=12,YB=186,x=t=>X0+t/12*(X1-X0),y=v=>YB-Math.min(v,24)/24*(YB-YT);
+  // 稳定状态：从第 0 个月开始循环多年，取最后一年的库存；harv 为各自收获的月份
+  function cycle(harv,c,d,pool){const k=1-d,n=harv.length;let s=Array(n).fill(0),ok=true,rec=[],lost=0;
+    for(let yr=0;yr<30;yr++){for(let m=0;m<12;m++){harv.forEach((h,i)=>{if(h===m)s[i]+=12;});
+      if(yr===29)rec.push(s.slice());
+      if(pool){let need=c*n,tot=s.reduce((a,b)=>a+b,0);if(tot<need-1e-9){if(yr>2)ok=false;s=s.map(()=>0);}else{ // 先用仓里粮食多的一方供两人吃
+          const ord=s.map((v,i)=>[v,i]).sort((a,b)=>b[0]-a[0]);for(const [,i] of ord){const u=Math.min(s[i],need);s[i]-=u;need-=u;}}}
+      else s=s.map(v=>{if(v<c-1e-9){if(yr>2)ok=false;return 0;}return v-c;});
+      const l=s.reduce((a,b)=>a+b,0)*d;if(yr===29)lost+=l;s=s.map(v=>v*k);}}
+    rec.push(s.slice());return {ok,rec,lost};}
+  function best(harv,d,pool){let lo=0,hi=1.2;for(let i=0;i<40;i++){const m=(lo+hi)/2;if(cycle(harv,m,d,pool).ok)lo=m;else hi=m;}return lo;}
+  $('-lg').innerHTML='<span><i style="background:var(--accent)"></i>My granary</span><span><i style="background:var(--warm)"></i>His granary</span><span><i style="background:var(--faint);opacity:.4"></i>Both granaries</span>';
+  $('-ax').innerHTML=[0,6,12,18,24].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+
+    Array.from({length:13},(_,i)=>`<text x="${x(i)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${i===0?'My harvest':i}</text>`).join('');
+  function draw(){const o=+$('-o').value,d=+$('-d').value/100,pool=$('-lend').checked,harv=[0,o];
+    const c=best(harv,d,pool),r=cycle(harv,c,d,pool),self=best([0],d,false);
+    const pa=r.rec.map((s,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(s[0]).toFixed(1)).join(''),pb=r.rec.map((s,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(s[1]).toFixed(1)).join('');
+    const pp='M'+x(0)+','+YB+r.rec.map((s,t)=>'L'+x(t).toFixed(1)+','+y(s[0]+s[1]).toFixed(1)).join('')+'L'+x(12)+','+YB+'Z';
+    $('-a').setAttribute('d',pa);$('-b').setAttribute('d',pb);$('-p').setAttribute('d',pp);
+    $('-ov').textContent=o+(o===1?' month':' months');$('-dv').textContent=(d*100).toFixed(1)+'%';
+    $('-out').innerHTML=[['Each can eat per month',c.toFixed(2)+' portions'],['Lost by both over the year',r.lost.toFixed(1)+' portions'],['Extra eaten compared with storing alone',(c>self+1e-6?'+'+((c/self-1)*100).toFixed(0)+'%':'0%')]].map(([a,b])=>`<div><span>${a}</span><b>${b}</b></div>`).join('');
+    $('-msg').textContent=!pool?`Without lending, each person's grain must stay in the granary for a full year; together the two lose ${r.lost.toFixed(1)} portions a year.`:d===0?'With no losses, lending makes no difference: the benefit of lending comes from losing less.':o===0?'Both harvest in the same month and run short at exactly the same time, so lending cannot help. Lending depends precisely on shortages falling at different times.':`With harvests ${o} month${o===1?'':'s'} apart, lending shortens the time grain stays in the granary, and each eats ${((c/self-1)*100).toFixed(0)}% more per month. The benefit is greatest with a six-month gap.`;}
+  ['-o','-d','-lend'].forEach(k=>$(k).addEventListener('input',draw));
+  $('').addEventListener('anim-in',()=>{let v=0;$('-o').value=0;draw();const id=setInterval(()=>{v++;$('-o').value=v;draw();if(v>=6)clearInterval(id);},500);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-5">5. What this step leaves open</h2>
+<p>Lending makes both people better off, and it also brings new problems:</p>
+<ol><li><strong>Grain that is lent out may not come back.</strong> What I lend him is today's grain, and what I get in return is only a promise about the future. He may not repay, or may be unable to.</li><li><strong>Finding the right counterpart is not easy.</strong> With two people, what each lacks and when is plain to see. With many people, some way is needed to match needs with each other.</li><li><strong>The problem of old age is still unsolved.</strong> Seasonal mismatches can be resolved by lending, but a lifetime mismatch requires the other party still to have income decades later; the youngest generation can find no younger people to lend to.</li><li><strong>Who sets the interest rate.</strong> Between two people, the rate is settled by negotiation. With many people, it must be set by the lending and borrowing of many together.</li></ol>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">What this step leaves open</p><p class="figsub">Four new problems brought by lending, each becoming the constraint of a later chapter. Choose a problem to see the assumption hidden in it.</p></div><button class="replay" type="button" data-replay="nx2">Replay</button></div>
+    <div class="nx" id="nx2" data-anim>
+      <div class="nx-src"><b>Two people</b><span>Lending and interest</span></div>
+      <div class="nx-list" id="nx2-l"></div>
+    </div>
+    <p class="nx-msg" id="nx2-msg" aria-live="polite"></p>
+  </div>
+</figure>
+<style>
+.nx{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:center}
+.nx-src{background:var(--ink);color:var(--bg);border-radius:10px;padding:14px 10px;text-align:center}
+.nx-src b{display:block;font-size:16px} .nx-src span{font-size:12px;opacity:.75}
+.nx-list{display:grid;gap:6px}
+.nx-i{font:inherit;text-align:left;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:9px 12px;color:var(--ink);opacity:0;transform:translateX(-8px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.3s)}
+.nx.in .nx-i{opacity:1;transform:none}
+.nx-i span{font-size:13.5px} .nx-i em{font-style:normal;font-size:11.5px;color:var(--faint);white-space:nowrap}
+.nx-i.sel{border-color:var(--accent)}
+.nx-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.nx{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const Q=[['Grain that is lent out may not come back','Chapter 3: Commitment','Hidden assumption: the borrower always repays principal and interest as agreed. What is lent is today\'s grain; what comes back is only a promise about the future.'],
+    ['Finding the right counterpart is not easy','Chapter 4: Money','Hidden assumption: each of the two can see plainly what the other needs. With many people, some way is needed to match needs with each other.'],
+    ['The problem of old age is still unsolved','Chapter 4: Money','Hidden assumption: the other party still has income decades later. The youngest generation can find no younger people to lend to.'],
+    ['Who sets the interest rate','Chapter 8: Market','Hidden assumption: the interest rate is settled by two people negotiating. With many people, it must be set by the lending and borrowing of many together.']];
+  const l=document.getElementById('nx2-l'),msg=document.getElementById('nx2-msg');
+  l.innerHTML=Q.map((q,i)=>`<button type="button" class="nx-i" style="--i:${i}" data-i="${i}"><span>${q[0]}</span><em>→ ${q[1]}</em></button>`).join('');
+  const bs=[...l.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));msg.textContent=Q[i][2];}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('nx2').addEventListener('anim-in',()=>{[0,1,2,3].forEach((i,k)=>setTimeout(()=>set(i),1600+k*1800));});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-6">6. Implications for products</h2>
+<p>Deposits and loans are, in essence, the transaction between this chapter's two people scaled up. Three implications follow. First, the value of lending comes from needs that fall at different times: a lending product serves the complementarity in time between the user's cash flows and other people's cash flows. Second, the return on a deposit comes from the borrower's future income; a promise can be kept only if the other party still has income in the future. Third, the interest rate has a lower bound and an upper bound: the lower bound is the saver's other options and the upper bound is the borrower's circumstances. The rate a product offers should be judged against these two bounds.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: finance between two people</p><p class="figsub">Four conclusions, each corresponding to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="g02summary">Replay</button></div>
+    <div class="g02summary" id="g02summary" data-anim><div class="g02summary-c" style="--i:0"><em>Lending</em><b>Lending out is storage without losses</b><p>Two people who run short at different times lend to each other, so grain need not spoil in the granary.</p></div><div class="g02summary-c" style="--i:1"><em>Constraint</em><b>The benefit comes from mismatched timing</b><p>If both run short at the same time, lending cannot help; with a half-year gap, the benefit is greatest.</p></div><div class="g02summary-c warn" style="--i:2"><em>Interest</em><b>The price of time has a floor and a ceiling</b><p>The floor is the lender's other options, the ceiling the borrower's circumstances; when storage involves losses, the floor can be negative.</p></div><div class="g02summary-c warn" style="--i:3"><em>Commitment</em><b>Lending requires the other party to be able to repay later</b><p>What is lent is today's grain; what comes back is a promise about the future, and it may not be kept.</p></div></div>
+  </div>
+</figure>
+<style>
+.g02summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g02summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g02summary-c.warn{border-left-color:var(--warm)}
+.g02summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g02summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g02summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g02summary.in .g02summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g02summary{grid-template-columns:1fr}}
+</style>
+
+<h2 id="sec-7">References</h2>
+<ul class="refs"><li>Böhm-Bawerk, E. von (1884). <i>Kapital und Kapitalzins. Erste Abtheilung: Geschichte und Kritik der Kapitalzins-Theorieen</i>. Innsbruck: Wagner.</li><li>Böhm-Bawerk, E. von (1891). <i>The Positive Theory of Capital</i> (W. Smart, Trans.). London: Macmillan. (Original work published 1889)</li><li>Homer, S., &amp; Sylla, R. (2005). <i>A History of Interest Rates</i> (4th ed.). Hoboken: John Wiley &amp; Sons.</li><li>Supreme People's Court (2020). Provisions of the Supreme People's Court on Several Issues Concerning the Application of Law in the Trial of Private Lending Cases (Second Amendment, 2020).</li></ul>
+<footer class="nav"><a href="g-01.html">← Chapter 1: One person, one year's harvest</a><a href="g-03.html">Chapter 3: What if a loan is not repaid →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

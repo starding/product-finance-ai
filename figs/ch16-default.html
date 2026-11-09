@@ -1,0 +1,41 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">同样的人，不同的默认值</p><p class="figsub">左：退休储蓄计划由“自愿加入”改为“自动加入、可以退出”，新员工中参加的人数。右：“明天储蓄更多”计划参加者的储蓄率，每次加薪时自动提高。</p></div><button class="replay" type="button" data-replay="df">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="默认值">
+      <button type="button" data-df="in" aria-pressed="true">自愿加入</button>
+      <button type="button" data-df="auto" aria-pressed="false">自动加入，可以退出</button>
+    </div>
+    <div class="df" id="df" data-anim>
+      <div class="df-l"><div class="df-dots" id="df-dots"></div><p id="df-n"></p></div>
+      <div class="df-r"><svg viewBox="0 0 300 180" role="img" aria-label="储蓄率随加薪提高"><g id="df-st"></g></svg></div>
+    </div>
+    <p class="df-msg" id="df-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>参加率约 37% 与约 86% 来自 Madrian 与 Shea（2001）对一家美国公司 401(k) 计划的研究；储蓄率 3.5% 至 13.6% 来自 Thaler 与 Benartzi（2004），中间三级为前三次加薪后的数值，13.6% 为第四次加薪后，均取自原文表 2。</figcaption>
+</figure>
+<style>
+.df{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:center}
+.df-dots{display:grid;grid-template-columns:repeat(10,1fr);gap:4px}
+.df-dots i{aspect-ratio:1;border-radius:50%;background:var(--line);transition:background .3s;transition-delay:calc(var(--i)*6ms)}
+.df-dots i.on{background:var(--accent)}
+.df-l p{font-size:13px;margin:8px 0 0}
+.df-r svg{width:100%;height:auto;display:block}
+.df-b{transition:height .5s ease,y .5s ease}
+.df-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.df{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),dots=$('df-dots');dots.innerHTML=Array.from({length:100},(_,i)=>`<i style="--i:${i}"></i>`).join('');
+  const ds=[...dots.children],ST=[3.5,6.5,9.4,11.6,13.6],YB=150,h=v=>v/15*(YB-14);
+  $('df-st').innerHTML=`<line x1="10" y1="${YB}" x2="295" y2="${YB}" class="s-faint"/>`+ST.map((v,i)=>`<rect class="df-b" x="${18+i*56}" width="40" rx="3" fill="var(--accent)" style="y:${YB}px;height:0"/><text class="df-t t-ink" x="${38+i*56}" y="${YB-h(v)-5}" text-anchor="middle" font-size="12" opacity="0">${v}%</text><text x="${38+i*56}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${i?'第 '+i+' 次加薪':'加入时'}</text>`).join('');
+  function stairs(){[...document.querySelectorAll('.df-b')].forEach((r,i)=>{r.style.y=YB+'px';r.style.height='0px';setTimeout(()=>{r.style.y=(YB-h(ST[i]))+'px';r.style.height=h(ST[i])+'px';},100+i*350);});
+    [...document.querySelectorAll('.df-t')].forEach((t,i)=>{t.setAttribute('opacity',0);setTimeout(()=>t.setAttribute('opacity',1),500+i*350);});}
+  function set(k){document.querySelectorAll('[data-df]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.df===k)));const n=k==='in'?37:86;
+    ds.forEach((d,i)=>d.classList.toggle('on',i<n));$('df-n').textContent=`100 位新员工中约 ${n} 位参加`;
+    $('df-msg').textContent=k==='in'?'需要主动填表才能参加时，多数人一直没有行动。不行动的原因是惰性与拖延，而不是不想储蓄。':'改为默认参加、随时可以退出后，参加的人数增加了一倍多。选择的自由没有减少，变化的只是不行动时会发生什么。';}
+  document.querySelectorAll('[data-df]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.df)));
+  $('df').addEventListener('anim-in',()=>{set('in');stairs();setTimeout(()=>set('auto'),2600);});
+  set('in');ST.forEach((v,i)=>{const r=document.querySelectorAll('.df-b')[i];r.style.y=(YB-h(v))+'px';r.style.height=h(v)+'px';document.querySelectorAll('.df-t')[i].setAttribute('opacity',1);});
+})();
+</script>

@@ -1,0 +1,17 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: designing for boundedly rational people</p><p class="figsub">Five design requirements, each corresponding to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="ch16summary">Replay</button></div>
+    <div class="ch16summary" id="ch16summary" data-anim><div class="ch16summary-c" style="--i:0"><em>Attention is limited</em><b>Bring goal-relevant information forward</b><p>Fees, concentration and the distance from the goal should be as prominent as price changes; do not compete for attention with rankings and push notifications.</p></div><div class="ch16summary-c" style="--i:1"><em>Reference points decide gains and losses</em><b>Offer a view with the goal as reference</b><p>Besides the purchase price, show where the portfolio stands relative to the plan and the goal; when selling, explain how different ways of selling affect the portfolio and the tax bill.</p></div><div class="ch16summary-c warn" style="--i:2"><em>Frequent evaluation magnifies the sense of loss</em><b>Match the frequency of evaluation to the horizon of the job</b><p>For long-term jobs, show by default a period consistent with the horizon, and do not put daily price changes in the most prominent place.</p></div><div class="ch16summary-c warn" style="--i:3"><em>Defaults are not neutral</em><b>Put the default options on the user's side</b><p>Defaults, confirmation steps and presentation should all serve the user's job; do not use game-like design to induce trading.</p></div><div class="ch16summary-c wide" style="--i:4"><em>The current practice is also a steady state</em><b>Respect first, then invite</b><p>Carry out the user's habits as usual, use their own trading records to show the results, then ask whether they would like to try another method; promise only to improve the process, not the outcome.</p></div></div>
+  </div>
+</figure>
+<style>
+.ch16summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch16summary-c.wide{grid-column:1/-1}
+.ch16summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch16summary-c.warn{border-left-color:var(--warm)}
+.ch16summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch16summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch16summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch16summary.in .ch16summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch16summary{grid-template-columns:1fr}}
+</style>

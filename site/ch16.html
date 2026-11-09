@@ -1,0 +1,687 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>用户如何做决定</title>
+<meta name="description" content="《产品×金融×AI：AI 时代的金融产品》第 16 章：人的决定受有限注意力、参照点与损失厌恶塑造，偏差是系统性的；同样的规律也意味着，决定可以被呈现方式与默认值改变；用户零散的做法也是一种稳态，产品宜先尊重习惯、再用用户自己的记录邀请改进，只承诺过程">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="ch16">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="全书目录">
+<div class="side-head"><a class="sidetitle" href="index.html">产品×金融×AI<small>AI 时代的金融产品</small></a></div>
+<div class="side-view" role="group" aria-label="阅读方式"><a href="preface.html" class="on" aria-current="true">分解式</a><a href="g-preface.html">生成式</a></div>
+<a class="side-about" href="index.html#about">关于本书</a>
+<a class="" href="preface.html"><span class="n">序</span>为什么金融产品在 AI 时代需要重新学</a>
+<a class="side-part" href="part1.html"><span class="pn">第一部分</span>市场：收益与风险从何而来</a>
+<a class="" href="ch01.html"><span class="n">1</span>金融产品卖的是什么</a>
+<a class="" href="ch02.html"><span class="n">2</span>利率与期限</a>
+<a class="" href="ch03.html"><span class="n">3</span>风险长什么样</a>
+<a class="" href="ch04.html"><span class="n">4</span>分散：哪些风险有补偿</a>
+<a class="" href="ch05.html"><span class="n">5</span>复利与波动拖累</a>
+<a class="" href="ch06.html"><span class="n">6</span>因子：风险补偿可以分解</a>
+<a class="" href="ch07.html"><span class="n">7</span>价格为什么难以预测</a>
+<a class="" href="ch08.html"><span class="n">8</span>信息如何进入价格</a>
+<a class="" href="ch09.html"><span class="n">9</span>市场里的交易者</a>
+<a class="" href="ch10.html"><span class="n">10</span>流动性与买卖价差</a>
+<a class="" href="ch11.html"><span class="n">11</span>订单、规则与市场结构</a>
+<a class="" href="ch12.html"><span class="n">12</span>主动管理的算术</a>
+<a class="" href="ch13.html"><span class="n">13</span>承诺如何被兑现</a>
+<a class="" href="ch14.html"><span class="n">14</span>监管为何存在</a>
+<a class="side-part" href="part2.html"><span class="pn">第二部分</span>用户：人要什么、能承受什么</a>
+<a class="" href="ch15.html"><span class="n">15</span>用户要完成的任务</a>
+<a class=" cur" href="ch16.html" aria-current="page"><span class="n">16</span>用户如何做决定</a>
+<a class="" href="ch17.html"><span class="n">17</span>用户能承受什么</a>
+<a class="" href="ch18.html"><span class="n">18</span>用户如何判断与信任</a>
+<a class="side-part" href="part3.html"><span class="pn">第三部分</span>AI：代理能替人做多少</a>
+<a class="" href="ch19.html"><span class="n">19</span>放大倍数：理论与实测</a>
+<a class="" href="ch20.html"><span class="n">20</span>哪些事务能交给 AI</a>
+<a class="" href="ch21.html"><span class="n">21</span>能力从哪里来、在哪里失效</a>
+<a class="" href="ch22.html"><span class="n">22</span>可验证性：核对的成本</a>
+<a class="" href="ch23.html"><span class="n">23</span>金融场景的特殊约束</a>
+<a class="side-part" href="part4.html"><span class="pn">第四部分</span>设计：在三组约束下设计金融产品</a>
+<a class="" href="ch24.html"><span class="n">24</span>承诺什么</a>
+<a class="" href="ch25.html"><span class="n">25</span>委托参数：交代的目标与约束</a>
+<a class="" href="ch26.html"><span class="n">26</span>授权与不可逆敞口</a>
+<a class="" href="ch27.html"><span class="n">27</span>责任与利益冲突</a>
+<a class="" href="ch28.html"><span class="n">28</span>能力装配与过程可见</a>
+<a class="" href="ch29.html"><span class="n">29</span>保障强度</a>
+<a class="" href="ch30.html"><span class="n">30</span>信任如何建立</a>
+<a class="" href="ch31.html"><span class="n">31</span>设计原则</a>
+<a class="side-app" href="estimates.html"><span class="n">附录</span>作者估算的方法与数据</a>
+<a class="side-app" href="method.html"><span class="n">附录</span>本书的写法</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="展开目录" title="目录"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">产品×金融×AI：AI 时代的金融产品</a><span>第二部分　用户：人要什么、能承受什么</span><a class="langlink" href="en/ch16.html" hreflang="en">English</a></header>
+
+<div class="chapno">第 16 章</div><h1>用户如何做决定<small>有限注意力与行为偏差</small></h1>
+<blockquote><p>任务定义了应当做什么，决定却由人来做。人的注意力有限，大多数决定依靠快速的直觉；人按参照点衡量得失，损失带来的痛苦约为同等收益带来的快乐的两倍。由此产生的偏差不是随机的失误，而是有方向、可预测的：卖出赚钱的股票而留着亏钱的，越常查看账户越不愿承担风险，对自己的判断过于自信。偏差有方向，也就意味着它可以被设计改变：同样的人，在不同的默认值与呈现方式下，会做出完全不同的决定。</p></blockquote>
+<h2 id="sec-1">一、两种思考方式</h2>
+<p>考虑这样一个问题：一支球拍和一个球共 1.10 元，球拍比球贵 1 元，球多少钱？多数人脑中立即浮现的答案是 0.10 元，而正确答案是 0.05 元。弗雷德里克（2005）用这类题目测量认知反思，发现即使在名校学生中，答错的比例也相当高。卡尼曼（2011）把人的思考分为两种方式：一种快速、自动、不费力，另一种缓慢、审慎、需要投入注意力。日常的大多数决定都由前者完成，这在多数场合是高效的；但在需要计算、需要抵抗第一印象的问题上，快速的直觉会系统性地出错。西蒙（1955）更早指出，人的理性是有限的：人不是寻找最优解，而是在有限的信息与计算能力下寻找足够好的解。</p>
+<figure>
+  <div class="card">
+    <p class="figtitle">快速的直觉与审慎的核对</p>
+    <p class="figsub">一支球拍和一个球共 1.10 元，球拍比球贵 1 元。球多少钱？先选一个答案。</p>
+    <div class="crt" id="crt" data-anim>
+      <div class="crt-opts">
+        <button type="button" data-c="10"><b>0.10 元</b><span>第一时间浮现的答案</span></button>
+        <button type="button" data-c="5"><b>0.05 元</b><span>需要停下来算一下</span></button>
+      </div>
+      <div class="crt-chk" id="crt-chk" hidden>
+        <div class="crt-row"><span>球</span><i id="crt-b"></i><b id="crt-bv"></b></div>
+        <div class="crt-row"><span>球拍</span><i id="crt-r"></i><b id="crt-rv"></b></div>
+        <div class="crt-row tot"><span>合计</span><em id="crt-t"></em></div>
+      </div>
+      <p class="crt-msg" id="crt-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>题目来自 Frederick（2005）的认知反思测试。快速的思考方式给出看似合理的答案，只有投入注意力去核对，才会发现它不满足题目条件。</figcaption>
+</figure>
+<style>
+.crt-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.crt-opts button{font:inherit;text-align:left;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);padding:12px 14px;cursor:pointer}
+.crt-opts b{display:block;font-size:20px} .crt-opts span{font-size:12px;color:var(--faint)}
+.crt-opts button.sel{border-color:var(--ink)}
+.crt-opts button.ok{background:var(--accent-soft);border-color:var(--accent)}
+.crt-opts button.bad{background:var(--warm-soft);border-color:var(--warm)}
+.crt-chk{margin-top:12px;display:grid;gap:6px}
+.crt-row{display:grid;grid-template-columns:44px 1fr 70px;gap:10px;align-items:center;font-size:13px}
+.crt-row i{display:block;height:16px;border-radius:4px;width:0;transition:width .6s ease}
+.crt-row b{text-align:right;font-variant-numeric:tabular-nums}
+.crt-row.tot em{grid-column:2/4;font-style:normal;font-size:14px}
+.crt-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),bs=[...document.querySelectorAll('[data-c]')];
+  function pick(c){bs.forEach(b=>{b.classList.toggle('sel',b.dataset.c==c);b.classList.toggle('ok',b.dataset.c==='5'&&c!==null);b.classList.toggle('bad',b.dataset.c==='10'&&c==='10');});
+    const ball=+c/100,racket=ball+1,sum=ball+racket;$('crt-chk').hidden=false;
+    $('crt-b').style.background='var(--gold)';$('crt-r').style.background='var(--accent)';$('crt-b').style.width='0';$('crt-r').style.width='0';
+    setTimeout(()=>{$('crt-b').style.width=ball/1.2*100+'%';$('crt-r').style.width=racket/1.2*100+'%';},40);
+    $('crt-bv').textContent=ball.toFixed(2)+' 元';$('crt-rv').textContent=racket.toFixed(2)+' 元';
+    const right=Math.abs(sum-1.1)<1e-9;$('crt-t').innerHTML=`${sum.toFixed(2)} 元　${right?'<span style="color:var(--accent)">符合题目条件</span>':'<span style="color:var(--warm)">不等于 1.10 元</span>'}`;
+    $('crt-msg').textContent=right?'球 0.05 元，球拍 1.05 元，合计 1.10 元。得出这个答案，需要先压下第一时间浮现的 0.10 元。':'如果球是 0.10 元，球拍就是 1.10 元，合计 1.20 元。这个答案来得很快，也很有把握，但它是错的。';}
+  bs.forEach(b=>b.addEventListener('click',()=>pick(b.dataset.c)));
+})();
+</script>
+
+<h2 id="sec-2">二、有限注意力：看见什么就决定什么</h2>
+<p>西蒙（1971）有一句常被引用的判断：信息消耗的是接收者的注意力，信息越丰富，注意力越贫乏。投资者面对的信息远多于能够处理的信息，于是决定往往取决于什么最先被看到，而不是什么最重要。德拉维尼亚与波莱特（2009）发现，在周五公布的盈利公告，市场当天的反应明显弱于其他工作日，此后的价格漂移更大：注意力分散时，信息进入决定的速度变慢。对个人而言，最显眼的信息通常是涨跌幅、排行榜与新闻，而与长期结果最相关的信息，例如费用、组合的集中程度与距离目标还有多远，往往并不显眼。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">注意力只够看几条信息</p><p class="figsub">一位用户打开账户，面前有十二条信息，注意力只够处理其中四条。切换排序方式，看哪些信息进入了决定。</p></div><button class="replay" type="button" data-replay="at">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="排序方式">
+      <button type="button" data-at="sal" aria-pressed="true">按显眼程度</button>
+      <button type="button" data-at="rel" aria-pressed="false">按与目标的相关程度</button>
+    </div>
+    <div class="at" id="at" data-anim></div>
+    <p class="at-msg" id="at-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>示意。显眼程度与相关程度为说明而设定。注意力分散会减慢信息进入决定的速度，见 DellaVigna 与 Pollet（2009）。</figcaption>
+</figure>
+<style>
+.at{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.at-i{border:1.5px solid var(--line);border-radius:8px;padding:7px 9px;font-size:12.5px;line-height:1.45;background:var(--surface);opacity:.45;transition:opacity .4s,background .4s,border-color .4s}
+.at-i em{display:block;font-style:normal;font-size:10.5px;color:var(--faint)}
+.at-i.on{opacity:1;background:var(--accent-soft);border-color:var(--accent)}
+.at-i.on.w{background:var(--warm-soft);border-color:var(--warm)}
+.at-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.at{grid-template-columns:repeat(2,1fr)}}
+</style>
+<script>
+(function(){
+  const I=[['今日涨幅榜第一名',95,10],['一条突发新闻推送',90,15],['持仓今日涨跌',88,30],['热门讨论帖',80,5],['某只股票创新高',75,12],
+    ['组合每年的总费用',15,85],['前三大持仓占比',20,80],['距离目标还差多少',18,95],['组合的最大回撤',25,75],['计划的再平衡日期',10,70],
+    ['分红与利息到账',35,40],['资金加权收益',12,78]];
+  const box=document.getElementById('at');
+  function set(k){document.querySelectorAll('[data-at]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.at===k)));
+    const ix=I.map((x,i)=>i).sort((a,b)=>k==='sal'?I[b][1]-I[a][1]:I[b][2]-I[a][2]);
+    box.innerHTML=ix.map(i=>`<div class="at-i" data-i="${i}"><em>显眼 ${I[i][1]} · 相关 ${I[i][2]}</em>${I[i][0]}</div>`).join('');
+    const els=[...box.children];els.slice(0,4).forEach((e,j)=>setTimeout(()=>e.classList.add('on',k==='sal'?'w':'x'),200+j*250));
+    const rel=ix.slice(0,4).reduce((s,i)=>s+I[i][2],0)/4;
+    document.getElementById('at-msg').textContent=k==='sal'?`按显眼程度，进入决定的四条信息平均相关程度只有 ${rel.toFixed(0)}：决定被最先看到的东西牵着走。`:`按与目标的相关程度，进入决定的四条信息平均相关程度为 ${rel.toFixed(0)}。这些信息本身并不显眼，需要产品主动把它们放到前面。`;}
+  document.querySelectorAll('[data-at]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.at)));
+  box.addEventListener('anim-in',()=>{set('sal');setTimeout(()=>set('rel'),3200);});
+  set('sal');
+})();
+</script>
+
+<h2 id="sec-3">三、参照点与损失厌恶</h2>
+<p>卡尼曼与特沃斯基（1979）的前景理论指出，人衡量结果时看的不是财富的总量，而是相对于某个参照点的得失；损失带来的痛苦，明显大于同等收益带来的快乐。特沃斯基与卡尼曼（1992）的估计是，损失的分量约为同等收益的 2.25 倍。此外，得失的感受都随金额增加而递减：从赚 100 元到赚 200 元，带来的快乐增加得不如从 0 到 100 元那么多。参照点通常是买入价，也可能是账户的最高点或者别人的收益，它在很大程度上决定了一个结果被感受为得还是失。</p>
+<figure>
+  <div class="card">
+    <p class="figtitle">前景理论的价值函数</p>
+    <p class="figsub">横轴是相对于参照点的得失，纵轴是感受到的价值。拖动结果，比较同样金额的收益与损失带来的感受。</p>
+    <div class="vf" id="vf" data-anim>
+      <svg viewBox="0 0 640 260" role="img" aria-label="价值函数">
+        <g id="vf-ax"></g><path id="vf-p" class="vf-l"/>
+        <line id="vf-h" class="vf-g"/><line id="vf-v" class="vf-g"/><circle id="vf-d" r="6" fill="var(--ink)"/>
+        <circle id="vf-m" r="5" fill="none" stroke="var(--faint)" stroke-width="1.5"/>
+      </svg>
+      <div class="sl"><label for="vf-s">相对于参照点的结果 <b id="vf-sv"></b></label><input id="vf-s" type="range" min="-1000" max="1000" step="50" value="-500"></div>
+      <p class="vf-msg" id="vf-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>参数取 Tversky 与 Kahneman（1992）的估计：收益与损失的敏感度递减系数为 0.88，损失厌恶系数为 2.25。空心圆为同等金额的相反结果。</figcaption>
+</figure>
+<style>
+.vf svg{width:100%;height:auto;display:block}
+.vf-l{fill:none;stroke:var(--accent);stroke-width:2.5;stroke-dasharray:1200;stroke-dashoffset:1200;transition:stroke-dashoffset 1.4s ease}
+.vf.in .vf-l{stroke-dashoffset:0}
+.vf-g{stroke:var(--faint);stroke-dasharray:3 3}
+.vf-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.vf svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const V=x=>x>=0?Math.pow(x,.88):-2.25*Math.pow(-x,.88), vmax=V(1000), vmin=V(-1000);
+  const X0=40,X1=620,YT=12,YB=248,cx=(X0+X1)/2,x=v=>cx+v/1000*(X1-cx),yr=(YB-YT)/(vmax-vmin),y=u=>YT+(vmax-u)*yr,y0=y(0);
+  const $=id=>document.getElementById(id);
+  let d='';for(let v=-1000;v<=1000;v+=10)d+=(v===-1000?'M':'L')+x(v).toFixed(1)+','+y(V(v)).toFixed(1);$('vf-p').setAttribute('d',d);
+  $('vf-ax').innerHTML=`<line x1="${X0}" y1="${y0}" x2="${X1}" y2="${y0}" class="s-faint"/><line x1="${cx}" y1="${YT}" x2="${cx}" y2="${YB}" class="s-faint"/>`+
+    `<text x="${X1}" y="${y0-6}" text-anchor="end" font-size="11" class="t-faint">收益 →</text><text x="${X0}" y="${y0-6}" font-size="11" class="t-faint">← 损失</text>`+
+    `<text x="${cx+6}" y="${YT+10}" font-size="11" class="t-faint">感受到的价值</text><text x="${cx+6}" y="${y0+14}" font-size="11" class="t-faint">参照点</text>`;
+  const sl=$('vf-s'),fm=u=>(u<0?'－':'＋')+Math.abs(u).toFixed(0);
+  function r(){const v=+sl.value,u=V(v);$('vf-sv').textContent=(v>0?'＋':v<0?'－':'')+Math.abs(v)+' 元';
+    $('vf-d').setAttribute('cx',x(v));$('vf-d').setAttribute('cy',y(u));$('vf-m').setAttribute('cx',x(-v));$('vf-m').setAttribute('cy',y(V(-v)));
+    const h=$('vf-h'),vv=$('vf-v');h.setAttribute('x1',cx);h.setAttribute('x2',x(v));h.setAttribute('y1',y(u));h.setAttribute('y2',y(u));vv.setAttribute('x1',x(v));vv.setAttribute('x2',x(v));vv.setAttribute('y1',y0);vv.setAttribute('y2',y(u));
+    $('vf-msg').textContent=v===0?'处在参照点上：没有得，也没有失。':v<0?`损失 ${-v} 元的感受约为 ${fm(u)}，而赚到同样金额的感受只有 ${fm(V(-v))}：损失的分量约为收益的 2.25 倍。`:`赚到 ${v} 元的感受约为 ${fm(u)}；亏掉同样金额，感受约为 ${fm(V(-v))}。`;}
+  sl.addEventListener('input',r);
+  $('vf').addEventListener('anim-in',()=>{let v=-1000;const id=setInterval(()=>{v+=100;sl.value=v;r();if(v>=1000){clearInterval(id);setTimeout(()=>{sl.value=-500;r();},700);}},130);});
+  r();
+})();
+</script>
+
+<h2 id="sec-4">四、处置效应：卖出赚钱的，留下亏钱的</h2>
+<p>参照点与损失厌恶结合，产生了个人投资者最稳健的行为规律之一。舍夫林与斯塔特曼（1985）把它称为处置效应：投资者倾向于过早卖出已经盈利的股票，而长期持有已经亏损的股票，因为卖出亏损的股票意味着承认损失。奥迪恩（1998）分析了一家券商约一万个账户的交易记录：按有卖出交易的日子计算，盈利的持仓被卖出的比例约为 14.8%，亏损的持仓只有约 9.8%；而被卖出的盈利股票，在随后一年里比被留下的亏损股票平均多涨约 3.4 个百分点。处置效应不但不能带来收益，在多数税制下还会多缴税。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">处置效应：卖出赚钱的，留下亏钱的</p><p class="figsub">一个持有十只股票的账户需要卖出三只来取现。以买入价为参照点的卖法与不看参照点的卖法，留下的是不同的组合。下方是奥迪恩（1998）的实证结果。</p></div><button class="replay" type="button" data-replay="ds">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="卖法">
+      <button type="button" data-ds="ref" aria-pressed="true">以买入价为参照点</button>
+      <button type="button" data-ds="loss" aria-pressed="false">优先卖出亏损的</button>
+    </div>
+    <div class="ds" id="ds" data-anim>
+      <div class="ds-pf" id="ds-pf"></div>
+      <p class="ds-msg" id="ds-msg" aria-live="polite"></p>
+      <div class="ds-ev">
+        <div><span>盈利持仓被卖出的比例</span><div class="ds-t"><i data-w="14.8" style="background:var(--accent)"></i></div><b>14.8%</b></div>
+        <div><span>亏损持仓被卖出的比例</span><div class="ds-t"><i data-w="9.8" style="background:var(--warm)"></i></div><b>9.8%</b></div>
+        <div><span>随后一年：卖出的盈利股比留下的亏损股多涨</span><div class="ds-t"><i data-w="3.4" style="background:var(--ink)"></i></div><b>3.4 个百分点</b></div>
+      </div>
+    </div>
+  </div>
+  <figcaption>上方为示意账户。下方数字来自 Odean（1998）对一家美国券商约一万个账户 1987—1993 年交易记录的分析；条形长度按 0～20% 绘制。在对资本利得征税的地区，优先卖出亏损的股票还可以抵减税款。</figcaption>
+</figure>
+<style>
+.ds-pf{display:grid;grid-template-columns:repeat(10,1fr);gap:5px}
+.ds-pf div{border-radius:7px;padding:8px 2px;text-align:center;font-size:12px;font-variant-numeric:tabular-nums;border:1.5px solid transparent;transition:all .4s}
+.ds-pf .g{background:var(--accent-soft);color:var(--accent)} .ds-pf .l{background:var(--warm-soft);color:var(--warm)}
+.ds-pf .sold{opacity:.3;border-style:dashed;border-color:var(--faint);transform:translateY(6px)}
+.ds-msg{font-size:14px;margin:10px 0;min-height:3.4em}
+.ds-ev{display:grid;gap:6px;border-top:1px dashed var(--line);padding-top:10px}
+.ds-ev>div{display:grid;grid-template-columns:minmax(0,1.3fr) 1fr 90px;gap:10px;align-items:center;font-size:12.5px}
+.ds-t{height:14px;background:var(--quote);border-radius:4px;overflow:hidden}
+.ds-t i{display:block;height:100%;width:0;transition:width .7s ease}
+.ds-ev b{text-align:right;font-size:13px}
+@media (max-width:640px){.ds-pf{grid-template-columns:repeat(5,1fr)}.ds-ev>div{grid-template-columns:1fr 70px}.ds-ev .ds-t{grid-column:1/3;grid-row:2}}
+</style>
+<script>
+(function(){
+  const P=[32,-18,15,-25,8,-6,41,-12,22,-31];
+  const box=document.getElementById('ds-pf');box.innerHTML=P.map(v=>`<div class="${v>0?'g':'l'}">${v>0?'＋':'－'}${Math.abs(v)}%</div>`).join('');
+  const cs=[...box.children];
+  function set(k){document.querySelectorAll('[data-ds]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.ds===k)));
+    const ix=P.map((v,i)=>i).sort((a,b)=>k==='ref'?P[b]-P[a]:P[a]-P[b]).slice(0,3);
+    cs.forEach((c,i)=>c.classList.toggle('sold',ix.includes(i)));
+    const left=P.filter((v,i)=>!ix.includes(i)),lo=left.filter(v=>v<0).length;
+    document.getElementById('ds-msg').textContent=k==='ref'?`卖出了涨得最多的三只，“锁定了收益”；留下的七只里有 ${lo} 只是亏损的。卖出亏损的股票意味着承认损失，于是它们被留了下来。`:`卖出亏损最多的三只，留下的七只里只有 ${lo} 只亏损。两种卖法取得的现金相近，区别只在是否愿意确认损失。`;}
+  document.querySelectorAll('[data-ds]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.ds)));
+  const bars=[...document.querySelectorAll('.ds-t i')];
+  document.getElementById('ds').addEventListener('anim-in',()=>{set('ref');bars.forEach(b=>b.style.width='0');setTimeout(()=>bars.forEach((b,i)=>setTimeout(()=>b.style.width=(+b.dataset.w/20*100)+'%',i*300)),600);});
+  set('ref');bars.forEach(b=>b.style.width=(+b.dataset.w/20*100)+'%');
+})();
+</script>
+
+<h2 id="sec-5">五、查看得越频繁，越不愿承担风险</h2>
+<p>一个长期收益为正的组合，在短时间里亏损的概率并不低。贝纳茨与塞勒（1995）提出了短视的损失厌恶：如果一个人频繁地评估组合，每次看到的亏损都按约两倍的分量计入感受，那么他会觉得股票的风险太大，因而配置得过于保守。他们估计，约一年的评估周期就足以解释股票为什么要求那么高的风险溢价。格尼兹与波特斯（1997）的实验也表明，同样的赌局，被要求更频繁地查看结果的参与者，投入的金额更少。</p>
+<figure>
+  <div class="card">
+    <p class="figtitle">查看得越频繁，股票显得越不值得持有</p>
+    <p class="figsub">同一个股票组合，长期收益为正。拖动查看账户的频率，看每次查看时亏损的概率，以及按损失厌恶计算的感受。</p>
+    <div class="mo" id="mo" data-anim>
+      <svg viewBox="0 0 640 220" role="img" aria-label="查看频率与感受到的价值">
+        <g id="mo-ax"></g><path id="mo-p" class="mo-l"/><circle id="mo-d" r="6" fill="var(--ink)"/>
+      </svg>
+      <div class="sl"><label for="mo-s">查看频率 <b id="mo-sv"></b></label><input id="mo-s" type="range" min="0" max="7" step="1" value="0"></div>
+      <div class="mo-out"><div><span>每次查看时处于亏损的概率</span><b id="mo-pl"></b></div><div><span>按损失厌恶计算的感受（每年）</span><b id="mo-u"></b></div></div>
+      <p class="mo-msg" id="mo-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意计算：年化预期收益 7%、波动 16%，各期收益服从正态分布；感受＝期望收益中的正向部分 － 2.25 × 负向部分，再折算为每年；纵轴为对数刻度。思路来自 Benartzi 与 Thaler（1995）的短视损失厌恶；实验证据见 Gneezy 与 Potters（1997）。</figcaption>
+</figure>
+<style>
+.mo svg{width:100%;height:auto;display:block}
+.mo-l{fill:none;stroke:var(--accent);stroke-width:2.5}
+.mo-out{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.mo-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.mo-out span{display:block;font-size:12px;color:var(--faint)} .mo-out b{font-size:19px;font-variant-numeric:tabular-nums}
+.mo-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.mo-out{grid-template-columns:1fr}}
+@media (max-width:640px){.mo svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const F=[['每天',1/250],['每周',1/52],['每月',1/12],['每季度',1/4],['每半年',1/2],['每年',1],['每两年',2],['每五年',5]];
+  const m=.07,s=.16,Phi=z=>{const t=1/(1+.2316419*Math.abs(z)),d=.3989423*Math.exp(-z*z/2),p=d*t*(.3193815+t*(-.3565638+t*(1.781478+t*(-1.821256+t*1.330274))));return z>0?1-p:p;},phi=z=>.3989423*Math.exp(-z*z/2);
+  const calc=t=>{const M=m*t,S=s*Math.sqrt(t),z=M/S,ep=M*Phi(z)+S*phi(z),en=ep-M;return {pl:Phi(-z),u:(ep-2.25*en)/t};};
+  const R=F.map(([n,t])=>calc(t));
+  const L=u=>Math.sign(u)*Math.log10(1+Math.abs(u)*100),lmin=Math.min(...R.map(r=>L(r.u))),lmax=Math.max(...R.map(r=>L(r.u))),X0=60,X1=610,YT=16,YB=180,x=i=>X0+i/7*(X1-X0),y=u=>YT+(lmax-L(u))/(lmax-lmin)*(YB-YT);
+  const $=id=>document.getElementById(id);
+  let a=`<line x1="${X0}" y1="${y(0)}" x2="${X1}" y2="${y(0)}" class="s-faint"/><text x="${X0-6}" y="${y(0)+4}" text-anchor="end" font-size="11" class="t-faint">0</text>`+
+    `<text x="${X0-6}" y="${YT+8}" text-anchor="end" font-size="11" class="t-accent">值得</text><text x="${X0-6}" y="${YB}" text-anchor="end" font-size="11" class="t-warm">不值得</text>`;
+  F.forEach(([n],i)=>a+=`<text x="${x(i)}" y="${YB+28}" text-anchor="middle" font-size="11" class="t-faint">${n}</text>`);
+  $('mo-ax').innerHTML=a;
+  $('mo-p').setAttribute('d',R.map((r,i)=>(i?'L':'M')+x(i).toFixed(1)+','+y(r.u).toFixed(1)).join(''));
+  const sl=$('mo-s');
+  function r(){const i=+sl.value,q=R[i];$('mo-sv').textContent=F[i][0];$('mo-d').setAttribute('cx',x(i));$('mo-d').setAttribute('cy',y(q.u));$('mo-d').setAttribute('fill',q.u>=0?'var(--accent)':'var(--warm)');
+    $('mo-pl').textContent=(q.pl*100).toFixed(0)+'%';$('mo-u').textContent=(q.u>=0?'＋':'－')+Math.abs(q.u*100).toFixed(1);
+    $('mo-msg').textContent=q.u<0?`${F[i][0]}查看一次，约 ${(q.pl*100).toFixed(0)}% 的时候看到的是亏损。按两倍左右的分量计入亏损，持有股票的感受是负的：同一个组合，显得风险太大。`:`${F[i][0]}查看一次，看到亏损的概率降到约 ${(q.pl*100).toFixed(0)}%，持有股票的感受转为正值。组合本身没有变，变的是评估的频率。`;}
+  sl.addEventListener('input',r);
+  $('mo').addEventListener('anim-in',()=>{let i=0;sl.value=0;r();const id=setInterval(()=>{i++;sl.value=i;r();if(i>=7)clearInterval(id);},500);});
+  r();
+})();
+</script>
+
+<h2 id="sec-6">六、过度自信</h2>
+<p>人们普遍高估自己判断的准确程度。在校准研究中，参与者被要求给出自己有 98% 把握包含真实答案的区间，结果真实答案落在区间内的比例远低于所声称的把握（利希滕斯坦、菲施霍夫与菲利普斯，1982）。过度自信让人低估风险、过于集中，并且交易过多。巴伯与奥迪恩（2001）以性别作为过度自信的代理变量，发现男性的交易量比女性高约 45%，交易使男性的年净收益降低约 2.65 个百分点，女性约 1.72 个百分点。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">“有 98% 把握”的区间</p><p class="figsub">十道估计题，每道给出一个自认为有 98% 把握包含真实答案的区间。圆点是真实答案。</p></div><button class="replay" type="button" data-replay="cb">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="区间">
+      <button type="button" data-cb="n" aria-pressed="true">通常给出的区间</button>
+      <button type="button" data-cb="w" aria-pressed="false">真正有 98% 把握的区间</button>
+    </div>
+    <div class="cb" id="cb" data-anim>
+      <svg viewBox="0 0 640 250" role="img" aria-label="估计区间与真实答案"><g id="cb-g"></g></svg>
+      <p class="cb-msg" id="cb-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：十道题与区间宽度为示例，命中比例取研究结果的量级。校准研究中，自称有 98% 把握的区间，实际只包含约六成的真实答案，见 Lichtenstein、Fischhoff 与 Phillips（1982）的综述。</figcaption>
+</figure>
+<style>
+.cb svg{width:100%;height:auto;display:block}
+.cb-r{transition:all .6s ease}
+.cb-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.cb svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const T=[[0,.6],[1,-1.6],[2,.2],[3,1.9],[4,-.4],[5,-.8],[6,.9],[7,2.8],[8,-.1],[9,-2.0]];
+  const X0=40,X1=620,cx=(X0+X1)/2,sc=70,g=document.getElementById('cb-g');
+  g.innerHTML=`<line x1="${cx}" y1="8" x2="${cx}" y2="240" class="s-faint" stroke-dasharray="3 3"/>`+T.map(([i,v])=>{const y=18+i*23;return `<g><text x="${X0-10}" y="${y+4}" text-anchor="end" font-size="11" class="t-faint">${i+1}</text><rect class="cb-r" data-i="${i}" x="${cx}" y="${y-6}" width="0" height="12" rx="6"/><circle cx="${cx+v*sc}" cy="${y}" r="5" fill="var(--ink)"/></g>`;}).join('');
+  const rs=[...g.querySelectorAll('.cb-r')];
+  function set(k){document.querySelectorAll('[data-cb]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.cb===k)));
+    const w=k==='n'?1:3;let hit=0;
+    rs.forEach((r,i)=>{const h=w,v=T[i][1],ok=Math.abs(v)<=h;if(ok)hit++;r.setAttribute('x',cx-h*sc);r.setAttribute('width',2*h*sc);r.setAttribute('fill',ok?'var(--accent-soft)':'var(--warm-soft)');r.setAttribute('stroke',ok?'var(--accent)':'var(--warm)');});
+    document.getElementById('cb-msg').textContent=k==='n'?`自称有 98% 把握，十个区间却只有 ${hit} 个包含了真实答案，与研究中约六成的结果相近。人们对自己知道多少的判断，比实际知道的更有把握。`:`要真正覆盖几乎全部真实答案，区间需要宽得多：这里约为原来的 3 倍，十个里有 ${hit} 个命中。`;}
+  document.querySelectorAll('[data-cb]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.cb)));
+  document.getElementById('cb').addEventListener('anim-in',()=>{rs.forEach(r=>{r.setAttribute('x',cx);r.setAttribute('width',0);});setTimeout(()=>set('n'),100);setTimeout(()=>set('w'),2800);});
+  set('n');
+})();
+</script>
+
+<h2 id="sec-7">七、偏差有方向，也就可以被设计改变</h2>
+<p>偏差是系统性的，这意味着决定会随呈现方式与默认值而改变。马德里安与谢伊（2001）研究了一家公司把退休储蓄计划从“自愿加入”改为“自动加入、可以退出”的效果：新员工的参加率从约 37% 上升到约 86%，而员工的选择自由没有任何减少。塞勒与贝纳茨（2004）设计的“明天储蓄更多”计划，让员工事先承诺在今后每次加薪时提高储蓄比例，参加者的储蓄率在约 40 个月内从 3.5% 上升到 13.6%。塞勒与桑斯坦（2008）把这种做法称为选择架构。同样的工具也可以用来诱导用户做对自己不利的事：把交易设计得像游戏，把亏损藏起来，把下单的确认步骤删掉。选择架构本身无所谓好坏，关键在于它服务于用户的任务，还是服务于平台的收入。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">同样的人，不同的默认值</p><p class="figsub">左：退休储蓄计划由“自愿加入”改为“自动加入、可以退出”，新员工中参加的人数。右：“明天储蓄更多”计划参加者的储蓄率，每次加薪时自动提高。</p></div><button class="replay" type="button" data-replay="df">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="默认值">
+      <button type="button" data-df="in" aria-pressed="true">自愿加入</button>
+      <button type="button" data-df="auto" aria-pressed="false">自动加入，可以退出</button>
+    </div>
+    <div class="df" id="df" data-anim>
+      <div class="df-l"><div class="df-dots" id="df-dots"></div><p id="df-n"></p></div>
+      <div class="df-r"><svg viewBox="0 0 300 180" role="img" aria-label="储蓄率随加薪提高"><g id="df-st"></g></svg></div>
+    </div>
+    <p class="df-msg" id="df-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>参加率约 37% 与约 86% 来自 Madrian 与 Shea（2001）对一家美国公司 401(k) 计划的研究；储蓄率 3.5% 至 13.6% 来自 Thaler 与 Benartzi（2004），中间三级为前三次加薪后的数值，13.6% 为第四次加薪后，均取自原文表 2。</figcaption>
+</figure>
+<style>
+.df{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:center}
+.df-dots{display:grid;grid-template-columns:repeat(10,1fr);gap:4px}
+.df-dots i{aspect-ratio:1;border-radius:50%;background:var(--line);transition:background .3s;transition-delay:calc(var(--i)*6ms)}
+.df-dots i.on{background:var(--accent)}
+.df-l p{font-size:13px;margin:8px 0 0}
+.df-r svg{width:100%;height:auto;display:block}
+.df-b{transition:height .5s ease,y .5s ease}
+.df-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.df{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),dots=$('df-dots');dots.innerHTML=Array.from({length:100},(_,i)=>`<i style="--i:${i}"></i>`).join('');
+  const ds=[...dots.children],ST=[3.5,6.5,9.4,11.6,13.6],YB=150,h=v=>v/15*(YB-14);
+  $('df-st').innerHTML=`<line x1="10" y1="${YB}" x2="295" y2="${YB}" class="s-faint"/>`+ST.map((v,i)=>`<rect class="df-b" x="${18+i*56}" width="40" rx="3" fill="var(--accent)" style="y:${YB}px;height:0"/><text class="df-t t-ink" x="${38+i*56}" y="${YB-h(v)-5}" text-anchor="middle" font-size="12" opacity="0">${v}%</text><text x="${38+i*56}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${i?'第 '+i+' 次加薪':'加入时'}</text>`).join('');
+  function stairs(){[...document.querySelectorAll('.df-b')].forEach((r,i)=>{r.style.y=YB+'px';r.style.height='0px';setTimeout(()=>{r.style.y=(YB-h(ST[i]))+'px';r.style.height=h(ST[i])+'px';},100+i*350);});
+    [...document.querySelectorAll('.df-t')].forEach((t,i)=>{t.setAttribute('opacity',0);setTimeout(()=>t.setAttribute('opacity',1),500+i*350);});}
+  function set(k){document.querySelectorAll('[data-df]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.df===k)));const n=k==='in'?37:86;
+    ds.forEach((d,i)=>d.classList.toggle('on',i<n));$('df-n').textContent=`100 位新员工中约 ${n} 位参加`;
+    $('df-msg').textContent=k==='in'?'需要主动填表才能参加时，多数人一直没有行动。不行动的原因是惰性与拖延，而不是不想储蓄。':'改为默认参加、随时可以退出后，参加的人数增加了一倍多。选择的自由没有减少，变化的只是不行动时会发生什么。';}
+  document.querySelectorAll('[data-df]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.df)));
+  $('df').addEventListener('anim-in',()=>{set('in');stairs();setTimeout(()=>set('auto'),2600);});
+  set('in');ST.forEach((v,i)=>{const r=document.querySelectorAll('.df-b')[i];r.style.y=(YB-h(v))+'px';r.style.height=h(v)+'px';document.querySelectorAll('.df-t')[i].setAttribute('opacity',1);});
+})();
+</script>
+
+<h2 id="sec-8">八、现状与理想之间</h2>
+<p>偏差可以被设计改变，不等于产品应当替用户决定。一位用户的做法可能谈不上一套完整的方法：发现机会、买入与复盘各凭一套理由；这种零散的做法本身是一种稳定的状态；它与成熟投资者的做法之间的张力，来自用户自己想要更好的结果。只顺着现状，频繁交易的代价会年年累积；处处纠正，用户又很可能离开。可行的做法是先尊重用户的习惯，用用户自己的交易记录说明结果，再邀请而不是要求他尝试另一种方法，并且只承诺改进决定的过程，不承诺结果。塞勒与桑斯坦（2003）把保留选择的自由、同时引导人们作出他们自己也认为更好的选择的做法，称为自由主义的家长制。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">现状与理想之间</p><p class="figsub">用户眼下零散的做法是一种稳态，成熟投资者前后一致的做法是另一种。切换产品的做法，看十次复盘之后用户在哪里，以及产品在几个时刻各怎样做。</p></div><button class="replay" type="button" data-replay="sd16">重播</button></div>
+    <div class="sd16" id="sd16" data-anim>
+      <div class="seg-btns" role="group" aria-label="产品的做法">
+        <button type="button" data-sd16="follow" aria-pressed="false">只顺着现状</button>
+        <button type="button" data-sd16="mid" aria-pressed="true">先尊重，再邀请</button>
+        <button type="button" data-sd16="push" aria-pressed="false">只看向理想</button>
+      </div>
+      <svg viewBox="0 0 400 78" role="img" aria-label="用户在现状与理想之间的位置"><g id="sd16-g"></g></svg>
+      <div class="sd16-ends"><div><b>现状的稳态：方法零散</b>听来的消息买入，换个理由卖出，复盘再换一套</div><div><b>理想的稳态：方法前后一致</b>发现、交易、复盘用同一套方法</div></div>
+      <div class="sd16-m" id="sd16-m"></div>
+      <p class="sd16-msg" id="sd16-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：横轴是用户的做法离成熟投资者有多远，位置与移动的幅度只为说明，不是实测数据。中间的路径只承诺改进过程的质量，不承诺结果。</figcaption>
+</figure>
+<style>
+.sd16 svg{width:100%;height:auto;display:block;margin-top:6px}
+.sd16-ends{display:flex;justify-content:space-between;gap:16px;font-size:12px;color:var(--faint);line-height:1.5}
+.sd16-ends div:last-child{text-align:right}
+.sd16-ends b{display:block;font-weight:500;color:var(--muted);font-size:12.5px}
+.sd16-m{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
+.sd16-m div{background:var(--quote);border-radius:9px;padding:8px 10px;font-size:13px;line-height:1.55}
+.sd16-m span{display:block;font-size:11.5px;color:var(--faint)}
+.sd16-msg{font-size:14px;margin:10px 0 0;min-height:3.2em}
+@media (max-width:640px){.sd16-m{grid-template-columns:1fr 1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('sd16'+id),X0=14,X1=386,AY=62,x=v=>X0+v*(X1-X0);
+  const P={follow:[.1,.1,.1,.1,.1,.1,.1,.1,.1,.1,.1],mid:[.1,.16,.22,.28,.34,.4,.45,.5,.55,.6,.64],push:[.1,.28,-1,-1,-1,-1,-1,-1,-1,-1,-1]};
+  const M={follow:[['用户想频繁交易','提供更快的下单工具，不加评判。'],['大跌之后','照用户的意思卖出，不提当初的计划。'],['复盘','只列出盈亏，不说每一笔为什么买卖。'],['用户不想改','本来就不打算让用户改。']],
+    mid:[['用户想频繁交易','照常执行，同时记下每一笔交易的理由与结果。'],['大跌之后','展示用户自己写下的计划，请他隔一天再确认。'],['复盘','用用户自己的交易记录说明：频繁交易没有带来更好的结果；问他要不要试一试另一种方法。'],['用户不想改','尊重用户的决定，下次复盘再看记录。']],
+    push:[['用户想频繁交易','反复弹窗劝阻，告诉用户这样做不对。'],['大跌之后','劝阻卖出，讲一遍长期持有的道理。'],['复盘','逐条指出用户哪里不像成熟的投资者。'],['用户不想改','继续说服，直到用户离开这个产品。']]};
+  const T={follow:'只顺着现状：产品不预设任何看法，也不为成交次数着想；可用户的习惯被照单全收，频繁交易的代价年年累积，他想要更好结果的愿望从未被回应。',
+    mid:'先尊重，再邀请：习惯照常执行，理由与结果都记下来；每次复盘用用户自己的记录说明结果，再问他要不要试一试。用户一小步一小步地向前移，决定始终在他手里；改进的是过程的质量，结果仍取决于市场。',
+    push:'只看向理想：产品处处纠正，第二次复盘时，用户离开了这个产品。方向没有错，可产品连帮他的机会也失去了。'};
+  let k='mid',tm=[],seq=[];
+  function axis(){return `<line x1="${X0}" x2="${X1}" y1="${AY}" y2="${AY}" class="s-line" stroke-width="2"/>`+
+    `<line x1="${x(.3)}" x2="${x(.7)}" y1="20" y2="20" stroke="var(--gold)" stroke-width="1.5" marker-end="url(#sd16-a)"/><text x="${x(.5)}" y="12" font-size="12" text-anchor="middle" fill="var(--gold)">张力：他自己想要更好的结果</text>`+
+    `<defs><marker id="sd16-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="var(--gold)"/></marker></defs>`;}
+  function draw(n){const p=P[k];let h=axis(),last=-1;
+    for(let i=0;i<=n;i++){const v=p[i];if(v<0)break;last=i;if(i<n&&p[i+1]>=0)h+=`<line x1="${x(v)}" x2="${x(p[i+1])}" y1="${AY}" y2="${AY}" stroke="var(--accent)" stroke-width="4" opacity=".35"/>`;}
+    const v=p[last],gone=n>last;
+    h+=`<circle cx="${x(v)}" cy="${AY}" r="8" fill="${k==='follow'?'var(--warm)':'var(--accent)'}" opacity="${gone?.25:1}"/>`;
+    h+=`<text x="${x(v)}" y="${AY-16}" font-size="12" text-anchor="middle" class="t-faint">${gone?'用户离开了这个产品':'第 '+n+' 次复盘后'}</text>`;
+    $('-g').innerHTML=h;}
+  function run(){tm.forEach(clearTimeout);tm=[];document.querySelectorAll('[data-sd16]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.sd16===k)));
+    $('-m').innerHTML=M[k].map(([a,b])=>`<div><span>${a}</span>${b}</div>`).join('');$('-msg').textContent=T[k];
+    for(let n=0;n<=10;n++)tm.push(setTimeout(()=>draw(n),n*260));}
+  document.querySelectorAll('[data-sd16]').forEach(b=>b.addEventListener('click',()=>{seq.forEach(clearTimeout);seq=[];k=b.dataset.sd16;run();}));
+  $('').addEventListener('anim-in',()=>{seq.forEach(clearTimeout);seq=[];['follow','push','mid'].forEach((s,i)=>seq.push(setTimeout(()=>{k=s;run();},300+i*3600)));});
+  draw(10);$('-m').innerHTML=M[k].map(([a,b])=>`<div><span>${a}</span>${b}</div>`).join('');$('-msg').textContent=T[k];
+})();
+</script>
+
+<h2 id="sec-9">九、对产品设计的含义</h2>
+<p>偏差有方向，产品的呈现方式与默认值就不可能是中性的；要让它们站在用户的任务一边，同时尊重用户已有的习惯，以邀请代替说教。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：为有限理性的人设计</p><p class="figsub">五条设计要求，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="ch16summary">重播</button></div>
+    <div class="ch16summary" id="ch16summary" data-anim><div class="ch16summary-c" style="--i:0"><em>注意力有限</em><b>把与目标相关的信息放到前面</b><p>费用、集中程度、距离目标的差距要和涨跌幅一样显眼；不以排行榜和推送争夺注意力。</p></div><div class="ch16summary-c" style="--i:1"><em>参照点决定得失</em><b>提供以目标为参照的视角</b><p>在买入价之外，展示组合相对于计划与目标的位置；卖出时说明各种卖法对组合与税负的影响。</p></div><div class="ch16summary-c warn" style="--i:2"><em>频繁评估放大损失感</em><b>让评估的频率与任务的期限相匹配</b><p>长期任务默认展示与期限相符的区间，不把每日涨跌放在最显眼的位置。</p></div><div class="ch16summary-c warn" style="--i:3"><em>默认值不是中性的</em><b>让默认选项站在用户一边</b><p>默认值、确认步骤与呈现方式都要服务于用户的任务；不用游戏化的设计诱导交易。</p></div><div class="ch16summary-c wide" style="--i:4"><em>现状也是一种稳态</em><b>先尊重，再邀请</b><p>照常执行用户的习惯，用他自己的交易记录说明结果，再问要不要试一试另一种方法；只承诺改进过程，不承诺结果。</p></div></div>
+  </div>
+</figure>
+<style>
+.ch16summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch16summary-c.wide{grid-column:1/-1}
+.ch16summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch16summary-c.warn{border-left-color:var(--warm)}
+.ch16summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch16summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch16summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch16summary.in .ch16summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch16summary{grid-template-columns:1fr}}
+</style>
+
+<h2 id="sec-10">参考文献</h2>
+<ul class="refs"><li>Simon, H. A. (1955). A behavioral model of rational choice. <i>Quarterly Journal of Economics</i>, 69(1), 99–118.</li><li>Simon, H. A. (1971). Designing organizations for an information-rich world. In M. Greenberger (Ed.), <i>Computers, Communications, and the Public Interest</i> (pp. 37–72). Johns Hopkins Press.</li><li>Frederick, S. (2005). Cognitive reflection and decision making. <i>Journal of Economic Perspectives</i>, 19(4), 25–42.</li><li>Kahneman, D. (2011). <i>Thinking, Fast and Slow</i>. Farrar, Straus and Giroux.</li><li>DellaVigna, S., &amp; Pollet, J. M. (2009). Investor inattention and Friday earnings announcements. <i>Journal of Finance</i>, 64(2), 709–749.</li><li>Kahneman, D., &amp; Tversky, A. (1979). Prospect theory: An analysis of decision under risk. <i>Econometrica</i>, 47(2), 263–291.</li><li>Tversky, A., &amp; Kahneman, D. (1992). Advances in prospect theory: Cumulative representation of uncertainty. <i>Journal of Risk and Uncertainty</i>, 5(4), 297–323.</li><li>Shefrin, H., &amp; Statman, M. (1985). The disposition to sell winners too early and ride losers too long: Theory and evidence. <i>Journal of Finance</i>, 40(3), 777–790.</li><li>Odean, T. (1998). Are investors reluctant to realize their losses? <i>Journal of Finance</i>, 53(5), 1775–1798.</li><li>Benartzi, S., &amp; Thaler, R. H. (1995). Myopic loss aversion and the equity premium puzzle. <i>Quarterly Journal of Economics</i>, 110(1), 73–92.</li><li>Gneezy, U., &amp; Potters, J. (1997). An experiment on risk taking and evaluation periods. <i>Quarterly Journal of Economics</i>, 112(2), 631–645.</li><li>Lichtenstein, S., Fischhoff, B., &amp; Phillips, L. D. (1982). Calibration of probabilities: The state of the art to 1980. In D. Kahneman, P. Slovic, &amp; A. Tversky (Eds.), <i>Judgment under Uncertainty: Heuristics and Biases</i> (pp. 306–334). Cambridge University Press.</li><li>Barber, B. M., &amp; Odean, T. (2001). Boys will be boys: Gender, overconfidence, and common stock investment. <i>Quarterly Journal of Economics</i>, 116(1), 261–292.</li><li>Madrian, B. C., &amp; Shea, D. F. (2001). The power of suggestion: Inertia in 401(k) participation and savings behavior. <i>Quarterly Journal of Economics</i>, 116(4), 1149–1187.</li><li>Thaler, R. H., &amp; Benartzi, S. (2004). Save More Tomorrow: Using behavioral economics to increase employee saving. <i>Journal of Political Economy</i>, 112(S1), S164–S187.</li><li>Thaler, R. H., &amp; Sunstein, C. R. (2003). Libertarian paternalism. <i>American Economic Review</i>, 93(2), 175–179.</li><li>Thaler, R. H., &amp; Sunstein, C. R. (2008). <i>Nudge: Improving Decisions about Health, Wealth, and Happiness</i>. Yale University Press.</li></ul>
+<footer class="nav"><a href="ch15.html">← 第 15 章　用户要完成的任务</a><a href="ch17.html">第 17 章　用户能承受什么 →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

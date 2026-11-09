@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: the cost of cognitive labour collapses</p><p class="figsub">Four conclusions, each tied to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="g13summary">Replay</button></div>
+    <div class="g13summary" id="g13summary" data-anim><div class="g13summary-c" style="--i:0"><em>Price</em><b>Cognitive labour is almost free</b><p>The price of reading, calculating and writing falls to a few hundredths of what it was; everything else stays the same.</p></div><div class="g13summary-c" style="--i:1"><em>Composition</em><b>Checking and bearing responsibility do not fall</b><p>The cheaper cognitive labour becomes, the larger the share of a delegation's cost taken by checking and bearing responsibility.</p></div><div class="g13summary-c warn" style="--i:2"><em>Edge</em><b>Abilities are uneven; checking cannot follow difficulty alone</b><p>The most dangerous tasks are those that look easy but which the scribe gets wrong.</p></div><div class="g13summary-c warn" style="--i:3"><em>Weakest stave</em><b>The slowest step sets the limit</b><p>Speeding up only what can be sped up leaves a ceiling on the overall factor; the reachable share depends on what is built around the model.</p></div></div>
+  </div>
+</figure>
+<style>
+.g13summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g13summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g13summary-c.warn{border-left-color:var(--warm)}
+.g13summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g13summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g13summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g13summary.in .g13summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g13summary{grid-template-columns:1fr}}
+</style>

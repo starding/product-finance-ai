@@ -1,0 +1,46 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">快速的直觉与审慎的核对</p>
+    <p class="figsub">一支球拍和一个球共 1.10 元，球拍比球贵 1 元。球多少钱？先选一个答案。</p>
+    <div class="crt" id="crt" data-anim>
+      <div class="crt-opts">
+        <button type="button" data-c="10"><b>0.10 元</b><span>第一时间浮现的答案</span></button>
+        <button type="button" data-c="5"><b>0.05 元</b><span>需要停下来算一下</span></button>
+      </div>
+      <div class="crt-chk" id="crt-chk" hidden>
+        <div class="crt-row"><span>球</span><i id="crt-b"></i><b id="crt-bv"></b></div>
+        <div class="crt-row"><span>球拍</span><i id="crt-r"></i><b id="crt-rv"></b></div>
+        <div class="crt-row tot"><span>合计</span><em id="crt-t"></em></div>
+      </div>
+      <p class="crt-msg" id="crt-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>题目来自 Frederick（2005）的认知反思测试。快速的思考方式给出看似合理的答案，只有投入注意力去核对，才会发现它不满足题目条件。</figcaption>
+</figure>
+<style>
+.crt-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.crt-opts button{font:inherit;text-align:left;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);padding:12px 14px;cursor:pointer}
+.crt-opts b{display:block;font-size:20px} .crt-opts span{font-size:12px;color:var(--faint)}
+.crt-opts button.sel{border-color:var(--ink)}
+.crt-opts button.ok{background:var(--accent-soft);border-color:var(--accent)}
+.crt-opts button.bad{background:var(--warm-soft);border-color:var(--warm)}
+.crt-chk{margin-top:12px;display:grid;gap:6px}
+.crt-row{display:grid;grid-template-columns:44px 1fr 70px;gap:10px;align-items:center;font-size:13px}
+.crt-row i{display:block;height:16px;border-radius:4px;width:0;transition:width .6s ease}
+.crt-row b{text-align:right;font-variant-numeric:tabular-nums}
+.crt-row.tot em{grid-column:2/4;font-style:normal;font-size:14px}
+.crt-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),bs=[...document.querySelectorAll('[data-c]')];
+  function pick(c){bs.forEach(b=>{b.classList.toggle('sel',b.dataset.c==c);b.classList.toggle('ok',b.dataset.c==='5'&&c!==null);b.classList.toggle('bad',b.dataset.c==='10'&&c==='10');});
+    const ball=+c/100,racket=ball+1,sum=ball+racket;$('crt-chk').hidden=false;
+    $('crt-b').style.background='var(--gold)';$('crt-r').style.background='var(--accent)';$('crt-b').style.width='0';$('crt-r').style.width='0';
+    setTimeout(()=>{$('crt-b').style.width=ball/1.2*100+'%';$('crt-r').style.width=racket/1.2*100+'%';},40);
+    $('crt-bv').textContent=ball.toFixed(2)+' 元';$('crt-rv').textContent=racket.toFixed(2)+' 元';
+    const right=Math.abs(sum-1.1)<1e-9;$('crt-t').innerHTML=`${sum.toFixed(2)} 元　${right?'<span style="color:var(--accent)">符合题目条件</span>':'<span style="color:var(--warm)">不等于 1.10 元</span>'}`;
+    $('crt-msg').textContent=right?'球 0.05 元，球拍 1.05 元，合计 1.10 元。得出这个答案，需要先压下第一时间浮现的 0.10 元。':'如果球是 0.10 元，球拍就是 1.10 元，合计 1.20 元。这个答案来得很快，也很有把握，但它是错的。';}
+  bs.forEach(b=>b.addEventListener('click',()=>pick(b.dataset.c)));
+})();
+</script>

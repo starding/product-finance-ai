@@ -1,0 +1,38 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Inertia keeps people on the default</p><p class="figsub">Forty households each have a suitable saving rate (dots), and most stay on the default (bars). Switch between a single default and a default tailored to each household, then let some households' income fall in year five, and see whether the default adjusts.</p></div><button class="replay" type="button" data-replay="df18">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Default">
+      <button type="button" data-df18="one" aria-pressed="true">Single default 12%</button>
+      <button type="button" data-df18="own" aria-pressed="false">Tailored to each household</button>
+    </div>
+    <div class="df18" id="df18" data-anim>
+      <svg viewBox="0 0 660 200" role="img" aria-label="Suitable rates and defaults"><g id="df18-g"></g></svg>
+      <div class="cs-sw"><label><input type="checkbox" id="df18-c"> Year five: a quarter of households see their income fall, and their suitable rate falls with it</label></div>
+      <p class="df18-msg" id="df18-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: suitable rates range from 6% to 18%; 70% of households stay on the default. The tailored default is set by the scribe for each household and adjusted when circumstances change. A gap of more than 3 percentage points counts as a "clear deviation".</figcaption>
+</figure>
+<style>
+.df18 svg{width:100%;height:auto;display:block}
+.df18-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.df18 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('df18'+id);let mode='one',s=1801;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};
+  const N=40,I=Array.from({length:N},()=>.06+.12*r()),stick=Array.from({length:N},()=>r()<.7),cut=Array.from({length:N},(_,i)=>i%4===1);
+  const X0=50,X1=628,YT=10,YB=170,x=i=>X0+(i+.5)/N*(X1-X0),y=v=>YB-v/.2*(YB-YT);
+  function draw(){const ch=$('-c').checked,ideal=I.map((v,i)=>ch&&cut[i]?Math.max(.02,v-.06):v),dft=ideal.map((v,i)=>mode==='own'?v:.12),got=ideal.map((v,i)=>stick[i]?(mode==='own'?(ch&&cut[i]?ideal[i]:I[i]):.12):v);
+    const got2=mode==='own'?dft:got;
+    let h=[0,.05,.1,.15,.2].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${Math.round(v*100)}%</text>`).join('');
+    let off=0;ideal.forEach((v,i)=>{const g=stick[i]?got2[i]:v;if(Math.abs(g-v)>.03)off++;h+=`<line x1="${x(i)}" x2="${x(i)}" y1="${y(v)}" y2="${y(g)}" stroke="var(--warm)" stroke-width="2"/><line x1="${x(i)-6}" x2="${x(i)+6}" y1="${y(g)}" y2="${y(g)}" stroke="var(--ink)" stroke-width="2"/><circle cx="${x(i)}" cy="${y(v)}" r="4" fill="${ch&&cut[i]?'var(--blue)':'var(--accent)'}"/>`;});
+    $('-g').innerHTML=h;
+    $('-msg').textContent=mode==='one'?`Single default of 12%: among households that stay on the default, ${off} clearly deviate from their own suitable rate. Those who meant to save more save too little, and those short of money save too much.`+(ch?' Households whose income fell are still charged 12%, and their budgets get tighter.':''):`Tailored to each household: the scribe sets each default to the household's circumstances, so staying on the default means staying in the right place; only ${off} households clearly deviate.`+(ch?' When income falls, the default is lowered with it.':'');}
+  const bs=[...document.querySelectorAll('[data-df18]')];
+  function set(m){mode=m;bs.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.df18===m)));draw();}
+  bs.forEach(b=>b.addEventListener('click',()=>set(b.dataset.df18)));$('-c').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{$('-c').checked=false;set('one');setTimeout(()=>{$('-c').checked=true;draw();},1800);setTimeout(()=>set('own'),3600);});
+  draw();
+})();
+</script>

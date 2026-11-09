@@ -1,0 +1,83 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">How a market shrinks when buyers cannot tell good from bad</p>
+    <p class="figsub">Sixty products, with quality ranging from 0 to 100. Sellers know the quality of their own products; buyers know only the average quality of products on the market, so they will only pay for average quality.</p>
+    <div class="seg-btns" role="group" aria-label="Information conditions">
+      <button type="button" data-info="0" aria-pressed="true">Buyers cannot tell</button>
+      <button type="button" data-info="1" aria-pressed="false">Credible quality disclosure</button>
+    </div>
+    <div class="lm" id="lm" data-anim>
+      <svg viewBox="0 0 640 170" role="img" aria-label="Products arranged by quality, and the buyers' bid">
+        <g id="lm-axis"></g>
+        <g id="lm-dots"></g>
+        <line id="lm-price" class="lm-price" y1="18" y2="128"/>
+        <text id="lm-pt" y="14" text-anchor="middle" font-size="12" class="t-accent"></text>
+      </svg>
+      <div class="lm-stats">
+        <div><span>Round</span><b id="lm-r">0</b></div>
+        <div><span>Buyers' bid</span><b id="lm-p">—</b></div>
+        <div><span>Products still on the market</span><b id="lm-n">60</b></div>
+        <div><span>Average quality</span><b id="lm-q">—</b></div>
+      </div>
+      <div class="lm-ctrl"><button type="button" class="replay" id="lm-next">Next round</button><button type="button" class="replay" id="lm-reset">Start over</button></div>
+      <p class="lm-msg" id="lm-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Simplified from the reasoning of Akerlof (1970): each product is worth its quality to both seller and buyer. When buyers cannot tell products apart, they bid the average quality of products still on the market, and sellers whose quality is above the bid leave. With credible disclosure, each product trades at its own quality.</figcaption>
+</figure>
+<style>
+.lm svg{width:100%;height:auto;display:block}
+.lm-dot{transition:cx .6s ease,cy .6s ease,opacity .6s ease,fill .4s}
+.lm-dot.in{fill:var(--accent)}
+.lm-dot.out{fill:var(--gray-mark);opacity:.25}
+.lm-price{stroke:var(--accent);stroke-width:2;stroke-dasharray:4 3;transition:x1 .6s,x2 .6s}
+.lm-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}
+.lm-stats div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.lm-stats span{display:block;font-size:11px;color:var(--faint)}
+.lm-stats b{font-size:18px;font-variant-numeric:tabular-nums}
+.lm-ctrl{display:flex;gap:8px}
+.lm-msg{font-size:14px;margin:10px 0 0;min-height:1.7em}
+@media (max-width:640px){.lm-stats{grid-template-columns:repeat(2,1fr)}}
+</style>
+<script>
+(function(){
+  const N=60, X0=30, X1=610, x=q=>X0+q/100*(X1-X0);
+  const items=Array.from({length:N},(_,i)=>({q:(i+0.5)*100/N,row:i%4}));
+  const dots=document.getElementById('lm-dots'), price=document.getElementById('lm-price'), pt=document.getElementById('lm-pt');
+  dots.innerHTML=items.map((it,i)=>`<circle class="lm-dot in" id="lm-d${i}" r="5.5" cx="${x(it.q)}" cy="${40+it.row*22}"/>`).join('');
+  let ax=`<line x1="${X0}" y1="132" x2="${X1}" y2="132" class="s-faint"/>`;
+  [0,25,50,75,100].forEach(q=>ax+=`<text x="${x(q)}" y="150" text-anchor="middle" font-size="11" class="t-faint">${q}</text>`);
+  ax+=`<text x="${X1}" y="166" text-anchor="end" font-size="11" class="t-faint">Product quality</text>`;
+  document.getElementById('lm-axis').innerHTML=ax;
+  let info=0, round=0, alive=items.map(()=>true), timer;
+  const avg=()=>{const a=items.filter((_,i)=>alive[i]);return a.reduce((s,it)=>s+it.q,0)/a.length;};
+  function paint(p){
+    items.forEach((it,i)=>{document.getElementById('lm-d'+i).setAttribute('class','lm-dot '+(alive[i]?'in':'out'));});
+    const n=alive.filter(Boolean).length;
+    document.getElementById('lm-r').textContent=round;
+    document.getElementById('lm-n').textContent=n;
+    document.getElementById('lm-q').textContent=avg().toFixed(1);
+    if(info){price.style.opacity=0;pt.textContent='';document.getElementById('lm-p').textContent='Priced by quality';}
+    else if(p!=null){price.style.opacity=1;price.setAttribute('x1',x(p));price.setAttribute('x2',x(p));pt.setAttribute('x',x(p));pt.textContent='Bid '+p.toFixed(1);document.getElementById('lm-p').textContent=p.toFixed(1);}
+    else {price.style.opacity=0;pt.textContent='';document.getElementById('lm-p').textContent='—';}
+  }
+  function next(){
+    if(info){document.getElementById('lm-msg').textContent='Buyers can see each product\'s quality and are willing to pay for it; all 60 products trade, and good products are no longer forced out.';paint();return false;}
+    const p=avg(); let gone=0;
+    items.forEach((it,i)=>{if(alive[i]&&it.q>p+1e-9){alive[i]=false;gone++;}});
+    round++; paint(p);
+    const n=alive.filter(Boolean).length;
+    document.getElementById('lm-msg').textContent=gone?`Buyers bid the average quality, ${p.toFixed(1)}; the ${gone} products with quality above the bid leave, and the average quality of those left falls.`:'';
+    if(n<=1||!gone){document.getElementById('lm-msg').textContent=`Only the ${n} lowest-quality product${n===1?'':'s'} remain${n===1?'s':''}. Because buyers cannot tell good from bad, good products are squeezed out step by step and the market all but disappears.`;return false;}
+    return true;
+  }
+  function reset(){clearInterval(timer);round=0;alive=items.map(()=>true);document.getElementById('lm-msg').textContent=info?'':'Click "Next round", or wait for it to play automatically.';paint(null);}
+  function auto(){reset();if(info){next();return;}timer=setInterval(()=>{if(!next())clearInterval(timer);},1300);}
+  document.getElementById('lm-next').addEventListener('click',()=>{clearInterval(timer);next();});
+  document.getElementById('lm-reset').addEventListener('click',reset);
+  const btns=[...document.querySelectorAll('[data-info]')];
+  btns.forEach(b=>b.addEventListener('click',()=>{info=+b.dataset.info;btns.forEach(x=>x.setAttribute('aria-pressed',String(x===b)));auto();}));
+  document.getElementById('lm').addEventListener('anim-in',auto);
+  reset();
+})();
+</script>

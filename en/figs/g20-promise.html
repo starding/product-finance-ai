@@ -1,0 +1,32 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">What can be promised, and what cannot</p><p class="figsub">Pick an item to see why it can or cannot be promised.</p></div><button class="replay" type="button" data-replay="pm20">Replay</button></div>
+    <div class="pm20" id="pm20" data-anim>
+      <div class="pm20-two"><div><p class="pm20-h">Can be promised, and checked</p><div id="pm20-y"></div></div><div><p class="pm20-h">Cannot be promised</p><div id="pm20-n"></div></div></div>
+      <p class="pm20-msg" id="pm20-msg" aria-live="polite"></p>
+    </div>
+  </div>
+</figure>
+<style>
+.pm20-two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pm20-h{margin:0 0 6px;font-size:12.5px;color:var(--muted)}
+.pm20-two button{font:inherit;display:block;width:100%;text-align:left;cursor:pointer;margin-bottom:5px;padding:7px 10px;border-radius:8px;border:1px solid transparent;font-size:13px;color:var(--ink);opacity:0;transform:translateY(6px);transition:opacity .35s,transform .35s,border-color .3s;transition-delay:calc(var(--i)*.12s)}
+.pm20.in .pm20-two button{opacity:1;transform:none}
+#pm20-y button{background:var(--accent-soft)} #pm20-n button{background:var(--warm-soft)}
+.pm20-two button.sel{border-color:var(--ink)}
+.pm20-msg{font-size:14px;margin:10px 0 0;min-height:4.6em;background:var(--quote);border-radius:9px;padding:10px 12px}
+@media (max-width:640px){.pm20-two{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const Y=[['Hold the agreed allocation','The allocation is written in the agreement, and holdings can be compared against it every day.'],['Deposit and rebalance on time','Every deposit and rebalancing is recorded, and its timing and amount can be checked.'],['Keep fees within the agreed ceiling','Fees are recorded item by item, and the total can be compared with the ceiling.'],['Keep each account\'s risk within the agreed limit','The limit is written as a share in ship shares and a maximum fall; going beyond it triggers a reminder or an adjustment.'],['Say truthfully how likely each goal is to be met','How likely, and what the worst run of years would look like, is calculated by one method, and the method is published.']];
+  const N=[['The house grain will certainly be enough','A storm that strikes the whole village may come in year five: systematic risk does not disappear.'],['Retirement returns will certainly be high','High returns come only from bearing risk that cannot be diversified away, and bearing it means bad years may come.'],['No losses','A product that promises principal protection and guaranteed returns is either hiding risk or has passed the risk to someone else.'],['Earning more than others','Before costs, active pickers as a whole can only earn the average.']];
+  const y=document.getElementById('pm20-y'),n=document.getElementById('pm20-n'),m=document.getElementById('pm20-msg');
+  y.innerHTML=Y.map((t,i)=>`<button type="button" style="--i:${i}">${t[0]}</button>`).join('');n.innerHTML=N.map((t,i)=>`<button type="button" style="--i:${i+5}">${t[0]}</button>`).join('');
+  const all=[...y.children,...n.children],D=[...Y,...N];
+  function set(i){all.forEach((b,j)=>b.classList.toggle('sel',j===i));m.textContent=D[i][0]+': '+D[i][1];}
+  all.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('pm20').addEventListener('anim-in',()=>{[0,3,5,7].forEach((i,k)=>setTimeout(()=>set(i),1800+k*1800));});
+  set(0);
+})();
+</script>

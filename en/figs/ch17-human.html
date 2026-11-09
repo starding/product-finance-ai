@@ -1,0 +1,49 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Total wealth: financial assets and human capital</p><p class="figsub">Drag the age to see the composition of total wealth; switch the nature of earnings to see how the suitable share of stocks within financial assets changes.</p></div><button class="replay" type="button" data-replay="hc">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Nature of earnings">
+      <button type="button" data-hc="s" aria-pressed="true">Stable earnings, bond-like</button>
+      <button type="button" data-hc="c" aria-pressed="false">Earnings move with the economy, stock-like</button>
+    </div>
+    <div class="hc" id="hc" data-anim>
+      <div class="sl"><label for="hc-a">Age <b id="hc-av"></b></label><input id="hc-a" type="range" min="25" max="65" step="1" value="30"></div>
+      <div class="hc-w"><span>Total wealth</span><div class="hc-t"><i id="hc-h" style="background:var(--blue)"></i><i id="hc-f" style="background:var(--accent)"></i></div></div>
+      <div class="legend"><span><i style="background:var(--blue)"></i>Human capital: present value of future earnings</span><span><i style="background:var(--accent)"></i>Financial assets</span></div>
+      <svg viewBox="0 0 640 180" role="img" aria-label="Share of stocks in financial assets by age"><g id="hc-g"></g></svg>
+      <p class="hc-msg" id="hc-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model: annual earnings of 1, retirement at 65, discount rate 2%; 15% of earnings saved each year, financial assets growing 4% a year; the stock target for total wealth is 60%, with human capital from stable earnings treated as 10% stock and from earnings that move with the economy as 50% stock. For the reasoning, see Bodie, Merton and Samuelson (1992) and Viceira (2001).</figcaption>
+</figure>
+<style>
+.hc-w{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:center;font-size:12.5px;color:var(--faint);margin:6px 0}
+.hc-t{display:flex;height:22px;border-radius:5px;overflow:hidden;background:var(--quote)}
+.hc-t i{display:block;height:100%;transition:width .4s}
+.hc svg{width:100%;height:auto;display:block;margin-top:6px}
+.hc-msg{font-size:14px;margin:4px 0 0;min-height:3.4em}
+@media (max-width:640px){.hc svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const H=a=>{let s=0;for(let k=1;k<=65-a;k++)s+=1/Math.pow(1.02,k);return s;};
+  const F=a=>{let f=.5;for(let k=25;k<a;k++)f=f*1.04+.15;return f;};
+  const S=(a,b)=>Math.max(0,Math.min(1,(.6*(F(a)+H(a))-b*H(a))/F(a)));
+  const B={s:.1,c:.5},X0=50,X1=620,YT=14,YB=150,x=a=>X0+(a-25)/40*(X1-X0),y=v=>YB-v*(YB-YT);
+  const $=id=>document.getElementById(id),sl=$('hc-a');let k='s';
+  const path=b=>{let d='';for(let a=25;a<=65;a++)d+=(a===25?'M':'L')+x(a).toFixed(1)+','+y(S(a,b)).toFixed(1);return d;};
+  function draw(){const a=+sl.value;let g=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`;
+    [0,.5,1].forEach(v=>g+=`<text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text>`);
+    [25,35,45,55,65].forEach(v=>g+=`<text x="${x(v)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${v===25?'Age ':''}${v}</text>`);
+    ['s','c'].forEach(j=>g+=`<path d="${path(B[j])}" fill="none" stroke="${j==='s'?'var(--blue)':'var(--warm)'}" stroke-width="${j===k?3:1.5}" opacity="${j===k?1:.35}"/>`);
+    g+=`<text x="${X1}" y="${YT+4}" text-anchor="end" font-size="11" class="t-faint">Stock share of financial assets</text>`;
+    const s=S(a,B[k]);g+=`<line x1="${x(a)}" y1="${YT}" x2="${x(a)}" y2="${YB}" class="s-faint" stroke-dasharray="3 3"/><circle cx="${x(a)}" cy="${y(s)}" r="6" fill="var(--ink)"/>`;
+    $('hc-g').innerHTML=g;
+    const h=H(a),f=F(a),t=h+f;$('hc-h').style.width=h/t*100+'%';$('hc-f').style.width=f/t*100+'%';$('hc-av').textContent=a;
+    $('hc-msg').textContent=`At age ${a}, human capital makes up about ${(h/t*100).toFixed(0)}% of total wealth. ${k==='s'?'With stable earnings, human capital behaves like a bond':'With earnings that move with the economy, human capital already carries a good deal of equity risk'}, and the suitable share of stocks within financial assets is about ${(S(a,B[k])*100).toFixed(0)}%.`;}
+  function set(j){k=j;document.querySelectorAll('[data-hc]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.hc===j)));draw();}
+  document.querySelectorAll('[data-hc]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.hc)));
+  sl.addEventListener('input',draw);
+  $('hc').addEventListener('anim-in',()=>{let a=25;sl.value=a;draw();const id=setInterval(()=>{a+=1;sl.value=a;draw();if(a>=65){clearInterval(id);sl.value=30;draw();}},90);});
+  set('s');
+})();
+</script>

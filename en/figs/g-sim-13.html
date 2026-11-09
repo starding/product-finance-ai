@@ -1,0 +1,53 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Civilization Simulator · Chapter 13: A village where cognitive labour is cheap</p><p class="figsub">Forty households are arranged from least to most property, and each has four money-related tasks a year. A task is done only when its benefit exceeds its cost. Drag the price of cognitive labour to see which tasks become affordable; then hand checking to the scribes as well, and see what happens.</p></div><button class="replay" type="button" data-replay="cs13">Replay</button></div>
+    <div class="cs-rules"><span class="on">Delegation</span><span class="on">Regulation &amp; custody</span><span class="on">Defaults</span><span class="on">Parameter: price of cognitive labour</span><span class="lock">Personal agent · Ch. 14</span></div>
+    <div class="cs13" id="cs13" data-anim>
+      <div class="cs13-grid" id="cs13-g"></div>
+      <div class="cs13-ax"><span>Least property</span><span>Most property</span></div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Affordable</span><span><i style="background:var(--quote);border:1px solid var(--line)"></i>Not affordable</span><span><i style="background:var(--warm)"></i>Scribe erred, nobody noticed</span></div>
+      <div class="sl"><label for="cs13-a">Price of cognitive labour <b id="cs13-av"></b></label><input id="cs13-a" type="range" min="0" max="2" step="0.1" value="0"></div>
+      <div class="cs-sw"><label><input type="checkbox" id="cs13-c"> Hand checking to the scribes too (no person checks or bears responsibility)</label></div>
+      <button type="button" class="replay" id="cs13-re">Another run of years</button>
+      <div class="cs13-out" id="cs13-out"></div>
+      <p class="cs13-msg" id="cs13-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model: median property is about 100 portions, the least a dozen or so, the most over a thousand. The four tasks bring benefits of 0.3%, 1%, 0.6% and 0.8% of property and require 2, 10, 4 and 3 hours of labour, of which cognitive labour accounts for 80%, 90%, 50% and 70%, the rest being checking and bearing responsibility; human labour costs 1 portion per hour. The price of cognitive labour is given as a percentage of its original level. When checking is also handed to the scribes, all labour is charged at the price of cognitive labour, but each task has an 8% chance of an error nobody notices, with a loss of twice the task's benefit; each household decides whether to do a task based on its expected gain or loss.</figcaption>
+</figure>
+<style>
+.cs13-grid{display:grid;gap:4px}
+.cs13-row{display:grid;grid-template-columns:6.5em 1fr;gap:8px;align-items:center;font-size:12px;color:var(--muted)}
+.cs13-row div{display:grid;grid-template-columns:repeat(40,1fr);gap:2px}
+.cs13-row i{height:16px;border-radius:2px;background:var(--quote);border:1px solid var(--line);transition:background .3s}
+.cs13-row i.on{background:var(--accent);border-color:var(--accent)}
+.cs13-row i.err{background:var(--warm);border-color:var(--warm)}
+.cs13-ax{display:flex;justify-content:space-between;font-size:11.5px;color:var(--faint);margin:4px 0 6px 7.2em}
+.cs13-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cs13-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs13-out span{display:block;font-size:11.5px;color:var(--faint)} .cs13-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.cs13-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs13-row{grid-template-columns:1fr;gap:2px}.cs13-row div{gap:1px}.cs13-row i{height:12px}.cs13-ax{margin-left:0}.cs13-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs13'+id);let seed=1313;
+  const T=[['Bookkeeping',.003,2,.8],['Research',.01,10,.9],['Monitoring',.006,4,.5],['Adjusting',.008,3,.7]];
+  let s0=1313;const r0=()=>{s0=(s0*16807)%2147483647;return s0/2147483647;};const g0=()=>{let u=0;while(!u)u=r0();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r0());};
+  const W=Array.from({length:40},()=>Math.round(100*Math.exp(1.1*g0()))).sort((a,b)=>a-b);
+  function sim(a,chk){let s=seed;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};
+    const G=T.map(()=>[]);let done=0,all=0,net=0,err=0,lost=0;
+    W.forEach(w=>{let n=0;T.forEach(([nm,v,h,c],k)=>{const cost=chk?h*a:h*(c*a+(1-c)),e=chk?.08:0,ev=v*w*(1-2*e)-cost;let st=0;
+      if(ev>0){st=1;done++;n++;net+=v*w-cost;if(chk&&r()<e){st=2;err++;lost+=2*v*w;net-=2*v*w;}}G[k].push(st);});if(n===4)all++;});
+    return {G,done,all,net,err,lost};}
+  function draw(){const ls=+$('-a').value,a=Math.pow(10,-ls),chk=$('-c').checked,S=sim(a,chk);
+    $('-av').textContent=a>=.1?Math.round(a*100)+'%':(a*100).toFixed(1)+'%';
+    $('-g').innerHTML=T.map((t,k)=>`<div class="cs13-row"><span>${t[0]}</span><div>${S.G[k].map(st=>`<i class="${st===1?'on':st===2?'err':''}"></i>`).join('')}</div></div>`).join('');
+    $('-out').innerHTML=[['Affordable tasks',S.done+' / 160'],['Households affording all four',S.all],[chk?'Errors nobody noticed':'Village net gain for the year',chk?S.err+', loss '+S.lost.toFixed(0)+' portions':S.net.toFixed(0)+' portions']].map(([x,v])=>`<div><span>${x}</span><b>${v}</b></div>`).join('');
+    const fix=T.reduce((x,[n,v,h,c])=>x+h*(1-c),0);
+    $('-msg').textContent=chk?`With checking handed to the scribes too, the cost is almost zero: ${S.done} tasks become affordable, and households doing all four rise to ${S.all}. But ${S.err} errors go unnoticed, with a loss of ${S.lost.toFixed(0)} portions, and nobody is responsible for them.`:ls===0?'With cognitive labour at its original price, only households with much property can afford research and monitoring; for households with little, even bookkeeping does not pay.':`With the price of cognitive labour down to ${a>=.1?Math.round(a*100):(a*100).toFixed(1)}%, affordable tasks rise to ${S.done}, but soon stop rising: across its four tasks each household still faces ${fix.toFixed(1)} hours of checking and bearing responsibility, and households with little property still cannot afford research and monitoring.`;}
+  ['-a','-c'].forEach(k=>$(k).addEventListener('input',draw));$('-re').addEventListener('click',()=>{seed=(seed*48271)%2147483647;draw();});
+  $('').addEventListener('anim-in',()=>{$('-c').checked=false;let v=0;$('-a').value=0;draw();const id=setInterval(()=>{v+=.1;$('-a').value=v.toFixed(1);draw();if(v>=2){clearInterval(id);setTimeout(()=>{$('-c').checked=true;draw();},1500);}},160);});
+  draw();
+})();
+</script>

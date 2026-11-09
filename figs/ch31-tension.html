@@ -1,0 +1,34 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">取舍的依据：后果与可核验性</p>
+    <p class="figsub">五对相互牵制的原则。拖动一项功能的后果严重程度（越严重、越难撤回与核验，越靠右），看每一对取舍的平衡点移向哪一边。</p>
+    <div class="tn" id="tn" data-anim>
+      <div class="sl"><label for="tn-s">后果的严重程度 <b id="tn-sv"></b></label><input id="tn-s" type="range" min="0" max="100" step="5" value="20"></div>
+      <div class="tn-list" id="tn-list"></div>
+      <p class="tn-msg" id="tn-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意。各对取舍的平衡点随后果严重程度移动，移动的速度不同。</figcaption>
+</figure>
+<style>
+.tn-list{display:grid;gap:10px;margin-top:10px}
+.tn-r{display:grid;grid-template-columns:96px 1fr 96px;gap:10px;align-items:center;font-size:12.5px}
+.tn-r span:first-child{text-align:right;color:var(--muted)} .tn-r span:last-child{color:var(--muted)}
+.tn-t{position:relative;height:10px;border-radius:5px;background:linear-gradient(90deg,var(--accent-soft),var(--warm-soft))}
+.tn-t i{position:absolute;top:50%;width:16px;height:16px;border-radius:50%;background:var(--ink);transform:translate(-50%,-50%);transition:left .4s}
+.tn-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.tn-r{grid-template-columns:70px 1fr 70px;font-size:11.5px}}
+</style>
+<script>
+(function(){
+  const T=[['便捷','逐笔确认',1.2],['安静','主动提醒',1.0],['简洁','完整透明',.8],['迭代速度','保障强度',1.1],['尊重习惯','引导改进',.9]];
+  const L=v=>v<25?'轻，容易撤回':v<50?'中等':v<75?'较重':'严重，无法撤回';
+  const box=document.getElementById('tn-list');box.innerHTML=T.map(([a,b])=>`<div class="tn-r"><span>${a}</span><div class="tn-t"><i></i></div><span>${b}</span></div>`).join('');
+  const dots=[...box.querySelectorAll('.tn-t i')],sl=document.getElementById('tn-s');
+  function r(){const v=+sl.value;document.getElementById('tn-sv').textContent=L(v);dots.forEach((d,i)=>d.style.left=Math.max(4,Math.min(96,10+v*.8*T[i][2]))+'%');
+    document.getElementById('tn-msg').textContent=v<25?'后果轻、容易撤回与核验的功能，例如一份行情摘要：偏向便捷、安静、简洁、快速迭代与尊重习惯。':v<75?'后果中等的功能，例如再平衡方案：方案批准、关键时刻提醒、可点开的依据与评测集，复盘时用用户自己的记录邀请改进。':'后果严重、无法撤回的操作，例如卖出与转出资金：逐笔确认、多次提醒、完整的记录与最强的保障，对超出承受力的做法明确提示。';}
+  sl.addEventListener('input',r);
+  document.getElementById('tn').addEventListener('anim-in',()=>{let v=0;sl.value=0;r();const id=setInterval(()=>{v+=5;sl.value=v;r();if(v>=100){clearInterval(id);setTimeout(()=>{sl.value=20;r();},600);}},120);});
+  r();
+})();
+</script>

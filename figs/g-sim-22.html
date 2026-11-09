@@ -1,0 +1,43 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">文明模拟器 · 第 22 章：看得见的过程</p><p class="figsub">十年里，书记员偶尔违约；也会有坏年景，结果不好却不是它的错。选择记录的方式与核对的方式，调整他一年能花在核对上的时间，看被发现的违约、他花掉的时间，以及他冤枉了守约的书记员几次。</p></div><button class="replay" type="button" data-replay="cs22">重播</button></div>
+    <div class="cs-rules"><span class="on">产品：承诺什么</span><span class="on">产品：委托参数与授权</span><span class="on">产品：过程记录与可核对的证据</span><span class="lock">上限、确认与赔付 · 第 23 章</span></div>
+    <div class="cs22-sel"><span>记录</span><div class="seg-btns" role="group" aria-label="记录"><button type="button" data-cs22r="none" aria-pressed="false">没有记录</button><button type="button" data-cs22r="self" aria-pressed="false">书记员自己写的摘要</button><button type="button" data-cs22r="third" aria-pressed="true">第三方保存的分层记录</button></div></div>
+    <div class="cs22-sel"><span>核对</span><div class="seg-btns" role="group" aria-label="核对"><button type="button" data-cs22c="none" aria-pressed="false">从不核对</button><button type="button" data-cs22c="all" aria-pressed="false">逐笔核对</button><button type="button" data-cs22c="smart" aria-pressed="true">结果不好或触发时细查＋随机抽查</button></div></div>
+    <div class="cs22" id="cs22" data-anim>
+      <div class="sl"><label for="cs22-h">他一年能花在核对上的时间 <b id="cs22-hv"></b></label><input id="cs22-h" type="range" min="2" max="40" step="1" value="8"></div>
+      <div class="cs22-bars" id="cs22-b"></div>
+            <p class="cs22-msg" id="cs22-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意模型：图中为十年的期望值。书记员每年平均违约 0.6 次，其中三分之一藏在结果好的事里；每年三成的可能遇到坏年景。没有记录时，违约只在结果不好时才可能被察觉（两成），坏年景中有三成会被误判为违约；书记员自己写的摘要会略去违约，只有三成被发现，误判降为一成五；第三方保存的分层记录写下当时的信息与依据，核对到的违约都能查出，不再误判。逐笔核对一年需 30 小时，智能核对约 6 小时，超出他的时间时只能核对相应的比例。有随机抽查时，书记员违约的次数减半。</figcaption>
+</figure>
+<style>
+.cs22-sel{display:grid;grid-template-columns:3em 1fr;gap:8px;align-items:center;font-size:12.5px;color:var(--muted)}
+.cs22-sel .seg-btns{margin:4px 0}
+.cs22-bars{display:grid;gap:10px;margin:8px 0}
+.cs22-r{display:grid;grid-template-columns:9.5em 1fr 5.5em;gap:10px;align-items:center;font-size:12.5px}
+.cs22-r div{height:22px;background:var(--quote);border-radius:5px;overflow:hidden}
+.cs22-r i{display:block;height:100%;transition:width .4s}
+.cs22-r b{text-align:right;font-variant-numeric:tabular-nums}
+.cs22-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs22-sel{grid-template-columns:1fr}.cs22-r{grid-template-columns:1fr 5.5em}.cs22-r span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs22'+id);let rec='third',chk='smart',seed=2222;
+  function sim(H){const need=chk==='all'?30:chk==='smart'?6:0,frac=need?Math.min(1,H/need):0,lam=chk==='smart'?.3:.6,viol=10*lam;
+    let det;if(rec==='none')det=(2/3)*.2;else if(rec==='self')det=chk==='none'?0:.3*frac;else det=chk==='none'?0:chk==='all'?frac:frac*((2/3)+(1/3)*.1);
+    const pw=rec==='none'?.3:rec==='self'?.15:0;return {viol,found:viol*det,wrong:3*pw,time:Math.min(H,need)};}
+  function draw(){const H=+$('-h').value,S=sim(H);$('-hv').textContent=H+' 小时';
+    $('-b').innerHTML=[['发现的违约',S.found,6,'var(--accent)',S.found.toFixed(1)+' ／ '+S.viol.toFixed(0)+' 次'],['每年花掉的时间',S.time,30,'var(--gold)',S.time.toFixed(0)+' 小时'],['冤枉守约的书记员',S.wrong,1,'var(--warm)',S.wrong.toFixed(1)+' 次']].map(([a,v,m,c,t])=>`<div class="cs22-r"><span>${a}</span><div><i style="width:${Math.min(100,v/m*100)}%;background:${c}"></i></div><b>${t}</b></div>`).join('');
+    $('-msg').textContent=rec==='none'?`没有记录：十年平均 ${S.viol.toFixed(0)} 次违约只发现 ${S.found.toFixed(1)} 次，还平均把 ${S.wrong.toFixed(1)} 个坏年景错怪在书记员头上。`:rec==='self'?`书记员自己写的摘要略去了违约，平均发现 ${S.found.toFixed(1)} 次；他仍会错怪书记员 ${S.wrong.toFixed(1)} 次。`:chk==='none'?'有了可核对的记录，却从不核对：记录本身发现不了违约。':chk==='all'?`逐笔核对一年要 30 小时，他只有 ${H} 小时，只能核对一部分；十年平均发现 ${S.found.toFixed(1)} ／ ${S.viol.toFixed(0)} 次违约。`:`第三方记录加智能核对：一年只花 ${S.time.toFixed(0)} 小时，随机抽查让违约降到平均 ${S.viol.toFixed(0)} 次，发现 ${S.found.toFixed(1)} 次，不再冤枉守约的书记员。`;}
+  const rb=[...document.querySelectorAll('[data-cs22r]')],cb=[...document.querySelectorAll('[data-cs22c]')];
+  function setR(m){rec=m;rb.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.cs22r===m)));draw();}
+  function setC(m){chk=m;cb.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.cs22c===m)));draw();}
+  rb.forEach(b=>b.addEventListener('click',()=>setR(b.dataset.cs22r)));cb.forEach(b=>b.addEventListener('click',()=>setC(b.dataset.cs22c)));
+  $('-h').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{[['none','none'],['self','smart'],['third','all'],['third','smart']].forEach(([a,b],i)=>setTimeout(()=>{rec=a;chk=b;rb.forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.cs22r===a)));cb.forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.cs22c===b)));draw();},300+i*2200));});
+  draw();
+})();
+</script>

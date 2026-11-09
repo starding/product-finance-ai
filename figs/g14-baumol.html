@@ -1,0 +1,31 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">请账房为什么越来越贵</p><p class="figsub">织布的效率每年提高 3%，账房的效率不变，两边的工钱一起上涨。纵轴是请账房一年相当于多少匹布。勾选“书记员到来”，看第 30 年之后会怎样。</p></div><button class="replay" type="button" data-replay="bm14">重播</button></div>
+    <div class="bm14" id="bm14" data-anim>
+      <svg viewBox="0 0 660 210" role="img" aria-label="账房相对于布的价格"><g id="bm14-g"></g></svg>
+      <div class="cs-sw"><label><input type="checkbox" id="bm14-c"> 书记员到来：第 30 年起，账房工作中八成的认知劳动几乎免费</label></div>
+      <p class="bm14-msg" id="bm14-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：鲍莫尔（1967）两部门模型。账房的相对价格＝（1＋3%）的 t 次方；书记员到来后，账房所需的劳动降到原来的两成，此后核对与担责的部分仍按原来的效率。</figcaption>
+</figure>
+<style>
+.bm14 svg{width:100%;height:auto;display:block}
+.bm14-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.bm14 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('bm14'+id),T=50,X0=50,X1=628,YT=12,YB=180,x=t=>X0+t/T*(X1-X0);
+  function draw(n){const c=$('-c').checked,N=n===undefined?T:n,P=[];for(let t=0;t<=T;t++)P.push(Math.pow(1.03,t)*(c&&t>=30?.2:1));
+    const mx=5,y=v=>YB-v/mx*(YB-YT);
+    let h=[0,1,2,3,4,5].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v} 倍</text>`).join('')+[0,10,20,30,40,50].map(t=>`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">第 ${t} 年</text>`).join('');
+    if(c)h+=`<line x1="${x(30)}" x2="${x(30)}" y1="${YT}" y2="${YB}" stroke="var(--warm)" stroke-dasharray="4 4"/><text x="${x(30)+6}" y="${YT+12}" font-size="11" fill="var(--warm)">书记员到来</text>`;
+    h+=`<path d="${P.slice(0,N+1).map((v,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(v).toFixed(1)).join('')}" fill="none" stroke="var(--accent)" stroke-width="2.6"/>`;
+    $('-g').innerHTML=h;
+    $('-msg').textContent=c?`第 29 年，请账房一年相当于 ${P[29].toFixed(1)} 匹布；书记员到来后，降到 ${P[30].toFixed(1)} 匹。但剩下的核对与担责仍不会变快，第 50 年又回升到 ${P[50].toFixed(1)} 匹。`:`五十年后，请账房一年相当于 ${P[50].toFixed(1)} 匹布：账房没有变得更差，只是别的东西变得更便宜了。`;}
+  $('-c').addEventListener('input',()=>draw());
+  $('').addEventListener('anim-in',()=>{$('-c').checked=false;let n=0;const id=setInterval(()=>{n+=1;draw(n);if(n>=T){clearInterval(id);setTimeout(()=>{$('-c').checked=true;draw();},1200);}},40);});
+  draw();
+})();
+</script>

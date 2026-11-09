@@ -1,0 +1,71 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">Most people sit below the average</p>
+    <p class="figsub">A simulation of 2,000 investors, each holding the same asset. Choose the holding period and volatility to see the distribution of ending values, the mean and the median, and how many people end up below the mean.</p>
+    <div class="md" id="md" data-anim>
+      <div class="presets" role="group" aria-label="Holding period">
+        <button type="button" data-y="5">5 years</button><button type="button" data-y="10">10 years</button><button type="button" data-y="30">30 years</button>
+      </div>
+      <div class="sl"><label for="md-s">Annual volatility <b id="md-sv"></b></label><input id="md-s" type="range" min="10" max="50" step="5" value="30"></div>
+      <svg viewBox="0 0 640 210" role="img" aria-label="Distribution of ending values">
+        <g id="md-axis"></g><g id="md-bars"></g>
+        <line id="md-mean" class="md-mean" y1="14" y2="176"/><line id="md-med" class="md-med" y1="14" y2="176"/>
+        <text id="md-mt" font-size="11" class="t-ink" text-anchor="start"></text><text id="md-dt" font-size="11" class="t-warm" text-anchor="end"></text>
+      </svg>
+      <div class="md-out">
+        <div><span>Mean</span><b id="md-a"></b></div>
+        <div><span>Median</span><b id="md-m"></b></div>
+        <div><span>Share below the mean</span><b id="md-p"></b></div>
+      </div>
+    </div>
+  </div>
+  <figcaption>Example parameters: arithmetic mean return 8% a year, starting value 100, each year’s return drawn independently. The horizontal axis shows the ending value on a log scale; results beyond the right edge are grouped into the rightmost bin.</figcaption>
+</figure>
+<style>
+.md svg{width:100%;height:auto;display:block}
+#md-bars rect{fill:var(--accent);opacity:.55;transition:height .4s,y .4s}
+#md-bars rect.hi{fill:var(--gray-mark);opacity:.45}
+.md-mean{stroke:var(--ink);stroke-width:2}
+.md-med{stroke:var(--warm);stroke-width:2;stroke-dasharray:4 3}
+.md-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.md-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.md-out span{display:block;font-size:12px;color:var(--faint)}
+.md-out b{font-size:19px;font-variant-numeric:tabular-nums}
+#md-p{color:var(--warm)}
+@media (max-width:640px){.md-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const N=2000, M=0.08, X0=40, X1=620, YB=176, B=40;
+  let seed=13; const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
+  const g=()=>{let u=0,v=0;while(!u)u=rnd();v=rnd();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);};
+  const Z=Array.from({length:N},()=>Array.from({length:30},g));
+  let Y=10; const s=document.getElementById('md-s');
+  function render(){
+    const sg=+s.value/100, mu=Math.log(1+M)-sg*sg/2;
+    document.getElementById('md-sv').textContent=s.value+'%';
+    document.querySelectorAll('[data-y]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.y===Y)));
+    const V=Z.map(z=>{let l=0;for(let t=0;t<Y;t++)l+=mu+sg*z[t];return 100*Math.exp(l);});
+    const mean=V.reduce((a,b)=>a+b,0)/N, srt=V.slice().sort((a,b)=>a-b), med=srt[N/2], below=V.filter(v=>v<mean).length/N;
+    const lo=Math.log(Math.max(5,srt[Math.floor(N*0.01)])), hi=Math.log(srt[Math.floor(N*0.99)]);
+    const x=v=>X0+(Math.log(v)-lo)/(hi-lo)*(X1-X0);
+    const bins=new Array(B).fill(0);V.forEach(v=>{const k=Math.max(0,Math.min(B-1,Math.floor((Math.log(v)-lo)/(hi-lo)*B)));bins[k]++;});
+    const mx=Math.max(...bins), bw=(X1-X0)/B;
+    document.getElementById('md-bars').innerHTML=bins.map((c,k)=>{const h=c/mx*150,cx=X0+k*bw;const val=Math.exp(lo+(k+0.5)/B*(hi-lo));return `<rect class="${val>mean?'hi':''}" x="${cx.toFixed(1)}" y="${(YB-h).toFixed(1)}" width="${(bw*0.85).toFixed(1)}" height="${h.toFixed(1)}"/>`;}).join('');
+    let a=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`;
+    [50,100,200,400,800,1600].forEach(v=>{if(Math.log(v)>lo&&Math.log(v)<hi)a+=`<text x="${x(v)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${v}</text>`;});
+    document.getElementById('md-axis').innerHTML=a;
+    const L=(id,v)=>{const e=document.getElementById(id);e.setAttribute('x1',x(v));e.setAttribute('x2',x(v));};
+    L('md-mean',mean);L('md-med',med);
+    const mt=document.getElementById('md-mt');mt.setAttribute('x',x(mean)+5);mt.setAttribute('y',24);mt.textContent='Mean';
+    const dt=document.getElementById('md-dt');dt.setAttribute('x',x(med)-5);dt.setAttribute('y',24);dt.textContent='Median';
+    document.getElementById('md-a').textContent=Math.round(mean);
+    document.getElementById('md-m').textContent=Math.round(med);
+    document.getElementById('md-p').textContent=Math.round(below*100)+'%';
+  }
+  document.querySelectorAll('[data-y]').forEach(b=>b.addEventListener('click',()=>{Y=+b.dataset.y;render();}));
+  s.addEventListener('input',render);
+  document.getElementById('md').addEventListener('anim-in',()=>{Y=5;render();setTimeout(()=>{Y=10;render();},900);setTimeout(()=>{Y=30;render();},1800);});
+  render();
+})();
+</script>

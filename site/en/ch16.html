@@ -1,0 +1,688 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How users make decisions</title>
+<meta name="description" content="Product × Finance × AI: Financial Products in the Age of AI, Chapter 16: decisions are shaped by limited attention, reference points and loss aversion, and the resulting biases are systematic; the same regularities mean decisions can be changed by presentation and defaults; a user&#x27;s piecemeal habits are also a steady state, so a product should respect them first, then use the user&#x27;s own records to invite improvement, and promise only the process">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="ch16">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="Contents">
+<div class="side-head"><a class="sidetitle" href="index.html">Product × Finance × AI<small>Financial Products in the Age of AI</small></a></div>
+<div class="side-view" role="group" aria-label="Way of reading"><a href="preface.html" class="on" aria-current="true">Decomposition</a><a href="g-preface.html">Derivation</a></div>
+<a class="side-about" href="index.html#about">About this book</a>
+<a class="" href="preface.html"><span class="n">Preface</span>Why financial products must be relearned in the age of AI</a>
+<a class="side-part" href="part1.html"><span class="pn">Part One</span>Markets: where returns and risks come from</a>
+<a class="" href="ch01.html"><span class="n">1</span>What financial products sell</a>
+<a class="" href="ch02.html"><span class="n">2</span>Interest rates and maturity</a>
+<a class="" href="ch03.html"><span class="n">3</span>What risk looks like</a>
+<a class="" href="ch04.html"><span class="n">4</span>Diversification</a>
+<a class="" href="ch05.html"><span class="n">5</span>Compounding and volatility drag</a>
+<a class="" href="ch06.html"><span class="n">6</span>Factors</a>
+<a class="" href="ch07.html"><span class="n">7</span>Why prices are hard to predict</a>
+<a class="" href="ch08.html"><span class="n">8</span>How information gets into prices</a>
+<a class="" href="ch09.html"><span class="n">9</span>Traders in the market</a>
+<a class="" href="ch10.html"><span class="n">10</span>Liquidity and the bid-ask spread</a>
+<a class="" href="ch11.html"><span class="n">11</span>Orders, rules and market structure</a>
+<a class="" href="ch12.html"><span class="n">12</span>The arithmetic of active management</a>
+<a class="" href="ch13.html"><span class="n">13</span>How promises are kept</a>
+<a class="" href="ch14.html"><span class="n">14</span>Why regulation exists</a>
+<a class="side-part" href="part2.html"><span class="pn">Part Two</span>Users: what people want and what they can bear</a>
+<a class="" href="ch15.html"><span class="n">15</span>The jobs users need done</a>
+<a class=" cur" href="ch16.html" aria-current="page"><span class="n">16</span>How users make decisions</a>
+<a class="" href="ch17.html"><span class="n">17</span>What users can bear</a>
+<a class="" href="ch18.html"><span class="n">18</span>How users judge and trust</a>
+<a class="side-part" href="part3.html"><span class="pn">Part Three</span>AI: how much an agent can do on people&#x27;s behalf</a>
+<a class="" href="ch19.html"><span class="n">19</span>The amplification factor</a>
+<a class="" href="ch20.html"><span class="n">20</span>Which tasks can be handed to AI</a>
+<a class="" href="ch21.html"><span class="n">21</span>Where capability comes from, and where it fails</a>
+<a class="" href="ch22.html"><span class="n">22</span>Verifiability: the cost of checking</a>
+<a class="" href="ch23.html"><span class="n">23</span>The special constraints of finance</a>
+<a class="side-part" href="part4.html"><span class="pn">Part Four</span>Design: financial products under three sets of constraints</a>
+<a class="" href="ch24.html"><span class="n">24</span>What to promise</a>
+<a class="" href="ch25.html"><span class="n">25</span>Mandate parameters</a>
+<a class="" href="ch26.html"><span class="n">26</span>Authority and irreversible exposure</a>
+<a class="" href="ch27.html"><span class="n">27</span>Liability and conflicts of interest</a>
+<a class="" href="ch28.html"><span class="n">28</span>Capability assembly and process visibility</a>
+<a class="" href="ch29.html"><span class="n">29</span>Assurance level</a>
+<a class="" href="ch30.html"><span class="n">30</span>How trust is built</a>
+<a class="" href="ch31.html"><span class="n">31</span>Design principles</a>
+<a class="side-app" href="estimates.html"><span class="n">Appendix</span>Methods and data behind the author&#x27;s estimates</a>
+<a class="side-app" href="method.html"><span class="n">Appendix</span>How this book was written</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="Open contents" title="Contents"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">Product × Finance × AI: Financial Products in the Age of AI</a><span>Part Two  Users: what people want and what they can bear</span><a class="langlink" href="../ch16.html" hreflang="zh-CN">中文</a></header>
+
+<div class="chapno">Chapter 16</div><h1>How users make decisions<small>Limited attention and behavioural biases</small></h1>
+<blockquote><p>The job defines what ought to be done, but people make the decisions. Human attention is limited, and most decisions rely on quick intuition. People measure gains and losses against a reference point, and the pain of a loss is about twice the pleasure of an equal gain. The resulting biases are not random errors; they have a direction and can be predicted: people sell the stocks that made money and keep the ones that lost; the more often they check their accounts, the less risk they are willing to bear; and they are overconfident in their own judgment. Because the biases have a direction, design can change them: the same people make quite different decisions under different defaults and forms of presentation.</p></blockquote>
+<h2 id="sec-1">1. Two modes of thinking</h2>
+<p>Consider this question: a bat and a ball cost $1.10 in total, and the bat costs $1 more than the ball. How much does the ball cost? The answer that springs to most people's minds is $0.10; the correct answer is $0.05. Frederick (2005) used questions of this kind to measure cognitive reflection and found that even among students at leading universities, a large share answered wrongly. Kahneman (2011) divides human thinking into two modes: one fast, automatic and effortless, the other slow, deliberate and demanding attention. Most everyday decisions are made by the first, which in most settings is efficient; but on problems that require calculation or resisting a first impression, fast intuition errs systematically. Simon (1955) had pointed out earlier that human rationality is bounded: people do not search for the optimal solution but for one that is good enough, given limited information and computing power.</p>
+<figure>
+  <div class="card">
+    <p class="figtitle">Fast intuition and careful checking</p>
+    <p class="figsub">A bat and a ball cost $1.10 in total, and the bat costs $1 more than the ball. How much does the ball cost? Pick an answer first.</p>
+    <div class="crt" id="crt" data-anim>
+      <div class="crt-opts">
+        <button type="button" data-c="10"><b>$0.10</b><span>The answer that comes to mind first</span></button>
+        <button type="button" data-c="5"><b>$0.05</b><span>Needs a pause to work out</span></button>
+      </div>
+      <div class="crt-chk" id="crt-chk" hidden>
+        <div class="crt-row"><span>Ball</span><i id="crt-b"></i><b id="crt-bv"></b></div>
+        <div class="crt-row"><span>Bat</span><i id="crt-r"></i><b id="crt-rv"></b></div>
+        <div class="crt-row tot"><span>Total</span><em id="crt-t"></em></div>
+      </div>
+      <p class="crt-msg" id="crt-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>The question comes from Frederick's (2005) Cognitive Reflection Test. The fast mode of thinking produces an answer that looks reasonable; only by spending attention to check it does one find that it does not satisfy the conditions of the question.</figcaption>
+</figure>
+<style>
+.crt-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.crt-opts button{font:inherit;text-align:left;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);padding:12px 14px;cursor:pointer}
+.crt-opts b{display:block;font-size:20px} .crt-opts span{font-size:12px;color:var(--faint)}
+.crt-opts button.sel{border-color:var(--ink)}
+.crt-opts button.ok{background:var(--accent-soft);border-color:var(--accent)}
+.crt-opts button.bad{background:var(--warm-soft);border-color:var(--warm)}
+.crt-chk{margin-top:12px;display:grid;gap:6px}
+.crt-row{display:grid;grid-template-columns:44px 1fr 70px;gap:10px;align-items:center;font-size:13px}
+.crt-row i{display:block;height:16px;border-radius:4px;width:0;transition:width .6s ease}
+.crt-row b{text-align:right;font-variant-numeric:tabular-nums}
+.crt-row.tot em{grid-column:2/4;font-style:normal;font-size:14px}
+.crt-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),bs=[...document.querySelectorAll('[data-c]')];
+  function pick(c){bs.forEach(b=>{b.classList.toggle('sel',b.dataset.c==c);b.classList.toggle('ok',b.dataset.c==='5'&&c!==null);b.classList.toggle('bad',b.dataset.c==='10'&&c==='10');});
+    const ball=+c/100,racket=ball+1,sum=ball+racket;$('crt-chk').hidden=false;
+    $('crt-b').style.background='var(--gold)';$('crt-r').style.background='var(--accent)';$('crt-b').style.width='0';$('crt-r').style.width='0';
+    setTimeout(()=>{$('crt-b').style.width=ball/1.2*100+'%';$('crt-r').style.width=racket/1.2*100+'%';},40);
+    $('crt-bv').textContent='$'+ball.toFixed(2);$('crt-rv').textContent='$'+racket.toFixed(2);
+    const right=Math.abs(sum-1.1)<1e-9;$('crt-t').innerHTML=`$${sum.toFixed(2)}&emsp;${right?'<span style="color:var(--accent)">Meets the conditions</span>':'<span style="color:var(--warm)">Does not equal $1.10</span>'}`;
+    $('crt-msg').textContent=right?'The ball costs $0.05 and the bat $1.05, for a total of $1.10. Reaching this answer requires first suppressing the $0.10 that comes to mind.':'If the ball cost $0.10, the bat would cost $1.10, for a total of $1.20. This answer comes quickly and feels certain, but it is wrong.';}
+  bs.forEach(b=>b.addEventListener('click',()=>pick(b.dataset.c)));
+})();
+</script>
+
+<h2 id="sec-2">2. Limited attention: what is seen is what gets decided</h2>
+<p>Simon (1971) made an often-quoted observation: information consumes the attention of its recipients, so a wealth of information creates a poverty of attention. Investors face far more information than they can process, so decisions tend to depend on what is seen first rather than on what matters most. DellaVigna and Pollet (2009) found that the market's same-day reaction to earnings announcements made on Fridays is markedly weaker than on other weekdays, and the subsequent price drift is larger: when attention is scattered, information enters decisions more slowly. For individuals, the most prominent information is usually price changes, rankings and news, while the information most relevant to long-term results, such as fees, how concentrated the portfolio is and how far it remains from the goal, is often not prominent at all.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Attention stretches to only a few items</p><p class="figsub">A user opens their account and faces twelve pieces of information, with attention enough for only four. Switch the ordering to see which items enter the decision.</p></div><button class="replay" type="button" data-replay="at">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Ordering">
+      <button type="button" data-at="sal" aria-pressed="true">By salience</button>
+      <button type="button" data-at="rel" aria-pressed="false">By relevance to the goal</button>
+    </div>
+    <div class="at" id="at" data-anim></div>
+    <p class="at-msg" id="at-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>Illustrative. Salience and relevance scores are set for the sake of explanation. Scattered attention slows the rate at which information enters decisions; see DellaVigna and Pollet (2009).</figcaption>
+</figure>
+<style>
+.at{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.at-i{border:1.5px solid var(--line);border-radius:8px;padding:7px 9px;font-size:12.5px;line-height:1.45;background:var(--surface);opacity:.45;transition:opacity .4s,background .4s,border-color .4s}
+.at-i em{display:block;font-style:normal;font-size:10.5px;color:var(--faint)}
+.at-i.on{opacity:1;background:var(--accent-soft);border-color:var(--accent)}
+.at-i.on.w{background:var(--warm-soft);border-color:var(--warm)}
+.at-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.at{grid-template-columns:repeat(2,1fr)}}
+</style>
+<script>
+(function(){
+  const I=[['Top of today\'s gainers list',95,10],['A breaking-news alert',90,15],['Today\'s change in holdings',88,30],['A trending discussion thread',80,5],['A stock hits a new high',75,12],
+    ['Total annual portfolio cost',15,85],['Weight of the top three holdings',20,80],['How far from the goal',18,95],['Portfolio maximum drawdown',25,75],['Planned rebalancing date',10,70],
+    ['Dividends and interest received',35,40],['Money-weighted return',12,78]];
+  const box=document.getElementById('at');
+  function set(k){document.querySelectorAll('[data-at]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.at===k)));
+    const ix=I.map((x,i)=>i).sort((a,b)=>k==='sal'?I[b][1]-I[a][1]:I[b][2]-I[a][2]);
+    box.innerHTML=ix.map(i=>`<div class="at-i" data-i="${i}"><em>Salience ${I[i][1]} · Relevance ${I[i][2]}</em>${I[i][0]}</div>`).join('');
+    const els=[...box.children];els.slice(0,4).forEach((e,j)=>setTimeout(()=>e.classList.add('on',k==='sal'?'w':'x'),200+j*250));
+    const rel=ix.slice(0,4).reduce((s,i)=>s+I[i][2],0)/4;
+    document.getElementById('at-msg').textContent=k==='sal'?`Ordered by salience, the four items that enter the decision have an average relevance of only ${rel.toFixed(0)}: the decision is led by whatever is seen first.`:`Ordered by relevance to the goal, the four items that enter the decision have an average relevance of ${rel.toFixed(0)}. These items are not prominent in themselves; the product has to bring them forward.`;}
+  document.querySelectorAll('[data-at]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.at)));
+  box.addEventListener('anim-in',()=>{set('sal');setTimeout(()=>set('rel'),3200);});
+  set('sal');
+})();
+</script>
+
+<h2 id="sec-3">3. Reference points and loss aversion</h2>
+<p>Kahneman and Tversky's (1979) prospect theory holds that people judge outcomes not by total wealth but by gains and losses relative to some reference point, and that the pain of a loss is clearly greater than the pleasure of an equal gain. Tversky and Kahneman (1992) estimated that losses weigh about 2.25 times as much as equal gains. In addition, the feeling of both gains and losses diminishes as the amounts grow: going from a $100 gain to a $200 gain adds less pleasure than going from $0 to $100. The reference point is usually the purchase price, but it can also be the account's peak or other people's returns, and it largely determines whether an outcome is felt as a gain or a loss.</p>
+<figure>
+  <div class="card">
+    <p class="figtitle">The value function of prospect theory</p>
+    <p class="figsub">The horizontal axis is the gain or loss relative to the reference point; the vertical axis is the value felt. Drag the outcome to compare how a gain and a loss of the same amount feel.</p>
+    <div class="vf" id="vf" data-anim>
+      <svg viewBox="0 0 640 260" role="img" aria-label="Value function">
+        <g id="vf-ax"></g><path id="vf-p" class="vf-l"/>
+        <line id="vf-h" class="vf-g"/><line id="vf-v" class="vf-g"/><circle id="vf-d" r="6" fill="var(--ink)"/>
+        <circle id="vf-m" r="5" fill="none" stroke="var(--faint)" stroke-width="1.5"/>
+      </svg>
+      <div class="sl"><label for="vf-s">Outcome relative to the reference point <b id="vf-sv"></b></label><input id="vf-s" type="range" min="-1000" max="1000" step="50" value="-500"></div>
+      <p class="vf-msg" id="vf-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Parameters follow the estimates of Tversky and Kahneman (1992): a diminishing-sensitivity exponent of 0.88 for gains and losses and a loss-aversion coefficient of 2.25. The hollow circle marks the opposite outcome of the same amount.</figcaption>
+</figure>
+<style>
+.vf svg{width:100%;height:auto;display:block}
+.vf-l{fill:none;stroke:var(--accent);stroke-width:2.5;stroke-dasharray:1200;stroke-dashoffset:1200;transition:stroke-dashoffset 1.4s ease}
+.vf.in .vf-l{stroke-dashoffset:0}
+.vf-g{stroke:var(--faint);stroke-dasharray:3 3}
+.vf-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.vf svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const V=x=>x>=0?Math.pow(x,.88):-2.25*Math.pow(-x,.88), vmax=V(1000), vmin=V(-1000);
+  const X0=40,X1=620,YT=12,YB=248,cx=(X0+X1)/2,x=v=>cx+v/1000*(X1-cx),yr=(YB-YT)/(vmax-vmin),y=u=>YT+(vmax-u)*yr,y0=y(0);
+  const $=id=>document.getElementById(id);
+  let d='';for(let v=-1000;v<=1000;v+=10)d+=(v===-1000?'M':'L')+x(v).toFixed(1)+','+y(V(v)).toFixed(1);$('vf-p').setAttribute('d',d);
+  $('vf-ax').innerHTML=`<line x1="${X0}" y1="${y0}" x2="${X1}" y2="${y0}" class="s-faint"/><line x1="${cx}" y1="${YT}" x2="${cx}" y2="${YB}" class="s-faint"/>`+
+    `<text x="${X1}" y="${y0-6}" text-anchor="end" font-size="11" class="t-faint">Gains →</text><text x="${X0}" y="${y0-6}" font-size="11" class="t-faint">← Losses</text>`+
+    `<text x="${cx+6}" y="${YT+10}" font-size="11" class="t-faint">Felt value</text><text x="${cx+6}" y="${y0+14}" font-size="11" class="t-faint">Reference point</text>`;
+  const sl=$('vf-s'),fm=u=>(u<0?'−':'+')+Math.abs(u).toFixed(0);
+  function r(){const v=+sl.value,u=V(v);$('vf-sv').textContent=(v>0?'+':v<0?'−':'')+'$'+Math.abs(v);
+    $('vf-d').setAttribute('cx',x(v));$('vf-d').setAttribute('cy',y(u));$('vf-m').setAttribute('cx',x(-v));$('vf-m').setAttribute('cy',y(V(-v)));
+    const h=$('vf-h'),vv=$('vf-v');h.setAttribute('x1',cx);h.setAttribute('x2',x(v));h.setAttribute('y1',y(u));h.setAttribute('y2',y(u));vv.setAttribute('x1',x(v));vv.setAttribute('x2',x(v));vv.setAttribute('y1',y0);vv.setAttribute('y2',y(u));
+    $('vf-msg').textContent=v===0?'At the reference point: neither a gain nor a loss.':v<0?`Losing $${-v} feels like about ${fm(u)}, while gaining the same amount feels like only ${fm(V(-v))}: a loss weighs about 2.25 times as much as a gain.`:`Gaining $${v} feels like about ${fm(u)}; losing the same amount feels like about ${fm(V(-v))}.`;}
+  sl.addEventListener('input',r);
+  $('vf').addEventListener('anim-in',()=>{let v=-1000;const id=setInterval(()=>{v+=100;sl.value=v;r();if(v>=1000){clearInterval(id);setTimeout(()=>{sl.value=-500;r();},700);}},130);});
+  r();
+})();
+</script>
+
+<h2 id="sec-4">4. The disposition effect: selling winners, keeping losers</h2>
+<p>Reference points combined with loss aversion produce one of the most robust regularities in individual investor behaviour. Shefrin and Statman (1985) called it the disposition effect: investors tend to sell stocks that have gained too early and to hold stocks that have lost for too long, because selling a losing stock means admitting the loss. Odean (1998) analysed the trading records of about 10,000 accounts at a brokerage: counting only days on which a sale took place, about 14.8% of winning positions were sold, against only about 9.8% of losing positions; and over the following year, the winners that were sold outperformed the losers that were kept by about 3.4 percentage points on average. Not only does the disposition effect bring no gain; under most tax systems it also means paying more tax.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The disposition effect: selling winners, keeping losers</p><p class="figsub">An account holding ten stocks needs to sell three to raise cash. Selling with the purchase price as the reference point and selling without regard to it leave different portfolios behind. Below are the empirical results of Odean (1998).</p></div><button class="replay" type="button" data-replay="ds">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="How to sell">
+      <button type="button" data-ds="ref" aria-pressed="true">Purchase price as reference</button>
+      <button type="button" data-ds="loss" aria-pressed="false">Sell losers first</button>
+    </div>
+    <div class="ds" id="ds" data-anim>
+      <div class="ds-pf" id="ds-pf"></div>
+      <p class="ds-msg" id="ds-msg" aria-live="polite"></p>
+      <div class="ds-ev">
+        <div><span>Share of winning positions sold</span><div class="ds-t"><i data-w="14.8" style="background:var(--accent)"></i></div><b>14.8%</b></div>
+        <div><span>Share of losing positions sold</span><div class="ds-t"><i data-w="9.8" style="background:var(--warm)"></i></div><b>9.8%</b></div>
+        <div><span>Next year: winners sold beat losers kept by</span><div class="ds-t"><i data-w="3.4" style="background:var(--ink)"></i></div><b>3.4 points</b></div>
+      </div>
+    </div>
+  </div>
+  <figcaption>The account above is illustrative. The figures below come from Odean's (1998) analysis of the 1987–1993 trading records of about 10,000 accounts at a US brokerage; bar lengths are drawn on a 0–20% scale. Where capital gains are taxed, selling losing stocks first can also reduce the tax bill.</figcaption>
+</figure>
+<style>
+.ds-pf{display:grid;grid-template-columns:repeat(10,1fr);gap:5px}
+.ds-pf div{border-radius:7px;padding:8px 2px;text-align:center;font-size:12px;font-variant-numeric:tabular-nums;border:1.5px solid transparent;transition:all .4s}
+.ds-pf .g{background:var(--accent-soft);color:var(--accent)} .ds-pf .l{background:var(--warm-soft);color:var(--warm)}
+.ds-pf .sold{opacity:.3;border-style:dashed;border-color:var(--faint);transform:translateY(6px)}
+.ds-msg{font-size:14px;margin:10px 0;min-height:3.4em}
+.ds-ev{display:grid;gap:6px;border-top:1px dashed var(--line);padding-top:10px}
+.ds-ev>div{display:grid;grid-template-columns:minmax(0,1.3fr) 1fr 90px;gap:10px;align-items:center;font-size:12.5px}
+.ds-t{height:14px;background:var(--quote);border-radius:4px;overflow:hidden}
+.ds-t i{display:block;height:100%;width:0;transition:width .7s ease}
+.ds-ev b{text-align:right;font-size:13px}
+@media (max-width:640px){.ds-pf{grid-template-columns:repeat(5,1fr)}.ds-ev>div{grid-template-columns:1fr 70px}.ds-ev .ds-t{grid-column:1/3;grid-row:2}}
+</style>
+<script>
+(function(){
+  const P=[32,-18,15,-25,8,-6,41,-12,22,-31];
+  const box=document.getElementById('ds-pf');box.innerHTML=P.map(v=>`<div class="${v>0?'g':'l'}">${v>0?'+':'−'}${Math.abs(v)}%</div>`).join('');
+  const cs=[...box.children];
+  function set(k){document.querySelectorAll('[data-ds]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.ds===k)));
+    const ix=P.map((v,i)=>i).sort((a,b)=>k==='ref'?P[b]-P[a]:P[a]-P[b]).slice(0,3);
+    cs.forEach((c,i)=>c.classList.toggle('sold',ix.includes(i)));
+    const left=P.filter((v,i)=>!ix.includes(i)),lo=left.filter(v=>v<0).length;
+    document.getElementById('ds-msg').textContent=k==='ref'?`The three biggest gainers were sold, "locking in the gains"; ${lo} of the seven stocks left are losers. Selling a losing stock means admitting the loss, so they were kept.`:`The three biggest losers were sold, and only ${lo} of the seven stocks left are losers. Both ways of selling raise similar amounts of cash; the only difference is whether one is willing to realize the loss.`;}
+  document.querySelectorAll('[data-ds]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.ds)));
+  const bars=[...document.querySelectorAll('.ds-t i')];
+  document.getElementById('ds').addEventListener('anim-in',()=>{set('ref');bars.forEach(b=>b.style.width='0');setTimeout(()=>bars.forEach((b,i)=>setTimeout(()=>b.style.width=(+b.dataset.w/20*100)+'%',i*300)),600);});
+  set('ref');bars.forEach(b=>b.style.width=(+b.dataset.w/20*100)+'%');
+})();
+</script>
+
+<h2 id="sec-5">5. The more often you look, the less risk you will bear</h2>
+<p>A portfolio with positive long-term returns has a fairly high probability of showing a loss over short periods. Benartzi and Thaler (1995) proposed myopic loss aversion: if a person evaluates a portfolio frequently and each loss seen counts about twice as heavily in how they feel, they will find stocks too risky and allocate too conservatively. They estimated that an evaluation period of about one year is enough to explain why stocks command such a high risk premium. Experiments by Gneezy and Potters (1997) likewise showed that, faced with the same gamble, participants required to look at results more frequently invested less.</p>
+<figure>
+  <div class="card">
+    <p class="figtitle">The more often you look, the less worth holding stocks seem</p>
+    <p class="figsub">The same stock portfolio, with positive long-term returns. Drag how often the account is checked to see the probability of a loss at each check and the felt value under loss aversion. Above zero, holding stocks feels worthwhile; below zero, it does not.</p>
+    <div class="mo" id="mo" data-anim>
+      <svg viewBox="0 0 640 220" role="img" aria-label="Checking frequency and felt value">
+        <g id="mo-ax"></g><path id="mo-p" class="mo-l"/><circle id="mo-d" r="6" fill="var(--ink)"/>
+      </svg>
+      <div class="sl"><label for="mo-s">How often the account is checked: <b id="mo-sv"></b></label><input id="mo-s" type="range" min="0" max="7" step="1" value="0"></div>
+      <div class="mo-out"><div><span>Probability of a loss at each check</span><b id="mo-pl"></b></div><div><span>Felt value under loss aversion (per year)</span><b id="mo-u"></b></div></div>
+      <p class="mo-msg" id="mo-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative calculation: expected annual return 7%, volatility 16%, returns in each period normally distributed; felt value = the positive part of expected returns − 2.25 × the negative part, converted to a per-year figure; the vertical axis is on a log scale. The idea comes from Benartzi and Thaler's (1995) myopic loss aversion; for experimental evidence, see Gneezy and Potters (1997).</figcaption>
+</figure>
+<style>
+.mo svg{width:100%;height:auto;display:block}
+.mo-l{fill:none;stroke:var(--accent);stroke-width:2.5}
+.mo-out{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.mo-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.mo-out span{display:block;font-size:12px;color:var(--faint)} .mo-out b{font-size:19px;font-variant-numeric:tabular-nums}
+.mo-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.mo-out{grid-template-columns:1fr}}
+@media (max-width:640px){.mo svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const F=[['daily',1/250],['weekly',1/52],['monthly',1/12],['quarterly',1/4],['every six months',1/2],['once a year',1],['every two years',2],['every five years',5]];
+  const FS=['Day','Week','Month','Quarter','6 mo','Year','2 yrs','5 yrs'];
+  const m=.07,s=.16,Phi=z=>{const t=1/(1+.2316419*Math.abs(z)),d=.3989423*Math.exp(-z*z/2),p=d*t*(.3193815+t*(-.3565638+t*(1.781478+t*(-1.821256+t*1.330274))));return z>0?1-p:p;},phi=z=>.3989423*Math.exp(-z*z/2);
+  const calc=t=>{const M=m*t,S=s*Math.sqrt(t),z=M/S,ep=M*Phi(z)+S*phi(z),en=ep-M;return {pl:Phi(-z),u:(ep-2.25*en)/t};};
+  const R=F.map(([n,t])=>calc(t));
+  const L=u=>Math.sign(u)*Math.log10(1+Math.abs(u)*100),lmin=Math.min(...R.map(r=>L(r.u))),lmax=Math.max(...R.map(r=>L(r.u))),X0=60,X1=610,YT=16,YB=180,x=i=>X0+i/7*(X1-X0),y=u=>YT+(lmax-L(u))/(lmax-lmin)*(YB-YT);
+  const $=id=>document.getElementById(id);
+  let a=`<line x1="${X0}" y1="${y(0)}" x2="${X1}" y2="${y(0)}" class="s-faint"/><text x="${X0-6}" y="${y(0)+4}" text-anchor="end" font-size="11" class="t-faint">0</text>`+
+    `<text x="${X0-6}" y="${YT+8}" text-anchor="end" font-size="11" class="t-accent">+</text><text x="${X0-6}" y="${YB}" text-anchor="end" font-size="11" class="t-warm">−</text>`;
+  F.forEach(([n],i)=>a+=`<text x="${x(i)}" y="${YB+28}" text-anchor="middle" font-size="11" class="t-faint">${FS[i]}</text>`);
+  $('mo-ax').innerHTML=a;
+  $('mo-p').setAttribute('d',R.map((r,i)=>(i?'L':'M')+x(i).toFixed(1)+','+y(r.u).toFixed(1)).join(''));
+  const sl=$('mo-s');
+  function r(){const i=+sl.value,q=R[i];$('mo-sv').textContent=F[i][0];$('mo-d').setAttribute('cx',x(i));$('mo-d').setAttribute('cy',y(q.u));$('mo-d').setAttribute('fill',q.u>=0?'var(--accent)':'var(--warm)');
+    $('mo-pl').textContent=(q.pl*100).toFixed(0)+'%';$('mo-u').textContent=(q.u>=0?'+':'−')+Math.abs(q.u*100).toFixed(1);
+    $('mo-msg').textContent=q.u<0?`Checking ${F[i][0]}, about ${(q.pl*100).toFixed(0)}% of the time the account shows a loss. With losses counted at roughly twice the weight, holding stocks feels negative: the same portfolio seems too risky.`:`Checking ${F[i][0]}, the probability of seeing a loss falls to about ${(q.pl*100).toFixed(0)}%, and holding stocks turns to a positive feeling. The portfolio has not changed; only the frequency of evaluation has.`;}
+  sl.addEventListener('input',r);
+  $('mo').addEventListener('anim-in',()=>{let i=0;sl.value=0;r();const id=setInterval(()=>{i++;sl.value=i;r();if(i>=7)clearInterval(id);},500);});
+  r();
+})();
+</script>
+
+<h2 id="sec-6">6. Overconfidence</h2>
+<p>People generally overestimate how accurate their judgments are. In calibration studies, participants are asked to give ranges they are 98% sure contain the true answer, and the share of true answers that fall inside the ranges is far below the confidence claimed (Lichtenstein, Fischhoff and Phillips, 1982). Overconfidence leads people to underestimate risk, concentrate too heavily and trade too much. Barber and Odean (2001), using gender as a proxy for overconfidence, found that men traded about 45% more than women, and that trading reduced men's annual net returns by about 2.65 percentage points and women's by about 1.72 percentage points.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Ranges held with "98% confidence"</p><p class="figsub">Ten estimation questions, each answered with a range the person believes is 98% certain to contain the true answer. The dots are the true answers.</p></div><button class="replay" type="button" data-replay="cb">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Range">
+      <button type="button" data-cb="n" aria-pressed="true">Ranges people usually give</button>
+      <button type="button" data-cb="w" aria-pressed="false">Ranges truly at 98%</button>
+    </div>
+    <div class="cb" id="cb" data-anim>
+      <svg viewBox="0 0 640 250" role="img" aria-label="Estimated ranges and true answers"><g id="cb-g"></g></svg>
+      <p class="cb-msg" id="cb-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the ten questions and the range widths are examples, and the hit rate is set at the order of magnitude found in research. In calibration studies, ranges claimed with 98% confidence actually contain only about 60% of true answers; see the review by Lichtenstein, Fischhoff and Phillips (1982).</figcaption>
+</figure>
+<style>
+.cb svg{width:100%;height:auto;display:block}
+.cb-r{transition:all .6s ease}
+.cb-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.cb svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const T=[[0,.6],[1,-1.6],[2,.2],[3,1.9],[4,-.4],[5,-.8],[6,.9],[7,2.8],[8,-.1],[9,-2.0]];
+  const X0=40,X1=620,cx=(X0+X1)/2,sc=70,g=document.getElementById('cb-g');
+  g.innerHTML=`<line x1="${cx}" y1="8" x2="${cx}" y2="240" class="s-faint" stroke-dasharray="3 3"/>`+T.map(([i,v])=>{const y=18+i*23;return `<g><text x="${X0-10}" y="${y+4}" text-anchor="end" font-size="11" class="t-faint">${i+1}</text><rect class="cb-r" data-i="${i}" x="${cx}" y="${y-6}" width="0" height="12" rx="6"/><circle cx="${cx+v*sc}" cy="${y}" r="5" fill="var(--ink)"/></g>`;}).join('');
+  const rs=[...g.querySelectorAll('.cb-r')];
+  function set(k){document.querySelectorAll('[data-cb]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.cb===k)));
+    const w=k==='n'?1:3;let hit=0;
+    rs.forEach((r,i)=>{const h=w,v=T[i][1],ok=Math.abs(v)<=h;if(ok)hit++;r.setAttribute('x',cx-h*sc);r.setAttribute('width',2*h*sc);r.setAttribute('fill',ok?'var(--accent-soft)':'var(--warm-soft)');r.setAttribute('stroke',ok?'var(--accent)':'var(--warm)');});
+    document.getElementById('cb-msg').textContent=k==='n'?`Claimed with 98% confidence, yet only ${hit} of the ten ranges contain the true answer, close to the roughly 60% found in research. People are more confident about how much they know than their knowledge warrants.`:`To truly cover nearly all the true answers, the ranges must be much wider: here about 3 times the original, and ${hit} of the ten hit.`;}
+  document.querySelectorAll('[data-cb]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.cb)));
+  document.getElementById('cb').addEventListener('anim-in',()=>{rs.forEach(r=>{r.setAttribute('x',cx);r.setAttribute('width',0);});setTimeout(()=>set('n'),100);setTimeout(()=>set('w'),2800);});
+  set('n');
+})();
+</script>
+
+<h2 id="sec-7">7. Biases have a direction, so design can change them</h2>
+<p>Because biases are systematic, decisions change with presentation and defaults. Madrian and Shea (2001) studied what happened when a company changed its retirement savings plan from "opt in voluntarily" to "enrolled automatically, free to opt out": participation among new employees rose from about 37% to about 86%, with no reduction at all in employees' freedom of choice. The "Save More Tomorrow" plan designed by Thaler and Benartzi (2004) had employees commit in advance to raising their savings rate at each future pay rise; participants' savings rates rose from 3.5% to 13.6% over about 40 months. Thaler and Sunstein (2008) called this approach choice architecture. The same tools can also be used to lead users into doing things against their own interest: designing trading to feel like a game, hiding losses, removing the confirmation step before an order. Choice architecture is neither good nor bad in itself; what matters is whether it serves the user's job or the platform's revenue.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The same people, different defaults</p><p class="figsub">Left: how many new employees join a retirement savings plan when it changes from "opt in voluntarily" to "enrolled automatically, free to opt out". Right: the savings rate of participants in the "Save More Tomorrow" plan, which rises automatically with each pay rise.</p></div><button class="replay" type="button" data-replay="df">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Default">
+      <button type="button" data-df="in" aria-pressed="true">Opt in voluntarily</button>
+      <button type="button" data-df="auto" aria-pressed="false">Enrolled automatically, free to opt out</button>
+    </div>
+    <div class="df" id="df" data-anim>
+      <div class="df-l"><div class="df-dots" id="df-dots"></div><p id="df-n"></p></div>
+      <div class="df-r"><svg viewBox="0 0 300 180" role="img" aria-label="Savings rate rising with pay rises"><g id="df-st"></g></svg></div>
+    </div>
+    <p class="df-msg" id="df-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>Participation rates of about 37% and about 86% come from Madrian and Shea's (2001) study of one US company's 401(k) plan; savings rates from 3.5% to 13.6% come from Thaler and Benartzi (2004), where the three middle steps are the values after the first three pay rises and 13.6% is the value after the fourth, all taken from Table 2 of the original paper.</figcaption>
+</figure>
+<style>
+.df{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:center}
+.df-dots{display:grid;grid-template-columns:repeat(10,1fr);gap:4px}
+.df-dots i{aspect-ratio:1;border-radius:50%;background:var(--line);transition:background .3s;transition-delay:calc(var(--i)*6ms)}
+.df-dots i.on{background:var(--accent)}
+.df-l p{font-size:13px;margin:8px 0 0}
+.df-r svg{width:100%;height:auto;display:block}
+.df-b{transition:height .5s ease,y .5s ease}
+.df-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.df{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),dots=$('df-dots');dots.innerHTML=Array.from({length:100},(_,i)=>`<i style="--i:${i}"></i>`).join('');
+  const ds=[...dots.children],ST=[3.5,6.5,9.4,11.6,13.6],YB=150,h=v=>v/15*(YB-14);
+  $('df-st').innerHTML=`<line x1="10" y1="${YB}" x2="295" y2="${YB}" class="s-faint"/>`+ST.map((v,i)=>`<rect class="df-b" x="${18+i*56}" width="40" rx="3" fill="var(--accent)" style="y:${YB}px;height:0"/><text class="df-t t-ink" x="${38+i*56}" y="${YB-h(v)-5}" text-anchor="middle" font-size="12" opacity="0">${v}%</text><text x="${38+i*56}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${i?'Raise '+i:'On joining'}</text>`).join('');
+  function stairs(){[...document.querySelectorAll('.df-b')].forEach((r,i)=>{r.style.y=YB+'px';r.style.height='0px';setTimeout(()=>{r.style.y=(YB-h(ST[i]))+'px';r.style.height=h(ST[i])+'px';},100+i*350);});
+    [...document.querySelectorAll('.df-t')].forEach((t,i)=>{t.setAttribute('opacity',0);setTimeout(()=>t.setAttribute('opacity',1),500+i*350);});}
+  function set(k){document.querySelectorAll('[data-df]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.df===k)));const n=k==='in'?37:86;
+    ds.forEach((d,i)=>d.classList.toggle('on',i<n));$('df-n').textContent=`About ${n} of 100 new employees join`;
+    $('df-msg').textContent=k==='in'?'When joining requires filling in a form, most people never act. The reason is inertia and procrastination, not an unwillingness to save.':'Once joining is the default and leaving is possible at any time, participation more than doubles. Freedom of choice is not reduced; the only change is what happens when people do nothing.';}
+  document.querySelectorAll('[data-df]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.df)));
+  $('df').addEventListener('anim-in',()=>{set('in');stairs();setTimeout(()=>set('auto'),2600);});
+  set('in');ST.forEach((v,i)=>{const r=document.querySelectorAll('.df-b')[i];r.style.y=(YB-h(v))+'px';r.style.height=h(v)+'px';document.querySelectorAll('.df-t')[i].setAttribute('opacity',1);});
+})();
+</script>
+
+<h2 id="sec-8">8. Between the current practice and the ideal</h2>
+<p>That design can change biases does not mean a product should decide for the user. A user's practice may not amount to a complete method: finding opportunities, buying and reviewing may each rest on a different set of reasons. This piecemeal practice is itself a stable state, and the tension between it and the practice of mature investors comes from the user's own wish for better results. Simply going along with the current practice lets the cost of frequent trading pile up year after year; correcting the user at every turn is likely to drive them away. A workable approach is to respect the user's habits first, use the user's own trading records to show the results, then invite rather than require them to try another method, and promise only to improve the decision process, not the outcome. Thaler and Sunstein (2003) called the approach of preserving freedom of choice while steering people toward choices they themselves consider better libertarian paternalism.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Between the current practice and the ideal</p><p class="figsub">The user's present piecemeal practice is one steady state; the consistent practice of mature investors is another. Switch the product's approach to see where the user stands after ten reviews, and what the product does at several moments.</p></div><button class="replay" type="button" data-replay="sd16">Replay</button></div>
+    <div class="sd16" id="sd16" data-anim>
+      <div class="seg-btns" role="group" aria-label="The product's approach">
+        <button type="button" data-sd16="follow" aria-pressed="false">Only go along</button>
+        <button type="button" data-sd16="mid" aria-pressed="true">Respect first, then invite</button>
+        <button type="button" data-sd16="push" aria-pressed="false">Only push to the ideal</button>
+      </div>
+      <svg viewBox="0 0 400 78" role="img" aria-label="The user's position between current practice and the ideal"><g id="sd16-g"></g></svg>
+      <div class="sd16-ends"><div><b>Steady state of current practice: a piecemeal method</b>Buys on a tip, sells for another reason, reviews by yet another standard</div><div><b>Steady state of the ideal: a consistent method</b>Finds, trades and reviews by one method</div></div>
+      <div class="sd16-m" id="sd16-m"></div>
+      <p class="sd16-msg" id="sd16-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the horizontal axis shows how far the user's practice is from that of mature investors; positions and the size of movements are for explanation only, not measured data. The middle path promises only to improve the quality of the process, not the outcome.</figcaption>
+</figure>
+<style>
+.sd16 svg{width:100%;height:auto;display:block;margin-top:6px}
+.sd16-ends{display:flex;justify-content:space-between;gap:16px;font-size:12px;color:var(--faint);line-height:1.5}
+.sd16-ends div:last-child{text-align:right}
+.sd16-ends b{display:block;font-weight:500;color:var(--muted);font-size:12.5px}
+.sd16-m{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
+.sd16-m div{background:var(--quote);border-radius:9px;padding:8px 10px;font-size:13px;line-height:1.55}
+.sd16-m span{display:block;font-size:11.5px;color:var(--faint)}
+.sd16-msg{font-size:14px;margin:10px 0 0;min-height:3.2em}
+@media (max-width:640px){.sd16-m{grid-template-columns:1fr 1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('sd16'+id),X0=14,X1=386,AY=62,x=v=>X0+v*(X1-X0);
+  const P={follow:[.1,.1,.1,.1,.1,.1,.1,.1,.1,.1,.1],mid:[.1,.16,.22,.28,.34,.4,.45,.5,.55,.6,.64],push:[.1,.28,-1,-1,-1,-1,-1,-1,-1,-1,-1]};
+  const M={follow:[['User wants to trade often','Provides faster order tools, without comment.'],['After a sharp fall','Sells as the user wishes, without mentioning the original plan.'],['Review','Lists only gains and losses, without saying why each trade was made.'],['User does not want to change','Never intended the user to change.']],
+    mid:[['User wants to trade often','Executes as usual, while recording the reason and result of every trade.'],['After a sharp fall','Shows the plan the user wrote down and asks them to confirm again a day later.'],['Review','Uses the user\'s own trading records to show that frequent trading did not bring better results, and asks whether they would like to try another method.'],['User does not want to change','Respects the user\'s decision and looks at the records again at the next review.']],
+    push:[['User wants to trade often','Pops up warnings again and again, telling the user this is wrong.'],['After a sharp fall','Discourages selling and explains the case for long-term holding.'],['Review','Points out item by item where the user falls short of a mature investor.'],['User does not want to change','Keeps trying to persuade until the user leaves the product.']]};
+  const T={follow:'Only go along: the product presumes no view and has no stake in trade counts; but the user\'s habits are accepted wholesale, the cost of frequent trading piles up year after year, and their wish for better results is never answered.',
+    mid:'Respect first, then invite: habits are carried out as usual, and reasons and results are recorded; at each review the user\'s own records show the results, and the user is asked whether they would like to try something else. The user moves forward a small step at a time, and the decision always stays in their hands; what improves is the quality of the process, while results still depend on the market.',
+    push:'Only push to the ideal: the product corrects the user at every turn, and by the second review the user has left. The direction was right, but the product lost even the chance to help.'};
+  let k='mid',tm=[],seq=[];
+  function axis(){return `<line x1="${X0}" x2="${X1}" y1="${AY}" y2="${AY}" class="s-line" stroke-width="2"/>`+
+    `<line x1="${x(.3)}" x2="${x(.7)}" y1="20" y2="20" stroke="var(--gold)" stroke-width="1.5" marker-end="url(#sd16-a)"/><text x="${x(.5)}" y="12" font-size="12" text-anchor="middle" fill="var(--gold)">Tension: the user's own wish for better results</text>`+
+    `<defs><marker id="sd16-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="var(--gold)"/></marker></defs>`;}
+  function draw(n){const p=P[k];let h=axis(),last=-1;
+    for(let i=0;i<=n;i++){const v=p[i];if(v<0)break;last=i;if(i<n&&p[i+1]>=0)h+=`<line x1="${x(v)}" x2="${x(p[i+1])}" y1="${AY}" y2="${AY}" stroke="var(--accent)" stroke-width="4" opacity=".35"/>`;}
+    const v=p[last],gone=n>last;
+    h+=`<circle cx="${x(v)}" cy="${AY}" r="8" fill="${k==='follow'?'var(--warm)':'var(--accent)'}" opacity="${gone?.25:1}"/>`;
+    h+=`<text x="${x(v)}" y="${AY-16}" font-size="12" text-anchor="middle" class="t-faint">${gone?'The user left the product':'After review '+n}</text>`;
+    $('-g').innerHTML=h;}
+  function run(){tm.forEach(clearTimeout);tm=[];document.querySelectorAll('[data-sd16]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.sd16===k)));
+    $('-m').innerHTML=M[k].map(([a,b])=>`<div><span>${a}</span>${b}</div>`).join('');$('-msg').textContent=T[k];
+    for(let n=0;n<=10;n++)tm.push(setTimeout(()=>draw(n),n*260));}
+  document.querySelectorAll('[data-sd16]').forEach(b=>b.addEventListener('click',()=>{seq.forEach(clearTimeout);seq=[];k=b.dataset.sd16;run();}));
+  $('').addEventListener('anim-in',()=>{seq.forEach(clearTimeout);seq=[];['follow','push','mid'].forEach((s,i)=>seq.push(setTimeout(()=>{k=s;run();},300+i*3600)));});
+  draw(10);$('-m').innerHTML=M[k].map(([a,b])=>`<div><span>${a}</span>${b}</div>`).join('');$('-msg').textContent=T[k];
+})();
+</script>
+
+<h2 id="sec-9">9. Implications for product design</h2>
+<p>Because biases have a direction, a product's presentation and defaults can never be neutral. They should be placed on the side of the user's job, while respecting the habits the user already has and replacing lecturing with invitation.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: designing for boundedly rational people</p><p class="figsub">Five design requirements, each corresponding to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="ch16summary">Replay</button></div>
+    <div class="ch16summary" id="ch16summary" data-anim><div class="ch16summary-c" style="--i:0"><em>Attention is limited</em><b>Bring goal-relevant information forward</b><p>Fees, concentration and the distance from the goal should be as prominent as price changes; do not compete for attention with rankings and push notifications.</p></div><div class="ch16summary-c" style="--i:1"><em>Reference points decide gains and losses</em><b>Offer a view with the goal as reference</b><p>Besides the purchase price, show where the portfolio stands relative to the plan and the goal; when selling, explain how different ways of selling affect the portfolio and the tax bill.</p></div><div class="ch16summary-c warn" style="--i:2"><em>Frequent evaluation magnifies the sense of loss</em><b>Match the frequency of evaluation to the horizon of the job</b><p>For long-term jobs, show by default a period consistent with the horizon, and do not put daily price changes in the most prominent place.</p></div><div class="ch16summary-c warn" style="--i:3"><em>Defaults are not neutral</em><b>Put the default options on the user's side</b><p>Defaults, confirmation steps and presentation should all serve the user's job; do not use game-like design to induce trading.</p></div><div class="ch16summary-c wide" style="--i:4"><em>The current practice is also a steady state</em><b>Respect first, then invite</b><p>Carry out the user's habits as usual, use their own trading records to show the results, then ask whether they would like to try another method; promise only to improve the process, not the outcome.</p></div></div>
+  </div>
+</figure>
+<style>
+.ch16summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch16summary-c.wide{grid-column:1/-1}
+.ch16summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch16summary-c.warn{border-left-color:var(--warm)}
+.ch16summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch16summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch16summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch16summary.in .ch16summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch16summary{grid-template-columns:1fr}}
+</style>
+
+<h2 id="sec-10">References</h2>
+<ul class="refs"><li>Simon, H. A. (1955). A behavioral model of rational choice. <i>Quarterly Journal of Economics</i>, 69(1), 99–118.</li><li>Simon, H. A. (1971). Designing organizations for an information-rich world. In M. Greenberger (Ed.), <i>Computers, Communications, and the Public Interest</i> (pp. 37–72). Johns Hopkins Press.</li><li>Frederick, S. (2005). Cognitive reflection and decision making. <i>Journal of Economic Perspectives</i>, 19(4), 25–42.</li><li>Kahneman, D. (2011). <i>Thinking, Fast and Slow</i>. Farrar, Straus and Giroux.</li><li>DellaVigna, S., &amp; Pollet, J. M. (2009). Investor inattention and Friday earnings announcements. <i>Journal of Finance</i>, 64(2), 709–749.</li><li>Kahneman, D., &amp; Tversky, A. (1979). Prospect theory: An analysis of decision under risk. <i>Econometrica</i>, 47(2), 263–291.</li><li>Tversky, A., &amp; Kahneman, D. (1992). Advances in prospect theory: Cumulative representation of uncertainty. <i>Journal of Risk and Uncertainty</i>, 5(4), 297–323.</li><li>Shefrin, H., &amp; Statman, M. (1985). The disposition to sell winners too early and ride losers too long: Theory and evidence. <i>Journal of Finance</i>, 40(3), 777–790.</li><li>Odean, T. (1998). Are investors reluctant to realize their losses? <i>Journal of Finance</i>, 53(5), 1775–1798.</li><li>Benartzi, S., &amp; Thaler, R. H. (1995). Myopic loss aversion and the equity premium puzzle. <i>Quarterly Journal of Economics</i>, 110(1), 73–92.</li><li>Gneezy, U., &amp; Potters, J. (1997). An experiment on risk taking and evaluation periods. <i>Quarterly Journal of Economics</i>, 112(2), 631–645.</li><li>Lichtenstein, S., Fischhoff, B., &amp; Phillips, L. D. (1982). Calibration of probabilities: The state of the art to 1980. In D. Kahneman, P. Slovic, &amp; A. Tversky (Eds.), <i>Judgment under Uncertainty: Heuristics and Biases</i> (pp. 306–334). Cambridge University Press.</li><li>Barber, B. M., &amp; Odean, T. (2001). Boys will be boys: Gender, overconfidence, and common stock investment. <i>Quarterly Journal of Economics</i>, 116(1), 261–292.</li><li>Madrian, B. C., &amp; Shea, D. F. (2001). The power of suggestion: Inertia in 401(k) participation and savings behavior. <i>Quarterly Journal of Economics</i>, 116(4), 1149–1187.</li><li>Thaler, R. H., &amp; Benartzi, S. (2004). Save More Tomorrow: Using behavioral economics to increase employee saving. <i>Journal of Political Economy</i>, 112(S1), S164–S187.</li><li>Thaler, R. H., &amp; Sunstein, C. R. (2003). Libertarian paternalism. <i>American Economic Review</i>, 93(2), 175–179.</li><li>Thaler, R. H., &amp; Sunstein, C. R. (2008). <i>Nudge: Improving Decisions about Health, Wealth, and Happiness</i>. Yale University Press.</li></ul>
+<footer class="nav"><a href="ch15.html">← Chapter 15: The jobs users need done</a><a href="ch17.html">Chapter 17: What users can bear →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

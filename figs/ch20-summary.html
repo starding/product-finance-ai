@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：先找能交出去的部分</p><p class="figsub">六条设计要求，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="ch20summary">重播</button></div>
+    <div class="ch20summary" id="ch20summary" data-anim><div class="ch20summary-c" style="--i:0"><em>交出去的尺度</em><b>持续的责任要有自己的组织方式</b><p>打扰分层、过去可以核查、将来可以预见；一次查询不需要长期关系。</p></div><div class="ch20summary-c" style="--i:1"><em>结果落在哪里</em><b>从信息与权利义务类事务做起</b><p>代理能直接改变这两类事务的结果；涉及身体与物理世界的事务，只作辅助。</p></div><div class="ch20summary-c" style="--i:2"><em>适用比例决定上限</em><b>扩大代理能完整承担的范围</b><p>把一件事中代理做不了的环节逐一补齐，比继续提高生成速度更能提高整体倍数。</p></div><div class="ch20summary-c" style="--i:3"><em>条件决定可达份额</em><b>补齐数据、工具与准入</b><p>账户与成交数据是上下文，交易通道是工具，牌照与托管是准入；持续监测是投资者投入最多、代理最能接手的部分。</p></div><div class="ch20summary-c warn" style="--i:4"><em>能做到不等于可以代办</em><b>把授权、确认与知悉留给本人</b><p>代理准备与执行；投入多少、是否下单、是否理解风险，由本人作出并留下记录。</p></div><div class="ch20summary-c warn" style="--i:5"><em>交代有固定成本</em><b>优先承接反复发生的事务</b><p>让一次说清的目标与约束可以长期使用，持续跟踪类任务最值得交出。</p></div></div>
+  </div>
+</figure>
+<style>
+.ch20summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch20summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.25s)}
+.ch20summary-c.warn{border-left-color:var(--warm)}
+.ch20summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch20summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch20summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch20summary.in .ch20summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch20summary{grid-template-columns:1fr}}
+</style>

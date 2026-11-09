@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">赔不起的人，不会太小心</p><p class="figsub">一次出错会让委托人损失 100 份。管粮的人可以多花功夫检查来减少出错，但检查要付出代价。拖动他的家产，看他会花多少功夫检查，以及委托人每年预期损失多少；再让部署他的人担责并投保。</p></div><button class="replay" type="button" data-replay="pf15">重播</button></div>
+    <div class="pf15" id="pf15" data-anim>
+      <svg viewBox="0 0 660 220" role="img" aria-label="家产与委托人的预期损失"><g id="pf15-g"></g></svg>
+      <div class="sl"><label for="pf15-a">管粮人的家产 <b id="pf15-av"></b></label><input id="pf15-a" type="range" min="0" max="100" step="5" value="20"></div>
+      <div class="cs-sw"><label><input type="checkbox" id="pf15-c"> 部署他的人承担赔付责任，并为此投保</label></div>
+      <div class="pf15-out" id="pf15-out"></div>
+      <p class="pf15-msg" id="pf15-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：出错的概率为 30% × e^(−检查)，每份检查的代价为 4 份；管粮人选择使“检查的代价＋出错的概率 × 他实际要赔的数额”最小的检查程度，实际要赔的数额为损失与他家产中较小的一个（沙维尔，1986 的简化）。</figcaption>
+</figure>
+<style>
+.pf15 svg{width:100%;height:auto;display:block}
+.pf15-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.pf15-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.pf15-out span{display:block;font-size:11.5px;color:var(--faint)} .pf15-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.pf15-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.pf15-out{grid-template-columns:1fr}.pf15 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('pf15'+id),H=100,X0=50,X1=628,YT=12,YB=180,x=a=>X0+a/H*(X1-X0),y=v=>YB-v/32*(YB-YT);
+  const care=pay=>Math.max(0,Math.log(.3*pay/4)),loss=pay=>.3*Math.exp(-care(pay))*H;
+  function draw(){const a=+$('-a').value,c=$('-c').checked,pay=c?H:Math.min(a,H),k=care(pay),L=loss(pay);$('-av').textContent=a+' 份';
+    let h=[0,10,20,30].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v} 份</text>`).join('')+[0,25,50,75,100].map(v=>`<text x="${x(v)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${v} 份</text>`).join('')+`<text x="${X1}" y="${YB+30}" text-anchor="end" font-size="11" class="t-faint">管粮人的家产 →</text>`;
+    let d='';for(let v=0;v<=H;v++)d+=(v?'L':'M')+x(v).toFixed(1)+','+y(loss(v)).toFixed(1);
+    h+=`<path d="${d}" fill="none" stroke="var(--warm)" stroke-width="2.6"/>`;
+    if(c)h+=`<line x1="${X0}" x2="${X1}" y1="${y(loss(H))}" y2="${y(loss(H))}" stroke="var(--accent)" stroke-width="2.6" stroke-dasharray="6 4"/><text x="${X0+6}" y="${y(loss(H))-6}" font-size="11" fill="var(--accent)">部署者担责并投保</text>`;
+    h+=`<circle cx="${x(a)}" cy="${y(L)}" r="7" fill="${c?'var(--accent)':'var(--warm)'}"/>`;
+    $('-g').innerHTML=h;
+    $('-out').innerHTML=[['花在检查上的功夫',k.toFixed(2)+' 份'],['出错的概率',(.3*Math.exp(-k)*100).toFixed(0)+'%'],['委托人每年预期损失',L.toFixed(1)+' 份']].map(([p,v])=>`<div><span>${p}</span><b>${v}</b></div>`).join('');
+    $('-msg').textContent=c?`赔付由有家产、又投了保的部署者承担，他按全部 100 份的损失来决定检查，出错的概率降到 ${(.3*Math.exp(-k)*100).toFixed(0)}%，与管粮人自己有多少家产无关。`:a<14?`管粮人的家产只有 ${a} 份，出了错最多赔这么多，他干脆不检查：委托人每年预期损失 ${L.toFixed(0)} 份。书记员的家产是零，正处在这里。`:a<H?`家产 ${a} 份：他只按自己可能赔的 ${a} 份来决定检查，委托人每年预期损失 ${L.toFixed(1)} 份，高于家产足够时的 ${loss(H).toFixed(1)} 份。`:'家产足以赔付全部损失，他按全部损失来决定检查，委托人的预期损失最低。';}
+  ['-a','-c'].forEach(k=>$(k).addEventListener('input',draw));
+  $('').addEventListener('anim-in',()=>{$('-c').checked=false;let v=100;$('-a').value=100;draw();const id=setInterval(()=>{v-=5;$('-a').value=v;draw();if(v<=0){clearInterval(id);setTimeout(()=>{$('-c').checked=true;draw();},1200);}},110);});
+  draw();
+})();
+</script>

@@ -1,0 +1,51 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">Out of a hundred stocks, which ones created the wealth?</p>
+    <p class="figsub">Illustrative, based on US listed stocks as a whole from 1926 to 2016: each dot represents 1% of stocks. Pick a few at random to hold in concentration and see whether you catch one of the few big winners.</p>
+    <div class="sk4" id="sk4" data-anim>
+      <div class="sk4-grid" id="sk4-g"></div>
+      <div class="legend"><span><i style="background:var(--gray-mark)"></i>Returned less than Treasury bills while listed (about 57%)</span><span><i style="background:var(--accent-soft);border:1px solid var(--accent)"></i>Beat Treasury bills, but added little net wealth</span><span><i style="background:var(--gold)"></i>Created all the net wealth (about 4%)</span></div>
+      <div class="sk4-ctrl">
+        <label>Pick <select id="sk4-n"><option>1</option><option selected>5</option><option>10</option><option>30</option></select> stocks each time</label>
+        <button type="button" class="replay" id="sk4-one">Pick once at random</button>
+        <button type="button" class="replay" id="sk4-many">Simulate 1,000 times</button>
+      </div>
+      <p class="sk4-msg" id="sk4-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative, based on Bessembinder (2018): from 1926 to 2016, more than half of US listed stocks returned less over their listed lives than one-month Treasury bills, and all the net wealth the stock market created came from about 4% of stocks. Proportions in the figure are rounded; “catching” a winner only means the portfolio contains at least one big winner.</figcaption>
+</figure>
+<style>
+.sk4-grid{display:grid;grid-template-columns:repeat(20,1fr);gap:4px}
+.sk4-grid i{aspect-ratio:1;border-radius:50%;background:var(--gray-mark);opacity:0;transform:scale(.5);transition:opacity .3s,transform .3s,box-shadow .2s;transition-delay:calc(var(--k)*6ms)}
+.sk4.in .sk4-grid i{opacity:.75;transform:none}
+.sk4-grid i.mid{background:var(--accent-soft);box-shadow:inset 0 0 0 1px var(--accent)}
+.sk4-grid i.top{background:var(--gold);opacity:1}
+.sk4-grid i.pick{box-shadow:0 0 0 3px var(--ink)!important;opacity:1}
+.sk4-ctrl{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px;font-size:13px}
+.sk4-ctrl select{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink);padding:2px 6px}
+.sk4-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.sk4-grid{grid-template-columns:repeat(10,1fr)}}
+</style>
+<script>
+(function(){
+  const kind=[]; for(let i=0;i<100;i++)kind.push(i<57?'low':i<96?'mid':'top');
+  // shuffle positions so the big winners are not clustered in one corner
+  let seed=9; const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
+  for(let i=99;i>0;i--){const j=Math.floor(rnd()*(i+1));[kind[i],kind[j]]=[kind[j],kind[i]];}
+  const g=document.getElementById('sk4-g');
+  g.innerHTML=kind.map((k,i)=>`<i class="${k==='low'?'':k}" style="--k:${i}"></i>`).join('');
+  const cells=[...g.children], nEl=document.getElementById('sk4-n'), msg=document.getElementById('sk4-msg');
+  const draw=n=>{const idx=[...Array(100).keys()];for(let i=0;i<n;i++){const j=i+Math.floor(Math.random()*(100-i));[idx[i],idx[j]]=[idx[j],idx[i]];}return idx.slice(0,n);};
+  document.getElementById('sk4-one').addEventListener('click',()=>{
+    const n=+nEl.value, pick=draw(n); cells.forEach(c=>c.classList.remove('pick')); pick.forEach(i=>cells[i].classList.add('pick'));
+    const hit=pick.filter(i=>kind[i]==='top').length, low=pick.filter(i=>kind[i]==='low').length;
+    msg.textContent=hit?`Caught ${hit} big winner${hit>1?'s':''}.`:`Did not catch a single big winner; ${low} of the ${n} did not even beat Treasury bills.`;
+  });
+  document.getElementById('sk4-many').addEventListener('click',()=>{
+    const n=+nEl.value; let miss=0; for(let t=0;t<1000;t++){if(!draw(n).some(i=>kind[i]==='top'))miss++;}
+    cells.forEach(c=>c.classList.remove('pick'));
+    msg.textContent=`Picking ${n} each time, ${miss} of 1,000 draws missed every big winner (about ${Math.round(miss/10)}%). The more diversified the holding, the less likely you are to miss them; holding the whole market, you are certain not to.`;
+  });
+})();
+</script>

@@ -1,0 +1,41 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The lower and upper bounds of the interest rate</p><p class="figsub">The lender's other options set the lower bound; the borrower's circumstances set the upper bound. Switch the lender's options and drag how urgently the borrower needs grain to see the range of rates at which a deal can be struck.</p></div><button class="replay" type="button" data-replay="rt">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Lender's other options">
+      <button type="button" data-rt="store" aria-pressed="true">Storage only</button>
+      <button type="button" data-rt="seed" aria-pressed="false">Can also keep seed</button>
+    </div>
+    <div class="rt" id="rt" data-anim>
+      <div class="rt-band"><div class="rt-ax" id="rt-ax"></div><div class="rt-zone" id="rt-z"></div><div class="rt-mk lo" id="rt-lo"><span></span></div><div class="rt-mk hi" id="rt-hi"><span></span></div></div>
+      <div class="sl"><label for="rt-u">How urgently the borrower needs grain <b id="rt-uv"></b></label><input id="rt-u" type="range" min="0" max="100" value="50"></div>
+      <p class="rt-msg" id="rt-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: storage loses a tenth a year; the return on seed is 25%; the more urgent the need, the higher the maximum rate the borrower is willing to pay.</figcaption>
+</figure>
+<style>
+.rt-band{position:relative;height:96px;margin:6px 0 8px}
+.rt-ax{position:absolute;left:0;right:0;top:56px;border-top:1px solid var(--line)}
+.rt-ax span{position:absolute;top:6px;transform:translateX(-50%);font-size:10.5px;color:var(--faint)}
+.rt-zone{position:absolute;top:44px;height:24px;background:var(--accent-soft);border-radius:4px;transition:left .4s,width .4s}
+.rt-mk{position:absolute;top:30px;height:52px;border-left:2px solid var(--ink);transition:left .4s}
+.rt-mk span{position:absolute;top:-28px;white-space:nowrap;font-size:12px;transform:translateX(-50%)}
+.rt-mk.hi{border-color:var(--warm)} .rt-mk.hi span{color:var(--warm)}
+.rt-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),R0=-20,R1=100,px=r=>(r-R0)/(R1-R0)*100;let alt='store';
+  $('rt-ax').innerHTML=[-20,0,20,40,60,80,100].map(v=>`<span style="left:${px(v)}%">${v<0?'−'+(-v):v}%</span>`).join('');
+  function draw(){const u=+$('rt-u').value,lo=alt==='store'?-10:25,hi=-5+u*1.0;
+    $('rt-uv').textContent=u<30?'not very urgent':u<70?'fairly urgent':'very urgent';
+    $('rt-lo').style.left=px(lo)+'%';$('rt-lo').querySelector('span').textContent=`Lower ${lo<0?'−'+(-lo):lo}%`;
+    $('rt-hi').style.left=px(Math.min(hi,R1))+'%';$('rt-hi').querySelector('span').textContent=`Upper ${Math.round(hi)}%`;
+    $('rt-z').style.left=px(lo)+'%';$('rt-z').style.width=Math.max(0,px(Math.min(hi,R1))-px(lo))+'%';
+    $('rt-msg').textContent=hi<lo?'The highest rate the borrower is willing to pay is below the lender\'s lower bound: this loan will not happen.':alt==='store'?`When the lender can only store grain, lending is better than storage even if slightly less comes back, so the lower bound is −10%. Deals can be struck between −10% and ${Math.round(hi)}%.`:`The lender can also keep seed, which returns 25%, so lending must earn at least 25%. Deals can be struck between 25% and ${Math.round(hi)}%.`;}
+  document.querySelectorAll('[data-rt]').forEach(b=>b.addEventListener('click',()=>{alt=b.dataset.rt;document.querySelectorAll('[data-rt]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  $('rt-u').addEventListener('input',draw);
+  $('rt').addEventListener('anim-in',()=>{let v=0;$('rt-u').value=0;draw();const id=setInterval(()=>{v+=5;$('rt-u').value=v;draw();if(v>=80)clearInterval(id);},150);});
+  draw();
+})();
+</script>

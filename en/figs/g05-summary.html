@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: insurance and diversification</p><p class="figsub">Four conclusions, each tied to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="g05summary">Replay</button></div>
+    <div class="g05summary" id="g05summary" data-anim><div class="g05summary-c" style="--i:0"><em>Bearing it alone</em><b>Precautionary saving is costly</b><p>Withstanding a large crop failure means keeping a large reserve year after year, which spoils and cannot be put to other use.</p></div><div class="g05summary-c" style="--i:1"><em>Bearing it together</em><b>Each household's own bad luck can cancel out</b><p>The more households, the fuller the cancelling; the swings per household shrink roughly with the square root of the number of households.</p></div><div class="g05summary-c warn" style="--i:2"><em>Cannot be diversified</em><b>Shared risk can only be transferred</b><p>When the whole village's harvest fails, no number of households helps; whoever bears this risk must be compensated.</p></div><div class="g05summary-c warn" style="--i:3"><em>New problems</em><b>Insurance changes behaviour</b><p>People take less care once insured, and those at higher risk are keener to insure; deductibles and risk-based premiums are the remedies.</p></div></div>
+  </div>
+</figure>
+<style>
+.g05summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g05summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g05summary-c.warn{border-left-color:var(--warm)}
+.g05summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g05summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g05summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g05summary.in .g05summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g05summary{grid-template-columns:1fr}}
+</style>

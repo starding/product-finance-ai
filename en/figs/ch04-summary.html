@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: make diversification the default</p><p class="figsub">Four design requirements, each tied to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="ch04summary">Replay</button></div>
+    <div class="ch04summary" id="ch04summary" data-anim><div class="ch04summary-c" style="--i:0"><em>Firm-specific risk is not compensated</em><b>Make diversification the default option</b><p>A new user’s first portfolio is diversified by default; when holdings are concentrated, state clearly how much uncompensated firm-specific risk is being borne.</p></div><div class="ch04summary-c" style="--i:1"><em>Risk is measured by its contribution to the portfolio</em><b>Show risk at the portfolio level</b><p>When assessing a trade, look at how much systematic risk it adds to the whole portfolio, not just at the volatility of the stock itself.</p></div><div class="ch04summary-c warn" style="--i:2"><em>A few stocks create most of the wealth</em><b>Do not encourage bets on a few “star stocks”</b><p>Explain that concentrated holdings are more likely to miss the few big winners, not more likely to catch them.</p></div><div class="ch04summary-c warn" style="--i:3"><em>Correlations rise in sell-offs</em><b>Use sell-off correlations in stress tests</b><p>Estimates of portfolio risk must include crisis periods, not just data from calm periods.</p></div></div>
+  </div>
+</figure>
+<style>
+.ch04summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch04summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch04summary-c.warn{border-left-color:var(--warm)}
+.ch04summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch04summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch04summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch04summary.in .ch04summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch04summary{grid-template-columns:1fr}}
+</style>

@@ -1,0 +1,28 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">贵的信号才可信</p><p class="figsub">两类运营者：可靠的与打算骗人的。拖动一项信号的代价，看两类运营者是否愿意付出，以及信号能否把它们区分开。</p></div><button class="replay" type="button" data-replay="sg24">重播</button></div>
+    <div class="sg24" id="sg24" data-anim>
+      <div class="sg24-g" id="sg24-g"></div>
+      <div class="sl"><label for="sg24-c">信号的代价（保证金、保险、执照与审计） <b id="sg24-cv"></b></label><input id="sg24-c" type="range" min="0" max="20" step="1" value="0"></div>
+      <p class="sg24-msg" id="sg24-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：可靠的运营者长期经营，赢得信任后十年可多得 15 份；打算骗人的运营者只想做一票就走，赢得信任后可骗得 8 份，而一旦出事，保证金与保险的成本要全部损失。两者都在“得到的多于付出的”时才付出信号的代价（斯彭斯，1973 的思路）。</figcaption>
+</figure>
+<style>
+.sg24-g{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sg24-c{border-radius:10px;padding:12px;background:var(--quote);font-size:13.5px;line-height:1.6;border-left:4px solid var(--c);transition:border-color .3s}
+.sg24-c b{display:block;font-size:15px}
+.sg24-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('sg24'+id);
+  function draw(){const c=+$('-c').value,good=15>c,bad=8>c;$('-cv').textContent=c+' 份';
+    $('-g').innerHTML=[['可靠的运营者',good,15],['打算骗人的运营者',bad,8]].map(([n,y,g])=>`<div class="sg24-c" style="--c:${y?'var(--accent)':'var(--faint)'}"><b>${n}</b>${y?'付出代价，发出信号':'不付，不发信号'}（得到 ${g} 份，付出 ${c} 份）</div>`).join('');
+    $('-msg').textContent=c===0?'信号不要钱，两类运营者都会说“我们值得信任”：信号什么也证明不了。':good&&bad?`代价 ${c} 份，两类运营者都付得起，信号仍然分不开它们。`:good?`代价 ${c} 份：可靠的运营者付得起、也值得付，打算骗人的付了不划算。信号把两者区分开了。`:'代价太高，连可靠的运营者也不愿付：市场上没有人发出信号。';}
+  $('-c').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{let v=0;$('-c').value=0;draw();const id=setInterval(()=>{v+=1;$('-c').value=v;draw();if(v>=12)clearInterval(id);},220);});
+  draw();
+})();
+</script>

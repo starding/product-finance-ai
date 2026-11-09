@@ -1,0 +1,41 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">核对的时间给放大倍数设了上限</p>
+    <p class="figsub">一项自己完成需要 100 分钟的任务，假设代理瞬间完成、从不出错。拖动核对所需的时间占自己完成时间的比例，看放大倍数的上限。</p>
+    <div class="cap" id="cap" data-anim>
+      <div class="cap-row"><span>自己完成</span><div class="cap-t"><i style="width:100%;background:var(--faint)"></i></div><b>100 分钟</b></div>
+      <div class="cap-row"><span>交给代理</span><div class="cap-t"><i id="cap-s" style="background:var(--blue)"></i><i id="cap-r" style="background:var(--gold)"></i></div><b id="cap-tot"></b></div>
+      <div class="legend"><span><i style="background:var(--blue)"></i>说明：5 分钟</span><span><i style="background:var(--gold)"></i>核对</span></div>
+      <svg viewBox="0 0 640 170" role="img" aria-label="核对比例与放大倍数上限"><g id="cap-ax"></g><path id="cap-p" class="cap-l"/><circle id="cap-d" r="6" fill="var(--ink)"/></svg>
+      <div class="sl"><label for="cap-x">核对所需时间占自己完成时间的比例 <b id="cap-xv"></b></label><input id="cap-x" type="range" min="2" max="80" step="1" value="27"></div>
+      <p class="cap-msg" id="cap-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>放大倍数上限 ＝ 100 ÷（说明 ＋ 核对）；纵轴为对数刻度。参照点：GDPval 测评中专家审阅模型成果的用时约为自己完成的四分之一（Patwardhan 等，2025）。</figcaption>
+</figure>
+<style>
+.cap-row{display:grid;grid-template-columns:72px 1fr 76px;gap:10px;align-items:center;font-size:13px;margin:6px 0}
+.cap-row>span{color:var(--faint);font-size:12px}
+.cap-row b{text-align:right;font-variant-numeric:tabular-nums}
+.cap-t{display:flex;height:20px;background:var(--quote);border-radius:5px;overflow:hidden}
+.cap-t i{display:block;height:100%;transition:width .3s}
+.cap svg{width:100%;height:auto;display:block;margin-top:6px}
+.cap-l{fill:none;stroke:var(--accent);stroke-width:2.5}
+.cap-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.cap svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const S=5,X0=56,X1=620,YT=14,YB=140,x=r=>X0+(r-2)/78*(X1-X0),M=r=>100/(S+r),ly=v=>YB-Math.log10(v)/Math.log10(15)*(YB-YT);
+  const $=id=>document.getElementById(id),sl=$('cap-x');
+  $('cap-ax').innerHTML=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`+[1,2,5,10].map(v=>`<text x="${X0-6}" y="${ly(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v} 倍</text><line x1="${X0}" x2="${X1}" y1="${ly(v)}" y2="${ly(v)}" class="s-line"/>`).join('')+[2,20,40,60,80].map(r=>`<text x="${x(r)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${r}%</text>`).join('')+
+    `<line x1="${x(27)}" y1="${YT}" x2="${x(27)}" y2="${YB}" stroke="var(--warm)" stroke-dasharray="3 3"/><text x="${x(27)+4}" y="${YT+10}" font-size="11" class="t-warm">GDPval 专家审阅</text>`;
+  let d='';for(let r=2;r<=80;r+=.5)d+=(r>2?'L':'M')+x(r).toFixed(1)+','+ly(M(r)).toFixed(1);$('cap-p').setAttribute('d',d);
+  function r(){const v=+sl.value;$('cap-xv').textContent=v+'%';$('cap-s').style.width=S+'%';$('cap-r').style.width=v+'%';$('cap-tot').textContent=(S+v)+' 分钟';
+    $('cap-d').setAttribute('cx',x(v));$('cap-d').setAttribute('cy',ly(M(v)));
+    $('cap-msg').textContent=`核对要花自己完成时间的 ${v}%，加上 5 分钟说明，放大倍数最多 ${M(v).toFixed(1)} 倍。${v>=20?'此时再提高代理的速度已无济于事，能改变上限的只有核对本身。':'核对足够便宜时，放大倍数才有可能达到十倍上下。'}`;}
+  sl.addEventListener('input',r);
+  $('cap').addEventListener('anim-in',()=>{let v=80;sl.value=v;r();const id=setInterval(()=>{v-=4;sl.value=v;r();if(v<=4){clearInterval(id);setTimeout(()=>{sl.value=27;r();},600);}},110);});
+  r();
+})();
+</script>

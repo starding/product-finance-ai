@@ -1,0 +1,43 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">How factor models evolved</p><p class="figsub">Each extension was made to explain return differences the previous model could not. Tap a factor to see how it is built and its economic explanation.</p></div><button class="replay" type="button" data-replay="fm6">Replay</button></div>
+    <div class="fm6" id="fm6" data-anim>
+      <div class="fm6-row" style="--i:0"><span class="fm6-y">1964</span><span class="fm6-n">Capital asset pricing model</span><div class="fm6-chips"><button data-f="mkt">Market</button></div></div>
+      <div class="fm6-row" style="--i:1"><span class="fm6-y">1993</span><span class="fm6-n">Three-factor model</span><div class="fm6-chips"><button data-f="mkt" class="old">Market</button><button data-f="smb">Size</button><button data-f="hml">Value</button></div></div>
+      <div class="fm6-row" style="--i:2"><span class="fm6-y">1997</span><span class="fm6-n">Four-factor model</span><div class="fm6-chips"><button data-f="mkt" class="old">Market</button><button data-f="smb" class="old">Size</button><button data-f="hml" class="old">Value</button><button data-f="mom">Momentum</button></div></div>
+      <div class="fm6-row" style="--i:3"><span class="fm6-y">2015</span><span class="fm6-n">Five-factor model</span><div class="fm6-chips"><button data-f="mkt" class="old">Market</button><button data-f="smb" class="old">Size</button><button data-f="hml" class="old">Value</button><button data-f="rmw">Profitability</button><button data-f="cma">Investment</button></div></div>
+    </div>
+    <div class="fm6-d" id="fm6-d" aria-live="polite">Tap a factor.</div>
+  </div>
+  <figcaption>For the three- and five-factor models, see Fama and French (1993, 2015); for the momentum factor, Carhart (1997); for the momentum phenomenon, Jegadeesh and Titman (1993). The five-factor model does not include momentum, but momentum is often used alongside it.</figcaption>
+</figure>
+<style>
+.fm6-row{display:grid;grid-template-columns:52px 120px 1fr;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line);opacity:0;transform:translateX(-8px);transition:opacity .4s,transform .4s;transition-delay:calc(var(--i)*.4s)}
+.fm6.in .fm6-row{opacity:1;transform:none}
+.fm6-y{font-size:13px;color:var(--faint);font-variant-numeric:tabular-nums}
+.fm6-n{font-size:13px;font-weight:700}
+.fm6-chips{display:flex;flex-wrap:wrap;gap:6px}
+.fm6-chips button{font:inherit;font-size:12.5px;border:1px solid var(--accent);background:var(--accent-soft);color:var(--ink);border-radius:999px;padding:3px 10px;cursor:pointer}
+.fm6-chips button.old{background:transparent;border-color:var(--line);color:var(--muted)}
+.fm6-chips button.sel{outline:2px solid var(--ink)}
+.fm6-d{margin-top:12px;background:var(--quote);border-radius:10px;padding:10px 14px;font-size:14px;line-height:1.7;min-height:5em}
+.fm6-d dl{display:grid;grid-template-columns:72px 1fr;gap:2px 10px;margin:4px 0 0}
+.fm6-d dt{font-size:12px;color:var(--faint);padding-top:3px}
+.fm6-d dd{margin:0}
+@media (max-width:640px){.fm6-row{grid-template-columns:44px 1fr}.fm6-chips{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const D={
+    mkt:['Market','The excess return of the whole stock market over the risk-free asset','Fluctuations in the economy as a whole cannot be diversified away'],
+    smb:['Size','Buy small-cap companies, sell large-cap companies','Small companies are more fragile and less liquid, and more likely to get into difficulty when the economy is bad'],
+    hml:['Value','Buy companies with high book-to-market ratios, sell those with low ratios','Risk explanation: value stocks are often companies in difficulty. Behavioural explanation: investors are too pessimistic about companies with dim prospects'],
+    mom:['Momentum','Buy stocks that rose most over roughly the past year, sell those that rose least','Most research leans towards a behavioural explanation: investors underreact to new information. Momentum can lose heavily when the market reverses sharply'],
+    rmw:['Profitability','Buy highly profitable companies, sell weakly profitable ones','At the same price, the stronger the profitability, the higher the implied expected return'],
+    cma:['Investment','Buy companies that expand their assets conservatively, sell those that expand aggressively','Aggressively expanding companies often invest heavily when valuations are high, and their later returns tend to be low']
+  };
+  const d=document.getElementById('fm6-d'), bs=[...document.querySelectorAll('#fm6 [data-f]')];
+  bs.forEach(b=>b.addEventListener('click',()=>{bs.forEach(x=>x.classList.toggle('sel',x.dataset.f===b.dataset.f));const v=D[b.dataset.f];
+    d.innerHTML=`<b>${v[0]} factor</b><dl><dt>Construction</dt><dd>${v[1]}</dd><dt>Economic explanation</dt><dd>${v[2]}</dd></dl>`;}));
+})();
+</script>

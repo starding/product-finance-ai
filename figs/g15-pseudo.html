@@ -1,0 +1,54 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">名字便宜时，声誉附着不上</p><p class="figsub">十位书记员连续接活二十轮，其中三位不可靠。每一行是一位书记员，每一格是一轮。切换三种情形，看委托人被骗了多少次，诚实的新来者又吃了多少亏。</p></div><button class="replay" type="button" data-replay="ps15">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="情形">
+      <button type="button" data-ps15="trust" aria-pressed="true">名字便宜，照常信任</button>
+      <button type="button" data-ps15="dues" aria-pressed="false">名字便宜，戒备新来者</button>
+      <button type="button" data-ps15="fixed" aria-pressed="false">身份不能更换</button>
+    </div>
+    <div class="ps15" id="ps15" data-anim>
+      <div class="ps15-g" id="ps15-g"></div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>正常接活</span><span><i style="background:var(--warm)"></i>骗了委托人</span><span><i style="background:var(--accent-soft)"></i>只接小活（新来者受戒备）</span><span><i style="background:var(--quote);border:1px solid var(--line)"></i>被排除</span><span><i style="background:var(--ink)"></i>换了一个名字</span></div>
+      <div class="ps15-out" id="ps15-out"></div>
+      <p class="ps15-msg" id="ps15-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：不可靠的书记员每轮有一半可能行骗，行骗会被记下；名字便宜时，它在行骗之后立即换一个名字。戒备新来者时，任何新名字的前四轮只接小活，小活的报酬为正常的四分之一，行骗的损失也只有四分之一。身份不能更换时，行骗一次即被排除（弗里德曼与雷斯尼克，2001 的思路）。另有两位诚实的书记员在第 6、12 轮新来。</figcaption>
+</figure>
+<style>
+.ps15-g{display:grid;gap:3px}
+.ps15-r{display:grid;grid-template-columns:repeat(20,1fr);gap:2px}
+.ps15-r i{height:14px;border-radius:2px;background:var(--accent);transition:background .3s}
+.ps15-r i.c{background:var(--warm)} .ps15-r i.p{background:var(--accent-soft)} .ps15-r i.x{background:var(--quote);outline:1px solid var(--line);outline-offset:-1px} .ps15-r i.n{background:var(--ink)} .ps15-r i.o{background:transparent}
+.ps15-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.ps15-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.ps15-out span{display:block;font-size:11.5px;color:var(--faint)} .ps15-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.ps15-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.ps15-out{grid-template-columns:1fr}.ps15-r i{height:11px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('ps15'+id),R=20;let mode='trust';
+  let s=1516;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};const U=Array.from({length:12},()=>Array.from({length:R},r));
+  // 前十行为起初的书记员，0～2 不可靠；第 10、11 行为第 6、12 轮新来的诚实书记员
+  function run(){const G=[],start=[0,0,0,0,0,0,0,0,0,0,5,11];let cheat=0,cheatLoss=0,dues=0;
+    for(let i=0;i<12;i++){const bad=i<3,row=[];let age=0,out=false;
+      for(let t=0;t<R;t++){if(t<start[i]){row.push('o');continue;}
+        if(out){row.push('x');continue;}
+        const prob=(mode==='dues')&&age<4;let c='';
+        if(bad&&U[i][t]<.5){c='c';cheat++;cheatLoss+=prob?.25:1;}else if(prob){c='p';if(!bad)dues+=.75;}
+        row.push(prob&&c==='c'?'c':c);age++;
+        if(c==='c'){if(mode==='fixed')out=true;else{age=0;if(t+1<R){row.push('n');t++;}}}}
+      G.push(row);}
+    return {G,cheat,cheatLoss,dues};}
+  function draw(){const S=run();
+    $('-g').innerHTML=S.G.map(row=>`<div class="ps15-r">${row.map(c=>`<i class="${c}"></i>`).join('')}</div>`).join('');
+    $('-out').innerHTML=[['行骗的次数',S.cheat+' 次'],['委托人的损失',S.cheatLoss.toFixed(1)+' 份活计'],['诚实者因受戒备少得的报酬',S.dues.toFixed(1)+' 份活计']].map(([a,v])=>`<div><span>${a}</span><b>${v}</b></div>`).join('');
+    $('-msg').textContent={trust:`名字便宜、照常信任：不可靠的书记员骗一次就换一个名字，下一轮照样接到正常的活，二十轮里骗了 ${S.cheat} 次。声誉对它们毫无约束。`,dues:`戒备新来者：每个新名字先只接小活，行骗的损失降到 ${S.cheatLoss.toFixed(1)} 份；可诚实的新来者也要先吃亏，少得 ${S.dues.toFixed(1)} 份。名字越便宜，这笔亏越难免。`,fixed:`身份不能更换：每位书记员的记录跟着它背后的运营者，行骗一次即被排除，委托人只损失 ${S.cheatLoss.toFixed(0)} 份，诚实的新来者也不必先吃亏。`}[mode];}
+  const bs=[...document.querySelectorAll('[data-ps15]')];
+  function set(m){mode=m;bs.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.ps15===m)));draw();}
+  bs.forEach(b=>b.addEventListener('click',()=>set(b.dataset.ps15)));
+  $('').addEventListener('anim-in',()=>{['trust','dues','fixed'].forEach((m,i)=>setTimeout(()=>set(m),300+i*2400));});
+  draw();
+})();
+</script>

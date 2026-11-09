@@ -1,0 +1,35 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Mandates expire</p><p class="figsub">Over ten years, several things happen that change the goals and constraints. Compare two ways of reviewing: once a year only, or also at once when an event occurs. Red segments show time during which the mandate no longer fits reality but is still being executed.</p></div><button class="replay" type="button" data-replay="rv">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Review method">
+      <button type="button" data-rv="y" aria-pressed="true">Annual review only</button>
+      <button type="button" data-rv="e" aria-pressed="false">Annual review, plus review at once when events occur</button>
+    </div>
+    <div class="rv" id="rv" data-anim>
+      <svg viewBox="0 0 640 150" role="img" aria-label="Timeline of mandate validity"><g id="rv-g"></g></svg>
+      <p class="rv-msg" id="rv-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative timeline. Investment policy statements are usually reviewed annually and when major changes occur (Maginn et al., 2007).</figcaption>
+</figure>
+<style>
+.rv svg{width:100%;height:auto;display:block}
+.rv-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.rv svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const EV=[[1.4,'New job, lower income'],[3.7,'Child born'],[6.2,'Buying a home'],[8.9,'Goal nears']];
+  const X0=30,X1=620,x=t=>X0+t/10*(X1-X0),Y=70;
+  function set(k){document.querySelectorAll('[data-rv]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.rv===k)));
+    let g=`<line x1="${X0}" y1="${Y}" x2="${X1}" y2="${Y}" stroke="var(--accent)" stroke-width="10" stroke-linecap="round" opacity=".35"/>`,stale=0;
+    for(let yr=0;yr<=10;yr++)g+=`<line x1="${x(yr)}" y1="${Y-12}" x2="${x(yr)}" y2="${Y+12}" class="s-faint"/><text x="${x(yr)}" y="${Y+28}" text-anchor="middle" font-size="10" class="t-faint">${yr}</text>`;
+    EV.forEach(([t,l],i)=>{const end=k==='y'?Math.ceil(t):t+.05;stale+=end-t;g+=`<rect x="${x(t)}" y="${Y-5}" width="${Math.max(2,x(end)-x(t))}" height="10" fill="var(--warm)" rx="2"><animate attributeName="width" from="0" to="${Math.max(2,x(end)-x(t))}" dur=".6s"/></rect><circle cx="${x(t)}" cy="${Y-22}" r="4" fill="var(--warm)"/><text x="${x(t)}" y="${Y-30-(i%2)*14}" text-anchor="middle" font-size="11" class="t-ink">${l}</text>`;});
+    g+=`<text x="${X1}" y="${Y+44}" text-anchor="end" font-size="11" class="t-faint">Year</text>`;
+    document.getElementById('rv-g').innerHTML=g;
+    document.getElementById('rv-msg').textContent=k==='y'?`With annual review only, after the four events the expired mandate is executed for about ${(stale*12).toFixed(0)} months in total.`:'With review at once when events occur, an expired mandate is hardly ever executed. An agent can keep checking whether the premises of the mandate still hold and remind the principal when they change.';}
+  document.querySelectorAll('[data-rv]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.rv)));
+  document.getElementById('rv').addEventListener('anim-in',()=>{set('y');setTimeout(()=>set('e'),2800);});
+  set('y');
+})();
+</script>

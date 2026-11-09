@@ -1,0 +1,45 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Why disclosure unravels step by step, and why it can stall</p><p class="figsub">Ten sellers, with product quality from 1 to 10. Buyers value any seller who does not disclose at "the average quality of non-disclosers"; a seller whose quality is above that value is willing to disclose.</p></div><button class="replay" type="button" id="ur-run">Run again</button></div>
+    <div class="seg-btns" role="group" aria-label="Whether disclosure can be verified">
+      <button type="button" data-ur="1" aria-pressed="true">Disclosures can be verified</button>
+      <button type="button" data-ur="0" aria-pressed="false">Disclosures cannot be verified</button>
+    </div>
+    <div class="ur" id="ur" data-anim>
+      <div class="ur-row" id="ur-row"></div>
+      <div class="ur-out"><div><span>Round</span><b id="ur-r">0</b></div><div><span>Buyers' value for non-disclosers</span><b id="ur-p"></b></div><div><span>Sellers who have disclosed</span><b id="ur-n"></b></div></div>
+      <p class="ur-msg" id="ur-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Simplified from the reasoning of Grossman (1981) and Milgrom (1981). When disclosures cannot be verified, anyone can claim high quality; disclosure becomes an unverifiable claim, and buyers can only ignore it.</figcaption>
+</figure>
+<style>
+.ur-row{display:grid;grid-template-columns:repeat(10,1fr);gap:6px}
+.ur-row div{border:1.5px dashed var(--line);border-radius:8px;padding:8px 0;text-align:center;font-size:13px;font-variant-numeric:tabular-nums;color:var(--muted);transition:all .4s}
+.ur-row div b{display:block;font-size:16px;color:var(--ink)}
+.ur-row div.dis{border-style:solid;border-color:var(--accent);background:var(--accent-soft)}
+.ur-row div.claim{border-style:solid;border-color:var(--warm);background:var(--warm-soft)}
+.ur-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.ur-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.ur-out span{display:block;font-size:12px;color:var(--faint)}
+.ur-out b{font-size:19px;font-variant-numeric:tabular-nums}
+.ur-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.ur-row{grid-template-columns:repeat(5,1fr)}.ur-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const row=document.getElementById('ur-row');row.innerHTML=Array.from({length:10},(_,i)=>`<div><b>${i+1}</b>quality</div>`).join('');
+  const cs=[...row.children]; let ver=1, timer;
+  function run(){clearInterval(timer);cs.forEach(c=>c.className='');let dis=new Array(10).fill(false),r=0;
+    const upd=p=>{document.getElementById('ur-r').textContent=r;document.getElementById('ur-p').textContent=p.toFixed(1);document.getElementById('ur-n').textContent=dis.filter(Boolean).length;};
+    if(!ver){cs.forEach(c=>c.classList.add('claim'));r=1;upd(5.5);document.getElementById('ur-msg').textContent='Every seller claims high quality, but buyers cannot verify it, so they value everyone at the average quality of 5.5. Good products cannot be told apart from bad ones, and unravelling does not happen.';return;}
+    upd(5.5);document.getElementById('ur-msg').textContent='At first no one discloses, and buyers value everyone at the average quality of 5.5.';
+    timer=setInterval(()=>{const nd=[...Array(10).keys()].filter(i=>!dis[i]);const p=nd.reduce((s,i)=>s+i+1,0)/nd.length;let moved=false;nd.forEach(i=>{if(i+1>p){dis[i]=true;cs[i].classList.add('dis');moved=true;}});r++;
+      const nd2=[...Array(10).keys()].filter(i=>!dis[i]);const p2=nd2.reduce((s,i)=>s+i+1,0)/nd2.length;upd(p2);
+      document.getElementById('ur-msg').textContent=moved?`Sellers with quality above ${p.toFixed(1)} choose to disclose. The average quality of those still silent falls to ${p2.toFixed(1)}, buyers lower their value accordingly, and another group of sellers now finds it worth disclosing.`:'';
+      if(!moved||nd2.length<=1){clearInterval(timer);document.getElementById('ur-msg').textContent='After unravelling step by step, every seller except the lowest-quality one has disclosed. As long as disclosures can be verified, buyers can tell good products from bad.';}},1300);}
+  document.querySelectorAll('[data-ur]').forEach(b=>b.addEventListener('click',()=>{ver=+b.dataset.ur;document.querySelectorAll('[data-ur]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));run();}));
+  document.getElementById('ur-run').addEventListener('click',run);
+  document.getElementById('ur').addEventListener('anim-in',run);
+})();
+</script>

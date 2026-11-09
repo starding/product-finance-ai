@@ -1,0 +1,48 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Civilization Simulator · Chapter 17: a market of scribes</p><p class="figsub">Forty scribes buy and sell the same ship share, whose fundamental value is 100. From step 5, a large holder's scribe sells a big order in each of ten consecutive steps. Adjust the share of scribes that come from the same operator and use the same method, switch the circuit breaker on or off, and watch the price over the day.</p></div><button class="replay" type="button" data-replay="cs17">Replay</button></div>
+    <div class="cs-rules"><span class="on">Market</span><span class="on">Parameter: price of cognitive labour</span><span class="on">Guaranteeing agents</span><span class="on">Analysts for all</span><span class="on">Agents as market participants</span><span class="lock">Agents and human bias · Ch. 18</span></div>
+    <div class="cs17" id="cs17" data-anim>
+      <svg viewBox="0 0 660 220" role="img" aria-label="Price over one day"><g id="cs17-ax"></g><g id="cs17-pz"></g><path id="cs17-b" class="cs17-b"/><path id="cs17-p" class="cs17-p"/></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Price</span><span><i style="background:var(--faint)"></i>Price when scribes are not alike</span><span><i style="background:var(--warm-soft)"></i>Circuit-breaker halt</span></div>
+      <div class="sl"><label for="cs17-s">Scribes from the same operator <b id="cs17-sv"></b></label><input id="cs17-s" type="range" min="0" max="90" step="10" value="50"></div>
+      <div class="cs-sw"><label><input type="checkbox" id="cs17-k"> Rule: circuit breaker (halt 3 steps after a fall of more than 4 points in one step)</label></div>
+      <div class="cs17-out" id="cs17-out"></div>
+      <p class="cs17-msg" id="cs17-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model: every scribe follows the rule "sell once losses reach a certain percentage". Scribes from the same operator share the same threshold and trigger at the same time; the other scribes' thresholds are spread between 4% and 16%. One third of the scribes quote prices in the market, and when the price falls more than 1.5 points in one step, they withdraw three quarters of their quotes. Households willing to buy at low prices buy more the lower the price. During a halt, the price recovers one fifth of the way towards fundamental value, and selling rules do not trigger.</figcaption>
+</figure>
+<style>
+.cs17 svg{width:100%;height:auto;display:block}
+.cs17-p{fill:none;stroke:var(--accent);stroke-width:2.6}
+.cs17-b{fill:none;stroke:var(--faint);stroke-width:1.6;stroke-dasharray:5 4}
+.cs17-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cs17-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs17-out span{display:block;font-size:11.5px;color:var(--faint)} .cs17-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.cs17-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs17-out{grid-template-columns:1fr}.cs17 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs17'+id),N=40,T=60,TH=.04,BIG=5,VB=.12,X0=44,X1=628,YT=10,YB=180,x=t=>X0+t/T*(X1-X0),y=v=>YB-(v-40)/62*(YB-YT);
+  function sim(same,brk){let s=1717;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};
+    const ns=Math.round(same*N),ag=[];for(let i=0;i<N;i++)ag.push({th:i<ns?TH:TH*(1+r()*3),sold:false,mm:i%3===0});
+    let p=100,pause=0;const P=[p],Z=[];
+    for(let t=1;t<=T;t++){if(pause>0){pause--;Z.push(t);p+=(100-p)*.2;P.push(p);continue;}
+      let sell=(t>=5&&t<15)?BIG:0;for(const a of ag){if(!a.sold&&(100-p)/100>=a.th){a.sold=true;sell+=1.5;}}
+      const prev=P[P.length-1],fall=P.length>1&&(P[P.length-2]-prev)>1.5,mm=ag.filter(a=>a.mm&&!a.sold).length,depth=2+(fall?mm*.25:mm);
+      p=Math.min(100,p-(sell-Math.max(0,100-p)*VB)/depth*2);if(brk&&(prev-p)>4)pause=3;P.push(p);}
+    const mn=Math.min(...P),ti=P.indexOf(mn),rec=P.findIndex((v,i)=>i>ti&&v>=97);return {P,Z,mn,rec};}
+  function draw(){const sm=+$('-s').value/100,bk=$('-k').checked,S=sim(sm,bk),B=sim(0,false);$('-sv').textContent=Math.round(sm*100)+'%';
+    $('-ax').innerHTML=[40,60,80,100].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+[0,15,30,45,60].map(t=>`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">Step ${t}</text>`).join('');
+    $('-pz').innerHTML=S.Z.map(t=>`<rect x="${x(t-1)}" y="${YT}" width="${(X1-X0)/T}" height="${YB-YT}" fill="var(--warm-soft)"/>`).join('');
+    const L=P=>P.map((v,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(v).toFixed(1)).join('');$('-p').setAttribute('d',L(S.P));$('-b').setAttribute('d',sm>0||bk?L(B.P):'');
+    $('-out').innerHTML=[['Lowest price',S.mn.toFixed(1)],['Largest fall',(100-S.mn).toFixed(1)+'%'],['Back above 97',S.rec>0?'Step '+S.rec:(S.mn>=97?'Never below 97':'Not that day')]].map(([a,v])=>`<div><span>${a}</span><b>${v}</b></div>`).join('');
+    const d=100-S.mn;
+    $('-msg').textContent=sm===0?(bk?'The scribes all use different methods, so the shock of the large order is absorbed by scattered selling and by households willing to buy at low prices; the circuit breaker is hardly needed.':`The scribes all use different methods and their thresholds for cutting positions are spread out, so the large order pushes the price down only ${d.toFixed(1)}%.`):d>30?`Scribes from the same operator make up ${Math.round(sm*100)}%. They trigger selling at the same moment, the quoting scribes withdraw at once, and the price falls as low as ${S.mn.toFixed(0)}.`+(bk?(d>40?' The circuit breaker comes too late: the synchronized selling has already crushed the price within a single step.':''):' Try switching on the circuit breaker.'):`Scribes from the same operator make up ${Math.round(sm*100)}%. `+(bk?`When the price plunges, the circuit breaker halts trading, giving households that buy at low prices time to arrive and stopping the scribes' rules from triggering one after another; the largest fall is held to ${d.toFixed(1)}%.`:`The largest fall is ${d.toFixed(1)}%.`);}
+  ['-s','-k'].forEach(k=>$(k).addEventListener('input',draw));
+  $('').addEventListener('anim-in',()=>{[[0,0],[50,0],[50,1],[90,1]].forEach(([v,b],i)=>setTimeout(()=>{$('-s').value=v;$('-k').checked=!!b;draw();},300+i*2200));});
+  draw();
+})();
+</script>

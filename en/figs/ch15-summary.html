@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: designing products from the job</p><p class="figsub">Four design requirements, each corresponding to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="ch15summary">Replay</button></div>
+    <div class="ch15summary" id="ch15summary" data-anim><div class="ch15summary-c" style="--i:0"><em>Users want a job done</em><b>Organize around jobs, not products</b><p>First ask when the money is needed, how much, and what loss can be borne; then recommend products. The same product can be the wrong choice for a different job.</p></div><div class="ch15summary-c" style="--i:1"><em>Jobs have levels</em><b>Make low-level actions serve high-level goals</b><p>On screens for viewing and ordering, show how this action relates to the user's goal and plan.</p></div><div class="ch15summary-c warn" style="--i:2"><em>Results are affected by luck</em><b>Define completion by the process</b><p>State the goal, constraints and checks in advance, and judge afterwards by whether they were followed, not by returns alone.</p></div><div class="ch15summary-c warn" style="--i:3"><em>Delivery must be complete; ongoing jobs must give an account</em><b>Keep the principal informed and in control</b><p>Have all eight stages in place; in ongoing jobs, report the state of every cycle, distinguishing normal, blocked and awaiting confirmation.</p></div></div>
+  </div>
+</figure>
+<style>
+.ch15summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch15summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch15summary-c.warn{border-left-color:var(--warm)}
+.ch15summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch15summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch15summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch15summary.in .ch15summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch15summary{grid-template-columns:1fr}}
+</style>

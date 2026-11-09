@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: show users the safeguards behind a promise</p><p class="figsub">Four design requirements, each tied to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="ch13summary">Replay</button></div>
+    <div class="ch13summary" id="ch13summary" data-anim><div class="ch13summary-c" style="--i:0"><em>Financial products are credence goods</em><b>Make the process open to checking</b><p>Provide the reasoning, records and verifiable data, rather than relying on short-term results alone to prove the product's quality.</p></div><div class="ch13summary-c" style="--i:1"><em>Credibility comes from institutions</em><b>Explain custody and protection clearly</b><p>State who holds the assets in custody, whether they are segregated from the firm's own assets, and what protections apply and up to what limits.</p></div><div class="ch13summary-c warn" style="--i:2"><em>Delegated monitors also need monitoring</em><b>Disclose conflicts of interest and fees</b><p>Explain where the intermediary makes its money and whether that conflicts with the user's interests.</p></div><div class="ch13summary-c" style="--i:3"><em>A trade is not a settlement</em><b>Distinguish trade, settlement and available funds</b><p>Show when money and securities actually arrive and when they can be withdrawn.</p></div></div>
+  </div>
+</figure>
+<style>
+.ch13summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch13summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch13summary-c.warn{border-left-color:var(--warm)}
+.ch13summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch13summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch13summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch13summary.in .ch13summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch13summary{grid-template-columns:1fr}}
+</style>

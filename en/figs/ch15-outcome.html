@@ -1,0 +1,46 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">A good decision is not the same as a good outcome</p><p class="figsub">100 investors each repeat the same decision. Good decision: diversified, with positive expected return. Poor decision: a concentrated bet, with negative expected return but high volatility. Drag the horizon to see how far results reflect the quality of the decision.</p></div><button class="replay" type="button" id="oc-re">Resample</button></div>
+    <div class="oc" id="oc" data-anim>
+      <div class="sl"><label for="oc-y">Horizon <b id="oc-yv"></b></label><input id="oc-y" type="range" min="1" max="30" step="1" value="1"></div>
+      <div class="oc-grid">
+        <div class="oc-q"><span class="oc-h">Good decision</span><div class="oc-dots" id="oc-g"></div><p id="oc-gt"></p></div>
+        <div class="oc-q"><span class="oc-h">Poor decision</span><div class="oc-dots" id="oc-b"></div><p id="oc-bt"></p></div>
+      </div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Positive result</span><span><i style="background:var(--warm)"></i>Negative result</span></div>
+      <p class="oc-msg" id="oc-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative simulation: the good decision has an expected annual return of 5% and volatility of 15%; the poor decision has an expected annual return of −3% and volatility of 40%; random draws from a normal distribution of log returns. On separating decisions from outcomes, see Howard (1988).</figcaption>
+</figure>
+<style>
+.oc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0 6px}
+.oc-q{background:var(--quote);border-radius:10px;padding:10px}
+.oc-h{font-size:13px;font-weight:700}
+.oc-dots{display:grid;grid-template-columns:repeat(20,1fr);gap:3px;margin:8px 0}
+.oc-dots i{aspect-ratio:1;border-radius:50%;background:var(--line);transition:background .3s}
+.oc-dots i.p{background:var(--accent)} .oc-dots i.n{background:var(--warm)}
+.oc-q p{margin:0;font-size:13px}
+.oc-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.oc-grid{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const N=100,$=id=>document.getElementById(id);let Zg=[],Zb=[];
+  const rn=()=>{let u=0,v=0;while(!u)u=Math.random();while(!v)v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);};
+  function draw(){Zg=Array.from({length:N},rn);Zb=Array.from({length:N},rn);}
+  ['oc-g','oc-b'].forEach(id=>$(id).innerHTML='<i></i>'.repeat(N));
+  const sl=$('oc-y');
+  function r(){const T=+sl.value;$('oc-yv').textContent=T+(T===1?' year':' years');
+    const f=(mu,s,z)=>(mu-s*s/2)*T+s*Math.sqrt(T)*z;
+    const g=Zg.map(z=>f(.05,.15,z)),b=Zb.map(z=>f(-.03,.40,z));
+    const pg=g.filter(v=>v>0).length,pb=b.filter(v=>v>0).length;
+    [...$('oc-g').children].forEach((c,i)=>c.className=g[i]>0?'p':'n');[...$('oc-b').children].forEach((c,i)=>c.className=b[i]>0?'p':'n');
+    $('oc-gt').textContent=`${pg} positive, ${N-pg} negative`;$('oc-bt').textContent=`${pb} positive, ${N-pb} negative`;
+    $('oc-msg').textContent=T<=3?`Over ${T} ${T===1?'year':'years'}, ${pb} of those making the poor decision still get a positive result, while ${N-pg} of those making the good decision lose money: looking at results alone, it is hard to tell good decisions from bad.`:T<15?'As the horizon lengthens, the results of the two decisions begin to separate, though there are still many exceptions.':`Over ${T} years, the good decision mostly produces positive results and the poor decision mostly loses money: the quality of a decision shows only over a long enough period.`;}
+  sl.addEventListener('input',r);
+  $('oc-re').addEventListener('click',()=>{draw();r();});
+  $('oc').addEventListener('anim-in',()=>{draw();let v=1;sl.value=v;r();const id=setInterval(()=>{v+=1;sl.value=v;r();if(v>=30)clearInterval(id);},120);});
+  draw();r();
+})();
+</script>

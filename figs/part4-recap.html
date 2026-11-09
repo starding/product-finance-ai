@@ -1,0 +1,40 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">第四部分小结：四层设计各自回答什么</p><p class="figsub">切换视角：每一层的结论、设计要求，以及怎样检验做到了没有。</p></div><button class="replay" type="button" data-replay="rc4">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="视角">
+      <button type="button" data-rv4="c" aria-pressed="true">结论</button>
+      <button type="button" data-rv4="p" aria-pressed="false">设计要求</button>
+      <button type="button" data-rv4="a" aria-pressed="false">怎样检验</button>
+    </div>
+    <div class="rc4" id="rc4" data-anim></div>
+  </div>
+  <figcaption>每一行对应分解中的一项。</figcaption>
+</figure>
+<style>
+.rc4{display:grid;gap:6px}
+.rc4-r{display:grid;grid-template-columns:150px 1fr;gap:12px;align-items:center;padding:10px 12px;border-radius:10px;background:var(--quote);opacity:0;transform:translateY(6px);transition:opacity .4s,transform .4s;transition-delay:calc(var(--i)*.15s)}
+.rc4.in .rc4-r{opacity:1;transform:none}
+.rc4-r b{font-size:14px;display:block}
+.rc4-r em{font-style:normal;font-size:11px;color:var(--faint)}
+.rc4-r p{margin:0;font-size:13.5px;line-height:1.6}
+.rc4-r.keep{background:rgba(160,120,24,.1)}
+.rc4-r .sign{display:inline-block;min-width:18px;margin-right:4px;font-size:11px;color:var(--faint);font-weight:700}
+@media (max-width:640px){.rc4-r{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const R=[
+    ['','价值层','24',{c:'只承诺市场能提供、产品能兑现、用户能核验的价值；以净价值衡量。',p:'承诺过程而非短期收益；按任务写出承诺与不承诺的内容；展示回测时说明尝试次数。',a:'每一条承诺都有可查的指标与检查方式。'}],
+    ['','契约层','25–27',{c:'交代要写成委托书；授权按可逆性分配；代理的收入与目标要站在用户一边。',p:'目标配风险约束与默认规则；不可逆的一步由本人确认、边界在执行层；结构性处理冲突，责任跟随控制。',a:'越界指令被拦下的比例；建议偏向的独立审计；每起差错都能追溯到责任方。'}],
+    ['','实现层','28–29',{c:'通用能力决定做成，金融专有能力决定做对；过程要可见、可回放；保障与风险相称。',p:'按任务选择现场装配或固定流程；长期对象与时点记录；分层评测、监控与分级发布。',a:'关键情形单独达标；指标越过门槛时自动告警；任意一次决定可以回放。'}],
+    ['前提','信任','30',{c:'信任要在信念更新的每一项上设计：先验、证据可见、诊断力、失误的分量与门槛。',p:'从小事开始；让过程证据被看见；第三方核验；失误抢先说明；退出容易。',a:'用户的信任是否与产品实际的可信程度相符，既不误用，也不弃用。'}],
+    ['总结','设计原则','31',{c:'十二条原则，每一条都追溯到市场、用户或 AI 的约束。',p:'取舍以后果与可核验性为依据：后果越重，越偏向确认、提醒、透明与保障。',a:'用十二个问题评审每一项设计。'}]
+  ];
+  const box=document.getElementById('rc4');
+  function set(v){document.querySelectorAll('[data-rv4]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.rv4===v)));
+    box.innerHTML=R.map(([s,n,ch,t],i)=>`<div class="rc4-r${n==='信任'||n==='设计原则'?' keep':''}" style="--i:${i}"><div><b><span class="sign">${s}</span>${n}</b><em>第 ${ch} 章</em></div><p>${t[v]}</p></div>`).join('');
+    box.classList.remove('in');void box.offsetWidth;box.classList.add('in');}
+  document.querySelectorAll('[data-rv4]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.rv4)));
+  set('c'); box.classList.remove('in');
+})();
+</script>

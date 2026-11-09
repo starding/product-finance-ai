@@ -1,0 +1,61 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Civilization Simulator · Chapter 6: The village granary</p><p class="figsub">Fifty households store their spare grain in the granary, and orchard planters borrow five-year grain from it. Switch the granary and deposit insurance on or off, adjust the share kept back for withdrawals and how many panic when a rumour comes, and watch the orchards and the granary over thirty years.</p></div><button class="replay" type="button" data-replay="cs6">Replay</button></div>
+    <div class="cs-rules"><span class="on">Saving</span><span class="on">Lending</span><span class="on">Commitment</span><span class="on">Money</span><span class="on">Insurance</span><span class="on">Bank</span><span class="lock">Shares · Ch. 7</span></div>
+    <div class="cs6" id="cs6" data-anim>
+      <svg viewBox="0 0 660 210" role="img" aria-label="The granary’s loans and reserves over thirty years"><g id="cs6-ax"></g><g id="cs6-b"></g><g id="cs6-m"></g></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Grain lent to orchards</span><span><i style="background:var(--gold)"></i>Grain kept back for withdrawals</span><span><i style="background:var(--warm)"></i>Years a rumour spreads</span></div>
+      <div class="cs-sw"><label><input type="checkbox" id="cs6-bank" checked> Rule: Bank (granary)</label><label><input type="checkbox" id="cs6-ins"> Rule: Deposit insurance</label></div>
+      <div class="cs6-ctl">
+        <div class="sl"><label for="cs6-r">Share kept back for withdrawals <b id="cs6-rv"></b></label><input id="cs6-r" type="range" min="5" max="60" step="5" value="20"></div>
+        <div class="sl"><label for="cs6-f">Who panic when a rumour comes <b id="cs6-fv"></b></label><input id="cs6-f" type="range" min="0" max="100" step="5" value="60"></div>
+      </div>
+      <button type="button" class="replay" id="cs6-re">Another run of years</button>
+      <div class="cs6-out" id="cs6-out"></div>
+      <p class="cs6-msg" id="cs6-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model: fifty households each deposit 10 portions; each has a one-in-ten chance each year of an emergency and withdraws, depositing again the following year; a rumour spreads about once every ten years. Orchard loans run five years and return 30% extra at maturity; recalling them early fetches only half their value. Without a granary, each household stores its own grain, losing 10% a year, and no one lends to orchards. A granary that cannot meet withdrawals falls and lends no more.</figcaption>
+</figure>
+<style>
+.cs6 svg{width:100%;height:auto;display:block}
+.cs6-ctl{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:8px 0}
+.cs6-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cs6-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs6-out span{display:block;font-size:11.5px;color:var(--faint)} .cs6-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.cs6-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs6-ctl{grid-template-columns:1fr;gap:4px}.cs6-out{grid-template-columns:1fr}.cs6 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs6'+id),N=50,DEP=10,Y=30,T=5;let seed=1606;
+  const X0=40,X1=650,YT=10,YB=180,bw=(X1-X0)/Y,y=v=>YB-v/500*(YB-YT);
+  function draws(){let s=seed;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};return {u:Array.from({length:Y},()=>Array.from({length:N},()=>r())),rum:Array.from({length:Y},()=>r()<.1)};}
+  function sim(o){const R=draws(),rows=[];let book=Array(T).fill(0),alive=true,out=0,unmet=0,runs=0,fail=-1,lost=0;
+    if(o.bank){const L=(1-o.rho)*N*DEP;book=book.map(()=>L/T);}
+    for(let t=0;t<Y;t++){const urgent=R.u[t].filter(u=>u<.1).length;
+      if(!o.bank){lost+=N*DEP*.1;rows.push([0,0,R.rum[t],false]);continue;}
+      if(!alive){rows.push([0,0,R.rum[t],false]);continue;}
+      // matured orchard loans are repaid and lent out again at the same size
+      const mat=book.shift();out+=mat*.3;book.push(mat);
+      let loans=book.reduce((a,b)=>a+b,0),reserve=N*DEP-loans;
+      const panic=R.rum[t]&&!o.ins?Math.round((N-urgent)*o.f):0;if(R.rum[t]&&panic>0)runs++;
+      const demand=(urgent+panic)*DEP;
+      if(demand<=reserve){rows.push([loans,reserve,R.rum[t],false]);continue;}
+      const need=demand-reserve,cap=loans*.5;
+      if(need<=cap){const cut=need/.5,k=1-cut/loans;book=book.map(v=>v*k);rows.push([loans*k,0,R.rum[t],false]);
+        // grain withdrawn in panic is redeposited next year; the granary relends to its reserve ratio
+        const L=(1-o.rho)*N*DEP,cur=book.reduce((a,b)=>a+b,0);book[T-1]+=Math.max(0,L-cur);continue;}
+      const paid=reserve+cap;unmet+=N-Math.floor(paid/DEP);alive=false;fail=t;rows.push([0,0,R.rum[t],true]);}
+    return {rows,out,unmet,runs,fail,lost};}
+  function draw(){const o={bank:$('-bank').checked,ins:$('-ins').checked,rho:+$('-r').value/100,f:+$('-f').value/100},S=sim(o);
+    $('-rv').textContent=Math.round(o.rho*100)+'%';$('-fv').textContent=Math.round(o.f*100)+'%';
+    $('-ax').innerHTML=[0,250,500].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+[1,10,20,30].map(t=>`<text x="${X0+bw*(t-.5)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">Year ${t}</text>`).join('');
+    $('-b').innerHTML=S.rows.map(([l,r,rum,f],t)=>{const x=X0+bw*t+bw*.15,w=bw*.7;return `<rect x="${x}" y="${y(l)}" width="${w}" height="${YB-y(l)}" fill="var(--accent)" rx="1"/><rect x="${x}" y="${y(l+r)}" width="${w}" height="${y(l)-y(l+r)}" fill="var(--gold)"/>`+(rum?`<rect x="${x}" y="${YT}" width="${w}" height="4" fill="var(--warm)"/>`:'')+(f?`<text x="${x+w/2}" y="${YB-6}" text-anchor="middle" font-size="11" class="t-warm">Falls</text>`:'');}).join('');
+    $('-out').innerHTML=[['Extra orchard grain over 30 years',Math.round(S.out)+' portions'],["Households unable to withdraw",S.unmet],[o.bank?'Runs set off by rumours':'Storage losses over 30 years',o.bank?S.runs:Math.round(S.lost)+' portions']].map(([a,b])=>`<div><span>${a}</span><b>${b}</b></div>`).join('');
+    $('-msg').textContent=!o.bank?`Without a granary, no one will lend grain for five years and the orchards are never planted; each household stores its own grain and loses about ${Math.round(S.lost)} portions over thirty years.`:S.fail>=0?`In year ${S.fail+1} a rumour spreads and ${Math.round(o.f*100)}% of people rush to withdraw; even cutting down trees, the granary cannot pay and falls. ${S.unmet} households cannot get their grain back, and no one lends to orchards again.`:o.ins?`With deposit insurance, no one rushes when rumours come; the granary runs smoothly for thirty years and the orchards yield about ${Math.round(S.out)} extra portions.`:S.runs?`Rumours came ${S.runs} time${S.runs===1?'':'s'}; the granary got through by recalling loans at a discount, but the trees cut down yielded less grain. The higher the share kept back, the steadier the granary, and the less it lends to orchards.`:`No run occurred in this run of years; the orchards yielded about ${Math.round(S.out)} extra portions. Try another run of years.`;}
+  ['-bank','-ins','-r','-f'].forEach(k=>$(k).addEventListener('input',draw));$('-re').addEventListener('click',()=>{seed=(seed*48271)%2147483647;draw();});
+  $('').addEventListener('anim-in',()=>{const s=[[false,false],[true,false],[true,true]];s.forEach(([b,i],k)=>setTimeout(()=>{$('-bank').checked=b;$('-ins').checked=i;draw();},300+k*2600));});
+  draw();
+})();
+</script>

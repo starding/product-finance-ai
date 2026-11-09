@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Capability assembly and process visibility</title>
+<meta name="description" content="Chapter 28 of Product × Finance × AI: Financial Products in the Age of AI. General capabilities decide whether a task can be done; finance-specific capabilities decide whether it is done right. Tasks with uncertain paths are assembled on the spot; tasks with fixed paths use fixed workflows. A lasting relationship must store its state as objects, keep a point-in-time record of what was known at the time, make progress and pending requests visible at a glance, and allow every decision to be replayed.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="ch28">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="Contents">
+<div class="side-head"><a class="sidetitle" href="index.html">Product × Finance × AI<small>Financial Products in the Age of AI</small></a></div>
+<div class="side-view" role="group" aria-label="Way of reading"><a href="preface.html" class="on" aria-current="true">Decomposition</a><a href="g-preface.html">Derivation</a></div>
+<a class="side-about" href="index.html#about">About this book</a>
+<a class="" href="preface.html"><span class="n">Preface</span>Why financial products must be relearned in the age of AI</a>
+<a class="side-part" href="part1.html"><span class="pn">Part One</span>Markets: where returns and risks come from</a>
+<a class="" href="ch01.html"><span class="n">1</span>What financial products sell</a>
+<a class="" href="ch02.html"><span class="n">2</span>Interest rates and maturity</a>
+<a class="" href="ch03.html"><span class="n">3</span>What risk looks like</a>
+<a class="" href="ch04.html"><span class="n">4</span>Diversification</a>
+<a class="" href="ch05.html"><span class="n">5</span>Compounding and volatility drag</a>
+<a class="" href="ch06.html"><span class="n">6</span>Factors</a>
+<a class="" href="ch07.html"><span class="n">7</span>Why prices are hard to predict</a>
+<a class="" href="ch08.html"><span class="n">8</span>How information gets into prices</a>
+<a class="" href="ch09.html"><span class="n">9</span>Traders in the market</a>
+<a class="" href="ch10.html"><span class="n">10</span>Liquidity and the bid-ask spread</a>
+<a class="" href="ch11.html"><span class="n">11</span>Orders, rules and market structure</a>
+<a class="" href="ch12.html"><span class="n">12</span>The arithmetic of active management</a>
+<a class="" href="ch13.html"><span class="n">13</span>How promises are kept</a>
+<a class="" href="ch14.html"><span class="n">14</span>Why regulation exists</a>
+<a class="side-part" href="part2.html"><span class="pn">Part Two</span>Users: what people want and what they can bear</a>
+<a class="" href="ch15.html"><span class="n">15</span>The jobs users need done</a>
+<a class="" href="ch16.html"><span class="n">16</span>How users make decisions</a>
+<a class="" href="ch17.html"><span class="n">17</span>What users can bear</a>
+<a class="" href="ch18.html"><span class="n">18</span>How users judge and trust</a>
+<a class="side-part" href="part3.html"><span class="pn">Part Three</span>AI: how much an agent can do on people&#x27;s behalf</a>
+<a class="" href="ch19.html"><span class="n">19</span>The amplification factor</a>
+<a class="" href="ch20.html"><span class="n">20</span>Which tasks can be handed to AI</a>
+<a class="" href="ch21.html"><span class="n">21</span>Where capability comes from, and where it fails</a>
+<a class="" href="ch22.html"><span class="n">22</span>Verifiability: the cost of checking</a>
+<a class="" href="ch23.html"><span class="n">23</span>The special constraints of finance</a>
+<a class="side-part" href="part4.html"><span class="pn">Part Four</span>Design: financial products under three sets of constraints</a>
+<a class="" href="ch24.html"><span class="n">24</span>What to promise</a>
+<a class="" href="ch25.html"><span class="n">25</span>Mandate parameters</a>
+<a class="" href="ch26.html"><span class="n">26</span>Authority and irreversible exposure</a>
+<a class="" href="ch27.html"><span class="n">27</span>Liability and conflicts of interest</a>
+<a class=" cur" href="ch28.html" aria-current="page"><span class="n">28</span>Capability assembly and process visibility</a>
+<a class="" href="ch29.html"><span class="n">29</span>Assurance level</a>
+<a class="" href="ch30.html"><span class="n">30</span>How trust is built</a>
+<a class="" href="ch31.html"><span class="n">31</span>Design principles</a>
+<a class="side-app" href="estimates.html"><span class="n">Appendix</span>Methods and data behind the author&#x27;s estimates</a>
+<a class="side-app" href="method.html"><span class="n">Appendix</span>How this book was written</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="Open contents" title="Contents"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">Product × Finance × AI: Financial Products in the Age of AI</a><span>Part Four · Implementation layer  How to deliver</span><a class="langlink" href="../ch28.html" hreflang="zh-CN">中文</a></header>
+
+<div class="chapno">Chapter 28</div><h1>Capability assembly and process visibility<small>What a task is done with, and how the process can be checked</small></h1>
+<blockquote><p>The implementation layer answers two questions: what capabilities a task is done with, and how the process can be seen and checked. Capabilities fall into two kinds. General capabilities, such as understanding, planning, retrieval, running programs, scheduled execution and notification, decide whether a task can be done at all. Finance-specific capabilities, such as market and fundamental data, portfolio calculations, suitability checks, trading interfaces and checks on whether investment statements are compliant, decide whether it is done right. How capabilities are organized depends on the task. Tasks whose path is uncertain and depends on personal circumstances are assembled on the spot by the agent; tasks whose path is fixed, which serve many people and require consistent quality, use fixed workflows. A lasting relationship cannot live only in a series of conversations. The mandate, the portfolio and the record of performance must be stored as long-lived objects, with a point-in-time record of what was known at the time. The user must be able to see at a glance what is under way and what is waiting for them, and must be able to replay every past decision.</p></blockquote>
+<h2 id="sec-1">1. Assembling capabilities: getting it done and getting it right</h2>
+<p>Completing a financial task takes two kinds of capability. General capabilities decide whether the task can be done: understanding what the principal asks for, breaking it into steps, retrieving material, running programs for calculation, running on schedule, sending notifications, and asking for instructions and waiting for confirmation. Finance-specific capabilities decide whether it is done right: accurate, time-stamped market and fundamental data; calculation of portfolio return, risk and attribution; suitability and constraint checks; trading interfaces and execution rules; and checks on whether investment statements are compliant. Without general capabilities the task cannot be completed. Without finance-specific capabilities the task is completed, but the result may be wrong.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Which capabilities a task calls on</p><p class="figsub">Choose a task to see which general and finance-specific capabilities it needs. Then tick "Missing finance-specific capabilities" to see what happens to the result.</p></div><button class="replay" type="button" data-replay="cp2">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Task">
+      <button type="button" data-cp2="0" aria-pressed="true">Research a company</button><button type="button" data-cp2="1" aria-pressed="false">Track holdings continuously</button><button type="button" data-cp2="2" aria-pressed="false">Rebalance to target</button><button type="button" data-cp2="3" aria-pressed="false">Explain a price move</button>
+    </div>
+    <label class="cp2-chk"><input type="checkbox" id="cp2-x"> Missing finance-specific capabilities</label>
+    <div class="cp2" id="cp2" data-anim>
+      <div class="cp2-col"><b>General capabilities: can it be done?</b><div id="cp2-g"></div></div>
+      <div class="cp2-col"><b>Finance-specific capabilities: is it done right?</b><div id="cp2-f"></div></div>
+    </div>
+    <p class="cp2-msg" id="cp2-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>Illustrative. The division into two kinds of capability is this book's own classification.</figcaption>
+</figure>
+<style>
+.cp2-chk{display:flex;gap:6px;align-items:center;font-size:14px;margin-bottom:6px}
+.cp2-chk input{accent-color:var(--warm);width:16px;height:16px}
+.cp2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cp2-col{background:var(--quote);border-radius:10px;padding:10px}
+.cp2-col>b{font-size:13px;display:block;margin-bottom:6px}
+.cp2-col>div{display:flex;flex-wrap:wrap;gap:5px}
+.cp2-c{font-size:12px;border-radius:14px;padding:3px 10px;border:1px solid var(--line);background:var(--surface);color:var(--faint);transition:all .3s}
+.cp2-c.on{color:var(--ink);border-color:var(--accent);background:var(--accent-soft)}
+.cp2-c.f.on{border-color:var(--blue);background:rgba(47,95,158,.12)}
+.cp2-c.off{text-decoration:line-through;color:var(--warm);border-color:var(--warm);background:var(--warm-soft)}
+.cp2-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cp2{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const G=['Understand the request','Break into steps','Retrieve material','Run programs to calculate','Run on schedule','Send notifications','Ask and wait for confirmation','Save and read records'],F=['Time-stamped market and fundamental data','Portfolio return and risk calculation','Suitability and constraint checks','Trading interface and execution rules','Compliance check on statements','Corporate event and announcement data'];
+  const T=[[[0,1,2,3,7],[0,4,5],'Research needs retrieval and calculation, and above all accurate financial data and announcements; without them, the analysis may rest on stale or invented numbers.'],[[0,4,5,6,7],[0,5,1,4],'Tracking must run on schedule and send notifications, and it depends on corporate event data; without event data, the agent may run on time and still miss an alert.'],[[0,1,3,6,7],[1,2,3,0],'Rebalancing needs portfolio calculation, constraint checks and a trading interface; without constraint checks, a correctly calculated plan may still breach the mandate.'],[[0,2,3],[0,5,4],'Explaining a price move needs time-stamped market data and that day\'s announcements, and a check on whether the wording amounts to investment advice.']];
+  const g=document.getElementById('cp2-g'),f=document.getElementById('cp2-f'),x=document.getElementById('cp2-x');let k=0;
+  g.innerHTML=G.map(n=>`<span class="cp2-c">${n}</span>`).join('');f.innerHTML=F.map(n=>`<span class="cp2-c f">${n}</span>`).join('');
+  const gs=[...g.children],fs=[...f.children];
+  function r(){const [a,b,m]=T[k],off=x.checked;gs.forEach((e,i)=>e.className='cp2-c'+(a.includes(i)?' on':''));fs.forEach((e,i)=>e.className='cp2-c f'+(b.includes(i)?(off?' off':' on'):''));
+    document.getElementById('cp2-msg').textContent=off?'The task can still be completed: the agent still breaks it into steps, retrieves, calculates and delivers a result. But the result may be wrong, and it looks just as certain.':m;}
+  document.querySelectorAll('[data-cp2]').forEach(b=>b.addEventListener('click',()=>{k=+b.dataset.cp2;document.querySelectorAll('[data-cp2]').forEach(z=>z.setAttribute('aria-pressed',String(z===b)));r();}));
+  x.addEventListener('change',r);
+  document.getElementById('cp2').addEventListener('anim-in',()=>{x.checked=false;[0,1,2,3].forEach(i=>setTimeout(()=>document.querySelector(`[data-cp2="${i}"]`).click(),i*1600));setTimeout(()=>{x.checked=true;r();},6800);});
+  r();
+})();
+</script>
+
+<h2 id="sec-2">2. Two ways of organizing: on-the-spot assembly and fixed workflows</h2>
+<p>Perrow (1967) distinguished tasks in organizations along two dimensions: how many exceptions arise, and whether a ready method of analysis exists when one does. Tasks with few exceptions and clear methods suit standardized procedures; tasks with many exceptions and unclear methods require judgment on the spot. The same holds for how an agent's capabilities are organized. Researching a company or answering a personal question has a path that cannot be fixed in advance; it suits an agent that calls capabilities as needed and assembles them on the spot. A daily market summary, a maturity reminder or a periodic portfolio check-up has a fixed path, serves many people and requires consistent quality; it suits a fixed workflow that has been evaluated. The two can connect: while assembling on the spot, the agent can call a published fixed workflow as one of its capabilities.</p>
+<figure>
+  <div class="card">
+    <p class="figtitle">On-the-spot assembly or a fixed workflow</p>
+    <p class="figsub">The horizontal axis is how fixed the task's path is; the vertical axis is how many people the same task serves, and how often. Tap a task to see which way of organizing suits it.</p>
+    <div class="og" id="og" data-anim>
+      <svg viewBox="0 0 640 280" role="img" aria-label="How tasks are organized"><g id="og-ax"></g><g id="og-pts"></g></svg>
+      <p class="og-msg" id="og-msg" aria-live="polite">Tap a task.</p>
+    </div>
+  </div>
+  <figcaption>Illustrative positions. The framework that distinguishes tasks by the number of exceptions and how analysable they are is from Perrow (1967).</figcaption>
+</figure>
+<style>
+.og svg{width:100%;height:auto;display:block}
+.og-p{cursor:pointer;opacity:0;transition:opacity .4s;transition-delay:calc(var(--i)*.12s)}
+.og.in .og-p{opacity:1}
+.og-p.sel circle{stroke:var(--ink);stroke-width:2.5}
+.og-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.og svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const T=[['Research a company',12,40,'a','The path differs from company to company, and what to look up and how to calculate it must be judged on the spot: assembled on the spot by the agent.'],['Answer a personal question',15,15,'a','It depends on the principal\'s circumstances, and the steps cannot be fixed in advance: assembled on the spot.'],['Review past decisions',36,30,'a','Each review focuses on something different; a fixed attribution calculation can be called as one of its steps.'],['Daily market summary',85,90,'f','Fixed steps, many people served, consistency required: built as a fixed workflow that has been evaluated.'],['Option/rights expiry alert',90,75,'f','Clear trigger rules and a high cost of missed alerts: a fixed workflow, triggered by rules, with the model responsible for the explanation.'],['Periodic portfolio check-up',80,66,'f','The checks are fixed and the results must be consistent and comparable: a fixed workflow.'],['Track holdings continuously',55,42,'m','The checks themselves are a fixed workflow; the explanation and suggestions after an anomaly is found are done on the spot by the agent: the two connect.']];
+  const X0=60,X1=610,YT=14,YB=240,x=v=>X0+v/100*(X1-X0),y=v=>YB-v/100*(YB-YT),C={a:'var(--accent)',f:'var(--blue)',m:'var(--gold)'};
+  document.getElementById('og-ax').innerHTML=`<rect x="${x(0)}" y="${y(100)}" width="${x(50)-x(0)}" height="${y(0)-y(100)}" fill="var(--accent-soft)" opacity=".45"/><rect x="${x(50)}" y="${y(100)}" width="${x(100)-x(50)}" height="${y(0)-y(100)}" fill="rgba(47,95,158,.08)"/>`+
+    `<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/><line x1="${X0}" y1="${YT}" x2="${X0}" y2="${YB}" class="s-faint"/><text x="${X0}" y="${YB+18}" font-size="11" class="t-faint">Path uncertain</text><text x="${X1}" y="${YB+18}" text-anchor="end" font-size="11" class="t-faint">Path fixed →</text><text x="${X0-6}" y="${YT+8}" text-anchor="end" font-size="11" class="t-faint">Many</text><text x="${X0-6}" y="${YB}" text-anchor="end" font-size="11" class="t-faint">Few</text>`+
+    `<text x="${x(25)}" y="${y(96)}" text-anchor="middle" font-size="12" class="t-accent">On-the-spot assembly</text><text x="${x(75)}" y="${y(96)}" text-anchor="middle" font-size="12" fill="var(--blue)">Fixed workflow</text>`;
+  document.getElementById('og-pts').innerHTML=T.map(([n,a,b,k],i)=>`<g class="og-p" data-i="${i}" style="--i:${i}"><circle cx="${x(a)}" cy="${y(b)}" r="7" fill="${C[k]}"/><text x="${x(a)+(a>70?-11:11)}" y="${y(b)+4}" text-anchor="${a>70?'end':'start'}" font-size="12" class="t-ink">${n}</text></g>`).join('');
+  const ps=[...document.querySelectorAll('.og-p')];
+  ps.forEach((p,i)=>p.addEventListener('click',()=>{ps.forEach(q=>q.classList.toggle('sel',q===p));document.getElementById('og-msg').textContent=T[i][0]+': '+T[i][4];}));
+})();
+</script>
+
+<h2 id="sec-3">3. From a single conversation to a lasting relationship</h2>
+<p>A conversation is temporary. When it ends, the agreements, judgments and to-do items made in it are scattered through the chat history. A continuing delegation needs objects that persist: the mandate, the portfolio, the assets being watched, research notes, pending items and the record of performance. The agent reads these objects each time it starts work and updates them when it finishes; the user can view and edit them directly, without searching through past conversations. Objects let the relationship span conversations and devices, and they keep the agreements and records intact after the agent or model is replaced.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">State kept in conversations, or stored as objects</p><p class="figsub">Over four weeks the principal and the agent have four conversations, and in the fourth week the model is changed. Switch how state is kept and see what remains by the fourth conversation.</p></div><button class="replay" type="button" data-replay="ob2">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="How state is kept"><button type="button" data-ob2="s" aria-pressed="true">Only in conversations</button><button type="button" data-ob2="o" aria-pressed="false">Stored as long-lived objects</button></div>
+    <div class="ob2" id="ob2" data-anim>
+      <div class="ob2-wk" id="ob2-wk"></div>
+      <div class="ob2-list" id="ob2-list"></div>
+    </div>
+    <p class="ob2-msg" id="ob2-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>Illustrative.</figcaption>
+</figure>
+<style>
+.ob2-wk{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px}
+.ob2-wk div{background:var(--quote);border-radius:8px;padding:6px 8px;font-size:12px;line-height:1.5}
+.ob2-wk b{display:block;font-size:12.5px}
+.ob2-list{display:grid;gap:5px}
+.ob2-i{display:grid;grid-template-columns:minmax(0,1fr) 110px;gap:8px;align-items:center;font-size:12.5px;background:var(--quote);border-radius:7px;padding:6px 10px;opacity:0;transition:opacity .3s;transition-delay:calc(var(--i)*.12s)}
+.ob2-i.on{opacity:1}
+.ob2-i b{font-weight:400;font-size:11.5px;text-align:center;border-radius:5px;padding:2px 6px}
+.ob2-i b.y{background:var(--accent-soft);color:var(--accent)} .ob2-i b.n{background:var(--warm-soft);color:var(--warm)}
+.ob2-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.ob2-wk{grid-template-columns:1fr 1fr}}
+</style>
+<script>
+(function(){
+  const W=[['Week 1','Agree that no single holding exceeds 30%'],['Week 2','Confirm a monthly investment of 2,000 yuan'],['Week 3','Leave a to-do: decide by month-end whether to take up a rights issue'],['Week 4','The model version is changed; a new conversation begins']];
+  const F=[['Constraint: no single holding above 30%',0],['Plan: invest 2,000 yuan each month',0],['Decide by month-end on the rights issue',1],['Last judgment on a company, with its basis',0],['Record of performance over the past month',0]];
+  document.getElementById('ob2-wk').innerHTML=W.map(([a,b])=>`<div><b>${a}</b>${b}</div>`).join('');
+  const box=document.getElementById('ob2-list');
+  function set(k){document.querySelectorAll('[data-ob2]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.ob2===k)));
+    box.innerHTML=F.map(([n,d],i)=>{const y=k==='o';return `<div class="ob2-i" style="--i:${i}"><span>${n}</span><b class="${y?'y':'n'}">${y?'In an object; viewable and editable':'Scattered in old chats'}</b></div>`;}).join('');
+    setTimeout(()=>box.querySelectorAll('.ob2-i').forEach(e=>e.classList.add('on')),40);
+    document.getElementById('ob2-msg').textContent=k==='o'?'Constraints, plans, to-dos, judgments and records are all stored as long-lived objects: a new conversation and a new model can read them from the start, and the principal can view and edit them directly.':'When the fourth conversation begins, the agreements of the first three weeks remain in old conversations; the new model cannot see them, and the month-end deadline for the rights issue may be forgotten.';}
+  document.querySelectorAll('[data-ob2]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.ob2)));
+  box.addEventListener('anim-in',()=>{set('s');setTimeout(()=>set('o'),2600);});
+  set('s');
+})();
+</script>
+
+<h2 id="sec-4">4. Point-in-time records: what was known at the time</h2>
+<p>Financial data are revised. Company earnings are restated, macroeconomic data are corrected, and index constituents change. Croushore and Stark (2001) built a real-time data set for macroeconomic research precisely because judging past decisions with revised data leads to wrong conclusions. An agent's records should likewise be kept point in time: when a decision was made, which moment's data it used, and which version of the mandate and of the model. In a review, the decision made at the time is judged with the data available at the time, not condemned or excused with information that only became known later.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Reviewing with the data of the time, or with later data</p><p class="figsub">A company first reports a preliminary figure for quarterly earnings, which is later revised down sharply. The agent decided to keep holding when the second-quarter preliminary figure was released. Switch the data used in the review and see how the decision is judged.</p></div><button class="replay" type="button" data-replay="pt2">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Data used in the review"><button type="button" data-pt2="now" aria-pressed="true">Revised data</button><button type="button" data-pt2="pit" aria-pressed="false">Data of the time</button></div>
+    <div class="pt2" id="pt2" data-anim>
+      <svg viewBox="0 0 640 200" role="img" aria-label="Preliminary and revised earnings"><g id="pt2-g"></g></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Preliminary figure reported at the time</span><span><i style="background:var(--warm)"></i>Later revised figure</span></div>
+      <p class="pt2-msg" id="pt2-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative data. Judging past decisions with revised data introduces bias, so data must be kept point in time; the idea follows the real-time data set of Croushore and Stark (2001).</figcaption>
+</figure>
+<style>
+.pt2 svg{width:100%;height:auto;display:block}
+.pt2-b{transition:height .5s ease,y .5s ease,opacity .4s}
+.pt2-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.pt2 svg text{font-size:17px}}
+</style>
+<script>
+(function(){
+  const Q=['Q1','Q2','Q3','Q4'],P=[1.20,1.30,1.10,1.25],R=[1.15,0.80,1.05,1.20];
+  const X0=50,X1=620,YB=160,YT=14,w=(X1-X0)/4,h=v=>v/1.5*(YB-YT);
+  function set(k){document.querySelectorAll('[data-pt2]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.pt2===k)));
+    let g=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`;
+    Q.forEach((q,i)=>{const x=X0+i*w;g+=`<rect class="pt2-b" x="${x+w*.18}" width="${w*.28}" y="${YB-h(P[i])}" height="${h(P[i])}" rx="3" fill="var(--accent)" opacity="${k==='pit'||i!==1?1:.35}"/><rect class="pt2-b" x="${x+w*.52}" width="${w*.28}" y="${YB-h(R[i])}" height="${h(R[i])}" rx="3" fill="var(--warm)" opacity="${k==='now'||i!==1?1:.25}"/><text x="${x+w/2}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${q}</text>`;});
+    g+=`<line x1="${X0+w*1.5}" y1="${YT}" x2="${X0+w*1.5}" y2="${YB}" stroke="var(--ink)" stroke-dasharray="3 3"/><text x="${X0+w*1.5}" y="${YT+10}" text-anchor="middle" font-size="11" class="t-ink">Decision: keep holding</text>`;
+    document.getElementById('pt2-g').innerHTML=g;
+    document.getElementById('pt2-msg').textContent=k==='now'?'With the revised data, second-quarter earnings were only 0.80, and "keep holding" looks plainly wrong. But that number became known two quarters later; no one could see it at the time.':'With the data of the time, the second-quarter preliminary figure was 1.30, higher than the previous quarter, and keeping the holding was reasonable. Only a point-in-time record separates the quality of the decision itself from information that came later.';}
+  document.querySelectorAll('[data-pt2]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.pt2)));
+  document.getElementById('pt2').addEventListener('anim-in',()=>{set('now');setTimeout(()=>set('pit'),2600);});
+  set('now');
+})();
+</script>
+
+<h2 id="sec-5">5. Process visibility: what is under way, and what is waiting for me</h2>
+<p>Norman (1988) called the difficulty users have in judging what state a system is in the "gulf of evaluation". If users cannot see what the system has done, how far it has got and whether it needs them, they can only guess or ask again and again. For a continuing agent, three things matter most and must be visible at a glance: which tasks are under way and when each will next run; which items are waiting for the user's confirmation, and by what deadline; and which checks were recently blocked, and why. If this information is scattered through the chat history, the user has to search for it item by item.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">What is waiting for me now</p><p class="figsub">The same information, presented two ways. Switch between searching through the chat history and seeing it at a glance on a task panel.</p></div><button class="replay" type="button" data-replay="pn">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Presentation"><button type="button" data-pn="c" aria-pressed="true">Chat history only</button><button type="button" data-pn="p" aria-pressed="false">Task panel</button></div>
+    <div class="pn" id="pn" data-anim></div>
+    <p class="pn-msg" id="pn-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>Illustrative interface. The difficulty of judging a system's state is called the "gulf of evaluation"; see Norman (1988).</figcaption>
+</figure>
+<style>
+.pn{background:var(--quote);border-radius:10px;padding:10px;min-height:250px}
+.pn-m{font-size:12.5px;line-height:1.6;border-radius:8px;padding:6px 10px;margin:4px 0;max-width:86%;background:var(--surface)}
+.pn-m.u{margin-left:auto;background:var(--accent-soft)}
+.pn-m.k{outline:2px solid var(--warm)}
+.pn-s{margin-bottom:8px}
+.pn-s>b{font-size:12px;color:var(--faint);display:block;margin-bottom:4px}
+.pn-r{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;font-size:12.5px;background:var(--surface);border-radius:7px;padding:6px 10px;margin-bottom:4px;border-left:3px solid var(--c)}
+.pn-r em{font-style:normal;font-size:11.5px;color:var(--faint)}
+.pn-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const C=[['a','This week\'s announcements for your three holdings have been compiled.'],['u','Fine, thanks.'],['a','Reminder: the option you hold expires on 25 October and is currently in the money. Please confirm how to handle it.',1],['a','Today\'s market summary: …'],['u','Take a look at that company\'s financial report for me.'],['a','Here is the analysis of the financial report: …'],['a','The market data source is temporarily down; today\'s tracking check was not completed.',1],['a','The rebalancing plan is ready and will be executed tomorrow at 10:00. Reply if you want to cancel it.',1],['a','Today\'s market summary: …']];
+  const box=document.getElementById('pn');
+  function set(k){document.querySelectorAll('[data-pn]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.pn===k)));
+    if(k==='c'){box.innerHTML=C.map(([w,t,key])=>`<div class="pn-m ${w==='u'?'u':''}${key?' k':''}">${t}</div>`).join('');
+      document.getElementById('pn-msg').textContent='Three items that need attention (outlined in red) are scattered among nine messages, between market summaries and ordinary replies. The principal has to go through them one by one to learn what is waiting.';}
+    else{box.innerHTML=`<div class="pn-s"><b>Waiting for your confirmation</b><div class="pn-r" style="--c:var(--warm)"><span>Option expiry (in the money)</span><em>Due 25 October</em></div><div class="pn-r" style="--c:var(--gold)"><span>Rebalancing plan: executes tomorrow at 10:00, can be cancelled</span><em>18 hours left</em></div></div>`+
+      `<div class="pn-s"><b>Checks blocked</b><div class="pn-r" style="--c:var(--warm)"><span>Today's tracking check not completed: market data source down</span><em>Will rerun on recovery</em></div></div>`+
+      `<div class="pn-s"><b>Under way</b><div class="pn-r" style="--c:var(--accent)"><span>Holdings tracking</span><em>Next run: today 16:30</em></div><div class="pn-r" style="--c:var(--accent)"><span>Daily market summary</span><em>Next run: tomorrow 09:00</em></div></div>`;
+      document.getElementById('pn-msg').textContent='The task panel groups items under "Waiting for your confirmation", "Checks blocked" and "Under way", and shows the deadlines: on opening it, the principal sees what they need to do.';}}
+  document.querySelectorAll('[data-pn]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.pn)));
+  box.addEventListener('anim-in',()=>{set('c');setTimeout(()=>set('p'),3000);});
+  set('c');
+})();
+</script>
+
+<h2 id="sec-6">6. Replay: reproducing a decision</h2>
+<p>If a decision records all its inputs, the clauses it relied on, the version of the model used and the result of execution, it can be replayed: run again with the same inputs to check whether it reaches the same conclusion. Peng (2011), discussing reproducibility in computational science, pointed out that results can be checked by others only when the data and code are made available. Replay has two uses. When a dispute arises, it reconstructs how the decision was made at the time. Before a model version is changed, it tests on past inputs which decisions the new version would make differently, so that users can be told of the change in advance.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Replaying past decisions</p><p class="figsub">Eight recorded decisions, with their inputs, the clauses relied on and the model version saved. First replay with the original version to check that they can be reproduced; then replay with a new version to see where it would decide differently.</p></div></div>
+    <div class="by-btn"><button type="button" class="replay" id="rp-1">Replay with original version</button><button type="button" class="replay" id="rp-2">Replay with new version</button></div>
+    <div class="rp" id="rp" data-anim></div>
+    <p class="rp-msg" id="rp-msg" aria-live="polite">Choose a replay.</p>
+  </div>
+  <figcaption>Illustrative. Reproducibility requires making data and code available; see Peng (2011). For an agent, the data timestamps, clauses and model version of the time must also be kept.</figcaption>
+</figure>
+<style>
+.by-btn{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+.rp{display:grid;gap:4px}
+.rp-r{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) minmax(0,1fr);gap:8px;align-items:center;font-size:12.5px;background:var(--quote);border-radius:7px;padding:6px 10px}
+.rp-r.h{background:none;font-size:11.5px;color:var(--faint)}
+.rp-r i{font-style:normal;border-radius:5px;padding:2px 6px;opacity:0;transition:opacity .3s;transition-delay:calc(var(--i)*.15s)}
+.rp.go .rp-r i{opacity:1}
+.rp-r i.same{background:var(--accent-soft);color:var(--accent)} .rp-r i.diff{background:var(--warm-soft);color:var(--warm)}
+.rp-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.rp-r{grid-template-columns:1fr 1fr}.rp-r span:first-child{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const D=[['Expiry reminder: option in the money','Remind and ask','Remind and ask'],['Rebalancing: 6% drift','Execute per plan','Execute per plan'],['News: peer company under investigation','Record, no alert','Alert, explain the link'],['Rights issue: three days before deadline','Remind and ask','Remind and ask'],['Data source down','Mark as blocked','Mark as blocked'],['Single holding rises to 31%','Ask to reduce','Ask to reduce'],['Dividend received','Reinvest as agreed','Reinvest as agreed'],['Volatility up, no constraint triggered','No action','Suggest reducing position']];
+  const box=document.getElementById('rp');
+  function show(v){box.classList.remove('go');box.innerHTML=`<div class="rp-r h"><span>Recorded event</span><span>Decision at the time</span><span>Replay result</span></div>`+D.map(([e,a,b],i)=>{const r=v===1?a:b,s=r===a;return `<div class="rp-r"><span>${e}</span><span>${a}</span><i class="${s?'same':'diff'}" style="--i:${i}">${r}${s?'':' (different)'}</i></div>`;}).join('');
+    void box.offsetWidth;box.classList.add('go');
+    document.getElementById('rp-msg').textContent=v===1?'Replayed with the original version and the inputs of the time, all eight decisions are reproduced: the record is complete, and past decisions can be reconstructed and checked.':'The new version decides differently in two places: one more alert, and one more suggestion to reduce a position. Before the version is changed, the principal should be told of these changes.';}
+  document.getElementById('rp-1').addEventListener('click',()=>show(1));document.getElementById('rp-2').addEventListener('click',()=>show(2));
+  box.addEventListener('anim-in',()=>{show(1);setTimeout(()=>show(2),3000);});
+  show(1);
+})();
+</script>
+
+<h2 id="sec-7">7. Implications for product design</h2>
+<p>Build general and finance-specific capabilities separately; choose on-the-spot assembly or a fixed workflow according to the task; store the relationship as objects with point-in-time records; make progress and pending requests visible at a glance; and allow every decision to be replayed.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: making implementation checkable</p><p class="figsub">Four design requirements, each corresponding to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="ch28summary">Replay</button></div>
+    <div class="ch28summary" id="ch28summary" data-anim><div class="ch28summary-c" style="--i:0"><em>Getting it done and getting it right</em><b>Build general and finance-specific capabilities separately</b><p>Data, calculation, constraint checks, trading interfaces and compliance checks decide whether the result is right, and need evaluating on their own.</p></div><div class="ch28summary-c" style="--i:1"><em>Two ways of organizing</em><b>Choose on-the-spot assembly or a fixed workflow by task</b><p>Tasks with fixed paths that serve many people become evaluated fixed workflows that the agent can call.</p></div><div class="ch28summary-c warn" style="--i:2"><em>The relationship needs a home</em><b>Store the mandate, portfolio and records as long-lived objects</b><p>Keep every piece of data and every decision point in time, and review with what was known at the time.</p></div><div class="ch28summary-c warn" style="--i:3"><em>The process must be visible and replayable</em><b>Show waiting, blocked and in-progress items on a task panel</b><p>Keep inputs, clauses and model versions; replay to test before changing versions, and tell the user of differences.</p></div></div>
+  </div>
+</figure>
+<style>
+.ch28summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch28summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch28summary-c.warn{border-left-color:var(--warm)}
+.ch28summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch28summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch28summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch28summary.in .ch28summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch28summary{grid-template-columns:1fr}}
+</style>
+
+<h2 id="sec-8">References</h2>
+<ul class="refs"><li>Perrow, C. (1967). A framework for the comparative analysis of organizations. <i>American Sociological Review</i>, 32(2), 194–208.</li><li>Croushore, D., &amp; Stark, T. (2001). A real-time data set for macroeconomists. <i>Journal of Econometrics</i>, 105(1), 111–130.</li><li>Norman, D. A. (1988). <i>The Psychology of Everyday Things</i>. Basic Books.</li><li>Peng, R. D. (2011). Reproducible research in computational science. <i>Science</i>, 334(6060), 1226–1227.</li></ul>
+<footer class="nav"><a href="ch27.html">← Chapter 27: Liability and conflicts of interest</a><a href="ch29.html">Chapter 29: Assurance level →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">完全有效的市场为何不可能</p><p class="figsub">四个环节首尾相接；循环最终停在“接近有效、但不完全”的位置。</p></div><button class="replay" type="button" data-replay="px">重播</button></div>
+    <div class="px" id="px" data-anim>
+      <div class="px-ring">
+        <div class="px-n n0"><b>价格充分反映信息</b><span>已无未被利用的信息</span></div>
+        <div class="px-n n1"><b>收集信息无利可图</b><span>知情交易者退出</span></div>
+        <div class="px-n n2"><b>价格不再反映信息</b><span>出现可获利的偏差</span></div>
+        <div class="px-n n3"><b>收集信息有利可图</b><span>知情交易者进入</span></div>
+        <svg class="px-arrows" viewBox="0 0 400 300" aria-hidden="true">
+          <path d="M268,62 C320,80 340,110 342,128"/><path d="M342,172 C338,200 318,224 268,238"/><path d="M132,238 C80,222 60,200 58,172"/><path d="M58,128 C62,100 82,78 132,62"/>
+        </svg>
+        <div class="px-c"><span>效率</span><b id="px-g">—</b></div>
+      </div>
+      <div class="px-bar"><div class="px-fill" id="px-fill"></div><span class="px-eq" id="px-eq">均衡</span></div>
+      <p class="px-msg" id="px-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>按 Grossman 与 Stiglitz（1980）的论证示意。效率的数值只表示方向，不对应任何市场的测量；均衡位置取决于收集信息的成本：成本越低，均衡越接近完全有效。</figcaption>
+</figure>
+<style>
+.px-ring{position:relative;max-width:440px;margin:0 auto;aspect-ratio:4/3}
+.px-arrows{position:absolute;inset:0;width:100%;height:100%}
+.px-arrows path{fill:none;stroke:var(--faint);stroke-width:1.6;stroke-dasharray:4 4;animation:pxflow 1.4s linear infinite}
+@keyframes pxflow{to{stroke-dashoffset:-16}}
+.px-n{position:absolute;width:42%;background:var(--surface);border:1.5px solid var(--line);border-radius:10px;padding:8px 10px;font-size:13px;line-height:1.4;text-align:center;transition:border-color .3s,background .3s,transform .3s;z-index:1}
+.px-n b{display:block;font-size:13.5px}
+.px-n span{font-size:11.5px;color:var(--faint)}
+.px-n.n0{left:29%;top:0}.px-n.n1{right:0;top:38%}.px-n.n2{left:29%;bottom:0}.px-n.n3{left:0;top:38%}
+.px-n.on{border-color:var(--accent);background:var(--accent-soft);transform:scale(1.04)}
+.px-c{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center}
+.px-c span{display:block;font-size:11px;color:var(--faint)}
+.px-c b{font-size:24px;font-variant-numeric:tabular-nums}
+.px-bar{position:relative;height:10px;background:var(--quote);border-radius:5px;margin:16px 0 4px}
+.px-fill{height:100%;background:var(--accent);border-radius:5px;width:0;transition:width .5s}
+.px-eq{position:absolute;top:14px;left:85%;transform:translateX(-50%);font-size:11px;color:var(--warm);opacity:0;transition:opacity .4s}
+.px-eq::before{content:"";position:absolute;left:50%;top:-14px;width:2px;height:12px;background:var(--warm)}
+.px-eq.on{opacity:1}
+.px-msg{font-size:14px;margin:18px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const nodes=[...document.querySelectorAll('#px .px-n')], g=document.getElementById('px-g'), fill=document.getElementById('px-fill'), eq=document.getElementById('px-eq'), msg=document.getElementById('px-msg');
+  // 效率在 100% 与较低水平之间来回摆动，幅度逐步收敛到均衡 85%
+  const seq=[[0,100],[1,100],[2,62],[3,62],[0,96],[1,96],[2,74],[3,74],[0,90],[1,90],[2,80],[3,80],[0,85]];
+  const M=['假设价格已经充分反映信息。','既然信息已在价格里，花钱收集信息就得不到回报，知情交易者退出。','没有人收集信息，价格开始偏离价值，出现可获利的偏差。','偏差带来利润，又吸引知情交易者进入，推动价格重新反映信息。'];
+  let timer;
+  function run(){clearTimeout(timer);eq.classList.remove('on');let k=0;
+    (function step(){const [n,e]=seq[k];nodes.forEach((x,i)=>x.classList.toggle('on',i===n));g.textContent=e+'%';fill.style.width=e+'%';msg.textContent=k===seq.length-1?'循环最终停在接近有效但不完全的位置：剩下的那一点无效，恰好补偿知情交易者收集信息的成本。':M[n];
+      if(++k<seq.length)timer=setTimeout(step,1100);else{eq.classList.add('on');nodes.forEach(x=>x.classList.remove('on'));}})();}
+  document.getElementById('px').addEventListener('anim-in',run);
+  g.textContent='100%';fill.style.width='100%';msg.textContent=M[0];
+})();
+</script>

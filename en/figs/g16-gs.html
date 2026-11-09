@@ -1,0 +1,32 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Where information gathering stops</p><p class="figsub">The curve is what each informed person gains from public reports: the more people are informed, the smaller the gain. The horizontal line is the cost of analysis. Where the two meet is where the share of informed people settles. Drag the price of cognitive labour and see how that point moves.</p></div><button class="replay" type="button" data-replay="gs16">Replay</button></div>
+    <div class="gs16" id="gs16" data-anim>
+      <svg viewBox="0 0 660 220" role="img" aria-label="Gain to the informed and cost of analysis"><g id="gs16-g"></g></svg>
+      <div class="sl"><label for="gs16-c">Price of cognitive labour <b id="gs16-cv"></b></label><input id="gs16-c" type="range" min="0" max="2" step="0.1" value="0"></div>
+      <p class="gs16-msg" id="gs16-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: forty households. When the informed share is f, the share of information that prices reflect before the news is public is f ÷ (f + 0.1). The part not yet reflected is what the informed earn from the uninformed, totalling 9.6 portions × (1 − share reflected) × (1 − f) a year for the whole village, split equally among the informed. The cost of analysis is originally 0.8 portions per person per year and falls in proportion to the price of cognitive labour. The vertical axis, in portions per year, uses a logarithmic scale.</figcaption>
+</figure>
+<style>
+.gs16 svg{width:100%;height:auto;display:block}
+.gs16-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.gs16 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('gs16'+id),N=40,V=9.6,K=.1,X0=56,X1=628,YT=12,YB=180,x=f=>X0+f*(X1-X0),L0=-3,L1=1,y=v=>YB-(Math.log10(Math.max(v,1e-3))-L0)/(L1-L0)*(YB-YT);
+  const gain=f=>V*(K/(f+K))*(1-f)/(f*N);
+  function eq(c){if(gain(1/N)<=c)return 1/N;let lo=1/N,hi=.999;if(gain(hi)>c)return hi;for(let k=0;k<60;k++){const m=(lo+hi)/2;if(gain(m)>c)lo=m;else hi=m;}return lo;}
+  function draw(){const a=Math.pow(10,-+$('-c').value),c=.8*a,f=eq(c),sh=f/(f+K);$('-cv').textContent=a>=.1?Math.round(a*100)+'%':(a*100).toFixed(1)+'%';
+    let h=[.001,.01,.1,1,10].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+[0,.25,.5,.75,1].map(v=>`<text x="${x(v)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${v*100}%</text>`).join('')+`<text x="${X1}" y="${YB+30}" text-anchor="end" font-size="11" class="t-faint">Share informed →</text>`;
+    let d='';for(let k=2;k<=99;k++){const ff=k/100;d+=(d?'L':'M')+x(ff).toFixed(1)+','+y(gain(ff)).toFixed(1);}
+    h+=`<path d="${d}" fill="none" stroke="var(--accent)" stroke-width="2.6"/><line x1="${X0}" x2="${X1}" y1="${y(c)}" y2="${y(c)}" stroke="var(--warm)" stroke-dasharray="5 4"/><text x="${X1}" y="${y(c)-6}" text-anchor="end" font-size="11" fill="var(--warm)">Cost of analysis: ${c<.1?c.toFixed(3):c.toFixed(2)} portions</text><circle cx="${x(f)}" cy="${y(c)}" r="7" fill="var(--accent)"/>`;
+    $('-g').innerHTML=h;
+    $('-msg').textContent=`The informed share settles at about ${Math.round(f*100)}%, and before the news is public, prices already reflect about ${Math.round(sh*100)}% of the public information. Each informed person's gain exactly equals the cost of ${c<.1?c.toFixed(3):c.toFixed(2)} portions.`+(a<.1?' The lower the cost, the more people are informed, and the less reading reports is worth in itself.':'');}
+  $('-c').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{let v=0;$('-c').value=0;draw();const id=setInterval(()=>{v+=.1;$('-c').value=v.toFixed(1);draw();if(v>=2)clearInterval(id);},150);});
+  draw();
+})();
+</script>

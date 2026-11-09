@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：让保障与风险相称</p><p class="figsub">四条设计要求，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="ch29summary">重播</button></div>
+    <div class="ch29summary" id="ch29summary" data-anim><div class="ch29summary-c" style="--i:0"><em>后果 × 验证难度</em><b>给每项功能定保障等级</b><p>抽查、评测集、分层评测与审核、形式化约束与全量检查，按等级分配。</p></div><div class="ch29summary-c" style="--i:1"><em>不确定的系统</em><b>用足够大的评测集作统计验证</b><p>按需要证明的错误率确定题目数量，0 次出错也要至少 3 ÷ 目标错误率道题。</p></div><div class="ch29summary-c warn" style="--i:2"><em>整体数字会掩盖关键情形</em><b>按情形分层评测，并做红队测试</b><p>到期日、剧烈波动、停牌与数据缺失单独达标。</p></div><div class="ch29summary-c warn" style="--i:3"><em>上线不是终点</em><b>持续监控、分级发布，保障与风险相称</b><p>关键指标设告警与回退；新版本小范围先行；低风险功能不要被最高标准拖慢。</p></div></div>
+  </div>
+</figure>
+<style>
+.ch29summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch29summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch29summary-c.warn{border-left-color:var(--warm)}
+.ch29summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch29summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch29summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch29summary.in .ch29summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch29summary{grid-template-columns:1fr}}
+</style>

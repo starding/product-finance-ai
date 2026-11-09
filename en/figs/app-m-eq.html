@@ -1,0 +1,30 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The four equations of the Decomposition view</p><p class="figsub">Select an equation to see how it meets the three standards for choosing equations.</p></div></div>
+    <div class="me" id="me" data-anim></div>
+    <div class="me-crit" id="me-c"></div>
+  </div>
+</figure>
+<style>
+.me{display:grid;gap:6px}
+.me-r{font:inherit;text-align:left;cursor:pointer;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:9px 12px;color:var(--ink);font-size:13.5px;line-height:1.55}
+.me-r em{font-style:normal;font-size:11.5px;color:var(--faint);margin-right:8px}
+.me-r.sel{border-color:var(--accent)}
+.me-crit{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.me-crit div{background:var(--accent-soft);border-radius:8px;padding:8px 10px;font-size:12.5px;line-height:1.55}
+.me-crit b{display:block;font-size:13px}
+@media (max-width:640px){.me-crit{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const E=[['Part One','Realized return = time compensation + risk compensation + information advantage − trading costs + luck','Returns can be calculated from the account','The five terms come from waiting, bearing risk, knowing more, the friction of trading, and chance','Each term has a return and a corresponding risk'],
+    ['Part Two','Result the user actually obtains = result the task requires − losses from decision biases','The result can be compared with the original goal','The requirement and the biases are two different things','The task yields the gain; biases bring the loss'],
+    ['Part Three','Amplification factor = input to do it yourself ÷ (inapplicable part + explaining and checking + rework after errors)','Input can be measured in time','The three terms in the denominator depend on the task, verifiability and reliability respectively','Time saved, against the cost of checking and rework'],
+    ['Part Four','Net value = result − user\'s input − risk borne by the user','All three terms can be estimated one by one','Result, input and risk do not overlap','The result is the gain; input and risk are the costs']];
+  const box=document.getElementById('me'),c=document.getElementById('me-c');
+  box.innerHTML=E.map((e,i)=>`<button type="button" class="me-r" data-i="${i}"><em>${e[0]}</em>${e[1]}</button>`).join('');
+  const bs=[...box.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));c.innerHTML=[['Observable',E[i][2]],['Mutually exclusive and complete',E[i][3]],['Both sides written',E[i][4]]].map(([a,b])=>`<div><b>${a}</b>${b}</div>`).join('');}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));set(0);
+})();
+</script>

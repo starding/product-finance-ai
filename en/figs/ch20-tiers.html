@@ -1,0 +1,57 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Conditions set the ceiling: Chat, Agent and embodied Agent (author's estimate)</p><p class="figsub">The three dots on each row are the ceiling on the amplification factor for a whole job under the three tiers. Switch between industries and typical occupations, and select a step up to see which gain most.</p></div><button class="replay" type="button" data-replay="tr">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Scope">
+      <button type="button" data-trv="ind" aria-pressed="true">Industries</button>
+      <button type="button" data-trv="occ" aria-pressed="false">Typical occupations</button>
+    </div>
+    <div class="seg-btns tr-hl" role="group" aria-label="Step up">
+      <button type="button" data-trh="" aria-pressed="true">All three tiers</button>
+      <button type="button" data-trh="1" aria-pressed="false">Add data and tools</button>
+      <button type="button" data-trh="2" aria-pressed="false">Then add embodiment</button>
+    </div>
+    <div class="legend"><span><i style="background:var(--faint)"></i>Chat: conversation material only</span><span><i style="background:var(--accent)"></i>Agent: connected to data and systems, can execute and deal with outside parties</span><span><i style="background:var(--warm)"></i>Embodied Agent: can also act on site</span></div>
+    <div class="tr" id="tr" data-anim></div>
+    <p class="tr-msg" id="tr-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>Author's estimate: two coders independently judged the reachable share of the 332 O*NET 31.0 Intermediate Work Activities under the three tiers; industries are weighted by the 2024 occupational composition of the EU-27; ceiling = 1 ÷ (1 − reachable share). For methods and data, see <a href="estimates.html">Appendix: Methods and data behind the author's estimates</a>.</figcaption>
+</figure>
+<style>
+.tr{display:grid;gap:2px;margin-top:10px}
+.tr-r{display:grid;grid-template-columns:13em 1fr;gap:10px;align-items:center;font-size:12.5px;padding:3px 0}
+.tr-r.tot{font-weight:600;border-top:1px solid var(--line);padding-top:6px;margin-top:2px}
+.tr-t{position:relative;height:16px}
+.tr-t::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:1px dashed var(--line)}
+.tr-seg{position:absolute;top:calc(50% - 2px);height:4px;border-radius:2px;transition:left .6s,width .6s,opacity .3s}
+.tr-dot{position:absolute;top:calc(50% - 5px);width:10px;height:10px;margin-left:-5px;border-radius:50%;transition:left .6s,opacity .3s}
+.tr-ax{position:relative;height:16px;font-size:10.5px;color:var(--faint)}
+.tr-ax span{position:absolute;transform:translateX(-50%)}
+.tr-r .v{position:absolute;right:0;top:-1px;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;background:var(--card);padding-left:4px}
+.tr-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.tr-r{grid-template-columns:8.5em 1fr;font-size:11px}}
+</style>
+<script>
+(function(){
+  const D={ind:/*DATA:ind*/[["Finance and insurance",0.1965,0.4547,0.5869,{"4d":0.41,"2":0.285,"5":0.048,"1":0.04,"4s":0.078,"3":0.139}],["Professional, scientific and technical",0.2053,0.4433,0.5624,{"4d":0.414,"2":0.295,"5":0.043,"1":0.05,"4s":0.079,"3":0.12}],["Information and communication",0.2076,0.4405,0.554,{"4d":0.414,"2":0.3,"5":0.042,"1":0.053,"4s":0.08,"3":0.112}],["Education",0.2046,0.4282,0.5506,{"4d":0.402,"2":0.306,"5":0.041,"1":0.056,"4s":0.077,"3":0.118}],["Public administration",0.1696,0.4118,0.5928,{"4d":0.352,"2":0.279,"5":0.046,"1":0.037,"4s":0.087,"3":0.199}],["Arts and recreation",0.1742,0.4077,0.5806,{"4d":0.355,"2":0.28,"5":0.042,"1":0.041,"4s":0.091,"3":0.192}],["Real estate",0.1661,0.4069,0.5898,{"4d":0.345,"2":0.27,"5":0.042,"1":0.034,"4s":0.097,"3":0.211}],["Health and social work",0.169,0.3939,0.5722,{"4d":0.337,"2":0.292,"5":0.039,"1":0.042,"4s":0.096,"3":0.194}],["Electricity, gas and steam",0.1637,0.3895,0.5975,{"4d":0.342,"2":0.239,"5":0.038,"1":0.037,"4s":0.096,"3":0.248}],["Other services",0.1328,0.3538,0.5916,{"4d":0.266,"2":0.29,"5":0.044,"1":0.034,"4s":0.104,"3":0.263}],["Wholesale and retail",0.1244,0.3431,0.5994,{"4d":0.252,"2":0.275,"5":0.044,"1":0.031,"4s":0.105,"3":0.292}],["Transport and storage",0.1111,0.3395,0.6492,{"4d":0.247,"2":0.196,"5":0.033,"1":0.024,"4s":0.122,"3":0.378}],["Accommodation and food",0.1089,0.3198,0.5933,{"4d":0.213,"2":0.295,"5":0.047,"1":0.03,"4s":0.105,"3":0.309}],["Manufacturing",0.1156,0.3125,0.6239,{"4d":0.246,"2":0.182,"5":0.028,"1":0.03,"4s":0.122,"3":0.392}],["Mining and quarrying",0.109,0.31,0.6292,{"4d":0.231,"2":0.183,"5":0.024,"1":0.03,"4s":0.134,"3":0.398}],["Water supply and waste",0.1112,0.3087,0.6285,{"4d":0.238,"2":0.184,"5":0.028,"1":0.028,"4s":0.115,"3":0.406}],["Administrative and support",0.109,0.3076,0.6216,{"4d":0.23,"2":0.212,"5":0.034,"1":0.028,"4s":0.106,"3":0.39}],["Construction",0.0936,0.2634,0.6331,{"4d":0.204,"2":0.137,"5":0.024,"1":0.026,"4s":0.126,"3":0.483}],["Agriculture, forestry, fishing",0.0587,0.2239,0.642,{"4d":0.126,"2":0.133,"5":0.014,"1":0.019,"4s":0.171,"3":0.537}],["Households and own-use production",0.0633,0.2161,0.6236,{"4d":0.125,"2":0.191,"5":0.024,"1":0.026,"4s":0.114,"3":0.52}],["All industries",0.1419,0.3565,0.5986,{"4d":0.291,"2":0.246,"5":0.037,"1":0.035,"4s":0.105,"3":0.286}]]/*END*/,occ:/*DATA:occ*/[["Accountants and Auditors",0.2487,0.6406,0.6686,{"4d":0.68,"2":0.204,"4s":0.028,"5":0.088}],["Customer Service Representatives",0.2471,0.6383,0.695,{"2":0.565,"4d":0.327,"5":0.108}],["Software Developers",0.2621,0.5571,0.5681,{"4d":0.562,"2":0.438}],["Elementary School Teachers, Except Special Education",0.2551,0.4383,0.5241,{"4d":0.534,"3":0.094,"2":0.328,"1":0.04,"5":0.004}],["Lawyers",0.234,0.4016,0.4038,{"4d":0.373,"5":0.142,"2":0.485}],["General and Operations Managers",0.1653,0.4021,0.4288,{"2":0.521,"4d":0.328,"5":0.079,"1":0.072}],["Retail Salespersons",0.1778,0.4505,0.644,{"4d":0.315,"2":0.33,"1":0.049,"5":0.083,"4s":0.054,"3":0.17}],["Registered Nurses",0.0984,0.3105,0.4186,{"4d":0.224,"4s":0.169,"2":0.408,"1":0.048,"5":0.054,"3":0.098}],["Heavy and Tractor-Trailer Truck Drivers",0.0717,0.2936,0.6788,{"3":0.489,"4s":0.127,"4d":0.234,"5":0.072,"2":0.061,"1":0.017}],["Electricians",0.0894,0.2296,0.5879,{"3":0.468,"4s":0.231,"2":0.082,"1":0.034,"4d":0.166,"5":0.019}],["Cooks, Restaurant",0.0468,0.1584,0.6848,{"4s":0.215,"3":0.585,"4d":0.119,"5":0.021,"2":0.059}],["Maids and Housekeeping Cleaners",0.0162,0.127,0.7359,{"3":0.767,"4s":0.196,"4d":0.037}],["Construction Laborers",0.0133,0.0954,0.6401,{"3":0.822,"4d":0.044,"2":0.076,"4s":0.059}]]/*END*/};
+  const MAX={ind:3,occ:4},C=['var(--faint)','var(--accent)','var(--warm)'];let view='ind',hl='';
+  const box=document.getElementById('tr'),msg=document.getElementById('tr-msg'),cap=p=>1/(1-p);
+  const M={ind:{'':'With conversation material only, the ceiling for each industry is just 1.1 to 1.3×; with data and tools connected, the all-industry average rises to 1.55×; with embodied capability as well, to about 2.5×.',
+      '1':'Adding data and tools helps finance, professional services, information and communication, and education most, with ceilings of about 1.75 to 1.83×; construction, agriculture, forestry and fishing, and household own-use production rise only to about 1.3×.',
+      '2':'Adding embodied capability lifts the physical production industries by 1.4 to 1.5×, to 2.7 to 2.8×, overtaking the knowledge-intensive industries; the latter gain only about 0.5×, as their ceiling comes from communicating with people and from the person\'s own decisions.'},
+    occ:{'':'Differences between occupations are larger: under the Agent tier, accountants and customer service representatives reach about 2.8×, lawyers and general managers about 1.7×, and construction labourers and housekeeping cleaners only about 1.1×.',
+      '1':'Adding data and tools helps most the occupations with a large share of information processing: accountants and auditors rise from 1.3× to 2.8×.',
+      '2':'Adding embodied capability brings the largest gains to housekeeping cleaners, cooks and truck drivers; lawyers and general managers barely change.'}};
+  function draw(){const rows=D[view].slice().sort((a,b)=>(b[0]==='All industries')?-1:(a[0]==='All industries')?1:b[2]-a[2]),mx=MAX[view],x=v=>(Math.min(v,mx)-1)/(mx-1)*92;
+    let h=`<div class="tr-r"><span></span><div class="tr-ax">${[1,1.5,2,2.5,3,3.5,4].filter(v=>v<=mx).map(v=>`<span style="left:${x(v)}%">${v}×</span>`).join('')}</div></div>`;
+    h+=rows.map(r=>{const v=[1,2,3].map(i=>cap(r[i]));const tot=r[0]==='All industries';
+      const seg=(a,b,c,on)=>`<i class="tr-seg" style="left:${x(v[a])}%;width:${x(v[b])-x(v[a])}%;background:${c};opacity:${on?1:.18}"></i>`;
+      const dots=v.map((u,i)=>`<i class="tr-dot" style="left:${x(u)}%;background:${C[i]};opacity:${!hl||+hl===i||+hl-1===i?1:.25}"></i>`).join('');
+      const lab=hl?`+${(v[+hl]-v[+hl-1]).toFixed(2)}`:`${v[1].toFixed(2)}×`;
+      return `<div class="tr-r${tot?' tot':''}"><span>${r[0]}</span><div class="tr-t">${seg(0,1,'var(--accent)',hl!=='2')}${seg(1,2,'var(--warm)',hl!=='1')}${dots}<span class="v">${lab}</span></div></div>`;}).join('');
+    box.innerHTML=h;msg.textContent=M[view][hl];}
+  document.querySelectorAll('[data-trv]').forEach(b=>b.addEventListener('click',()=>{view=b.dataset.trv;document.querySelectorAll('[data-trv]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  document.querySelectorAll('[data-trh]').forEach(b=>b.addEventListener('click',()=>{hl=b.dataset.trh;document.querySelectorAll('[data-trh]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  box.addEventListener('anim-in',()=>{['1','2',''].forEach((k,i)=>setTimeout(()=>{hl=k;document.querySelectorAll('[data-trh]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.trh===k)));draw();},300+i*2600));});
+  draw();
+})();
+</script>

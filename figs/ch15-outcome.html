@@ -1,0 +1,46 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">好的决定不等于好的结果</p><p class="figsub">100 位投资者各自重复同一个决定。好的决定：分散投资、预期收益为正；差的决定：集中押注、预期收益为负但波动很大。拖动期限，看结果在多大程度上反映了决定的好坏。</p></div><button class="replay" type="button" id="oc-re">重新抽样</button></div>
+    <div class="oc" id="oc" data-anim>
+      <div class="sl"><label for="oc-y">期限 <b id="oc-yv"></b></label><input id="oc-y" type="range" min="1" max="30" step="1" value="1"></div>
+      <div class="oc-grid">
+        <div class="oc-q"><span class="oc-h">好的决定</span><div class="oc-dots" id="oc-g"></div><p id="oc-gt"></p></div>
+        <div class="oc-q"><span class="oc-h">差的决定</span><div class="oc-dots" id="oc-b"></div><p id="oc-bt"></p></div>
+      </div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>结果为正</span><span><i style="background:var(--warm)"></i>结果为负</span></div>
+      <p class="oc-msg" id="oc-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意模拟：好的决定年化预期收益 5%、波动 15%；差的决定年化预期收益 －3%、波动 40%，按对数收益正态分布随机抽样。决定与结果的区分见 Howard（1988）。</figcaption>
+</figure>
+<style>
+.oc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0 6px}
+.oc-q{background:var(--quote);border-radius:10px;padding:10px}
+.oc-h{font-size:13px;font-weight:700}
+.oc-dots{display:grid;grid-template-columns:repeat(20,1fr);gap:3px;margin:8px 0}
+.oc-dots i{aspect-ratio:1;border-radius:50%;background:var(--line);transition:background .3s}
+.oc-dots i.p{background:var(--accent)} .oc-dots i.n{background:var(--warm)}
+.oc-q p{margin:0;font-size:13px}
+.oc-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.oc-grid{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const N=100,$=id=>document.getElementById(id);let Zg=[],Zb=[];
+  const rn=()=>{let u=0,v=0;while(!u)u=Math.random();while(!v)v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);};
+  function draw(){Zg=Array.from({length:N},rn);Zb=Array.from({length:N},rn);}
+  ['oc-g','oc-b'].forEach(id=>$(id).innerHTML='<i></i>'.repeat(N));
+  const sl=$('oc-y');
+  function r(){const T=+sl.value;$('oc-yv').textContent=T+' 年';
+    const f=(mu,s,z)=>(mu-s*s/2)*T+s*Math.sqrt(T)*z;
+    const g=Zg.map(z=>f(.05,.15,z)),b=Zb.map(z=>f(-.03,.40,z));
+    const pg=g.filter(v=>v>0).length,pb=b.filter(v=>v>0).length;
+    [...$('oc-g').children].forEach((c,i)=>c.className=g[i]>0?'p':'n');[...$('oc-b').children].forEach((c,i)=>c.className=b[i]>0?'p':'n');
+    $('oc-gt').textContent=`${pg} 人结果为正，${N-pg} 人结果为负`;$('oc-bt').textContent=`${pb} 人结果为正，${N-pb} 人结果为负`;
+    $('oc-msg').textContent=T<=3?`期限 ${T} 年时，差的决定也有 ${pb} 人得到正的结果，好的决定却有 ${N-pg} 人亏损：只看结果，很难分辨决定的好坏。`:T<15?'期限拉长，两种决定的结果开始分开，但仍有不少例外。':`期限 ${T} 年时，好的决定大多得到正的结果，差的决定大多亏损：决定的质量要在足够长的时间里才会显现。`;}
+  sl.addEventListener('input',r);
+  $('oc-re').addEventListener('click',()=>{draw();r();});
+  $('oc').addEventListener('anim-in',()=>{draw();let v=1;sl.value=v;r();const id=setInterval(()=>{v+=1;sl.value=v;r();if(v>=30)clearInterval(id);},120);});
+  draw();r();
+})();
+</script>

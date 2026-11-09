@@ -1,0 +1,43 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">Why value stocks earn more: two explanations</p>
+    <p class="figsub">The two explanations rest on different mechanisms and have different implications. Tap a question to see how each explanation answers it.</p>
+    <div class="wy" id="wy" data-anim>
+      <div class="wy-col r" style="--i:0"><h5>Risk explanation</h5><p>Value stocks are often companies in operating difficulty that are more likely to deteriorate further when the economy is bad. Holding them means bearing the risk of “doing worse in bad times”, so investors demand a higher return.</p><em>Proponents: Fama and French</em></div>
+      <div class="wy-col b" style="--i:1"><h5>Behavioural explanation</h5><p>Investors extrapolate past performance too far: they are too pessimistic about companies with dim prospects and too optimistic about popular ones, so value stocks are undervalued and growth stocks overvalued.</p><em>Proponents: Lakonishok, Shleifer and Vishny (1994)</em></div>
+      <div class="wy-qs">
+        <button type="button" data-q="0">Will it weaken once widely known?</button>
+        <button type="button" data-q="1">How does it do when the economy is bad?</button>
+        <button type="button" data-q="2">Is it worth holding for the long run?</button>
+      </div>
+      <div class="wy-a"><div id="wy-ar"></div><div id="wy-ab"></div></div>
+    </div>
+  </div>
+  <figcaption>The two explanations are not mutually exclusive; in practice both may be at work.</figcaption>
+</figure>
+<style>
+.wy{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.wy-col{border-radius:10px;padding:12px 14px;opacity:0;transform:translateY(8px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.4s)}
+.wy.in .wy-col{opacity:1;transform:none}
+.wy-col.r{background:var(--accent-soft)} .wy-col.b{background:rgba(47,95,158,.12)}
+.wy-col h5{margin:0 0 4px;font-size:15px}
+.wy-col p{margin:0;font-size:13px;line-height:1.6;color:var(--ink)}
+.wy-col em{display:block;margin-top:6px;font-style:normal;font-size:11px;color:var(--faint)}
+.wy-qs{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.wy-qs button{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:5px 12px;cursor:pointer}
+.wy-qs button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.wy-a{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.wy-a div{font-size:13.5px;line-height:1.6;background:var(--quote);border-radius:8px;padding:10px 12px;min-height:4.5em}
+@media (max-width:640px){.wy,.wy-a{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const A=[['It will not disappear: it is compensation for bearing risk, and as long as the risk remains, so does the compensation.','It may weaken: once the mispricing is known, trading erodes it.'],
+           ['Worse: that is exactly why it is regarded as risk.','Not necessarily worse: its return comes from the correction of mispricing and is only loosely tied to the state of the economy.'],
+           ['Yes, provided you can bear losses in bad times and even long stretches of lagging.','It depends on how much of the mispricing remains and whether trading costs have eaten it up.']];
+  const bs=[...document.querySelectorAll('[data-q]')];
+  const set=q=>{bs.forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.q===q)));document.getElementById('wy-ar').textContent='Risk explanation: '+A[q][0];document.getElementById('wy-ab').textContent='Behavioural explanation: '+A[q][1];};
+  bs.forEach(b=>b.addEventListener('click',()=>set(+b.dataset.q)));
+  set(0);
+})();
+</script>

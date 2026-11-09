@@ -1,0 +1,38 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Attention stretches to only a few items</p><p class="figsub">A user opens their account and faces twelve pieces of information, with attention enough for only four. Switch the ordering to see which items enter the decision.</p></div><button class="replay" type="button" data-replay="at">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Ordering">
+      <button type="button" data-at="sal" aria-pressed="true">By salience</button>
+      <button type="button" data-at="rel" aria-pressed="false">By relevance to the goal</button>
+    </div>
+    <div class="at" id="at" data-anim></div>
+    <p class="at-msg" id="at-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>Illustrative. Salience and relevance scores are set for the sake of explanation. Scattered attention slows the rate at which information enters decisions; see DellaVigna and Pollet (2009).</figcaption>
+</figure>
+<style>
+.at{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.at-i{border:1.5px solid var(--line);border-radius:8px;padding:7px 9px;font-size:12.5px;line-height:1.45;background:var(--surface);opacity:.45;transition:opacity .4s,background .4s,border-color .4s}
+.at-i em{display:block;font-style:normal;font-size:10.5px;color:var(--faint)}
+.at-i.on{opacity:1;background:var(--accent-soft);border-color:var(--accent)}
+.at-i.on.w{background:var(--warm-soft);border-color:var(--warm)}
+.at-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.at{grid-template-columns:repeat(2,1fr)}}
+</style>
+<script>
+(function(){
+  const I=[['Top of today\'s gainers list',95,10],['A breaking-news alert',90,15],['Today\'s change in holdings',88,30],['A trending discussion thread',80,5],['A stock hits a new high',75,12],
+    ['Total annual portfolio cost',15,85],['Weight of the top three holdings',20,80],['How far from the goal',18,95],['Portfolio maximum drawdown',25,75],['Planned rebalancing date',10,70],
+    ['Dividends and interest received',35,40],['Money-weighted return',12,78]];
+  const box=document.getElementById('at');
+  function set(k){document.querySelectorAll('[data-at]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.at===k)));
+    const ix=I.map((x,i)=>i).sort((a,b)=>k==='sal'?I[b][1]-I[a][1]:I[b][2]-I[a][2]);
+    box.innerHTML=ix.map(i=>`<div class="at-i" data-i="${i}"><em>Salience ${I[i][1]} · Relevance ${I[i][2]}</em>${I[i][0]}</div>`).join('');
+    const els=[...box.children];els.slice(0,4).forEach((e,j)=>setTimeout(()=>e.classList.add('on',k==='sal'?'w':'x'),200+j*250));
+    const rel=ix.slice(0,4).reduce((s,i)=>s+I[i][2],0)/4;
+    document.getElementById('at-msg').textContent=k==='sal'?`Ordered by salience, the four items that enter the decision have an average relevance of only ${rel.toFixed(0)}: the decision is led by whatever is seen first.`:`Ordered by relevance to the goal, the four items that enter the decision have an average relevance of ${rel.toFixed(0)}. These items are not prominent in themselves; the product has to bring them forward.`;}
+  document.querySelectorAll('[data-at]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.at)));
+  box.addEventListener('anim-in',()=>{set('sal');setTimeout(()=>set('rel'),3200);});
+  set('sal');
+})();
+</script>

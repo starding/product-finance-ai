@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：写出一份可以兑现的承诺</p><p class="figsub">四条设计要求，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="ch24summary">重播</button></div>
+    <div class="ch24summary" id="ch24summary" data-anim><div class="ch24summary-c" style="--i:0"><em>三个条件</em><b>只承诺能提供、能兑现、能核验的</b><p>费用、执行、纪律、约束与覆盖可以承诺；收益与方向不能。</p></div><div class="ch24summary-c" style="--i:1"><em>收益是很差的信号</em><b>承诺过程，并让过程指标可查</b><p>把费用、配置偏离、周期交代等指标写进承诺，每月公开。</p></div><div class="ch24summary-c warn" style="--i:2"><em>净价值才是价值</em><b>以净价值表述承诺</b><p>同时说明用户得到什么、付出什么、承担什么，不只展示收益。</p></div><div class="ch24summary-c warn" style="--i:3"><em>回测会误导</em><b>展示历史时说明尝试的次数与样本外表现</b><p>不以精选的回测与短期排名制造期望；按任务写出承诺与不承诺的内容。</p></div></div>
+  </div>
+</figure>
+<style>
+.ch24summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch24summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch24summary-c.warn{border-left-color:var(--warm)}
+.ch24summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch24summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch24summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch24summary.in .ch24summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch24summary{grid-template-columns:1fr}}
+</style>

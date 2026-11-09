@@ -1,0 +1,56 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">再平衡：方向相反的同一个机制</p>
+    <p class="figsub">两项资产各投 50 元，长期走势相同但涨跌交替。比较“买入后不再调整”与“每期调回各占一半”的结果。</p>
+    <div class="seg-btns" role="group" aria-label="走势">
+      <button type="button" data-rb="chop" aria-pressed="true">来回震荡</button>
+      <button type="button" data-rb="trend" aria-pressed="false">一项持续上涨</button>
+    </div>
+    <div class="rb" id="rb" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="买入持有与定期再平衡的组合净值">
+        <g id="rb-axis"></g><path id="rb-bh" class="rb-l bh"/><path id="rb-re" class="rb-l re"/>
+      </svg>
+      <div class="legend"><span><i style="background:var(--faint)"></i>买入后不再调整</span><span><i style="background:var(--accent)"></i>每期再平衡（高抛低吸）</span></div>
+      <p class="rb-msg" id="rb-msg" aria-live="polite"></p>
+      <div class="rb-cmp">
+        <div><b>固定杠杆</b><span>涨了加仓、跌了减仓（追涨杀跌）</span><em class="w">震荡中吃亏，趋势中占优</em></div>
+        <div><b>固定比例</b><span>涨了减仓、跌了加仓（高抛低吸）</span><em>震荡中获益，趋势中落后</em></div>
+      </div>
+    </div>
+  </div>
+  <figcaption>示意模拟，不计交易成本。震荡情形下，两项资产每期在 2% 的基础上分别涨跌 20%、方向相反，各自长期几乎不涨；趋势情形下，一项每期上涨 8%、另一项不变。再平衡带来的“分散收益”见 Booth 与 Fama（1992）。</figcaption>
+</figure>
+<style>
+.rb svg{width:100%;height:auto;display:block}
+.rb-l{fill:none;stroke-width:2.5}
+.rb-l.bh{stroke:var(--faint);stroke-dasharray:5 4} .rb-l.re{stroke:var(--accent)}
+.rb-msg{font-size:14px;margin:8px 0;min-height:1.7em}
+.rb-cmp{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rb-cmp div{background:var(--quote);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;font-size:13px}
+.rb-cmp span{color:var(--muted)}
+.rb-cmp em{font-style:normal;color:var(--accent);font-weight:500}
+.rb-cmp em.w{color:var(--warm)}
+@media (max-width:640px){.rb-cmp{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const N=20,X0=50,X1=620,YT=14,YB=184,x=t=>X0+t/N*(X1-X0);
+  const S={chop:t=>[(t%2?-0.2:0.2)+0.02,(t%2?0.2:-0.2)+0.02],trend:t=>[0.08,0]};
+  let k='chop';
+  function render(){
+    document.querySelectorAll('[data-rb]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.rb===k)));
+    let a=50,b=50,re=100; const BH=[100],RE=[100];
+    for(let t=0;t<N;t++){const [ra,rb]=S[k](t);a*=1+ra;b*=1+rb;re*=1+(ra+rb)/2;BH.push(a+b);RE.push(re);}
+    const all=BH.concat(RE), lo=Math.min(...all)*0.95, hi=Math.max(...all)*1.05, y=v=>YB-(v-lo)/(hi-lo)*(YB-YT);
+    let ax=`<line x1="${X0}" y1="${y(100)}" x2="${X1}" y2="${y(100)}" class="s-line"/><text x="${X0-8}" y="${y(100)+4}" text-anchor="end" font-size="11" class="t-faint">100</text>`;
+    [0,5,10,15,20].forEach(t=>ax+=`<text x="${x(t)}" y="${YB+18}" text-anchor="middle" font-size="11" class="t-faint">第 ${t} 期</text>`);
+    document.getElementById('rb-axis').innerHTML=ax;
+    const P=arr=>'M'+arr.map((v,t)=>`${x(t).toFixed(1)},${y(v).toFixed(1)}`).join('L');
+    document.getElementById('rb-bh').setAttribute('d',P(BH));document.getElementById('rb-re').setAttribute('d',P(RE));
+    document.getElementById('rb-msg').textContent=k==='chop'?`20 期后：不调整 ${BH[N].toFixed(0)}，再平衡 ${RE[N].toFixed(0)}。每项资产单独来看几乎原地踏步，再平衡的组合却在增长。`:`20 期后：不调整 ${BH[N].toFixed(0)}，再平衡 ${RE[N].toFixed(0)}。持续卖出上涨的资产，使再平衡落后于不调整。`;
+  }
+  document.querySelectorAll('[data-rb]').forEach(b=>b.addEventListener('click',()=>{k=b.dataset.rb;render();}));
+  document.getElementById('rb').addEventListener('anim-in',()=>{k='chop';render();setTimeout(()=>{k='trend';render();},2600);setTimeout(()=>{k='chop';render();},5200);});
+  render();
+})();
+</script>

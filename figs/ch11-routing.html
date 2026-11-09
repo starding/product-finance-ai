@@ -1,0 +1,48 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">一笔订单可以送往哪里</p>
+    <p class="figsub">客户要市价买入 300 股。各场所当前的最低卖价如下，全市场最优卖价为 10.01。选择一个去向，看结果。</p>
+    <div class="rt" id="rt" data-anim>
+      <div class="rt-src">客户订单<br><b>买入 300 股</b></div>
+      <div class="rt-arrows" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="rt-dst">
+        <button type="button" data-rt="a"><b>交易所甲</b><span>卖价 10.01 · 500 股</span></button>
+        <button type="button" data-rt="b"><b>交易所乙</b><span>卖价 10.02 · 800 股</span></button>
+        <button type="button" data-rt="w"><b>批发做市商</b><span>承诺优于最优价成交</span></button>
+      </div>
+    </div>
+    <div class="rt-d" id="rt-d" aria-live="polite">选择一个去向。</div>
+  </div>
+  <figcaption>示例报价。规则依据美国证券交易委员会《全国市场体系规则》（2005）中的订单保护规则，以及美国金融业监管局第 5310 条最佳执行规则；订单去向与订单流付费的季度披露依据第 606 条规则（SEC 2018 年修订）。各国规则不同。</figcaption>
+</figure>
+<style>
+.rt{display:grid;grid-template-columns:120px 60px 1fr;gap:8px;align-items:center}
+.rt-src{background:var(--ink);color:var(--bg);border-radius:10px;padding:12px;text-align:center;font-size:12px}
+.rt-src b{font-size:14px}
+.rt-arrows{display:flex;flex-direction:column;gap:30px}
+.rt-arrows i{display:block;height:2px;background:linear-gradient(90deg,var(--faint) 50%,transparent 50%);background-size:8px 2px;animation:rtflow .8s linear infinite}
+@keyframes rtflow{to{background-position:8px 0}}
+.rt-dst{display:grid;gap:8px}
+.rt-dst button{font:inherit;text-align:left;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;padding:8px 12px;cursor:pointer;display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.rt-dst button span{font-size:12px;color:var(--muted)}
+.rt-dst button.sel{border-color:var(--ink)}
+.rt-dst button.bad.sel{border-color:var(--warm);background:var(--warm-soft)}
+.rt-dst button.ok.sel{border-color:var(--accent);background:var(--accent-soft)}
+.rt-d{margin-top:12px;background:var(--quote);border-radius:10px;padding:10px 14px;font-size:14px;line-height:1.7;min-height:5em}
+.rt-d dl{display:grid;grid-template-columns:96px 1fr;gap:2px 10px;margin:4px 0 0}
+.rt-d dt{font-size:12px;color:var(--faint);padding-top:3px}
+.rt-d dd{margin:0}
+@media (max-width:640px){.rt{grid-template-columns:1fr}.rt-arrows{display:none}}
+</style>
+<script>
+(function(){
+  const D={
+    a:['ok','10.01','等于全市场最优价','合规：在最优报价处成交。'],
+    b:['bad','10.02','比最优价差 0.01','不允许：以劣于其他场所公开最优价的价格成交，属于订单保护规则禁止的“穿价成交”。'],
+    w:['ok','10.008','比最优价好 0.002','允许，但存在利益冲突：做市商可能向经纪商支付订单流费用。经纪商须定期披露订单去向与这类收入，并证明整体上为客户争取了最佳执行。']
+  };
+  const d=document.getElementById('rt-d'), bs=[...document.querySelectorAll('[data-rt]')];
+  bs.forEach(b=>{b.classList.add(D[b.dataset.rt][0]);b.addEventListener('click',()=>{bs.forEach(x=>x.classList.toggle('sel',x===b));const v=D[b.dataset.rt];
+    d.innerHTML=`<dl><dt>成交价</dt><dd><b>${v[1]}</b></dd><dt>相对最优价</dt><dd>${v[2]}</dd><dt>规则</dt><dd>${v[3]}</dd></dl>`;});});
+})();
+</script>

@@ -1,0 +1,42 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">展示什么，决定了核对要花多久</p><p class="figsub">代理完成了“比较两只基金近三年的费用与回撤”。切换展示方式，比较读完所需的时间，以及可以单独核验的项目。</p></div><button class="replay" type="button" data-replay="un">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="展示方式">
+      <button type="button" data-un="cot" aria-pressed="true">展示思考过程</button>
+      <button type="button" data-un="act" aria-pressed="false">展示关键行动与证据</button>
+    </div>
+    <div class="un" id="un" data-anim>
+      <div class="un-box" id="un-box"></div>
+      <div class="un-out"><div><span>读完约需</span><b id="un-t"></b></div><div><span>可以单独核验的项目</span><b id="un-n"></b></div></div>
+      <p class="un-msg" id="un-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意。推理文字未必反映模型实际的依据，见 Turpin、Michael、Perez 与 Bowman（2023）。</figcaption>
+</figure>
+<style>
+.un-box{background:var(--quote);border-radius:10px;padding:10px 12px;height:220px;overflow:hidden;position:relative}
+.un-box .ln{height:7px;border-radius:4px;background:var(--line);margin:6px 0}
+.un-box.cot::after{content:"";position:absolute;left:0;right:0;bottom:0;height:50px;background:linear-gradient(transparent,var(--quote))}
+.un-a{display:grid;grid-template-columns:52px 1fr auto;gap:8px;align-items:center;font-size:12.5px;padding:5px 0;border-bottom:1px dashed var(--line);opacity:0;transform:translateY(4px);transition:opacity .3s,transform .3s;transition-delay:calc(var(--i)*.15s)}
+.un-a.on{opacity:1;transform:none}
+.un-a em{font-style:normal;font-size:11px;color:var(--faint)}
+.un-a i{font-style:normal;font-size:11px;color:var(--accent);border:1px solid var(--accent);border-radius:10px;padding:1px 7px;white-space:nowrap}
+.un-out{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.un-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.un-out span{display:block;font-size:12px;color:var(--faint)} .un-out b{font-size:19px}
+.un-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const A=[['查询','甲基金 2023—2025 年的管理费与托管费','招募说明书'],['查询','乙基金同期费率','招募说明书'],['查询','两只基金每日净值，截至上月末','净值数据'],['计算','甲的最大回撤 －18.4%（示意）','计算过程'],['计算','乙的最大回撤 －23.1%（示意）','计算过程'],['结论','甲的年费率低 0.6 个百分点，回撤也更小','依据 1—5']];
+  const $=id=>document.getElementById(id),box=$('un-box');
+  function set(k){document.querySelectorAll('[data-un]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.un===k)));
+    if(k==='cot'){box.className='un-box cot';box.innerHTML=Array.from({length:22},(_,i)=>`<div class="ln" style="width:${60+((i*37)%40)}%"></div>`).join('');$('un-t').textContent='约 12 分钟';$('un-n').textContent='0 项';
+      $('un-msg').textContent='三千多字的推理过程：读完要十几分钟，其中提到的数字散落各处，无法逐项点开核对，而且这些文字未必是代理实际的依据。';}
+    else{box.className='un-box';box.innerHTML=A.map(([a,b,c],i)=>`<div class="un-a" style="--i:${i}"><em>${a}</em><span>${b}</span><i>${c}</i></div>`).join('');setTimeout(()=>box.querySelectorAll('.un-a').forEach(e=>e.classList.add('on')),40);
+      $('un-t').textContent='约 2 分钟';$('un-n').textContent='6 项';$('un-msg').textContent='六个关键行动，每一项都附有出处：核对者可以只点开与结论有关的几处，几分钟内确认结论是否站得住。';}}
+  document.querySelectorAll('[data-un]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.un)));
+  $('un').addEventListener('anim-in',()=>{set('cot');setTimeout(()=>set('act'),2600);});
+  set('cot');
+})();
+</script>

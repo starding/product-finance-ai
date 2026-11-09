@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: assigning power by consequence</p><p class="figsub">Four design requirements, each corresponding to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="ch26summary">Replay</button></div>
+    <div class="ch26summary" id="ch26summary" data-anim><div class="ch26summary-c" style="--i:0"><em>Authority is a ladder</em><b>Let users see and choose the level for each kind of operation</b><p>Information, drafting, per-trade confirmation, plan approval, time-limited veto and autonomy within scope are set operation by operation, not by a single master switch.</p></div><div class="ch26summary-c" style="--i:1"><em>Reversibility sets the ceiling</em><b>Keep irreversible, uncapped operations at per-trade confirmation</b><p>Selling holdings, transferring funds, accepting offers and exercising options are confirmed by the person; small reversible matters can be handed to the agent.</p></div><div class="ch26summary-c warn" style="--i:2"><em>Irreversible exposure needs timely watching</em><b>Remind before the deadline and explain the options</b><p>For option expiry, margin calls, rights issue deadlines and the like, remind several times in advance; the step that changes holdings is taken by the person.</p></div><div class="ch26summary-c warn" style="--i:3"><em>Limits must be enforced at the execution layer</em><b>Check independently; raise and lower authority with the record</b><p>Check instrument, amount, total and authority for every trade and keep a record; lower the level after overreach, version updates and changes in circumstances, and allow withdrawal with one tap.</p></div></div>
+  </div>
+</figure>
+<style>
+.ch26summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch26summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch26summary-c.warn{border-left-color:var(--warm)}
+.ch26summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch26summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch26summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch26summary.in .ch26summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch26summary{grid-template-columns:1fr}}
+</style>

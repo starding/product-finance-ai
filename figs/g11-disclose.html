@@ -1,0 +1,30 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">披露让好的留下来</p><p class="figsub">仍是二十位经理，起初三成五不可靠。经理必须公开持仓、风险与费用后，委托人有一定把握分辨好坏，只按看出来的价值付费。拖动披露能让委托人分辨的程度，看六轮之后还剩下多少位可靠的经理。</p></div><button class="replay" type="button" data-replay="ds">重播</button></div>
+    <div class="ds" id="ds" data-anim></div>
+    <div class="sl"><label for="ds-d">委托人能分辨的程度 <b id="ds-dv"></b></label><input id="ds-d" type="range" min="0" max="100" step="10" value="0"></div>
+    <p class="ds-msg" id="ds-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>示意：能分辨时，委托人给可靠的经理付 10 份、不可靠的付 4 份；不能分辨时按平均付费；可靠经理的实得为两者按分辨程度加权，低于 8 份时一半退出。与上一张图的规则相同，只多了披露。</figcaption>
+</figure>
+<style>
+.ds{display:grid;gap:6px}
+.ds-r{display:grid;grid-template-columns:3.5em 1fr 7em;gap:10px;align-items:center;font-size:12.5px}
+.ds-r div{display:flex;flex-wrap:wrap;gap:3px}
+.ds-r i{width:12px;height:12px;border-radius:3px}
+.ds-r b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.ds-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  function draw(){const d=+$('ds-d').value/100;let G=13,B=7;const rows=[];
+    for(let k=0;k<6;k++){const avg=G+B?(10*G+4*B)/(G+B):0,pay=d*10+(1-d)*avg;rows.push([G,B,pay]);if(pay<8)G=Math.floor(G/2);if(d>0)B=Math.round(B*(1-d*.5));}
+    $('ds').innerHTML=rows.map(([g,b,p],k)=>`<div class="ds-r"><span>第 ${k+1} 轮</span><div>${'<i style="background:var(--accent)"></i>'.repeat(g)}${'<i style="background:var(--warm)"></i>'.repeat(b)}</div><b>可靠者实得 ${p.toFixed(1)}</b></div>`).join('');
+    $('ds-dv').textContent=Math.round(d*100)+'%';const l=rows[5];
+    $('ds-msg').textContent=d===0?'没有披露，委托人只能按平均付费，可靠的经理一轮轮退出。':l[0]>=13?`披露让委托人能分辨 ${Math.round(d*100)}% 的好坏：可靠的经理按价值收费，全部留下；不可靠的经理找不到委托，逐渐退出。`:`披露的程度还不够，可靠的经理仍在流失，六轮后剩下 ${l[0]} 位。`;}
+  $('ds-d').addEventListener('input',draw);
+  $('ds').addEventListener('anim-in',()=>{let v=0;$('ds-d').value=0;draw();const id=setInterval(()=>{v+=10;$('ds-d').value=v;draw();if(v>=80)clearInterval(id);},350);});
+  draw();
+})();
+</script>

@@ -1,0 +1,32 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">披露之后，结果为什么可能更差</p><p class="figsub">建议者与接受建议者之间存在利益冲突。切换是否披露冲突，看建议的偏差、接受者打的折扣，以及接受者最终的误差（示意）。</p></div><button class="replay" type="button" data-replay="ds2">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="是否披露"><button type="button" data-ds2="0" aria-pressed="true">不披露</button><button type="button" data-ds2="1" aria-pressed="false">披露冲突</button></div>
+    <div class="ds2" id="ds2" data-anim>
+      <div class="ds2-r"><span>建议偏离真实的程度</span><div class="ds2-t"><i id="ds2-a" style="background:var(--warm)"></i></div><b id="ds2-av"></b></div>
+      <div class="ds2-r"><span>接受者自行扣除的部分</span><div class="ds2-t"><i id="ds2-b" style="background:var(--accent)"></i></div><b id="ds2-bv"></b></div>
+      <div class="ds2-r tot"><span>接受者最终的误差</span><div class="ds2-t"><i id="ds2-c" style="background:var(--ink)"></i></div><b id="ds2-cv"></b></div>
+      <p class="ds2-msg" id="ds2-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意数字，方向依据 Cain、Loewenstein 与 Moore（2005）的实验：披露后建议者给出的建议更偏，接受者的折扣不足以抵消。</figcaption>
+</figure>
+<style>
+.ds2-r{display:grid;grid-template-columns:150px 1fr 50px;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.ds2-r span{color:var(--muted)} .ds2-r.tot span{color:var(--ink);font-weight:700}
+.ds2-t{height:16px;background:var(--quote);border-radius:8px;overflow:hidden}
+.ds2-t i{display:block;height:100%;border-radius:8px;transition:width .6s ease}
+.ds2-r b{text-align:right;font-variant-numeric:tabular-nums}
+.ds2-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.ds2-r{grid-template-columns:110px 1fr 40px}}
+</style>
+<script>
+(function(){
+  const S=[[30,0,'不披露时，建议偏离真实 30 个单位，接受者没有察觉，误差 30。'],[48,12,'披露之后，建议者觉得已经告知，建议偏得更多；接受者知道有冲突，却只扣除了一小部分，最终误差反而更大。']];
+  function set(k){document.querySelectorAll('[data-ds2]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.ds2===k)));const [a,b,m]=S[k],c=a-b;
+    [['a',a],['b',b],['c',c]].forEach(([id,v])=>{document.getElementById('ds2-'+id).style.width=v/50*100+'%';document.getElementById('ds2-'+id+'v').textContent=v;});document.getElementById('ds2-msg').textContent=m;}
+  document.querySelectorAll('[data-ds2]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.ds2)));
+  document.getElementById('ds2').addEventListener('anim-in',()=>{set(0);setTimeout(()=>set(1),2400);});
+  set(0);
+})();
+</script>

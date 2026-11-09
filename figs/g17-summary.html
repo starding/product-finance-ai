@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：代理人成为市场的主要参与者</p><p class="figsub">四条结论，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="g17summary">重播</button></div>
+    <div class="g17summary" id="g17summary" data-anim><div class="g17summary-c" style="--i:0"><em>重跑：价差</em><b>平时更便宜</b><p>书记员报价与囤货几乎不花成本，平静时的价差大幅收窄。</p></div><div class="g17summary-c" style="--i:1"><em>信息瀑布</em><b>相像的书记员同时行动</b><p>同样的方法与数据让判断不再独立，一致的行动可能只建立在很少的信息上。</p></div><div class="g17summary-c warn" style="--i:2"><em>流动性螺旋</em><b>下跌引发下跌</b><p>减仓与保证金规则同时触发，报价的书记员在最需要时撤走。</p></div><div class="g17summary-c warn" style="--i:3"><em>市场设计</em><b>留出喘息的时间</b><p>暂停与熔断打断螺旋，参与者的多样减少同向行动。</p></div></div>
+  </div>
+</figure>
+<style>
+.g17summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g17summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g17summary-c.warn{border-left-color:var(--warm)}
+.g17summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g17summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g17summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g17summary.in .g17summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g17summary{grid-template-columns:1fr}}
+</style>

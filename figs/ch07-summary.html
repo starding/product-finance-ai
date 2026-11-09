@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：价格难以预测，产品不承诺什么</p><p class="figsub">三条设计要求，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="ch07summary">重播</button></div>
+    <div class="ch07summary" id="ch07summary" data-anim><div class="ch07summary-c" style="--i:0"><em>可预测的部分会被交易掉</em><b>不以预测方向作为承诺</b><p>对“稳定预测涨跌”的说法先保持怀疑，包括来自 AI 的说法。</p></div><div class="ch07summary-c warn" style="--i:1"><em>人会在随机中看到规律</em><b>不把连涨连跌包装成信号</b><p>短期的走势形态与连续涨跌，大多是随机序列中的正常现象。</p></div><div class="ch07summary-c warn" style="--i:2"><em>可预测性被发现后会减弱</em><b>任何规律都要经样本外检验</b><p>AI 很擅长在噪声里找出看似合理的规律；回测与形态都需要用未参与建模的数据检验。</p></div></div>
+  </div>
+</figure>
+<style>
+.ch07summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch07summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch07summary-c.warn{border-left-color:var(--warm)}
+.ch07summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch07summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch07summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch07summary.in .ch07summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch07summary{grid-template-columns:1fr}}
+</style>

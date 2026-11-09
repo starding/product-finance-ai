@@ -1,0 +1,53 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">文明模拟器 · 第 13 章：认知劳动变便宜的村子</p><p class="figsub">四十户人家按家产从少到多排列，每户每年有四件理财的事。一件事只在好处超过成本时才去做。拖动认知劳动的价格，看哪些事变得做得起；再把核对也交给书记员，看会发生什么。</p></div><button class="replay" type="button" data-replay="cs13">重播</button></div>
+    <div class="cs-rules"><span class="on">委托</span><span class="on">监管与托管</span><span class="on">默认选项</span><span class="on">参数：认知劳动的价格</span><span class="lock">专属代理 · 第 14 章</span></div>
+    <div class="cs13" id="cs13" data-anim>
+      <div class="cs13-grid" id="cs13-g"></div>
+      <div class="cs13-ax"><span>家产最少</span><span>家产最多</span></div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>做得起</span><span><i style="background:var(--quote);border:1px solid var(--line)"></i>做不起</span><span><i style="background:var(--warm)"></i>书记员出了错，无人发现</span></div>
+      <div class="sl"><label for="cs13-a">认知劳动的价格 <b id="cs13-av"></b></label><input id="cs13-a" type="range" min="0" max="2" step="0.1" value="0"></div>
+      <div class="cs-sw"><label><input type="checkbox" id="cs13-c"> 核对也交给书记员（不再由人核对与担责）</label></div>
+      <button type="button" class="replay" id="cs13-re">换一组年景</button>
+      <div class="cs13-out" id="cs13-out"></div>
+      <p class="cs13-msg" id="cs13-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意模型：家产的中位数约 100 份，最少的十几份，最多的一千多份。四件事的好处分别为家产的 0.3%、1%、0.6%、0.8%，所需劳动分别为 2、10、4、3 个工时，其中认知劳动分别占八成、九成、五成、七成，其余是核对与担责；人工每工时 1 份。认知劳动的价格按原来的百分比计。核对也交给书记员时，全部劳动都按认知劳动的价格计，但每件事有 8% 的可能出错且无人发现，损失为这件事好处的两倍；各户按预期的得失决定做不做。</figcaption>
+</figure>
+<style>
+.cs13-grid{display:grid;gap:4px}
+.cs13-row{display:grid;grid-template-columns:6.5em 1fr;gap:8px;align-items:center;font-size:12px;color:var(--muted)}
+.cs13-row div{display:grid;grid-template-columns:repeat(40,1fr);gap:2px}
+.cs13-row i{height:16px;border-radius:2px;background:var(--quote);border:1px solid var(--line);transition:background .3s}
+.cs13-row i.on{background:var(--accent);border-color:var(--accent)}
+.cs13-row i.err{background:var(--warm);border-color:var(--warm)}
+.cs13-ax{display:flex;justify-content:space-between;font-size:11.5px;color:var(--faint);margin:4px 0 6px 7.2em}
+.cs13-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cs13-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs13-out span{display:block;font-size:11.5px;color:var(--faint)} .cs13-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.cs13-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs13-row{grid-template-columns:1fr;gap:2px}.cs13-row div{gap:1px}.cs13-row i{height:12px}.cs13-ax{margin-left:0}.cs13-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs13'+id);let seed=1313;
+  const T=[['记账与对账',.003,2,.8],['研究与挑选',.01,10,.9],['监督经理',.006,4,.5],['按计划调整',.008,3,.7]];
+  let s0=1313;const r0=()=>{s0=(s0*16807)%2147483647;return s0/2147483647;};const g0=()=>{let u=0;while(!u)u=r0();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r0());};
+  const W=Array.from({length:40},()=>Math.round(100*Math.exp(1.1*g0()))).sort((a,b)=>a-b);
+  function sim(a,chk){let s=seed;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};
+    const G=T.map(()=>[]);let done=0,all=0,net=0,err=0,lost=0;
+    W.forEach(w=>{let n=0;T.forEach(([nm,v,h,c],k)=>{const cost=chk?h*a:h*(c*a+(1-c)),e=chk?.08:0,ev=v*w*(1-2*e)-cost;let st=0;
+      if(ev>0){st=1;done++;n++;net+=v*w-cost;if(chk&&r()<e){st=2;err++;lost+=2*v*w;net-=2*v*w;}}G[k].push(st);});if(n===4)all++;});
+    return {G,done,all,net,err,lost};}
+  function draw(){const ls=+$('-a').value,a=Math.pow(10,-ls),chk=$('-c').checked,S=sim(a,chk);
+    $('-av').textContent=a>=.1?Math.round(a*100)+'%':(a*100).toFixed(1)+'%';
+    $('-g').innerHTML=T.map((t,k)=>`<div class="cs13-row"><span>${t[0]}</span><div>${S.G[k].map(st=>`<i class="${st===1?'on':st===2?'err':''}"></i>`).join('')}</div></div>`).join('');
+    $('-out').innerHTML=[['做得起的事',S.done+' ／ 160 件'],['四件都做得起的户',S.all+' 户'],[chk?'无人发现的错误':'全村一年的净得',chk?S.err+' 件，损失 '+S.lost.toFixed(0)+' 份':S.net.toFixed(0)+' 份']].map(([x,v])=>`<div><span>${x}</span><b>${v}</b></div>`).join('');
+    const fix=T.reduce((x,[n,v,h,c])=>x+h*(1-c),0);
+    $('-msg').textContent=chk?`核对也交给书记员，成本几乎为零，${S.done} 件事都做得起了，四件全做的户增加到 ${S.all} 户；可是有 ${S.err} 件错误无人发现，损失 ${S.lost.toFixed(0)} 份，而且没有人为此负责。`:ls===0?'认知劳动按原价计：只有家产多的人家做得起研究与监督，家产少的人家连记账都不划算。':`认知劳动的价格降到 ${a>=.1?Math.round(a*100):(a*100).toFixed(1)}%，做得起的事增加到 ${S.done} 件，但很快不再增加：每户四件事合计仍有 ${fix.toFixed(1)} 个工时的核对与担责，家产少的人家仍然负担不起研究与监督。`;}
+  ['-a','-c'].forEach(k=>$(k).addEventListener('input',draw));$('-re').addEventListener('click',()=>{seed=(seed*48271)%2147483647;draw();});
+  $('').addEventListener('anim-in',()=>{$('-c').checked=false;let v=0;$('-a').value=0;draw();const id=setInterval(()=>{v+=.1;$('-a').value=v.toFixed(1);draw();if(v>=2){clearInterval(id);setTimeout(()=>{$('-c').checked=true;draw();},1500);}},160);});
+  draw();
+})();
+</script>

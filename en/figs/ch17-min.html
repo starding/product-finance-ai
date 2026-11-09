@@ -1,0 +1,42 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">When the three faces disagree, the lowest governs</p>
+    <p class="figsub">Adjust capacity, willingness and behaviour separately to see the risk level at which the plan can be carried out and how the product should respond.</p>
+    <div class="mn" id="mn" data-anim>
+      <div class="mn-s" id="mn-s"></div>
+      <div class="mn-out"><span>Risk level at which the plan can be carried out</span><div class="mn-lv" id="mn-lv"></div></div>
+      <p class="mn-msg" id="mn-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative. Five levels from low to high. The constraint that applies when willingness exceeds capacity is the starting point of suitability rules.</figcaption>
+</figure>
+<style>
+.mn-s{display:grid;gap:6px}
+.mn-s .sl label b{font-variant-numeric:tabular-nums}
+.mn-out{margin-top:10px;background:var(--quote);border-radius:10px;padding:10px 12px}
+.mn-out>span{font-size:12px;color:var(--faint)}
+.mn-lv{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-top:6px}
+.mn-lv i{font-style:normal;text-align:center;font-size:12px;padding:6px 0;border-radius:6px;background:var(--surface);color:var(--faint);border:1.5px solid var(--line);transition:all .3s}
+.mn-lv i.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.mn-msg{font-size:14px;margin:10px 0 0;min-height:5.1em}
+</style>
+<script>
+(function(){
+  const N=[['ab','Capacity',2],['wi','Willingness',4],['be','Behaviour',3]],L=['','Very low','Low','Medium','High','Very high'];
+  const box=document.getElementById('mn-s');
+  box.innerHTML=N.map(([k,n,v])=>`<div class="sl"><label for="mn-${k}">${n} <b id="mn-${k}v"></b></label><input id="mn-${k}" type="range" min="1" max="5" step="1" value="${v}"></div>`).join('');
+  document.getElementById('mn-lv').innerHTML=L.slice(1).map(l=>`<i>${l}</i>`).join('');
+  const lv=[...document.querySelectorAll('#mn-lv i')];
+  function r(){const v=N.map(([k])=>+document.getElementById('mn-'+k).value);N.forEach(([k],i)=>document.getElementById('mn-'+k+'v').textContent=L[v[i]]);
+    const m=Math.min(...v);lv.forEach((e,i)=>e.classList.toggle('on',i+1===m));
+    const [a,w,b]=v,t=[];
+    if(a===m)t.push(w>a?'Willingness exceeds capacity: even if the user wants it, do not allocate according to willingness, and explain why. ':'Capacity is the lowest face: the allocation is limited to what does not harm the user\'s livelihood and goals. ');
+    if(w===m&&w<a)t.push('Willingness is below capacity: the long-term benefits of taking more risk can be explained, but not forced; a plan beyond the user\'s willingness is likely to be abandoned in a decline. ');
+    if(b===m&&b<Math.min(a,w))t.push('Behaviour is the lowest: in past declines the user actually bore less. Go by the behavioural record, and talk it through before the next decline. ');
+    if(a===w&&w===b)t.push('The three faces agree: the plan can be carried out at this level and reviewed in a decline. ');
+    document.getElementById('mn-msg').textContent=t.join('').trim();}
+  N.forEach(([k])=>document.getElementById('mn-'+k).addEventListener('input',r));
+  document.getElementById('mn').addEventListener('anim-in',()=>{const S=[[2,4,3],[5,2,4],[5,5,2],[3,3,3]];S.forEach((s,j)=>setTimeout(()=>{N.forEach(([k],i)=>document.getElementById('mn-'+k).value=s[i]);r();},j*1800));});
+  r();
+})();
+</script>

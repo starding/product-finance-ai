@@ -1,0 +1,60 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Civilization Simulator · Chapter 7: The village fleet</p><p class="figsub">Each year twenty households invest part of their wealth in building ships. Choose to build alone, have a few households build one together, or have every household hold a small share in every ship; switch limited liability on or off, and watch each household’s wealth over twenty years.</p></div><button class="replay" type="button" data-replay="cs7">Replay</button></div>
+    <div class="cs-rules"><span class="on">Lending</span><span class="on">Commitment</span><span class="on">Money</span><span class="on">Insurance</span><span class="on">Bank</span><span class="on">Shares</span><span class="lock">Market · Ch. 8</span></div>
+    <div class="seg-btns" role="group" aria-label="How to invest">
+      <button type="button" data-cs7="alone" aria-pressed="false">Build alone</button>
+      <button type="button" data-cs7="group" aria-pressed="false">A few build one together</button>
+      <button type="button" data-cs7="all" aria-pressed="true">Everyone holds a small share in every ship</button>
+    </div>
+    <div class="cs7" id="cs7" data-anim>
+      <svg viewBox="0 0 660 220" role="img" aria-label="Wealth of twenty households over twenty years"><g id="cs7-ax"></g><g id="cs7-l"></g></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Each household’s wealth</span><span><i style="background:var(--ink)"></i>Village average</span><span><i style="background:var(--warm)"></i>Households ruined</span></div>
+      <div class="cs-sw"><label><input type="checkbox" id="cs7-lim" checked> Rule: Limited liability</label></div>
+      <div class="cs7-ctl">
+        <div class="sl"><label for="cs7-k">Share of wealth invested each year <b id="cs7-kv"></b></label><input id="cs7-k" type="range" min="10" max="90" step="10" value="50"></div>
+        <button type="button" class="replay" id="cs7-re">Another run of years</button>
+      </div>
+      <div class="cs7-out" id="cs7-out"></div>
+      <p class="cs7-msg" id="cs7-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model: households start with wealth of 10 to 30 portions and earn another 4 portions a year from farming. A ship costs 100 portions and makes one round trip a year; 70% of ships return worth 1.6 times their cost, while 30% sink with nothing left and 15 portions of unpaid debts. Under unlimited liability, the investors repay a sunken ship’s debts from their own wealth in proportion to their holdings. When building together, every five households pool for one ship; a household with less than 1 portion is ruined and can only farm thereafter. The vertical axis is logarithmic.</figcaption>
+</figure>
+<style>
+.cs7 svg{width:100%;height:auto;display:block}
+.cs7-ctl{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:end;margin-top:8px}
+.cs7-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cs7-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs7-out span{display:block;font-size:11.5px;color:var(--faint)} .cs7-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.cs7-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs7-ctl{grid-template-columns:1fr}.cs7-out{grid-template-columns:1fr}.cs7 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs7'+id),N=20,Y=20,COST=100,UP=1.6,PS=.7,DEBT=15,FARM=4;let mode='all',seed=707;
+  const X0=44,X1=650,YT=10,YB=186,x=t=>X0+t/Y*(X1-X0),ly=v=>YB-(Math.log10(Math.max(v,.5))-Math.log10(.5))/(Math.log10(2000)-Math.log10(.5))*(YB-YT);
+  function rng(){let s=seed;return ()=>{s=(s*16807)%2147483647;return s/2147483647;};}
+  function sim(k,lim){const r=rng(),W=Array.from({length:N},(_,i)=>10+i*20/(N-1)),P=[W.slice()],broke=Array(N).fill(false);let ships=0;
+    for(let t=0;t<Y;t++){const inv=W.map((w,i)=>broke[i]?0:w*k);let ret=Array(N).fill(0);
+      if(mode==='alone'){for(let i=0;i<N;i++){if(inv[i]>=COST){const n=Math.floor(inv[i]/COST);ships+=n;let g=0;for(let j=0;j<n;j++){if(r()<PS)g+=COST*UP;else if(!lim)g-=DEBT;}ret[i]=g-n*COST;}}}
+      else if(mode==='group'){const idx=[...Array(N).keys()].filter(i=>!broke[i]);for(let s=0;s+5<=idx.length;s+=5){const g=idx.slice(s,s+5),tot=g.reduce((a,i)=>a+inv[i],0);if(tot<COST)continue;const n=Math.floor(tot/COST);ships+=n;let val=0,deb=0;for(let j=0;j<n;j++){if(r()<PS)val+=COST*UP;else deb+=lim?0:DEBT;}const used=n*COST;g.forEach(i=>{const sh=inv[i]/tot;ret[i]=sh*(val-deb)-sh*used;});}}
+      else{const tot=inv.reduce((a,b)=>a+b,0),n=Math.floor(tot/COST);ships+=n;let val=0,deb=0;for(let j=0;j<n;j++){if(r()<PS)val+=COST*UP;else deb+=lim?0:DEBT;}const used=n*COST;for(let i=0;i<N;i++){if(tot>0){const sh=inv[i]/tot;ret[i]=sh*(val-deb)-sh*used;}}}
+      for(let i=0;i<N;i++){W[i]=Math.max(0,W[i]+ret[i])+FARM;if(W[i]-FARM<1&&ret[i]<0)broke[i]=true;}
+      P.push(W.slice());}
+    return {P,broke,ships};}
+  function draw(){const k=+$('-k').value/100,lim=$('-lim').checked,S=sim(k,lim);$('-kv').textContent=Math.round(k*100)+'%';
+    $('-ax').innerHTML=[1,10,100,1000].map(v=>`<line x1="${X0}" x2="${X1}" y1="${ly(v)}" y2="${ly(v)}" class="s-line"/><text x="${X0-6}" y="${ly(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+[0,5,10,15,20].map(t=>`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">Year ${t}</text>`).join('');
+    const avg=S.P.map(w=>w.reduce((a,b)=>a+b,0)/N);
+    $('-l').innerHTML=[...Array(N).keys()].map(i=>`<path d="${S.P.map((w,t)=>(t?'L':'M')+x(t).toFixed(1)+','+ly(w[i]).toFixed(1)).join('')}" fill="none" stroke="${S.broke[i]?'var(--warm)':'var(--accent)'}" stroke-width="1.1" opacity=".55"/>`).join('')+`<path d="${avg.map((v,t)=>(t?'L':'M')+x(t).toFixed(1)+','+ly(v).toFixed(1)).join('')}" fill="none" stroke="var(--ink)" stroke-width="2.4"/>`;
+    const nb=S.broke.filter(Boolean).length,end=S.P[Y],farm=20+FARM*Y;
+    $('-out').innerHTML=[['Ships built in twenty years',S.ships],['Average wealth in year 20',Math.round(avg[Y])+' portions'],['Households ruined',nb]].map(([a,b])=>`<div><span>${a}</span><b>${b}</b></div>`).join('');
+    $('-msg').textContent=mode==='alone'?(S.ships?`Only households with enough wealth can afford a ship, and a single sinking costs them most of what they have.`:`No household can pay for a ship, so not one is built in twenty years; the village lives on farming alone, with average wealth of about ${Math.round(avg[Y])} portions.`):
+      mode==='group'?`Five households build one ship together, and each household’s fortune hangs on a single ship: one sinking loses everything invested${nb?'; '+nb+(nb===1?' household is ruined':' households are ruined'):''}. Households drift further and further apart in wealth.${lim?'':' Unlimited liability also puts the debts of sunken ships on the investors.'}`:
+      `Every household holds a small share in every ship, so the ships’ successes and failures offset one another and households’ wealth grows almost in step, averaging about ${Math.round(avg[Y])} portions in year 20${nb?'; '+nb+(nb===1?' household is still ruined':' households are still ruined'):'; no household is ruined'}.${lim?'':' With limited liability off, the debts of sunken ships are spread across households by holding, and growth is somewhat slower.'}`;}
+  document.querySelectorAll('[data-cs7]').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.cs7;document.querySelectorAll('[data-cs7]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  ['-k','-lim'].forEach(k=>$(k).addEventListener('input',draw));$('-re').addEventListener('click',()=>{seed=(seed*48271)%2147483647;draw();});
+  $('').addEventListener('anim-in',()=>{['alone','group','all'].forEach((k,i)=>setTimeout(()=>{mode=k;document.querySelectorAll('[data-cs7]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.cs7===k)));draw();},300+i*2600));});
+  draw();
+})();
+</script>

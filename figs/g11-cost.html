@@ -1,0 +1,35 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">规则的力度：欺诈的损失与合规的成本</p><p class="figsub">拖动规则的严格程度，看欺诈造成的损失、各方为合规付出的成本，以及两者之和。</p></div><button class="replay" type="button" data-replay="ct">重播</button></div>
+    <div class="ct" id="ct" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="规则的严格程度与成本"><g id="ct-ax"></g><path id="ct-f" class="ct-f"/><path id="ct-c" class="ct-c"/><path id="ct-t" class="ct-t"/><circle id="ct-p" r="6" fill="var(--ink)"/></svg>
+      <div class="legend"><span><i style="background:var(--warm)"></i>欺诈造成的损失</span><span><i style="background:var(--blue)"></i>合规的成本</span><span><i style="background:var(--ink)"></i>两者之和</span></div>
+      <div class="sl"><label for="ct-x">规则的严格程度 <b id="ct-xv"></b></label><input id="ct-x" type="range" min="0" max="100" step="5" value="20"></div>
+      <p class="ct-msg" id="ct-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：欺诈损失随规则严格程度递减，合规成本随之递增；两者之和最小的地方，是规则力度的合适范围。规则过严还会把小的经理挤出行业，图中未计入。</figcaption>
+</figure>
+<style>
+.ct svg{width:100%;height:auto;display:block}
+.ct-f{fill:none;stroke:var(--warm);stroke-width:2.2}
+.ct-c{fill:none;stroke:var(--blue);stroke-width:2.2}
+.ct-t{fill:none;stroke:var(--ink);stroke-width:2.8}
+.ct-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.ct svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),X0=46,X1=630,YT=12,YB=178,x=v=>X0+v*(X1-X0),y=v=>YB-v/12*(YB-YT);
+  const F=v=>10*Math.exp(-3.5*v),C=v=>.5+6*v*v,Tt=v=>F(v)+C(v);
+  $('ct-ax').innerHTML=[0,4,8,12].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+[0,.25,.5,.75,1].map(v=>`<text x="${x(v)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${['宽松','','适中','','严格'][v*4]}</text>`).join('');
+  const path=f=>{let d='';for(let v=0;v<=1.0001;v+=.01)d+=(v?'L':'M')+x(v).toFixed(1)+','+y(Math.min(12,f(v))).toFixed(1);return d;};
+  $('ct-f').setAttribute('d',path(F));$('ct-c').setAttribute('d',path(C));$('ct-t').setAttribute('d',path(Tt));
+  let best=0,bv=1e9;for(let v=0;v<=1;v+=.01)if(Tt(v)<bv){bv=Tt(v);best=v;}
+  function draw(){const v=+$('ct-x').value/100;$('ct-p').setAttribute('cx',x(v));$('ct-p').setAttribute('cy',y(Tt(v)));$('ct-xv').textContent=Math.round(v*100)+'%';
+    $('ct-msg').textContent=Math.abs(v-best)<.08?`这一带两者之和最小：欺诈的损失 ${F(v).toFixed(1)}，合规的成本 ${C(v).toFixed(1)}。`:v<best?`规则太松，欺诈的损失（${F(v).toFixed(1)}）远大于合规的成本（${C(v).toFixed(1)}），收紧规则得大于失。`:`规则太严，合规的成本（${C(v).toFixed(1)}）已经超过它挡住的欺诈损失（${F(v).toFixed(1)}）；过严的规则还会把小的经理挤出行业。`;}
+  $('ct-x').addEventListener('input',draw);
+  $('ct').addEventListener('anim-in',()=>{let v=0;$('ct-x').value=0;draw();const id=setInterval(()=>{v+=5;$('ct-x').value=v;draw();if(v>=100){clearInterval(id);setTimeout(()=>{$('ct-x').value=Math.round(best*20)*5;draw();},500);}},150);});
+  draw();
+})();
+</script>

@@ -1,0 +1,70 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The range of uncertainty widens with the square root of time</p><p class="figsub">Forty possible paths, and the range of the middle 90% of outcomes. Choose a holding period to see the probability of a gain.</p></div><button class="replay" type="button" data-replay="df">Replay</button></div>
+    <div class="df" id="df" data-anim>
+      <svg viewBox="0 0 640 280" role="img" aria-label="Spreading random paths and the probability of a gain over the holding period">
+        <g id="df-axis"></g>
+        <path id="df-band" class="df-band"/>
+        <g id="df-paths"></g>
+        <path id="df-mid" class="df-mid"/>
+        <line id="df-cur" class="df-cur" y1="16" y2="244"/>
+      </svg>
+      <div class="presets" role="group" aria-label="Holding period">
+        <button type="button" data-t="0.004">1 day</button><button type="button" data-t="1">1 year</button><button type="button" data-t="4">4 years</button><button type="button" data-t="10">10 years</button>
+      </div>
+      <div class="df-out">
+        <div><span>Holding period</span><b id="df-t"></b></div>
+        <div><span>Probability of ending above the start</span><b id="df-p"></b></div>
+        <div><span>Range of the middle 90% of outcomes</span><b id="df-r"></b></div>
+      </div>
+    </div>
+  </div>
+  <figcaption>Illustrative parameters: mean annual log return 5%, annual volatility 18%, monthly steps. The range is shown on a logarithmic scale, with the starting point at 100. On the logarithmic scale, the width of the range at 4 years is twice that at 1 year, the ratio of the square roots of time.</figcaption>
+</figure>
+<style>
+.df svg{width:100%;height:auto;display:block}
+.df-band{fill:var(--accent-soft)}
+.df-p{fill:none;stroke:var(--faint);stroke-width:1;opacity:.55;stroke-dasharray:1400;stroke-dashoffset:1400}
+.df.in .df-p{animation:dfdraw 2.4s ease-out forwards;animation-delay:calc(var(--k)*25ms)}
+@keyframes dfdraw{to{stroke-dashoffset:0}}
+.df-mid{fill:none;stroke:var(--accent);stroke-width:2;stroke-dasharray:5 4}
+.df-cur{stroke:var(--warm);stroke-width:2}
+.df-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.df-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.df-out span{display:block;font-size:12px;color:var(--faint)}
+.df-out b{font-size:20px;font-variant-numeric:tabular-nums}
+@media (max-width:640px){.df-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const MU=0.05, SG=0.18, T=10, X0=50, X1=620, Y0=244, Y1=16, LMIN=Math.log(25), LMAX=Math.log(600);
+  const x=t=>X0+t/T*(X1-X0), y=v=>Y0-(Math.log(v)-LMIN)/(LMAX-LMIN)*(Y0-Y1);
+  const erf=z=>{const t=1/(1+0.3275911*Math.abs(z));const r=1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-0.284496736)*t+0.254829592)*t*Math.exp(-z*z);return z>=0?r:-r;};
+  const Phi=z=>0.5*(1+erf(z/Math.SQRT2));
+  let a=`<line x1="${X0}" y1="${Y0}" x2="${X1}" y2="${Y0}" class="s-faint"/>`;
+  [0,2,4,6,8,10].forEach(t=>a+=`<text x="${x(t)}" y="${Y0+16}" text-anchor="middle" font-size="11" class="t-faint">Year ${t}</text>`);
+  [50,100,200,400].forEach(v=>a+=`<line x1="${X0}" y1="${y(v)}" x2="${X1}" y2="${y(v)}" class="s-line"/><text x="${X0-8}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`);
+  document.getElementById('df-axis').innerHTML=a;
+  const ts=[];for(let k=0;k<=120;k++)ts.push(k/12);
+  const up=ts.map(t=>`${x(t).toFixed(1)},${y(100*Math.exp(MU*t+1.645*SG*Math.sqrt(t))).toFixed(1)}`);
+  const dn=ts.map(t=>`${x(t).toFixed(1)},${y(100*Math.exp(MU*t-1.645*SG*Math.sqrt(t))).toFixed(1)}`).reverse();
+  document.getElementById('df-band').setAttribute('d','M'+up.join('L')+'L'+dn.join('L')+'Z');
+  document.getElementById('df-mid').setAttribute('d','M'+ts.map(t=>`${x(t).toFixed(1)},${y(100*Math.exp(MU*t)).toFixed(1)}`).join('L'));
+  let seed=7; const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
+  const g=()=>{let u=0,v=0;while(!u)u=rnd();v=rnd();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);};
+  let P='';
+  for(let k=0;k<40;k++){let l=Math.log(100),d=`M${x(0)},${y(100)}`;for(let i=1;i<=120;i++){l+=MU/12+SG*Math.sqrt(1/12)*g();const v=Math.min(590,Math.max(26,Math.exp(l)));d+=`L${x(i/12).toFixed(1)},${y(v).toFixed(1)}`;}P+=`<path class="df-p" style="--k:${k}" d="${d}"/>`;}
+  document.getElementById('df-paths').innerHTML=P;
+  const pb=[...document.querySelectorAll('[data-t]')];
+  function set(t){
+    pb.forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.t===t)));
+    const cur=document.getElementById('df-cur');cur.setAttribute('x1',x(Math.max(t,0.04)));cur.setAttribute('x2',x(Math.max(t,0.04)));
+    document.getElementById('df-t').textContent=t<0.01?'1 day':t+(t===1?' year':' years');
+    document.getElementById('df-p').textContent=(Phi(MU*Math.sqrt(t)/SG)*100).toFixed(1)+'%';
+    const lo=100*Math.exp(MU*t-1.645*SG*Math.sqrt(t)), hi=100*Math.exp(MU*t+1.645*SG*Math.sqrt(t));
+    document.getElementById('df-r').textContent=lo.toFixed(0)+'–'+hi.toFixed(0);
+  }
+  pb.forEach(b=>b.addEventListener('click',()=>set(+b.dataset.t)));
+  set(1);
+})();
+</script>

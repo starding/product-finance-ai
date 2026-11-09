@@ -1,0 +1,30 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">知情的人越多，价差越宽</p><p class="figsub">一份船股可能值 8 份，也可能值 12 份，各一半。知情的人只在值 12 份时买、值 8 份时卖；不知情的人随意买卖。拖动来交易的人中知情者的比例，看做市商不亏本的报价。</p></div><button class="replay" type="button" data-replay="gm9">重播</button></div>
+    <div class="gm9" id="gm9" data-anim>
+      <div class="gm9-q"><div><em>买价</em><b id="gm9-b"></b></div><div class="gm9-mid"><i id="gm9-w"></i><span id="gm9-wv"></span></div><div><em>卖价</em><b id="gm9-a"></b></div></div>
+      <div class="sl"><label for="gm9-p">知情者的比例 <b id="gm9-pv"></b></label><input id="gm9-p" type="range" min="0" max="100" step="5" value="20"></div>
+      <p class="gm9-msg" id="gm9-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：做市商的卖价等于“有人来买”时份额的平均价值，买价等于“有人来卖”时的平均价值；价差 ＝ 4 × 知情者的比例（格洛斯滕与米尔格罗姆，1985 的简化情形）。</figcaption>
+</figure>
+<style>
+.gm9-q{display:grid;grid-template-columns:1fr 1.4fr 1fr;gap:10px;align-items:center}
+.gm9-q>div:not(.gm9-mid){background:var(--quote);border-radius:10px;padding:10px 12px;text-align:center}
+.gm9-q em{display:block;font-style:normal;font-size:11.5px;color:var(--faint)} .gm9-q b{font-size:22px;font-variant-numeric:tabular-nums}
+.gm9-mid{position:relative;height:54px;text-align:center}
+.gm9-mid i{position:absolute;left:50%;top:8px;height:18px;transform:translateX(-50%);background:var(--warm-soft);border:1px solid var(--warm);border-radius:6px;transition:width .3s}
+.gm9-mid span{position:relative;top:32px;font-size:12px;color:var(--warm);font-variant-numeric:tabular-nums}
+.gm9-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  function draw(){const p=+$('gm9-p').value/100,ask=10+2*p,bid=10-2*p,s=ask-bid;$('gm9-a').textContent=ask.toFixed(1);$('gm9-b').textContent=bid.toFixed(1);$('gm9-w').style.width=Math.max(4,s/4*100)+'%';$('gm9-wv').textContent=`价差 ${s.toFixed(1)} 份`;$('gm9-pv').textContent=Math.round(p*100)+'%';
+    $('gm9-msg').textContent=p===0?'没有知情者，做市商不必担心吃亏，可以按 10 份买卖。':p===1?'来的全是知情者，做市商无论怎么报价都会吃亏：价差宽到买价 8 份、卖价 12 份，等于不再交易。':`知情者占 ${Math.round(p*100)}%：做市商在知情者身上亏的，要靠从不知情者身上多收的价差弥补。不知情的人每买卖一次，平均多付 ${(s/2).toFixed(1)} 份。`;}
+  $('gm9-p').addEventListener('input',draw);
+  $('gm9').addEventListener('anim-in',()=>{let v=0;$('gm9-p').value=0;draw();const id=setInterval(()=>{v+=5;$('gm9-p').value=v;draw();if(v>=60)clearInterval(id);},200);});
+  draw();
+})();
+</script>

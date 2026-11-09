@@ -1,0 +1,42 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">三项实验：省下了多少</p><p class="figsub">点选一项研究，查看它的对象、做法与主要结果。</p></div><button class="replay" type="button" data-replay="ex13">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="研究">
+      <button type="button" data-ex13="0" aria-pressed="true">写作任务</button>
+      <button type="button" data-ex13="1" aria-pressed="false">客服工作</button>
+      <button type="button" data-ex13="2" aria-pressed="false">咨询任务</button>
+    </div>
+    <div class="ex13" id="ex13" data-anim>
+      <p class="ex13-who" id="ex13-who"></p>
+      <div class="ex13-bars" id="ex13-b"></div>
+      <p class="ex13-msg" id="ex13-msg"></p>
+    </div>
+  </div>
+  <figcaption>数据：诺伊与张（2023，《科学》）；布林约尔松、李与雷蒙德（2025，《经济学季刊》；新手的提高幅度出自 2023 年的工作论文）；德拉夸等（2023，哈佛商学院工作论文）。条形长度按各自的百分数绘制，不同研究的口径不可直接比较。</figcaption>
+</figure>
+<style>
+.ex13-who{font-size:13px;color:var(--muted);margin:4px 0 10px}
+.ex13-bars{display:grid;gap:8px}
+.ex13-r{display:grid;grid-template-columns:10.5em 1fr;gap:10px;align-items:center;font-size:12.5px}
+.ex13-r div{position:relative;height:22px}
+.ex13-r i{position:absolute;top:0;height:100%;border-radius:4px;background:var(--accent);transition:width .7s}
+.ex13-r i.neg{background:var(--warm)}
+.ex13-r em{position:absolute;top:2px;font-style:normal;font-size:12px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.ex13-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.ex13-r{grid-template-columns:1fr;gap:2px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('ex13'+id);
+  const S=[['453 位受过大学教育的专业人员，完成本行业的写作任务，随机让一半人使用对话式大模型。',[['用时减少',40],['质量提高',18]],'在短小、独立的写作任务上，用时与质量都明显改善，人与人之间的差距也缩小了。'],
+    ['5,172 名客服人员，分批获得人工智能助手，比较获得前后每小时解决的问题数。',[['平均提高',15],['新手与技能较低者提高（工作论文）',34]],'提高的主要是经验少的人：助手把经验丰富者的做法传给了新手；经验最丰富的人几乎没有提高。'],
+    ['758 名咨询顾问，完成一组在大模型能力范围之内的任务，与一项在能力范围之外的任务。',[['能力范围内：多完成的任务',12.2],['能力范围内：速度提高',25.1],['能力范围内：质量提高',40],['能力范围外：答对的比例变化',-19]],'在能力范围之内，样样都好；在看上去相近、却在能力范围之外的任务上，使用者反而更容易答错。']];
+  function set(k){document.querySelectorAll('[data-ex13]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.ex13===k)));const s=S[k];$('-who').textContent=s[0];
+    $('-b').innerHTML=s[1].map(([n,v])=>`<div class="ex13-r"><span>${n}</span><div><i class="${v<0?'neg':''}" style="left:${v<0?0:0}%;width:0"></i><em></em></div></div>`).join('');
+    requestAnimationFrame(()=>[...$('-b').children].forEach((r,i)=>{const v=s[1][i][1],w=Math.abs(v)*1.6;const bar=r.querySelector('i'),t=r.querySelector('em');bar.style.width=w+'%';t.style.left=`calc(${w}% + 6px)`;t.textContent=(v<0?'−'+(-v)+' 个百分点':(k===2&&i===2?'40% 以上':v+'%'));}));
+    $('-msg').textContent=s[2];}
+  document.querySelectorAll('[data-ex13]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.ex13)));
+  $('').addEventListener('anim-in',()=>{[0,1,2].forEach((k,i)=>setTimeout(()=>set(k),200+i*2600));});
+  set(0);
+})();
+</script>

@@ -1,0 +1,32 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Three sources of trust, each with its own evidence</p><p class="figsub">Select one to see what he needs to believe, what the product uses as proof, and what happens if it is missing.</p></div><button class="replay" type="button" data-replay="ab24">Replay</button></div>
+    <div class="ab24" id="ab24" data-anim><div class="ab24-g" id="ab24-g"></div><div class="ab24-d" id="ab24-d" aria-live="polite"></div></div>
+  </div>
+  <figcaption>The three-part division comes from Mayer, Davis and Schoorman (1995); the column "The product's evidence" is a design derived in this book.</figcaption>
+</figure>
+<style>
+.ab24-g{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ab24-g button{font:inherit;cursor:pointer;border:1px solid transparent;border-radius:12px;padding:14px 10px;background:var(--quote);color:var(--ink);font-size:16px;font-weight:600;opacity:0;transform:scale(.9);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.25s)}
+.ab24.in .ab24-g button{opacity:1;transform:none}
+.ab24-g button em{display:block;font-style:normal;font-weight:400;font-size:12px;color:var(--faint);margin-top:2px}
+.ab24-g button.sel{border-color:var(--accent);color:var(--accent)}
+.ab24-d{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.ab24-d div{background:var(--quote);border-radius:8px;padding:9px 11px;font-size:13.5px;line-height:1.6}
+.ab24-d div:last-child{background:var(--warm-soft)}
+.ab24-d span{display:block;font-size:11px;color:var(--faint)}
+@media (max-width:640px){.ab24-d{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const A=[['Ability','Is it capable?','It can keep accounts, understands the fleet, and does not make elementary mistakes.','A verifiable past record: how reliably it has met goals, how many mistakes it has made and of what kinds, and its compensation history.','It keeps the agreement but keeps getting things wrong, and he bears the losses for nothing.'],
+    ['Benevolence','Whose interests does it serve?','What it recommends is what he would choose himself after thinking it through.','It charges him rather than taking commissions from sellers; its goals are written into the agreement, and it acts according to his plan rather than the number of trades.','It is capable and keeps the agreement, but uses its ability to make him buy and sell more.'],
+    ['Integrity','Do its words match its actions?','It really keeps the boundaries in the agreement, and the grounds in the records really exist.','Records kept by a third party that cannot be altered; independent verification; penalties for overstepping written into the agreement.','It says the right things but does something else, and he has no way of finding out.']];
+  const g=document.getElementById('ab24-g'),d=document.getElementById('ab24-d');
+  g.innerHTML=A.map((a,i)=>`<button type="button" style="--i:${i}">${a[0]}<em>${a[1]}</em></button>`).join('');const bs=[...g.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));d.innerHTML=`<div><span>What he needs to believe</span>${A[i][2]}</div><div><span>The product's evidence</span>${A[i][3]}</div><div><span>If it is missing</span>${A[i][4]}</div>`;}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('ab24').addEventListener('anim-in',()=>{[0,1,2].forEach((i,k)=>setTimeout(()=>set(i),1000+k*2000));});
+  set(0);
+})();
+</script>

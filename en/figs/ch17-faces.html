@@ -1,0 +1,45 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The three faces of risk tolerance</p><p class="figsub">Three investors all chose "willing to take relatively high risk" on the questionnaire. Switch between them to compare the level of each face and the level at which the plan can finally be carried out.</p></div><button class="replay" type="button" data-replay="fc">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Investor">
+      <button type="button" data-fc="a" aria-pressed="true">Age 30, stable income</button>
+      <button type="button" data-fc="b" aria-pressed="false">Age 58, retiring in two years</button>
+      <button type="button" data-fc="c" aria-pressed="false">Sold in the last crash</button>
+    </div>
+    <div class="fc" id="fc" data-anim>
+      <div class="fc-bars" id="fc-bars"></div>
+      <p class="fc-msg" id="fc-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative. Five levels from low to high; the dashed line marks the lowest of the three faces, which is the ceiling at which the plan can be carried out.</figcaption>
+</figure>
+<style>
+.fc-bars{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:18px;height:200px;align-items:end;padding:0 8px;border-bottom:1px solid var(--faint)}
+.fc-b{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.fc-b i{display:block;width:70%;max-width:110px;border-radius:6px 6px 0 0;height:0;transition:height .6s ease}
+.fc-b b{font-size:13px;margin-bottom:4px}
+.fc-cap{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;padding:0 8px;margin-top:6px;text-align:center;font-size:13px}
+.fc-cap span{color:var(--faint);font-size:11.5px;display:block}
+.fc-line{position:absolute;left:0;right:0;border-top:2px dashed var(--ink);transition:bottom .6s ease}
+.fc-line em{position:absolute;left:0;top:-18px;font-style:normal;font-size:11.5px;background:var(--surface);padding:0 4px}
+.fc-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const N=['Capacity','Willingness','Behaviour'],D=['How much can objectively be borne','How much risk one is subjectively willing to take','How much was actually borne in a decline'],C=['var(--blue)','var(--accent)','var(--warm)'],L=['','very low','low','medium','high','very high'];
+  const P={a:[5,4,4,'All three faces are fairly high and broadly consistent: the plan can be carried out at a fairly high level. The behaviour face has not yet been tested by a crash and still needs to be reviewed in a decline.'],
+    b:[2,4,3,'Willingness is fairly high, but capacity is low: this money is the person\'s entire savings and will be needed in two years. The plan can only be carried out at the capacity level; otherwise a single decline could directly affect retirement.'],
+    c:[5,5,2,'Capacity and willingness are both very high, but in the last crash this investor sold before the fall was even half over. The actual tolerance shown in the behavioural record is the lowest, and the plan should be based on it.']};
+  const box=document.getElementById('fc');
+  box.querySelector('.fc-bars').innerHTML=N.map((n,i)=>`<div class="fc-b"><i id="fc-i${i}" style="background:${C[i]}"></i></div>`).join('')+'<div class="fc-line" id="fc-line"><em id="fc-le"></em></div>';
+  box.querySelector('.fc-bars').insertAdjacentHTML('afterend','<div class="fc-cap">'+N.map((n,i)=>`<div>${n}: <b id="fc-v${i}"></b><span>${D[i]}</span></div>`).join('')+'</div>');
+  function set(k,anim){document.querySelectorAll('[data-fc]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.fc===k)));
+    const v=P[k];if(anim)N.forEach((n,i)=>document.getElementById('fc-i'+i).style.height='0');
+    setTimeout(()=>{N.forEach((n,i)=>{document.getElementById('fc-i'+i).style.height=v[i]/5*180+'px';document.getElementById('fc-v'+i).textContent=L[v[i]];});
+      const m=Math.min(v[0],v[1],v[2]);document.getElementById('fc-line').style.bottom=m/5*180+'px';document.getElementById('fc-le').textContent='Plan ceiling: '+L[m];},anim?60:0);
+    document.getElementById('fc-msg').textContent=v[3];}
+  document.querySelectorAll('[data-fc]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.fc,false)));
+  box.addEventListener('anim-in',()=>{set('a',true);setTimeout(()=>set('b'),2600);setTimeout(()=>set('c'),5200);});
+  set('a',false);
+})();
+</script>

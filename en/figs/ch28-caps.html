@@ -1,0 +1,44 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Which capabilities a task calls on</p><p class="figsub">Choose a task to see which general and finance-specific capabilities it needs. Then tick "Missing finance-specific capabilities" to see what happens to the result.</p></div><button class="replay" type="button" data-replay="cp2">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Task">
+      <button type="button" data-cp2="0" aria-pressed="true">Research a company</button><button type="button" data-cp2="1" aria-pressed="false">Track holdings continuously</button><button type="button" data-cp2="2" aria-pressed="false">Rebalance to target</button><button type="button" data-cp2="3" aria-pressed="false">Explain a price move</button>
+    </div>
+    <label class="cp2-chk"><input type="checkbox" id="cp2-x"> Missing finance-specific capabilities</label>
+    <div class="cp2" id="cp2" data-anim>
+      <div class="cp2-col"><b>General capabilities: can it be done?</b><div id="cp2-g"></div></div>
+      <div class="cp2-col"><b>Finance-specific capabilities: is it done right?</b><div id="cp2-f"></div></div>
+    </div>
+    <p class="cp2-msg" id="cp2-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>Illustrative. The division into two kinds of capability is this book's own classification.</figcaption>
+</figure>
+<style>
+.cp2-chk{display:flex;gap:6px;align-items:center;font-size:14px;margin-bottom:6px}
+.cp2-chk input{accent-color:var(--warm);width:16px;height:16px}
+.cp2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cp2-col{background:var(--quote);border-radius:10px;padding:10px}
+.cp2-col>b{font-size:13px;display:block;margin-bottom:6px}
+.cp2-col>div{display:flex;flex-wrap:wrap;gap:5px}
+.cp2-c{font-size:12px;border-radius:14px;padding:3px 10px;border:1px solid var(--line);background:var(--surface);color:var(--faint);transition:all .3s}
+.cp2-c.on{color:var(--ink);border-color:var(--accent);background:var(--accent-soft)}
+.cp2-c.f.on{border-color:var(--blue);background:rgba(47,95,158,.12)}
+.cp2-c.off{text-decoration:line-through;color:var(--warm);border-color:var(--warm);background:var(--warm-soft)}
+.cp2-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cp2{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const G=['Understand the request','Break into steps','Retrieve material','Run programs to calculate','Run on schedule','Send notifications','Ask and wait for confirmation','Save and read records'],F=['Time-stamped market and fundamental data','Portfolio return and risk calculation','Suitability and constraint checks','Trading interface and execution rules','Compliance check on statements','Corporate event and announcement data'];
+  const T=[[[0,1,2,3,7],[0,4,5],'Research needs retrieval and calculation, and above all accurate financial data and announcements; without them, the analysis may rest on stale or invented numbers.'],[[0,4,5,6,7],[0,5,1,4],'Tracking must run on schedule and send notifications, and it depends on corporate event data; without event data, the agent may run on time and still miss an alert.'],[[0,1,3,6,7],[1,2,3,0],'Rebalancing needs portfolio calculation, constraint checks and a trading interface; without constraint checks, a correctly calculated plan may still breach the mandate.'],[[0,2,3],[0,5,4],'Explaining a price move needs time-stamped market data and that day\'s announcements, and a check on whether the wording amounts to investment advice.']];
+  const g=document.getElementById('cp2-g'),f=document.getElementById('cp2-f'),x=document.getElementById('cp2-x');let k=0;
+  g.innerHTML=G.map(n=>`<span class="cp2-c">${n}</span>`).join('');f.innerHTML=F.map(n=>`<span class="cp2-c f">${n}</span>`).join('');
+  const gs=[...g.children],fs=[...f.children];
+  function r(){const [a,b,m]=T[k],off=x.checked;gs.forEach((e,i)=>e.className='cp2-c'+(a.includes(i)?' on':''));fs.forEach((e,i)=>e.className='cp2-c f'+(b.includes(i)?(off?' off':' on'):''));
+    document.getElementById('cp2-msg').textContent=off?'The task can still be completed: the agent still breaks it into steps, retrieves, calculates and delivers a result. But the result may be wrong, and it looks just as certain.':m;}
+  document.querySelectorAll('[data-cp2]').forEach(b=>b.addEventListener('click',()=>{k=+b.dataset.cp2;document.querySelectorAll('[data-cp2]').forEach(z=>z.setAttribute('aria-pressed',String(z===b)));r();}));
+  x.addEventListener('change',r);
+  document.getElementById('cp2').addEventListener('anim-in',()=>{x.checked=false;[0,1,2,3].forEach(i=>setTimeout(()=>document.querySelector(`[data-cp2="${i}"]`).click(),i*1600));setTimeout(()=>{x.checked=true;r();},6800);});
+  r();
+})();
+</script>

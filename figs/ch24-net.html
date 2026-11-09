@@ -1,0 +1,41 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">只看收益，还是看净价值</p><p class="figsub">产品甲宣传更高的收益，需要用户每天盯盘、频繁决策；产品乙收益平平，几乎不占用用户的时间，风险也在事先约定的范围内。切换比较口径。</p></div><button class="replay" type="button" data-replay="nv">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="口径">
+      <button type="button" data-nv="r" aria-pressed="true">只看收益</button>
+      <button type="button" data-nv="n" aria-pressed="false">看净价值</button>
+    </div>
+    <div class="nv" id="nv" data-anim></div>
+    <p class="nv-msg" id="nv-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>示意数字，按每年占资产的百分点计。“用户的投入”包括费用、交易成本与折算的时间；“承担的风险”按超出承受力、在下跌中放弃计划造成的期望损失折算。主动投资的社会成本估计见 French（2008）。</figcaption>
+</figure>
+<style>
+.nv{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.nv-c{background:var(--quote);border-radius:10px;padding:10px 12px}
+.nv-c>b{font-size:14px;display:block;margin-bottom:6px}
+.nv-r{display:grid;grid-template-columns:90px 1fr 46px;gap:8px;align-items:center;font-size:12.5px;margin:5px 0;transition:opacity .3s}
+.nv-r span{color:var(--faint)}
+.nv-t{height:14px;background:var(--surface);border-radius:7px;overflow:hidden}
+.nv-t i{display:block;height:100%;width:0;border-radius:7px;transition:width .6s ease}
+.nv-r em{font-style:normal;text-align:right;font-variant-numeric:tabular-nums}
+.nv-r.tot{border-top:1px dashed var(--line);padding-top:6px;font-weight:700}
+.nv.ro .nv-r.x{opacity:.15}
+.nv-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.nv{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const P=[['产品甲',9,[1.5,2.5],3],['产品乙',7,[.4,.2],.5]];
+  const box=document.getElementById('nv');
+  box.innerHTML=P.map(([n,r,[f,t],k],i)=>{const net=r-f-t-k;const row=(l,v,c,x)=>`<div class="nv-r ${x}"><span>${l}</span><div class="nv-t"><i data-w="${Math.abs(v)/10*100}" style="background:${c}"></i></div><em>${v>0&&x!=='tot'?'':''}${v.toFixed(1)}</em></div>`;
+    return `<div class="nv-c"><b>${n}</b>${row('收益',r,'var(--accent)','')}${row('－ 费用与交易',f,'var(--gold)','x')}${row('－ 用户的时间',t,'var(--gold)','x')}${row('－ 承担的风险',k,'var(--warm)','x')}${row('＝ 净价值',net,'var(--ink)','x tot')}</div>`;}).join('');
+  const is=[...box.querySelectorAll('.nv-t i')];
+  function set(k){document.querySelectorAll('[data-nv]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.nv===k)));box.classList.toggle('ro',k==='r');
+    is.forEach(e=>{e.style.width='0';setTimeout(()=>e.style.width=e.dataset.w+'%',40);});
+    document.getElementById('nv-msg').textContent=k==='r'?'只看收益，甲比乙每年多 2 个百分点。':'把费用、用户的时间与承担的风险算进来，甲的净价值只有 2.0，乙为 5.9：宣传更高收益的产品，给用户带来的反而更少。';}
+  document.querySelectorAll('[data-nv]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.nv)));
+  box.addEventListener('anim-in',()=>{set('r');setTimeout(()=>set('n'),2400);});
+  set('r');
+})();
+</script>

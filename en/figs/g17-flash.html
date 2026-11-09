@@ -1,0 +1,35 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">A quarter of an hour on the afternoon of 6 May 2010</p><p class="figsub">The S&amp;P 500 index futures market as described in the joint report of the U.S. Securities and Exchange Commission and the Commodity Futures Trading Commission. Click a moment to see the details.</p></div><button class="replay" type="button" data-replay="fl17">Replay</button></div>
+    <div class="fl17" id="fl17" data-anim>
+      <div class="fl17-t" id="fl17-t"></div>
+      <p class="fl17-d" id="fl17-d" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Source: U.S. CFTC &amp; SEC (2010), <i>Findings Regarding the Market Events of May 6, 2010</i>. Times are p.m. U.S. Eastern Time.</figcaption>
+</figure>
+<style>
+.fl17-t{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;position:relative}
+.fl17-t button{font:inherit;cursor:pointer;text-align:left;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:8px 9px;color:var(--ink);font-size:12.5px;line-height:1.45;opacity:0;transform:translateY(6px);transition:opacity .35s,transform .35s,border-color .3s;transition-delay:calc(var(--i)*.25s)}
+.fl17.in .fl17-t button{opacity:1;transform:none}
+.fl17-t button em{display:block;font-style:normal;font-size:11px;color:var(--faint)}
+.fl17-t button.w{background:var(--warm-soft)} .fl17-t button.g{background:var(--accent-soft)}
+.fl17-t button.sel{border-color:var(--ink)}
+.fl17-d{font-size:14px;margin:12px 0 0;min-height:4.6em;background:var(--quote);border-radius:9px;padding:10px 12px}
+@media (max-width:640px){.fl17-t{grid-template-columns:1fr 1fr}}
+</style>
+<script>
+(function(){
+  const E=[['2:32','A large order starts selling','','A mutual fund starts a sell program for 75,000 contracts in all, worth about $4.1 billion. The execution algorithm sells at 9% of the previous minute\'s trading volume, without regard to price or time.'],
+    ['2:41–2:45:27','Prices plunge','w','Within four and a half minutes, the index futures fall more than 5%, and the corresponding index fund falls more than 6%.'],
+    ['2:45:13–2:45:27','Hot potato','w','With fundamental buyers lacking, high-frequency traders begin rapidly buying and selling among themselves: more than 27,000 contracts trade within 14 seconds, about 49% of volume in that period, yet net buying is only about 200 contracts.'],
+    ['2:45:27','Liquidity vanishes','w','Buy-side order book depth falls to about $58 million, less than 1% of its level that morning; within 15 seconds prices fall a further 1.7%, reaching the low of the day.'],
+    ['2:45:28–2:45:33','A 5-second pause','g','The exchange\'s automatic mechanism pauses trading for 5 seconds; selling pressure partly eases and buying interest returns. After trading resumes, prices stabilize and then begin to recover.']];
+  const t=document.getElementById('fl17-t'),d=document.getElementById('fl17-d');
+  t.innerHTML=E.map((e,i)=>`<button type="button" style="--i:${i}" class="${e[2]}"><em>${e[0]}</em>${e[1]}</button>`).join('');const bs=[...t.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));d.textContent=E[i][0]+': '+E[i][3];}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('fl17').addEventListener('anim-in',()=>{[0,1,2,3,4].forEach((i,k)=>setTimeout(()=>set(i),1500+k*1900));});
+  set(0);
+})();
+</script>

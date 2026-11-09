@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">分级发布：缺陷只影响少数人</p><p class="figsub">一个新版本带有评测没有发现的缺陷，要在 1000 次使用之后才会被发现。每个圆点代表 100 位用户。切换发布方式，看缺陷被发现时有多少用户受到影响。</p></div><button class="replay" type="button" id="ro-run">重新发布</button></div>
+    <div class="seg-btns" role="group" aria-label="发布方式"><button type="button" data-ro="all" aria-pressed="true">一次全量发布</button><button type="button" data-ro="st" aria-pressed="false">分级发布：1% → 10% → 100%</button></div>
+    <div class="ro" id="ro" data-anim>
+      <div class="ro-g" id="ro-g"></div>
+      <div class="ro-out"><div><span>缺陷被发现时受影响的用户</span><b id="ro-n"></b></div><div><span>当前阶段</span><b id="ro-s"></b></div></div>
+      <p class="ro-msg" id="ro-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：共 1 万位用户，每位用户每天使用一次。分级发布的做法见 Beyer 等（2016）。影响交易与资金的功能，第一级可以只运行而不生效。</figcaption>
+</figure>
+<style>
+.ro-g{display:grid;grid-template-columns:repeat(20,1fr);gap:4px}
+.ro-g i{aspect-ratio:1;border-radius:50%;background:var(--quote);border:1.5px solid var(--line);transition:all .3s}
+.ro-g i.n{background:var(--blue);border-color:var(--blue)}
+.ro-g i.b{background:var(--warm);border-color:var(--warm)}
+.ro-out{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.ro-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.ro-out span{display:block;font-size:12px;color:var(--faint)} .ro-out b{font-size:19px;font-variant-numeric:tabular-nums}
+.ro-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const g=document.getElementById('ro-g');g.innerHTML='<i></i>'.repeat(100);const cs=[...g.children];let mode='all',tm;
+  function run(){clearInterval(tm);cs.forEach(c=>c.className='');let step=0;const plan=mode==='all'?[100]:[1,10,100];let k=0;
+    const show=(n,bad)=>{cs.forEach((c,i)=>c.className=i<n?(bad?'b':'n'):'');};
+    tm=setInterval(()=>{if(k>=plan.length){clearInterval(tm);return;}const n=plan[k];show(n,false);document.getElementById('ro-s').textContent=n+'%'+(mode==='st'&&n===1?'（运行 10 天）':'');
+      const exposures=n*100*(mode==='st'?10:1);if(exposures>=1000){clearInterval(tm);setTimeout(()=>{show(n,true);document.getElementById('ro-n').textContent=(n*100).toLocaleString()+' 位';document.getElementById('ro-msg').textContent=mode==='all'?'一次全量发布：第一天就有 1 万次使用，缺陷被发现时，全部 1 万位用户都已受到影响。':'分级发布：第一级只有 100 位用户，十天后累计 1000 次使用时发现缺陷；此时只有 1% 的用户受到影响，版本在扩大之前被撤回。';},500);}
+      k++;},900);
+    document.getElementById('ro-n').textContent='—';document.getElementById('ro-msg').textContent='';}
+  document.querySelectorAll('[data-ro]').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.ro;document.querySelectorAll('[data-ro]').forEach(z=>z.setAttribute('aria-pressed',String(z===b)));run();}));
+  document.getElementById('ro-run').addEventListener('click',run);
+  document.getElementById('ro').addEventListener('anim-in',()=>{mode='all';document.querySelectorAll('[data-ro]').forEach(z=>z.setAttribute('aria-pressed',String(z.dataset.ro==='all')));run();setTimeout(()=>{document.querySelector('[data-ro=st]').click();},3000);});
+  run();
+})();
+</script>

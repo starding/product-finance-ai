@@ -1,0 +1,45 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">默认设成什么，大多数人就停在什么</p><p class="figsub">一百位员工各有自己想清楚之后会选的缴费比例，平均约 8%。六成的人从不改动默认。选择不同的默认比例，看最终的分布与存得比自己想要的少的人。</p></div><button class="replay" type="button" data-replay="df12">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="默认缴费比例">
+      <button type="button" data-df12="0" aria-pressed="false">不设默认（0%）</button>
+      <button type="button" data-df12="3" aria-pressed="true">默认 3%</button>
+      <button type="button" data-df12="8" aria-pressed="false">默认 8%</button>
+      <button type="button" data-df12="14" aria-pressed="false">默认 14%</button>
+    </div>
+    <div class="df12" id="df12" data-anim>
+      <svg viewBox="0 0 660 200" role="img" aria-label="缴费比例的分布"><g id="df12-g"></g></svg>
+      <div class="legend"><span><i style="background:var(--warm)"></i>停在默认上的人</span><span><i style="background:var(--accent)"></i>自己选的人</span></div>
+      <div class="df12-out" id="df12-out"></div>
+      <p class="df12-msg" id="df12-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：每人想要的比例在 2%～14% 之间；从不改动默认的六成人员是随机的，与想要的比例无关。“默认 14%”高于多数人想要的比例，用来说明默认过高同样会让人偏离本意。</figcaption>
+</figure>
+<style>
+.df12 svg{width:100%;height:auto;display:block}
+.df12-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.df12-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.df12-out span{display:block;font-size:11.5px;color:var(--faint)} .df12-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.df12-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.df12-out{grid-template-columns:1fr}.df12 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('df12'+id);let s=1202;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};
+  const W=Array.from({length:100},()=>Math.max(2,Math.min(14,Math.round(8+2.6*(r()+r()+r()-1.5)*2)))),stick=Array.from({length:100},()=>r()<.6);
+  let d=3;const X0=40,X1=650,YT=10,YB=168,bw=(X1-X0)/16;
+  function draw(){const v=W.map((w,i)=>stick[i]?d:w),cnt=Array.from({length:16},()=>[0,0]);v.forEach((x,i)=>cnt[x][stick[i]?0:1]++);
+    const mx=Math.max(20,...cnt.map(c=>c[0]+c[1])),y=n=>YB-n/mx*(YB-YT);
+    let h=[0,.5,1].map(k=>`<line x1="${X0}" x2="${X1}" y1="${y(mx*k)}" y2="${y(mx*k)}" class="s-line"/><text x="${X0-6}" y="${y(mx*k)+4}" text-anchor="end" font-size="11" class="t-faint">${Math.round(mx*k)}</text>`).join('');
+    cnt.forEach(([a,b],x)=>{const bx=X0+x*bw+3;h+=`<rect x="${bx}" y="${y(b)}" width="${bw-6}" height="${YB-y(b)}" fill="var(--accent)"/><rect x="${bx}" y="${y(a+b)}" width="${bw-6}" height="${YB-y(a)}" fill="var(--warm)"/>`;if(x%2===0)h+=`<text x="${bx+(bw-6)/2}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${x}%</text>`;});
+    $('-g').innerHTML=h;const avg=v.reduce((a,b)=>a+b,0)/100,low=v.filter((x,i)=>x<W[i]).length,off=v.filter((x,i)=>x!==W[i]).length;
+    $('-out').innerHTML=[['平均缴费比例',avg.toFixed(1)+'%'],['存得比自己想要的少',low+' 人'],['偏离自己本意的人',off+' 人']].map(([a,b])=>`<div><span>${a}</span><b>${b}</b></div>`).join('');
+    $('-msg').textContent=d===0?`不设默认等于默认不存：六成没有动手的人一分不存，平均只有 ${avg.toFixed(1)}%。`:d===3?`默认 3% 让每个人都开始储蓄，但停在默认上的人大多存得比自己想要的少，平均只有 ${avg.toFixed(1)}%。`:d===8?`默认设在多数人想清楚之后会选的位置附近，平均 ${avg.toFixed(1)}%，存得太少的人最少。`:`默认 14% 高于多数人想要的比例：平均存得多了，但有 ${off} 人偏离了自己的本意，一些人眼下的生活会过得太紧。`;}
+  const bs=[...document.querySelectorAll('[data-df12]')];
+  function set(x){d=x;bs.forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.df12===x)));draw();}
+  bs.forEach(b=>b.addEventListener('click',()=>set(+b.dataset.df12)));
+  $('').addEventListener('anim-in',()=>{[0,3,8,14].forEach((x,i)=>setTimeout(()=>set(x),300+i*2000));});
+  draw();
+})();
+</script>

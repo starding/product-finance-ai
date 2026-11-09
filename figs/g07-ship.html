@@ -1,0 +1,34 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">一艘船，要多少户一起出</p><p class="figsub">造一艘船要 100 份粮食，每户最多拿得出 5 份。拖动出资的户数，看船能否造成，以及船沉没时每户损失多少。</p></div><button class="replay" type="button" data-replay="sh">重播</button></div>
+    <div class="sh" id="sh" data-anim>
+      <div class="sh-bar"><i id="sh-f"></i><span class="sh-line"></span></div>
+      <div class="sh-hh" id="sh-hh"></div>
+      <div class="sl"><label for="sh-n">出资的户数 <b id="sh-nv"></b></label><input id="sh-n" type="range" min="1" max="20" step="1" value="1"></div>
+      <div class="sh-out"><div><span>船回来（七成）每户分得</span><b id="sh-w"></b></div><div><span>船沉没（三成）每户损失</span><b id="sh-l"></b></div></div>
+      <p class="sh-msg" id="sh-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：船回来时，货物值得上造船成本的两倍半；船沉没时，投进去的粮食全部损失。</figcaption>
+</figure>
+<style>
+.sh-bar{position:relative;height:28px;background:var(--quote);border-radius:6px;overflow:hidden}
+.sh-bar i{display:block;height:100%;background:var(--accent);transition:width .3s}
+.sh-hh{display:grid;grid-template-columns:repeat(20,1fr);gap:3px;margin:8px 0}
+.sh-hh i{height:16px;border-radius:3px;background:var(--quote);transition:background .3s}
+.sh-hh i.on{background:var(--accent)}
+.sh-out{display:flex;gap:24px;flex-wrap:wrap;margin-top:8px}
+.sh-out div{display:flex;flex-direction:column} .sh-out span{font-size:12px;color:var(--faint)} .sh-out b{font-size:20px;font-variant-numeric:tabular-nums}
+.sh-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);$('sh-hh').innerHTML='<i></i>'.repeat(20);const hs=[...$('sh-hh').children];
+  function draw(){const n=+$('sh-n').value,tot=n*5,ok=tot>=100;$('sh-f').style.width=Math.min(tot,100)+'%';hs.forEach((h,i)=>h.classList.toggle('on',i<n));$('sh-nv').textContent=n+' 户';
+    $('sh-w').textContent=ok?'12.5 份':'—';$('sh-l').textContent=ok?'5 份':'—';
+    $('sh-msg').textContent=ok?'二十户各出 5 份，船造成了。船回来，每户分得 12.5 份；船沉没，每户损失自己的 5 份，不至于倾家荡产。':`${n} 户共凑出 ${tot} 份，还差 ${100-tot} 份，船造不成。`;}
+  $('sh-n').addEventListener('input',draw);
+  $('sh').addEventListener('anim-in',()=>{let v=1;$('sh-n').value=1;draw();const id=setInterval(()=>{v++;$('sh-n').value=v;draw();if(v>=20)clearInterval(id);},150);});
+  draw();
+})();
+</script>

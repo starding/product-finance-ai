@@ -1,0 +1,63 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Civilization Simulator · Chapter 5: A village of mutual aid</p><p class="figsub">Twenty households, with harvests that vary at random each year. Choose individual reserves, the mutual granary or both, drag the weight of village-wide conditions, and see over thirty years how many household-years of hunger there are and how much each household's food varies.</p></div><button class="replay" type="button" data-replay="cs5">Replay</button></div>
+    <div class="cs-rules"><span class="on">Saving</span><span class="on">Seed</span><span class="on">Lending</span><span class="on">Commitment</span><span class="on">Money</span><span class="on">Insurance</span><span class="lock">Bank · Ch. 6</span></div>
+    <div class="seg-btns" role="group" aria-label="Approach">
+      <button type="button" data-cs5="self" aria-pressed="false">Individual reserves</button>
+      <button type="button" data-cs5="pool" aria-pressed="false">Mutual granary</button>
+      <button type="button" data-cs5="both" aria-pressed="true">Both</button>
+    </div>
+    <div class="cs5" id="cs5" data-anim>
+      <svg viewBox="0 0 660 210" role="img" aria-label="Food eaten by three households over thirty years"><g id="cs5-ax"></g><g id="cs5-l"></g></svg>
+      <div class="legend" id="cs5-lg"></div>
+      <div class="cs5-ctl">
+        <div class="sl"><label for="cs5-r">Weight of village-wide conditions <b id="cs5-rv"></b></label><input id="cs5-r" type="range" min="0" max="100" step="10" value="30"></div>
+        <button type="button" class="replay" id="cs5-re">Try another run of years</button>
+      </div>
+      <div class="cs5-out" id="cs5-out"></div>
+      <p class="cs5-msg" id="cs5-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model: each household's harvest averages 12 portions with swings of about 40%; the set weight of those swings comes from conditions shared by the whole village, and the rest from each household's own luck. Individual reserves: each household keeps a reserve of 6 portions year-round, 10% of which spoils each year. Mutual granary: the village's total harvest is divided equally among the households. Both: the harvest is divided equally first, then each household keeps a reserve. A year with less than 9 portions eaten counts as hunger.</figcaption>
+</figure>
+<style>
+.cs5 svg{width:100%;height:auto;display:block}
+.cs5-ctl{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:end;margin-top:8px}
+.cs5-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cs5-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs5-out span{display:block;font-size:11.5px;color:var(--faint)} .cs5-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.cs5-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs5-ctl{grid-template-columns:1fr}.cs5-out{grid-template-columns:1fr}.cs5 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs5'+id),N=20,Y=30,SIG=.4,B=6,NEED=9;let mode='both',seed=20261021;
+  const X0=40,X1=650,YT=10,YB=180,x=t=>X0+(t+.5)/Y*(X1-X0),y=v=>YB-Math.min(v,24)/24*(YB-YT);
+  const C=['var(--accent)','var(--warm)','var(--blue)'];
+  $('-lg').innerHTML=['household 1','household 2','household 3'].map((n,i)=>`<span><i style="background:${C[i]}"></i>Food eaten by ${n}</span>`).join('')+'<span><i style="background:var(--warm-soft)"></i>Below 9 portions means hunger</span>';
+  function shocks(){let s=seed;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};const g=()=>{let u=0;while(!u)u=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r());};
+    return {z:Array.from({length:Y},()=>g()),e:Array.from({length:Y},()=>Array.from({length:N},()=>g()))};}
+  function sim(rho){const S=shocks(),st=Array(N).fill(0),cons=[];
+    for(let t=0;t<Y;t++){const h=Array.from({length:N},(_,i)=>Math.max(0,12*(1+SIG*(Math.sqrt(rho)*S.z[t]+Math.sqrt(1-rho)*S.e[t][i]))));
+      let get=h.slice();if(mode!=='self'){const m=h.reduce((a,b)=>a+b,0)/N;get=Array(N).fill(m);}
+      const row=[];for(let i=0;i<N;i++){if(mode==='pool'){row.push(Math.min(get[i],16));continue;}let have=get[i]+st[i],c=Math.min(12,have);row.push(c);have-=c;st[i]=Math.min(B,have)*.9;}
+      cons.push(row);}
+    return cons;}
+  function draw(){const rho=+$('-r').value/100,cons=sim(rho);
+    $('-ax').innerHTML=`<rect x="${X0}" y="${y(NEED)}" width="${X1-X0}" height="${YB-y(NEED)}" fill="var(--warm-soft)"/>`+[0,6,12,18,24].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+[1,10,20,30].map(t=>`<text x="${x(t-1)}" y="${YB+16}" text-anchor="${t===30?'end':'middle'}" font-size="11" class="t-faint">Year ${t}</text>`).join('');
+    $('-l').innerHTML=[0,1,2].map(i=>`<path d="${cons.map((r,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(r[i]).toFixed(1)).join('')}" fill="none" stroke="${C[i]}" stroke-width="2" opacity=".9"/>`).join('');
+    let hungry=0,all=[];cons.forEach(r=>r.forEach(v=>{if(v<NEED)hungry++;all.push(v);}));
+    const per=[...Array(N).keys()].map(i=>{const v=cons.map(r=>r[i]),m=v.reduce((a,b)=>a+b,0)/Y;return Math.sqrt(v.reduce((a,b)=>a+(b-m)*(b-m),0)/Y)/12;});
+    const sd=per.reduce((a,b)=>a+b,0)/N,ce=Math.exp(all.reduce((a,v)=>a+Math.log(Math.max(v,.5)),0)/all.length);
+    $('-rv').textContent=Math.round(rho*100)+'%';
+    $('-out').innerHTML=[['Household-years of hunger over thirty years',hungry],['Swings in each household\'s food',Math.round(sd*100)+'%'],['Equivalent steady food per year',ce.toFixed(1)+' portions']].map(([a,b])=>`<div><span>${a}</span><b>${b}</b></div>`).join('');
+    $('-msg').textContent=mode==='self'?`With individual reserves, a household struck by disaster twice in a row cannot cope: ${hungry} household-years of hunger over thirty years, while the reserves keep spoiling in the store.`:
+      rho===0?`Each household's luck is unrelated to the others', so dividing equally almost eliminates the swings: ${hungry} household-years of hunger.`:rho>=.99?'All swings come from village-wide conditions, so the mutual granary cannot share any of the risk: the households have good harvests together and go hungry together.':
+      mode==='pool'?`With village-wide conditions at ${Math.round(rho*100)}%, dividing equally cancels each household's own bad luck, but the granary keeps no reserve, so in years when the whole village's harvest fails all twenty households go hungry at once: ${hungry} household-years over thirty years. Diversification can deal only with each household's own risk.`:
+      `With village-wide conditions at ${Math.round(rho*100)}%, the granary cancels each household's own bad luck, and the households' reserves carry them through part of the village-wide failures; hunger falls to ${hungry} household-years. Diversification and reserves deal with two different kinds of risk.`;}
+  document.querySelectorAll('[data-cs5]').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.cs5;document.querySelectorAll('[data-cs5]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  $('-r').addEventListener('input',draw);$('-re').addEventListener('click',()=>{seed=(seed*48271)%2147483647;draw();});
+  $('').addEventListener('anim-in',()=>{['self','pool','both'].forEach((k,i)=>setTimeout(()=>{mode=k;document.querySelectorAll('[data-cs5]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.cs5===k)));draw();},300+i*2400));});
+  draw();
+})();
+</script>

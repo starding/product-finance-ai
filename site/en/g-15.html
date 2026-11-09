@@ -1,0 +1,647 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Who guarantees an agent's promises</title>
+<meta name="description" content="Product × Finance × AI: Derived from Zero, Chapter 15. Rerunning the steps of commitment and regulation. A scribe places orders for people, yet it has no property from which to pay compensation, and it can start over under a new name; punishing it is pointless, and reputation cannot attach to it. Its promises can only be guaranteed by the people behind it: make whoever deploys it bear liability, have every step leave a record kept by someone else, and give it only the least authority its task requires.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="g-15">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="Contents">
+<div class="side-head"><a class="sidetitle" href="index.html">Product × Finance × AI<small>Financial Products in the Age of AI</small></a></div>
+<div class="side-view" role="group" aria-label="Way of reading"><a href="preface.html">Decomposition</a><a href="g-preface.html" class="on" aria-current="true">Derivation</a></div>
+<a class="side-about" href="index.html#about">About this book</a>
+<a class="" href="g-preface.html"><span class="n">Preface</span>The best way to understand financial products is to build them from zero</a>
+<a class="side-part" href="g-part1.html"><span class="pn">Part One</span>From 0 to 1: how a world without finance grows finance</a>
+<a class="" href="g-01.html"><span class="n">1</span>One person, one year&#x27;s harvest</a>
+<a class="" href="g-02.html"><span class="n">2</span>Two people, short of grain at different times</a>
+<a class="" href="g-03.html"><span class="n">3</span>What if a loan is not repaid</a>
+<a class="" href="g-04.html"><span class="n">4</span>Exchange among many</a>
+<a class="" href="g-05.html"><span class="n">5</span>Harvests good and bad</a>
+<a class="" href="g-06.html"><span class="n">6</span>Savers may need their grain at any time; borrowers need it for years</a>
+<a class="" href="g-07.html"><span class="n">7</span>No one household can pay for a ship</a>
+<a class="" href="g-08.html"><span class="n">8</span>Securities must be saleable</a>
+<a class="" href="g-09.html"><span class="n">9</span>Prices carry everyone&#x27;s information</a>
+<a class="" href="g-10.html"><span class="n">10</span>Ordinary people have neither the time nor the expertise</a>
+<a class="" href="g-11.html"><span class="n">11</span>Trustees may not do their duty</a>
+<a class="" href="g-12.html"><span class="n">12</span>The institutions are in place, and people still make mistakes</a>
+<a class="side-part" href="g-part2.html"><span class="pn">Part Two</span>Changing one parameter: when agency becomes almost free</a>
+<a class="" href="g-13.html"><span class="n">13</span>A new parameter: the cost of cognitive labour collapses</a>
+<a class="" href="g-14.html"><span class="n">14</span>Can everyone have a personal agent?</a>
+<a class=" cur" href="g-15.html" aria-current="page"><span class="n">15</span>Who guarantees an agent&#x27;s promises</a>
+<a class="" href="g-16.html"><span class="n">16</span>If everyone has an analyst</a>
+<a class="" href="g-17.html"><span class="n">17</span>Agents become the main market participants</a>
+<a class="" href="g-18.html"><span class="n">18</span>Can an agent correct human bias?</a>
+<a class="" href="g-19.html"><span class="n">19</span>What did not change</a>
+<a class="side-part" href="g-part3.html"><span class="pn">Part Three</span>Deriving a product in the new world</a>
+<a class="" href="g-20.html"><span class="n">20</span>One person and one sum of money</a>
+<a class="" href="g-21.html"><span class="n">21</span>The user is not present</a>
+<a class="" href="g-22.html"><span class="n">22</span>The user cannot see the process</a>
+<a class="" href="g-23.html"><span class="n">23</span>Agents make mistakes</a>
+<a class="" href="g-24.html"><span class="n">24</span>Trust takes time</a>
+<a class="side-app" href="g-epilogue.html"><span class="n">Epilogue</span>Back to the governing rule</a>
+<a class="side-app" href="method.html"><span class="n">Appendix</span>How this book was written</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="Open contents" title="Contents"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">Product × Finance × AI: Financial Products in the Age of AI</a><span>Part Two  Changing one parameter</span><a class="langlink" href="../g-15.html" hreflang="zh-CN">中文</a></header>
+
+<div class="chapno">Chapter 15</div><h1>Who guarantees an agent's promises<small>Compensation, reputation, records and authority</small></h1>
+<blockquote><p>A scribe can buy and sell ship shares for a household, adjust its plans, and even draw grain out of the granary. It will make mistakes, and others may exploit it. Yet when it errs, punishing it achieves nothing: it has no property from which to pay compensation and no long-built name to lose, and it can start over under a new name. Of the three devices that grew out of lending, neither collateral nor reputation can attach to it, and a third party's judgment can take nothing from it. The only device left is to hold the people behind it responsible. So the arrangements must change. Whoever deploys a scribe bears liability for compensation and insures against it; every step the scribe takes leaves a record kept by someone else; the scribe receives only the least authority its task requires, and the assets stay with a custodian who has nothing to do with it.</p></blockquote>
+<h2 id="sec-1">1. A scribe has nothing to lose</h2>
+<p>A promise is credible because the party who breaks it loses something: future cooperation, the property pledged as collateral, or the grain a judgment orders it to pay. A scribe acting for a principal must also make promises: to buy and sell according to the agreed plan, not to exceed its authority, and not to hand the principal's grain to anyone else. But it has no property, and it does not care about the future.</p>
+<p>Consider what punishment does. Someone who manages grain for others and must make good any loss in full will check his work carefully. But if all his property amounts to only a small part of the loss, a judgment ordering full compensation can take only what he has. For him, the worst outcome is losing that small amount of property, so he decides how much care to take according to that amount, not according to the loss the principal might suffer. The less property he has, the less he cares. Nor will he insure against other people's losses of his own accord, because he would pay the premium while the principal received the benefit. A scribe is the extreme case of this reasoning: its property is zero.</p>
+<aside class="principle"><p class="pr-k">Derived so far: a principle</p><p class="pr-n">The judgment-proof problem</p><p class="pr-c"><span><em>Discipline</em>Law and economics › Tort liability</span><span><em>Type</em>Theoretical model</span></p><p class="pr-s">When a potential injurer's assets are smaller than the harm he may cause, liability can take only what he owns; he therefore sets his level of care by what he himself could lose rather than by the loss others could suffer, takes too little care, and is unwilling to buy liability insurance of his own accord.</p><dl><div><dt>Standing in the field</dt><dd>The paper, titled "The judgment proof problem", studies how liability affects the behaviour of potential injurers, and their purchase of liability insurance, when their assets are smaller than the harm they may cause</dd></div><div><dt>Constraint it answers</dt><dd>Promises may not be kept, and the agent has no property from which to pay compensation</dd></div><div><dt>Premises</dt><dd>Harm may exceed all of the injurer's assets; the injurer weighs only what he himself could lose</dd></div><div><dt>Proposed by</dt><dd>Shavell, 1986</dd></div><div><dt>Open question</dt><dd>Who pays compensation for an agent that owns nothing</dd></div><div><dt>After the rerun</dt><dd>A scribe can start work with almost no property, so the problem turns from an occasional case into the general case</dd></div></dl></aside>
+<p><strong>Today's counterpart.</strong> The product liability directive the European Union adopted in 2024 explicitly brings software, including artificial intelligence systems, within the definition of "product". When defective software causes harm, the injured party need only prove the defect and the causal link, not that the manufacturer was at fault.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Those who cannot pay will not be very careful</p><p class="figsub">One mistake costs the principal 100 portions. The grain manager can spend more effort checking to reduce mistakes, but checking has a cost. Drag his property and see how much effort he spends checking and how much the principal expects to lose each year; then make whoever deploys him liable and insured.</p></div><button class="replay" type="button" data-replay="pf15">Replay</button></div>
+    <div class="pf15" id="pf15" data-anim>
+      <svg viewBox="0 0 660 220" role="img" aria-label="Property and the principal's expected loss"><g id="pf15-g"></g></svg>
+      <div class="sl"><label for="pf15-a">Grain manager's property <b id="pf15-av"></b></label><input id="pf15-a" type="range" min="0" max="100" step="5" value="20"></div>
+      <div class="cs-sw"><label><input type="checkbox" id="pf15-c"> Whoever deploys him bears liability for compensation and insures against it</label></div>
+      <div class="pf15-out" id="pf15-out"></div>
+      <p class="pf15-msg" id="pf15-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the probability of a mistake is 30% × e^(−checking), and each unit of checking costs 4 portions. The grain manager chooses the level of checking that minimizes "cost of checking + probability of a mistake × the amount he actually has to pay", where the amount he actually has to pay is the smaller of the loss and his property (a simplification of Shavell, 1986). Vertical axis: the principal's expected loss per year, in portions.</figcaption>
+</figure>
+<style>
+.pf15 svg{width:100%;height:auto;display:block}
+.pf15-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.pf15-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.pf15-out span{display:block;font-size:11.5px;color:var(--faint)} .pf15-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.pf15-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.pf15-out{grid-template-columns:1fr}.pf15 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('pf15'+id),H=100,X0=50,X1=628,YT=12,YB=180,x=a=>X0+a/H*(X1-X0),y=v=>YB-v/32*(YB-YT);
+  const care=pay=>Math.max(0,Math.log(.3*pay/4)),loss=pay=>.3*Math.exp(-care(pay))*H;
+  function draw(){const a=+$('-a').value,c=$('-c').checked,pay=c?H:Math.min(a,H),k=care(pay),L=loss(pay);$('-av').textContent=a+' portions';
+    let h=[0,10,20,30].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+[0,25,50,75,100].map(v=>`<text x="${x(v)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${v}</text>`).join('')+`<text x="${X1}" y="${YB+30}" text-anchor="end" font-size="11" class="t-faint">Grain manager's property (portions) →</text>`;
+    let d='';for(let v=0;v<=H;v++)d+=(v?'L':'M')+x(v).toFixed(1)+','+y(loss(v)).toFixed(1);
+    h+=`<path d="${d}" fill="none" stroke="var(--warm)" stroke-width="2.6"/>`;
+    if(c)h+=`<line x1="${X0}" x2="${X1}" y1="${y(loss(H))}" y2="${y(loss(H))}" stroke="var(--accent)" stroke-width="2.6" stroke-dasharray="6 4"/><text x="${X0+6}" y="${y(loss(H))-6}" font-size="11" fill="var(--accent)">Deployer liable and insured</text>`;
+    h+=`<circle cx="${x(a)}" cy="${y(L)}" r="7" fill="${c?'var(--accent)':'var(--warm)'}"/>`;
+    $('-g').innerHTML=h;
+    $('-out').innerHTML=[['Effort spent checking',k.toFixed(2)+' portions'],['Probability of a mistake',(.3*Math.exp(-k)*100).toFixed(0)+'%'],['Principal\'s expected loss per year',L.toFixed(1)+' portions']].map(([p,v])=>`<div><span>${p}</span><b>${v}</b></div>`).join('');
+    $('-msg').textContent=c?`Compensation is borne by a deployer who has property and is insured. He decides how much to check based on the full loss of 100 portions, and the probability of a mistake falls to ${(.3*Math.exp(-k)*100).toFixed(0)}%, regardless of how much property the grain manager himself has.`:a<14?`The grain manager has only ${a} portions of property, which is the most he can pay for a mistake, so he does not check at all: the principal expects to lose ${L.toFixed(0)} portions a year. A scribe has zero property and sits exactly here.`:a<H?`With ${a} portions of property, he decides how much to check based only on the ${a} portions he might have to pay. The principal expects to lose ${L.toFixed(1)} portions a year, more than the ${loss(H).toFixed(1)} portions when his property is sufficient.`:'His property is enough to cover the full loss, so he decides how much to check based on the full loss, and the principal\'s expected loss is at its lowest.';}
+  ['-a','-c'].forEach(k=>$(k).addEventListener('input',draw));
+  $('').addEventListener('anim-in',()=>{$('-c').checked=false;let v=100;$('-a').value=100;draw();const id=setInterval(()=>{v-=5;$('-a').value=v;draw();if(v<=0){clearInterval(id);setTimeout(()=>{$('-c').checked=true;draw();},1200);}},110);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-2">2. Starting over under a new name</h2>
+<p>Reputation binds because a record of default follows the one who defaulted: fail to repay this time, and you cannot borrow next time. A scribe, however, can change its name at any moment. When bad reviews pile up under one name, it drops that name and takes on work under a new one. Every "newcomer" a principal meets may be an old hand that has just changed its name.</p>
+<p>All a principal can do is treat every newcomer with extra caution: hand it only small matters at first, and entrust larger matters only after it has worked for a while. This shrinks the gain from changing names, but honest newcomers must also accept a period of worse treatment. The cheaper names are, the longer that period lasts. To make reputation work again, names must become expensive: reputation should attach not to the scribe but to the person who deploys it and who cannot change identity at will.</p>
+<aside class="principle"><p class="pr-k">Rerun: a principle re-examined</p><p class="pr-n">Reputation mechanism</p><p class="pr-c"><span><em>Discipline</em>Economics › Game theory (repeated games)</span><span><em>Type</em>Theoretical model</span></p><p class="pr-s">When dealings repeat and defaults are seen and passed on, the immediate gain from defaulting cannot outweigh the cooperation lost in the future, and promises become credible without outside enforcement.</p><dl><div><dt>Standing in the field</dt><dd>Part of the theory of repeated games; in its statement on the 2005 Nobel Prize in economics, the Royal Swedish Academy of Sciences noted that repeated-game theory had deepened the understanding of the prerequisites for cooperation, and Aumann shared the prize with Schelling for this</dd></div><div><dt>Constraint it answers</dt><dd>Promises may not be kept, and no one can enforce them</dd></div><div><dt>Premises</dt><dd>Dealings repeat; records of default spread; the defaulting party cannot change identity at will</dd></div><div><dt>Proposed by</dt><dd>Kreps, Milgrom, Roberts and Wilson, 1982</dd></div><div><dt>Open question</dt><dd>When identities can be changed at no cost, to whom does reputation attach</dd></div><div><dt>After the rerun</dt><dd>Records have become extremely cheap, so reputation ought to be stronger; but a scribe can change its name at no cost, so the premise that a party "cannot change identity at will" fails, and reputation can only attach to the person behind it, who cannot change identity at will</dd></div></dl></aside>
+<p>The effect of the price of identity on cooperation was later studied directly. Friedman and Resnick (2001) analysed online settings where anyone can register a new name at will. When names are cheap, cooperation can be sustained only by making newcomers accept worse treatment at first, and this itself carries a social cost. The remedies they discuss include charging entry fees and using identities that cannot be changed.</p>
+<p><strong>Today's counterpart.</strong> App and plug-in platforms usually require developers to register under their real names, and ratings and penalties are recorded against the developer's account, not only against a particular app.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">When names are cheap, reputation cannot attach</p><p class="figsub">Ten scribes take on work for twenty rounds in a row, and three of them are unreliable. Each row is a scribe and each cell is a round. Switch among three situations and see how often principals are cheated and how much honest newcomers lose.</p></div><button class="replay" type="button" data-replay="ps15">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Situation">
+      <button type="button" data-ps15="trust" aria-pressed="true">Cheap names, trust as usual</button>
+      <button type="button" data-ps15="dues" aria-pressed="false">Cheap names, wary of newcomers</button>
+      <button type="button" data-ps15="fixed" aria-pressed="false">Identity cannot change</button>
+    </div>
+    <div class="ps15" id="ps15" data-anim>
+      <div class="ps15-g" id="ps15-g"></div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Normal work</span><span><i style="background:var(--warm)"></i>Cheated the principal</span><span><i style="background:var(--accent-soft)"></i>Small jobs only (newcomer under caution)</span><span><i style="background:var(--quote);border:1px solid var(--line)"></i>Excluded</span><span><i style="background:var(--ink)"></i>Changed name</span></div>
+      <div class="ps15-out" id="ps15-out"></div>
+      <p class="ps15-msg" id="ps15-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: an unreliable scribe cheats with a probability of one half in each round, and cheating is recorded; when names are cheap, it changes its name immediately after cheating. When newcomers are treated with caution, any new name takes only small jobs for its first four rounds; a small job pays a quarter of the normal rate, and the loss from cheating is also only a quarter. When identity cannot be changed, one instance of cheating means exclusion (following the idea in Friedman and Resnick, 2001). Two further honest scribes arrive as newcomers in rounds 6 and 12.</figcaption>
+</figure>
+<style>
+.ps15-g{display:grid;gap:3px}
+.ps15-r{display:grid;grid-template-columns:repeat(20,1fr);gap:2px}
+.ps15-r i{height:14px;border-radius:2px;background:var(--accent);transition:background .3s}
+.ps15-r i.c{background:var(--warm)} .ps15-r i.p{background:var(--accent-soft)} .ps15-r i.x{background:var(--quote);outline:1px solid var(--line);outline-offset:-1px} .ps15-r i.n{background:var(--ink)} .ps15-r i.o{background:transparent}
+.ps15-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.ps15-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.ps15-out span{display:block;font-size:11.5px;color:var(--faint)} .ps15-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.ps15-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.ps15-out{grid-template-columns:1fr}.ps15-r i{height:11px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('ps15'+id),R=20;let mode='trust';
+  let s=1516;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};const U=Array.from({length:12},()=>Array.from({length:R},r));
+  // rows 0-9 are the original scribes, 0-2 unreliable; rows 10-11 are honest newcomers arriving in rounds 6 and 12
+  function run(){const G=[],start=[0,0,0,0,0,0,0,0,0,0,5,11];let cheat=0,cheatLoss=0,dues=0;
+    for(let i=0;i<12;i++){const bad=i<3,row=[];let age=0,out=false;
+      for(let t=0;t<R;t++){if(t<start[i]){row.push('o');continue;}
+        if(out){row.push('x');continue;}
+        const prob=(mode==='dues')&&age<4;let c='';
+        if(bad&&U[i][t]<.5){c='c';cheat++;cheatLoss+=prob?.25:1;}else if(prob){c='p';if(!bad)dues+=.75;}
+        row.push(prob&&c==='c'?'c':c);age++;
+        if(c==='c'){if(mode==='fixed')out=true;else{age=0;if(t+1<R){row.push('n');t++;}}}}
+      G.push(row);}
+    return {G,cheat,cheatLoss,dues};}
+  function draw(){const S=run();
+    $('-g').innerHTML=S.G.map(row=>`<div class="ps15-r">${row.map(c=>`<i class="${c}"></i>`).join('')}</div>`).join('');
+    $('-out').innerHTML=[['Instances of cheating',S.cheat+''],['Principals\' loss',S.cheatLoss.toFixed(1)+' jobs'],['Pay honest scribes lose to caution',S.dues.toFixed(1)+' jobs']].map(([a,v])=>`<div><span>${a}</span><b>${v}</b></div>`).join('');
+    $('-msg').textContent={trust:`Cheap names, trust as usual: an unreliable scribe changes its name after each act of cheating and still gets normal work in the next round. Over twenty rounds they cheat ${S.cheat} times. Reputation does nothing to restrain them.`,dues:`Wary of newcomers: every new name takes only small jobs at first, and the loss from cheating falls to ${S.cheatLoss.toFixed(1)} jobs; but honest newcomers must also take a loss first, earning ${S.dues.toFixed(1)} jobs less. The cheaper names are, the harder this loss is to avoid.`,fixed:`Identity cannot change: each scribe's record follows the operator behind it, and one act of cheating means exclusion. Principals lose only ${S.cheatLoss.toFixed(0)} jobs, and honest newcomers need not take a loss first.`}[mode];}
+  const bs=[...document.querySelectorAll('[data-ps15]')];
+  function set(m){mode=m;bs.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.ps15===m)));draw();}
+  bs.forEach(b=>b.addEventListener('click',()=>set(b.dataset.ps15)));
+  $('').addEventListener('anim-in',()=>{['trust','dues','fixed'].forEach((m,i)=>setTimeout(()=>set(m),300+i*2400));});
+  draw();
+})();
+</script>
+
+<h2 id="sec-3">3. Holding the people behind it responsible</h2>
+<p>A scribe cannot afford to pay compensation, but whoever deploys it can: that person has property, knows what the scribe has done, and can decide whether to spend more effort checking it. If the deployer must pay for the scribe's mistakes, he will count the expected compensation as part of his own costs and keep adding checks until the cost of one more check equals the compensation it saves. He will also insure of his own accord, turning occasional large payouts into a fixed annual premium, and build the premium into the fees he charges. Liability for compensation thus falls on someone who can both afford to pay and is in a position to control the scribe.</p>
+<aside class="principle"><p class="pr-k">Derived so far: a principle</p><p class="pr-n">The economic case for vicarious liability</p><p class="pr-c"><span><em>Discipline</em>Law and economics › Agency law and tort liability</span><span><em>Type</em>Theory</span></p><p class="pr-s">When an agent cannot pay compensation, making the principal who controls the agent and owns assets liable for the agent's wrongs leads the principal to count expected compensation as a cost, to strengthen the selection, monitoring and restraint of the agent, and to spread the risk through insurance.</p><dl><div><dt>Standing in the field</dt><dd>The paper, titled "The economics of vicarious liability", uses a principal–agent model to analyse why employers are held liable for their employees' wrongs; this line of analysis starts from the agent's inability to pay</dd></div><div><dt>Constraint it answers</dt><dd>The agent's promises may not be kept, and the agent cannot afford to pay compensation</dd></div><div><dt>Premises</dt><dd>The principal can influence the agent's behaviour; the principal's assets are sufficient to pay compensation, or the principal can buy insurance</dd></div><div><dt>Proposed by</dt><dd>Sykes, 1984</dd></div><div><dt>Open question</dt><dd>The costs of liability and insurance are built into fees, so the threshold for delegation may rise again</dd></div><div><dt>After the rerun</dt><dd>A scribe has no property, so liability for its wrongs can only fall on whoever deploys and operates it; this arrangement adds the cost of the guarantee back into delegation</dd></div></dl></aside>
+<p><strong>Today's counterpart.</strong> The "manufacturers" covered by the EU product liability directive include developers of software and providers of artificial intelligence systems.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Whoever pays compensation does the checking</p><p class="figsub">A scribe deployed by one operator works for forty households each year. Switch who bears the loss from mistakes, and see how much effort the operator is willing to spend checking the scribe, how many mistakes occur, and how much principals pay in extra fees and lose without compensation each year.</p></div><button class="replay" type="button" data-replay="vc15">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Who bears the loss">
+      <button type="button" data-vc15="self" aria-pressed="true">Principal bears it</button>
+      <button type="button" data-vc15="clerk" aria-pressed="false">Scribe is liable</button>
+      <button type="button" data-vc15="op" aria-pressed="false">Operator liable and insured</button>
+    </div>
+    <div class="vc15" id="vc15" data-anim>
+      <div class="vc15-bars" id="vc15-b"></div>
+      <p class="vc15-msg" id="vc15-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the scribe handles 50 matters a year for each household; each has a 2% × e^(−checking) probability of a mistake, and each mistake costs 1 portion on average. Each unit of checking costs the operator 10 portions, and the operator chooses the level of checking that minimizes "cost of checking + the amount it has to pay". When it insures, the premium equals the expected compensation and, together with the cost of checking, is built into the fees charged to households (following the idea in Sykes, 1984). Amounts are in portions.</figcaption>
+</figure>
+<style>
+.vc15-bars{display:grid;gap:10px}
+.vc15-r{display:grid;grid-template-columns:9em 1fr 5em;gap:10px;align-items:center;font-size:12.5px}
+.vc15-r div{height:20px;background:var(--quote);border-radius:5px;overflow:hidden}
+.vc15-r i{display:block;height:100%;transition:width .6s;border-radius:5px}
+.vc15-r b{text-align:right;font-variant-numeric:tabular-nums}
+.vc15-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.vc15-r{grid-template-columns:1fr 4.5em}.vc15-r span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('vc15'+id),N=40,A=50,L=1,C=10;let mode='self';
+  function calc(){const liable=mode==='op',k=liable?Math.max(0,Math.log(.02*N*A*L/C)):0,e=.02*Math.exp(-k),errs=N*A*e,loss=errs*L;
+    return {k,errs,fee:liable?(k*C+loss)/N:0,unc:liable?0:loss/N};}
+  function draw(){const S=calc(),B=[['Effort spent checking',S.k,3,'var(--accent)',S.k.toFixed(2)],['Mistakes per year',S.errs,45,'var(--warm)',S.errs.toFixed(0)],['Extra fees per household per year',S.fee,1.2,'var(--blue)',S.fee.toFixed(2)],['Uncompensated loss per household per year',S.unc,1.2,'var(--warm)',S.unc.toFixed(2)]];
+    $('-b').innerHTML=B.map(([n,v,m,c,t])=>`<div class="vc15-r"><span>${n}</span><div><i style="width:${Math.min(100,v/m*100)}%;background:${c}"></i></div><b>${t}</b></div>`).join('');
+    $('-msg').textContent={self:'Principal bears it: the operator pays nothing when mistakes occur, so it has no reason to spend extra effort checking. There are 40 mistakes a year, and each household absorbs a loss of 1 portion a year.',clerk:'Scribe is liable: it is ordered to pay compensation, but it owns nothing, so the outcome is exactly the same as when the principal bears the loss. Liability in name only achieves nothing.',op:`Operator liable and insured: the operator decides how much to check based on what it would have to pay, and mistakes fall to ${S.errs.toFixed(0)} a year. The cost of checking and the premium are built into fees: each household pays ${S.fee.toFixed(2)} portions more a year, and in return every loss is compensated. The guarantee is not free.`}[mode];}
+  const bs=[...document.querySelectorAll('[data-vc15]')];
+  function set(m){mode=m;bs.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.vc15===m)));draw();}
+  bs.forEach(b=>b.addEventListener('click',()=>set(b.dataset.vc15)));
+  $('').addEventListener('anim-in',()=>{['self','clerk','op'].forEach((m,i)=>setTimeout(()=>set(m),300+i*2200));});
+  draw();
+})();
+</script>
+
+<h2 id="sec-4">4. Every step leaves a record</h2>
+<p>To hold the people behind a scribe responsible, one must first be able to tell whether a loss came from the scribe's error or from a bad run of years. When a person does the work, the principal sees only the result. When a scribe does it, every step can be written down: what it read, what it based its judgment on, and what instruction it gave and when. With such a record, checking changes from guesswork into comparison: another scribe can examine each transaction and determine which one broke the agreement.</p>
+<p>The record itself must also be trustworthy. If the scribe keeps its own record, it can rewrite it. Like the certificates for ship shares, the record must be entrusted to someone with no connection to the scribe and must not be alterable once written. What the principal can see is then no longer just the result but the process, and the cost of constraining the agent falls sharply.</p>
+<p><strong>Today's counterpart.</strong> In 2012 the U.S. Securities and Exchange Commission adopted a rule requiring a consolidated audit trail, which records the full life of every order in U.S. markets, from origination, routing, modification and cancellation to execution, and identifies the brokers that handled it.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Who keeps the record</p><p class="figsub">In one month a scribe did twelve things for a household, two of which broke the agreement. Switch among three situations and see what the principal can find out.</p></div><button class="replay" type="button" data-replay="lg15">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Situation">
+      <button type="button" data-lg15="result" aria-pressed="true">Month-end result only</button>
+      <button type="button" data-lg15="self" aria-pressed="false">Scribe keeps its own record</button>
+      <button type="button" data-lg15="third" aria-pressed="false">Third party keeps it, unalterable</button>
+    </div>
+    <div class="lg15" id="lg15" data-anim>
+      <ol class="lg15-l" id="lg15-l"></ol>
+      <div class="lg15-res" id="lg15-r"></div>
+      <p class="lg15-msg" id="lg15-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the twelve items and the two breaches are a made-up example. "Kept by a third party" means that once written, the record is handed to a party with no connection to the scribe, and no party can alter it.</figcaption>
+</figure>
+<style>
+.lg15-l{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:3px;font-size:13px}
+.lg15-l li{display:grid;grid-template-columns:3.8em 1fr auto;gap:8px;padding:4px 8px;border-radius:6px;background:var(--quote);opacity:0;transform:translateX(-6px);transition:opacity .35s,transform .35s,background .3s;transition-delay:calc(var(--i)*.08s)}
+.lg15.in .lg15-l li{opacity:1;transform:none}
+.lg15-l li span{color:var(--faint)} .lg15-l li em{font-style:normal;font-size:12px}
+.lg15-l li.bad{background:var(--warm-soft)} .lg15-l li.bad em{color:var(--warm)}
+.lg15-l li.hid{color:var(--faint)} .lg15-l li.hid b{text-decoration:line-through}
+.lg15-l.blur li{filter:blur(3px)}
+.lg15-res{margin-top:10px;background:var(--quote);border-radius:8px;padding:9px 11px;font-size:13.5px}
+.lg15-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('lg15'+id);let mode='result';
+  const E=[['Day 1','Read the reports on four ships',0],['Day 3','Bought 2 ship shares as agreed',0],['Day 5','Checked the grain stored in the granary',0],['Day 8','Bought 6 ship shares, above the agreed limit of 3 a month',1],['Day 10','Reminded the principal of next month\'s tax',0],['Day 12','Sold 1 ship share as agreed',0],['Day 15','Kept the accounts',0],['Day 18','Sold a ship share to a household under the operator\'s own name, below the market price',1],['Day 20','Read the new reports',0],['Day 23','Adjusted next month\'s plan',0],['Day 26','Kept the accounts',0],['Day 30','Produced the month-end report',0]];
+  function draw(){const l=$('-l');l.classList.toggle('blur',mode==='result');
+    l.innerHTML=E.map(([d,t,b],i)=>{const hid=mode==='self'&&b;return `<li style="--i:${i}" class="${mode==='third'&&b?'bad':''}${hid?' hid':''}"><span>${d}</span><b>${hid?(i===3?'Bought 3 ship shares':'Sold 1 ship share at the market price'):t}</b><em>${mode==='third'&&b?'Broke the agreement':''}</em></li>`;}).join('');
+    $('-r').textContent={result:'Month-end report: the value of the ship shares fell 2% this month. The principal sees only this one number and cannot tell whether the years were bad or the scribe did something wrong.',self:'The record the scribe keeps itself: every item is there, and all appear to follow the agreement. But because the scribe keeps the record, the two breaches have been rewritten.',third:'The record kept by a third party: all twelve items are listed, and another scribe finds the two breaches by comparison within seconds: on day 8 it exceeded the purchase limit, and on day 18 it sold a ship share cheaply to a household connected to the operator.'}[mode];
+    $('-msg').textContent={result:'Seeing only the result, the principal cannot judge, and so cannot hold anyone to account.',self:'A record kept by the scribe itself is like accounts kept by the manager himself: it can erase its own mistakes.',third:'Once written, the record is kept by a party with no connection to the scribe and cannot be altered. Checking changes from guesswork into comparison, and holding someone responsible has a basis.'}[mode];}
+  const bs=[...document.querySelectorAll('[data-lg15]')];
+  function set(m){mode=m;bs.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lg15===m)));draw();}
+  bs.forEach(b=>b.addEventListener('click',()=>set(b.dataset.lg15)));
+  $('').addEventListener('anim-in',()=>{['result','self','third'].forEach((m,i)=>setTimeout(()=>set(m),300+i*2600));});
+  draw();
+})();
+</script>
+
+<h2 id="sec-5">5. Grant only the authority needed</h2>
+<p>A record can settle responsibility after the fact, but it cannot undo a loss that has already occurred. The largest loss a scribe can cause with a single mistake depends on what it is permitted to do. If it can use all of a principal's grain, one mistake could ruin a household; if it can buy or sell only a small portion at a time, the worst case is the loss of a small portion.</p>
+<p>This yields a rule for assigning authority: give the scribe only the least authority its task requires. A scribe that keeps accounts for someone needs only to read the accounts, not to place orders. A scribe that makes regular purchases for someone needs only to buy within a limit; it does not need to sell, still less to transfer grain to anyone else. Irreversible operations, such as moving grain out of the granary or changing the authorization itself, must be confirmed by the principal in person. The assets remain with a custodian who has no connection to the scribe; the scribe can only issue instructions and cannot take anything away.</p>
+<aside class="principle"><p class="pr-k">Derived so far: a principle</p><p class="pr-n">Principle of least privilege</p><p class="pr-c"><span><em>Discipline</em>Computer science › Information security</span><span><em>Type</em>Design principle</span></p><p class="pr-s">Every program and every user of a system should hold only the least privilege needed to complete its work; the harm that a single error or a single abuse can cause is then confined within that privilege.</p><dl><div><dt>Standing in the field</dt><dd>One of the eight design principles for information protection set out in the paper; according to Smith's (2012) retrospective, most of these principles were adopted by the U.S. Department of Defense's Trusted Computer System Evaluation Criteria</dd></div><div><dt>Constraint it answers</dt><dd>An agent may err or be abused, and compensation after the fact cannot recover everything</dd></div><div><dt>Premises</dt><dd>The authority a task requires can be defined in advance; authority can be subdivided and enforced by the system</dd></div><div><dt>Proposed by</dt><dd>Saltzer and Schroeder, 1975</dd></div><div><dt>Open question</dt><dd>The finer authority is divided, the more confirmations the principal must give, and the convenience of delegation declines</dd></div><div><dt>After the rerun</dt><dd>A scribe handles a great many small matters every day, so confirming each one is not feasible; authority must therefore be graded by the size of the matter and whether it can be undone, with small, reversible matters left to the scribe and large, irreversible ones reserved for the principal</dd></div></dl></aside>
+<p><strong>Today's counterpart.</strong> The market access rule adopted by the U.S. Securities and Exchange Commission in 2010 requires brokers to check customer orders against preset credit and capital thresholds before the orders reach the market and to block erroneous orders, and these controls must be under the broker's direct and exclusive control.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Grant only the authority needed</p><p class="figsub">First choose the scribe's task, then switch among three ways of granting authority, and see what it is allowed to do and the largest loss a single mistake could cause.</p></div><button class="replay" type="button" data-replay="lp15">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Task">
+      <button type="button" data-lp15t="book" aria-pressed="false">Keep accounts</button>
+      <button type="button" data-lp15t="dca" aria-pressed="true">Monthly purchases</button>
+      <button type="button" data-lp15t="reb" aria-pressed="false">Adjust to plan</button>
+    </div>
+    <div class="seg-btns" role="group" aria-label="Authorization">
+      <button type="button" data-lp15m="all" aria-pressed="true">Full authority</button>
+      <button type="button" data-lp15m="least" aria-pressed="false">Least authority</button>
+      <button type="button" data-lp15m="conf" aria-pressed="false">Least authority + confirm irreversible actions</button>
+    </div>
+    <div class="lp15" id="lp15" data-anim>
+      <div class="lp15-t" id="lp15-t"></div>
+      <div class="lp15-w"><span>Worst loss from one mistake</span><div><i id="lp15-wb"></i></div><b id="lp15-wv"></b></div>
+      <p class="lp15-msg" id="lp15-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: a household has 100 portions of property in all; the limit for monthly purchases is 2 portions, and adjusting to plan can move at most 10 portions at a time. The worst loss is the largest amount the scribe can use in a single mistake; operations that need confirmation cannot be completed by the scribe alone.</figcaption>
+</figure>
+<style>
+.lp15-t{display:grid;gap:4px;margin-top:6px}
+.lp15-r{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:6px 10px;border-radius:7px;background:var(--quote);font-size:13px}
+.lp15-r em{font-style:normal;font-size:12px;padding:1px 9px;border-radius:999px;transition:background .3s}
+.lp15-r em.y{background:var(--accent-soft);color:var(--accent)} .lp15-r em.n{background:var(--bg);color:var(--faint);border:1px solid var(--line)} .lp15-r em.c{background:var(--warm-soft);color:var(--warm)}
+.lp15-w{display:grid;grid-template-columns:10em 1fr 5.5em;gap:10px;align-items:center;margin-top:12px;font-size:12.5px}
+.lp15-w div{height:18px;background:var(--quote);border-radius:5px;overflow:hidden}
+.lp15-w i{display:block;height:100%;background:var(--warm);transition:width .6s}
+.lp15-w b{text-align:right;font-variant-numeric:tabular-nums}
+.lp15-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.lp15-w{grid-template-columns:1fr 5.5em}.lp15-w span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('lp15'+id);let task='dca',mode='all';
+  const A=[['View accounts and holdings',0,0],['Buy within the limit',2,0],['Sell',10,0],['Large trades above the limit',100,0],['Move grain out of the granary',100,1],['Change the authorization itself',100,1]];
+  const NEED={book:[0],dca:[0,1],reb:[0,1,2]};
+  function st(i){if(mode==='all')return 'y';if(!NEED[task].includes(i))return mode==='conf'&&A[i][2]?'c':'n';return 'y';}
+  function draw(){const S=A.map((_,i)=>st(i)),worst=Math.max(0,...A.map((a,i)=>S[i]==='y'?a[1]:0));
+    $('-t').innerHTML=A.map((a,i)=>`<div class="lp15-r"><span>${a[0]}</span><em class="${S[i]}">${{y:'Allowed',n:'Not allowed',c:'Principal must confirm'}[S[i]]}</em></div>`).join('');
+    $('-wb').style.width=worst+'%';$('-wv').textContent=worst+' portions';
+    $('-msg').textContent=mode==='all'?'Full authority: whatever the task, the scribe can use all of the household\'s property, and a single mistake or a single act of exploitation could ruin the household.':mode==='least'?`Least authority: only the operations needed for this task are allowed, and the worst loss from one mistake is ${worst} portions. It cannot perform any other operation at all; if the principal wants one done, separate authorization is needed.`:`On top of least authority, the two irreversible operations, moving grain out and changing the authorization, are left for the principal to confirm in person: the scribe cannot do them alone, and the principal need not worry about every small matter.`;}
+  const tb=[...document.querySelectorAll('[data-lp15t]')],mb=[...document.querySelectorAll('[data-lp15m]')];
+  function setT(t){task=t;tb.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lp15t===t)));draw();}
+  function setM(m){mode=m;mb.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lp15m===m)));draw();}
+  tb.forEach(b=>b.addEventListener('click',()=>setT(b.dataset.lp15t)));mb.forEach(b=>b.addEventListener('click',()=>setM(b.dataset.lp15m)));
+  $('').addEventListener('anim-in',()=>{['all','least','conf'].forEach((m,i)=>setTimeout(()=>setM(m),300+i*2200));});
+  draw();
+})();
+</script>
+
+<h2 id="sec-6">6. Guaranteed scribes: Civilization Simulator, version 15</h2>
+<p>The simulator unlocks "Guaranteeing agents". Forty households hand their ship shares to scribes for management. The scribes are deployed by ten operators, some of whom are unreliable: their scribes make more mistakes, and they do not pay when something goes wrong. You can separately switch on or off operator liability with insurance, records kept by a third party, and authority limits with confirmation, and adjust the share of unreliable operators. Then watch how many households are willing to delegate over twenty years, and how much of the loss caused by scribes' mistakes goes uncompensated.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Civilization Simulator · Chapter 15: guaranteed scribes</p><p class="figsub">Forty households hand their ship shares to scribes for management, and the scribes are deployed by ten operators. Switch three rules on or off separately and adjust the share of unreliable operators, then watch how many households are willing to delegate over twenty years and how much of the loss from mistakes goes uncompensated.</p></div><button class="replay" type="button" data-replay="cs15">Replay</button></div>
+    <div class="cs-rules"><span class="on">Regulation &amp; custody</span><span class="on">Parameter: price of cognitive labour</span><span class="on">Personal agent</span><span class="on">Guaranteeing agents</span><span class="lock">Analysts for all · Ch. 16</span></div>
+    <div class="cs15" id="cs15" data-anim>
+      <svg viewBox="0 0 660 210" role="img" aria-label="Share of households willing to delegate"><g id="cs15-ax"></g><path id="cs15-p" class="cs15-p"/></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Households willing to delegate</span></div>
+      <div class="cs-sw"><label><input type="checkbox" id="cs15-l"> Rule: operators liable and insured</label><label><input type="checkbox" id="cs15-r"> Rule: unalterable records kept by a third party</label><label><input type="checkbox" id="cs15-c"> Rule: authority limits and confirmation</label></div>
+      <div class="sl"><label for="cs15-q">Unreliable operators <b id="cs15-qv"></b></label><input id="cs15-q" type="range" min="0" max="60" step="10" value="30"></div>
+      <button type="button" class="replay" id="cs15-re">Another run of years</button>
+      <div class="cs15-out" id="cs15-out"></div>
+      <p class="cs15-msg" id="cs15-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model: a scribe does 20 things a year for each household. Each task done by a reliable operator's scribe has a 2.5% probability of a mistake, and by an unreliable operator's scribe 5%; when operators are liable they check more closely, and the probability of a mistake is halved. Each mistake costs 1.5% of the household's property, or at most 0.2% when there are authority limits. Without checkable records, principals find only 30% of mistakes; with records, they find 95%. Of the mistakes found, all are compensated when operators are liable and insured; otherwise reliable operators, to protect their names, compensate only part (20% without records, half with records), and unreliable operators compensate nothing. At first 80% of households are willing to delegate; whenever there are uncompensated losses, that share falls, and it recovers slowly in calm years.</figcaption>
+</figure>
+<style>
+.cs15 svg{width:100%;height:auto;display:block}
+.cs15-p{fill:none;stroke:var(--accent);stroke-width:2.6}
+.cs15-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cs15-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs15-out span{display:block;font-size:11.5px;color:var(--faint)} .cs15-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.cs15-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs15-out{grid-template-columns:1fr}.cs15 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs15'+id),Y=20,N=40,OP=10;let seed=1515;
+  const X0=44,X1=628,YT=10,YB=176,x=t=>X0+t/Y*(X1-X0),y=v=>YB-v*(YB-YT);
+  function sim(q,lia,log,cap){let s=seed;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};
+    const nB=Math.round(q*OP);let P=.8;const Ps=[P];let unc=0,tot=0,det=0,errs=0,uy=0;
+    for(let t=0;t<Y;t++){const users=Math.round(P*N);let uncY=0;uy+=users;
+      for(let i=0;i<users;i++){const bad=(i%OP)<nB,e=(bad?.05:.025)*(lia?.5:1);
+        for(let a=0;a<20;a++){if(r()<e){errs++;const L=cap?.002:.015;tot+=L;const d=r()<(log?.95:.3);if(d)det++;
+          const comp=d?(lia?1:(bad?0:(log?.5:.2))):0;uncY+=L*(1-comp);unc+=L*(1-comp);}}}
+      P=Math.max(.05,Math.min(.95,P+.06*(.9-P)-12*(users?uncY/users:0)));Ps.push(P);}
+    return {Ps,tot:uy?tot/uy:0,unc:uy?unc/uy:0,det:errs?det/errs:0};}
+  function draw(){const q=+$('-q').value/100,l=$('-l').checked,rc=$('-r').checked,c=$('-c').checked,S=sim(q,l,rc,c);$('-qv').textContent=Math.round(q*100)+'%';
+    $('-ax').innerHTML=[0,.25,.5,.75,1].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text>`).join('')+[0,5,10,15,20].map(t=>`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">Year ${t}</text>`).join('');
+    $('-p').setAttribute('d',S.Ps.map((v,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(v).toFixed(1)).join(''));
+    const end=Math.round(S.Ps[Y]*100),pc=v=>(v*100).toFixed(2)+'%';
+    $('-out').innerHTML=[['Households willing to delegate in year 20',end+'%'],['Loss from mistakes (share of property per year)',pc(S.tot)],['Of which uncompensated',pc(S.unc)]].map(([a,v])=>`<div><span>${a}</span><b>${v}</b></div>`).join('');
+    const n=[l,rc,c].filter(Boolean).length;
+    $('-msg').textContent=n===0?`All three rules off: when scribes make mistakes, principals mostly fail to notice, and even when they do, often no one pays. Households willing to delegate fall to ${end}%.`:n===3?`All three on: operators pay for mistakes and so check more closely, records mean almost every mistake is found, and authority limits keep the loss from each mistake small. Households willing to delegate rise to ${end}%.`:`${l?'Operators are liable, so there are fewer mistakes, and every mistake found is compensated':'No one is liable, so even mistakes that are found often go uncompensated'}; ${rc?'there are records, so almost every mistake can be found':'there are no records, so most mistakes go unnoticed and liability cannot take hold'}; ${c?'there are authority limits, so each mistake causes only a small loss':'there are no authority limits, so a single mistake can cause a sizeable loss'}. Households willing to delegate: ${end}%.`;}
+  ['-l','-r','-c','-q'].forEach(k=>$(k).addEventListener('input',draw));$('-re').addEventListener('click',()=>{seed=(seed*48271)%2147483647;draw();});
+  $('').addEventListener('anim-in',()=>{[[0,0,0],[1,0,0],[1,1,0],[1,1,1]].forEach(([a,b,d],i)=>setTimeout(()=>{$('-l').checked=!!a;$('-r').checked=!!b;$('-c').checked=!!d;draw();},300+i*2200));});
+  draw();
+})();
+</script>
+
+<h2 id="sec-7">7. What this step leaves open</h2>
+<p>Guarantees and records make scribes trustworthy, but several questions remain unresolved:</p>
+<ol><li><strong>The cost of the guarantee.</strong> Liability, insurance and records all cost money, and these costs are built into fees. Will the threshold for delegation rise again as a result?</li><li><strong>The keeper of the record.</strong> The record must be kept by someone with no connection to the scribe. Who constrains that keeper?</li><li><strong>A scribe for everyone.</strong> If every household has a scribe read the reports and pick ship shares for it, how will information advantage change?</li><li><strong>Scribes that resemble each other.</strong> Many scribes come from the same few operators. Will they make the same decision at the same moment?</li></ol>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">What this step leaves open</p><p class="figsub">Four questions that remain unresolved once guarantees and records have made scribes trustworthy. Click a question to see the assumption it hides.</p></div><button class="replay" type="button" data-replay="nx15">Replay</button></div>
+    <div class="nx" id="nx15" data-anim>
+      <div class="nx-src"><b>Guaranteed scribes</b><span>Liability, records and authority</span></div>
+      <div class="nx-list" id="nx15-l"></div>
+    </div>
+    <p class="nx-msg" id="nx15-msg" aria-live="polite"></p>
+  </div>
+</figure>
+<style>
+.nx{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:center}
+.nx-src{background:var(--ink);color:var(--bg);border-radius:10px;padding:14px 10px;text-align:center}
+.nx-src b{display:block;font-size:16px} .nx-src span{font-size:12px;opacity:.75}
+.nx-list{display:grid;gap:6px}
+.nx-i{font:inherit;text-align:left;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:9px 12px;color:var(--ink);opacity:0;transform:translateX(-8px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.3s)}
+.nx.in .nx-i{opacity:1;transform:none}
+.nx-i span{font-size:13.5px} .nx-i em{font-style:normal;font-size:11.5px;color:var(--faint);white-space:nowrap}
+.nx-i.sel{border-color:var(--accent)}
+.nx-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.nx{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const Q=[['The cost of the guarantee','Part Three','Hidden assumption: the guarantee is free. Liability, insurance and records all cost money, and once these are built into fees, the threshold for delegation may rise again.'],
+    ['The keeper of the record','Part Three','Hidden assumption: the party that keeps the record is trustworthy. Who constrains it, and how can the record be made understandable to principals themselves?'],
+    ['A scribe for everyone','Chapter 16','Hidden assumption: only a few people can read every report. When everyone has a scribe, information advantage is used up faster, and new asymmetries appear elsewhere.'],
+    ['Scribes that resemble each other','Chapter 17','Hidden assumption: trading is done by many people who each judge for themselves. Scribes from the same few operators may make the same decision at the same moment.']];
+  const l=document.getElementById('nx15-l'),msg=document.getElementById('nx15-msg');
+  l.innerHTML=Q.map((q,i)=>`<button type="button" class="nx-i" style="--i:${i}" data-i="${i}"><span>${q[0]}</span><em>→ ${q[1]}</em></button>`).join('');
+  const bs=[...l.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));msg.textContent=Q[i][2];}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('nx15').addEventListener('anim-in',()=>{[0,1,2,3].forEach((i,k)=>setTimeout(()=>set(i),1600+k*1800));});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-8">8. Implications for products</h2>
+<p>An agent product that can place orders for users must first answer the same question as a lending product: why should anyone believe it will keep its promises? Three implications follow. First, the agent itself cannot provide a guarantee; the guarantee comes from the institution that operates it. That institution's capital, liability and insurance are what users can rely on, and the product should state this clearly. Second, the process should leave a record that is kept by a third party and cannot be altered, so that users and regulators can check each transaction; a process that can be checked is the precondition for assigning responsibility. Third, authority should be graded by the size of the matter and whether it can be undone, and the assets should stay with an independent custodian; the agent can only issue instructions, and irreversible operations are confirmed by the user in person.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: who guarantees an agent's promises</p><p class="figsub">Four conclusions, each corresponding to one mechanism in the chapter.</p></div><button class="replay" type="button" data-replay="g15summary">Replay</button></div>
+    <div class="g15summary" id="g15summary" data-anim><div class="g15summary-c" style="--i:0"><em>Judgment-proof</em><b>Those who cannot pay will not be very careful</b><p>A scribe has no property, so punishing it is pointless, and it will not insure of its own accord.</p></div><div class="g15summary-c" style="--i:1"><em>Reputation and vicarious liability</em><b>Guaranteed by the people behind it</b><p>Names can be changed at will, so reputation must attach to the operator; compensation is borne by the operator, who can afford to pay and is in a position to control the scribe.</p></div><div class="g15summary-c warn" style="--i:2"><em>Records</em><b>Kept by a third party, unalterable</b><p>With a record of every transaction, checking changes from guesswork into comparison, and responsibility can be assigned.</p></div><div class="g15summary-c warn" style="--i:3"><em>Least privilege</em><b>Grant only the authority needed</b><p>Authority is graded by size and by whether an action can be undone, and the assets stay with an independent custodian.</p></div></div>
+  </div>
+</figure>
+<style>
+.g15summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g15summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g15summary-c.warn{border-left-color:var(--warm)}
+.g15summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g15summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g15summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g15summary.in .g15summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g15summary{grid-template-columns:1fr}}
+</style>
+
+<h2 id="sec-9">References</h2>
+<ul class="refs"><li>European Parliament and Council of the European Union (2024). Directive (EU) 2024/2853 on liability for defective products. <i>Official Journal of the European Union</i>.</li><li>Friedman, E. J., &amp; Resnick, P. (2001). The social cost of cheap pseudonyms. <i>Journal of Economics &amp; Management Strategy</i>, 10(2), 173–199.</li><li>Kreps, D. M., Milgrom, P., Roberts, J., &amp; Wilson, R. (1982). Rational cooperation in the finitely repeated prisoners' dilemma. <i>Journal of Economic Theory</i>, 27(2), 245–252.</li><li>Nobel Prize Outreach. <i>The Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel 2005</i>. NobelPrize.org.</li><li>Saltzer, J. H., &amp; Schroeder, M. D. (1975). The protection of information in computer systems. <i>Proceedings of the IEEE</i>, 63(9), 1278–1308.</li><li>Shavell, S. (1986). The judgment proof problem. <i>International Review of Law and Economics</i>, 6(1), 45–58.</li><li>Smith, R. E. (2012). A contemporary look at Saltzer and Schroeder's 1975 design principles. <i>IEEE Security &amp; Privacy</i>, 10(6), 20–25.</li><li>Sykes, A. O. (1984). The economics of vicarious liability. <i>Yale Law Journal</i>, 93, 1231–1280.</li><li>U.S. Securities and Exchange Commission (2010). Risk management controls for brokers or dealers with market access. Release No. 34-63241.</li><li>U.S. Securities and Exchange Commission (2012). Consolidated audit trail. Release No. 34-67457.</li></ul>
+<footer class="nav"><a href="g-14.html">← Chapter 14: Can everyone have a personal agent?</a><a href="g-16.html">Chapter 16: If everyone has an analyst →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Results alone cannot tell good from bad</p><p class="figsub">Four of twenty scribes breach the agreement by taking extra risk outside it. Each dot is one scribe's result. Drag the number of years observed and see whether results separate those who keep the agreement from those who breach it.</p></div><button class="replay" type="button" data-replay="bk22">Replay</button></div>
+    <div class="bk22" id="bk22" data-anim>
+      <svg viewBox="0 0 660 190" role="img" aria-label="Results of scribes who keep and who breach the agreement"><g id="bk22-g"></g></svg>
+      <div class="legend"><span><i style="background:var(--accent);border-radius:50%"></i>Scribe keeping the agreement</span><span><i style="background:var(--warm);border-radius:50%"></i>Scribe in breach</span></div>
+      <div class="sl"><label for="bk22-n">Years observed <b id="bk22-nv"></b></label><input id="bk22-n" type="range" min="1" max="20" step="1" value="1"></div>
+      <p class="bk22-msg" id="bk22-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: scribes who keep the agreement earn 5% a year on average, each with volatility of 10%; those in breach take more risk, with an average return of 6% and volatility of 22%; all of them also share the same run of years. The horizontal axis is the annualized return over the observation period.</figcaption>
+</figure>
+<style>
+.bk22 svg{width:100%;height:auto;display:block}
+.bk22-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.bk22 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('bk22'+id),N=20,X0=40,X1=628,x=v=>X0+(v+.3)/.6*(X1-X0);
+  let s=2201;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};const g=()=>{let u=0;while(!u)u=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r());};
+  const Y=20,M=Array.from({length:Y},()=>.12*g()),E=Array.from({length:N},()=>Array.from({length:Y},g));
+  function draw(){const n=+$('-n').value;$('-nv').textContent=n+(n===1?' year':' years');
+    const R=E.map((e,i)=>{const bad=i<4;let w=1;for(let t=0;t<n;t++)w*=1+(bad?.06:.05)+M[t]*(bad?1.3:1)+(bad?.22:.10)*e[t];return [Math.pow(Math.max(w,.01),1/n)-1,bad];});
+    let h=[-.2,-.1,0,.1,.2].map(v=>`<line x1="${x(v)}" x2="${x(v)}" y1="20" y2="150" class="s-line"/><text x="${x(v)}" y="168" text-anchor="middle" font-size="11" class="t-faint">${Math.round(v*100)}%</text>`).join('');
+    R.forEach(([v,b],i)=>{h+=`<circle cx="${x(Math.max(-.29,Math.min(.29,v)))}" cy="${b?60:110}" r="7" fill="${b?'var(--warm)':'var(--accent)'}" opacity=".8"/>`;});
+    h+=`<text x="${X0}" y="56" font-size="11" class="t-faint">Breach</text><text x="${X0}" y="106" font-size="11" class="t-faint">Kept</text>`;
+    $('-g').innerHTML=h;const gm=R.filter(r=>!r[1]).map(r=>r[0]),bm=R.filter(r=>r[1]).map(r=>r[0]),mx=Math.max(...gm),better=bm.filter(v=>v>mx).length,inside=bm.filter(v=>v>=Math.min(...gm)).length;
+    $('-msg').textContent=n<5?`Judging by ${n} ${n===1?'year':'years'} of results: ${inside} of the 4 scribes in breach do no worse than the weakest scribe who kept the agreement${better?`, and ${better} do better than every one of them`:''}. The principal cannot tell who kept the agreement and who breached it.`:`After ${n} years, the results of those in breach begin to spread out more, yet ${inside} still do no worse than the weakest scribe who kept the agreement. Telling them apart by results takes too long.`;}
+  $('-n').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{let v=1;$('-n').value=1;draw();const id=setInterval(()=>{v+=1;$('-n').value=v;draw();if(v>=20)clearInterval(id);},200);});
+  draw();
+})();
+</script>

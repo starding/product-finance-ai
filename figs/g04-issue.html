@@ -1,0 +1,31 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">发行的纪律：货币多了，东西没多</p><p class="figsub">拖动每年新增货币的速度，看二十年里物价与 100 单位现金的购买力。岛上的物产每年增长 2%。</p></div><button class="replay" type="button" data-replay="is">重播</button></div>
+    <div class="is" id="is" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="物价与购买力"><g id="is-ax"></g><path id="is-p" class="is-p"/><path id="is-v" class="is-v"/></svg>
+      <div class="legend"><span><i style="background:var(--warm)"></i>物价（第 0 年为 100）</span><span><i style="background:var(--accent)"></i>100 单位现金的购买力</span></div>
+      <div class="sl"><label for="is-g">每年新增货币 <b id="is-gv"></b></label><input id="is-g" type="range" min="0" max="15" step="0.5" value="2"></div>
+      <p class="is-msg" id="is-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：按费雪（1911）的交换方程，假设货币的流通速度不变，物价的年增长率约等于货币增长率减去物产增长率。</figcaption>
+</figure>
+<style>
+.is svg{width:100%;height:auto;display:block}
+.is-p{fill:none;stroke:var(--warm);stroke-width:2.4}
+.is-v{fill:none;stroke:var(--accent);stroke-width:2.4}
+.is-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.is svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),X0=46,X1=630,YT=12,YB=180,x=t=>X0+t/20*(X1-X0),ly=v=>YB-(Math.log(v)-Math.log(20))/(Math.log(600)-Math.log(20))*(YB-YT);
+  $('is-ax').innerHTML=[25,50,100,200,400].map(v=>`<line x1="${X0}" x2="${X1}" y1="${ly(v)}" y2="${ly(v)}" class="s-line"/><text x="${X0-6}" y="${ly(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+[0,5,10,15,20].map(t=>`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">第 ${t} 年</text>`).join('');
+  function draw(){const g=+$('is-g').value/100,pi=(1+g)/1.02-1;let p='',v='';for(let t=0;t<=20;t++){const P=100*Math.pow(1+pi,t);p+=(t?'L':'M')+x(t)+','+ly(Math.max(P,20)).toFixed(1);v+=(t?'L':'M')+x(t)+','+ly(Math.max(1e4/P,20)).toFixed(1);}
+    $('is-p').setAttribute('d',p);$('is-v').setAttribute('d',v);$('is-gv').textContent=(g*100).toFixed(1)+'%';
+    const P20=100*Math.pow(1+pi,20);$('is-msg').textContent=Math.abs(pi)<.0005?'新增货币与物产同步增长，物价稳定，现金的购买力不变。':pi>0?`物价每年上涨约 ${(pi*100).toFixed(1)}%，二十年后 100 单位现金只能买到原来 ${Math.round(1e4/P20)} 单位的东西：持有货币，就像储藏会腐坏的粮食。`:`货币增长慢于物产，物价每年下降约 ${(-pi*100).toFixed(1)}%，现金的购买力上升；但物价持续下跌会让人推迟消费与借贷，同样有代价。`;}
+  $('is-g').addEventListener('input',draw);
+  $('is').addEventListener('anim-in',()=>{let v=2;$('is-g').value=v;draw();const id=setInterval(()=>{v+=.5;$('is-g').value=v;draw();if(v>=12)clearInterval(id);},150);});
+  draw();
+})();
+</script>

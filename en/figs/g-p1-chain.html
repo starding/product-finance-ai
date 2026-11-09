@@ -1,0 +1,45 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Twelve constraints, twelve institutions</p><p class="figsub">Each chapter adds just one constraint and grows one institution; that institution in turn leaves the next problem. Choose any step to see its constraint, its institution and the problem it leaves.</p></div><button class="replay" type="button" data-replay="pc1">Replay</button></div>
+    <div class="pc1" id="pc1" data-anim><div class="pc1-g" id="pc1-g"></div></div>
+    <div class="pc1-d" id="pc1-d" aria-live="polite"></div>
+  </div>
+</figure>
+<style>
+.pc1-g{display:grid;grid-template-columns:repeat(4,1fr);gap:8px 22px}
+.pc1-c{font:inherit;text-align:left;cursor:pointer;position:relative;background:var(--quote);border:1px solid transparent;border-radius:10px;padding:9px 11px;color:var(--ink);opacity:0;transform:translateY(8px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.18s)}
+.pc1.in .pc1-c{opacity:1;transform:none}
+.pc1-c em{display:block;font-style:normal;font-size:11px;color:var(--faint)}
+.pc1-c b{display:block;font-size:14.5px;margin-top:1px}
+.pc1-c.sel{border-color:var(--accent)}
+.pc1-c:not(:nth-child(4n))::after{content:"→";position:absolute;right:-17px;top:50%;transform:translateY(-50%);color:var(--faint);font-size:13px}
+.pc1-d{margin-top:14px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pc1-d div{background:var(--quote);border-radius:8px;padding:9px 11px;font-size:13.5px;line-height:1.55}
+.pc1-d span{display:block;font-size:11px;color:var(--faint)}
+.pc1-d a{font-size:12.5px}
+@media (max-width:640px){.pc1-g{grid-template-columns:repeat(2,1fr);gap:8px 22px}.pc1-c:not(:nth-child(4n))::after{content:none}.pc1-c:nth-child(odd)::after{content:"→"}.pc1-d{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const S=[['One person, one year\'s harvest','Income and consumption do not happen at the same time','Saving and seed','Storage spoils, and one can rely only on oneself'],
+    ['Two people, short of grain at different times','Shortages fall at different times','Lending and interest','What is lent may not come back'],
+    ['What if a loan is not repaid','Promises may not be kept','Reputation, collateral and contracts','With many people, the two sides of an exchange do not match'],
+    ['Exchange among many','The double coincidence of wants','Money','Future harvests may be good or bad'],
+    ['Harvests good and bad','Future harvests are uncertain','Insurance and risk sharing','Savers want their grain at any time; borrowers want it for years'],
+    ['Savers may need their grain at any time; borrowers need it for years','Mismatched maturities','Bank','No one household can pay for a ship'],
+    ['No one household can pay for a ship','No one person can bear the risk of a large project','Shares and limited liability','In an emergency, shares must be saleable'],
+    ['Securities must be saleable','Finding a counterparty takes time and money','Markets, market making and brokers','Everyone wants to use their own information'],
+    ['Prices carry everyone\'s information','Everyone wants to use their information','Information in prices','Ordinary people have neither the time nor the expertise'],
+    ['Ordinary people have neither the time nor the expertise','Attention and expertise are scarce','Delegation','Trustees may not do their duty'],
+    ['Trustees may not do their duty','Asymmetric information and conflicts of interest','Custody, disclosure, suitability and regulation','The institutions are in place, and people still make mistakes'],
+    ['The institutions are in place, and people still make mistakes','Human decision biases','Defaults and commitment devices','What if the cost of having others think and act for us collapses']];
+  const g=document.getElementById('pc1-g'),d=document.getElementById('pc1-d');
+  g.innerHTML=S.map((s,i)=>`<button type="button" class="pc1-c" style="--i:${i}"><em>Chapter ${i+1}</em><b>${s[2]}</b></button>`).join('');
+  const bs=[...g.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));const s=S[i];
+    d.innerHTML=`<div><span>Constraint</span>${s[1]}</div><div><span>Institution that grows</span>${s[2]}<br><a href="g-${String(i+1).padStart(2,'0')}.html">Open Chapter ${i+1}: ${s[0]}</a></div><div><span>Problem left open</span>${s[3]}</div>`;}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('pc1').addEventListener('anim-in',()=>{[0,5,9,11].forEach((i,k)=>setTimeout(()=>set(i),2400+k*1500));});
+  set(0);
+})();
+</script>

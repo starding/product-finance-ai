@@ -1,0 +1,38 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">信息优势是零和的</p><p class="figsub">把所有人一年的得失加在一起。拖动不知情却频繁买卖的人所占的比例与每次买卖的成本，看各类人的得失，以及合计之后剩下什么。</p></div><button class="replay" type="button" data-replay="zr">重播</button></div>
+    <div class="zr" id="zr" data-anim></div>
+    <div class="zr-sl">
+      <div class="sl"><label for="zr-a">频繁买卖的不知情者 <b id="zr-av"></b></label><input id="zr-a" type="range" min="0" max="100" step="10" value="50"></div>
+      <div class="sl"><label for="zr-c">打听与买卖的成本 <b id="zr-cv"></b></label><input id="zr-c" type="range" min="0" max="10" step="1" value="4"></div>
+    </div>
+    <p class="zr-msg" id="zr-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>示意：知情者从频繁买卖的不知情者那里赚到 10 份；不交易的被动持有者只得到船队的平均收益，不在这场得失之中。夏普（1991）：扣除成本之前，主动者整体与被动者收益相同；扣除成本之后，主动者整体必然落后。</figcaption>
+</figure>
+<style>
+.zr{display:grid;gap:6px}
+.zr-r{display:grid;grid-template-columns:9em 1fr 4.5em;gap:10px;align-items:center;font-size:13px}
+.zr-t{position:relative;height:16px;background:var(--quote);border-radius:4px}
+.zr-t::before{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;border-left:1px solid var(--faint)}
+.zr-t i{position:absolute;top:0;height:100%;border-radius:4px;transition:left .3s,width .3s}
+.zr-r b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.zr-r.tot{font-weight:600;border-top:1px solid var(--line);padding-top:6px}
+.zr-sl{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px}
+.zr-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.zr-sl{grid-template-columns:1fr;gap:4px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  function bar(v,M){const w=Math.min(50,Math.abs(v)/M*50);return `left:${v>=0?50:50-w}%;width:${w}%;background:${v>=0?'var(--accent)':'var(--warm)'}`;}
+  function draw(){const a=+$('zr-a').value/100,c=+$('zr-c').value,pool=10*a,inf=pool-c*.5,act=-pool-c*.5*a,pas=0,tot=inf+act+pas;
+    const R=[['知情者',inf],['频繁买卖的不知情者',act],['被动持有者',pas],['合计',tot]];
+    $('zr').innerHTML=R.map(([n,v],i)=>`<div class="zr-r${i===3?' tot':''}"><span>${n}</span><div class="zr-t"><i style="${bar(v,12)}"></i></div><b>${v>=0?'+':'−'}${Math.abs(v).toFixed(1)}</b></div>`).join('');
+    $('zr-av').textContent=Math.round(a*100)+'%';$('zr-cv').textContent=c+' 份';
+    $('zr-msg').textContent=a===0?'没有人陪知情者交易，他们打听来的消息无利可图，还白白付出了成本。':c===0?'不计成本时，知情者赚的恰好等于频繁买卖的不知情者亏的，合计为零。':`知情者赚的，正是频繁买卖的不知情者亏的；扣除 ${c} 份成本之后，合计为负。被动持有者不参与这场竞猜，也不付这笔成本。`;}
+  ['zr-a','zr-c'].forEach(k=>$(k).addEventListener('input',draw));
+  $('zr').addEventListener('anim-in',()=>{let v=0;$('zr-c').value=0;draw();const id=setInterval(()=>{v++;$('zr-c').value=v;draw();if(v>=8)clearInterval(id);},300);});
+  draw();
+})();
+</script>

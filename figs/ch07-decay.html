@@ -1,0 +1,27 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">被发现之后，可预测性会减弱</p><p class="figsub">97 种已发表的收益预测变量，在三个时期的平均收益（以原论文样本期为 100）。</p></div><button class="replay" type="button" data-replay="dc">重播</button></div>
+    <div class="dc" id="dc" data-anim>
+      <div class="dc-row" style="--i:0;--v:100"><span>原论文的样本期</span><div class="dc-t"><i></i></div><b>100</b></div>
+      <div class="dc-row" style="--i:1;--v:74"><span>样本期之外、发表之前</span><div class="dc-t"><i></i></div><b>74</b></div>
+      <div class="dc-row" style="--i:2;--v:42"><span>论文发表之后</span><div class="dc-t"><i></i></div><b>42</b></div>
+      <div class="dc-notes">
+        <p style="--i:3"><em>100 → 74</em>样本期之外的下降：一部分“规律”只是在特定样本里碰巧成立，即数据挖掘带来的偏差。</p>
+        <p style="--i:4"><em>74 → 42</em>发表之后的进一步下降：投资者知道之后据此交易，可以预测的部分被交易消耗。</p>
+      </div>
+    </div>
+  </div>
+  <figcaption>数据来自 McLean 与 Pontiff（2016）：与原论文样本期相比，样本期之外的组合收益平均低 26%，论文发表之后平均低 58%。作者把样本期之外的下降视为统计偏差的上限，把发表之后的额外下降归因于投资者从论文中了解到错误定价并据此交易。</figcaption>
+</figure>
+<style>
+.dc-row{display:grid;grid-template-columns:150px 1fr 40px;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.dc-row b{font-size:18px;font-variant-numeric:tabular-nums;text-align:right}
+.dc-t{height:24px;background:var(--quote);border-radius:6px;overflow:hidden}
+.dc-t i{display:block;height:100%;width:0;background:var(--accent);border-radius:6px;transition:width .8s ease;transition-delay:calc(var(--i)*.6s)}
+.dc-row:nth-child(3) .dc-t i{background:var(--warm)}
+.dc.in .dc-t i{width:calc(var(--v)*1%)}
+.dc-notes p{font-size:13px;color:var(--muted);margin:8px 0 0;opacity:0;transition:opacity .5s;transition-delay:calc(var(--i)*.6s)}
+.dc-notes em{font-style:normal;font-weight:700;color:var(--ink);margin-right:8px;font-variant-numeric:tabular-nums}
+.dc.in .dc-notes p{opacity:1}
+@media (max-width:640px){.dc-row{grid-template-columns:1fr 40px}.dc-row span{grid-column:1/-1}}
+</style>

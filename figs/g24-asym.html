@@ -1,0 +1,34 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">出错之后：归零，还是退一步</p><p class="figsub">一个可靠的书记员，第 4 年出了一次已赔付、已修补的执行错误，第 7 年按约定调回比例后遇上风暴，属于判断失误。切换两种对待错误的方式，看十年里授权的等级与它替他做成的事。</p></div><button class="replay" type="button" data-replay="as24">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="方式">
+      <button type="button" data-as24="zero" aria-pressed="true">任何错误都归零</button>
+      <button type="button" data-as24="kind" aria-pressed="false">按错误的种类调整</button>
+    </div>
+    <div class="as24" id="as24" data-anim>
+      <svg viewBox="0 0 660 170" role="img" aria-label="授权等级"><g id="as24-g"></g></svg>
+      <p class="as24-msg" id="as24-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：授权四级，守约一年升一级；“按错误的种类调整”时，已赔付、已修补的执行错误退一级，判断失误不退级，越界与隐瞒才收回授权。每一级一年替他做成的事分别计 1、2、4、7。</figcaption>
+</figure>
+<style>
+.as24 svg{width:100%;height:auto;display:block}
+.as24-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.as24 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('as24'+id),V=[1,2,4,7],X0=50,X1=628,YB=140,YT=12,bw=(X1-X0)/10,y=l=>YB-(l+1)/4*(YB-YT);
+  function path(m){const L=[];let lv=0;for(let t=0;t<10;t++){L.push(lv);if(t===3){lv=m==='zero'?0:Math.max(0,lv-1);continue;}if(t===6){lv=m==='zero'?0:Math.min(3,lv+1);continue;}lv=Math.min(3,lv+1);}return L;}
+  function set(m){document.querySelectorAll('[data-as24]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.as24===m)));const L=path(m),tot=L.reduce((a,l)=>a+V[l],0),o=path(m==='zero'?'kind':'zero').reduce((a,l)=>a+V[l],0);
+    let h=['一','二','三','四'].map((n,i)=>`<text x="${X0-6}" y="${y(i)+14}" text-anchor="end" font-size="11" class="t-faint">${n}级</text>`).join('');
+    L.forEach((l,t)=>{h+=`<rect x="${X0+t*bw+4}" y="${y(l)}" width="${bw-8}" height="${YB-y(l)}" fill="var(--accent)" opacity="${.35+l*.2}"/><text x="${X0+t*bw+bw/2}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${t+1}</text>`;});
+    h+=`<text x="${X0+3*bw+bw/2}" y="${YT+8}" text-anchor="middle" font-size="11" fill="var(--warm)">执行错误</text><text x="${X0+6*bw+bw/2}" y="${YT+8}" text-anchor="middle" font-size="11" fill="var(--blue)">判断失误</text>`;
+    $('-g').innerHTML=h;
+    $('-msg').textContent=m==='zero'?`任何错误都归零：两次错误都让授权回到第一级，十年里它替他做成的事合计 ${tot}。他也因此一次次回到更差的自行判断。`:`按错误的种类调整：执行错误已赔付、已修补，只退一级；判断失误不退级。十年里它替他做成的事合计 ${tot}，比归零时的 ${o} 多出 ${Math.round((tot/o-1)*100)}%。`;}
+  document.querySelectorAll('[data-as24]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.as24)));
+  $('').addEventListener('anim-in',()=>{set('zero');setTimeout(()=>set('kind'),2400);});
+  set('zero');
+})();
+</script>

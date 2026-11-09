@@ -1,0 +1,33 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The advantage moves from public reports to exclusive data</p><p class="figsub">Divide the information that can give an advantage into two kinds: what can be read from public reports, and what only a few people hold. Drag the price of cognitive labour and see how much advantage each kind still gives.</p></div><button class="replay" type="button" data-replay="dt16">Replay</button></div>
+    <div class="dt16" id="dt16" data-anim>
+      <div class="dt16-bars" id="dt16-b"></div>
+      <div class="sl"><label for="dt16-c">Price of cognitive labour <b id="dt16-cv"></b></label><input id="dt16-c" type="range" min="0" max="2" step="0.1" value="0"></div>
+      <p class="dt16-msg" id="dt16-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the advantage of public reports is calculated with the model in the figure "Where information gathering stops", as the total portions earned each year by the village's informed households. The advantage of exclusive data is 3 portions a year, shared among the data holders, who make up one tenth of households, and does not change with the price of cognitive labour. Amounts are in portions.</figcaption>
+</figure>
+<style>
+.dt16-bars{display:grid;gap:12px;margin:6px 0 10px}
+.dt16-r{display:grid;grid-template-columns:9em 1fr 7.5em;gap:10px;align-items:center;font-size:12.5px}
+.dt16-r div{height:22px;background:var(--quote);border-radius:5px;overflow:hidden}
+.dt16-r i{display:block;height:100%;transition:width .4s}
+.dt16-r b{text-align:right;font-variant-numeric:tabular-nums}
+.dt16-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.dt16-r{grid-template-columns:1fr 7.5em}.dt16-r span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('dt16'+id),N=40,V=9.6,K=.1,VX=3;
+  const gain=f=>V*(K/(f+K))*(1-f)/(f*N);
+  function eq(c){if(gain(1/N)<=c)return 1/N;let lo=1/N,hi=.999;if(gain(hi)>c)return hi;for(let k=0;k<60;k++){const m=(lo+hi)/2;if(gain(m)>c)lo=m;else hi=m;}return lo;}
+  function draw(){const a=Math.pow(10,-+$('-c').value),f=eq(.8*a),pub=V*(K/(f+K))*(1-f),perPub=pub/(f*N),perX=VX/(.1*N);$('-cv').textContent=a>=.1?Math.round(a*100)+'%':(a*100).toFixed(1)+'%';
+    $('-b').innerHTML=[['Advantage of public reports (total)',pub,'var(--accent)',pub.toFixed(2)+' a year'],['Per report reader',perPub,'var(--accent)',perPub.toFixed(2)+' a year'],['Advantage of exclusive data (total)',VX,'var(--warm)',VX.toFixed(2)+' a year'],['Per data-holding household',perX,'var(--warm)',perX.toFixed(2)+' a year']].map(([k,v,c,t])=>`<div class="dt16-r"><span>${k}</span><div><i style="width:${Math.min(100,v/V*100*1.6)}%;background:${c}"></i></div><b>${t}</b></div>`).join('');
+    $('-msg').textContent=a===1?`At the original price of cognitive labour, few people read public reports yet, and together they can earn ${pub.toFixed(1)} portions, more than the 3 portions from exclusive data.`:`With the price of cognitive labour down to ${a>=.1?Math.round(a*100):(a*100).toFixed(1)}%, the share reading public reports rises to about ${Math.round(f*100)}%, and together they earn only ${pub.toFixed(2)} portions, ${perPub.toFixed(2)} each. The 3 portions from exclusive data have not shrunk at all, and each holding household still gets ${perX.toFixed(2)}.`;}
+  $('-c').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{let v=0;$('-c').value=0;draw();const id=setInterval(()=>{v+=.1;$('-c').value=v.toFixed(1);draw();if(v>=2)clearInterval(id);},150);});
+  draw();
+})();
+</script>

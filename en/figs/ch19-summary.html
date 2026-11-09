@@ -1,0 +1,23 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: six requirements for designing agent products</p><p class="figsub">Each corresponds to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="s17">Replay</button></div>
+    <div class="s17" id="s17" data-anim>
+      <div class="s17-c" style="--i:0"><em>Principal–agent</em><b>Treat agency costs as a design object</b><p>Let the principal see what was done, align the agent's interest with the principal's, and cap losses with hard limits.</p></div>
+      <div class="s17-c" style="--i:1"><em>Measure</em><b>Measure value by the principal's input</b><p>Ask how much less time the principal spent and how much checking it took, not how fast the agent finished.</p></div>
+      <div class="s17-c" style="--i:2"><em>Annual value</em><b>Start with tasks that are frequent and costly each time</b><p>Beyond about 5×, how much is saved depends mainly on the input per occurrence and the number of occurrences; capability extension is counted separately.</p></div>
+      <div class="s17-c" style="--i:3"><em>Breakdown</em><b>Cut checking costs before chasing generation speed</b><p>Give the basis and sources, flag key assumptions, highlight what changed, and automate whatever checks can be automated.</p></div>
+      <div class="s17-c" style="--i:4"><em>Verifiability</em><b>Start with tasks whose results can be verified</b><p>Hand the agent first the tasks where the cost of error is manageable; keep human confirmation for those that are hard to verify or whose errors are irreversible.</p></div>
+      <div class="s17-c fin" style="--i:5"><em>Scope of application</em><b>First widen the scope the agent can take on in full</b><p>When the agent covers only a small part of the work, the rest is still done by the principal, and the overall factor stays low.</p></div>
+    </div>
+  </div>
+</figure>
+<style>
+.s17{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.s17-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.25s)}
+.s17-c.fin{border-left-color:var(--warm)}
+.s17-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.s17-c b{display:block;font-size:15px;margin:2px 0 4px}
+.s17-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.s17.in .s17-c{opacity:1;transform:none}
+@media (max-width:640px){.s17{grid-template-columns:1fr}}
+</style>

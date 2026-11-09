@@ -1,0 +1,41 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">利率的下限与上限</p><p class="figsub">出借人的其他选择决定下限，借款人的处境决定上限。切换出借人手上的选择，拖动借款人有多急需，看可以成交的利率区间。</p></div><button class="replay" type="button" data-replay="rt">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="出借人的其他选择">
+      <button type="button" data-rt="store" aria-pressed="true">只能储藏</button>
+      <button type="button" data-rt="seed" aria-pressed="false">还可以留种</button>
+    </div>
+    <div class="rt" id="rt" data-anim>
+      <div class="rt-band"><div class="rt-ax" id="rt-ax"></div><div class="rt-zone" id="rt-z"></div><div class="rt-mk lo" id="rt-lo"><span></span></div><div class="rt-mk hi" id="rt-hi"><span></span></div></div>
+      <div class="sl"><label for="rt-u">借款人有多急需 <b id="rt-uv"></b></label><input id="rt-u" type="range" min="0" max="100" value="50"></div>
+      <p class="rt-msg" id="rt-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：储藏一年损耗一成；留种的回报为 25%；急需程度越高，借款人愿意付出的最高利率越高。</figcaption>
+</figure>
+<style>
+.rt-band{position:relative;height:96px;margin:6px 0 8px}
+.rt-ax{position:absolute;left:0;right:0;top:56px;border-top:1px solid var(--line)}
+.rt-ax span{position:absolute;top:6px;transform:translateX(-50%);font-size:10.5px;color:var(--faint)}
+.rt-zone{position:absolute;top:44px;height:24px;background:var(--accent-soft);border-radius:4px;transition:left .4s,width .4s}
+.rt-mk{position:absolute;top:30px;height:52px;border-left:2px solid var(--ink);transition:left .4s}
+.rt-mk span{position:absolute;top:-28px;white-space:nowrap;font-size:12px;transform:translateX(-50%)}
+.rt-mk.hi{border-color:var(--warm)} .rt-mk.hi span{color:var(--warm)}
+.rt-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),R0=-20,R1=100,px=r=>(r-R0)/(R1-R0)*100;let alt='store';
+  $('rt-ax').innerHTML=[-20,0,20,40,60,80,100].map(v=>`<span style="left:${px(v)}%">${v<0?'−'+(-v):v}%</span>`).join('');
+  function draw(){const u=+$('rt-u').value,lo=alt==='store'?-10:25,hi=-5+u*1.0;
+    $('rt-uv').textContent=u<30?'不太急':u<70?'比较急':'非常急';
+    $('rt-lo').style.left=px(lo)+'%';$('rt-lo').querySelector('span').textContent=`下限 ${lo<0?'−'+(-lo):lo}%`;
+    $('rt-hi').style.left=px(Math.min(hi,R1))+'%';$('rt-hi').querySelector('span').textContent=`上限 ${Math.round(hi)}%`;
+    $('rt-z').style.left=px(lo)+'%';$('rt-z').style.width=Math.max(0,px(Math.min(hi,R1))-px(lo))+'%';
+    $('rt-msg').textContent=hi<lo?'借款人愿意付出的最高利率低于出借人的下限：这笔借贷不会发生。':alt==='store'?`出借人只能储藏时，借出去哪怕收回少一点也比储藏划算，下限是 −10%。可以成交的区间是 −10% 到 ${Math.round(hi)}%。`:`出借人还可以留种，种子有 25% 的回报，借出的利率至少要有 25%。可以成交的区间是 25% 到 ${Math.round(hi)}%。`;}
+  document.querySelectorAll('[data-rt]').forEach(b=>b.addEventListener('click',()=>{alt=b.dataset.rt;document.querySelectorAll('[data-rt]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  $('rt-u').addEventListener('input',draw);
+  $('rt').addEventListener('anim-in',()=>{let v=0;$('rt-u').value=0;draw();const id=setInterval(()=>{v+=5;$('rt-u').value=v;draw();if(v>=80)clearInterval(id);},150);});
+  draw();
+})();
+</script>

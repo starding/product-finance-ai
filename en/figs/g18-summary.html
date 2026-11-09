@@ -1,0 +1,17 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: can an agent correct human bias?</p><p class="figsub">Five conclusions, each tied to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="g18summary">Replay</button></div>
+    <div class="g18summary" id="g18summary" data-anim><div class="g18summary-c" style="--i:0"><em>Rerun: Choice architecture</em><b>A default for each household</b><p>The default no longer aims only at the average person; inertia holds each household closer to what it intended.</p></div><div class="g18summary-c" style="--i:1"><em>Rerun: Quasi-hyperbolic discounting</em><b>A smarter lock</b><p>It adds resistance to impulses and lets emergencies through, on the basis of the agreement the principal wrote in advance.</p></div><div class="g18summary-c warn" style="--i:2"><em>Exploiting bias</em><b>One capability, the opposite direction</b><p>A scribe acting on the number of trades knows best how to push for a trade at the impulsive moment.</p></div><div class="g18summary-c warn" style="--i:3"><em>Misuse and disuse</em><b>Trust must match reliability</b><p>Trust it too much and you stop checking; see it err once and you stop using it. Confirming and answering for key actions in person reduces both biases.</p></div><div class="g18summary-c wide" style="--i:4"><em>Current practice and the ideal</em><b>Respect first, then invite</b><p>A scattered way of investing is also a steady state. Use the principal's own record to show the results, then ask whether he would like to try something else; promise only the quality of the process.</p></div></div>
+  </div>
+</figure>
+<style>
+.g18summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g18summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g18summary-c.warn{border-left-color:var(--warm)}
+.g18summary-c.wide{grid-column:1/-1}
+.g18summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g18summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g18summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g18summary.in .g18summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g18summary{grid-template-columns:1fr}}
+</style>

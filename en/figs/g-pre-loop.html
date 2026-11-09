@@ -1,0 +1,48 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">One step of the derivation: constraint, mechanism and new problem</p><p class="figsub">Each step first introduces a constraint, then sees what mechanism grows from it; the new problem the mechanism leaves becomes the constraint of the next step. Tap "Next step" to move the derivation forward.</p></div><button class="replay" type="button" data-replay="gl">Replay</button></div>
+    <div class="gl" id="gl" data-anim>
+      <div class="gl-row">
+        <div class="gl-c"><em>Constraint</em><b id="gl-k"></b></div>
+        <div class="gl-ar">→</div>
+        <div class="gl-c m"><em>Mechanism</em><b id="gl-m"></b></div>
+        <div class="gl-ar">→</div>
+        <div class="gl-c q"><em>New problem</em><b id="gl-q"></b></div>
+      </div>
+      <div class="gl-steps" id="gl-steps"></div>
+      <div class="gl-ctl"><button type="button" class="replay" id="gl-prev">Previous step</button><button type="button" class="replay" id="gl-next">Next step</button></div>
+    </div>
+  </div>
+  <figcaption>The first five steps as examples; the full derivation is in the chapters of Part One.</figcaption>
+</figure>
+<style>
+.gl-row{display:grid;grid-template-columns:1fr 22px 1fr 22px 1fr;align-items:stretch;gap:4px}
+.gl-c{background:var(--quote);border-radius:10px;padding:10px 12px;min-height:84px;transition:opacity .3s}
+.gl-c em{display:block;font-style:normal;font-size:11px;color:var(--faint);margin-bottom:3px}
+.gl-c b{font-size:14px;font-weight:500;line-height:1.55}
+.gl-c.m{background:var(--accent-soft)} .gl-c.q{background:var(--warm-soft)}
+.gl-ar{align-self:center;text-align:center;color:var(--faint)}
+.gl.fade .gl-c{opacity:.2}
+.gl-steps{display:flex;gap:6px;margin:12px 0 0;flex-wrap:wrap}
+.gl-steps span{font-size:12px;padding:3px 9px;border-radius:999px;background:var(--quote);color:var(--muted);cursor:pointer}
+.gl-steps span.on{background:var(--ink);color:var(--bg)}
+.gl-ctl{display:flex;gap:8px;margin-top:10px}
+@media (max-width:640px){.gl-row{grid-template-columns:1fr}.gl-ar{transform:rotate(90deg)}}
+</style>
+<script>
+(function(){
+  const S=[['One person: income and consumption do not come at the same time','Saving and storage','Stores spoil; when young or ill there is no income to save'],
+    ['Two people: you are short today, I am short tomorrow','Lending and interest','A loan may not be repaid'],
+    ['Promises may not be kept','Collateral, reputation and contracts','With many people, barter rarely matches up'],
+    ['Exchange needs a double coincidence of wants','Money and payment','Future harvests may be good or bad'],
+    ['The future state is uncertain','Insurance and diversification','Savers want to withdraw at any time; borrowers need the money for years']];
+  const $=id=>document.getElementById(id),box=$('gl');let k=0;
+  $('gl-steps').innerHTML=S.map((s,i)=>`<span data-i="${i}">Step ${i+1}</span>`).join('');
+  function set(i){k=(i+S.length)%S.length;box.classList.add('fade');setTimeout(()=>{$('gl-k').textContent=S[k][0];$('gl-m').textContent=S[k][1];$('gl-q').textContent=S[k][2];box.classList.remove('fade');},200);
+    document.querySelectorAll('#gl-steps span').forEach(s=>s.classList.toggle('on',+s.dataset.i===k));}
+  $('gl-next').addEventListener('click',()=>set(k+1));$('gl-prev').addEventListener('click',()=>set(k-1));
+  document.querySelectorAll('#gl-steps span').forEach(s=>s.addEventListener('click',()=>set(+s.dataset.i)));
+  box.addEventListener('anim-in',()=>{set(0);[1,2,3,4].forEach((i,j)=>setTimeout(()=>set(i),1800*(j+1)));});
+  set(0);
+})();
+</script>

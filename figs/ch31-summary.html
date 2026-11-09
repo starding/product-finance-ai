@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">全书小结：在三组约束下设计金融产品</p><p class="figsub">四层设计，各自对应净价值的一部分。</p></div><button class="replay" type="button" data-replay="ch31summary">重播</button></div>
+    <div class="ch31summary" id="ch31summary" data-anim><div class="ch31summary-c" style="--i:0"><em>价值层</em><b>承诺能兑现、能核验的价值</b><p>以净价值衡量，价值落在成本、纪律、行为与可及性上。</p></div><div class="ch31summary-c" style="--i:1"><em>契约层</em><b>按后果约定权力</b><p>把交代写成委托书，不可逆的一步由本人完成，收入与目标站在用户一边。</p></div><div class="ch31summary-c warn" style="--i:2"><em>实现层</em><b>让实现可以被核查</b><p>从易核对的任务做起，缩短无人检查的段落，按时点记录，保障与风险相称。</p></div><div class="ch31summary-c warn" style="--i:3"><em>信任</em><b>以可诊断的证据换取相称的信任</b><p>让证据被看见且难以伪造，失误抢先说明，默认值站在用户一边，以邀请代替说教，退出容易。</p></div></div>
+  </div>
+</figure>
+<style>
+.ch31summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch31summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch31summary-c.warn{border-left-color:var(--warm)}
+.ch31summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch31summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch31summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch31summary.in .ch31summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch31summary{grid-template-columns:1fr}}
+</style>

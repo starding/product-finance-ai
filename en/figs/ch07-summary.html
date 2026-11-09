@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: prices are hard to predict, so what products should not promise</p><p class="figsub">Three design requirements, each tied to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="ch07summary">Replay</button></div>
+    <div class="ch07summary" id="ch07summary" data-anim><div class="ch07summary-c" style="--i:0"><em>The predictable part gets traded away</em><b>Do not promise to predict direction</b><p>Treat claims of “consistently predicting rises and falls” with scepticism first, including claims that come from AI.</p></div><div class="ch07summary-c warn" style="--i:1"><em>People see patterns in randomness</em><b>Do not package winning or losing streaks as signals</b><p>Short-term chart patterns and streaks of rises or falls are mostly normal features of random sequences.</p></div><div class="ch07summary-c warn" style="--i:2"><em>Predictability weakens once discovered</em><b>Every pattern must pass an out-of-sample test</b><p>AI is very good at finding plausible-looking patterns in noise; backtests and patterns must be tested on data not used to build the model.</p></div></div>
+  </div>
+</figure>
+<style>
+.ch07summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch07summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch07summary-c.warn{border-left-color:var(--warm)}
+.ch07summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch07summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch07summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch07summary.in .ch07summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch07summary{grid-template-columns:1fr}}
+</style>

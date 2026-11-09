@@ -1,0 +1,43 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Civilization Simulator · Chapter 22: a visible process</p><p class="figsub">Over ten years the scribe occasionally breaches the agreement; there are also bad runs of years in which results are poor through no fault of its own. Choose how records are kept and how they are checked, set how much time he can spend on checking each year, and see the breaches found, the time he spends, and how often he wrongly blames a scribe that kept the agreement.</p></div><button class="replay" type="button" data-replay="cs22">Replay</button></div>
+    <div class="cs-rules"><span class="on">Product: what to promise</span><span class="on">Product: mandate and authority</span><span class="on">Product: process records and verifiable evidence</span><span class="lock">Limits, confirmation and compensation · Ch. 23</span></div>
+    <div class="cs22-sel"><span>Record</span><div class="seg-btns" role="group" aria-label="Record"><button type="button" data-cs22r="none" aria-pressed="false">No records</button><button type="button" data-cs22r="self" aria-pressed="false">Summary written by the scribe</button><button type="button" data-cs22r="third" aria-pressed="true">Layered records kept by a third party</button></div></div>
+    <div class="cs22-sel"><span>Check</span><div class="seg-btns" role="group" aria-label="Check"><button type="button" data-cs22c="none" aria-pressed="false">Never check</button><button type="button" data-cs22c="all" aria-pressed="false">Check every entry</button><button type="button" data-cs22c="smart" aria-pressed="true">Detailed checks on poor results or triggers + random spot checks</button></div></div>
+    <div class="cs22" id="cs22" data-anim>
+      <div class="sl"><label for="cs22-h">Time he can spend on checking each year <b id="cs22-hv"></b></label><input id="cs22-h" type="range" min="2" max="40" step="1" value="8"></div>
+      <div class="cs22-bars" id="cs22-b"></div>
+            <p class="cs22-msg" id="cs22-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model: the figure shows expected values over ten years. The scribe breaches the agreement 0.6 times a year on average, a third of these hidden among good results; there is a 30% chance each year of a bad run. Without records, a breach can be noticed only when results are poor (20%), and 30% of bad runs are mistaken for breaches. A summary written by the scribe leaves out breaches, so only 30% are found, and mistaken blame falls to 15%. Layered records kept by a third party state the information and basis at the time, so every breach that is checked is found and there is no mistaken blame. Checking every entry takes 30 hours a year and smart checking about 6 hours; when this exceeds his time, only a corresponding share can be checked. With random spot checks, the number of breaches halves.</figcaption>
+</figure>
+<style>
+.cs22-sel{display:grid;grid-template-columns:4em 1fr;gap:8px;align-items:center;font-size:12.5px;color:var(--muted)}
+.cs22-sel .seg-btns{margin:4px 0}
+.cs22-bars{display:grid;gap:10px;margin:8px 0}
+.cs22-r{display:grid;grid-template-columns:9.5em 1fr 5.5em;gap:10px;align-items:center;font-size:12.5px}
+.cs22-r div{height:22px;background:var(--quote);border-radius:5px;overflow:hidden}
+.cs22-r i{display:block;height:100%;transition:width .4s}
+.cs22-r b{text-align:right;font-variant-numeric:tabular-nums}
+.cs22-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs22-sel{grid-template-columns:1fr}.cs22-r{grid-template-columns:1fr 5.5em}.cs22-r span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs22'+id);let rec='third',chk='smart',seed=2222;
+  function sim(H){const need=chk==='all'?30:chk==='smart'?6:0,frac=need?Math.min(1,H/need):0,lam=chk==='smart'?.3:.6,viol=10*lam;
+    let det;if(rec==='none')det=(2/3)*.2;else if(rec==='self')det=chk==='none'?0:.3*frac;else det=chk==='none'?0:chk==='all'?frac:frac*((2/3)+(1/3)*.1);
+    const pw=rec==='none'?.3:rec==='self'?.15:0;return {viol,found:viol*det,wrong:3*pw,time:Math.min(H,need)};}
+  function draw(){const H=+$('-h').value,S=sim(H);$('-hv').textContent=H+' hours';
+    $('-b').innerHTML=[['Breaches found',S.found,6,'var(--accent)',S.found.toFixed(1)+' / '+S.viol.toFixed(0)],['Time spent per year',S.time,30,'var(--gold)',S.time.toFixed(0)+' h'],['Wrongly blamed',S.wrong,1,'var(--warm)',S.wrong.toFixed(1)]].map(([a,v,m,c,t])=>`<div class="cs22-r"><span>${a}</span><div><i style="width:${Math.min(100,v/m*100)}%;background:${c}"></i></div><b>${t}</b></div>`).join('');
+    $('-msg').textContent=rec==='none'?`No records: of an average ${S.viol.toFixed(0)} breaches over ten years, only ${S.found.toFixed(1)} are found, and on average ${S.wrong.toFixed(1)} bad runs are wrongly blamed on the scribe.`:rec==='self'?`The scribe's own summary leaves out breaches, so on average ${S.found.toFixed(1)} are found; he still wrongly blames the scribe ${S.wrong.toFixed(1)} times.`:chk==='none'?'Verifiable records exist, but they are never checked: records by themselves find no breaches.':chk==='all'?`Checking every entry takes 30 hours a year, but he has only ${H}, so he can check only part; over ten years he finds on average ${S.found.toFixed(1)} of ${S.viol.toFixed(0)} breaches.`:`Third-party records with smart checking: only ${S.time.toFixed(0)} hours a year; random spot checks cut breaches to an average of ${S.viol.toFixed(0)}, of which ${S.found.toFixed(1)} are found, and a scribe that keeps the agreement is no longer wrongly blamed.`;}
+  const rb=[...document.querySelectorAll('[data-cs22r]')],cb=[...document.querySelectorAll('[data-cs22c]')];
+  function setR(m){rec=m;rb.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.cs22r===m)));draw();}
+  function setC(m){chk=m;cb.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.cs22c===m)));draw();}
+  rb.forEach(b=>b.addEventListener('click',()=>setR(b.dataset.cs22r)));cb.forEach(b=>b.addEventListener('click',()=>setC(b.dataset.cs22c)));
+  $('-h').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{[['none','none'],['self','smart'],['third','all'],['third','smart']].forEach(([a,b],i)=>setTimeout(()=>{rec=a;chk=b;rb.forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.cs22r===a)));cb.forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.cs22c===b)));draw();},300+i*2200));});
+  draw();
+})();
+</script>

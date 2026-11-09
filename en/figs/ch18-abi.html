@@ -1,0 +1,44 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The three components of trustworthiness</p><p class="figsub">Pick a trustee, or set ability, benevolence and integrity yourself, and see whether a retirement fund could be entrusted to it.</p></div><button class="replay" type="button" data-replay="ab">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Trustee">
+      <button type="button" data-ab="0" aria-pressed="true">Capable salesperson</button>
+      <button type="button" data-ab="1" aria-pressed="false">Well-meaning friend</button>
+      <button type="button" data-ab="2" aria-pressed="false">Conscientious adviser</button>
+    </div>
+    <div class="ab" id="ab" data-anim>
+      <div class="ab-s" id="ab-s"></div>
+      <div class="ab-out"><span>How far it can be trusted</span><div class="ab-t"><i id="ab-bar"></i></div><b id="ab-v"></b></div>
+      <p class="ab-msg" id="ab-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>The three components follow Mayer, Davis and Schoorman (1995). "How far it can be trusted" is the product of the three, for illustration: if any one component is very low, the whole is very low.</figcaption>
+</figure>
+<style>
+.ab-s{display:grid;gap:4px}
+.ab-s .sl label span{font-size:12px;color:var(--faint);margin-left:6px}
+.ab-out{display:grid;grid-template-columns:auto 1fr 50px;gap:10px;align-items:center;margin-top:10px;font-size:13px}
+.ab-out>span{color:var(--faint);font-size:12px}
+.ab-t{height:16px;background:var(--quote);border-radius:8px;overflow:hidden}
+.ab-t i{display:block;height:100%;width:0;border-radius:8px;transition:width .5s,background .3s}
+.ab-out b{text-align:right;font-variant-numeric:tabular-nums}
+.ab-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const F=[['ab','Ability','has the skill to do the job'],['be','Benevolence','cares about the principal\'s interest'],['in','Integrity','acts as it says and keeps to principles']];
+  const P=[[9,2,6,'Highly skilled, but paid from sales: benevolence is very low, and what it recommends depends on what earns it most.'],[2,9,9,'Sincerely cares about the principal and is dependable, but lacks expertise: good intentions cannot turn into good results.'],[8,8,9,'All three components are high: skilled, cares about the principal, acts as it says. Only a trustee like this deserves to be entrusted.']];
+  const box=document.getElementById('ab-s');
+  box.innerHTML=F.map(([k,n,d])=>`<div class="sl"><label for="ab-${k}"><span style="color:var(--ink);font-size:inherit;margin:0">${n}: ${d}</span><b id="ab-${k}v"></b></label><input id="ab-${k}" type="range" min="0" max="10" step="1" value="5"></div>`).join('');
+  let msg='';
+  function r(){const v=F.map(([k])=>+document.getElementById('ab-'+k).value);F.forEach(([k],i)=>document.getElementById('ab-'+k+'v').textContent=v[i]);
+    const t=v[0]*v[1]*v[2]/10,bar=document.getElementById('ab-bar');bar.style.width=t+'%';bar.style.background=t>=50?'var(--accent)':t>=20?'var(--gold)':'var(--warm)';
+    document.getElementById('ab-v').textContent=t.toFixed(0);const lo=F[v.indexOf(Math.min(...v))][1];
+    document.getElementById('ab-msg').textContent=msg||(t>=50?'All three components are high enough; it can be entrusted.':`${lo} is the weakest link and drags the whole down: all three components are needed.`);msg='';}
+  function set(i){document.querySelectorAll('[data-ab]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.ab===i)));F.forEach(([k],j)=>document.getElementById('ab-'+k).value=P[i][j]);msg=P[i][3];r();}
+  F.forEach(([k])=>document.getElementById('ab-'+k).addEventListener('input',()=>{document.querySelectorAll('[data-ab]').forEach(b=>b.setAttribute('aria-pressed','false'));r();}));
+  document.querySelectorAll('[data-ab]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.ab)));
+  document.getElementById('ab').addEventListener('anim-in',()=>{[0,1,2].forEach(i=>setTimeout(()=>set(i),i*2200));});
+  set(0);
+})();
+</script>

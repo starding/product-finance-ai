@@ -1,0 +1,38 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">A jagged capability boundary</p><p class="figsub">Twelve tasks that look similarly difficult; the jagged line is the boundary of the agent's capability. Switch between working with and without the agent and see how results change inside and outside the boundary.</p></div><button class="replay" type="button" data-replay="jg">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Whether the agent is used">
+      <button type="button" data-jg="no" aria-pressed="true">Without the agent</button>
+      <button type="button" data-jg="ai" aria-pressed="false">With the agent</button>
+    </div>
+    <div class="jg" id="jg" data-anim>
+      <svg viewBox="0 0 640 230" role="img" aria-label="Tasks and the capability boundary"><g id="jg-g"></g></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Inside the boundary</span><span><i style="background:var(--warm)"></i>Outside the boundary</span><span><i style="background:var(--quote);border:1px solid var(--faint)"></i>Confidence the agent shows</span></div>
+      <p class="jg-msg" id="jg-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative. The experimental results come from the study of 758 consultants by Dell'Acqua et al. (2023): on tasks inside the boundary, those using the agent completed 12.2% more tasks, 25.1% faster and at more than 40% higher quality; on the task outside the boundary, those using the agent reached the correct conclusion about 19 percentage points less often.</figcaption>
+</figure>
+<style>
+.jg svg{width:100%;height:auto;display:block}
+.jg-b{transition:y .6s ease,height .6s ease}
+.jg-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const IN=[1,1,0,1,1,1,0,1,0,1,1,0],n=12,X0=30,X1=620,YB=200,YT=20,w=(X1-X0)/n,x=i=>X0+i*w;
+  const base=60,y=v=>YB-v/100*(YB-YT);let fr='M'+X0+','+y(88);
+  IN.forEach((v,i)=>{const h=v?88:45;fr+=`L${x(i)},${y(h)}L${x(i)+w},${y(h)}`;});
+  let g=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/><path d="${fr}" fill="none" stroke="var(--ink)" stroke-width="1.5" stroke-dasharray="4 3"/><text x="${X1}" y="${y(95)}" text-anchor="end" font-size="11" class="t-faint">Capability boundary</text>`;
+  IN.forEach((v,i)=>{g+=`<rect class="jg-c" x="${x(i)+w*.2}" width="${w*.6}" y="${y(80)}" height="${y(0)-y(80)}" rx="3" fill="var(--quote)" stroke="var(--faint)" stroke-dasharray="2 2" opacity="0"/><rect class="jg-b" data-i="${i}" x="${x(i)+w*.28}" width="${w*.44}" rx="3" fill="${v?'var(--accent)':'var(--warm)'}" style="y:${y(base)}px;height:${y(0)-y(base)}px"/><text x="${x(i)+w/2}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${i+1}</text>`;});
+  document.getElementById('jg-g').innerHTML=g;
+  const bs=[...document.querySelectorAll('.jg-b')],cs=[...document.querySelectorAll('.jg-c')];
+  function set(k){document.querySelectorAll('[data-jg]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.jg===k)));
+    bs.forEach((b,i)=>{const v=k==='ai'?(IN[i]?85:41):base;b.style.y=y(v)+'px';b.style.height=(y(0)-y(v))+'px';});
+    cs.forEach(c=>c.setAttribute('opacity',k==='ai'?1:0));
+    document.getElementById('jg-msg').textContent=k==='ai'?'On tasks inside the boundary, results clearly improve; on tasks outside it, they get worse. The agent shows almost the same confidence on both kinds of task (dashed boxes), so users can hardly tell them apart from the outside.':'Without the agent, the quality of work on the twelve tasks is roughly the same.';}
+  document.querySelectorAll('[data-jg]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.jg)));
+  document.getElementById('jg').addEventListener('anim-in',()=>{set('no');setTimeout(()=>set('ai'),1800);});
+  set('no');
+})();
+</script>

@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Liability and conflicts of interest</title>
+<meta name="description" content="Product × Finance × AI: Financial Products in the Age of AI, Chapter 27: a financial agent serves both the user and the platform that provides it, and the conflict is written into its objective; disclosure is not enough to remove the conflict, which must be aligned structurally through fees, objective constraints and audit; liability should fall on the party that can avoid the loss at lowest cost, traced through complete records">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="ch27">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="Contents">
+<div class="side-head"><a class="sidetitle" href="index.html">Product × Finance × AI<small>Financial Products in the Age of AI</small></a></div>
+<div class="side-view" role="group" aria-label="Way of reading"><a href="preface.html" class="on" aria-current="true">Decomposition</a><a href="g-preface.html">Derivation</a></div>
+<a class="side-about" href="index.html#about">About this book</a>
+<a class="" href="preface.html"><span class="n">Preface</span>Why financial products must be relearned in the age of AI</a>
+<a class="side-part" href="part1.html"><span class="pn">Part One</span>Markets: where returns and risks come from</a>
+<a class="" href="ch01.html"><span class="n">1</span>What financial products sell</a>
+<a class="" href="ch02.html"><span class="n">2</span>Interest rates and maturity</a>
+<a class="" href="ch03.html"><span class="n">3</span>What risk looks like</a>
+<a class="" href="ch04.html"><span class="n">4</span>Diversification</a>
+<a class="" href="ch05.html"><span class="n">5</span>Compounding and volatility drag</a>
+<a class="" href="ch06.html"><span class="n">6</span>Factors</a>
+<a class="" href="ch07.html"><span class="n">7</span>Why prices are hard to predict</a>
+<a class="" href="ch08.html"><span class="n">8</span>How information gets into prices</a>
+<a class="" href="ch09.html"><span class="n">9</span>Traders in the market</a>
+<a class="" href="ch10.html"><span class="n">10</span>Liquidity and the bid-ask spread</a>
+<a class="" href="ch11.html"><span class="n">11</span>Orders, rules and market structure</a>
+<a class="" href="ch12.html"><span class="n">12</span>The arithmetic of active management</a>
+<a class="" href="ch13.html"><span class="n">13</span>How promises are kept</a>
+<a class="" href="ch14.html"><span class="n">14</span>Why regulation exists</a>
+<a class="side-part" href="part2.html"><span class="pn">Part Two</span>Users: what people want and what they can bear</a>
+<a class="" href="ch15.html"><span class="n">15</span>The jobs users need done</a>
+<a class="" href="ch16.html"><span class="n">16</span>How users make decisions</a>
+<a class="" href="ch17.html"><span class="n">17</span>What users can bear</a>
+<a class="" href="ch18.html"><span class="n">18</span>How users judge and trust</a>
+<a class="side-part" href="part3.html"><span class="pn">Part Three</span>AI: how much an agent can do on people&#x27;s behalf</a>
+<a class="" href="ch19.html"><span class="n">19</span>The amplification factor</a>
+<a class="" href="ch20.html"><span class="n">20</span>Which tasks can be handed to AI</a>
+<a class="" href="ch21.html"><span class="n">21</span>Where capability comes from, and where it fails</a>
+<a class="" href="ch22.html"><span class="n">22</span>Verifiability: the cost of checking</a>
+<a class="" href="ch23.html"><span class="n">23</span>The special constraints of finance</a>
+<a class="side-part" href="part4.html"><span class="pn">Part Four</span>Design: financial products under three sets of constraints</a>
+<a class="" href="ch24.html"><span class="n">24</span>What to promise</a>
+<a class="" href="ch25.html"><span class="n">25</span>Mandate parameters</a>
+<a class="" href="ch26.html"><span class="n">26</span>Authority and irreversible exposure</a>
+<a class=" cur" href="ch27.html" aria-current="page"><span class="n">27</span>Liability and conflicts of interest</a>
+<a class="" href="ch28.html"><span class="n">28</span>Capability assembly and process visibility</a>
+<a class="" href="ch29.html"><span class="n">29</span>Assurance level</a>
+<a class="" href="ch30.html"><span class="n">30</span>How trust is built</a>
+<a class="" href="ch31.html"><span class="n">31</span>Design principles</a>
+<a class="side-app" href="estimates.html"><span class="n">Appendix</span>Methods and data behind the author&#x27;s estimates</a>
+<a class="side-app" href="method.html"><span class="n">Appendix</span>How this book was written</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="Open contents" title="Contents"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">Product × Finance × AI: Financial Products in the Age of AI</a><span>Part Four · Contract layer  On what terms</span><a class="langlink" href="../ch27.html" hreflang="zh-CN">中文</a></header>
+
+<div class="chapno">Chapter 27</div><h1>Liability and conflicts of interest<small>Whom the agent works for, and who is responsible when it errs</small></h1>
+<blockquote><p>A financial agent nominally works for the user, yet it is provided by the platform, paid for by the platform, and trained and evaluated against objectives the platform sets. If the platform's revenue comes from trading volume and time spent in the app, that interest will be written into the agent's objective: one more alert, one more trade, one more paid service. Disclosing the conflict does not remove it; research has even found that after disclosure, advice may become more biased, while those receiving it do not discount it accordingly. The more reliable remedy is structural: revenue that does not rise or fall with trading volume, an agent whose objective is measured by the user's net value, and independent audit. When the agent errs, liability should fall on the party that could have avoided the loss at the lowest cost; and to apportion liability, every step must first have a complete record.</p></blockquote>
+<h2 id="sec-1">1. Whom the agent works for</h2>
+<p>The classic principal–agent relationship has a single principal. A financial agent faces at least several parties at once: the user who uses it, the platform that provides and operates it, the issuers who sell products on the platform, and the company that supplies the underlying model. Bernheim and Whinston (1986) called the case of one agent serving several principals at once common agency: each party influences the agent's behaviour by paying it or setting its objectives, and the agent's eventual choice is a balance struck among these influences. The user is the nominal principal, yet is often not the party that pays most directly or has the most influence on the objective.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">One agent, several principals</p><p class="figsub">Switch views: where the money flows, who sets the agent's objectives, and whom the agent ought to serve. The thicker the line, the greater the influence (illustrative). "Issuer" means product issuers; "Model firm" means the model provider.</p></div><button class="replay" type="button" data-replay="pt">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="View">
+      <button type="button" data-pt="m" aria-pressed="true">Money flows</button>
+      <button type="button" data-pt="g" aria-pressed="false">Who sets objectives</button>
+      <button type="button" data-pt="s" aria-pressed="false">Whom it should serve</button>
+    </div>
+    <div class="pt" id="pt" data-anim>
+      <svg viewBox="0 0 640 260" role="img" aria-label="Relationships between the agent and the parties"><defs><marker id="pt-ar" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" fill="context-stroke"/></marker></defs><g id="pt-e"></g><g id="pt-n"></g></svg>
+      <p class="pt-msg" id="pt-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative structure. The case of one agent influenced by several principals at once is called common agency; see Bernheim and Whinston (1986).</figcaption>
+</figure>
+<style>
+.pt svg{width:100%;height:auto;display:block}
+.pt-ln{fill:none;transition:stroke-width .5s,opacity .5s}
+.pt-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.pt svg text{font-size:17px}}
+</style>
+<script>
+(function(){
+  const N={a:[320,130,'Agent','var(--ink)'],u:[90,130,'User','var(--accent)'],p:[550,130,'Platform','var(--blue)'],i:[430,235,'Issuer','var(--gold)'],m:[210,235,'Model firm','var(--faint)']};
+  const E={m:[['u','p',5,'Subscriptions, commissions'],['i','p',6,'Sales revenue share'],['p','m',3,'Usage fees'],['p','a',2,'']],
+    g:[['p','a',7,'Objectives and metrics'],['m','a',4,'Model training objective'],['u','a',2,'Mandate'],['i','a',2,'Product info and promotion']],
+    s:[['a','u',8,'Act on the user\'s mandate and net value'],['a','p',1,''],['a','i',1,'']]};
+  const M={m:'The user\'s money flows to the platform, which also takes a revenue share from product issuers and in turn pays the model provider. The agent itself is paid nothing, but its provider is paid from several directions.',g:'The platform has the most influence over the agent\'s objectives: whatever metrics it uses to evaluate the agent, the agent optimizes toward. The user influences it through the mandate, but is often not the most influential party.',s:'The agent ought to serve the user, acting on the user\'s mandate and net value. The gap between the first two views and this one is the conflict of interest.'};
+  const $=id=>document.getElementById(id);
+  $('pt-n').innerHTML=Object.entries(N).map(([k,[x,y,t,c]])=>`<g><circle cx="${x}" cy="${y}" r="${k==='a'?38:30}" fill="var(--surface)" stroke="${c}" stroke-width="2.5"/><text x="${x}" y="${y+4}" text-anchor="middle" font-size="${k==='a'?14:12}" class="t-ink">${t}</text></g>`).join('');
+  function set(k){document.querySelectorAll('[data-pt]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.pt===k)));
+    $('pt-e').innerHTML=E[k].map(([f,t,w,l])=>{const [x1,y1]=N[f],[x2,y2]=N[t],dx=x2-x1,dy=y2-y1,L=Math.hypot(dx,dy),r1=f==='a'?40:32,r2=t==='a'?42:34,sx=x1+dx/L*r1,sy=y1+dy/L*r1,ex=x2-dx/L*r2,ey=y2-dy/L*r2,mx=(sx+ex)/2-dy/L*18,my=(sy+ey)/2+dx/L*18;
+      return `<path class="pt-ln" d="M${sx},${sy}Q${mx},${my} ${ex},${ey}" stroke="${N[k==='s'?t:f][3]}" stroke-width="${w*1.3}" opacity="${w>1?.85:.25}" marker-end="url(#pt-ar)"/>${l?`<text x="${mx}" y="${my-6}" text-anchor="middle" font-size="11" class="t-muted">${l}</text>`:''}`;}).join('');
+    $('pt-msg').textContent=M[k];}
+  document.querySelectorAll('[data-pt]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.pt)));
+  $('pt').addEventListener('anim-in',()=>{['m','g','s'].forEach((k,i)=>setTimeout(()=>set(k),i*2600));});
+  set('m');
+})();
+</script>
+
+<h2 id="sec-2">2. The conflict is written into the objective</h2>
+<p>An AI agent's behaviour is determined by the objectives against which it is set up and evaluated. Holmström and Milgrom (1991) showed that when an agent's work has several aspects and only some are measured and rewarded, the agent shifts effort toward the part that is measured. If the platform evaluates the agent by trading volume, clicks and time spent, the agent will send alerts more often and recommend trades more actively; gains in these measures do not mean better outcomes for the user. In 2021 the U.S. Securities and Exchange Commission sought public comment on the digital engagement practices of brokers and investment advisers, and its concern was precisely the effect of gamified design, push notifications and prompts on investor behaviour.</p>
+<figure>
+  <div class="card">
+    <p class="figtitle">How much weight the platform carries in the metrics</p>
+    <p class="figsub">The agent is evaluated on a weighted mix of two parts: the user's net value, and the platform's trading volume and time spent. Drag the weight on the platform's metrics to see the agent's behaviour and the user's outcome (illustrative).</p>
+    <div class="ob" id="ob" data-anim>
+      <svg viewBox="0 0 640 200" role="img" aria-label="Weight and outcomes"><g id="ob-ax"></g><path id="ob-u" class="ob-l u"/><path id="ob-p" class="ob-l p"/><line id="ob-c" class="ob-c"/></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>User's net annual return</span><span><i style="background:var(--blue)"></i>Platform's annual revenue from this user</span></div>
+      <div class="sl"><label for="ob-w">Weight on platform metrics <b id="ob-wv"></b></label><input id="ob-w" type="range" min="0" max="100" step="5" value="0"></div>
+      <div class="ob-out"><div><span>Trade suggestions per month</span><b id="ob-n"></b></div><div><span>User's net return</span><b id="ob-r"></b></div><div><span>Platform revenue</span><b id="ob-q"></b></div></div>
+    </div>
+  </div>
+  <figcaption>Illustrative model: for each extra trade suggestion, about half of users follow it; each trade costs about 0.05% of assets, part of which goes to the platform; trading itself does not raise expected returns. On agents shifting effort toward the measured part when only part of the work is measured, see Holmström and Milgrom (1991).</figcaption>
+</figure>
+<style>
+.ob svg{width:100%;height:auto;display:block}
+.ob-l{fill:none;stroke-width:2.5} .ob-l.u{stroke:var(--accent)} .ob-l.p{stroke:var(--blue)}
+.ob-c{stroke:var(--ink);stroke-dasharray:3 3}
+.ob-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.ob-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.ob-out span{display:block;font-size:12px;color:var(--faint)} .ob-out b{font-size:19px;font-variant-numeric:tabular-nums}
+@media (max-width:640px){.ob-out{grid-template-columns:1fr}.ob svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const n=w=>1+w/100*11,cost=w=>n(w)*12*.5*.05,R=w=>6-cost(w),P=w=>.3+cost(w)*.4;
+  const X0=50,X1=620,YT=14,YB=170,x=w=>X0+w/100*(X1-X0),y=v=>YB-(v+.5)/7*(YB-YT);
+  const $=id=>document.getElementById(id),sl=$('ob-w');
+  $('ob-ax').innerHTML=`<line x1="${X0}" y1="${y(0)}" x2="${X1}" y2="${y(0)}" class="s-faint"/>`+[0,2,4,6].map(v=>`<text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}%</text>`).join('')+[0,50,100].map(w=>`<text x="${x(w)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${w}%</text>`).join('');
+  let a='',b='';for(let w=0;w<=100;w+=2){a+=(w?'L':'M')+x(w).toFixed(1)+','+y(R(w)).toFixed(1);b+=(w?'L':'M')+x(w).toFixed(1)+','+y(P(w)).toFixed(1);}$('ob-u').setAttribute('d',a);$('ob-p').setAttribute('d',b);
+  function r(){const w=+sl.value;$('ob-wv').textContent=w+'%';$('ob-c').setAttribute('x1',x(w));$('ob-c').setAttribute('x2',x(w));$('ob-c').setAttribute('y1',YT);$('ob-c').setAttribute('y2',YB);
+    $('ob-n').textContent=n(w).toFixed(0)+'';$('ob-r').textContent=R(w).toFixed(1)+'%';$('ob-q').textContent=P(w).toFixed(2)+'%';}
+  sl.addEventListener('input',r);
+  $('ob').addEventListener('anim-in',()=>{let w=0;sl.value=0;r();const id=setInterval(()=>{w+=5;sl.value=w;r();if(w>=100){clearInterval(id);setTimeout(()=>{sl.value=0;r();},700);}},110);});
+  r();
+})();
+</script>
+
+<h2 id="sec-3">3. Why disclosure is not enough</h2>
+<p>The most common remedy is to tell users about the conflict of interest. Yet experiments by Cain, Loewenstein and Moore (2005) found that disclosure can backfire: after disclosing, advisers felt they had met their duty to inform and gave even more biased advice; those receiving the advice knew of the conflict but did not discount the advice enough. As a result, after disclosure the advised party ended up worse off. Disclosure is necessary, but it hands the burden of recognizing the conflict to the people least able to recognize it.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Why outcomes can be worse after disclosure</p><p class="figsub">There is a conflict of interest between the adviser and the person advised. Switch whether the conflict is disclosed, and see the bias in the advice, the discount the recipient applies, and the recipient's final error (illustrative).</p></div><button class="replay" type="button" data-replay="ds2">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Disclosure"><button type="button" data-ds2="0" aria-pressed="true">No disclosure</button><button type="button" data-ds2="1" aria-pressed="false">Conflict disclosed</button></div>
+    <div class="ds2" id="ds2" data-anim>
+      <div class="ds2-r"><span>How far the advice departs from the truth</span><div class="ds2-t"><i id="ds2-a" style="background:var(--warm)"></i></div><b id="ds2-av"></b></div>
+      <div class="ds2-r"><span>Discount the recipient applies</span><div class="ds2-t"><i id="ds2-b" style="background:var(--accent)"></i></div><b id="ds2-bv"></b></div>
+      <div class="ds2-r tot"><span>Recipient's final error</span><div class="ds2-t"><i id="ds2-c" style="background:var(--ink)"></i></div><b id="ds2-cv"></b></div>
+      <p class="ds2-msg" id="ds2-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative numbers; the directions follow the experiments of Cain, Loewenstein and Moore (2005): after disclosure, advisers gave more biased advice, and recipients' discounts were not enough to offset it.</figcaption>
+</figure>
+<style>
+.ds2-r{display:grid;grid-template-columns:150px 1fr 50px;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.ds2-r span{color:var(--muted)} .ds2-r.tot span{color:var(--ink);font-weight:700}
+.ds2-t{height:16px;background:var(--quote);border-radius:8px;overflow:hidden}
+.ds2-t i{display:block;height:100%;border-radius:8px;transition:width .6s ease}
+.ds2-r b{text-align:right;font-variant-numeric:tabular-nums}
+.ds2-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.ds2-r{grid-template-columns:110px 1fr 40px}}
+</style>
+<script>
+(function(){
+  const S=[[30,0,'Without disclosure, the advice departs from the truth by 30 units; the recipient does not notice, and the error is 30.'],[48,12,'After disclosure, the adviser feels the duty to inform has been met and the advice becomes more biased; the recipient knows of the conflict but discounts only a small part, so the final error is actually larger.']];
+  function set(k){document.querySelectorAll('[data-ds2]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.ds2===k)));const [a,b,m]=S[k],c=a-b;
+    [['a',a],['b',b],['c',c]].forEach(([id,v])=>{document.getElementById('ds2-'+id).style.width=v/50*100+'%';document.getElementById('ds2-'+id+'v').textContent=v;});document.getElementById('ds2-msg').textContent=m;}
+  document.querySelectorAll('[data-ds2]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.ds2)));
+  document.getElementById('ds2').addEventListener('anim-in',()=>{set(0);setTimeout(()=>set(1),2400);});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-4">4. Structural alignment</h2>
+<p>More reliable than disclosure is to make conflicts structurally hard to arise. First, the fee model: the agent's revenue does not vary with the number of trades or the products recommended, as with a fixed subscription. Second, objective constraints: the agent is evaluated on the user's net value and its adherence to the mandate, not on trading volume and time spent. Third, information separation: when making a recommendation, the agent cannot see how much revenue each product brings the platform. Fourth, independent audit: regular checks on whether the agent's recommendations lean systematically toward options that favour the platform. In 2023 the U.S. Securities and Exchange Commission proposed a rule requiring brokers and investment advisers to identify and eliminate conflicts of interest in predictive data analytics; the proposal was withdrawn in 2025, but the question it raised is exactly the one AI agents must answer.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Structural alignment, not just disclosure</p><p class="figsub">Add four structural arrangements one by one and see how much room the agent has left to lean toward the platform's interest (illustrative).</p></div><button class="replay" type="button" data-replay="al2">Replay</button></div>
+    <div class="al2-sl" id="al2-sl"></div>
+    <div class="al2" id="al2" data-anim>
+      <div class="al2-m"><span>Room to favour the platform</span><div class="al2-t"><i id="al2-bar"></i></div><b id="al2-v"></b></div>
+      <div class="al2-list" id="al2-list"></div>
+    </div>
+  </div>
+  <figcaption>Illustrative. The U.S. Securities and Exchange Commission's 2023 proposed rule (Release No. 34-97990, withdrawn in 2025) would have required firms to identify and eliminate conflicts of interest in predictive data analytics.</figcaption>
+</figure>
+<style>
+.al2-sl{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px;margin-bottom:8px}
+.al2-sl label{display:flex;gap:6px;align-items:center;font-size:13.5px;cursor:pointer}
+.al2-sl input{accent-color:var(--accent);width:16px;height:16px}
+.al2-m{display:grid;grid-template-columns:150px 1fr 50px;gap:10px;align-items:center;font-size:13px}
+.al2-m span{color:var(--muted)}
+.al2-t{height:18px;background:var(--quote);border-radius:9px;overflow:hidden}
+.al2-t i{display:block;height:100%;border-radius:9px;background:var(--warm);transition:width .6s ease}
+.al2-m b{text-align:right;font-variant-numeric:tabular-nums}
+.al2-list{display:grid;gap:5px;margin-top:10px}
+.al2-i{font-size:13px;line-height:1.6;background:var(--quote);border-radius:8px;padding:7px 10px;border-left:3px solid var(--line);transition:all .3s}
+.al2-i.on{border-left-color:var(--accent);background:var(--accent-soft)}
+.al2-i b{font-size:13.5px}
+@media (max-width:640px){.al2-sl{grid-template-columns:1fr}.al2-m{grid-template-columns:100px 1fr 40px}}
+</style>
+<script>
+(function(){
+  const S=[['Revenue does not vary with trades or recommendations',35,'A fixed subscription: whether the agent suggests one more trade or recommends one more product, the platform\'s revenue stays the same.'],['Evaluate the agent on the user\'s net value and compliance',30,'The agent\'s metrics no longer include trading volume or time spent, so it optimizes toward the user\'s outcome.'],['Revenue by product hidden when advising',15,'When making a recommendation, the agent cannot know which product brings the platform more revenue.'],['Regular independent audit of bias in advice',12,'Check whether the agent\'s recommendations lean systematically toward options that favour the platform, and publish the results.']];
+  const box=document.getElementById('al2-sl');box.innerHTML=S.map(([n],i)=>`<label><input type="checkbox" data-al2="${i}"> ${n}</label>`).join('');
+  document.getElementById('al2-list').innerHTML=S.map(([n,,d])=>`<div class="al2-i"><b>${n}</b>: ${d}</div>`).join('');
+  const cb=[...document.querySelectorAll('[data-al2]')],li=[...document.querySelectorAll('.al2-i')];
+  function r(){let v=100;cb.forEach((c,i)=>{if(c.checked)v-=S[i][1];li[i].classList.toggle('on',c.checked);});document.getElementById('al2-bar').style.width=v+'%';document.getElementById('al2-v').textContent=v;}
+  cb.forEach(c=>c.addEventListener('change',r));
+  document.getElementById('al2').addEventListener('anim-in',()=>{cb.forEach(c=>c.checked=false);r();cb.forEach((c,i)=>setTimeout(()=>{c.checked=true;r();},900*(i+1)));});
+  r();
+})();
+</script>
+
+<h2 id="sec-5">5. Who is responsible when it goes wrong</h2>
+<p>Agents err for different reasons: the agent misread the mandate, a data source supplied a wrong price, the execution layer failed to block an instruction that crossed a limit, or the agent followed the user's explicit instruction and the result was poor. Calabresi (1970) proposed that liability for an accident should fall on the party able to avoid it at the lowest cost. By this principle, losses from execution beyond the limits should be borne by the platform, because it controls the execution layer's checks; data errors are borne by the party that supplied the data; if the agent misreads a clearly written mandate, the platform bears it; and if the agent follows the user's own explicit instruction and the result falls short of expectations, the user bears it. Liability follows control: whoever can avoid the loss is responsible for it.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Whoever can avoid it most cheaply is responsible</p><p class="figsub">Six cases of an agent going wrong. Tap "Assign liability" to see who should bear the loss under the least-cost-avoider principle.</p></div><button class="replay" type="button" id="lb-go">Assign liability</button></div>
+    <div class="lb" id="lb" data-anim></div>
+    <p class="lb-msg" id="lb-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>Illustrative judgments, not legal advice. For the least-cost-avoider principle, see Calabresi (1970); actual allocation of liability depends on local law and contract terms.</figcaption>
+</figure>
+<style>
+.lb{display:grid;gap:5px}
+.lb-r{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr) 90px;gap:10px;align-items:center;font-size:12.5px;background:var(--quote);border-radius:8px;padding:7px 10px}
+.lb-r span:nth-child(2){color:var(--muted);font-size:12px}
+.lb-r b{text-align:center;font-size:12px;border-radius:6px;padding:3px 6px;opacity:0;transform:scale(.8);transition:opacity .3s,transform .3s;transition-delay:calc(var(--i)*.2s)}
+.lb.on .lb-r b{opacity:1;transform:none}
+.lb-r b.p{background:rgba(47,95,158,.14);color:var(--blue)} .lb-r b.u{background:var(--accent-soft);color:var(--accent)} .lb-r b.d{background:rgba(160,120,24,.15);color:var(--gold)}
+.lb-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.lb-r{grid-template-columns:1fr 80px}.lb-r span:nth-child(2){grid-column:1/-1;grid-row:2}}
+</style>
+<script>
+(function(){
+  const C=[['The execution layer failed to block an instruction above the per-trade limit','The platform controls the execution layer\'s checks','Platform','p'],['The agent misread a clearly written mandate','The platform selects and tests the agent','Platform','p'],['A data source sent a wrong price','The data provider controls data quality','Data provider','d'],['The mandate was vague, and the agent acted on a reasonable reading','The principal is best placed to state requirements clearly','Shared','u'],['The agent followed the user\'s explicit instruction, and the result fell short','The decision came from the user','User','u'],['The agent reminded on time; the user did not act and missed the deadline','The reminder was delivered; the decision was the user\'s','User','u']];
+  const box=document.getElementById('lb');
+  box.innerHTML=C.map(([a,b,c,k],i)=>`<div class="lb-r"><span>${a}</span><span>${b}</span><b class="${k}" style="--i:${i}">${c}</b></div>`).join('');
+  function go(){box.classList.remove('on');void box.offsetWidth;box.classList.add('on');document.getElementById('lb-msg').textContent='Liability follows control: the party that could have avoided this loss at the lowest cost bears it. Allocating it this way also gives every party a reason to get its own part right.';}
+  document.getElementById('lb-go').addEventListener('click',go);
+  box.addEventListener('anim-in',()=>setTimeout(go,600));
+})();
+</script>
+
+<h2 id="sec-6">6. Liability must be traceable</h2>
+<p>Apportioning liability requires being able to reconstruct afterwards what happened: what data the agent saw at the time, which clause of the mandate it relied on, whose authorization it had, and what checks the execution layer performed. The securities industry has long had record-keeping requirements; for example, the U.S. Securities and Exchange Commission's Rule 17a-4 specifies the records brokers must keep and how they must keep them. For an AI agent, the record must cover every key action: the input data and its point in time, the clause relied on, the level of authority, and the result of execution. Only with a complete record can liability be apportioned, compensation be grounded, and the same error be avoided.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Records decide whether liability can be apportioned</p><p class="figsub">An incident: the agent sold part of a holding beyond the agreed proportion. Afterwards, six questions need answers. Switch how complete the records are and see how many can be answered.</p></div><button class="replay" type="button" data-replay="tr">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Records"><button type="button" data-tr="0" aria-pressed="true">Trade records only</button><button type="button" data-tr="1" aria-pressed="false">Every key action recorded</button></div>
+    <div class="tr" id="tr" data-anim></div>
+    <p class="tr-msg" id="tr-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>Illustrative. For the records brokers must keep and how, see the U.S. Securities and Exchange Commission's Rule 17a-4; for AI agents, records must also cover inputs, the basis for action and authorization.</figcaption>
+</figure>
+<style>
+.tr{display:grid;gap:5px}
+.tr-r{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:10px;align-items:center;font-size:12.5px;background:var(--quote);border-radius:8px;padding:7px 10px;opacity:0;transform:translateY(4px);transition:opacity .3s,transform .3s;transition-delay:calc(var(--i)*.12s)}
+.tr-r.on{opacity:1;transform:none}
+.tr-r span:last-child{border-radius:6px;padding:3px 8px}
+.tr-r .k{background:var(--accent-soft);color:var(--ink)} .tr-r .n{background:var(--surface);color:var(--faint);border:1px dashed var(--line)}
+.tr-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.tr-r{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const Q=[['What was sold, and when was it filled','Sold 1,200 shares, filled at 10:32',1],['The price and holding weight the agent saw at the time','Market data at 10:31:58; holding weight 38% (mandate limit 30%)',0],['Which clause of the mandate it relied on','Clause 3: when a single holding exceeds 30%, reduce it to 30%',0],['Why it sold more than needed','The agent misread "reduce to 30%" as "reduce by 30%"',0],['Whether the execution layer ran checks','Checked instrument and per-trade amount, but not the post-trade weight (missing check)',0],['Whether the principal was notified','Notice sent at 10:33, read by the principal at 10:40',0]];
+  const box=document.getElementById('tr');
+  function set(k){document.querySelectorAll('[data-tr]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.tr===k)));
+    box.innerHTML=Q.map(([q,a,base],i)=>{const ok=k||base;return `<div class="tr-r" style="--i:${i}"><span>${q}</span><span class="${ok?'k':'n'}">${ok?a:'Cannot be reconstructed'}</span></div>`;}).join('');
+    setTimeout(()=>box.querySelectorAll('.tr-r').forEach(e=>e.classList.add('on')),40);
+    document.getElementById('tr-msg').textContent=k?'All six questions can be answered: the error came from the agent misreading a clause, and the execution layer lacked one check. The platform bears liability, compensation has a basis, and the missing check can be added.':'With trade records alone, we know only what was sold, not why. Liability cannot be apportioned, and there is no way to prevent the same error.';}
+  document.querySelectorAll('[data-tr]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.tr)));
+  box.addEventListener('anim-in',()=>{set(0);setTimeout(()=>set(1),2600);});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-7">7. Implications for product design</h2>
+<p>Put the agent's revenue and objective on the user's side, and handle conflicts through structure rather than disclosure; liability follows control and rests on a complete record.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: keeping the agent on the user's side</p><p class="figsub">Four design requirements, each corresponding to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="ch27summary">Replay</button></div>
+    <div class="ch27summary" id="ch27summary" data-anim><div class="ch27summary-c" style="--i:0"><em>The agent has several principals</em><b>Make clear that the agent serves the user</b><p>Write the mandate and the user's net value into the agent's objective, and tell users where the platform makes its money.</p></div><div class="ch27summary-c" style="--i:1"><em>The conflict is written into the objective</em><b>Do not evaluate the agent on trading volume or time spent</b><p>Base the metrics mainly on the user's net value and adherence to the mandate, and monitor how often trades are suggested.</p></div><div class="ch27summary-c warn" style="--i:2"><em>Disclosure is not enough</em><b>Handle conflicts through structure</b><p>Revenue does not vary with trades or recommendations; product revenue is hidden when advising; bias in advice is independently audited at regular intervals.</p></div><div class="ch27summary-c warn" style="--i:3"><em>Liability follows control</em><b>Assign liability to the least-cost avoider, and keep complete records</b><p>Execution and data errors are borne by the party in control; every key action records inputs, basis, authorization and checks, which ground compensation and improvement when things go wrong.</p></div></div>
+  </div>
+</figure>
+<style>
+.ch27summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch27summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch27summary-c.warn{border-left-color:var(--warm)}
+.ch27summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch27summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch27summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch27summary.in .ch27summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch27summary{grid-template-columns:1fr}}
+</style>
+
+<h2 id="sec-8">References</h2>
+<ul class="refs"><li>Bernheim, B. D., &amp; Whinston, M. D. (1986). Common agency. <i>Econometrica</i>, 54(4), 923–942.</li><li>Holmström, B., &amp; Milgrom, P. (1991). Multitask principal-agent analyses: Incentive contracts, asset ownership, and job design. <i>Journal of Law, Economics, &amp; Organization</i>, 7(Special Issue), 24–52.</li><li>U.S. Securities and Exchange Commission (2021). Request for Information and Comments on Broker-Dealer and Investment Adviser Digital Engagement Practices. Release No. 34-92766; IA-5833.</li><li>Cain, D. M., Loewenstein, G., &amp; Moore, D. A. (2005). The dirt on coming clean: Perverse effects of disclosing conflicts of interest. <i>Journal of Legal Studies</i>, 34(1), 1–25.</li><li>U.S. Securities and Exchange Commission (2023). Conflicts of Interest Associated with the Use of Predictive Data Analytics by Broker-Dealers and Investment Advisers (proposed rule). Release No. 34-97990; IA-6353.</li><li>Calabresi, G. (1970). <i>The Costs of Accidents: A Legal and Economic Analysis</i>. Yale University Press.</li><li>U.S. Securities and Exchange Commission. Rule 17a-4: Records to be preserved by certain exchange members, brokers and dealers.</li></ul>
+<footer class="nav"><a href="ch26.html">← Chapter 26: Authority and irreversible exposure</a><a href="ch28.html">Chapter 28: Capability assembly and process visibility →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

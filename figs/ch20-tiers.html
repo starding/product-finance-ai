@@ -1,0 +1,57 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">条件决定上限：Chat、Agent 与具身 Agent（作者估算）</p><p class="figsub">每行三个点是三档条件下整份工作的放大倍数上限。切换行业与典型职业，点选一档提升，看哪些行业受益最多。</p></div><button class="replay" type="button" data-replay="tr">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="范围">
+      <button type="button" data-trv="ind" aria-pressed="true">行业</button>
+      <button type="button" data-trv="occ" aria-pressed="false">典型职业</button>
+    </div>
+    <div class="seg-btns tr-hl" role="group" aria-label="提升">
+      <button type="button" data-trh="" aria-pressed="true">三档</button>
+      <button type="button" data-trh="1" aria-pressed="false">补上数据与工具</button>
+      <button type="button" data-trh="2" aria-pressed="false">再补具身</button>
+    </div>
+    <div class="legend"><span><i style="background:var(--faint)"></i>Chat：只凭对话材料</span><span><i style="background:var(--accent)"></i>Agent：接入数据与系统，可执行、可对外办理</span><span><i style="background:var(--warm)"></i>具身 Agent：再能到现场操作</span></div>
+    <div class="tr" id="tr" data-anim></div>
+    <p class="tr-msg" id="tr-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>作者估算：O*NET 31.0 的 332 项中间工作活动由两位编码者独立判定三档条件下的可达比例，行业按欧盟 27 国 2024 年的职业构成加权；上限 ＝ 1 ÷（1 − 可达份额）。方法与数据见<a href="estimates.html">附录：作者估算的方法与数据</a>。</figcaption>
+</figure>
+<style>
+.tr{display:grid;gap:2px;margin-top:10px}
+.tr-r{display:grid;grid-template-columns:9.5em 1fr;gap:10px;align-items:center;font-size:12.5px;padding:3px 0}
+.tr-r.tot{font-weight:600;border-top:1px solid var(--line);padding-top:6px;margin-top:2px}
+.tr-t{position:relative;height:16px}
+.tr-t::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:1px dashed var(--line)}
+.tr-seg{position:absolute;top:calc(50% - 2px);height:4px;border-radius:2px;transition:left .6s,width .6s,opacity .3s}
+.tr-dot{position:absolute;top:calc(50% - 5px);width:10px;height:10px;margin-left:-5px;border-radius:50%;transition:left .6s,opacity .3s}
+.tr-ax{position:relative;height:16px;font-size:10.5px;color:var(--faint)}
+.tr-ax span{position:absolute;transform:translateX(-50%)}
+.tr-r .v{position:absolute;right:0;top:-1px;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;background:var(--card);padding-left:4px}
+.tr-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.tr-r{grid-template-columns:7em 1fr;font-size:11.5px}}
+</style>
+<script>
+(function(){
+  const D={ind:/*DATA:ind*/[["金融保险",0.1965,0.4547,0.5869,{"4d":0.41,"2":0.285,"5":0.048,"1":0.04,"4s":0.078,"3":0.139}],["专业、科学与技术服务",0.2053,0.4433,0.5624,{"4d":0.414,"2":0.295,"5":0.043,"1":0.05,"4s":0.079,"3":0.12}],["信息与通信",0.2076,0.4405,0.554,{"4d":0.414,"2":0.3,"5":0.042,"1":0.053,"4s":0.08,"3":0.112}],["教育",0.2046,0.4282,0.5506,{"4d":0.402,"2":0.306,"5":0.041,"1":0.056,"4s":0.077,"3":0.118}],["公共管理与社会保障",0.1696,0.4118,0.5928,{"4d":0.352,"2":0.279,"5":0.046,"1":0.037,"4s":0.087,"3":0.199}],["文体娱乐",0.1742,0.4077,0.5806,{"4d":0.355,"2":0.28,"5":0.042,"1":0.041,"4s":0.091,"3":0.192}],["房地产",0.1661,0.4069,0.5898,{"4d":0.345,"2":0.27,"5":0.042,"1":0.034,"4s":0.097,"3":0.211}],["卫生与社会工作",0.169,0.3939,0.5722,{"4d":0.337,"2":0.292,"5":0.039,"1":0.042,"4s":0.096,"3":0.194}],["电力、燃气与热力",0.1637,0.3895,0.5975,{"4d":0.342,"2":0.239,"5":0.038,"1":0.037,"4s":0.096,"3":0.248}],["其他服务",0.1328,0.3538,0.5916,{"4d":0.266,"2":0.29,"5":0.044,"1":0.034,"4s":0.104,"3":0.263}],["批发与零售",0.1244,0.3431,0.5994,{"4d":0.252,"2":0.275,"5":0.044,"1":0.031,"4s":0.105,"3":0.292}],["交通运输与仓储",0.1111,0.3395,0.6492,{"4d":0.247,"2":0.196,"5":0.033,"1":0.024,"4s":0.122,"3":0.378}],["住宿与餐饮",0.1089,0.3198,0.5933,{"4d":0.213,"2":0.295,"5":0.047,"1":0.03,"4s":0.105,"3":0.309}],["制造",0.1156,0.3125,0.6239,{"4d":0.246,"2":0.182,"5":0.028,"1":0.03,"4s":0.122,"3":0.392}],["采矿",0.109,0.31,0.6292,{"4d":0.231,"2":0.183,"5":0.024,"1":0.03,"4s":0.134,"3":0.398}],["供水、污水与废物处理",0.1112,0.3087,0.6285,{"4d":0.238,"2":0.184,"5":0.028,"1":0.028,"4s":0.115,"3":0.406}],["行政与支持服务",0.109,0.3076,0.6216,{"4d":0.23,"2":0.212,"5":0.034,"1":0.028,"4s":0.106,"3":0.39}],["建筑",0.0936,0.2634,0.6331,{"4d":0.204,"2":0.137,"5":0.024,"1":0.026,"4s":0.126,"3":0.483}],["农林牧渔",0.0587,0.2239,0.642,{"4d":0.126,"2":0.133,"5":0.014,"1":0.019,"4s":0.171,"3":0.537}],["家庭雇工与自用生产",0.0633,0.2161,0.6236,{"4d":0.125,"2":0.191,"5":0.024,"1":0.026,"4s":0.114,"3":0.52}],["全部行业",0.1419,0.3565,0.5986,{"4d":0.291,"2":0.246,"5":0.037,"1":0.035,"4s":0.105,"3":0.286}]]/*END*/,occ:/*DATA:occ*/[["会计与审计",0.2487,0.6406,0.6686,{"4d":0.68,"2":0.204,"4s":0.028,"5":0.088}],["客户服务代表",0.2471,0.6383,0.695,{"2":0.565,"4d":0.327,"5":0.108}],["软件开发人员",0.2621,0.5571,0.5681,{"4d":0.562,"2":0.438}],["小学教师",0.2551,0.4383,0.5241,{"4d":0.534,"3":0.094,"2":0.328,"1":0.04,"5":0.004}],["律师",0.234,0.4016,0.4038,{"4d":0.373,"5":0.142,"2":0.485}],["总经理与运营经理",0.1653,0.4021,0.4288,{"2":0.521,"4d":0.328,"5":0.079,"1":0.072}],["零售销售人员",0.1778,0.4505,0.644,{"4d":0.315,"2":0.33,"1":0.049,"5":0.083,"4s":0.054,"3":0.17}],["注册护士",0.0984,0.3105,0.4186,{"4d":0.224,"4s":0.169,"2":0.408,"1":0.048,"5":0.054,"3":0.098}],["重型卡车司机",0.0717,0.2936,0.6788,{"3":0.489,"4s":0.127,"4d":0.234,"5":0.072,"2":0.061,"1":0.017}],["电工",0.0894,0.2296,0.5879,{"3":0.468,"4s":0.231,"2":0.082,"1":0.034,"4d":0.166,"5":0.019}],["餐厅厨师",0.0468,0.1584,0.6848,{"4s":0.215,"3":0.585,"4d":0.119,"5":0.021,"2":0.059}],["客房清洁员",0.0162,0.127,0.7359,{"3":0.767,"4s":0.196,"4d":0.037}],["建筑工人",0.0133,0.0954,0.6401,{"3":0.822,"4d":0.044,"2":0.076,"4s":0.059}]]/*END*/};
+  const MAX={ind:3,occ:4},C=['var(--faint)','var(--accent)','var(--warm)'];let view='ind',hl='';
+  const box=document.getElementById('tr'),msg=document.getElementById('tr-msg'),cap=p=>1/(1-p);
+  const M={ind:{'':'只凭对话材料，各行业的上限只有 1.1～1.3 倍；接入数据与工具后，全部行业平均升到 1.55 倍；再具备具身能力，升到约 2.5 倍。',
+      '1':'补上数据与工具，金融、专业服务、信息通信与教育提升最多，上限约 1.75～1.83 倍；建筑、农林牧渔与家庭自用生产只升到 1.3 倍左右。',
+      '2':'再补具身能力，实体生产行业提升 1.4～1.5 倍，升到 2.7～2.8 倍，反超知识密集行业；后者只多约 0.5 倍，天花板来自与人沟通和本人的决定。'},
+    occ:{'':'职业之间差异更大：会计与客服代表在 Agent 条件下约 2.8 倍，律师与总经理约 1.7 倍，建筑工人与客房清洁员只有约 1.1 倍。',
+      '1':'补上数据与工具，信息处理占比高的职业提升最多：会计与审计从 1.3 倍升到 2.8 倍。',
+      '2':'再补具身能力，客房清洁、厨师与卡车司机升幅最大；律师与总经理几乎不变。'}};
+  function draw(){const rows=D[view].slice().sort((a,b)=>(b[0]==='全部行业')?-1:(a[0]==='全部行业')?1:b[2]-a[2]),mx=MAX[view],x=v=>(Math.min(v,mx)-1)/(mx-1)*92;
+    let h=`<div class="tr-r"><span></span><div class="tr-ax">${[1,1.5,2,2.5,3,3.5,4].filter(v=>v<=mx).map(v=>`<span style="left:${x(v)}%">${v} 倍</span>`).join('')}</div></div>`;
+    h+=rows.map(r=>{const v=[1,2,3].map(i=>cap(r[i]));const tot=r[0]==='全部行业';
+      const seg=(a,b,c,on)=>`<i class="tr-seg" style="left:${x(v[a])}%;width:${x(v[b])-x(v[a])}%;background:${c};opacity:${on?1:.18}"></i>`;
+      const dots=v.map((u,i)=>`<i class="tr-dot" style="left:${x(u)}%;background:${C[i]};opacity:${!hl||+hl===i||+hl-1===i?1:.25}"></i>`).join('');
+      const lab=hl?`+${(v[+hl]-v[+hl-1]).toFixed(2)}`:`${v[1].toFixed(2)} 倍`;
+      return `<div class="tr-r${tot?' tot':''}"><span>${r[0]}</span><div class="tr-t">${seg(0,1,'var(--accent)',hl!=='2')}${seg(1,2,'var(--warm)',hl!=='1')}${dots}<span class="v">${lab}</span></div></div>`;}).join('');
+    box.innerHTML=h;msg.textContent=M[view][hl];}
+  document.querySelectorAll('[data-trv]').forEach(b=>b.addEventListener('click',()=>{view=b.dataset.trv;document.querySelectorAll('[data-trv]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  document.querySelectorAll('[data-trh]').forEach(b=>b.addEventListener('click',()=>{hl=b.dataset.trh;document.querySelectorAll('[data-trh]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  box.addEventListener('anim-in',()=>{['1','2',''].forEach((k,i)=>setTimeout(()=>{hl=k;document.querySelectorAll('[data-trh]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.trh===k)));draw();},300+i*2600));});
+  draw();
+})();
+</script>

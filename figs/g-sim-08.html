@@ -1,0 +1,64 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">文明模拟器 · 第 8 章：村口的集市</p><p class="figsub">四十户人家持有船股，每年都有人急需粮食要卖、有人手头宽裕想买。三条线分别是各自寻找、定期集市与集市加做市商三种情形下，急着卖的人平均到手的价格；点选一种查看细节。</p></div><button class="replay" type="button" data-replay="cs8">重播</button></div>
+    <div class="cs-rules"><span class="on">承诺</span><span class="on">货币</span><span class="on">保险</span><span class="on">银行</span><span class="on">股份</span><span class="on">市场</span><span class="lock">价格中的信息 · 第 9 章</span></div>
+    <div class="seg-btns" role="group" aria-label="卖法">
+      <button type="button" data-cs8="self" aria-pressed="false">各自寻找</button>
+      <button type="button" data-cs8="fair" aria-pressed="false">定期集市</button>
+      <button type="button" data-cs8="mm" aria-pressed="true">集市加做市商</button>
+    </div>
+    <div class="cs8" id="cs8" data-anim>
+      <svg viewBox="0 0 660 210" role="img" aria-label="二十年里急着卖的人平均到手的价格"><g id="cs8-ax"></g><g id="cs8-l"></g></svg>
+      <div class="legend"><span><i style="background:var(--faint)"></i>各自寻找</span><span><i style="background:var(--blue)"></i>定期集市</span><span><i style="background:var(--accent)"></i>集市加做市商</span></div>
+      <div class="cs8-ctl">
+        <div class="sl"><label for="cs8-b">手头宽裕、想买的人家 <b id="cs8-bv"></b></label><input id="cs8-b" type="range" min="5" max="60" step="5" value="25"></div>
+        <button type="button" class="replay" id="cs8-re">换一组年景</button>
+      </div>
+      <div class="cs8-out" id="cs8-out"></div>
+      <p class="cs8-msg" id="cs8-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意模型：每份船股按前景值 10 份计。每年约一成半的人家急需粮食要卖，最多等五天，等不到就以 5 份贱卖。各自寻找：每天问三户，遇到的人家有一半的可能对这艘船有兴趣，出价在 6～12 份之间。定期集市：每五天一次，所有想卖与想买的人集中竞价，想买的人愿付 8～12 份，买方不够时多出的人只能贱卖。做市商：随时以前景值减去价差的一半买入，成交越多价差越窄；想卖的人多于想买的人时，他手里的份额不易转手，买价还要再压低。</figcaption>
+</figure>
+<style>
+.cs8 svg{width:100%;height:auto;display:block}
+.cs8-ctl{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:end;margin-top:8px}
+.cs8-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cs8-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs8-out span{display:block;font-size:11.5px;color:var(--faint)} .cs8-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.cs8-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs8-ctl{grid-template-columns:1fr}.cs8-out{grid-template-columns:1fr}.cs8 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs8'+id),N=40,Y=20,FAIR=10,DUMP=5,DL=5;let mode='mm',seed=808;
+  const X0=40,X1=650,YT=10,YB=180,x=t=>X0+(t+.5)/Y*(X1-X0),y=v=>YB-(v-4)/7*(YB-YT);
+  function rng(){let s=seed;return ()=>{s=(s*16807)%2147483647;return s/2147483647;};}
+  const Emax=(v,a,b)=>v<=a?(a+b)/2:v>=b?v:((b*b-v*v)/2+v*(v-a))/(b-a);
+  function sim(bshare){const r=rng(),out={self:[],fair:[],mm:[]},wait={self:0,fair:0,mm:0},dumped={self:0,fair:0,mm:0};let tot=0;
+    for(let t=0;t<Y;t++){let U=0,Bn=0;for(let i=0;i<N;i++){if(r()<.15)U++;else if(r()<bshare)Bn++;}U=Math.max(U,1);tot+=U;
+      // 各自寻找：每天问三户，每户遇到有兴趣买方的可能 q
+      const q=(Bn/N)*.5,pd=1-Math.pow(1-q,3),V=[DUMP];for(let k=1;k<=DL;k++)V.push(pd*Emax(V[k-1],6,12)+(1-pd)*V[k-1]);
+      let s=0;for(let i=0;i<U;i++){let sold=false;for(let d=DL;d>=1;d--){if(r()<pd){const o=6+6*r();if(o>=V[d-1]){s+=o;wait.self+=DL-d+1;sold=true;break;}}}if(!sold){s+=DUMP;dumped.self++;wait.self+=DL;}}
+      out.self.push(s/U);
+      // 定期集市：集中竞价，统一价格取最后一位成交买方的出价
+      const vals=Array.from({length:Bn},()=>8+4*r()).sort((a,b)=>b-a),qq=Math.min(U,Bn),px=qq?vals[qq-1]:DUMP;
+      out.fair.push((qq*px+(U-qq)*DUMP)/U);dumped.fair+=U-qq;wait.fair+=U*2.5;
+      // 做市商：价差随成交笔数收窄
+      const spread=.1+2.4*.2/Math.sqrt(Math.max(1,(U+Bn)/2)),glut=Math.max(0,(U-Bn)/U)*2;out.mm.push(FAIR-spread/2-glut);}
+    return {out,wait:{self:wait.self/tot,fair:wait.fair/tot,mm:0},dumped,tot};}
+  function draw(){const b=+$('-b').value/100,S=sim(b);$('-bv').textContent=Math.round(b*100)+'%';
+    $('-ax').innerHTML=[5,7,9,10,11].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="${v===10?'s-faint':'s-line'}"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+[1,5,10,15,20].map(t=>`<text x="${x(t-1)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">第 ${t} 年</text>`).join('');
+    const C={self:'var(--faint)',fair:'var(--blue)',mm:'var(--accent)'};
+    $('-l').innerHTML=['self','fair','mm'].map(k=>`<path d="${S.out[k].map((v,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(v).toFixed(1)).join('')}" fill="none" stroke="${C[k]}" stroke-width="${k===mode?3:1.4}" opacity="${k===mode?1:.5}"/>`).join('');
+    const avg=S.out[mode].reduce((a,v)=>a+v,0)/Y;
+    $('-out').innerHTML=[['急着卖的人平均到手',avg.toFixed(2)+' 份'],['平均等待',S.wait[mode].toFixed(1)+' 天'],['只能贱卖的户次',S.dumped[mode]]].map(([a,c])=>`<div><span>${a}</span><b>${c}</b></div>`).join('');
+    $('-msg').textContent=mode==='self'?`各自寻找，急着卖的人平均到手 ${avg.toFixed(2)} 份，二十年里有 ${S.dumped.self} 户次等不到买方而贱卖。想买的人越少，越难找到对手。`:
+      mode==='fair'?`定期集市把想卖与想买的人集中起来，平均到手 ${avg.toFixed(2)} 份；可是想买的人不够的年份，多出的卖方仍只能贱卖（共 ${S.dumped.fair} 户次）。`:
+      `做市商随时接手，急着卖的人不必等待、没有一户贱卖，平均到手 ${avg.toFixed(2)} 份；让出的价差，就是即时成交的价格。想买的人越少，做市商的买价也压得越低：他承担了别人不愿承担的囤货风险。`;}
+  document.querySelectorAll('[data-cs8]').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.cs8;document.querySelectorAll('[data-cs8]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  $('-b').addEventListener('input',draw);$('-re').addEventListener('click',()=>{seed=(seed*48271)%2147483647;draw();});
+  $('').addEventListener('anim-in',()=>{['self','fair','mm'].forEach((k,i)=>setTimeout(()=>{mode=k;document.querySelectorAll('[data-cs8]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.cs8===k)));draw();},300+i*2400));});
+  draw();
+})();
+</script>

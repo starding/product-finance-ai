@@ -1,0 +1,62 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">放大倍数由什么决定</p><p class="figsub">一项自己完成需要 100 分钟的任务。切换情形，看交给代理之后委托人仍需付出的投入由哪几块构成，以及放大倍数。下方是对应的章节。</p></div><button class="replay" type="button" data-replay="pm3">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="情形">
+      <button type="button" data-p3="ideal" aria-pressed="true">理想情形</button>
+      <button type="button" data-p3="scope" aria-pressed="false">适用范围小</button>
+      <button type="button" data-p3="check" aria-pressed="false">核对成本高</button>
+      <button type="button" data-p3="err" aria-pressed="false">经常出错</button>
+    </div>
+    <div class="pm3" id="pm3" data-anim>
+      <div class="pm3-row"><span>自己完成</span><div class="pm3-t"><i style="width:100%;background:var(--faint)"></i></div><b>100 分钟</b></div>
+      <div class="pm3-row"><span>交给代理之后</span><div class="pm3-t" id="pm3-st"></div><b id="pm3-tot"></b></div>
+      <div class="legend"><span><i style="background:var(--blue)"></i>不适用的部分</span><span><i style="background:var(--gold)"></i>说明与核对</span><span><i style="background:var(--warm)"></i>出错后的返工</span></div>
+      <div class="pm3-x"><span>放大倍数</span><b id="pm3-x"></b></div>
+      <p class="pm3-msg" id="pm3-msg" aria-live="polite"></p>
+    </div>
+    <div class="pm3-cols">
+      <div class="pm3-c" style="--c:var(--ink)"><b>总论</b><span>理论与实测的差距</span><a href="ch19.html"><em>19</em>放大倍数：理论与实测</a></div>
+      <div class="pm3-c" style="--c:var(--blue)"><b>不适用的部分</b><span>哪些事务能交出去</span><a href="ch20.html"><em>20</em>哪些事务能交给 AI</a></div>
+      <div class="pm3-c" style="--c:var(--warm)"><b>出错后的返工</b><span>能力从哪里来，在哪里失效</span><a href="ch21.html"><em>21</em>能力从哪里来、在哪里失效</a></div>
+      <div class="pm3-c" style="--c:var(--gold)"><b>说明与核对</b><span>结果能否被方便地验证</span><a href="ch22.html"><em>22</em>可验证性：核对的成本</a></div>
+      <div class="pm3-c" style="--c:var(--accent)"><b>约束</b><span>市场效率与实际行为</span><a href="ch23.html"><em>23</em>金融场景的特殊约束</a></div>
+    </div>
+  </div>
+  <figcaption>示意数字，只表示各项的作用方向。</figcaption>
+</figure>
+<style>
+.pm3-row{display:grid;grid-template-columns:96px 1fr 76px;gap:10px;align-items:center;font-size:13px;margin:6px 0}
+.pm3-row>span{color:var(--faint);font-size:12px}
+.pm3-row b{text-align:right;font-variant-numeric:tabular-nums}
+.pm3-t{display:flex;height:22px;background:var(--quote);border-radius:5px;overflow:hidden}
+.pm3-t i{display:block;height:100%;transition:width .6s ease}
+.pm3-x{display:flex;align-items:baseline;gap:10px;margin-top:8px}
+.pm3-x span{font-size:12px;color:var(--faint)} .pm3-x b{font-size:26px;font-variant-numeric:tabular-nums}
+.pm3-msg{font-size:14px;margin:4px 0 0;min-height:3.4em}
+.pm3-cols{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:10px}
+.pm3-c{border-top:3px solid var(--c);background:var(--quote);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:4px}
+.pm3-c b{font-size:13.5px}
+.pm3-c>span:not(.todo){font-size:12px;color:var(--muted);line-height:1.5}
+.pm3-c a,.pm3-c .todo{font-size:12.5px;border-radius:7px;padding:5px 8px;text-decoration:none;line-height:1.35;margin-top:auto}
+.pm3-c a{background:var(--surface);border:1px solid var(--accent);color:var(--ink)}
+.pm3-c a:hover{background:var(--accent-soft)}
+.pm3-c .todo{background:var(--surface);color:var(--faint);border:1px solid var(--line)}
+.pm3-c em{font-style:normal;color:var(--faint);margin-right:6px}
+@media (max-width:640px){.pm3-cols{grid-template-columns:repeat(2,1fr)}.pm3-row{grid-template-columns:76px 1fr 64px}}
+</style>
+<script>
+(function(){
+  const S={ideal:[0,8,0,'代理能完成整件事，委托人只需说明与抽查，几乎不必返工：这是理论上限，可以达到十倍以上。'],
+    scope:[70,6,0,'代理只能完成其中三成，其余七成仍要自己做。即使代理做得又快又好，放大倍数也被压到 1.3 倍左右：适用比例决定了上限。'],
+    check:[0,40,0,'结果难以核验，委托人要花 40 分钟逐项检查：放大倍数只剩 2.5 倍。核对成本往往比生成速度更重要。'],
+    err:[0,10,45,'代理经常出错，发现与修正又花掉 45 分钟，放大倍数只剩 1.8 倍；出错再多一些，交出去反而更费事。']};
+  const C=['var(--blue)','var(--gold)','var(--warm)'],st=document.getElementById('pm3-st');
+  st.innerHTML=C.map(c=>`<i style="background:${c};width:0"></i>`).join('');const is=[...st.children];
+  function set(k){document.querySelectorAll('[data-p3]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.p3===k)));
+    const v=S[k],tot=v[0]+v[1]+v[2];setTimeout(()=>is.forEach((e,i)=>e.style.width=v[i]+'%'),40);
+    document.getElementById('pm3-tot').textContent=tot+' 分钟';document.getElementById('pm3-x').textContent=(100/tot).toFixed(1)+' 倍';document.getElementById('pm3-msg').textContent=v[3];}
+  document.querySelectorAll('[data-p3]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.p3)));
+  document.getElementById('pm3').addEventListener('anim-in',()=>{['ideal','scope','check','err','ideal'].forEach((k,i)=>setTimeout(()=>set(k),i*2200));});
+  set('ideal');
+})();
+</script>

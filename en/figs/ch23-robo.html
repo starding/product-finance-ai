@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The value is concentrated among those who were doing worst</p><p class="figsub">Changes in two groups of investors before and after adopting a robo-adviser. Switch between before and after to compare the number of stocks held and portfolio volatility (illustrative numbers).</p></div><button class="replay" type="button" data-replay="rb">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Point in time">
+      <button type="button" data-rb="pre" aria-pressed="true">Before adoption</button>
+      <button type="button" data-rb="post" aria-pressed="false">After adoption</button>
+    </div>
+    <div class="rb" id="rb" data-anim>
+      <div class="rb-g" id="rb-g"></div>
+      <p class="rb-msg" id="rb-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative numbers; the directions follow D'Acunto, Prabhala and Rossi (2019), a study of a robo-adviser at an Indian brokerage. Investors who had been poorly diversified became markedly more diversified after adoption, and their volatility fell; investors who had been fairly diversified ended up holding fewer stocks, their volatility fell slightly, and they traded more. The reduction in behavioural biases applied to all adopters.</figcaption>
+</figure>
+<style>
+.rb-g{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.rb-c{background:var(--quote);border-radius:10px;padding:10px 12px}
+.rb-c>b{font-size:14px;display:block;margin-bottom:6px}
+.rb-m{display:grid;grid-template-columns:90px 1fr 54px;gap:8px;align-items:center;font-size:12.5px;margin:6px 0}
+.rb-m span{color:var(--faint)}
+.rb-t{height:14px;background:var(--surface);border-radius:7px;overflow:hidden}
+.rb-t i{display:block;height:100%;border-radius:7px;transition:width .7s ease}
+.rb-m em{font-style:normal;text-align:right;font-variant-numeric:tabular-nums}
+.rb-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.rb-g{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const G=[['Poorly diversified before',[3,14],[32,22]],['Fairly diversified before',[15,13],[19,18]]];
+  const box=document.getElementById('rb-g');
+  box.innerHTML=G.map(([n],i)=>`<div class="rb-c"><b>${n}</b><div class="rb-m"><span>Stocks held</span><div class="rb-t"><i id="rb-s${i}" style="background:var(--accent)"></i></div><em id="rb-sv${i}"></em></div><div class="rb-m"><span>Annualized volatility</span><div class="rb-t"><i id="rb-v${i}" style="background:var(--warm)"></i></div><em id="rb-vv${i}"></em></div></div>`).join('');
+  function set(k){document.querySelectorAll('[data-rb]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.rb===k)));const j=k==='pre'?0:1;
+    G.forEach(([n,s,v],i)=>{document.getElementById('rb-s'+i).style.width=s[j]/20*100+'%';document.getElementById('rb-sv'+i).textContent=s[j]+'';document.getElementById('rb-v'+i).style.width=v[j]/40*100+'%';document.getElementById('rb-vv'+i).textContent=v[j]+'%';});
+    document.getElementById('rb-msg').textContent=k==='pre'?'Before adoption: one group holds only three or four stocks and its portfolios are very volatile; the other group is already fairly diversified.':'After adoption: the poorly diversified group holds many more stocks and its volatility falls markedly; the already diversified group ends up holding fewer stocks, its volatility falls only slightly, and it trades more often. The agent\'s value is letting those who could not do it do it.';}
+  document.querySelectorAll('[data-rb]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.rb)));
+  document.getElementById('rb').addEventListener('anim-in',()=>{set('pre');setTimeout(()=>set('post'),2200);});
+  set('pre');
+})();
+</script>

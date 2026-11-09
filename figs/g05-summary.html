@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：保险与分散</p><p class="figsub">四条结论，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="g05summary">重播</button></div>
+    <div class="g05summary" id="g05summary" data-anim><div class="g05summary-c" style="--i:0"><em>自己扛</em><b>预防性储蓄代价很大</b><p>要扛住大的歉收，就要常年放着一大笔储备，它在损耗、也不能另作他用。</p></div><div class="g05summary-c" style="--i:1"><em>一起扛</em><b>各家自己的坏运气可以抵消</b><p>户数越多抵消越充分，平均到每户的波动大致按户数的平方根缩小。</p></div><div class="g05summary-c warn" style="--i:2"><em>分散不掉</em><b>共同的风险只能转移</b><p>全村一起歉收时，户数再多也无济于事；承担它的人要得到补偿。</p></div><div class="g05summary-c warn" style="--i:3"><em>新问题</em><b>保险会改变人的行为</b><p>投保之后不再小心，风险高的人更想投保；免赔额与区分保费是对策。</p></div></div>
+  </div>
+</figure>
+<style>
+.g05summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g05summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g05summary-c.warn{border-left-color:var(--warm)}
+.g05summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g05summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g05summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g05summary.in .g05summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g05summary{grid-template-columns:1fr}}
+</style>

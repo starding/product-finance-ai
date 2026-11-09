@@ -1,0 +1,32 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Bearing it together: the more households, the more bad luck cancels out</p><p class="figsub">Pest damage in different households is unrelated. Drag the number of households in the common store and see how each household's share of the harvest clusters around 12 portions.</p></div><button class="replay" type="button" data-replay="pl">Replay</button></div>
+    <div class="pl" id="pl" data-anim>
+      <svg viewBox="0 0 640 200" role="img" aria-label="Distribution of each household's share of the harvest"><g id="pl-ax"></g><g id="pl-b"></g></svg>
+      <div class="sl"><label for="pl-n">Households in the common store <b id="pl-nv"></b></label><input id="pl-n" type="range" min="1" max="50" step="1" value="1"></div>
+      <p class="pl-msg" id="pl-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: each household's harvest averages 12 portions with swings of about 40%, unrelated across households; the common store divides the total harvest equally among them. The bars show the distribution of each household's share over two thousand years; the shaded area is less than 9 portions.</figcaption>
+</figure>
+<style>
+.pl svg{width:100%;height:auto;display:block}
+.pl-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.pl svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);let s=11;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};
+  const g=()=>{let u=0;while(!u)u=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r());};
+  const Z=Array.from({length:2000},()=>Array.from({length:50},()=>g()));
+  const X0=40,X1=630,YT=10,YB=170,lo=0,hi=24,nb=24,bw=(X1-X0)/nb,x=v=>X0+(v-lo)/(hi-lo)*(X1-X0);
+  $('pl-ax').innerHTML=`<rect x="${X0}" y="${YT}" width="${x(9)-X0}" height="${YB-YT}" fill="var(--warm-soft)"/><line x1="${X0}" x2="${X1}" y1="${YB}" y2="${YB}" class="s-faint"/>`+[0,6,9,12,18,24].map(v=>`<text x="${x(v)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${v}</text>`).join('')+`<text x="${X1}" y="${YB-6}" text-anchor="end" font-size="11" class="t-muted">Portions per household</text>`;
+  function draw(){const n=+$('pl-n').value,c=Array(nb).fill(0);let bad=0;
+    for(const row of Z){let m=0;for(let i=0;i<n;i++)m+=row[i];m/=n;const v=Math.max(0,12*(1+.4*m));if(v<9)bad++;c[Math.min(nb-1,Math.floor((v-lo)/(hi-lo)*nb))]++;}
+    const mx=Math.max(...c);$('pl-b').innerHTML=c.map((k,i)=>`<rect x="${X0+i*bw+1}" y="${YB-k/mx*(YB-YT-8)}" width="${bw-2}" height="${k/mx*(YB-YT-8)}" fill="var(--accent)" rx="1"/>`).join('');
+    $('pl-nv').textContent=n;$('pl-msg').textContent=n===1?`Bearing it alone, the household gets less than 9 portions in about ${Math.round(bad/20)}% of years.`:`With ${n} households sharing, the swings in each household's harvest shrink to about ${Math.round(100/Math.sqrt(n))}% of what they were, and years with less than 9 portions fall to ${(bad/20).toFixed(1)}%.`;}
+  $('pl-n').addEventListener('input',draw);
+  $('pl').addEventListener('anim-in',()=>{const seq=[1,2,4,8,16,32,50];seq.forEach((v,i)=>setTimeout(()=>{$('pl-n').value=v;draw();},200+i*500));});
+  draw();
+})();
+</script>

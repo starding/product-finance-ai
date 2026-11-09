@@ -1,0 +1,30 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">When to come back and ask him</p><p class="figsub">Eight events over ten years, laid out on a timeline. Tick the triggers written into the agreement and see which events make the scribe stop and ask him.</p></div><button class="replay" type="button" data-replay="tg21">Replay</button></div>
+    <div class="tg21" id="tg21" data-anim>
+      <svg viewBox="0 0 660 150" role="img" aria-label="Events over ten years"><g id="tg21-g"></g></svg>
+      <div class="cs-sw"><label><input type="checkbox" id="tg21-q" checked> Quantitative trigger: any account falls more than 15% in a year, or drifts 20% from its target</label><label><input type="checkbox" id="tg21-e"> Event trigger: a change of job, a new child, illness, a move</label><label><input type="checkbox" id="tg21-t"> Time trigger: a review once a year</label></div>
+      <p class="tg21-msg" id="tg21-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the eight events are invented examples. A "quiet drift" is a deviation that builds up over several years without any single large fall, for example when his income quietly declines and the agreed deposit rate gradually exceeds what he can afford.</figcaption>
+</figure>
+<style>
+.tg21 svg{width:100%;height:auto;display:block}
+.tg21-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.tg21 svg text{font-size:13px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('tg21'+id),X0=30,X1=630,x=t=>X0+t/10*(X1-X0);
+  const E=[[1.2,'Storm: retirement −22%','q'],[2.5,'New job','e'],[3.6,'Child born','e'],[4.4,'Quiet drift','t'],[5.5,'Storm: house −8%',''],[6.8,'Illness','e'],[7.7,'Income falls','t'],[9.1,'Storm: retirement −18%','q']];
+  function draw(){const on={q:$('-q').checked,e:$('-e').checked,t:$('-t').checked};let h=`<line x1="${X0}" x2="${X1}" y1="80" y2="80" stroke="var(--line)" stroke-width="3"/>`+[0,2,4,6,8,10].map(t=>`<text x="${x(t)}" y="104" text-anchor="middle" font-size="11" class="t-faint">Year ${t}</text>`).join('');
+    if(on.t)for(let t=1;t<=10;t++)h+=`<line x1="${x(t)}" x2="${x(t)}" y1="72" y2="88" stroke="var(--blue)" stroke-width="2"/>`;
+    let n=0,miss=[];E.forEach(([t,l,k],i)=>{const hit=k&&on[k];if(hit)n++;else if(k)miss.push(l);h+=`<circle cx="${x(t)}" cy="80" r="${hit?9:6}" fill="${hit?'var(--warm)':'var(--faint)'}"/><text x="${x(t)}" y="${i%2?56:40}" text-anchor="middle" font-size="11" fill="${hit?'var(--warm)':'var(--muted)'}">${l}</text>`;});
+    $('-g').innerHTML=h;
+    $('-msg').textContent=`${n} events make the scribe stop and ask him. `+(miss.length?`Important events that set off no trigger: ${miss.join(', ')}.`:'Everything that should be asked about sets off a trigger; the 8% fall in the house account stayed within the boundaries, so the scribe handled it by the rules without disturbing him.');}
+  ['-q','-e','-t'].forEach(k=>$(k).addEventListener('input',draw));
+  $('').addEventListener('anim-in',()=>{$('-q').checked=true;$('-e').checked=false;$('-t').checked=false;draw();setTimeout(()=>{$('-e').checked=true;draw();},1600);setTimeout(()=>{$('-t').checked=true;draw();},3200);});
+  draw();
+})();
+</script>

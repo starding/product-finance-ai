@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Trust in proportion to trustworthiness</p><p class="figsub">The horizontal axis is how reliable a service actually is; the vertical axis is the user's trust. Near the diagonal, trust is calibrated. Turn on "Make trustworthiness visible" and see how the two imbalances return to the diagonal.</p></div><button class="replay" type="button" data-replay="cl">Replay</button></div>
+    <label class="cl-chk"><input type="checkbox" id="cl-x"> Make trustworthiness visible: show the basis, the record and known limitations</label>
+    <div class="cl" id="cl" data-anim>
+      <svg viewBox="0 0 640 300" role="img" aria-label="Trust and reliability"><g id="cl-g"></g><g id="cl-pts"></g></svg>
+      <p class="cl-msg" id="cl-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative. The concepts of misuse and disuse are from Parasuraman and Riley (1997); the calibration of trust is from Lee and See (2004).</figcaption>
+</figure>
+<style>
+.cl-chk{display:flex;gap:6px;align-items:center;font-size:14px;margin-bottom:6px}
+.cl-chk input{accent-color:var(--accent);width:16px;height:16px}
+.cl svg{width:100%;height:auto;display:block}
+.cl-pt{transition:transform .9s ease}
+.cl-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.cl svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const X0=195,S=250,YT=20,x=v=>X0+v*S,y=v=>YT+(1-v)*S;
+  const $=id=>document.getElementById(id);
+  $('cl-g').innerHTML=`<rect x="${x(0)}" y="${y(1)}" width="${S}" height="${S}" fill="none" class="s-faint"/>`+
+    `<path d="M${x(0)},${y(.12)} L${x(.88)},${y(1)} L${x(1)},${y(1)} L${x(1)},${y(.88)} L${x(.12)},${y(0)} L${x(0)},${y(0)}Z" fill="var(--accent-soft)"/>`+
+    `<line x1="${x(0)}" y1="${y(0)}" x2="${x(1)}" y2="${y(1)}" stroke="var(--accent)" stroke-dasharray="4 4"/>`+
+    `<text x="${x(.22)}" y="${y(.85)}" text-anchor="middle" font-size="12" class="t-warm">Misuse</text><text x="${x(.22)}" y="${y(.85)+15}" text-anchor="middle" font-size="10.5" class="t-faint">Trust above reliability</text>`+
+    `<text x="${x(.8)}" y="${y(.15)}" text-anchor="middle" font-size="12" class="t-warm">Disuse</text><text x="${x(.8)}" y="${y(.15)+15}" text-anchor="middle" font-size="10.5" class="t-faint">Trust below reliability</text>`+
+    `<text x="${x(.5)}" y="${y(0)+20}" text-anchor="middle" font-size="11" class="t-faint">Actual reliability →</text><text transform="translate(${x(0)-14},${y(.5)}) rotate(-90)" text-anchor="middle" font-size="11" class="t-faint">User's trust →</text>`;
+  const P=[[.5,.92,.52,'Confident, conclusions-only service','Only moderately reliable, yet it sounds very sure: users stop checking, and errors slip through.'],[.88,.32,.85,'Reliable but opaque service','Quite reliable in fact, but users cannot see the basis, so they either do not use it or check it by hand again and again.']];
+  $('cl-pts').innerHTML=P.map(([r,t,t2,n],i)=>`<g class="cl-pt" id="cl-p${i}"><circle cx="${x(r)}" cy="${y(t)}" r="8" fill="var(--warm)"/><text x="${x(r)+(i?-14:14)}" y="${y(t)+4}" text-anchor="${i?'end':'start'}" font-size="12" class="t-ink">${n}</text></g>`).join('');
+  const cb=$('cl-x');
+  function r(){const on=cb.checked;P.forEach(([rr,t,t2],i)=>{const g=$('cl-p'+i);g.style.transform=on?`translateY(${y(t2)-y(t)}px)`:'none';g.querySelector('circle').setAttribute('fill',on?'var(--accent)':'var(--warm)');});
+    $('cl-msg').textContent=on?'Once the basis and record are shown and the scope and limitations explained, users can judge when to rely on the service and when to check it: trust in both services returns to a level in proportion to their reliability.':P.map(p=>p[3]+': '+p[4]).join(' ');}
+  cb.addEventListener('change',r);
+  $('cl').addEventListener('anim-in',()=>{cb.checked=false;r();setTimeout(()=>{cb.checked=true;r();},1800);});
+  r();
+})();
+</script>

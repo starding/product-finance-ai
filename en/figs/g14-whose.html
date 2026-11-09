@@ -1,0 +1,38 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">It works for whoever pays it</p><p class="figsub">The market offers three kinds of ship shares: a low-fee whole-market portfolio, a mid-fee portfolio, and a high-fee portfolio that pays the recommender the largest commission. Switch where the agent's pay comes from to see what a hundred principals are recommended and how much more they pay each year.</p></div><button class="replay" type="button" data-replay="wh14">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Source of pay">
+      <button type="button" data-wh14="0" aria-pressed="true">Principal pays an annual fee</button>
+      <button type="button" data-wh14="1" aria-pressed="false">Seller pays commission per sale</button>
+      <button type="button" data-wh14="2" aria-pressed="false">Free, earns from recommendations</button>
+    </div>
+    <div class="wh14" id="wh14" data-anim>
+      <div class="wh14-g" id="wh14-g"></div>
+      <div class="wh14-out" id="wh14-out"></div>
+      <p class="wh14-msg" id="wh14-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the three kinds of ship shares carry annual fees of 0.1%, 0.8% and 1.8%, and pay the recommender commissions of 0, 0.3% and 1.0%; when the principal pays an annual fee, the agent charges 0.3% a year. The shares recommended are set according to the agent's income, for illustration (following the line of analysis in Inderst and Ottaviani, 2012).</figcaption>
+</figure>
+<style>
+.wh14-g{display:grid;grid-template-columns:repeat(20,1fr);gap:3px;max-width:520px}
+.wh14-g i{aspect-ratio:1;border-radius:50%;transition:background .4s;transition-delay:calc(var(--i)*6ms)}
+.wh14-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.wh14-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.wh14-out span{display:block;font-size:11.5px;color:var(--faint)} .wh14-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.wh14-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.wh14-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('wh14'+id),F=[.1,.8,1.8],C=['var(--accent)','var(--faint)','var(--warm)'];
+  const S=[[80,15,5,.3,'The principal pays directly, and the agent\'s income does not depend on what it recommends, so it mostly recommends the lowest-fee portfolio.'],[20,30,50,0,'The agent\'s income comes from commissions, so its recommendations lean towards the highest-commission portfolio: the principal pays nothing directly, but pays more through higher fees.'],[10,25,65,0,'An agent that appears to be free earns all its income from recommendations, and its recommendations concentrate most heavily on the highest-fee portfolio.']];
+  $('-g').innerHTML=Array.from({length:100},(_,i)=>`<i style="--i:${i}"></i>`).join('');const cs=[...$('-g').children];
+  function set(k){document.querySelectorAll('[data-wh14]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.wh14===k)));const [a,b,c,fee,msg]=S[k];
+    cs.forEach((x,i)=>x.style.background=C[i<a?0:i<a+b?1:2]);const cost=(a*F[0]+b*F[1]+c*F[2])/100+fee;
+    $('-out').innerHTML=[['Recommended the lowest-fee portfolio',a+' people'],['Recommended the highest-fee portfolio',c+' people'],['Average paid by principals each year',cost.toFixed(2)+'%']].map(([x,v])=>`<div><span>${x}</span><b>${v}</b></div>`).join('');$('-msg').textContent=msg;}
+  document.querySelectorAll('[data-wh14]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.wh14)));
+  $('').addEventListener('anim-in',()=>{[0,1,2].forEach((k,i)=>setTimeout(()=>set(k),300+i*2200));});
+  set(0);
+})();
+</script>

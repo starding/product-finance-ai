@@ -1,0 +1,28 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Whoever can avoid it most cheaply is responsible</p><p class="figsub">Six cases of an agent going wrong. Tap "Assign liability" to see who should bear the loss under the least-cost-avoider principle.</p></div><button class="replay" type="button" id="lb-go">Assign liability</button></div>
+    <div class="lb" id="lb" data-anim></div>
+    <p class="lb-msg" id="lb-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>Illustrative judgments, not legal advice. For the least-cost-avoider principle, see Calabresi (1970); actual allocation of liability depends on local law and contract terms.</figcaption>
+</figure>
+<style>
+.lb{display:grid;gap:5px}
+.lb-r{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr) 90px;gap:10px;align-items:center;font-size:12.5px;background:var(--quote);border-radius:8px;padding:7px 10px}
+.lb-r span:nth-child(2){color:var(--muted);font-size:12px}
+.lb-r b{text-align:center;font-size:12px;border-radius:6px;padding:3px 6px;opacity:0;transform:scale(.8);transition:opacity .3s,transform .3s;transition-delay:calc(var(--i)*.2s)}
+.lb.on .lb-r b{opacity:1;transform:none}
+.lb-r b.p{background:rgba(47,95,158,.14);color:var(--blue)} .lb-r b.u{background:var(--accent-soft);color:var(--accent)} .lb-r b.d{background:rgba(160,120,24,.15);color:var(--gold)}
+.lb-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.lb-r{grid-template-columns:1fr 80px}.lb-r span:nth-child(2){grid-column:1/-1;grid-row:2}}
+</style>
+<script>
+(function(){
+  const C=[['The execution layer failed to block an instruction above the per-trade limit','The platform controls the execution layer\'s checks','Platform','p'],['The agent misread a clearly written mandate','The platform selects and tests the agent','Platform','p'],['A data source sent a wrong price','The data provider controls data quality','Data provider','d'],['The mandate was vague, and the agent acted on a reasonable reading','The principal is best placed to state requirements clearly','Shared','u'],['The agent followed the user\'s explicit instruction, and the result fell short','The decision came from the user','User','u'],['The agent reminded on time; the user did not act and missed the deadline','The reminder was delivered; the decision was the user\'s','User','u']];
+  const box=document.getElementById('lb');
+  box.innerHTML=C.map(([a,b,c,k],i)=>`<div class="lb-r"><span>${a}</span><span>${b}</span><b class="${k}" style="--i:${i}">${c}</b></div>`).join('');
+  function go(){box.classList.remove('on');void box.offsetWidth;box.classList.add('on');document.getElementById('lb-msg').textContent='Liability follows control: the party that could have avoided this loss at the lowest cost bears it. Allocating it this way also gives every party a reason to get its own part right.';}
+  document.getElementById('lb-go').addEventListener('click',go);
+  box.addEventListener('anim-in',()=>setTimeout(go,600));
+})();
+</script>

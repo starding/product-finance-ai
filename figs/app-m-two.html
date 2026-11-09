@@ -1,0 +1,32 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">分解与推演：两种写法</p><p class="figsub">切换两种写法，看各自的起点、推进方式与适合回答的问题。</p></div><button class="replay" type="button" data-replay="mt">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="写法">
+      <button type="button" data-mt="d" aria-pressed="true">分解</button>
+      <button type="button" data-mt="g" aria-pressed="false">推演</button>
+    </div>
+    <div class="mt" id="mt" data-anim></div>
+    <p class="mt-msg" id="mt-msg" aria-live="polite"></p>
+  </div>
+</figure>
+<style>
+.mt{display:flex;align-items:stretch;gap:6px;flex-wrap:wrap}
+.mt-s{flex:1 1 110px;background:var(--quote);border-radius:9px;padding:10px;font-size:13px;line-height:1.5;position:relative;opacity:0;transform:translateY(6px);transition:opacity .4s,transform .4s;transition-delay:calc(var(--i)*.3s)}
+.mt.in .mt-s{opacity:1;transform:none}
+.mt-s em{display:block;font-style:normal;font-size:11px;color:var(--faint)}
+.mt-s.end{background:var(--accent-soft)}
+.mt-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const T={d:[['起点','一个可以观测的结果，例如实际回报'],['推进','拆成互不重叠、合起来完整的几项'],['检查','每一项都有收益与风险两面'],['适合','检查一个产品缺了哪一项']],
+    g:[['起点','一个什么都没有的世界'],['推进','每一步只加一个约束'],['回应','约束逼出一种机制，机制留下新问题'],['适合','约束改变时，设想会长出什么新产品']]};
+  const M={d:'分解的长处是可以检查是否完整：每一项都写出来之后，缺了哪一项一目了然。',g:'推演的长处是可以迁移：把一个参数改掉、重跑一遍，就能看到哪些制度会变。'};
+  const box=document.getElementById('mt'),msg=document.getElementById('mt-msg');
+  function set(k){document.querySelectorAll('[data-mt]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mt===k)));
+    box.innerHTML=T[k].map(([a,b],i)=>`<div class="mt-s${i===3?' end':''}" style="--i:${i}"><em>${a}</em>${b}</div>`).join('');msg.textContent=M[k];box.classList.remove('in');void box.offsetWidth;box.classList.add('in');}
+  document.querySelectorAll('[data-mt]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.mt)));
+  box.addEventListener('anim-in',()=>{set('d');setTimeout(()=>set('g'),2600);});
+  set('d');box.classList.remove('in');
+})();
+</script>

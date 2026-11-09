@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Summary of Part Two: what each term of the decomposition yields</p><p class="figsub">Switch views: each term's conclusion, its implications for financial products, and its implications for AI entering financial products.</p></div><button class="replay" type="button" data-replay="rc2">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="View">
+      <button type="button" data-rv2="c" aria-pressed="true">Conclusions</button>
+      <button type="button" data-rv2="p" aria-pressed="false">Implications for products</button>
+      <button type="button" data-rv2="a" aria-pressed="false">Implications for AI</button>
+    </div>
+    <div class="rc2" id="rc2" data-anim></div>
+  </div>
+  <figcaption>Each row corresponds to one term of the decomposition.</figcaption>
+</figure>
+<style>
+.rc2{display:grid;gap:6px}
+.rc2-r{display:grid;grid-template-columns:150px 1fr;gap:12px;align-items:center;padding:10px 12px;border-radius:10px;background:var(--quote);opacity:0;transform:translateY(6px);transition:opacity .4s,transform .4s;transition-delay:calc(var(--i)*.15s)}
+.rc2.in .rc2-r{opacity:1;transform:none}
+.rc2-r b{font-size:14px;display:block}
+.rc2-r em{font-style:normal;font-size:11px;color:var(--faint)}
+.rc2-r p{margin:0;font-size:13.5px;line-height:1.6}
+.rc2-r.keep{background:rgba(160,120,24,.1)}
+.rc2-r .sign{display:inline-block;min-width:18px;margin-right:4px;font-size:11px;color:var(--faint);font-weight:700}
+@media (max-width:640px){.rc2-r{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const R=[
+    ['','Task','15',{c:'Users want to get something done; financial tasks arise from arranging income and spending over a lifetime; outcomes are affected by luck, so the standard of completion rests on the process.',p:'Ask about the task before recommending a product; write down the goal, constraints and method of checking in advance; deliver completely, and account for every cycle of an ongoing task.',a:'AI is well suited to clarifying the task, keeping a record of the process, and checking and reporting cycle by cycle in ongoing tasks.'}],
+    ['－','Decision biases','16',{c:'Attention is limited; gains and losses are judged against a reference point, and a loss weighs about twice as much as an equal gain; biases have a direction and can be changed by presentation and defaults.',p:'Put the information relevant to the goal first; match the frequency of evaluation to the horizon; set defaults on the user\'s side.',a:'AI can supply goal-relevant information at the moment the user decides, but it can equally be used to induce trading, so its objectives must be constrained.'}],
+    ['Constraint','Capacity to bear','17',{c:'Risk tolerance has three faces, capacity, willingness and behaviour, and a plan must follow the lowest; willingness changes, so a profile can only be a statistical description.',p:'Learn each of the three faces separately, follow the lowest and review it regularly; describe profiles only in statistical terms.',a:'AI can keep watching the behavioural record and talk to users before a decline, but it cannot assert how much an individual can bear.'}],
+    ['Premise','Trust','18',{c:'Trust is the belief that a trustee will not act in its own interest when unobserved, and it updates with evidence by Bayes\' rule; return evidence has very low diagnostic power and serious failures very high, so trust is built slowly and lost quickly; whether to hand over also depends on whether the stakes cross a threshold.',p:'Provide process evidence with high diagnostic power; avoid integrity failures, and state and remedy competence failures honestly; do not lift exposure limits as trust grows; aim for trust proportionate to trustworthiness.',a:'An AI agent is a new trustee with a weak prior, and changes in model version partly invalidate the old record, so trust has to be rebuilt through diagnosable records.'}]
+  ];
+  const box=document.getElementById('rc2');
+  function set(v){document.querySelectorAll('[data-rv2]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.rv2===v)));
+    box.innerHTML=R.map(([s,n,ch,t],i)=>`<div class="rc2-r${n==='Trust'?' keep':''}" style="--i:${i}"><div><b><span class="sign">${s}</span>${n}</b><em>Ch. ${ch}</em></div><p>${t[v]}</p></div>`).join('');
+    box.classList.remove('in');void box.offsetWidth;box.classList.add('in');}
+  document.querySelectorAll('[data-rv2]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.rv2)));
+  set('c'); box.classList.remove('in');
+})();
+</script>

@@ -1,0 +1,32 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">打听的人停在哪里</p><p class="figsub">曲线是每位知情者从公开报告中赚到的好处，知情的人越多，好处越少；水平线是分析的成本。两者相交处，就是知情者比例停下来的位置。拖动认知劳动的价格，看这个位置怎样移动。</p></div><button class="replay" type="button" data-replay="gs16">重播</button></div>
+    <div class="gs16" id="gs16" data-anim>
+      <svg viewBox="0 0 660 220" role="img" aria-label="知情者的好处与分析成本"><g id="gs16-g"></g></svg>
+      <div class="sl"><label for="gs16-c">认知劳动的价格 <b id="gs16-cv"></b></label><input id="gs16-c" type="range" min="0" max="2" step="0.1" value="0"></div>
+      <p class="gs16-msg" id="gs16-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：四十户人家；知情者比例为 f 时，价格在消息公开前反映的比例为 f ÷（f ＋ 0.1）；尚未反映的部分由知情者从不知情者那里赚到，全村每年合计 9.6 份 ×（1－反映的比例）×（1－f），由知情者平分。分析的成本原为每人每年 0.8 份，按认知劳动的价格同比例下降。纵轴为对数刻度。</figcaption>
+</figure>
+<style>
+.gs16 svg{width:100%;height:auto;display:block}
+.gs16-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.gs16 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('gs16'+id),N=40,V=9.6,K=.1,X0=56,X1=628,YT=12,YB=180,x=f=>X0+f*(X1-X0),L0=-3,L1=1,y=v=>YB-(Math.log10(Math.max(v,1e-3))-L0)/(L1-L0)*(YB-YT);
+  const gain=f=>V*(K/(f+K))*(1-f)/(f*N);
+  function eq(c){if(gain(1/N)<=c)return 1/N;let lo=1/N,hi=.999;if(gain(hi)>c)return hi;for(let k=0;k<60;k++){const m=(lo+hi)/2;if(gain(m)>c)lo=m;else hi=m;}return lo;}
+  function draw(){const a=Math.pow(10,-+$('-c').value),c=.8*a,f=eq(c),sh=f/(f+K);$('-cv').textContent=a>=.1?Math.round(a*100)+'%':(a*100).toFixed(1)+'%';
+    let h=[.001,.01,.1,1,10].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v} 份</text>`).join('')+[0,.25,.5,.75,1].map(v=>`<text x="${x(v)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${v*100}%</text>`).join('')+`<text x="${X1}" y="${YB+30}" text-anchor="end" font-size="11" class="t-faint">知情者的比例 →</text>`;
+    let d='';for(let k=2;k<=99;k++){const ff=k/100;d+=(d?'L':'M')+x(ff).toFixed(1)+','+y(gain(ff)).toFixed(1);}
+    h+=`<path d="${d}" fill="none" stroke="var(--accent)" stroke-width="2.6"/><line x1="${X0}" x2="${X1}" y1="${y(c)}" y2="${y(c)}" stroke="var(--warm)" stroke-dasharray="5 4"/><text x="${X1}" y="${y(c)-6}" text-anchor="end" font-size="11" fill="var(--warm)">分析的成本 ${c<.1?c.toFixed(3):c.toFixed(2)} 份</text><circle cx="${x(f)}" cy="${y(c)}" r="7" fill="var(--accent)"/>`;
+    $('-g').innerHTML=h;
+    $('-msg').textContent=`知情者停在约 ${Math.round(f*100)}%，价格在消息公开之前已反映约 ${Math.round(sh*100)}% 的公开信息；每位知情者赚到的好处恰好等于 ${c<.1?c.toFixed(3):c.toFixed(2)} 份的成本。`+(a<.1?'成本越低，知情的人越多，读报告本身越不值钱。':'');}
+  $('-c').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{let v=0;$('-c').value=0;draw();const id=setInterval(()=>{v+=.1;$('-c').value=v.toFixed(1);draw();if(v>=2)clearInterval(id);},150);});
+  draw();
+})();
+</script>

@@ -1,0 +1,35 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Performance degrades even when the code is unchanged</p><p class="figsub">The missed-alert rate of an alert function over 60 days after launch. On day 35 the market enters a new state and a data source changes its format. Switch continuous monitoring and automatic rollback on or off.</p></div><button class="replay" type="button" data-replay="mn2">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Monitoring"><button type="button" data-mn2="0" aria-pressed="true">No monitoring after launch</button><button type="button" data-mn2="1" aria-pressed="false">Continuous monitoring and automatic rollback</button></div>
+    <div class="mn2" id="mn2" data-anim>
+      <svg viewBox="0 0 640 200" role="img" aria-label="Missed-alert rate over time"><g id="mn2-ax"></g><path id="mn2-p" class="mn2-l"/><g id="mn2-m"></g></svg>
+      <p class="mn2-msg" id="mn2-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative curve. On hidden problems that accumulate over time in machine learning systems, see Sculley and colleagues (2015). The alert threshold is 2%.</figcaption>
+</figure>
+<style>
+.mn2 svg{width:100%;height:auto;display:block}
+.mn2-l{fill:none;stroke:var(--accent);stroke-width:2.5;stroke-dasharray:1400;stroke-dashoffset:1400;transition:stroke-dashoffset 2s ease}
+.mn2.in .mn2-l{stroke-dashoffset:0}
+.mn2-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.mn2 svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  let s=9;const rnd=()=>{s=(s*9301+49297)%233280;return s/233280;};const noise=Array.from({length:61},()=>(rnd()-.5)*.5);
+  const X0=50,X1=620,YT=14,YB=170,x=d=>X0+d/60*(X1-X0),y=v=>YB-v/5*(YB-YT);
+  const $=id=>document.getElementById(id);
+  $('mn2-ax').innerHTML=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`+[0,1,2,3,4,5].map(v=>`<text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}%</text>`).join('')+[0,15,30,45,60].map(d=>`<text x="${x(d)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">Day ${d}</text>`).join('')+`<line x1="${X0}" x2="${X1}" y1="${y(2)}" y2="${y(2)}" stroke="var(--warm)" stroke-dasharray="4 4"/><text x="${X1}" y="${y(2)-5}" text-anchor="end" font-size="11" class="t-warm">Alert threshold</text><line x1="${x(35)}" x2="${x(35)}" y1="${YT}" y2="${YB}" class="s-faint" stroke-dasharray="2 3"/><text x="${x(35)+4}" y="${YT+10}" font-size="11" class="t-faint">Market and data source change</text>`;
+  function set(k){document.querySelectorAll('[data-mn2]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.mn2===k)));
+    const v=[];for(let d=0;d<=60;d++){let base=d<35?1:Math.min(4,1+(d-35)*.6);if(k&&d>=38)base=1.1;v.push(Math.max(.2,base+noise[d]));}
+    const p=$('mn2-p');p.style.transition='none';p.style.strokeDashoffset=1400;p.setAttribute('d',v.map((u,d)=>(d?'L':'M')+x(d).toFixed(1)+','+y(u).toFixed(1)).join(''));void p.getBoundingClientRect();p.style.transition='stroke-dashoffset 2s ease';p.style.strokeDashoffset=0;
+    $('mn2-m').innerHTML=k?`<circle cx="${x(37)}" cy="${y(v[37])}" r="6" fill="var(--warm)"/><text x="${x(37)+8}" y="${y(v[37])-8}" font-size="11" class="t-warm">Alert; fall back to conservative mode</text>`:'';
+    const missed=v.slice(35).reduce((a,u)=>a+u,0)*2;
+    $('mn2-msg').textContent=k?`On day 37 the missed-alert rate crosses the threshold; the system raises an alert and falls back to a conservative mode, and from day 38 it is back to normal. Missed alerts after the change total about ${missed.toFixed(0)} (about 200 alerts a day).`:`After day 35 the missed-alert rate quietly rises to about 4%, and nobody notices. By day 60, missed alerts after the change total about ${missed.toFixed(0)}.`;}
+  document.querySelectorAll('[data-mn2]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.mn2)));
+  $('mn2').addEventListener('anim-in',()=>{set(0);setTimeout(()=>set(1),3000);});
+  set(0);
+})();
+</script>

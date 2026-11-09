@@ -1,0 +1,21 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: explain the trading rules clearly</p><p class="figsub">Four design requirements, each tied to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="s06">Replay</button></div>
+    <div class="s06" id="s06" data-anim>
+      <div class="s06-c" style="--i:0"><em>Order types are trade-offs between risks</em><b>At order entry, explain "may not be filled" and "may be filled badly"</b><p>Especially for stop orders: explain that once triggered they become market orders, and that in a gap the fill price may be far from the set price.</p></div>
+      <div class="s06-c" style="--i:1"><em>Call auctions and continuous trading follow different rules</em><b>Explain the rules by trading session</b><p>How orders are matched during the opening and closing auctions, and whether they can be cancelled, should be explained right on the order screen.</p></div>
+      <div class="s06-c warn" style="--i:2"><em>Circuit breakers and price limits</em><b>Warn that trading may be temporarily impossible</b><p>Near a price limit or during a halt, state clearly the order's status and how trading will resume, so users do not mistake it for a system failure.</p></div>
+      <div class="s06-c" style="--i:3"><em>Orders can be sent to different venues</em><b>Disclose order routing and conflicts of interest</b><p>Explain where the order was sent, how the fill price compares with the best price in the market, and whether there is payment for order flow.</p></div>
+    </div>
+  </div>
+</figure>
+<style>
+.s06{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.s06-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.s06-c.warn{border-left-color:var(--warm)}
+.s06-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.s06-c b{display:block;font-size:15px;margin:2px 0 4px}
+.s06-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.s06.in .s06-c{opacity:1;transform:none}
+@media (max-width:640px){.s06{grid-template-columns:1fr}}
+</style>

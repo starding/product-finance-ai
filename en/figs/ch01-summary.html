@@ -1,0 +1,26 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: design the product around the promise</p><p class="figsub">The design requirements for each of the three elements, and the new questions an agent raises.</p></div><button class="replay" type="button" data-replay="sm">Replay</button></div>
+    <div class="sm" id="sm" data-anim>
+      <div class="sm-core">The promise<span>Who promises · What is promised · When it fails</span></div>
+      <div class="sm-k" style="--i:0"><b>Time</b><p>Match maturity to when the money is needed; measure returns in purchasing power</p></div>
+      <div class="sm-k" style="--i:1"><b>Risk</b><p>Match the shape of the promise to the capacity to bear risk; do not let the average stand for the outcome</p></div>
+      <div class="sm-k" style="--i:2"><b>Trust</b><p>Disclosure, custody and records are product features; make the process verifiable rather than relying on short-term results as proof</p></div>
+      <div class="sm-ai" style="--i:3"><b>AI agents: a new promisor</b><p>What it promises to do, why it is credible, and how problems are detected are answered with the same three elements</p></div>
+    </div>
+  </div>
+</figure>
+<style>
+.sm{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.sm-core{grid-column:1/-1;text-align:center;font-size:20px;font-weight:700;padding:14px;border-radius:12px;background:var(--ink);color:var(--bg);font-family:var(--serif)}
+.sm-core span{display:block;font-family:var(--sans);font-size:12px;font-weight:400;opacity:.75;margin-top:4px}
+.sm-k{position:relative;background:var(--quote);border-radius:10px;padding:12px;opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(.3s + var(--i)*.35s)}
+.sm-k::before{content:"";position:absolute;left:50%;top:-10px;width:2px;height:10px;background:var(--faint)}
+.sm-k b{font-size:15px;color:var(--accent)}
+.sm-k p,.sm-ai p{margin:4px 0 0;font-size:13px;line-height:1.6;color:var(--muted)}
+.sm-ai{grid-column:1/-1;border:1.5px dashed var(--warm);background:var(--warm-soft);border-radius:10px;padding:12px;opacity:0;transition:opacity .5s;transition-delay:1.7s}
+.sm-ai b{color:var(--warm);font-size:15px}
+.sm.in .sm-k{opacity:1;transform:none}
+.sm.in .sm-ai{opacity:1}
+@media (max-width:640px){.sm{grid-template-columns:1fr}.sm-k::before{display:none}}
+</style>

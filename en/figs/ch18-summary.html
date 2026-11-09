@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: diagnostic evidence in exchange for trust in proportion</p><p class="figsub">Four design requirements, each corresponding to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="ch18summary">Replay</button></div>
+    <div class="ch18summary" id="ch18summary" data-anim><div class="ch18summary-c" style="--i:0"><em>Trust is a belief plus a decision</em><b>Set thresholds by stakes and capacity to bear loss</b><p>Small matters can be handed over first; large ones wait until the evidence is sufficient. Thresholds adjust to the user's capacity to bear loss.</p></div><div class="ch18summary-c" style="--i:1"><em>Diagnostic power drives updating</em><b>Provide process evidence with high diagnostic power</b><p>Make fees kept to the agreement, constraints respected, an account of every period and explanations after ability failures into records that can be checked. Do not seek trust with short-term returns and rankings.</p></div><div class="ch18summary-c warn" style="--i:2"><em>Lost faster than built</em><b>Avoid integrity failures; admit ability failures candidly</b><p>Serious failures change belief sharply. Integrity failures are hard to repair afterwards and must be prevented by rules; ability failures must be explained truthfully and put right, which is evidence of willingness to improve.</p></div><div class="ch18summary-c warn" style="--i:3"><em>Reputations can be exploited; types change</em><b>Limits stay as trust grows; a new version rebuilds the record</b><p>Exposure limits match the stakes. When the model or the team changes, say so, and build the record again.</p></div></div>
+  </div>
+</figure>
+<style>
+.ch18summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch18summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch18summary-c.warn{border-left-color:var(--warm)}
+.ch18summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch18summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch18summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch18summary.in .ch18summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch18summary{grid-template-columns:1fr}}
+</style>

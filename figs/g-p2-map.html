@@ -1,0 +1,46 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">重跑哪几步</p><p class="figsub">上方是第一部分的十二步，下方是第二部分的六章。点选一章，看它重跑哪几步、要回答什么问题。</p></div><button class="replay" type="button" data-replay="pm2">重播</button></div>
+    <div class="pm2" id="pm2" data-anim>
+      <div class="pm2-top" id="pm2-t"></div>
+      <div class="pm2-bot" id="pm2-b"></div>
+      <div class="pm2-d" id="pm2-d" aria-live="polite"></div>
+    </div>
+  </div>
+  <figcaption>“预判”是推演之前的判断；七章写完之后，推演的结果与预判一致。第 13 章先确定这个参数降的是哪一部分成本，不重跑任何一步。</figcaption>
+</figure>
+<style>
+.pm2-top{display:grid;grid-template-columns:repeat(12,1fr);gap:4px}
+.pm2-top span{font-size:11px;line-height:1.35;text-align:center;padding:6px 2px;border-radius:6px;background:var(--quote);color:var(--muted);transition:background .3s,color .3s}
+.pm2-top span b{display:block;font-size:10px;font-weight:400;color:var(--faint)}
+.pm2-top span.hit{background:var(--warm-soft);color:var(--warm)}
+.pm2-bot{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-top:14px}
+.pm2-c{font:inherit;cursor:pointer;text-align:left;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:8px 9px;color:var(--ink);font-size:13px;line-height:1.45;opacity:0;transform:translateY(8px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.2s)}
+.pm2.in .pm2-c{opacity:1;transform:none}
+.pm2-c em{display:block;font-style:normal;font-size:11px;color:var(--faint)}
+.pm2-c.sel{border-color:var(--accent)}
+.pm2-d{margin-top:12px;display:grid;grid-template-columns:2fr 1fr;gap:8px}
+.pm2-d div{background:var(--quote);border-radius:8px;padding:9px 11px;font-size:13.5px;line-height:1.55}
+.pm2-d span{display:block;font-size:11px;color:var(--faint)}
+@media (max-width:640px){.pm2-top{grid-template-columns:repeat(6,1fr)}.pm2-bot{grid-template-columns:repeat(2,1fr)}.pm2-d{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const P=['储蓄与留种','借贷','承诺','货币','保险','银行','股份','市场','价格中的信息','委托','监管与托管','默认选项'];
+  const C=[[14,'人人都能有专属代理人吗',[10],'研究与比较几乎免费之后，资产不多的人家能否也请得起专属的代理；委托的边界移动多少。','放松'],
+    [15,'谁来为代理人的承诺担保',[3,11],'代理没有家产可以抵押、也没有积累的名声；谁来担保它的行动，怎样核对它做了什么。','收紧'],
+    [16,'如果人人都有分析师',[9],'人人都能读完所有报告时，信息优势消耗得更快；新的不对称出现在哪里。','放松后转移'],
+    [17,'代理人成为市场的主要参与者',[8],'执行的成本更低，但彼此相像的代理会不会同时做出同样的决定。','放松与新的风险'],
+    [18,'代理人能否矫正人的偏差',[12],'代理可以为每户随时调整默认，也可以被用来利用偏差。','两面'],
+    [19,'没有改变的东西',[1,2,5],'时间、风险与不可逆的损失，并不因认知劳动变便宜而消失。','不变']];
+  const t=document.getElementById('pm2-t'),b=document.getElementById('pm2-b'),d=document.getElementById('pm2-d');
+  t.innerHTML=P.map((p,i)=>`<span><b>${i+1}</b>${p}</span>`).join('');
+  b.innerHTML=C.map((c,i)=>`<button type="button" class="pm2-c" style="--i:${i}"><em>第 ${c[0]} 章</em>${c[1]}</button>`).join('');
+  const ts=[...t.children],bs=[...b.children];
+  function set(i){const c=C[i];bs.forEach((x,j)=>x.classList.toggle('sel',j===i));ts.forEach((x,j)=>x.classList.toggle('hit',c[2].includes(j+1)));
+    d.innerHTML=`<div><span>重跑第 ${c[2].join('、')} 步：${c[2].map(k=>P[k-1]).join('、')}</span>${c[3]}</div><div><span>预判</span>${c[4]}</div>`;}
+  bs.forEach((x,i)=>x.addEventListener('click',()=>set(i)));
+  document.getElementById('pm2').addEventListener('anim-in',()=>{[0,1,2,3,4,5].forEach((i,k)=>setTimeout(()=>set(i),1500+k*1500));});
+  set(0);
+})();
+</script>

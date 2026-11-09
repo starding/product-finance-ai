@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">这一步留下的问题</p><p class="figsub">有了股份之后出现的四个新问题。点选一个问题，看它隐含的假设。</p></div><button class="replay" type="button" data-replay="nx7">重播</button></div>
+    <div class="nx" id="nx7" data-anim>
+      <div class="nx-src"><b>村里的船队</b><span>股份与有限责任</span></div>
+      <div class="nx-list" id="nx7-l"></div>
+    </div>
+    <p class="nx-msg" id="nx7-msg" aria-live="polite"></p>
+  </div>
+</figure>
+<style>
+.nx{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:center}
+.nx-src{background:var(--ink);color:var(--bg);border-radius:10px;padding:14px 10px;text-align:center}
+.nx-src b{display:block;font-size:16px} .nx-src span{font-size:12px;opacity:.75}
+.nx-list{display:grid;gap:6px}
+.nx-i{font:inherit;text-align:left;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:9px 12px;color:var(--ink);opacity:0;transform:translateX(-8px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.3s)}
+.nx.in .nx-i{opacity:1;transform:none}
+.nx-i span{font-size:13.5px} .nx-i em{font-style:normal;font-size:11.5px;color:var(--faint);white-space:nowrap}
+.nx-i.sel{border-color:var(--accent)}
+.nx-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.nx{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const Q=[['股份要能卖出去','第 8 章 市场','隐含的假设：出资人愿意一直持有。想退出时，要找到愿意接手的人，并商定一个价格。'],
+    ['出资的人与经营的人分开了','第 10 章 委托','隐含的假设：船长会尽力为出资人着想。伯利与米恩斯（1932）称之为所有权与控制权的分离。'],
+    ['船长报告的航程可能不实','第 11 章 监管与托管','隐含的假设：出资人知道货物值多少。他们只能听船长说。'],
+    ['一份份额值多少','第 9 章 价格中的信息','隐含的假设：船的前景人人看得清。份额的价格要由许多人对前景的判断共同决定。']];
+  const l=document.getElementById('nx7-l'),msg=document.getElementById('nx7-msg');
+  l.innerHTML=Q.map((q,i)=>`<button type="button" class="nx-i" style="--i:${i}" data-i="${i}"><span>${q[0]}</span><em>→ ${q[1]}</em></button>`).join('');
+  const bs=[...l.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));msg.textContent=Q[i][2];}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('nx7').addEventListener('anim-in',()=>{[0,1,2,3].forEach((i,k)=>setTimeout(()=>set(i),1600+k*1800));});
+  set(0);
+})();
+</script>

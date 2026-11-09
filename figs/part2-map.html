@@ -1,0 +1,83 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">用户实际得到的结果由什么决定</p><p class="figsub">从任务要求的结果出发，切换情形，看决策偏差、承受能力与信任各自怎样改变最终结果。下方是对应的章节。</p></div><button class="replay" type="button" data-replay="pm2">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="情形">
+      <button type="button" data-p2="ok" aria-pressed="true">各项都具备</button>
+      <button type="button" data-p2="bias" aria-pressed="false">有决策偏差</button>
+      <button type="button" data-p2="cap" aria-pressed="false">超出承受能力</button>
+      <button type="button" data-p2="trust" aria-pressed="false">缺乏信任</button>
+    </div>
+    <div class="pm2" id="pm2" data-anim>
+      <svg viewBox="0 0 640 200" role="img" aria-label="从任务要求的结果到实际结果的分解">
+        <g id="pm2-g"></g>
+      </svg>
+      <p class="pm2-msg" id="pm2-msg" aria-live="polite"></p>
+    </div>
+    <div class="pm2-cols">
+      <div class="pm2-c" style="--c:var(--accent)"><b>任务</b><span>要完成什么，什么算完成</span><a href="ch15.html"><em>15</em>用户要完成的任务</a></div>
+      <div class="pm2-c" style="--c:var(--warm)"><b>决策</b><span>怎样做决定，偏差在哪里</span><a href="ch16.html"><em>16</em>用户如何做决定</a></div>
+      <div class="pm2-c" style="--c:var(--blue)"><b>承受能力</b><span>能承受多大的损失与波动</span><a href="ch17.html"><em>17</em>用户能承受什么</a></div>
+      <div class="pm2-c" style="--c:var(--gold)"><b>信任</b><span>信念如何随证据更新</span><a href="ch18.html"><em>18</em>用户如何判断与信任</a></div>
+    </div>
+  </div>
+  <figcaption>示意数字，只表示各因素的作用方向。</figcaption>
+</figure>
+<style>
+.pm2 svg{width:100%;height:auto;display:block}
+.pm2-b{transition:y .6s ease,height .6s ease}
+.pm2-msg{font-size:14px;margin:4px 0 0;min-height:3.4em}
+.pm2-cols{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.pm2-c{border-top:3px solid var(--c);background:var(--quote);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:4px}
+.pm2-c b{font-size:14px}
+.pm2-c>span:not(.todo){font-size:12px;color:var(--muted);line-height:1.5}
+.pm2-c a,.pm2-c .todo{font-size:12.5px;border-radius:7px;padding:5px 8px;text-decoration:none;line-height:1.35;margin-top:auto}
+.pm2-c a{background:var(--surface);border:1px solid var(--accent);color:var(--ink)}
+.pm2-c a:hover{background:var(--accent-soft)}
+.pm2-c .todo{background:var(--surface);color:var(--faint);border:1px solid var(--line)}
+.pm2-c em{font-style:normal;color:var(--faint);margin-right:6px}
+@media (max-width:640px){.pm2 svg text{font-size:15px}.pm2-cols{grid-template-columns:repeat(2,1fr)}}
+</style>
+<script>
+(function(){
+  const S={
+    ok:{bias:0,cap:false,trust:true,m:'任务清楚，决策少有偏差，计划在承受能力之内，用户也信任这份承诺：实际结果接近任务要求的结果。'},
+    bias:{bias:28,cap:false,trust:true,m:'追涨杀跌、频繁交易与过度集中等决策偏差，吞掉了一部分本可得到的结果。这部分损失可以通过设计来减少。'},
+    cap:{bias:0,cap:true,trust:true,m:'计划要求承受的回撤超出了用户的承受能力，用户在下跌中放弃计划，结果停在半途。承受能力是硬约束。'},
+    trust:{bias:0,cap:false,trust:false,m:'用户不相信这份承诺，任务没有开始，结果为零。信任是闸门，而不是可以慢慢扣减的一项。'}};
+  const X=[50,200,350,500],W=90,YB=170,YT=24,h=v=>v/112*(YB-YT);
+  const g=document.getElementById('pm2-g');
+  const lab=['任务要求的结果','决策偏差','承受能力之内','实际结果'];
+  let base=`<line x1="30" y1="${YB}" x2="620" y2="${YB}" class="s-faint"/>`;
+  lab.forEach((l,i)=>base+=`<text x="${X[i]+W/2}" y="${YB+18}" text-anchor="middle" font-size="12" class="t-ink">${l}</text>`);
+  base+=`<rect id="b0" class="pm2-b" x="${X[0]}" width="${W}" rx="4" fill="var(--accent)"/>`+
+        `<rect id="b1" class="pm2-b" x="${X[1]}" width="${W}" rx="4" fill="var(--warm)"/>`+
+        `<rect id="b2x" class="pm2-b" x="${X[2]}" width="${W}" rx="4" fill="none" stroke="var(--warm)" stroke-width="1.5" stroke-dasharray="4 3"/>`+`<rect id="b2" class="pm2-b" x="${X[2]}" width="${W}" rx="4" fill="var(--blue)"/>`+`<text id="t2x" x="${X[2]+W/2}" text-anchor="middle" font-size="12" class="t-warm"></text>`+`<text id="t2" x="${X[2]+W/2}" text-anchor="middle" font-size="11" fill="var(--blue)"></text>`+
+        `<line id="cap" x1="${X[2]-10}" x2="${X[2]+W+10}" stroke="var(--blue)" stroke-width="2" stroke-dasharray="5 4"/>`+
+        `<rect id="b3" class="pm2-b" x="${X[3]}" width="${W}" rx="4" fill="var(--ink)"/>`+
+        `<text id="t1" x="${X[1]+W/2}" text-anchor="middle" font-size="12" class="t-warm"></text>`+
+        `<text id="t3" x="${X[3]+W/2}" text-anchor="middle" font-size="13" font-weight="700" class="t-ink"></text>`+
+        `<g id="gate" opacity="0"><rect x="${X[3]-6}" y="${YT}" width="${W+12}" height="${YB-YT}" rx="6" fill="none" stroke="var(--gold)" stroke-width="2" stroke-dasharray="6 4"/><text x="${X[3]+W/2}" y="${YB-60}" text-anchor="middle" font-size="12" fill="var(--gold)">闸门关闭</text></g>`;
+  g.innerHTML=base;
+  const $=id=>document.getElementById(id);
+  const setR=(id,top,bot)=>{const r=$(id);r.style.y=(YB-h(top))+'px';r.style.height=Math.max(0,h(top)-h(bot))+'px';};
+  function set(k,anim){document.querySelectorAll('[data-p2]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.p2===k)));
+    const s=S[k];let v=100-s.bias;
+    if(anim){['b0','b1','b2','b2x','b3'].forEach(id=>setR(id,0,0));}
+    setTimeout(()=>{
+      setR('b0',100,0);
+      setR('b1',100,100-s.bias);$('t1').setAttribute('y',YB-h(100)-6);$('t1').textContent=s.bias?'－'+s.bias:'接近 0';
+      const capV=s.cap?45:110;setR('b2',Math.min(v,capV),0);
+      if(s.cap){setR('b2x',v,capV);$('t2x').setAttribute('y',YB-h((v+capV)/2)+4);$('t2x').textContent='中途放弃';}else{setR('b2x',0,0);$('t2x').textContent='';}
+      $('cap').setAttribute('y1',YB-h(capV));$('cap').setAttribute('y2',YB-h(capV));
+      $('t2').setAttribute('y',YB-h(capV)-5);$('t2').textContent='承受上限';
+      if(s.cap)v=Math.min(v,capV);
+      if(!s.trust)v=0;
+      setR('b3',v,0);$('t3').setAttribute('y',YB-h(v)-6);$('t3').textContent=v;
+      $('gate').setAttribute('opacity',s.trust?0:1);
+      $('pm2-msg').textContent=s.m;
+    },anim?40:0);}
+  document.querySelectorAll('[data-p2]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.p2,false)));
+  $('pm2').addEventListener('anim-in',()=>set('ok',true));
+  set('ok',false);
+})();
+</script>

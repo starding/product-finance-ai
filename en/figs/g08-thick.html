@@ -1,0 +1,29 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The more people come, the easier it is to get a good price</p><p class="figsub">A villager brings a ship share to the market square. Each buyer will pay between 6 and 14 portions. Drag the number of buyers who come and see the chance that he sells for at least 10 portions, and the average of the highest bid.</p></div><button class="replay" type="button" data-replay="tk">Replay</button></div>
+    <div class="tk" id="tk" data-anim>
+      <div class="tk-b"><span>Chance of selling for at least 10</span><div><i id="tk-p" style="background:var(--accent)"></i></div><b id="tk-pv"></b></div>
+      <div class="tk-b"><span>Average highest bid</span><div><i id="tk-m" style="background:var(--blue)"></i></div><b id="tk-mv"></b></div>
+      <div class="sl"><label for="tk-n">Buyers at the market <b id="tk-nv"></b></label><input id="tk-n" type="range" min="1" max="30" step="1" value="1"></div>
+      <p class="tk-msg" id="tk-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: buyers’ prices are independent and uniformly distributed between 6 and 14 portions; the share goes to the highest bidder. Average highest bid = 6 + 8 × buyers ÷ (buyers + 1).</figcaption>
+</figure>
+<style>
+.tk-b{display:grid;grid-template-columns:13em 1fr 4.5em;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.tk-b div{height:16px;background:var(--quote);border-radius:4px;overflow:hidden}
+.tk-b i{display:block;height:100%;transition:width .3s}
+.tk-b b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.tk-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  function draw(){const n=+$('tk-n').value,p=1-Math.pow(.5,n),m=6+8*n/(n+1);$('tk-p').style.width=p*100+'%';$('tk-m').style.width=(m-6)/8*100+'%';$('tk-pv').textContent=Math.round(p*100)+'%';$('tk-mv').textContent=m.toFixed(1);$('tk-nv').textContent=n;
+    $('tk-msg').textContent=n===1?'With only one buyer, getting 10 portions is down to luck: there is an even chance of falling short.':`With ${n} buyers present at once, the chance of selling for at least 10 portions rises to ${Math.round(p*100)}%, and the highest bid averages ${m.toFixed(1)} portions. The more people come, the more reason there is to come: trading therefore gathers in a few places.`;}
+  $('tk-n').addEventListener('input',draw);
+  $('tk').addEventListener('anim-in',()=>{let v=1;$('tk-n').value=1;draw();const id=setInterval(()=>{v++;$('tk-n').value=v;draw();if(v>=30)clearInterval(id);},100);});
+  draw();
+})();
+</script>

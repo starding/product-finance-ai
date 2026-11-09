@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：让代理站在用户一边</p><p class="figsub">四条设计要求，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="ch27summary">重播</button></div>
+    <div class="ch27summary" id="ch27summary" data-anim><div class="ch27summary-c" style="--i:0"><em>代理有几个委托人</em><b>明确代理服务于用户</b><p>把委托书与用户的净价值写进代理的目标，并向用户说明平台从哪里赚钱。</p></div><div class="ch27summary-c" style="--i:1"><em>冲突会写进目标</em><b>不以交易量与使用时长评价代理</b><p>评价指标以用户的净价值与守约为主，交易建议的频率接受监测。</p></div><div class="ch27summary-c warn" style="--i:2"><em>披露不够</em><b>用结构处理冲突</b><p>收入不随交易与推荐变化，建议时隔离产品收入信息，并定期独立审计建议的偏向。</p></div><div class="ch27summary-c warn" style="--i:3"><em>责任跟随控制</em><b>按最低成本避免者分配责任，并完整记录</b><p>执行与数据错误由控制方承担；每次关键行动记录输入、依据、授权与检查，出错时据此补偿与改进。</p></div></div>
+  </div>
+</figure>
+<style>
+.ch27summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch27summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch27summary-c.warn{border-left-color:var(--warm)}
+.ch27summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch27summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch27summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch27summary.in .ch27summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch27summary{grid-template-columns:1fr}}
+</style>

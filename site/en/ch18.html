@@ -1,0 +1,668 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How users judge and trust</title>
+<meta name="description" content="Product × Finance × AI: Financial Products in the Age of AI, Chapter 18. Trust is the principal&#x27;s belief that the trustee will act in the principal&#x27;s interest when no one is watching, and it updates with evidence by Bayes&#x27; rule. In finance, evidence from returns has very little diagnostic power, so trust has to be built on diagnostic process evidence, and the decision to trust uses a threshold that matches the stakes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="ch18">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="Contents">
+<div class="side-head"><a class="sidetitle" href="index.html">Product × Finance × AI<small>Financial Products in the Age of AI</small></a></div>
+<div class="side-view" role="group" aria-label="Way of reading"><a href="preface.html" class="on" aria-current="true">Decomposition</a><a href="g-preface.html">Derivation</a></div>
+<a class="side-about" href="index.html#about">About this book</a>
+<a class="" href="preface.html"><span class="n">Preface</span>Why financial products must be relearned in the age of AI</a>
+<a class="side-part" href="part1.html"><span class="pn">Part One</span>Markets: where returns and risks come from</a>
+<a class="" href="ch01.html"><span class="n">1</span>What financial products sell</a>
+<a class="" href="ch02.html"><span class="n">2</span>Interest rates and maturity</a>
+<a class="" href="ch03.html"><span class="n">3</span>What risk looks like</a>
+<a class="" href="ch04.html"><span class="n">4</span>Diversification</a>
+<a class="" href="ch05.html"><span class="n">5</span>Compounding and volatility drag</a>
+<a class="" href="ch06.html"><span class="n">6</span>Factors</a>
+<a class="" href="ch07.html"><span class="n">7</span>Why prices are hard to predict</a>
+<a class="" href="ch08.html"><span class="n">8</span>How information gets into prices</a>
+<a class="" href="ch09.html"><span class="n">9</span>Traders in the market</a>
+<a class="" href="ch10.html"><span class="n">10</span>Liquidity and the bid-ask spread</a>
+<a class="" href="ch11.html"><span class="n">11</span>Orders, rules and market structure</a>
+<a class="" href="ch12.html"><span class="n">12</span>The arithmetic of active management</a>
+<a class="" href="ch13.html"><span class="n">13</span>How promises are kept</a>
+<a class="" href="ch14.html"><span class="n">14</span>Why regulation exists</a>
+<a class="side-part" href="part2.html"><span class="pn">Part Two</span>Users: what people want and what they can bear</a>
+<a class="" href="ch15.html"><span class="n">15</span>The jobs users need done</a>
+<a class="" href="ch16.html"><span class="n">16</span>How users make decisions</a>
+<a class="" href="ch17.html"><span class="n">17</span>What users can bear</a>
+<a class=" cur" href="ch18.html" aria-current="page"><span class="n">18</span>How users judge and trust</a>
+<a class="side-part" href="part3.html"><span class="pn">Part Three</span>AI: how much an agent can do on people&#x27;s behalf</a>
+<a class="" href="ch19.html"><span class="n">19</span>The amplification factor</a>
+<a class="" href="ch20.html"><span class="n">20</span>Which tasks can be handed to AI</a>
+<a class="" href="ch21.html"><span class="n">21</span>Where capability comes from, and where it fails</a>
+<a class="" href="ch22.html"><span class="n">22</span>Verifiability: the cost of checking</a>
+<a class="" href="ch23.html"><span class="n">23</span>The special constraints of finance</a>
+<a class="side-part" href="part4.html"><span class="pn">Part Four</span>Design: financial products under three sets of constraints</a>
+<a class="" href="ch24.html"><span class="n">24</span>What to promise</a>
+<a class="" href="ch25.html"><span class="n">25</span>Mandate parameters</a>
+<a class="" href="ch26.html"><span class="n">26</span>Authority and irreversible exposure</a>
+<a class="" href="ch27.html"><span class="n">27</span>Liability and conflicts of interest</a>
+<a class="" href="ch28.html"><span class="n">28</span>Capability assembly and process visibility</a>
+<a class="" href="ch29.html"><span class="n">29</span>Assurance level</a>
+<a class="" href="ch30.html"><span class="n">30</span>How trust is built</a>
+<a class="" href="ch31.html"><span class="n">31</span>Design principles</a>
+<a class="side-app" href="estimates.html"><span class="n">Appendix</span>Methods and data behind the author&#x27;s estimates</a>
+<a class="side-app" href="method.html"><span class="n">Appendix</span>How this book was written</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="Open contents" title="Contents"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">Product × Finance × AI: Financial Products in the Age of AI</a><span>Part Two  Users: what people want and what they can bear</span><a class="langlink" href="../ch18.html" hreflang="zh-CN">中文</a></header>
+
+<div class="chapno">Chapter 18</div><h1>How users judge and trust<small>Trust is a belief that updates with evidence</small></h1>
+<blockquote><p>For A to trust B is for A to believe that B will act in A's interest even when A cannot monitor B. This is a belief, and it updates with evidence. Before there is any record, the belief comes from a prior: institutional safeguards, the brand and what others say. After that, every act of fulfilment is a piece of evidence. How far a piece of evidence moves the belief depends on its diagnostic power, that is, on how different the probabilities are of seeing it from a reliable trustee and from an unreliable one. The difficulty in finance is that the evidence people use most often, short-term returns, has almost no diagnostic power. What does have diagnostic power is the process record and serious failures, which also explains why trust is built slowly and lost quickly. Beyond being a belief, trust is also a decision: the larger the stakes, the stronger the belief required. Good trust is trust that matches how trustworthy the other party actually is.</p></blockquote>
+<h2 id="sec-1">1. Trust is a belief, and also a decision</h2>
+<p>Mayer, Davis and Schoorman (1995) separated two things. Trustworthiness is the principal's judgement of the trustee; trust is the principal's decision, on the basis of that judgement, to accept risk. The first can be written as a probability: how likely the trustee is to act in the principal's interest when no one is watching. The second is a choice made on top of that probability, and its threshold depends on the stakes. To ask someone to look up a figure, fifty per cent confidence may be enough; to hand over all of one's savings for discretionary management, ninety per cent may not be. The same belief can be sufficient for a small matter and insufficient for a large one, and how high the threshold sits depends in turn on how large a loss the principal can bear.</p>
+<figure>
+  <div class="card">
+    <p class="figtitle">Whether the same belief is enough depends on the stakes</p>
+    <p class="figsub">Drag the principal's belief about the trustee: the probability that the trustee acts in the principal's interest when no one is watching. The four tasks carry different stakes and so need different thresholds; switch the principal's capacity to bear loss.</p>
+    <div class="dc" id="dc" data-anim>
+      <div class="seg-btns" role="group" aria-label="Capacity to bear loss">
+        <button type="button" data-dc="0" aria-pressed="true">Higher capacity</button>
+        <button type="button" data-dc="1" aria-pressed="false">Lower capacity</button>
+      </div>
+      <div class="dc-sc"><div class="dc-t"><i id="dc-bar"></i></div><div id="dc-th"></div></div>
+      <div class="sl"><label for="dc-p">Belief <b id="dc-pv"></b></label><input id="dc-p" type="range" min="0" max="100" step="1" value="70"></div>
+      <div class="dc-list" id="dc-list"></div>
+      <p class="dc-msg" id="dc-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative thresholds. The distinction between trustworthiness (a belief) and trust (the decision to accept risk) follows Mayer, Davis and Schoorman (1995).</figcaption>
+</figure>
+<style>
+.dc-sc{position:relative;margin:28px 0 6px}
+.dc-t{height:18px;background:var(--quote);border-radius:9px;overflow:hidden}
+.dc-t i{display:block;height:100%;background:var(--accent);border-radius:9px;transition:width .3s}
+.dc-mk{position:absolute;top:-24px;transform:translateX(-50%);font-size:11px;color:var(--warm);white-space:nowrap;transition:left .4s}
+.dc-mk::after{content:"";position:absolute;left:50%;top:16px;height:30px;border-left:2px dashed var(--warm)}
+.dc-list{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
+.dc-i{border-radius:8px;padding:8px 10px;font-size:12.5px;background:var(--quote);border:1.5px solid var(--line);transition:all .3s}
+.dc-i b{display:block;font-size:13.5px}
+.dc-i.ok{background:var(--accent-soft);border-color:var(--accent)}
+.dc-i span{color:var(--faint)}
+.dc-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.dc-list{grid-template-columns:1fr 1fr}.dc-mk{font-size:10px}}
+</style>
+<script>
+(function(){
+  const T=[['Look up a figure',45],['Research a company',60],['Place an order',78],['Fully manage a pension',92]];let lo=0;
+  const $=id=>document.getElementById(id),sl=$('dc-p');
+  function r(){const p=+sl.value,add=lo?6:0;$('dc-pv').textContent=p+'%';$('dc-bar').style.width=p+'%';
+    $('dc-th').innerHTML=T.map(([n,t],i)=>`<span class="dc-mk" style="left:${Math.min(98,t+add)}%;top:${-24-(i%2)*0}px">${i+1}</span>`).join('');
+    $('dc-list').innerHTML=T.map(([n,t],i)=>{const ok=p>=t+add;return `<div class="dc-i${ok?' ok':''}"><b>${i+1}. ${n}</b><span>Threshold ${Math.min(99,t+add)}% · ${ok?'Hand over':'Hold back'}</span></div>`;}).join('');
+    const k=T.filter(([n,t])=>p>=t+add).length;
+    $('dc-msg').textContent=k===0?'The belief is too low: not even looking up a figure would be handed over.':k===4?'The belief is high enough that even discretionary management of a pension would be handed over.':`The same ${p}% belief is enough to hand over the first ${k} task${k>1?'s':''}, but not the tasks with larger stakes.${lo?' With lower capacity to bear loss, every threshold is higher.':''}`;}
+  document.querySelectorAll('[data-dc]').forEach(b=>b.addEventListener('click',()=>{lo=+b.dataset.dc;document.querySelectorAll('[data-dc]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));r();}));
+  sl.addEventListener('input',r);
+  $('dc').addEventListener('anim-in',()=>{let p=20;sl.value=p;r();const id=setInterval(()=>{p+=4;sl.value=p;r();if(p>=96){clearInterval(id);setTimeout(()=>{sl.value=70;r();},600);}},120);});
+  r();
+})();
+</script>
+
+<h2 id="sec-2">2. What is being estimated: ability, benevolence and integrity</h2>
+<p>What the principal has to estimate is which kind of trustee this is. Mayer and colleagues argue that trustworthiness has three components: ability, whether the trustee has the skill to do the job; benevolence, whether the trustee cares about the principal's interest; and integrity, whether the trustee keeps to principles both sides accept and acts as it says. All three are needed. An adviser with great ability whose real aim is to sell, and a friend who sincerely wants the best for you but lacks expertise, are equally unfit to be entrusted with a retirement fund. Ability must also be estimated task by task: being good at research does not mean being good at executing trades.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The three components of trustworthiness</p><p class="figsub">Pick a trustee, or set ability, benevolence and integrity yourself, and see whether a retirement fund could be entrusted to it.</p></div><button class="replay" type="button" data-replay="ab">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Trustee">
+      <button type="button" data-ab="0" aria-pressed="true">Capable salesperson</button>
+      <button type="button" data-ab="1" aria-pressed="false">Well-meaning friend</button>
+      <button type="button" data-ab="2" aria-pressed="false">Conscientious adviser</button>
+    </div>
+    <div class="ab" id="ab" data-anim>
+      <div class="ab-s" id="ab-s"></div>
+      <div class="ab-out"><span>How far it can be trusted</span><div class="ab-t"><i id="ab-bar"></i></div><b id="ab-v"></b></div>
+      <p class="ab-msg" id="ab-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>The three components follow Mayer, Davis and Schoorman (1995). "How far it can be trusted" is the product of the three, for illustration: if any one component is very low, the whole is very low.</figcaption>
+</figure>
+<style>
+.ab-s{display:grid;gap:4px}
+.ab-s .sl label span{font-size:12px;color:var(--faint);margin-left:6px}
+.ab-out{display:grid;grid-template-columns:auto 1fr 50px;gap:10px;align-items:center;margin-top:10px;font-size:13px}
+.ab-out>span{color:var(--faint);font-size:12px}
+.ab-t{height:16px;background:var(--quote);border-radius:8px;overflow:hidden}
+.ab-t i{display:block;height:100%;width:0;border-radius:8px;transition:width .5s,background .3s}
+.ab-out b{text-align:right;font-variant-numeric:tabular-nums}
+.ab-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const F=[['ab','Ability','has the skill to do the job'],['be','Benevolence','cares about the principal\'s interest'],['in','Integrity','acts as it says and keeps to principles']];
+  const P=[[9,2,6,'Highly skilled, but paid from sales: benevolence is very low, and what it recommends depends on what earns it most.'],[2,9,9,'Sincerely cares about the principal and is dependable, but lacks expertise: good intentions cannot turn into good results.'],[8,8,9,'All three components are high: skilled, cares about the principal, acts as it says. Only a trustee like this deserves to be entrusted.']];
+  const box=document.getElementById('ab-s');
+  box.innerHTML=F.map(([k,n,d])=>`<div class="sl"><label for="ab-${k}"><span style="color:var(--ink);font-size:inherit;margin:0">${n}: ${d}</span><b id="ab-${k}v"></b></label><input id="ab-${k}" type="range" min="0" max="10" step="1" value="5"></div>`).join('');
+  let msg='';
+  function r(){const v=F.map(([k])=>+document.getElementById('ab-'+k).value);F.forEach(([k],i)=>document.getElementById('ab-'+k+'v').textContent=v[i]);
+    const t=v[0]*v[1]*v[2]/10,bar=document.getElementById('ab-bar');bar.style.width=t+'%';bar.style.background=t>=50?'var(--accent)':t>=20?'var(--gold)':'var(--warm)';
+    document.getElementById('ab-v').textContent=t.toFixed(0);const lo=F[v.indexOf(Math.min(...v))][1];
+    document.getElementById('ab-msg').textContent=msg||(t>=50?'All three components are high enough; it can be entrusted.':`${lo} is the weakest link and drags the whole down: all three components are needed.`);msg='';}
+  function set(i){document.querySelectorAll('[data-ab]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.ab===i)));F.forEach(([k],j)=>document.getElementById('ab-'+k).value=P[i][j]);msg=P[i][3];r();}
+  F.forEach(([k])=>document.getElementById('ab-'+k).addEventListener('input',()=>{document.querySelectorAll('[data-ab]').forEach(b=>b.setAttribute('aria-pressed','false'));r();}));
+  document.querySelectorAll('[data-ab]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.ab)));
+  document.getElementById('ab').addEventListener('anim-in',()=>{[0,1,2].forEach(i=>setTimeout(()=>set(i),i*2200));});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-3">3. Prior and update: how the record changes belief</h2>
+<p>With no record at all, the principal relies on a prior: whether the trustee is regulated, whether assets are held in independent custody, what its brand and reputation are. Each observed act of fulfilment then adjusts the belief once by Bayes' rule: posterior = prior × probability of the evidence if the trustee is reliable ÷ total probability of the evidence. This is how reputation theory describes the formation of trust (Diamond, 1989), and online platforms' reputation systems often use a Beta distribution to accumulate positive and negative records (Jøsang and Ismail, 2002). A trustee with a strong prior starts high and needs less evidence. A new trustee, such as a newly arrived AI agent, starts low, and every piece of evidence matters more.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Belief updates with evidence</p><p class="figsub">The trustee is in fact reliable. Choose the prior and the type of evidence, observe the record of fulfilment step by step, and see how quickly the belief crosses the threshold needed for discretionary management; then try a serious failure and a model version update.</p></div><button class="replay" type="button" id="by-reset">Start over</button></div>
+    <div class="by-c">
+      <div class="seg-btns" role="group" aria-label="Prior"><button type="button" data-pr="0.7" aria-pressed="false">Regulated institution with custody</button><button type="button" data-pr="0.3" aria-pressed="true">New trustee</button></div>
+      <div class="seg-btns" role="group" aria-label="Evidence"><button type="button" data-ev="r" aria-pressed="true">Annual returns only</button><button type="button" data-ev="p" aria-pressed="false">Process records</button></div>
+    </div>
+    <div class="by" id="by" data-anim>
+      <svg viewBox="0 0 640 220" role="img" aria-label="Belief as the number of observations grows"><g id="by-ax"></g><path id="by-p" class="by-l"/><g id="by-mk"></g><circle id="by-d" r="6" fill="var(--ink)"/></svg>
+      <div class="by-btn"><button type="button" class="replay" id="by-10">Observe 10 more</button><button type="button" class="replay" id="by-f">A serious failure</button><button type="button" class="replay" id="by-v">Model version update</button></div>
+      <p class="by-msg" id="by-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model with two hypotheses, reliable and unreliable. Annual returns: a reliable trustee has a good year 55% of the time, an unreliable one 50%. Process records (fees, constraints, an account of each period): a reliable trustee keeps to the agreement in 97% of periods, an unreliable one 70%. Serious failure: 0.2% for a reliable trustee, 20% for an unreliable one. Old records are discounted at each step, keeping 90%; at a model version update, the belief falls halfway back to the prior. The approach follows Diamond (1989) and Jøsang and Ismail (2002).</figcaption>
+</figure>
+<style>
+.by-c{display:flex;flex-wrap:wrap;gap:4px 14px}
+.by svg{width:100%;height:auto;display:block}
+.by-l{fill:none;stroke:var(--accent);stroke-width:2.5}
+.by-btn{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.by-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.by svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const X0=50,X1=620,YT=14,YB=190,TH=.85,MAX=80,y=p=>YB-p*(YB-YT);
+  const $=id=>document.getElementById(id);let prior=.3,ev='r',H=[],mk=[],seed=7;
+  const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
+  const lo=p=>Math.log(p/(1-p)),ex=l=>1/(1+Math.exp(-l));
+  const x=i=>X0+i/MAX*(X1-X0);
+  function reset(){H=[prior];mk=[];seed=7;draw('');}
+  function step(){const L0=lo(prior),L=L0+(lo(H[H.length-1])-L0)*.9;let d;if(ev==='r'){const g=rnd()<.55;d=g?Math.log(.55/.5):Math.log(.45/.5);}else{const g=rnd()<.97;d=g?Math.log(.97/.7):Math.log(.03/.3);}H.push(ex(L+d));}
+  function draw(msg){$('by-ax').innerHTML=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`+[0,.5,1].map(v=>`<text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text>`).join('')+
+      `<line x1="${X0}" x2="${X1}" y1="${y(TH)}" y2="${y(TH)}" stroke="var(--warm)" stroke-dasharray="4 4"/><text x="${X1}" y="${y(TH)-5}" text-anchor="end" font-size="11" class="t-warm">Threshold for discretionary management</text>`+[0,20,40,60,80].map(i=>`<text x="${x(i)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${i} obs.</text>`).join('');
+    const n=Math.min(H.length,MAX+1);$('by-p').setAttribute('d',H.slice(0,n).map((p,i)=>(i?'L':'M')+x(i).toFixed(1)+','+y(p).toFixed(1)).join(''));
+    $('by-mk').innerHTML=mk.filter(([i])=>i<=MAX).map(([i,t])=>`<line x1="${x(i)}" x2="${x(i)}" y1="${YT}" y2="${YB}" stroke="${t==='f'?'var(--warm)':'var(--blue)'}" stroke-dasharray="2 3"/><text x="${x(i)+3}" y="${YT+10}" font-size="11" fill="${t==='f'?'var(--warm)':'var(--blue)'}">${t==='f'?'Serious failure':'Version update'}</text>`).join('');
+    const p=H[n-1];$('by-d').setAttribute('cx',x(n-1));$('by-d').setAttribute('cy',y(p));
+    $('by-msg').textContent=msg||`After ${n-1} observations, the belief is ${(p*100).toFixed(0)}%. `+(ev==='r'?'Annual returns have very little diagnostic power, so the belief barely moves: even a good trustee needs many years to prove itself.':'Process records have high diagnostic power, so the belief quickly crosses the threshold.');}
+  function more(k){for(let i=0;i<k&&H.length<=MAX;i++)step();draw();}
+  $('by-10').addEventListener('click',()=>more(10));
+  $('by-f').addEventListener('click',()=>{if(H.length>MAX)return;const L=lo(H[H.length-1]);H.push(ex(L+Math.log(.002/.2)));mk.push([H.length-1,'f']);const p=H[H.length-1];draw(`A serious failure has a likelihood ratio of about 1 to 100: the belief falls from ${(H[H.length-2]*100).toFixed(0)}% to ${(p*100).toFixed(0)}%. Most of the belief built up by many good records is lost at once.`);});
+  $('by-v').addEventListener('click',()=>{if(H.length>MAX)return;const L=lo(H[H.length-1]),L0=lo(prior);H.push(ex(L0+(L-L0)*.5));mk.push([H.length-1,'v']);draw(`After a model version update, the past record applies only in part: the belief falls back to ${(H[H.length-1]*100).toFixed(0)}% and must be rebuilt with new evidence.`);});
+  document.querySelectorAll('[data-pr]').forEach(b=>b.addEventListener('click',()=>{prior=+b.dataset.pr;document.querySelectorAll('[data-pr]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));reset();}));
+  document.querySelectorAll('[data-ev]').forEach(b=>b.addEventListener('click',()=>{ev=b.dataset.ev;document.querySelectorAll('[data-ev]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));reset();}));
+  $('by-reset').addEventListener('click',reset);
+  $('by').addEventListener('anim-in',()=>{reset();let k=0;const id=setInterval(()=>{more(2);k+=2;if(k>=40)clearInterval(id);},120);});
+  reset();more(40);
+})();
+</script>
+
+<h2 id="sec-4">4. The diagnostic power of evidence: which records are useful</h2>
+<p>How far a piece of evidence moves the belief depends on the likelihood ratio: the probability of seeing it from a reliable trustee divided by the probability of seeing it from an unreliable one. Evidence with a likelihood ratio close to 1 carries almost no information. The evidence most often used in finance is exactly of this kind: short-term returns are driven mainly by luck, and good and bad trustees alike can deliver a fine year. Sirri and Tufano (1998) found that money flows heavily into funds that ranked near the top the previous year; Jain and Wu (2000) found that funds that advertised attracted more money but did not perform better than their peers afterwards. Evidence with high diagnostic power is evidence on which reliable and unreliable trustees differ sharply: whether fees were kept to the agreement, whether constraints were respected, whether every period was accounted for, and whether ability-related failures were reported truthfully.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The diagnostic power of evidence</p><p class="figsub">The probability of each piece of evidence from a reliable and from an unreliable trustee, and the ratio of the two (the likelihood ratio). The centre line is 1: the closer to it, the less useful the evidence. Tap a row for an explanation.</p></div><button class="replay" type="button" data-replay="lr">Replay</button></div>
+    <div class="lr" id="lr" data-anim></div>
+    <p class="lr-msg" id="lr-msg" aria-live="polite">Tap a piece of evidence.</p>
+  </div>
+  <figcaption>Illustrative probabilities, showing relative size only. Evidence that money chases past performance and advertising is from Sirri and Tufano (1998) and Jain and Wu (2000); Jain and Wu (2000) found that advertised funds did not perform better than their peers afterwards, so the likelihood ratios of past returns and advertising are close to 1.</figcaption>
+</figure>
+<style>
+.lr{display:grid;gap:5px}
+.lr-r{font:inherit;width:100%;display:grid;grid-template-columns:minmax(0,1.3fr) 96px minmax(0,1.6fr) 54px;gap:10px;align-items:center;text-align:left;background:var(--quote);border:1.5px solid transparent;border-radius:8px;padding:6px 10px;font-size:12.5px;color:var(--ink);cursor:pointer}
+.lr-r.sel{border-color:var(--ink)}
+.lr-r>span:nth-child(2){color:var(--faint);font-size:11.5px;font-variant-numeric:tabular-nums}
+.lr-t{position:relative;height:14px;background:var(--surface);border-radius:7px}
+.lr-t::before{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;border-left:1.5px solid var(--faint)}
+.lr-t i{position:absolute;top:0;height:100%;border-radius:7px;width:0;transition:width .6s ease,left .6s ease}
+.lr-r b{text-align:right;font-variant-numeric:tabular-nums}
+.lr-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.lr-r{grid-template-columns:minmax(0,1fr) 54px}.lr-r>span:nth-child(2){display:none}.lr-t{grid-column:1/-1;grid-row:2}}
+</style>
+<script>
+(function(){
+  const E=[['Top-quartile return last year',.27,.25,'Good and bad trustees alike can deliver a fine year: it carries almost no information, yet it is the evidence used most often.'],
+    ['Advertised heavily',.5,.5,'Whether a trustee advertises has nothing to do with whether it is reliable; the likelihood ratio is 1.'],
+    ['Fees matched the promise all year',.99,.6,'A reliable trustee almost always keeps to the agreement; an unreliable one often has hidden charges.'],
+    ['No agreed constraint broken all year',.98,.5,'Whether constraints are respected differs sharply between good and bad trustees, so this evidence has high diagnostic power.'],
+    ['Every period accounted for',.97,.4,'Reporting the status of a continuing task in every period is hard for an unreliable trustee to keep up for long.'],
+    ['Ability failure admitted and fixed',.9,.3,'The failure itself is evidence about ability; candidly admitting an ability failure and explaining the improvement is evidence of willingness to improve, which reliable trustees show more often.'],
+    ['One serious breach',.01,.15,'Very rare among reliable trustees: a single occurrence is enough to change the belief sharply.']];
+  const box=document.getElementById('lr'),L=Math.log(20);
+  box.innerHTML=E.map(([n,a,b],i)=>`<button type="button" class="lr-r" data-i="${i}"><span>${n}</span><span>${Math.round(a*100)}% vs ${Math.round(b*100)}%</span><div class="lr-t"><i></i></div><b>${(a/b)>=1?(a/b).toFixed(1):'1/'+(b/a).toFixed(0)}</b></button>`).join('');
+  const rs=[...box.children];
+  function fill(){rs.forEach((r,i)=>{const v=Math.log(E[i][1]/E[i][2])/L*50,el=r.querySelector('i');el.style.background=v>=0?'var(--accent)':'var(--warm)';el.style.left=(v>=0?50:50+v)+'%';el.style.width=Math.max(1,Math.abs(v))+'%';});}
+  rs.forEach((r,i)=>r.addEventListener('click',()=>{rs.forEach(x=>x.classList.toggle('sel',x===r));document.getElementById('lr-msg').textContent=E[i][0]+': '+E[i][3];}));
+  box.addEventListener('anim-in',()=>{rs.forEach(r=>{const el=r.querySelector('i');el.style.width='0';el.style.left='50%';});setTimeout(fill,60);});
+  fill();
+})();
+</script>
+
+<h2 id="sec-5">5. Why trust is built slowly and lost quickly</h2>
+<p>Slovic (1993) observed that building trust takes a long record of good conduct, while a single negative event can destroy it quickly. Bayesian updating produces this asymmetry directly. A good act of fulfilment is common among reliable and unreliable trustees alike, so its likelihood ratio is close to 1 and the belief rises only a little. A serious failure is very rare among reliable trustees, so its likelihood ratio is large and the belief falls sharply. The response after a failure is also evidence, but the same response has different diagnostic power for different kinds of failure. Kim, Ferrin, Cooper and Dirks (2004) found that the effect of a response depends on which kind of problem the failure is seen as. When it is seen as a matter of ability, an apology repairs trust better than a denial. When it is seen as a matter of integrity, a denial works better than an apology, because to apologize is to admit a flaw of character. In terms of likelihood ratios: people generally believe ability can improve, whereas a single dishonest act is enough to reveal character. So the same apology is, for an ability failure, evidence of willingness to improve, which is more common among reliable trustees, and the belief recovers; for an integrity failure, it is evidence of genuine dishonesty, and the belief falls further. For products this means two things. Integrity failures, such as hiding fees, acting beyond authority or rewriting records after the fact, are almost impossible to repair afterwards and must be prevented at the source by rules and constraints. Ability failures, such as a calculation error or a wrong judgement, must be admitted candidly, with an account of what happened, whom it affected and how it will be improved.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Trust is built slowly and lost quickly</p><p class="figsub">Forty interactions between a user and a service. At the 24th, an ability failure occurs, such as a calculation error. Switch the response to the failure and see how trust changes.</p></div><button class="replay" type="button" data-replay="as">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Response">
+      <button type="button" data-as="none" aria-pressed="false">No failure</button>
+      <button type="button" data-as="deny" aria-pressed="false">Denied after failure</button>
+      <button type="button" data-as="own" aria-pressed="true">Explained and put right</button>
+    </div>
+    <div class="as" id="as" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="Trust across the number of interactions"><g id="as-ax"></g><path id="as-ref" class="as-r"/><path id="as-p" class="as-l"/></svg>
+      <p class="as-msg" id="as-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative curves: a good interaction has a likelihood ratio close to 1 and a serious failure a large one, so belief rises and falls asymmetrically. The asymmetry of trust is from Slovic (1993). Kim, Ferrin, Cooper and Dirks (2004) found that for ability failures an apology repairs trust better than a denial; for integrity failures the finding reverses, and a denial works better than an apology. The figure shows only the ability-failure case. The grey dashed line is the path with no failure.</figcaption>
+</figure>
+<style>
+.as svg{width:100%;height:auto;display:block}
+.as-l{fill:none;stroke:var(--accent);stroke-width:2.5}
+.as-r{fill:none;stroke:var(--faint);stroke-width:1.5;stroke-dasharray:4 4}
+.as-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.as svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const run=k=>{let t=10,o=[t];for(let i=1;i<=40;i++){if(i===24&&k!=='none')t=k==='deny'?t*.35:t*.7;else t+=(100-t)*(k==='deny'&&i>24?.03:.07);o.push(t);}return o;};
+  const X0=50,X1=620,YT=14,YB=180,x=i=>X0+i/40*(X1-X0),y=v=>YB-v/100*(YB-YT);
+  const $=id=>document.getElementById(id),P=a=>a.map((v,i)=>(i?'L':'M')+x(i).toFixed(1)+','+y(v).toFixed(1)).join('');
+  $('as-ax').innerHTML=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`+[0,50,100].map(v=>`<text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+
+    [1,10,20,30,40].map(i=>`<text x="${x(i)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">#${i}</text>`).join('')+`<line x1="${x(24)}" y1="${YT}" x2="${x(24)}" y2="${YB}" stroke="var(--warm)" stroke-dasharray="3 3"/><text x="${x(24)+4}" y="${YT+10}" font-size="11" class="t-warm">Failure</text><text x="${X0}" y="${YT-2}" font-size="11" class="t-faint">Trust</text>`;
+  $('as-ref').setAttribute('d',P(run('none')));
+  const M={none:'Each good interaction adds only a little trust; it takes more than twenty before trust nears a high level.',deny:'When an ability failure is denied, the user sees no willingness to improve. Trust falls further, and later good records restore it only slowly.',own:'The ability failure is admitted candidly, with an account of what happened, whom it affected and how it will be improved. This is evidence of willingness to improve: trust still falls, but by less, and then recovers step by step.'};
+  function set(k,anim){document.querySelectorAll('[data-as]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.as===k)));
+    const a=run(k),p=$('as-p');p.setAttribute('d',P(a));
+    if(anim){const L=p.getTotalLength();p.style.transition='none';p.style.strokeDasharray=L;p.style.strokeDashoffset=L;setTimeout(()=>{p.style.transition='stroke-dashoffset 1.8s ease';p.style.strokeDashoffset=0;},40);}else{p.style.strokeDasharray='';p.style.strokeDashoffset='';}
+    $('as-msg').textContent=M[k];}
+  document.querySelectorAll('[data-as]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.as,true)));
+  $('as').addEventListener('anim-in',()=>{set('none',true);setTimeout(()=>set('deny',true),2600);setTimeout(()=>set('own',true),5200);});
+  set('own',false);
+})();
+</script>
+
+<h2 id="sec-6">6. Reputations can be exploited, and types can change</h2>
+<p>The updating rule has two weak points. First, the trustee knows the principal is updating. The reputation models of Kreps and Wilson (1982) and Milgrom and Roberts (1982) show that an unreliable party also has a motive to build a good record first; once a one-off gain is large enough, cashing in the reputation becomes profitable. A good record therefore cannot replace limits that match the stakes. Second, the trustee's type can change: an institution changes its management, an AI agent changes its model version, and the past record no longer fully applies. Old records must be discounted, the belief must move partly back towards the prior, and new evidence must accumulate again.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Build a reputation first, then cash it in</p><p class="figsub">An unreliable trustee performs well for the first 15 periods. The principal's belief rises, and so does the amount entrusted to it; in period 16 a large one-off opportunity appears. Switch whether the principal has a limit that matches the stakes.</p></div><button class="replay" type="button" data-replay="mk">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Limit">
+      <button type="button" data-mk="0" aria-pressed="true">Amount grows with belief</button>
+      <button type="button" data-mk="1" aria-pressed="false">Cap on single exposure</button>
+    </div>
+    <div class="mk" id="mk" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="Belief, exposure and loss"><g id="mk-g"></g></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Principal's belief</span><span><i style="background:var(--blue)"></i>Amount entrusted</span><span><i style="background:var(--warm)"></i>Loss</span></div>
+      <p class="mk-msg" id="mk-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative. On reputations built and exploited strategically, see Kreps and Wilson (1982) and Milgrom and Roberts (1982).</figcaption>
+</figure>
+<style>
+.mk svg{width:100%;height:auto;display:block}
+.mk-b{transition:height .5s ease,y .5s ease}
+.mk-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.mk svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const N=18,X0=40,X1=620,YT=14,YB=176,w=(X1-X0)/N,x=i=>X0+i*w;
+  const bel=[];let L=Math.log(.3/.7);for(let i=0;i<N;i++){bel.push(1/(1+Math.exp(-L)));L+=Math.log(.97/.8);}
+  function set(k){document.querySelectorAll('[data-mk]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mk===k)));
+    const cap=k==='1';let g=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`,line='';
+    bel.forEach((b,i)=>{const amt=cap?Math.min(b,.35):b,h=amt*(YB-YT)*.9,loss=i===15?h:0;
+      g+=`<rect class="mk-b" x="${x(i)+w*.2}" width="${w*.6}" y="${YB-h}" height="${h}" rx="2" fill="${i===15?'var(--warm)':'var(--blue)'}" opacity="${i>15?.25:i===15?1:.6}"/>`;
+      line+=(i?'L':'M')+(x(i)+w/2).toFixed(1)+','+(YB-b*(YB-YT)).toFixed(1);
+      if(i%3===0)g+=`<text x="${x(i)+w/2}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${i+1}</text>`;});
+    g+=`<path d="${line}" fill="none" stroke="var(--accent)" stroke-width="2.5"/><text x="${x(15)+w/2}" y="${YT+10}" text-anchor="middle" font-size="11" class="t-warm">Cash-in</text>`;
+    document.getElementById('mk-g').innerHTML=g;
+    document.getElementById('mk-msg').textContent=cap?'With a cap on single exposure, however high the belief, no more than the cap is handed over at once. When the trustee cashes in its reputation, the loss is held within the cap, and doing so no longer pays for the trustee.':'Belief rises with the good record, and the amount handed over rises with it. In period 16 the trustee seizes a large one-off opportunity to cash in its reputation, and the loss is as large as the trust built up before. A good record cannot replace a limit.';}
+  document.querySelectorAll('[data-mk]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.mk)));
+  document.getElementById('mk').addEventListener('anim-in',()=>{set('0');setTimeout(()=>set('1'),2800);});
+  set('0');
+})();
+</script>
+
+<h2 id="sec-7">7. Too little trust and misplaced trust</h2>
+<p>When belief departs from how trustworthy the trustee actually is, both directions have a cost. Guiso, Sapienza and Zingales (2008) found that people who trust others less hold fewer stocks, even at the same level of wealth and education, and so give up the long-run risk compensation. Gennaioli, Shleifer and Vishny (2015) showed that trust lowers the risk investors perceive and lets trustees charge higher fees; they call such trustees "money doctors". The first group loses returns the market could have provided; the second hands part of its returns to the trustee.</p>
+<figure>
+  <div class="card">
+    <p class="figtitle">Too little trust and misplaced trust both have a cost</p>
+    <p class="figsub">Drag the level of trust. With too little trust, the user puts only a small share of the money into the market; with trust beyond the trustee's actual trustworthiness, the user stops comparing fees and is willing to pay a higher management fee. See what 1 million yuan becomes after 30 years.</p>
+    <div class="ct" id="ct" data-anim>
+      <svg viewBox="0 0 640 220" role="img" aria-label="Level of trust and the result after 30 years"><g id="ct-ax"></g><path id="ct-p" class="ct-l"/><circle id="ct-d" r="6" fill="var(--ink)"/></svg>
+      <div class="sl"><label for="ct-s">Level of trust <b id="ct-sv"></b></label><input id="ct-s" type="range" min="0" max="100" step="5" value="15"></div>
+      <div class="ct-out"><div><span>Share put into the market</span><b id="ct-p1"></b></div><div><span>Fees paid each year</span><b id="ct-p2"></b></div><div><span>After 30 years (million yuan)</span><b id="ct-p3"></b></div></div>
+      <p class="ct-msg" id="ct-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative calculation: the part not invested grows at 1% a year, the invested part at 6% a year before fees; a trust level of 50 exactly matches the trustee's trustworthiness. On trust and participation, see Guiso, Sapienza and Zingales (2008); on trust and fees, Gennaioli, Shleifer and Vishny (2015).</figcaption>
+</figure>
+<style>
+.ct svg{width:100%;height:auto;display:block}
+.ct-l{fill:none;stroke:var(--accent);stroke-width:2.5}
+.ct-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.ct-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.ct-out span{display:block;font-size:12px;color:var(--faint)} .ct-out b{font-size:19px;font-variant-numeric:tabular-nums}
+.ct-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.ct-out{grid-template-columns:1fr}.ct svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const p=t=>Math.min(1,.1+.9*t/50),f=t=>.4+Math.max(0,t-50)/50*1.8,W=t=>100*((1-p(t))*Math.pow(1.01,30)+p(t)*Math.pow(1+.06-f(t)/100,30));
+  const vals=[];for(let t=0;t<=100;t++)vals.push(W(t));const mx=Math.max(...vals),mn=Math.min(...vals);
+  const X0=60,X1=620,YT=20,YB=180,x=t=>X0+t/100*(X1-X0),y=v=>YT+(mx-v)/(mx-mn)*(YB-YT);
+  const $=id=>document.getElementById(id);
+  $('ct-ax').innerHTML=`<rect x="${x(0)}" y="${YT-8}" width="${x(40)-x(0)}" height="${YB-YT+8}" fill="var(--warm-soft)" opacity=".5"/><rect x="${x(60)}" y="${YT-8}" width="${x(100)-x(60)}" height="${YB-YT+8}" fill="var(--warm-soft)" opacity=".5"/>`+
+    `<text x="${x(20)}" y="${YB+18}" text-anchor="middle" font-size="11" class="t-warm">Too little trust</text><text x="${x(50)}" y="${YB+18}" text-anchor="middle" font-size="11" class="t-accent">In proportion</text><text x="${x(80)}" y="${YB+18}" text-anchor="middle" font-size="11" class="t-warm">Misplaced trust</text>`+
+    `<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`+[mn,mx].map(v=>`<text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${(v/100).toFixed(2)}m</text>`).join('');
+  let d='';vals.forEach((v,t)=>d+=(t?'L':'M')+x(t).toFixed(1)+','+y(v).toFixed(1));$('ct-p').setAttribute('d',d);
+  const sl=$('ct-s');
+  function r(){const t=+sl.value;$('ct-sv').textContent=t;$('ct-d').setAttribute('cx',x(t));$('ct-d').setAttribute('cy',y(W(t)));
+    $('ct-p1').textContent=(p(t)*100).toFixed(0)+'%';$('ct-p2').textContent=f(t).toFixed(1)+'%';$('ct-p3').textContent=(W(t)/100).toFixed(2);
+    $('ct-msg').textContent=t<40?'Too little trust: most of the money stays in low-yield deposits, giving up the long-run risk compensation.':t>60?'Misplaced trust: the user no longer compares fees, and the extra management fee paid each year eats a sizeable part of the return over 30 years.':'Trust roughly in proportion to the trustee\'s trustworthiness: the user takes part in the market without paying extra for trust.';}
+  sl.addEventListener('input',r);
+  $('ct').addEventListener('anim-in',()=>{let t=0;sl.value=0;r();const id=setInterval(()=>{t+=5;sl.value=t;r();if(t>=100){clearInterval(id);setTimeout(()=>{sl.value=50;r();},600);}},150);});
+  r();
+})();
+</script>
+
+<h2 id="sec-8">8. Trust in proportion to trustworthiness</h2>
+<p>Good trust is trust whose posterior matches how reliable the trustee actually is. Lee and See (2004), studying how people trust automated systems, call this calibration. When trust exceeds reliability, people stop checking and errors slip through; when trust falls short of reliability, even a reliable system is left unused. Parasuraman and Riley (1997) call the first misuse and the second disuse. The way to bring trust into line with trustworthiness is to provide evidence with high diagnostic power: show the basis and the record, state the scope of application and the known limitations, and make it easy for users to check.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Trust in proportion to trustworthiness</p><p class="figsub">The horizontal axis is how reliable a service actually is; the vertical axis is the user's trust. Near the diagonal, trust is calibrated. Turn on "Make trustworthiness visible" and see how the two imbalances return to the diagonal.</p></div><button class="replay" type="button" data-replay="cl">Replay</button></div>
+    <label class="cl-chk"><input type="checkbox" id="cl-x"> Make trustworthiness visible: show the basis, the record and known limitations</label>
+    <div class="cl" id="cl" data-anim>
+      <svg viewBox="0 0 640 300" role="img" aria-label="Trust and reliability"><g id="cl-g"></g><g id="cl-pts"></g></svg>
+      <p class="cl-msg" id="cl-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative. The concepts of misuse and disuse are from Parasuraman and Riley (1997); the calibration of trust is from Lee and See (2004).</figcaption>
+</figure>
+<style>
+.cl-chk{display:flex;gap:6px;align-items:center;font-size:14px;margin-bottom:6px}
+.cl-chk input{accent-color:var(--accent);width:16px;height:16px}
+.cl svg{width:100%;height:auto;display:block}
+.cl-pt{transition:transform .9s ease}
+.cl-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.cl svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const X0=195,S=250,YT=20,x=v=>X0+v*S,y=v=>YT+(1-v)*S;
+  const $=id=>document.getElementById(id);
+  $('cl-g').innerHTML=`<rect x="${x(0)}" y="${y(1)}" width="${S}" height="${S}" fill="none" class="s-faint"/>`+
+    `<path d="M${x(0)},${y(.12)} L${x(.88)},${y(1)} L${x(1)},${y(1)} L${x(1)},${y(.88)} L${x(.12)},${y(0)} L${x(0)},${y(0)}Z" fill="var(--accent-soft)"/>`+
+    `<line x1="${x(0)}" y1="${y(0)}" x2="${x(1)}" y2="${y(1)}" stroke="var(--accent)" stroke-dasharray="4 4"/>`+
+    `<text x="${x(.22)}" y="${y(.85)}" text-anchor="middle" font-size="12" class="t-warm">Misuse</text><text x="${x(.22)}" y="${y(.85)+15}" text-anchor="middle" font-size="10.5" class="t-faint">Trust above reliability</text>`+
+    `<text x="${x(.8)}" y="${y(.15)}" text-anchor="middle" font-size="12" class="t-warm">Disuse</text><text x="${x(.8)}" y="${y(.15)+15}" text-anchor="middle" font-size="10.5" class="t-faint">Trust below reliability</text>`+
+    `<text x="${x(.5)}" y="${y(0)+20}" text-anchor="middle" font-size="11" class="t-faint">Actual reliability →</text><text transform="translate(${x(0)-14},${y(.5)}) rotate(-90)" text-anchor="middle" font-size="11" class="t-faint">User's trust →</text>`;
+  const P=[[.5,.92,.52,'Confident, conclusions-only service','Only moderately reliable, yet it sounds very sure: users stop checking, and errors slip through.'],[.88,.32,.85,'Reliable but opaque service','Quite reliable in fact, but users cannot see the basis, so they either do not use it or check it by hand again and again.']];
+  $('cl-pts').innerHTML=P.map(([r,t,t2,n],i)=>`<g class="cl-pt" id="cl-p${i}"><circle cx="${x(r)}" cy="${y(t)}" r="8" fill="var(--warm)"/><text x="${x(r)+(i?-14:14)}" y="${y(t)+4}" text-anchor="${i?'end':'start'}" font-size="12" class="t-ink">${n}</text></g>`).join('');
+  const cb=$('cl-x');
+  function r(){const on=cb.checked;P.forEach(([rr,t,t2],i)=>{const g=$('cl-p'+i);g.style.transform=on?`translateY(${y(t2)-y(t)}px)`:'none';g.querySelector('circle').setAttribute('fill',on?'var(--accent)':'var(--warm)');});
+    $('cl-msg').textContent=on?'Once the basis and record are shown and the scope and limitations explained, users can judge when to rely on the service and when to check it: trust in both services returns to a level in proportion to their reliability.':P.map(p=>p[3]+': '+p[4]).join(' ');}
+  cb.addEventListener('change',r);
+  $('cl').addEventListener('anim-in',()=>{cb.checked=false;r();setTimeout(()=>{cb.checked=true;r();},1800);});
+  r();
+})();
+</script>
+
+<h2 id="sec-9">9. Implications for product design</h2>
+<p>Trust cannot be won by promotion; it can only accumulate through evidence with high diagnostic power. The aim of design is trust in proportion, not more trust.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: diagnostic evidence in exchange for trust in proportion</p><p class="figsub">Four design requirements, each corresponding to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="ch18summary">Replay</button></div>
+    <div class="ch18summary" id="ch18summary" data-anim><div class="ch18summary-c" style="--i:0"><em>Trust is a belief plus a decision</em><b>Set thresholds by stakes and capacity to bear loss</b><p>Small matters can be handed over first; large ones wait until the evidence is sufficient. Thresholds adjust to the user's capacity to bear loss.</p></div><div class="ch18summary-c" style="--i:1"><em>Diagnostic power drives updating</em><b>Provide process evidence with high diagnostic power</b><p>Make fees kept to the agreement, constraints respected, an account of every period and explanations after ability failures into records that can be checked. Do not seek trust with short-term returns and rankings.</p></div><div class="ch18summary-c warn" style="--i:2"><em>Lost faster than built</em><b>Avoid integrity failures; admit ability failures candidly</b><p>Serious failures change belief sharply. Integrity failures are hard to repair afterwards and must be prevented by rules; ability failures must be explained truthfully and put right, which is evidence of willingness to improve.</p></div><div class="ch18summary-c warn" style="--i:3"><em>Reputations can be exploited; types change</em><b>Limits stay as trust grows; a new version rebuilds the record</b><p>Exposure limits match the stakes. When the model or the team changes, say so, and build the record again.</p></div></div>
+  </div>
+</figure>
+<style>
+.ch18summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch18summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch18summary-c.warn{border-left-color:var(--warm)}
+.ch18summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch18summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch18summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch18summary.in .ch18summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch18summary{grid-template-columns:1fr}}
+</style>
+
+<h2 id="sec-10">References</h2>
+<ul class="refs"><li>Mayer, R. C., Davis, J. H., &amp; Schoorman, F. D. (1995). An integrative model of organizational trust. <i>Academy of Management Review</i>, 20(3), 709–734.</li><li>Diamond, D. W. (1989). Reputation acquisition in debt markets. <i>Journal of Political Economy</i>, 97(4), 828–862.</li><li>Jøsang, A., &amp; Ismail, R. (2002). The beta reputation system. <i>Proceedings of the 15th Bled Electronic Commerce Conference</i>.</li><li>Sirri, E. R., &amp; Tufano, P. (1998). Costly search and mutual fund flows. <i>Journal of Finance</i>, 53(5), 1589–1622.</li><li>Jain, P. C., &amp; Wu, J. S. (2000). Truth in mutual fund advertising: Evidence on future performance and fund flows. <i>Journal of Finance</i>, 55(2), 937–958.</li><li>Slovic, P. (1993). Perceived risk, trust, and democracy. <i>Risk Analysis</i>, 13(6), 675–682.</li><li>Kim, P. H., Ferrin, D. L., Cooper, C. D., &amp; Dirks, K. T. (2004). Removing the shadow of suspicion: The effects of apology versus denial for repairing competence- versus integrity-based trust violations. <i>Journal of Applied Psychology</i>, 89(1), 104–118.</li><li>Kreps, D. M., &amp; Wilson, R. (1982). Reputation and imperfect information. <i>Journal of Economic Theory</i>, 27(2), 253–279.</li><li>Milgrom, P., &amp; Roberts, J. (1982). Predation, reputation, and entry deterrence. <i>Journal of Economic Theory</i>, 27(2), 280–312.</li><li>Guiso, L., Sapienza, P., &amp; Zingales, L. (2008). Trusting the stock market. <i>Journal of Finance</i>, 63(6), 2557–2600.</li><li>Gennaioli, N., Shleifer, A., &amp; Vishny, R. (2015). Money doctors. <i>Journal of Finance</i>, 70(1), 91–114.</li><li>Parasuraman, R., &amp; Riley, V. (1997). Humans and automation: Use, misuse, disuse, abuse. <i>Human Factors</i>, 39(2), 230–253.</li><li>Lee, J. D., &amp; See, K. A. (2004). Trust in automation: Designing for appropriate reliance. <i>Human Factors</i>, 46(1), 50–80.</li></ul>
+<footer class="nav"><a href="ch17.html">← Chapter 17: What users can bear</a><a href="part3.html">Part Three: AI: how much an agent can do on people's behalf →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

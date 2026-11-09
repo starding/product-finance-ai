@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：用可诊断的证据换取相称的信任</p><p class="figsub">四条设计要求，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="ch18summary">重播</button></div>
+    <div class="ch18summary" id="ch18summary" data-anim><div class="ch18summary-c" style="--i:0"><em>信任是信念加决定</em><b>按赌注与承受力设门槛</b><p>小事可以先交出，大事等证据足够再交；门槛随用户的承受力调整。</p></div><div class="ch18summary-c" style="--i:1"><em>证据的诊断力决定更新</em><b>提供诊断力高的过程证据</b><p>费用守约、约束遵守、周期交代与能力类失误后的说明，都做成可查的记录；不以短期收益与排名争取信任。</p></div><div class="ch18summary-c warn" style="--i:2"><em>失去快于建立</em><b>避免正直类失误，坦率承认能力类失误</b><p>严重失误会大幅改变信念。正直类失误事后难以修复，要从制度上避免发生；能力类失误要如实说明并补救，这是愿意改进的证据。</p></div><div class="ch18summary-c warn" style="--i:3"><em>声誉会被利用，类型会变</em><b>上限不随信任取消，版本变化要重新积累</b><p>敞口上限与赌注相称；模型或团队变化时说明变化，并重新积累记录。</p></div></div>
+  </div>
+</figure>
+<style>
+.ch18summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch18summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch18summary-c.warn{border-left-color:var(--warm)}
+.ch18summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch18summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch18summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch18summary.in .ch18summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch18summary{grid-template-columns:1fr}}
+</style>

@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：用因子看清收益来源</p><p class="figsub">四条设计要求，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="ch06summary">重播</button></div>
+    <div class="ch06summary" id="ch06summary" data-anim><div class="ch06summary-c" style="--i:0"><em>收益可以拆成因子暴露</em><b>按因子拆开展示组合的收益来源</b><p>告诉用户收益中有多少来自市场、规模、价值等因子，有多少是真正的超额收益。</p></div><div class="ch06summary-c" style="--i:1"><em>因子暴露可以低成本复制</em><b>费用要与真正的超额收益相称</b><p>只有拆完因子之后仍然存在的部分，才值得支付主动管理的费用。</p></div><div class="ch06summary-c warn" style="--i:2"><em>试得够多总有假阳性</em><b>对“新发现的规律”提高门槛</b><p>AI 或回测给出的新因子，要有经济解释、更高的统计门槛和样本外检验。</p></div><div class="ch06summary-c warn" style="--i:3"><em>可信的因子也会长期落后</em><b>说明因子策略可能连续多年跑输</b><p>在用户买入前展示历史上最长的落后期，避免在低迷时被迫放弃。</p></div></div>
+  </div>
+</figure>
+<style>
+.ch06summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch06summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch06summary-c.warn{border-left-color:var(--warm)}
+.ch06summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch06summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch06summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch06summary.in .ch06summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch06summary{grid-template-columns:1fr}}
+</style>

@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">What this step leaves open</p><p class="figsub">Four questions that remain unresolved once scribes become the main market participants. Click a question to see the assumption it hides.</p></div><button class="replay" type="button" data-replay="nx17">Replay</button></div>
+    <div class="nx" id="nx17" data-anim>
+      <div class="nx-src"><b>A market of scribes</b><span>Cheap but fragile</span></div>
+      <div class="nx-list" id="nx17-l"></div>
+    </div>
+    <p class="nx-msg" id="nx17-msg" aria-live="polite"></p>
+  </div>
+</figure>
+<style>
+.nx{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:center}
+.nx-src{background:var(--ink);color:var(--bg);border-radius:10px;padding:14px 10px;text-align:center}
+.nx-src b{display:block;font-size:16px} .nx-src span{font-size:12px;opacity:.75}
+.nx-list{display:grid;gap:6px}
+.nx-i{font:inherit;text-align:left;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:9px 12px;color:var(--ink);opacity:0;transform:translateX(-8px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.3s)}
+.nx.in .nx-i{opacity:1;transform:none}
+.nx-i span{font-size:13.5px} .nx-i em{font-style:normal;font-size:11.5px;color:var(--faint);white-space:nowrap}
+.nx-i.sel{border-color:var(--accent)}
+.nx-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.nx{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const Q=[['Human bias','Chapter 18','Hidden assumption: principals will stick to their plans. In a panic a principal may tell the scribe to sell along with everyone else. Can the scribe help him hold to the plan, and will it exploit his biases?'],
+    ['Sources of diversity','Part Three','Hidden assumption: participants are naturally different from one another. Once methods and data converge, who has an incentive to maintain diversity?'],
+    ['Coordinating rules','Part Three','Hidden assumption: if each participant\'s rules are reasonable, the whole is stable. Rules that are reasonable one by one may together form a spiral, so someone must look at the whole picture.'],
+    ['What does not change','Chapter 19','Hidden assumption: better execution can eliminate risk. Ships can still sink; the risk of a fall does not disappear because of scribes.']];
+  const l=document.getElementById('nx17-l'),msg=document.getElementById('nx17-msg');
+  l.innerHTML=Q.map((q,i)=>`<button type="button" class="nx-i" style="--i:${i}" data-i="${i}"><span>${q[0]}</span><em>→ ${q[1]}</em></button>`).join('');
+  const bs=[...l.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));msg.textContent=Q[i][2];}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('nx17').addEventListener('anim-in',()=>{[0,1,2,3].forEach((i,k)=>setTimeout(()=>set(i),1600+k*1800));});
+  set(0);
+})();
+</script>

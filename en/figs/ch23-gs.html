@@ -1,0 +1,65 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">When analysis becomes cheap, where do its returns go?</p><p class="figsub">The more investors use the same kind of analysis, the faster the same information enters prices and the smaller the excess return each user earns. People keep joining until the excess return only just covers the cost of analysis.</p></div><button class="replay" type="button" data-replay="gs">Replay</button></div>
+    <div class="gs" id="gs" data-anim>
+      <svg viewBox="0 0 640 250" role="img" aria-label="Share of users and excess return per user">
+        <g id="gs-axis"></g>
+        <path id="gs-curve" class="gs-curve"/>
+        <line id="gs-cost" class="gs-cost"/>
+        <text id="gs-ct" font-size="12" class="t-warm" text-anchor="start"></text>
+        <line id="gs-eqv" class="gs-eqv"/>
+        <circle id="gs-dot" r="6" class="gs-dot"/>
+        <text id="gs-et" font-size="12" class="t-ink" text-anchor="middle"></text>
+      </svg>
+      <div class="sl"><label for="gs-c">Cost of analysis (per year, as a share of assets) <b id="gs-cv"></b></label><input id="gs-c" type="range" min="0.2" max="3.5" step="0.1" value="3"><div class="hint">AI makes analysis cheaper: drag left</div></div>
+      <div class="gs-out">
+        <div><span>Investors using this analysis at equilibrium</span><b id="gs-s"></b></div>
+        <div><span>Excess return per user</span><b id="gs-r"></b></div>
+      </div>
+      <p class="gs-msg" id="gs-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model following the logic of Grossman and Stiglitz (1980): the total value of the information is 4% a year; the more users, the earlier the information enters prices, and the excess return per user falls proportionally; at equilibrium the excess return equals the cost of analysis. The numbers do not correspond to estimates for any market.</figcaption>
+</figure>
+<style>
+.gs svg{width:100%;height:auto;display:block}
+.gs-curve{fill:none;stroke:var(--accent);stroke-width:2.5}
+.gs-cost{stroke:var(--warm);stroke-width:2;stroke-dasharray:6 4}
+.gs-eqv{stroke:var(--ink);stroke-dasharray:3 3}
+.gs-dot{fill:var(--ink)}
+.gs-out{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0}
+.gs-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.gs-out span{display:block;font-size:12px;color:var(--faint)}
+.gs-out b{font-size:22px;font-variant-numeric:tabular-nums}
+.gs-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const E=4, X0=56, X1=620, Y0=210, Y1=20, x=s=>X0+s*(X1-X0), y=r=>Y0-r/E*(Y0-Y1);
+  let a=`<line x1="${X0}" y1="${Y0}" x2="${X1}" y2="${Y0}" class="s-faint"/><line x1="${X0}" y1="${Y1}" x2="${X0}" y2="${Y0}" class="s-faint"/>`;
+  [0,.25,.5,.75,1].forEach(s=>a+=`<text x="${x(s)}" y="${Y0+16}" text-anchor="middle" font-size="11" class="t-faint">${s*100}%</text>`);
+  [1,2,3,4].forEach(r=>a+=`<line x1="${X0}" y1="${y(r)}" x2="${X1}" y2="${y(r)}" class="s-line"/><text x="${X0-8}" y="${y(r)+4}" text-anchor="end" font-size="11" class="t-faint">${r}%</text>`);
+  a+=`<text x="${X1}" y="${Y0+32}" text-anchor="end" font-size="11" class="t-faint">Share of investors using the same analysis</text><text x="${X0}" y="${Y1-6}" font-size="11" class="t-faint">Excess return per user</text>`;
+  document.getElementById('gs-axis').innerHTML=a;
+  document.getElementById('gs-curve').setAttribute('d',`M${x(0)},${y(E)}L${x(1)},${y(0)}`);
+  const c=document.getElementById('gs-c');
+  const set=(id,o)=>{const e=document.getElementById(id);for(const k in o)e.setAttribute(k,o[k]);};
+  function render(){
+    const C=+c.value, s=1-C/E;
+    document.getElementById('gs-cv').textContent=C.toFixed(1)+'%';
+    set('gs-cost',{x1:X0,x2:X1,y1:y(C),y2:y(C)});
+    const ct=document.getElementById('gs-ct');ct.setAttribute('x',X0+8);ct.setAttribute('y',y(C)-6);ct.textContent='Cost of analysis '+C.toFixed(1)+'%';
+    set('gs-eqv',{x1:x(s),x2:x(s),y1:y(C),y2:Y0});
+    set('gs-dot',{cx:x(s),cy:y(C)});
+    const et=document.getElementById('gs-et');et.setAttribute('x',x(s));et.setAttribute('y',y(C)-12);et.textContent='Equilibrium';
+    document.getElementById('gs-s').textContent=Math.round(s*100)+'%';
+    document.getElementById('gs-r').textContent=C.toFixed(1)+'%';
+    document.getElementById('gs-msg').textContent=C>=2.5
+      ?'When analysis is expensive, only a few people do it; they earn a fairly high excess return, and prices absorb information slowly.'
+      :C>=1?'As the cost of analysis falls, more people join, prices reflect information faster, and the excess return each person earns falls with it.'
+      :'When analysis is almost free, nearly everyone uses the same kind of analysis, prices reflect information almost at once, and little excess return is left to earn from analysis.';
+  }
+  c.addEventListener('input',render); render();
+  document.getElementById('gs').addEventListener('anim-in',()=>{let v=3.5;c.value=v;render();const id=setInterval(()=>{v=Math.round((v-0.1)*10)/10;c.value=v;render();if(v<=0.8)clearInterval(id);},70);});
+})();
+</script>

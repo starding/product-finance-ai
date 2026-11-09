@@ -1,0 +1,46 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">文明模拟器 · 第 24 章：十年的信任</p><p class="figsub">这位村民与一个新的书记员打交道十年。选择书记员实际的类型与授权的方式，打开或关掉借来的信号，看四百组十年下的平均结果。</p></div><button class="replay" type="button" data-replay="cs24">重播</button></div>
+    <div class="cs-rules"><span class="on">产品：承诺什么</span><span class="on">产品：委托参数与授权</span><span class="on">产品：过程记录</span><span class="on">产品：上限、确认与赔付</span><span class="on">产品：信任的建立路径</span></div>
+    <div class="cs24-sel"><span>类型</span><div class="seg-btns" role="group" aria-label="类型"><button type="button" data-cs24t="good" aria-pressed="true">实际可靠</button><button type="button" data-cs24t="bad" aria-pressed="false">实际不可靠</button></div></div>
+    <div class="cs24-sel"><span>授权</span><div class="seg-btns" role="group" aria-label="授权"><button type="button" data-cs24p="all" aria-pressed="false">一开始全部交出</button><button type="button" data-cs24p="zero" aria-pressed="false">逐级放宽，出错归零</button><button type="button" data-cs24p="kind" aria-pressed="true">逐级放宽，按错误种类调整</button></div></div>
+    <div class="cs24" id="cs24" data-anim>
+      <div class="cs-sw"><label><input type="checkbox" id="cs24-s" checked> 规则：运营者提供保证金、保险与审计（只有可靠的运营者付得起）</label></div>
+      <div class="cs24-bars" id="cs24-b"></div>
+      <p class="cs24-msg" id="cs24-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意模型：授权四级，每一级一年替他做成的事计 1、2、4、7，一次最多动用家产的 2%、5%、10%、25%。两类书记员每年都有四分之一的可能出一次已赔付的执行错误；不可靠的书记员拿到第三级以上的授权后，每年有六成的可能越界，损失为该级的上限。一开始全部交出时，任何一次错误都有一半可能让他彻底放弃；“按错误种类调整”时，执行错误退一级，越界即终止合作。有信号时，可靠的书记员从第二级起步，不可靠的运营者付不起信号，仍从第一级起步。</figcaption>
+</figure>
+<style>
+.cs24-sel{display:grid;grid-template-columns:3em 1fr;gap:8px;align-items:center;font-size:12.5px;color:var(--muted)}
+.cs24-sel .seg-btns{margin:4px 0}
+.cs24-bars{display:grid;gap:10px;margin:8px 0}
+.cs24-r{display:grid;grid-template-columns:9.5em 1fr 5.5em;gap:10px;align-items:center;font-size:12.5px}
+.cs24-r div{height:22px;background:var(--quote);border-radius:5px;overflow:hidden}
+.cs24-r i{display:block;height:100%;transition:width .4s}
+.cs24-r b{text-align:right;font-variant-numeric:tabular-nums}
+.cs24-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs24-sel{grid-template-columns:1fr}.cs24-r{grid-template-columns:1fr 5.5em}.cs24-r span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs24'+id),V=[1,2,4,7],CAP=[2,5,10,25];let type='good',pol='kind';
+  function run(sig,seed){let s=seed;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};
+    let lv=pol==='all'?3:(sig&&type==='good'?1:0),val=0,loss=0,end=0;
+    for(let y=0;y<10;y++){if(end)break;val+=V[lv];const exe=r()<.25,cheat=type==='bad'&&lv>=2&&r()<.6;
+      if(cheat){loss+=CAP[lv];if(pol==='all'||pol==='kind')end=1;else lv=0;continue;}
+      if(exe){if(pol==='all'){if(r()<.5)end=1;}else if(pol==='zero')lv=0;else lv=Math.max(0,lv-1);continue;}
+      if(pol!=='all')lv=Math.min(3,lv+1);}
+    return [val,loss,end];}
+  function draw(){const sig=$('-s').checked;let a=[0,0,0];for(let k=1;k<=400;k++){const o=run(sig,k*7919);a=a.map((v,i)=>v+o[i]);}a=a.map(v=>v/400);
+    $('-b').innerHTML=[['十年替他做成的事',a[0],60,'var(--accent)',a[0].toFixed(1)],['因过度信任的损失',a[1],30,'var(--warm)',a[1].toFixed(1)+'%'],[type==='good'?'彻底放弃的比例':'终止合作的比例',a[2],1,type==='good'?'var(--warm)':'var(--blue)',Math.round(a[2]*100)+'%']].map(([k,v,m,c,t])=>`<div class="cs24-r"><span>${k}</span><div><i style="width:${Math.min(100,v/m*100)}%;background:${c}"></i></div><b>${t}</b></div>`).join('');
+    $('-msg').textContent=type==='good'?(pol==='all'?`一开始全部交出：起步最快，可一次小错就有一半可能让他彻底放弃，四成以上的十年里他半途而废，平均做成 ${a[0].toFixed(1)}。`:pol==='zero'?`逐级放宽、出错归零：没有人放弃，可每次小错都让授权回到第一级，平均做成 ${a[0].toFixed(1)}。`:`逐级放宽、按错误种类调整：小错只退一级${sig?'，借来的信号又让它从第二级起步':''}，平均做成 ${a[0].toFixed(1)}，是三种方式中最多的。`):(pol==='all'?`对不可靠的书记员一开始全部交出：它第一年就可能动用四分之一的家产越界，平均损失 ${a[1].toFixed(1)}%。`:pol==='zero'?`逐级放宽、出错归零：它每次越界后被降回第一级，可很快又爬上来再犯，平均损失 ${a[1].toFixed(1)}%。`:`逐级放宽、越界即终止：它要守约两年才拿到能越界的权限，第一次越界就被终止合作，平均损失 ${a[1].toFixed(1)}%，是三种方式中最少的。`);}
+  const tb=[...document.querySelectorAll('[data-cs24t]')],pb=[...document.querySelectorAll('[data-cs24p]')];
+  tb.forEach(b=>b.addEventListener('click',()=>{type=b.dataset.cs24t;tb.forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  pb.forEach(b=>b.addEventListener('click',()=>{pol=b.dataset.cs24p;pb.forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  $('-s').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{[['good','all'],['good','zero'],['good','kind'],['bad','all'],['bad','kind']].forEach(([t,p],i)=>setTimeout(()=>{type=t;pol=p;tb.forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.cs24t===t)));pb.forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.cs24p===p)));draw();},300+i*2000));});
+  draw();
+})();
+</script>

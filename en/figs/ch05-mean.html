@@ -1,0 +1,58 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">Up 50%, down 50%: what is the average?</p>
+    <p class="figsub">Each year the value either rises x% or falls x%, alternately. Adjust x and compare the arithmetic mean with the compound return actually received.</p>
+    <div class="mn" id="mn" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="Value under alternating rises and falls">
+        <g id="mn-axis"></g>
+        <path id="mn-flat" class="mn-flat"/>
+        <path id="mn-path" class="mn-path"/>
+        <g id="mn-dots"></g>
+      </svg>
+      <div class="sl"><label for="mn-x">Annual rise or fall x <b id="mn-xv"></b></label><input id="mn-x" type="range" min="5" max="60" step="5" value="50"></div>
+      <div class="mn-out">
+        <div><span>Arithmetic mean return</span><b>0%</b></div>
+        <div><span>Value after 10 years (start 100)</span><b id="mn-end"></b></div>
+        <div><span>Compound return per year</span><b id="mn-g"></b></div>
+      </div>
+    </div>
+  </div>
+  <figcaption>The arithmetic mean adds up the yearly returns and averages them; the compound return (geometric mean) is the single yearly rate that, applied every year, gives the same ending value. Investors receive the latter.</figcaption>
+</figure>
+<style>
+.mn svg{width:100%;height:auto;display:block}
+.mn-flat{stroke:var(--faint);stroke-dasharray:5 4;fill:none}
+.mn-path{fill:none;stroke:var(--warm);stroke-width:2.5;stroke-linejoin:round}
+.mn-dots circle{fill:var(--warm)}
+.mn-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mn-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.mn-out span{display:block;font-size:12px;color:var(--faint)}
+.mn-out b{font-size:20px;font-variant-numeric:tabular-nums}
+#mn-g{color:var(--warm)}
+@media (max-width:640px){.mn-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const N=10,X0=50,X1=620,YT=14,YB=180,x=t=>X0+t/N*(X1-X0);
+  const xs=document.getElementById('mn-x');
+  function render(anim){
+    const r=+xs.value/100; let v=100; const P=[v];
+    for(let t=1;t<=N;t++){v*=t%2?1+r:1-r;P.push(v);}
+    const hi=Math.max(...P)*1.08, y=u=>YB-u/hi*(YB-YT);
+    let a=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`;
+    for(let t=0;t<=N;t+=2)a+=`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">Year ${t}</text>`;
+    a+=`<text x="${X0-8}" y="${y(100)+4}" text-anchor="end" font-size="11" class="t-faint">100</text><text x="${X1}" y="${y(100)-6}" text-anchor="end" font-size="11" class="t-faint">Expectation at a 0% arithmetic mean</text>`;
+    document.getElementById('mn-axis').innerHTML=a;
+    document.getElementById('mn-flat').setAttribute('d',`M${x(0)},${y(100)}L${x(N)},${y(100)}`);
+    const path=document.getElementById('mn-path');path.setAttribute('d','M'+P.map((u,t)=>`${x(t).toFixed(1)},${y(u).toFixed(1)}`).join('L'));
+    document.getElementById('mn-dots').innerHTML=P.map((u,t)=>`<circle cx="${x(t)}" cy="${y(u)}" r="3.5"/>`).join('');
+    document.getElementById('mn-xv').textContent='±'+xs.value+'%';
+    document.getElementById('mn-end').textContent=v.toFixed(1);
+    document.getElementById('mn-g').textContent=((Math.sqrt((1+r)*(1-r))-1)*100).toFixed(1)+'%';
+    if(anim){const L=path.getTotalLength();path.style.transition='none';path.style.strokeDasharray=L;path.style.strokeDashoffset=L;path.getBoundingClientRect();path.style.transition='stroke-dashoffset 1.6s ease';path.style.strokeDashoffset=0;}else path.style.strokeDasharray='none';
+  }
+  xs.addEventListener('input',()=>render(false));
+  document.getElementById('mn').addEventListener('anim-in',()=>render(true));
+  render(false);
+})();
+</script>

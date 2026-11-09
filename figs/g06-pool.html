@@ -1,0 +1,29 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">汇在一起，每年来取的比例相当稳定</p><p class="figsub">每户每年有一成的可能来取回自己的存粮。拖动存粮的户数，看粮仓要留下多少，才能有九成九的把握应付当年的提取。</p></div><button class="replay" type="button" data-replay="po">重播</button></div>
+    <div class="po" id="po" data-anim>
+      <div class="po-bar"><i id="po-r"></i><i id="po-l"></i></div>
+      <div class="legend"><span><i style="background:var(--gold)"></i>留下应付提取</span><span><i style="background:var(--accent)"></i>可以长期借给种果园的人</span></div>
+      <div class="sl"><label for="po-n">存粮的户数 <b id="po-nv"></b></label><input id="po-n" type="range" min="1" max="500" step="1" value="1"></div>
+      <p class="po-msg" id="po-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：每户存粮相同、是否来取相互独立；留下的比例取当年来取户数的 99% 分位数（按二项分布精确计算）。</figcaption>
+</figure>
+<style>
+.po-bar{display:flex;height:30px;border-radius:6px;overflow:hidden;background:var(--quote)}
+.po-bar i{display:block;height:100%;transition:width .4s}
+#po-r{background:var(--gold)} #po-l{background:var(--accent)}
+.po-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),p=.1;
+  function q99(n){let c=0,pr=Math.pow(1-p,n),k=0;c=pr;while(c<.99&&k<n){pr=pr*(n-k)/(k+1)*p/(1-p);k++;c+=pr;}return k;}
+  function draw(){const n=+$('po-n').value,k=q99(n),res=k/n;$('po-r').style.width=res*100+'%';$('po-l').style.width=(1-res)*100+'%';$('po-nv').textContent=n+' 户';
+    $('po-msg').textContent=n===1?'只有一户时，他随时可能把粮食全部取走，粮仓一份也不能借出。':`${n} 户存粮时，要有九成九的把握，只需留下 ${Math.round(res*100)}%，其余 ${Math.round((1-res)*100)}% 可以长期借出。户数越多，留下的比例越接近每年来取的一成。`;}
+  $('po-n').addEventListener('input',draw);
+  $('po').addEventListener('anim-in',()=>{const seq=[1,5,10,20,50,100,200,500];seq.forEach((v,i)=>setTimeout(()=>{$('po-n').value=v;draw();},200+i*450));});
+  draw();
+})();
+</script>

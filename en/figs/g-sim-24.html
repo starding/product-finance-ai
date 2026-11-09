@@ -1,0 +1,46 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Civilization Simulator · Chapter 24: ten years of trust</p><p class="figsub">The villager deals with a new scribe for ten years. Choose the scribe's actual type and the way authority is granted, turn the borrowed signals on or off, and see the average result over 400 ten-year runs.</p></div><button class="replay" type="button" data-replay="cs24">Replay</button></div>
+    <div class="cs-rules"><span class="on">Product: what to promise</span><span class="on">Product: mandate and authority</span><span class="on">Product: process records</span><span class="on">Product: limits, confirmation and compensation</span><span class="on">Product: the path to trust</span></div>
+    <div class="cs24-sel"><span>Type</span><div class="seg-btns" role="group" aria-label="Type"><button type="button" data-cs24t="good" aria-pressed="true">Actually reliable</button><button type="button" data-cs24t="bad" aria-pressed="false">Actually unreliable</button></div></div>
+    <div class="cs24-sel"><span>Authority</span><div class="seg-btns" role="group" aria-label="Authority"><button type="button" data-cs24p="all" aria-pressed="false">Hand everything over at the start</button><button type="button" data-cs24p="zero" aria-pressed="false">Widen by level, reset on any mistake</button><button type="button" data-cs24p="kind" aria-pressed="true">Widen by level, adjust by kind of mistake</button></div></div>
+    <div class="cs24" id="cs24" data-anim>
+      <div class="cs-sw"><label><input type="checkbox" id="cs24-s" checked> Rule: the operator provides a deposit, insurance and audit (only a reliable operator can afford them)</label></div>
+      <div class="cs24-bars" id="cs24-b"></div>
+      <p class="cs24-msg" id="cs24-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model: authority has four levels; what the scribe gets done for him in one year at each level counts as 1, 2, 4 and 7, and a single action can move at most 2%, 5%, 10% and 25% of household wealth. Each year, both types of scribe have a one-in-four chance of one execution error, which is compensated. Once an unreliable scribe reaches Level 3 or above, it has a 60% chance each year of overstepping, losing an amount equal to that level's limit. When everything is handed over at the start, any single mistake has a 50% chance of making him give up entirely. Under "adjust by kind of mistake", an execution error steps back one level and overstepping ends the relationship. With signals, a reliable scribe starts at Level 2, while an unreliable operator cannot afford the signals and still starts at Level 1.</figcaption>
+</figure>
+<style>
+.cs24-sel{display:grid;grid-template-columns:5.5em 1fr;gap:8px;align-items:center;font-size:12.5px;color:var(--muted)}
+.cs24-sel .seg-btns{margin:4px 0}
+.cs24-bars{display:grid;gap:10px;margin:8px 0}
+.cs24-r{display:grid;grid-template-columns:11em 1fr 5.5em;gap:10px;align-items:center;font-size:12.5px}
+.cs24-r div{height:22px;background:var(--quote);border-radius:5px;overflow:hidden}
+.cs24-r i{display:block;height:100%;transition:width .4s}
+.cs24-r b{text-align:right;font-variant-numeric:tabular-nums}
+.cs24-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs24-sel{grid-template-columns:1fr}.cs24-r{grid-template-columns:1fr 5.5em}.cs24-r span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs24'+id),V=[1,2,4,7],CAP=[2,5,10,25];let type='good',pol='kind';
+  function run(sig,seed){let s=seed;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};
+    let lv=pol==='all'?3:(sig&&type==='good'?1:0),val=0,loss=0,end=0;
+    for(let y=0;y<10;y++){if(end)break;val+=V[lv];const exe=r()<.25,cheat=type==='bad'&&lv>=2&&r()<.6;
+      if(cheat){loss+=CAP[lv];if(pol==='all'||pol==='kind')end=1;else lv=0;continue;}
+      if(exe){if(pol==='all'){if(r()<.5)end=1;}else if(pol==='zero')lv=0;else lv=Math.max(0,lv-1);continue;}
+      if(pol!=='all')lv=Math.min(3,lv+1);}
+    return [val,loss,end];}
+  function draw(){const sig=$('-s').checked;let a=[0,0,0];for(let k=1;k<=400;k++){const o=run(sig,k*7919);a=a.map((v,i)=>v+o[i]);}a=a.map(v=>v/400);
+    $('-b').innerHTML=[['Done for him in ten years',a[0],60,'var(--accent)',a[0].toFixed(1)],['Loss from over-trusting',a[1],30,'var(--warm)',a[1].toFixed(1)+'%'],[type==='good'?'Share who give up entirely':'Share of relationships ended',a[2],1,type==='good'?'var(--warm)':'var(--blue)',Math.round(a[2]*100)+'%']].map(([k,v,m,c,t])=>`<div class="cs24-r"><span>${k}</span><div><i style="width:${Math.min(100,v/m*100)}%;background:${c}"></i></div><b>${t}</b></div>`).join('');
+    $('-msg').textContent=type==='good'?(pol==='all'?`Handing everything over at the start: the fastest beginning, but one small mistake has a 50% chance of making him give up entirely. In more than 40% of the ten-year runs he quits partway, and on average ${a[0].toFixed(1)} gets done.`:pol==='zero'?`Widening by level, resetting on any mistake: no one gives up, but every small mistake sends authority back to Level 1, and on average ${a[0].toFixed(1)} gets done.`:`Widening by level, adjusting by kind of mistake: a small mistake steps back only one level${sig?', and the borrowed signals let it start at Level 2':''}. On average ${a[0].toFixed(1)} gets done, the most of the three approaches.`):(pol==='all'?`Handing everything over to an unreliable scribe at the start: in the first year it may already overstep with a quarter of the household wealth. The average loss is ${a[1].toFixed(1)}%.`:pol==='zero'?`Widening by level, resetting on any mistake: after each instance of overstepping it is sent back to Level 1, but it soon climbs back up and does it again. The average loss is ${a[1].toFixed(1)}%.`:`Widening by level, ending the relationship on overstepping: it must keep the agreement for two years before it gets authority it can abuse, and the relationship ends at the first instance of overstepping. The average loss is ${a[1].toFixed(1)}%, the lowest of the three approaches.`);}
+  const tb=[...document.querySelectorAll('[data-cs24t]')],pb=[...document.querySelectorAll('[data-cs24p]')];
+  tb.forEach(b=>b.addEventListener('click',()=>{type=b.dataset.cs24t;tb.forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  pb.forEach(b=>b.addEventListener('click',()=>{pol=b.dataset.cs24p;pb.forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  $('-s').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{[['good','all'],['good','zero'],['good','kind'],['bad','all'],['bad','kind']].forEach(([t,p],i)=>setTimeout(()=>{type=t;pol=p;tb.forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.cs24t===t)));pb.forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.cs24p===p)));draw();},300+i*2000));});
+  draw();
+})();
+</script>

@@ -1,0 +1,73 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">委托—代理问题的结构</p><p class="figsub">两个根源产生两类问题，委托人为此付出代理成本。点选一类治理办法，看它针对的是哪一处。</p></div><button class="replay" type="button" data-replay="pa">重播</button></div>
+    <div class="pa" id="pa" data-anim>
+      <div class="pa-top">
+        <div class="pa-who"><b>委托人</b><span>交出事务与权限</span></div>
+        <div class="pa-mid">
+          <div class="pa-arrow r"><span>交出事务，授予权限</span></div>
+          <div class="pa-roots"><i class="pa-root" data-g="obs">信息不对称<small>看不清对方的能力与行为</small></i><i class="pa-root" data-g="inc">目标冲突<small>双方的利益不完全一致</small></i></div>
+          <div class="pa-arrow l"><span>履约与汇报</span></div>
+        </div>
+        <div class="pa-who"><b>代理人</b><span>替委托人行事</span></div>
+      </div>
+      <div class="pa-row">
+        <div class="pa-p" data-g="obs inc"><em>交托之前</em><b>逆向选择</b><span>看不清能力，可能选错人</span></div>
+        <div class="pa-p" data-g="obs inc"><em>交托之后</em><b>道德风险</b><span>看不见行为，对方可能不尽力或谋私</span></div>
+      </div>
+      <div class="pa-cost">
+        <span class="pa-lab">代理成本</span>
+        <i data-g="obs" style="--w:34%">监督支出<small>委托人核实对方做了什么</small></i>
+        <i data-g="inc" style="--w:26%">保证支出<small>代理人为取信而承担</small></i>
+        <i data-g="cap" style="--w:40%">剩余损失<small>仍然无法消除的部分</small></i>
+      </div>
+      <div class="seg-btns pa-gov" role="group" aria-label="治理办法">
+        <button type="button" data-pg="obs" aria-pressed="false">提升可观测性</button>
+        <button type="button" data-pg="inc" aria-pressed="false">促成激励相容</button>
+        <button type="button" data-pg="cap" aria-pressed="false">限定损失、明确责任</button>
+      </div>
+      <p class="pa-msg" id="pa-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>代理成本的三项划分见 Jensen 与 Meckling（1976）；三类治理办法为作者的归纳。成本条的长短只作示意。</figcaption>
+</figure>
+<style>
+.pa-top{display:grid;grid-template-columns:92px 1fr 92px;gap:10px;align-items:center}
+.pa-who{background:var(--ink);color:var(--bg);border-radius:10px;padding:12px 8px;text-align:center}
+.pa-who b{display:block;font-size:15px} .pa-who span{font-size:11px;opacity:.75}
+.pa-mid{display:flex;flex-direction:column;gap:8px}
+.pa-arrow{position:relative;height:18px;font-size:11.5px;color:var(--muted);text-align:center}
+.pa-arrow::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:1.5px solid var(--faint)}
+.pa-arrow span{position:relative;background:var(--card);padding:0 8px}
+.pa-arrow.r::after,.pa-arrow.l::after{content:"";position:absolute;top:calc(50% - 4px);border:4px solid transparent}
+.pa-arrow.r::after{right:-2px;border-left:7px solid var(--faint)} .pa-arrow.l::after{left:-2px;border-right:7px solid var(--faint)}
+.pa-roots{display:flex;gap:8px;justify-content:center}
+.pa-root{font-style:normal;font-size:13.5px;font-weight:600;background:var(--warm-soft);color:var(--warm);border-radius:8px;padding:6px 10px;text-align:center;transition:opacity .3s,box-shadow .3s}
+.pa-root small{display:block;font-weight:400;font-size:11px;color:var(--muted)}
+.pa-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.pa-p{background:var(--quote);border-radius:10px;padding:10px 12px;transition:opacity .3s,box-shadow .3s}
+.pa-p em{font-style:normal;font-size:11px;color:var(--faint)} .pa-p b{display:block;font-size:15px} .pa-p span{font-size:12.5px;color:var(--muted)}
+.pa-cost{display:flex;align-items:stretch;gap:3px;margin-top:14px;flex-wrap:wrap}
+.pa-lab{width:100%;font-size:12px;color:var(--faint);margin-bottom:2px}
+.pa-cost i{font-style:normal;flex:0 0 calc(var(--w) - 3px);background:var(--quote);border-left:3px solid var(--gold);border-radius:6px;padding:6px 8px;font-size:13px;font-weight:600;transform-origin:left;transform:scaleX(0);transition:transform .6s,opacity .3s,box-shadow .3s}
+.pa-cost i small{display:block;font-weight:400;font-size:11px;color:var(--muted)}
+.pa.in .pa-cost i{transform:none}
+.pa-gov{margin:14px 0 0}
+.pa.dim [data-g]{opacity:.3} .pa.dim [data-g].hit{opacity:1;box-shadow:0 0 0 2px var(--accent)}
+.pa-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.pa-top{grid-template-columns:64px 1fr 64px}.pa-roots{flex-direction:column}.pa-cost i{flex-basis:100%}}
+</style>
+<script>
+(function(){
+  const M={obs:'提升可观测性：让委托人能核实代理人做了什么、依据是什么。它缩小信息不对称，同时减轻逆向选择与道德风险，也降低监督支出。',
+    inc:'促成激励相容：让代理人出于自利的行为同时符合委托人的利益，例如按结果分成、利益冲突的披露与回避。它针对的是目标冲突。',
+    cap:'限定损失、明确责任：例如由系统强制执行的额度上限、出错后的赔付与追责。它不缩小前两项差距，只限制剩余损失的上限。'};
+  const box=document.getElementById('pa'),msg=document.getElementById('pa-msg');
+  function set(g){document.querySelectorAll('[data-pg]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.pg===g)));
+    box.classList.toggle('dim',!!g);box.querySelectorAll('[data-g]').forEach(e=>e.classList.toggle('hit',!!g&&e.dataset.g.split(' ').includes(g)));
+    msg.textContent=g?M[g]:'信息不对称与目标冲突叠加，产生逆向选择与道德风险；委托人为此付出的代价就是代理成本。';}
+  document.querySelectorAll('[data-pg]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.pg===box.dataset.cur?'':(box.dataset.cur=b.dataset.pg))));
+  box.addEventListener('anim-in',()=>{box.dataset.cur='';set('');['obs','inc','cap',''].forEach((g,i)=>setTimeout(()=>{box.dataset.cur=g;set(g);},1400+i*2600));});
+  set('');
+})();
+</script>

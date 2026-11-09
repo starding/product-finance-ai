@@ -1,0 +1,46 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">同一份信念，够不够取决于赌注</p>
+    <p class="figsub">拖动委托人对受托人的信念：受托人在无人监督时按委托人利益行事的概率。四件事的赌注不同，所需的门槛也不同；切换委托人的承受力。</p>
+    <div class="dc" id="dc" data-anim>
+      <div class="seg-btns" role="group" aria-label="承受力">
+        <button type="button" data-dc="0" aria-pressed="true">承受力较高</button>
+        <button type="button" data-dc="1" aria-pressed="false">承受力较低</button>
+      </div>
+      <div class="dc-sc"><div class="dc-t"><i id="dc-bar"></i></div><div id="dc-th"></div></div>
+      <div class="sl"><label for="dc-p">信念 <b id="dc-pv"></b></label><input id="dc-p" type="range" min="0" max="100" step="1" value="70"></div>
+      <div class="dc-list" id="dc-list"></div>
+      <p class="dc-msg" id="dc-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意门槛。值得信任（信念）与信任（愿意承担风险的决定）的区分见 Mayer、Davis 与 Schoorman（1995）。</figcaption>
+</figure>
+<style>
+.dc-sc{position:relative;margin:28px 0 6px}
+.dc-t{height:18px;background:var(--quote);border-radius:9px;overflow:hidden}
+.dc-t i{display:block;height:100%;background:var(--accent);border-radius:9px;transition:width .3s}
+.dc-mk{position:absolute;top:-24px;transform:translateX(-50%);font-size:11px;color:var(--warm);white-space:nowrap;transition:left .4s}
+.dc-mk::after{content:"";position:absolute;left:50%;top:16px;height:30px;border-left:2px dashed var(--warm)}
+.dc-list{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
+.dc-i{border-radius:8px;padding:8px 10px;font-size:12.5px;background:var(--quote);border:1.5px solid var(--line);transition:all .3s}
+.dc-i b{display:block;font-size:13.5px}
+.dc-i.ok{background:var(--accent-soft);border-color:var(--accent)}
+.dc-i span{color:var(--faint)}
+.dc-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.dc-list{grid-template-columns:1fr 1fr}.dc-mk{font-size:10px}}
+</style>
+<script>
+(function(){
+  const T=[['查一个数据',45],['研究一家公司',60],['下单执行',78],['全权管理养老金',92]];let lo=0;
+  const $=id=>document.getElementById(id),sl=$('dc-p');
+  function r(){const p=+sl.value,add=lo?6:0;$('dc-pv').textContent=p+'%';$('dc-bar').style.width=p+'%';
+    $('dc-th').innerHTML=T.map(([n,t],i)=>`<span class="dc-mk" style="left:${Math.min(98,t+add)}%;top:${-24-(i%2)*0}px">${i+1}</span>`).join('');
+    $('dc-list').innerHTML=T.map(([n,t],i)=>{const ok=p>=t+add;return `<div class="dc-i${ok?' ok':''}"><b>${i+1}　${n}</b><span>门槛 ${Math.min(99,t+add)}%　${ok?'可以交出':'暂不交出'}</span></div>`;}).join('');
+    const k=T.filter(([n,t])=>p>=t+add).length;
+    $('dc-msg').textContent=k===0?'信念太低，连查一个数据也不愿交给对方。':k===4?'信念足够高，连全权管理养老金也愿意交出。':`同一份 ${p}% 的信念，足够交出前 ${k} 件事，却不够交出赌注更大的事。${lo?'承受力较低时，每件事的门槛都更高。':''}`;}
+  document.querySelectorAll('[data-dc]').forEach(b=>b.addEventListener('click',()=>{lo=+b.dataset.dc;document.querySelectorAll('[data-dc]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));r();}));
+  sl.addEventListener('input',r);
+  $('dc').addEventListener('anim-in',()=>{let p=20;sl.value=p;r();const id=setInterval(()=>{p+=4;sl.value=p;r();if(p>=96){clearInterval(id);setTimeout(()=>{sl.value=70;r();},600);}},120);});
+  r();
+})();
+</script>

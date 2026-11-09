@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">45 分钟里的错误订单</p><p class="figsub">一套交易系统因部署失误，持续发出错误订单。播放累计损失；再打开“累计亏损上限与停止开关”，看同一失误的后果。</p></div><button class="replay" type="button" id="ir-run">播放</button></div>
+    <label class="ir-chk"><input type="checkbox" id="ir-x"> 设有累计亏损上限与自动停止开关</label>
+    <div class="ir" id="ir" data-anim>
+      <svg viewBox="0 0 640 220" role="img" aria-label="累计损失随时间变化"><g id="ir-ax"></g><path id="ir-p" class="ir-l"/><line id="ir-cap" class="ir-cap"/></svg>
+      <div class="ir-out"><div><span>经过时间</span><b id="ir-t"></b></div><div><span>累计损失</span><b id="ir-v"></b></div></div>
+      <p class="ir-msg" id="ir-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>依据美国证券交易委员会 2013 年对 2012 年 8 月一起事件的处罚决定（Release No. 34-70694）：约 45 分钟内发出数百万笔错误订单，损失约 4.6 亿美元。损失随时间的路径为示意；上限取 1000 万美元也为示意。</figcaption>
+</figure>
+<style>
+.ir-chk{display:flex;gap:6px;align-items:center;font-size:14px;margin-bottom:6px}
+.ir-chk input{accent-color:var(--accent);width:16px;height:16px}
+.ir svg{width:100%;height:auto;display:block}
+.ir-l{fill:none;stroke:var(--warm);stroke-width:2.5}
+.ir-cap{stroke:var(--accent);stroke-dasharray:5 4;stroke-width:2}
+.ir-out{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.ir-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.ir-out span{display:block;font-size:12px;color:var(--faint)} .ir-out b{font-size:19px;font-variant-numeric:tabular-nums}
+.ir-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.ir svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const X0=60,X1=620,YT=14,YB=185,x=t=>X0+t/45*(X1-X0),y=v=>YB-v/480*(YB-YT),L=t=>460*Math.pow(t/45,1.15),CAP=10;
+  const $=id=>document.getElementById(id),cb=$('ir-x');let tm;
+  $('ir-ax').innerHTML=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`+[0,100,200,300,400].map(v=>`<text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+[0,15,30,45].map(t=>`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${t} 分钟</text>`).join('')+`<text x="${X0}" y="${YT-2}" font-size="11" class="t-faint">累计损失（百万美元）</text>`;
+  function draw(T){const cap=cb.checked;let d='',last=0,stop=null;for(let t=0;t<=T;t+=.25){let v=L(t);if(cap&&v>=CAP){v=CAP;if(stop===null)stop=t;}d+=(t?'L':'M')+x(t).toFixed(1)+','+y(v).toFixed(1);last=v;}
+    $('ir-p').setAttribute('d',d);$('ir-cap').setAttribute('x1',X0);$('ir-cap').setAttribute('x2',X1);$('ir-cap').setAttribute('y1',y(CAP));$('ir-cap').setAttribute('y2',y(CAP));$('ir-cap').style.opacity=cap?1:0;
+    $('ir-t').textContent=T.toFixed(0)+' 分钟';$('ir-v').textContent=last.toFixed(0)+' 百万美元';
+    $('ir-msg').textContent=cap?(stop!==null?`累计亏损在约第 ${stop.toFixed(0)} 分钟触及上限，系统自动停止发出新订单，损失停在约 1000 万美元。`:'尚未触及上限。'):(T>=45?'没有上限与停止开关，错误订单持续了约 45 分钟，损失约 4.6 亿美元。成交之后的订单无法撤回。':'');}
+  function run(){clearInterval(tm);let T=0;draw(0);tm=setInterval(()=>{T+=1;draw(T);if(T>=45)clearInterval(tm);},70);}
+  $('ir-run').addEventListener('click',run);cb.addEventListener('change',run);
+  $('ir').addEventListener('anim-in',()=>{cb.checked=false;run();setTimeout(()=>{cb.checked=true;run();},4500);});
+  draw(45);
+})();
+</script>

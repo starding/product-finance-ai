@@ -1,0 +1,36 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">声誉的力量：在乎将来，记录传得远</p><p class="figsub">不还一次眼前多得 4 份。拖动借款人有多在乎将来，切换违约的记录能传多远，比较不还的所得与失去的将来。</p></div><button class="replay" type="button" data-replay="rp">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="记录">
+      <button type="button" data-rp="1" aria-pressed="false">只有被骗的人知道</button>
+      <button type="button" data-rp="10" aria-pressed="true">全村都知道</button>
+    </div>
+    <div class="rp" id="rp" data-anim>
+      <div class="rp-b"><span>不还，眼前多得</span><div><i id="rp-g" style="background:var(--warm)"></i></div><b id="rp-gv"></b></div>
+      <div class="rp-b"><span>不还，失去的将来</span><div><i id="rp-l" style="background:var(--accent)"></i></div><b id="rp-lv"></b></div>
+      <div class="sl"><label for="rp-d">在乎将来的程度 <b id="rp-dv"></b></label><input id="rp-d" type="range" min="0" max="95" step="5" value="80"></div>
+      <p class="rp-msg" id="rp-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：村里有 10 户可以出借的人，借款人每年从借贷中得到 1 份好处；“在乎将来的程度”是明年的一份相当于今天的几成。只有被骗的人知道时，违约者只失去与这一户的往来，仍可向其余 9 户借。</figcaption>
+</figure>
+<style>
+.rp-b{display:grid;grid-template-columns:8em 1fr 4em;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.rp-b div{height:16px;background:var(--quote);border-radius:4px;overflow:hidden}
+.rp-b i{display:block;height:100%;transition:width .3s}
+.rp-b b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.rp-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);let share=10;
+  function draw(){const d=+$('rp-d').value/100,V=d>=.999?99:d/(1-d)*1,lost=V*share/10,G=4,M=12;
+    $('rp-g').style.width=G/M*100+'%';$('rp-l').style.width=Math.min(lost,M)/M*100+'%';$('rp-gv').textContent=G+' 份';$('rp-lv').textContent=lost.toFixed(1)+' 份';
+    $('rp-dv').textContent=(+(d*10).toFixed(1))+' 成';
+    $('rp-msg').textContent=lost>=G?`失去的将来（${lost.toFixed(1)} 份）不小于眼前的所得：守约更划算，承诺是可信的。`:share<10?`违约只有被骗的那一户知道，违约者换一户照样借，失去的将来只有 ${lost.toFixed(1)} 份：不还更划算。记录传得越远，声誉越有力。`:`借款人不够在乎将来，失去的将来只有 ${lost.toFixed(1)} 份：不还更划算。`;}
+  document.querySelectorAll('[data-rp]').forEach(b=>b.addEventListener('click',()=>{share=+b.dataset.rp;document.querySelectorAll('[data-rp]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  $('rp-d').addEventListener('input',draw);
+  $('rp').addEventListener('anim-in',()=>{let v=0;$('rp-d').value=0;draw();const id=setInterval(()=>{v+=5;$('rp-d').value=v;draw();if(v>=90)clearInterval(id);},180);});
+  draw();
+})();
+</script>

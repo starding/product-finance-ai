@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">1,000 managers with no skill</p><p class="figsub">Each has an even chance of beating the market every year, purely by luck. Year by year, see how many keep an unbroken record of beating the market.</p></div><button class="replay" type="button" id="lk-run">Run again</button></div>
+    <div class="lk" id="lk" data-anim>
+      <div class="lk-grid" id="lk-g"></div>
+      <div class="lk-out">
+        <div><span>Years elapsed</span><b id="lk-y">0</b></div>
+        <div><span>Managers still unbeaten</span><b id="lk-n">1,000</b></div>
+        <div><span>Expected by probability</span><b id="lk-e">1,000</b></div>
+      </div>
+      <p class="lk-msg" id="lk-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative simulation. For evidence on whether performance persists, see Carhart (1997): good past performance barely predicts good future performance.</figcaption>
+</figure>
+<style>
+.lk-grid{display:grid;grid-template-columns:repeat(50,1fr);gap:2px}
+.lk-grid i{aspect-ratio:1;border-radius:1px;background:var(--accent);transition:background .3s,opacity .3s}
+.lk-grid i.out{background:var(--line);opacity:.6}
+.lk-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.lk-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.lk-out span{display:block;font-size:12px;color:var(--faint)}
+.lk-out b{font-size:20px;font-variant-numeric:tabular-nums}
+.lk-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.lk-grid{grid-template-columns:repeat(25,1fr)}.lk-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const N=1000,g=document.getElementById('lk-g');g.innerHTML='<i></i>'.repeat(N);const cs=[...g.children];
+  let timer;
+  function run(){clearInterval(timer);let alive=cs.map(()=>true),y=0;cs.forEach(c=>c.classList.remove('out'));
+    const upd=()=>{const n=alive.filter(Boolean).length;document.getElementById('lk-y').textContent=y;document.getElementById('lk-n').textContent=n.toLocaleString();document.getElementById('lk-e').textContent=Math.round(N/Math.pow(2,y)).toLocaleString();
+      document.getElementById('lk-msg').textContent=y===0?'':y<5?`After year ${y}, ${n} managers still have an unbroken record.`:`After five years, ${n} managers have beaten the market five years in a row. In hindsight their records look flawless; but in year six, their chance of beating the market is still only one half.`;};
+    upd();
+    timer=setInterval(()=>{y++;alive=alive.map((a,i)=>{if(!a)return false;const w=Math.random()<0.5;if(!w)cs[i].classList.add('out');return w;});upd();if(y>=5)clearInterval(timer);},900);}
+  document.getElementById('lk-run').addEventListener('click',run);
+  document.getElementById('lk').addEventListener('anim-in',run);
+})();
+</script>

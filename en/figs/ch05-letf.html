@@ -1,0 +1,79 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Keeping leverage at 2x, step by step</p><p class="figsub">$100 of your own, $100 borrowed, $200 invested in total. The underlying rises 10% on day one and falls 10% on day two.</p></div><button class="replay" type="button" id="lf-step">Next step</button></div>
+    <div class="lf" id="lf" data-anim>
+      <div class="lf-tbl" id="lf-tbl"></div>
+      <p class="lf-msg" id="lf-msg" aria-live="polite"></p>
+    </div>
+    <div class="lf2">
+      <p class="figtitle" style="margin-top:18px">Change the market path, and the direction of the deviation changes</p>
+      <div class="seg-btns" role="group" aria-label="Market path">
+        <button type="button" data-mk="chop" aria-pressed="true">Choppy</button>
+        <button type="button" data-mk="up" aria-pressed="false">Steady rise</button>
+        <button type="button" data-mk="down" aria-pressed="false">Steady fall</button>
+      </div>
+      <div class="sl"><label for="lf-k">Daily leverage <b id="lf-kv"></b></label><input id="lf-k" type="range" min="1" max="3" step="0.5" value="2"></div>
+      <svg viewBox="0 0 640 210" role="img" aria-label="Leveraged product value versus value implied by the multiple">
+        <g id="lf-axis"></g><path id="lf-naive" class="lf-l naive"/><path id="lf-act" class="lf-l act"/>
+      </svg>
+      <div class="legend"><span><i style="background:var(--faint)"></i>Implied by “cumulative change of underlying × multiple”</span><span><i style="background:var(--warm)"></i>Actual value with leverage reset daily</span></div>
+      <p class="lf-msg" id="lf-msg2" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>The figures in the first part are taken from the author’s published article (2024-12-28). The second part is an illustrative simulation over 60 trading days, ignoring borrowing interest and management fees. For a systematic analysis of path dependence, see Cheng and Madhavan (2009) and Avellaneda and Zhang (2010).</figcaption>
+</figure>
+<style>
+.lf-tbl{display:grid;grid-template-columns:120px repeat(4,minmax(0,1fr));gap:4px;font-size:13px;font-variant-numeric:tabular-nums}
+.lf-tbl div{padding:6px 8px;border-radius:6px;background:var(--quote);opacity:.25;transition:opacity .4s,background .4s}
+.lf-tbl div.h{background:transparent;color:var(--faint);font-size:12px;opacity:1}
+.lf-tbl div.on{opacity:1}
+.lf-tbl div.buy{background:var(--warm-soft)} .lf-tbl div.sell{background:var(--accent-soft)}
+.lf-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+.lf2 svg{width:100%;height:auto;display:block}
+.lf-l{fill:none;stroke-width:2.2}
+.lf-l.naive{stroke:var(--faint);stroke-dasharray:5 4} .lf-l.act{stroke:var(--warm);stroke-width:2.6}
+@media (max-width:640px){.lf-tbl{grid-template-columns:88px repeat(4,minmax(0,1fr));font-size:12px}}
+.lf-tbl>*{min-width:0;overflow-wrap:anywhere}
+</style>
+<script>
+(function(){
+  // part one: step-by-step table
+  const R=[['Step','Position','Own','Borrowed','Leverage'],
+    ['Start','200','100','100','2.00'],
+    ['Day 1: up 10%','220','120','100','1.83'],
+    ['Borrow 20, buy more (buy high)','240','120','120','2.00','buy'],
+    ['Day 2: down 10%','216','96','120','2.25'],
+    ['Sell 24, repay (sell low)','192','96','96','2.00','sell']];
+  const M=['Start: $100 of your own, $100 borrowed, a $200 position, leverage 2x.','The underlying rises 10%. The position is $220, of which $120 is your own, and leverage falls to about 1.83x.','To get back to 2x, borrow another $20 and buy: this adds to the position at a high price.','The underlying falls 10%. The position loses $24, all borne by your own capital, which falls to $96; leverage rises to 2.25x.','To get back to 2x, sell $24 of the position to repay debt: this cuts the position at a low price. Over two days the underlying fell only 1%; at 2x you would expect to lose 2%, but you actually lost 4%.'];
+  const tbl=document.getElementById('lf-tbl');
+  tbl.innerHTML=R.map((r,i)=>r.slice(0,5).map(c=>`<div class="${i===0?'h':''} ${r[5]||''}" data-r="${i}">${c}</div>`).join('')).join('');
+  let step=0;
+  const show=k=>{step=k;tbl.querySelectorAll('div[data-r]').forEach(d=>{const r=+d.dataset.r;d.classList.toggle('on',r>0&&r<=k+1);});document.getElementById('lf-msg').textContent=M[k];};
+  document.getElementById('lf-step').addEventListener('click',()=>show((step+1)%5));
+  let timer; document.getElementById('lf').addEventListener('anim-in',()=>{clearInterval(timer);show(0);let k=0;timer=setInterval(()=>{k++;show(k);if(k>=4)clearInterval(timer);},1600);});
+  show(0);
+  // part two: deviation under different market paths
+  const N=60,X0=50,X1=620,YT=14,YB=184,x=t=>X0+t/N*(X1-X0);
+  let seed=21; const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
+  const g=()=>{let u=0,v=0;while(!u)u=rnd();v=rnd();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);};
+  const noise=Array.from({length:N},g);
+  const MK={chop:t=>(t%2?-0.03:0.03)+0.004*noise[t],up:t=>0.01+0.006*noise[t],down:t=>-0.01+0.006*noise[t]};
+  let mk='chop'; const kEl=document.getElementById('lf-k');
+  function sim(){
+    const k=+kEl.value; document.getElementById('lf-kv').textContent=k+'x';
+    document.querySelectorAll('[data-mk]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mk===mk)));
+    let u=1,a=1; const NA=[1],AC=[1];
+    for(let t=0;t<N;t++){const r=MK[mk](t);u*=1+r;a*=1+k*r;NA.push(Math.max(0.01,1+k*(u-1)));AC.push(a);}
+    const all=NA.concat(AC), lo=Math.min(...all)*0.95, hi=Math.max(...all)*1.05, y=v=>YB-(v-lo)/(hi-lo)*(YB-YT);
+    let ax=`<line x1="${X0}" y1="${y(1)}" x2="${X1}" y2="${y(1)}" class="s-line"/><text x="${X0-8}" y="${y(1)+4}" text-anchor="end" font-size="11" class="t-faint">100</text>`;
+    [0,20,40,60].forEach(t=>ax+=`<text x="${x(t)}" y="${YB+18}" text-anchor="middle" font-size="11" class="t-faint">Day ${t}</text>`);
+    document.getElementById('lf-axis').innerHTML=ax;
+    const P=arr=>'M'+arr.map((v,t)=>`${x(t).toFixed(1)},${y(v).toFixed(1)}`).join('L');
+    document.getElementById('lf-naive').setAttribute('d',P(NA));document.getElementById('lf-act').setAttribute('d',P(AC));
+    const dev=(AC[N]-NA[N])*100;
+    document.getElementById('lf-msg2').textContent=k===1?'Without leverage the two lines coincide and there is no deviation.':`After 60 days, the actual value is ${(AC[N]*100).toFixed(0)} and the value implied by the multiple is ${(NA[N]*100).toFixed(0)}, a deviation of ${dev>0?'+':''}${dev.toFixed(0)}. ${mk==='chop'?'In a choppy market, buying high and selling low every day makes the deviation unfavourable.':'In a one-way trend, buying high and selling low means adding in the direction of the trend, so the deviation is favourable.'}`;
+  }
+  document.querySelectorAll('[data-mk]').forEach(b=>b.addEventListener('click',()=>{mk=b.dataset.mk;sim();}));
+  kEl.addEventListener('input',sim); sim();
+})();
+</script>

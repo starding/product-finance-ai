@@ -1,0 +1,48 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">The more often you look, the less worth holding stocks seem</p>
+    <p class="figsub">The same stock portfolio, with positive long-term returns. Drag how often the account is checked to see the probability of a loss at each check and the felt value under loss aversion. Above zero, holding stocks feels worthwhile; below zero, it does not.</p>
+    <div class="mo" id="mo" data-anim>
+      <svg viewBox="0 0 640 220" role="img" aria-label="Checking frequency and felt value">
+        <g id="mo-ax"></g><path id="mo-p" class="mo-l"/><circle id="mo-d" r="6" fill="var(--ink)"/>
+      </svg>
+      <div class="sl"><label for="mo-s">How often the account is checked: <b id="mo-sv"></b></label><input id="mo-s" type="range" min="0" max="7" step="1" value="0"></div>
+      <div class="mo-out"><div><span>Probability of a loss at each check</span><b id="mo-pl"></b></div><div><span>Felt value under loss aversion (per year)</span><b id="mo-u"></b></div></div>
+      <p class="mo-msg" id="mo-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative calculation: expected annual return 7%, volatility 16%, returns in each period normally distributed; felt value = the positive part of expected returns − 2.25 × the negative part, converted to a per-year figure; the vertical axis is on a log scale. The idea comes from Benartzi and Thaler's (1995) myopic loss aversion; for experimental evidence, see Gneezy and Potters (1997).</figcaption>
+</figure>
+<style>
+.mo svg{width:100%;height:auto;display:block}
+.mo-l{fill:none;stroke:var(--accent);stroke-width:2.5}
+.mo-out{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.mo-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.mo-out span{display:block;font-size:12px;color:var(--faint)} .mo-out b{font-size:19px;font-variant-numeric:tabular-nums}
+.mo-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.mo-out{grid-template-columns:1fr}}
+@media (max-width:640px){.mo svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const F=[['daily',1/250],['weekly',1/52],['monthly',1/12],['quarterly',1/4],['every six months',1/2],['once a year',1],['every two years',2],['every five years',5]];
+  const FS=['Day','Week','Month','Quarter','6 mo','Year','2 yrs','5 yrs'];
+  const m=.07,s=.16,Phi=z=>{const t=1/(1+.2316419*Math.abs(z)),d=.3989423*Math.exp(-z*z/2),p=d*t*(.3193815+t*(-.3565638+t*(1.781478+t*(-1.821256+t*1.330274))));return z>0?1-p:p;},phi=z=>.3989423*Math.exp(-z*z/2);
+  const calc=t=>{const M=m*t,S=s*Math.sqrt(t),z=M/S,ep=M*Phi(z)+S*phi(z),en=ep-M;return {pl:Phi(-z),u:(ep-2.25*en)/t};};
+  const R=F.map(([n,t])=>calc(t));
+  const L=u=>Math.sign(u)*Math.log10(1+Math.abs(u)*100),lmin=Math.min(...R.map(r=>L(r.u))),lmax=Math.max(...R.map(r=>L(r.u))),X0=60,X1=610,YT=16,YB=180,x=i=>X0+i/7*(X1-X0),y=u=>YT+(lmax-L(u))/(lmax-lmin)*(YB-YT);
+  const $=id=>document.getElementById(id);
+  let a=`<line x1="${X0}" y1="${y(0)}" x2="${X1}" y2="${y(0)}" class="s-faint"/><text x="${X0-6}" y="${y(0)+4}" text-anchor="end" font-size="11" class="t-faint">0</text>`+
+    `<text x="${X0-6}" y="${YT+8}" text-anchor="end" font-size="11" class="t-accent">+</text><text x="${X0-6}" y="${YB}" text-anchor="end" font-size="11" class="t-warm">−</text>`;
+  F.forEach(([n],i)=>a+=`<text x="${x(i)}" y="${YB+28}" text-anchor="middle" font-size="11" class="t-faint">${FS[i]}</text>`);
+  $('mo-ax').innerHTML=a;
+  $('mo-p').setAttribute('d',R.map((r,i)=>(i?'L':'M')+x(i).toFixed(1)+','+y(r.u).toFixed(1)).join(''));
+  const sl=$('mo-s');
+  function r(){const i=+sl.value,q=R[i];$('mo-sv').textContent=F[i][0];$('mo-d').setAttribute('cx',x(i));$('mo-d').setAttribute('cy',y(q.u));$('mo-d').setAttribute('fill',q.u>=0?'var(--accent)':'var(--warm)');
+    $('mo-pl').textContent=(q.pl*100).toFixed(0)+'%';$('mo-u').textContent=(q.u>=0?'+':'−')+Math.abs(q.u*100).toFixed(1);
+    $('mo-msg').textContent=q.u<0?`Checking ${F[i][0]}, about ${(q.pl*100).toFixed(0)}% of the time the account shows a loss. With losses counted at roughly twice the weight, holding stocks feels negative: the same portfolio seems too risky.`:`Checking ${F[i][0]}, the probability of seeing a loss falls to about ${(q.pl*100).toFixed(0)}%, and holding stocks turns to a positive feeling. The portfolio has not changed; only the frequency of evaluation has.`;}
+  sl.addEventListener('input',r);
+  $('mo').addEventListener('anim-in',()=>{let i=0;sl.value=0;r();const id=setInterval(()=>{i++;sl.value=i;r();if(i>=7)clearInterval(id);},500);});
+  r();
+})();
+</script>

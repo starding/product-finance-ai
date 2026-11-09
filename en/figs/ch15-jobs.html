@@ -1,0 +1,54 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">One product, different jobs</p>
+    <p class="figsub">The product is fixed: a stock index fund. Switch the job the user needs done to see how the yardstick for judging it changes.</p>
+    <div class="seg-btns" role="group" aria-label="Job">
+      <button type="button" data-jb="ret" aria-pressed="true">Retire in 30 years</button>
+      <button type="button" data-jb="home" aria-pressed="false">Down payment in 5 years</button>
+      <button type="button" data-jb="fee" aria-pressed="false">Tuition in 3 months</button>
+      <button type="button" data-jb="emg" aria-pressed="false">Emergency fund</button>
+    </div>
+    <div class="jb" id="jb" data-anim>
+      <div class="jb-prod"><span>Product</span><b>Stock index fund</b><em>Has fallen more than 30% within a year in the past</em></div>
+      <div class="jb-grid">
+        <div><span>When the money is needed</span><b id="jb-h"></b></div>
+        <div><span>Largest acceptable loss</span><b id="jb-l"></b></div>
+        <div><span>What counts as done</span><b id="jb-d"></b></div>
+      </div>
+      <div class="jb-fit"><span>Fit</span><div class="jb-bar"><i id="jb-bar"></i></div><b id="jb-v"></b></div>
+      <p class="jb-msg" id="jb-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative. "Fit" compares only the horizon and the bearable loss, and is not a recommendation of any product.</figcaption>
+</figure>
+<style>
+.jb-prod{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;background:var(--quote);border-radius:8px;padding:8px 12px}
+.jb-prod span{font-size:12px;color:var(--faint)} .jb-prod b{font-size:15px} .jb-prod em{font-style:normal;font-size:12px;color:var(--muted)}
+.jb-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
+.jb-grid div{border:1.5px solid var(--line);border-radius:8px;padding:8px 12px}
+.jb-grid span{display:block;font-size:12px;color:var(--faint)}
+.jb-grid b{font-size:14px;line-height:1.5;display:block;margin-top:2px}
+.jb-fit{display:grid;grid-template-columns:auto 1fr 90px;gap:10px;align-items:center}
+.jb-bar{height:14px;background:var(--quote);border-radius:7px;overflow:hidden}
+.jb-bar i{display:block;height:100%;width:0;border-radius:7px;transition:width .6s ease,background .3s}
+.jb-fit span{font-size:12px;color:var(--faint)}
+.jb-fit b{font-size:14px;text-align:right}
+.jb-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.jb-grid{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const J={ret:['In about 30 years','A 40% fall along the way can be waited out','Enough purchasing power built up by retirement',92,'Fits','The horizon is long, short-term falls have time to recover, and bearing risk earns risk compensation.'],
+    home:['In about 5 years','15% at most, or the down payment falls short','A definite sum available in five years',40,'Partly fits','The horizon is medium: part of the money can go here, and risk should come down as the date approaches.'],
+    fee:['In 3 months','Almost no loss at all','The full amount on the due date',6,'Does not fit','The horizon is too short: a single fall would make it impossible to pay on time. This job needs certainty, not returns.'],
+    emg:['At any time','No loss, and available at any moment','Enough money available the moment it is needed',4,'Does not fit','Emergency money must be available at any time and in a definite amount; an asset whose price fluctuates cannot do this job.']};
+  const $=id=>document.getElementById(id);
+  function set(k){document.querySelectorAll('[data-jb]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.jb===k)));
+    const [h,l,d,f,v,m]=J[k];$('jb-h').textContent=h;$('jb-l').textContent=l;$('jb-d').textContent=d;
+    const bar=$('jb-bar');bar.style.width='0';bar.style.background=f>60?'var(--accent)':f>20?'var(--gold)':'var(--warm)';
+    setTimeout(()=>bar.style.width=f+'%',40);$('jb-v').textContent=v;$('jb-msg').textContent=m;}
+  document.querySelectorAll('[data-jb]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.jb)));
+  $('jb').addEventListener('anim-in',()=>{const ks=['ret','home','fee','emg'];ks.forEach((k,i)=>setTimeout(()=>set(k),i*1600));setTimeout(()=>set('ret'),ks.length*1600);});
+  set('ret');
+})();
+</script>

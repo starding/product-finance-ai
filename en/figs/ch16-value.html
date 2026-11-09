@@ -1,0 +1,43 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">The value function of prospect theory</p>
+    <p class="figsub">The horizontal axis is the gain or loss relative to the reference point; the vertical axis is the value felt. Drag the outcome to compare how a gain and a loss of the same amount feel.</p>
+    <div class="vf" id="vf" data-anim>
+      <svg viewBox="0 0 640 260" role="img" aria-label="Value function">
+        <g id="vf-ax"></g><path id="vf-p" class="vf-l"/>
+        <line id="vf-h" class="vf-g"/><line id="vf-v" class="vf-g"/><circle id="vf-d" r="6" fill="var(--ink)"/>
+        <circle id="vf-m" r="5" fill="none" stroke="var(--faint)" stroke-width="1.5"/>
+      </svg>
+      <div class="sl"><label for="vf-s">Outcome relative to the reference point <b id="vf-sv"></b></label><input id="vf-s" type="range" min="-1000" max="1000" step="50" value="-500"></div>
+      <p class="vf-msg" id="vf-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Parameters follow the estimates of Tversky and Kahneman (1992): a diminishing-sensitivity exponent of 0.88 for gains and losses and a loss-aversion coefficient of 2.25. The hollow circle marks the opposite outcome of the same amount.</figcaption>
+</figure>
+<style>
+.vf svg{width:100%;height:auto;display:block}
+.vf-l{fill:none;stroke:var(--accent);stroke-width:2.5;stroke-dasharray:1200;stroke-dashoffset:1200;transition:stroke-dashoffset 1.4s ease}
+.vf.in .vf-l{stroke-dashoffset:0}
+.vf-g{stroke:var(--faint);stroke-dasharray:3 3}
+.vf-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.vf svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const V=x=>x>=0?Math.pow(x,.88):-2.25*Math.pow(-x,.88), vmax=V(1000), vmin=V(-1000);
+  const X0=40,X1=620,YT=12,YB=248,cx=(X0+X1)/2,x=v=>cx+v/1000*(X1-cx),yr=(YB-YT)/(vmax-vmin),y=u=>YT+(vmax-u)*yr,y0=y(0);
+  const $=id=>document.getElementById(id);
+  let d='';for(let v=-1000;v<=1000;v+=10)d+=(v===-1000?'M':'L')+x(v).toFixed(1)+','+y(V(v)).toFixed(1);$('vf-p').setAttribute('d',d);
+  $('vf-ax').innerHTML=`<line x1="${X0}" y1="${y0}" x2="${X1}" y2="${y0}" class="s-faint"/><line x1="${cx}" y1="${YT}" x2="${cx}" y2="${YB}" class="s-faint"/>`+
+    `<text x="${X1}" y="${y0-6}" text-anchor="end" font-size="11" class="t-faint">Gains →</text><text x="${X0}" y="${y0-6}" font-size="11" class="t-faint">← Losses</text>`+
+    `<text x="${cx+6}" y="${YT+10}" font-size="11" class="t-faint">Felt value</text><text x="${cx+6}" y="${y0+14}" font-size="11" class="t-faint">Reference point</text>`;
+  const sl=$('vf-s'),fm=u=>(u<0?'−':'+')+Math.abs(u).toFixed(0);
+  function r(){const v=+sl.value,u=V(v);$('vf-sv').textContent=(v>0?'+':v<0?'−':'')+'$'+Math.abs(v);
+    $('vf-d').setAttribute('cx',x(v));$('vf-d').setAttribute('cy',y(u));$('vf-m').setAttribute('cx',x(-v));$('vf-m').setAttribute('cy',y(V(-v)));
+    const h=$('vf-h'),vv=$('vf-v');h.setAttribute('x1',cx);h.setAttribute('x2',x(v));h.setAttribute('y1',y(u));h.setAttribute('y2',y(u));vv.setAttribute('x1',x(v));vv.setAttribute('x2',x(v));vv.setAttribute('y1',y0);vv.setAttribute('y2',y(u));
+    $('vf-msg').textContent=v===0?'At the reference point: neither a gain nor a loss.':v<0?`Losing $${-v} feels like about ${fm(u)}, while gaining the same amount feels like only ${fm(V(-v))}: a loss weighs about 2.25 times as much as a gain.`:`Gaining $${v} feels like about ${fm(u)}; losing the same amount feels like about ${fm(V(-v))}.`;}
+  sl.addEventListener('input',r);
+  $('vf').addEventListener('anim-in',()=>{let v=-1000;const id=setInterval(()=>{v+=100;sl.value=v;r();if(v>=1000){clearInterval(id);setTimeout(()=>{sl.value=-500;r();},700);}},130);});
+  r();
+})();
+</script>

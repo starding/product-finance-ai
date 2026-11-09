@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">状态放在会话里，还是存为对象</p><p class="figsub">委托人与代理在四个星期里有四次对话，第四周还更换了模型。切换状态的保存方式，看到第四次对话时还剩下什么。</p></div><button class="replay" type="button" data-replay="ob2">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="保存方式"><button type="button" data-ob2="s" aria-pressed="true">只在会话里</button><button type="button" data-ob2="o" aria-pressed="false">存为长期对象</button></div>
+    <div class="ob2" id="ob2" data-anim>
+      <div class="ob2-wk" id="ob2-wk"></div>
+      <div class="ob2-list" id="ob2-list"></div>
+    </div>
+    <p class="ob2-msg" id="ob2-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>示意。</figcaption>
+</figure>
+<style>
+.ob2-wk{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px}
+.ob2-wk div{background:var(--quote);border-radius:8px;padding:6px 8px;font-size:12px;line-height:1.5}
+.ob2-wk b{display:block;font-size:12.5px}
+.ob2-list{display:grid;gap:5px}
+.ob2-i{display:grid;grid-template-columns:minmax(0,1fr) 110px;gap:8px;align-items:center;font-size:12.5px;background:var(--quote);border-radius:7px;padding:6px 10px;opacity:0;transition:opacity .3s;transition-delay:calc(var(--i)*.12s)}
+.ob2-i.on{opacity:1}
+.ob2-i b{font-weight:400;font-size:11.5px;text-align:center;border-radius:5px;padding:2px 6px}
+.ob2-i b.y{background:var(--accent-soft);color:var(--accent)} .ob2-i b.n{background:var(--warm-soft);color:var(--warm)}
+.ob2-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.ob2-wk{grid-template-columns:1fr 1fr}}
+</style>
+<script>
+(function(){
+  const W=[['第一周','约定单一持仓不超过 30%'],['第二周','确认每月定投 2000 元'],['第三周','留下一项待办：月底前决定是否认购供股'],['第四周','更换了模型版本，新开一次对话']];
+  const F=[['单一持仓不超过 30% 的约束',0],['每月定投 2000 元的方案',0],['月底前决定是否认购供股',1],['上次对一家公司的判断与依据',0],['过去一个月的履约记录',0]];
+  document.getElementById('ob2-wk').innerHTML=W.map(([a,b])=>`<div><b>${a}</b>${b}</div>`).join('');
+  const box=document.getElementById('ob2-list');
+  function set(k){document.querySelectorAll('[data-ob2]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.ob2===k)));
+    box.innerHTML=F.map(([n,d],i)=>{const y=k==='o';return `<div class="ob2-i" style="--i:${i}"><span>${n}</span><b class="${y?'y':'n'}">${y?'在对象中，可读可改':'散落在旧对话里'}</b></div>`;}).join('');
+    setTimeout(()=>box.querySelectorAll('.ob2-i').forEach(e=>e.classList.add('on')),40);
+    document.getElementById('ob2-msg').textContent=k==='o'?'约束、方案、待办、判断与记录都存为长期对象：新的对话、新的模型一开始就能读到它们，委托人也能直接查看与修改。':'第四次对话开始时，前三周的约定都留在旧对话里；新模型看不到它们，月底的供股截止可能被遗忘。';}
+  document.querySelectorAll('[data-ob2]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.ob2)));
+  box.addEventListener('anim-in',()=>{set('s');setTimeout(()=>set('o'),2600);});
+  set('s');
+})();
+</script>

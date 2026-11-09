@@ -1,0 +1,61 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">What is handed over comes in three scales</p><p class="figsub">Select a scale to see the time relationship, the agent's own time, what is left behind, and the principal's scarcest resource. The three scales nest within one another.</p></div><button class="replay" type="button" data-replay="sc">Replay</button></div>
+    <div class="sc" id="sc" data-anim>
+      <div class="sc-nest" aria-hidden="true">
+        <div class="sc-box b2" data-sc="2"><span>An ongoing responsibility</span>
+          <div class="sc-box b1" data-sc="1"><span>A piece of work with a deliverable</span>
+            <div class="sc-box b0" data-sc="0"><span>A question</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="sc-side">
+        <div class="seg-btns" role="group" aria-label="Scale">
+          <button type="button" data-scb="0" aria-pressed="false">A question</button>
+          <button type="button" data-scb="1" aria-pressed="false">A piece of work</button>
+          <button type="button" data-scb="2" aria-pressed="true">An ongoing responsibility</button>
+        </div>
+        <dl class="sc-d" id="sc-d" aria-live="polite"></dl>
+      </div>
+    </div>
+    <div class="sc-req" id="sc-req"><b>Three requirements of ongoing asynchronous work</b>
+      <span><em>Tiered interruptions</em>The agent wakes far more often than the principal is willing to be interrupted; most checks are only recorded and do not interrupt</span>
+      <span><em>A verifiable past</em>The principal is mostly absent, so later checks rely on records, which must state the state of things at the time and the basis for each step</span>
+      <span><em>A visible future</em>The principal knows in advance when a decision is required and which matters fall on the same day</span>
+    </div>
+  </div>
+  <figcaption>The synchronous–asynchronous distinction follows the time–space matrix of collaboration in Johansen (1988); the three scales and the three requirements are the author's synthesis.</figcaption>
+</figure>
+<style>
+.sc{display:grid;grid-template-columns:minmax(200px,40%) 1fr;gap:18px;align-items:start}
+.sc-box{border-radius:12px;padding:26px 10px 10px;position:relative;transition:background .4s,box-shadow .4s,opacity .5s,transform .5s;opacity:0;transform:scale(.94)}
+.sc.in .sc-box{opacity:1;transform:none}
+.sc-box>span{position:absolute;top:6px;left:10px;font-size:12px;color:var(--muted)}
+.sc-box.b2{background:var(--quote);min-height:210px;transition-delay:.0s}
+.sc-box.b1{background:var(--surface);min-height:150px;transition-delay:.25s}
+.sc-box.b0{background:var(--quote);min-height:70px;transition-delay:.5s}
+.sc-box.on{box-shadow:0 0 0 2px var(--accent)} .sc-box.on>span{color:var(--accent);font-weight:600}
+.sc-d{display:grid;grid-template-columns:9.5em 1fr;gap:6px 12px;margin:0;font-size:13.5px;line-height:1.6}
+.sc-d dt{color:var(--faint);font-size:12px;padding-top:2px} .sc-d dd{margin:0}
+.sc-req{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px;transition:opacity .4s}
+.sc-req b{grid-column:1/-1;font-size:13px}
+.sc-req span{background:var(--accent-soft);border-radius:8px;padding:8px 10px;font-size:12.5px;line-height:1.55;color:var(--muted)}
+.sc-req em{display:block;font-style:normal;font-weight:600;color:var(--ink);font-size:13.5px}
+.sc-req.dim{opacity:.35}
+@media (max-width:640px){.sc{grid-template-columns:1fr}.sc-box.b2{min-height:170px}.sc-req{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const K=['What is handed over','Time relationship','Time span','The agent\'s own time','What is left when done','Scarcest resource'];
+  const D=[['A question: answer me','Synchronous: the principal is present and waiting','Seconds to minutes','None: works only when asked','An answer','The principal\'s waiting time: the answer must be fast'],
+    ['A piece of work with a deliverable: get it done for me','Bounded asynchronous: the principal explains, leaves, and returns to accept the result','Minutes to hours','While running; stops when done','The deliverable, plus the rules and settings for doing the work','The principal\'s trust: will what is handed over get done'],
+    ['An ongoing responsibility: keep looking after it','Ongoing asynchronous: each side keeps its own time, with intermittent contact','Weeks to years, until the mandate ends','Yes: dormant most of the time, waking at agreed times or when something changes outside','Goals, triggers, authority and the delivery record','The principal\'s attention: when an interruption is worth it']];
+  const d=document.getElementById('sc-d'),req=document.getElementById('sc-req');
+  function set(k){document.querySelectorAll('[data-scb]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.scb===k)));
+    document.querySelectorAll('.sc-box').forEach(b=>b.classList.toggle('on',+b.dataset.sc===k));
+    d.innerHTML=K.map((x,i)=>`<dt>${x}</dt><dd>${D[k][i]}</dd>`).join('');req.classList.toggle('dim',k!==2);}
+  document.querySelectorAll('[data-scb]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.scb)));
+  document.getElementById('sc').addEventListener('anim-in',()=>{[0,1,2].forEach((k,i)=>setTimeout(()=>set(k),600+i*1800));});
+  set(2);
+})();
+</script>

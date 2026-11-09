@@ -1,0 +1,64 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">Central counterparty and netting: from a web to a few lines</p>
+    <p class="figsub">Four brokers do 10 trades with one another in a day. Switch between the three stages to see how the number and value of settlements change.</p>
+    <div class="seg-btns" role="group" aria-label="Stage">
+      <button type="button" data-se="0" aria-pressed="true">Bilateral, trade by trade</button>
+      <button type="button" data-se="1" aria-pressed="false">Central counterparty steps in</button>
+      <button type="button" data-se="2" aria-pressed="false">Netted: settle net amounts only</button>
+    </div>
+    <div class="se" id="se" data-anim>
+      <svg viewBox="0 0 640 260" role="img" aria-label="Settlement relationships between brokers">
+        <defs><marker id="se-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0L10,5L0,10z" class="se-mk"/></marker></defs>
+        <g id="se-l"></g><g id="se-n"></g>
+      </svg>
+      <div class="se-out"><div><span>Settlements required</span><b id="se-c"></b></div><div><span>Total funds to transfer</span><b id="se-v"></b></div></div>
+      <p class="se-msg" id="se-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Example numbers in millions of yuan; arrows show the direction of payment. CCP stands for central counterparty. Settlement is delivery versus payment: money and securities are exchanged at the same time. On the role of central counterparties, see CPSS and IOSCO (2012), Principles for Financial Market Infrastructures.</figcaption>
+</figure>
+<style>
+.se svg{width:100%;height:auto;display:block}
+.se-mk{fill:var(--faint)}
+.se-ln{stroke:var(--faint);stroke-width:1.4;fill:none;opacity:.8}
+.se-ln.n{stroke:var(--accent);stroke-width:2.4}
+.se-node rect{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+.se-node.c rect{fill:var(--accent-soft);stroke:var(--accent)}
+.se-node text{fill:var(--ink)}
+.se-amt{font-size:10.5px;fill:var(--muted)}
+.se-out{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.se-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.se-out span{display:block;font-size:12px;color:var(--faint)}
+.se-out b{font-size:20px;font-variant-numeric:tabular-nums}
+.se-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const P={A:[110,60],B:[530,60],C:[530,200],D:[110,200]}, CC=[320,130];
+  const T=[['A','B',500],['B','A',300],['A','C',200],['C','A',400],['B','C',600],['C','D',300],['D','B',250],['D','A',150],['B','D',100],['C','B',200]];
+  const net={A:0,B:0,C:0,D:0}; T.forEach(([f,t,v])=>{net[f]-=v;net[t]+=v;});
+  const node=(k,[x,y],c)=>`<g class="se-node ${c||''}"><rect x="${x-46}" y="${y-18}" width="92" height="36" rx="10"/><text x="${x}" y="${y+5}" text-anchor="middle" font-size="13" font-weight="700">${k}</text></g>`;
+  function line(a,b,off,cls,lab){const [x1,y1]=a,[x2,y2]=b,dx=x2-x1,dy=y2-y1,L=Math.hypot(dx,dy),nx=-dy/L*off,ny=dx/L*off,s=50/L,e=1-52/L;
+    const sx=x1+dx*s+nx,sy=y1+dy*s+ny,ex=x1+dx*e+nx,ey=y1+dy*e+ny;
+    return `<path class="se-ln ${cls}" d="M${sx},${sy}L${ex},${ey}" marker-end="url(#se-ar)"/>`+(lab?`<text class="se-amt" x="${(sx+ex)/2+nx*0.6}" y="${(sy+ey)/2+ny*0.6}" text-anchor="middle">${lab}</text>`:'');}
+  const btns=[...document.querySelectorAll('[data-se]')];
+  function set(k){
+    btns.forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.se===k)));
+    let L='',N='',cnt=0,val=0;
+    if(k===0){const seen={};T.forEach(([f,t,v])=>{const key=[f,t].sort().join('');seen[key]=(seen[key]||0)+1;L+=line(P[f],P[t],(seen[key]===1?-8:8),'',v/100);cnt++;val+=v;});
+      Object.keys(P).forEach(n=>N+=node(n,P[n]));}
+    else if(k===1){T.forEach(([f,t,v],i)=>{L+=line(P[f],CC,-6+(i%4)*4,'','');L+=line(CC,P[t],-6+(i%4)*4,'','');cnt+=2;val+=2*v;});
+      Object.keys(P).forEach(n=>N+=node(n,P[n]));N+=node('CCP',CC,'c');}
+    else{Object.entries(net).forEach(([n,v])=>{if(v<0)L+=line(P[n],CC,0,'n','Pays '+(-v/100));else if(v>0)L+=line(CC,P[n],0,'n','Gets '+(v/100));else L+=`<text class="se-amt" x="${P[n][0]}" y="${P[n][1]+34}" text-anchor="middle">Net zero: nothing to settle</text>`;cnt+=v!==0?1:0;val+=Math.abs(v);});
+      Object.keys(P).forEach(n=>N+=node(n,P[n]));N+=node('CCP',CC,'c');}
+    document.getElementById('se-l').innerHTML=L;document.getElementById('se-n').innerHTML=N;
+    document.getElementById('se-c').textContent=String(cnt);
+    document.getElementById('se-v').textContent=(val/100).toLocaleString()+' million';
+    document.getElementById('se-msg').textContent=k===0?'Each trade is settled directly between buyer and seller, and every broker must worry whether several counterparties will perform.':k===1?'The central counterparty becomes the buyer to every seller and the seller to every buyer. The number of settlements rises for now, but each broker faces only one counterparty.':'The central counterparty offsets each broker\'s receivables against its payables and settles only the net amount: both the number of settlements and the funds transferred fall sharply.';
+  }
+  btns.forEach(b=>b.addEventListener('click',()=>set(+b.dataset.se)));
+  document.getElementById('se').addEventListener('anim-in',()=>{set(0);setTimeout(()=>set(1),2200);setTimeout(()=>set(2),4600);});
+  set(0);
+})();
+</script>

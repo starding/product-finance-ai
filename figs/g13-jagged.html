@@ -1,0 +1,53 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">参差的边界：该核对哪些</p><p class="figsub">二十四件事按看上去的难易从左到右排列，绿色是书记员做得对的，橙色是它会做错的。选择一种分工，看花掉的时间与漏过的错误。</p></div><button class="replay" type="button" data-replay="jg13">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="分工">
+      <button type="button" data-jg13="self" aria-pressed="false">全部自己做</button>
+      <button type="button" data-jg13="trust" aria-pressed="true">全部交给书记员</button>
+      <button type="button" data-jg13="hard" aria-pressed="false">只核对看上去难的</button>
+      <button type="button" data-jg13="all" aria-pressed="false">交给书记员，逐件核对</button>
+    </div>
+    <div class="jg13" id="jg13" data-anim>
+      <div class="jg13-row" id="jg13-r"></div>
+      <div class="jg13-ax"><span>看上去容易</span><span>看上去难</span></div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>书记员做得对</span><span><i style="background:var(--warm)"></i>书记员会做错</span><span><i style="outline:2px solid var(--ink);outline-offset:-2px;background:transparent"></i>由人核对</span><span><i style="background:var(--warm);opacity:.35"></i>错误被漏过</span></div>
+      <div class="jg13-out" id="jg13-out"></div>
+      <p class="jg13-msg" id="jg13-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：人自己做一件事要 1 小时，书记员几乎不花时间，人核对一件要 0.3 小时，发现错误后自己重做要 1 小时。哪些事会出错是事先排定的，与看上去的难易只有微弱的关系（德拉夸等，2023 所说的“参差的技术前沿”）。</figcaption>
+</figure>
+<style>
+.jg13-row{display:grid;grid-template-columns:repeat(24,1fr);gap:3px;align-items:end;height:90px}
+.jg13-row i{display:block;border-radius:3px;background:var(--accent);transition:opacity .4s,outline-color .3s;outline:2px solid transparent;outline-offset:1px}
+.jg13-row i.bad{background:var(--warm)}
+.jg13-row i.chk{outline-color:var(--ink)}
+.jg13-row i.miss{opacity:.35}
+.jg13-row i.self{background:var(--faint)}
+.jg13-ax{display:flex;justify-content:space-between;font-size:11.5px;color:var(--faint);margin:4px 0 6px}
+.jg13-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.jg13-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.jg13-out span{display:block;font-size:11.5px;color:var(--faint)} .jg13-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.jg13-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.jg13-row{gap:2px}.jg13-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('jg13'+id);
+  // 1 表示书记员会做错；与难易只有微弱的关系
+  const BAD=[0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1];
+  let mode='trust';
+  function draw(){let hrs=0,miss=0,chk=0;
+    $('-r').innerHTML=BAD.map((b,i)=>{const h=30+i*2.5;let c=b?'bad':'';
+      if(mode==='self'){hrs+=1;c='self';}
+      else{const check=mode==='all'||(mode==='hard'&&i>=16);if(check){hrs+=.3;chk++;c+=' chk';if(b)hrs+=1;}else if(b){miss++;c+=' miss';}}
+      return `<i class="${c}" style="height:${h}px"></i>`;}).join('');
+    $('-out').innerHTML=[['花掉的时间',hrs.toFixed(1)+' 小时'],['由人核对的件数',(mode==='self'?24:chk)+' 件'],['漏过的错误',miss+' 件']].map(([a,v])=>`<div><span>${a}</span><b>${v}</b></div>`).join('');
+    $('-msg').textContent={self:'全部自己做，没有错误漏过，但要花 24 小时。',trust:`全部交给书记员，几乎不花时间，却有 ${miss} 件错误被原样交了出去，而且出错时与做对时看起来一样。`,hard:`只核对看上去难的八件，花 ${hrs.toFixed(1)} 小时，仍漏过 ${miss} 件错误：它们恰恰出在看上去容易的事上。`,all:`逐件核对，错误全部被发现并重做，共花 ${hrs.toFixed(1)} 小时，比全部自己做省下约 ${Math.round((1-hrs/24)*100)}%。省下的上限，由核对的成本决定。`}[mode];}
+  const bs=[...document.querySelectorAll('[data-jg13]')];
+  function set(m){mode=m;bs.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.jg13===m)));draw();}
+  bs.forEach(b=>b.addEventListener('click',()=>set(b.dataset.jg13)));
+  $('').addEventListener('anim-in',()=>{['self','trust','hard','all'].forEach((m,i)=>setTimeout(()=>set(m),300+i*2200));});
+  draw();
+})();
+</script>

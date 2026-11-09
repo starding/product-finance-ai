@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trustees may not do their duty</title>
+<meta name="description" content="Product × Finance × AI: Derived from Zero, Chapter 11: a trustee holds other people&#x27;s assets and knows more than the principals. A market where good cannot be told from bad gets driven out by the bad; independent custody keeps assets out of the manager&#x27;s hands, mandatory disclosure makes the invisible visible, and suitability requires sellers to act in buyers&#x27; interests; rules have costs too, and regulators themselves also need to be constrained">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="g-11">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="Contents">
+<div class="side-head"><a class="sidetitle" href="index.html">Product × Finance × AI<small>Financial Products in the Age of AI</small></a></div>
+<div class="side-view" role="group" aria-label="Way of reading"><a href="preface.html">Decomposition</a><a href="g-preface.html" class="on" aria-current="true">Derivation</a></div>
+<a class="side-about" href="index.html#about">About this book</a>
+<a class="" href="g-preface.html"><span class="n">Preface</span>The best way to understand financial products is to build them from zero</a>
+<a class="side-part" href="g-part1.html"><span class="pn">Part One</span>From 0 to 1: how a world without finance grows finance</a>
+<a class="" href="g-01.html"><span class="n">1</span>One person, one year&#x27;s harvest</a>
+<a class="" href="g-02.html"><span class="n">2</span>Two people, short of grain at different times</a>
+<a class="" href="g-03.html"><span class="n">3</span>What if a loan is not repaid</a>
+<a class="" href="g-04.html"><span class="n">4</span>Exchange among many</a>
+<a class="" href="g-05.html"><span class="n">5</span>Harvests good and bad</a>
+<a class="" href="g-06.html"><span class="n">6</span>Savers may need their grain at any time; borrowers need it for years</a>
+<a class="" href="g-07.html"><span class="n">7</span>No one household can pay for a ship</a>
+<a class="" href="g-08.html"><span class="n">8</span>Securities must be saleable</a>
+<a class="" href="g-09.html"><span class="n">9</span>Prices carry everyone&#x27;s information</a>
+<a class="" href="g-10.html"><span class="n">10</span>Ordinary people have neither the time nor the expertise</a>
+<a class=" cur" href="g-11.html" aria-current="page"><span class="n">11</span>Trustees may not do their duty</a>
+<a class="" href="g-12.html"><span class="n">12</span>The institutions are in place, and people still make mistakes</a>
+<a class="side-part" href="g-part2.html"><span class="pn">Part Two</span>Changing one parameter: when agency becomes almost free</a>
+<a class="" href="g-13.html"><span class="n">13</span>A new parameter: the cost of cognitive labour collapses</a>
+<a class="" href="g-14.html"><span class="n">14</span>Can everyone have a personal agent?</a>
+<a class="" href="g-15.html"><span class="n">15</span>Who guarantees an agent&#x27;s promises</a>
+<a class="" href="g-16.html"><span class="n">16</span>If everyone has an analyst</a>
+<a class="" href="g-17.html"><span class="n">17</span>Agents become the main market participants</a>
+<a class="" href="g-18.html"><span class="n">18</span>Can an agent correct human bias?</a>
+<a class="" href="g-19.html"><span class="n">19</span>What did not change</a>
+<a class="side-part" href="g-part3.html"><span class="pn">Part Three</span>Deriving a product in the new world</a>
+<a class="" href="g-20.html"><span class="n">20</span>One person and one sum of money</a>
+<a class="" href="g-21.html"><span class="n">21</span>The user is not present</a>
+<a class="" href="g-22.html"><span class="n">22</span>The user cannot see the process</a>
+<a class="" href="g-23.html"><span class="n">23</span>Agents make mistakes</a>
+<a class="" href="g-24.html"><span class="n">24</span>Trust takes time</a>
+<a class="side-app" href="g-epilogue.html"><span class="n">Epilogue</span>Back to the governing rule</a>
+<a class="side-app" href="method.html"><span class="n">Appendix</span>How this book was written</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="Open contents" title="Contents"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">Product × Finance × AI: Financial Products in the Age of AI</a><span>Part One  From 0 to 1</span><a class="langlink" href="../g-11.html" hreflang="zh-CN">中文</a></header>
+
+<div class="chapno">Chapter 11</div><h1>Trustees may not do their duty<small>Custody, disclosure, suitability and regulation</small></h1>
+<blockquote><p>After delegation, the fleet manager holds the whole village's ship shares and knows the details of every ship better than any household. He can quietly sell some of them and keep the grain for himself, or sell the riskiest ship shares to the elderly people least able to bear a loss. When principals cannot tell who is reliable, they will pay only for the average, and reliable managers, finding it not worth their while, leave the trade. Four arrangements grow up in response: assets are kept by someone unconnected with the manager, who can only give instructions; the manager must regularly disclose where the ship shares have gone and what risks they carry; whoever sells ship shares must first find out what the buyer can bear; and someone accepted by all parties checks and punishes. All these arrangements have costs, and the people doing the regulating also need to be constrained.</p></blockquote>
+<h2 id="sec-1">1. The manager holds everyone's ship shares</h2>
+<p>The fleet manager manages ship shares for forty households. All the share certificates are in his hands, and each year he reports to every household how much more the fleet has earned. But the households cannot see the certificates and do not know whether the shares are still there. If he quietly sells some, keeps the grain for himself and pays old principals their returns out of new principals' grain, the books can be kept up for many years, until one day the incoming grain is not enough to pay out.</p>
+<p>There is one new constraint: trustees and sellers know more than principals, and their interests do not fully coincide with the principals'.</p>
+<p><strong>Today's counterpart.</strong> Frauds that pay old investors' returns out of new investors' money have occurred in many countries, and are often discovered only when the flow of money breaks down.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Reported figures and real assets</p><p class="figsub">The manager reports a return of 8% every year, though the fleet actually earns only 6%, and he quietly keeps a portion for himself. Drag the share he takes each year to see how the reported figures and the real assets diverge, and how long new money from principals can keep it going.</p></div><button class="replay" type="button" data-replay="hd">Replay</button></div>
+    <div class="hd" id="hd" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="Reported assets and real assets"><g id="hd-ax"></g><path id="hd-g" class="hd-g"/><path id="hd-r" class="hd-r"/><path id="hd-a" class="hd-a"/><g id="hd-x"></g></svg>
+      <div class="legend"><span><i style="background:var(--faint)"></i>Assets the manager reports</span><span><i style="background:var(--accent)"></i>Real assets</span><span><i style="background:var(--warm-soft)"></i>Gap</span></div>
+      <div class="sl"><label for="hd-s">Taken each year <b id="hd-sv"></b></label><input id="hd-s" type="range" min="0" max="10" step="1" value="6"></div>
+      <div class="cs-sw"><label><input type="checkbox" id="hd-c"> An independent custodian reports directly to principals</label></div>
+      <p class="hd-msg" id="hd-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: 100 portions are entrusted at the start, and 3 portions of new money flow in each year after that; principals withdraw 6% a year based on the reported figures. When the real assets are not enough to pay withdrawals, the fraud collapses.</figcaption>
+</figure>
+<style>
+.hd svg{width:100%;height:auto;display:block}
+.hd-r{fill:none;stroke:var(--faint);stroke-width:2;stroke-dasharray:5 4}
+.hd-a{fill:none;stroke:var(--accent);stroke-width:2.6}
+.hd-g{fill:var(--warm-soft);stroke:none}
+.hd-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.hd svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),T=20,X0=46,X1=630,YT=12,YB=178,x=t=>X0+t/T*(X1-X0);
+  function run(s){let R=100,A=100;const r=[R],a=[A];let crash=-1;for(let t=1;t<=T;t++){R=R*1.08+3;const w=R*.06;R-=w;A=A*(1.06-s)+3-w;if(A<0&&crash<0)crash=t;r.push(R);a.push(Math.max(A,0));}return {r,a,crash};}
+  function draw(){const s=+$('hd-s').value/100,c=$('hd-c').checked,S=run(s),M=Math.max(...S.r)*1.05,y=v=>YB-v/M*(YB-YT);
+    $('hd-ax').innerHTML=[0,.5,1].map(k=>{const v=Math.round(M*k/50)*50;return `<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`;}).join('')+[0,5,10,15,20].map(t=>`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">Year ${t}</text>`).join('');
+    const end=S.crash>0?S.crash:T,rr=c?S.a:S.r;
+    $('hd-r').setAttribute('d',rr.slice(0,end+1).map((v,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(v).toFixed(1)).join(''));
+    $('hd-a').setAttribute('d',S.a.slice(0,end+1).map((v,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(v).toFixed(1)).join(''));
+    $('hd-g').setAttribute('d',c?'':'M'+S.r.slice(0,end+1).map((v,t)=>x(t)+','+y(v)).join('L')+'L'+S.a.slice(0,end+1).map((v,t)=>x(t)+','+y(v)).reverse().join('L')+'Z');
+    $('hd-x').innerHTML=S.crash>0&&!c?`<line x1="${x(S.crash)}" x2="${x(S.crash)}" y1="${YT}" y2="${YB}" stroke="var(--warm)" stroke-width="2"/><text x="${x(S.crash)-4}" y="${YT+12}" text-anchor="end" font-size="11" class="t-warm">Collapse</text>`:'';
+    $('hd-sv').textContent=Math.round(s*100)+'%';
+    $('hd-msg').textContent=c?(s>0?'The independent custodian reports the real assets directly, so the gap is in front of principals from the first year, and the theft has nowhere to hide.':'With nothing taken, the real assets match the reports.'):s===0?'Even with nothing taken, the reported 8% is still above the actual 6%, and the gap slowly builds up.':S.crash>0?`Taking ${Math.round(s*100)}% a year, the manager keeps going on new principals' money until year ${S.crash}, when the real assets cannot pay the withdrawals and the fraud collapses. In every year before that, principals saw handsome figures.`:`Taking ${Math.round(s*100)}% a year, the gap grows wider over twenty years, yet new principals' money keeps covering it up.`;}
+  ['hd-s','hd-c'].forEach(k=>$(k).addEventListener('input',draw));
+  $('hd').addEventListener('anim-in',()=>{let v=0;$('hd-s').value=0;$('hd-c').checked=false;draw();const id=setInterval(()=>{v++;$('hd-s').value=v;draw();if(v>=8)clearInterval(id);},350);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-2">2. A market where good cannot be told from bad</h2>
+<p>If principals cannot tell which managers are reliable, they can only pay at the average level. Reliable managers receive the same as unreliable ones, find it not worth it and leave; among those who remain, a larger share is unreliable, principals are willing to pay even less, and another group of reliable managers leaves. This process repeats round after round, and in the worst case all the reliable managers leave and delegation itself cannot be sustained.</p>
+<aside class="principle"><p class="pr-k">Derived so far: a principle</p><p class="pr-n">The market for lemons</p><p class="pr-c"><span><em>Discipline</em>Economics › Information economics</span><span><em>Type</em>Theoretical model</span></p><p class="pr-s">When sellers know quality and buyers do not, buyers will pay only for average quality, so sellers of good quality leave, average quality falls, and the market may shrink all the way down to only its worst part.</p><dl><div><dt>Standing in the field</dt><dd>The 2001 Nobel Memorial Prize in Economic Sciences went to Akerlof, Spence and Stiglitz "for their analyses of markets with asymmetric information"; the prize announcement used this paper to explain Akerlof's contribution: when sellers know more about quality than buyers, adverse selection may shrink a market until only low-quality products remain</dd></div><div><dt>Constraint it answers</dt><dd>Trustees and sellers know more than principals</dd></div><div><dt>Premises</dt><dd>Sellers know quality better than buyers; buyers can bid only for average quality; sellers of good quality have somewhere else to go</dd></div><div><dt>Proposed by</dt><dd>Akerlof, 1970; the paper uses the used-car market as its example, where a bad used car is commonly called a "lemon" in the United States</dd></div><div><dt>Open question</dt><dd>How can buyers tell good from bad, or sellers of good quality prove themselves?</dd></div></dl></aside>
+<p>The fleet is even harder to judge than a used car. Someone who buys a car will eventually find out whether it is good after driving it for a while. A principal, even after a year, who sees that the fleet lost money cannot tell whether it met a storm or the manager failed in his duty; seeing that the fleet made money, he does not know whether another manager would have made more. Moreover, the person who judges what needs to be done is often the person who does it: if the manager says a ship needs a major overhaul, the principals can only pay. With no way for principals to compare, competition among managers can hardly eliminate this kind of fraud.</p>
+<aside class="principle"><p class="pr-k">Derived so far: a principle</p><p class="pr-n">Credence goods</p><p class="pr-c"><span><em>Discipline</em>Economics › Information economics</span><span><em>Type</em>Theory</span></p><p class="pr-s">The quality of some goods and services cannot be judged by buyers even after use, only taken on trust from the seller; when the seller is also responsible for judging what the buyer needs, fraud can persist even under full competition.</p><dl><div><dt>Standing in the field</dt><dd>Beyond the two kinds of goods whose quality can be judged before purchase or only after use, it proposed a third kind, "credence goods"; the paper is titled "Free competition and the optimal amount of fraud"</dd></div><div><dt>Constraint it answers</dt><dd>Trustees and sellers know more than principals and are hard to check even afterwards</dd></div><div><dt>Premises</dt><dd>Buyers cannot judge quality even afterwards; the seller both diagnoses and provides the service; verification is very costly</dd></div><div><dt>Proposed by</dt><dd>Darby and Karni, 1973; at its core, the seller holds more information than the buyer, and diagnosis and service are provided by the same party</dd></div><div><dt>Open question</dt><dd>Most financial services have this character; how can principals check their trustees?</dd></div></dl></aside>
+<p><strong>Today's counterpart.</strong> When investors lose trust in a whole industry, reliable firms suffer along with the rest, and money leaves the market.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">When good cannot be told from bad, the good leave</p><p class="figsub">A reliable manager creates 10 portions of value a year for principals; an unreliable one only 4. Principals cannot tell them apart and will pay only the average; reliable managers change trade if they earn less than 8 portions. Drag the initial share of unreliable managers to see who is left after a few rounds.</p></div><button class="replay" type="button" data-replay="lm11">Replay</button></div>
+    <div class="lm11" id="lm11" data-anim></div>
+    <div class="sl"><label for="lm11-b">Unreliable managers at the start <b id="lm11-bv"></b></label><input id="lm11-b" type="range" min="0" max="60" step="5" value="35"></div>
+    <p class="lm11-msg" id="lm11-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>Illustrative: principals pay the average value of the managers who remain; in each round, if the pay is below 8 portions, half the reliable managers leave (a simplification of Akerlof, 1970).</figcaption>
+</figure>
+<style>
+.lm11{display:grid;gap:6px}
+.lm11-r{display:grid;grid-template-columns:4.2em 1fr 6em;gap:10px;align-items:center;font-size:12.5px}
+.lm11-r div{display:flex;flex-wrap:wrap;gap:3px}
+.lm11-r i{width:12px;height:12px;border-radius:3px}
+.lm11-r b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.lm11-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  function draw(){const b0=+$('lm11-b').value/100;let G=Math.round(20*(1-b0)),B=20-G;const rows=[];
+    for(let k=0;k<6;k++){const pay=G+B?(10*G+4*B)/(G+B):0;rows.push([G,B,pay]);if(pay<8)G=Math.floor(G/2);}
+    $('lm11').innerHTML=rows.map(([g,b,p],k)=>`<div class="lm11-r"><span>Round ${k+1}</span><div>${'<i style="background:var(--accent)"></i>'.repeat(g)}${'<i style="background:var(--warm)"></i>'.repeat(b)}</div><b>Pay ${p.toFixed(1)}</b></div>`).join('');
+    $('lm11-bv').textContent=Math.round(b0*100)+'%';const last=rows[5];
+    $('lm11-msg').textContent=rows[0][2]>=8?'There are few unreliable managers, the average pay is still at least 8 portions, and reliable managers are willing to stay.':`With ${Math.round(b0*100)}% unreliable at the start, the average pay is only ${rows[0][2].toFixed(1)} portions, and reliable managers begin to leave; those who remain get worse and worse, and the pay lower and lower. After six rounds only ${last[0]} reliable ${last[0]===1?'manager is':'managers are'} left.`;}
+  $('lm11-b').addEventListener('input',draw);
+  $('lm11').addEventListener('anim-in',()=>{let v=0;$('lm11-b').value=0;draw();const id=setInterval(()=>{v+=5;$('lm11-b').value=v;draw();if(v>=50)clearInterval(id);},250);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-3">3. Custody: assets out of the manager's hands</h2>
+<p>The most direct remedy is to give the share certificates to someone unconnected with the manager for safekeeping. The manager can decide which ship to buy and which to sell, but can only give instructions to the custodian and cannot take the shares away himself; the custodian acts on the instructions and reports directly to each principal how much is held in their name. Then even if the manager wants to misappropriate, there is nothing he can take, and the figures principals see no longer come only from the manager's mouth.</p>
+<p><strong>Today's counterpart.</strong> Fund assets are held by independent custodian banks. The custody rule amended by the US Securities and Exchange Commission in 2009 requires that client assets managed by investment advisers generally be held with a qualified custodian, that the custodian send account statements directly to clients, and that an independent accountant conduct a surprise examination each year.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Custody: assets out of the manager's hands</p><p class="figsub">Switch between having an independent custodian or not, and see which of the manager's crooked paths are blocked.</p></div><button class="replay" type="button" data-replay="cu">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Custody">
+      <button type="button" data-cu="0" aria-pressed="true">Manager holds the assets</button>
+      <button type="button" data-cu="1" aria-pressed="false">Independent custodian</button>
+    </div>
+    <div class="cu" id="cu" data-anim>
+      <div class="cu-flow" id="cu-flow"></div>
+      <div class="cu-ths" id="cu-ths"></div>
+    </div>
+  </div>
+  <figcaption>Illustrative. Independent custody cannot guarantee that the manager judges correctly; it can only guarantee that the assets are still there and the figures are true.</figcaption>
+</figure>
+<style>
+.cu-flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:6px;align-items:center;margin-bottom:12px}
+.cu-n{background:var(--quote);border-radius:10px;padding:10px;text-align:center;font-size:13.5px}
+.cu-n b{display:block;font-size:14.5px} .cu-n span{font-size:11.5px;color:var(--muted)}
+.cu-n.hold{background:var(--accent-soft)}
+.cu-ar{font-size:11.5px;color:var(--muted);text-align:center;line-height:1.4}
+.cu-ths{display:grid;gap:6px}
+.cu-t{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;font-size:13.5px;background:var(--quote);border-radius:8px;padding:8px 12px;opacity:0;transform:translateX(-6px);transition:opacity .4s,transform .4s;transition-delay:calc(var(--i)*.2s)}
+.cu.in .cu-t{opacity:1;transform:none}
+.cu-t em{font-style:normal;font-size:12px;padding:2px 9px;border-radius:999px}
+.cu-t em.ok{background:var(--accent-soft);color:var(--accent)} .cu-t em.no{background:var(--warm-soft);color:var(--warm)}
+@media (max-width:640px){.cu-flow{grid-template-columns:1fr;}.cu-ar{transform:none}}
+</style>
+<script>
+(function(){
+  const T=[['Sell the ship shares and keep the grain','he cannot reach the shares and can only give instructions'],['Report false figures','the custodian reports directly to principals'],['Pay old principals with new principals\' grain','the custodian records each household\'s shares one by one'],['Buy a ship that loses money','can still happen: custody does not guarantee sound judgement']];
+  const box=document.getElementById('cu');
+  function set(k){document.querySelectorAll('[data-cu]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.cu===k)));
+    document.getElementById('cu-flow').innerHTML=k?`<div class="cu-n"><b>Principals</b><span>read the custodian's reports</span></div><div class="cu-ar">← reports directly<br>hand over shares →</div><div class="cu-n hold"><b>Custodian</b><span>holds the shares</span></div><div class="cu-ar">← instructions</div><div class="cu-n"><b>Manager</b><span>only decides</span></div>`:`<div class="cu-n"><b>Principals</b><span>hear only the manager</span></div><div class="cu-ar">← manager reports<br>hand over shares →</div><div class="cu-n hold"><b>Manager</b><span>holds the shares and decides</span></div><div class="cu-ar"></div><div class="cu-n" style="opacity:.3"><b>Custodian</b><span>none</span></div>`;
+    document.getElementById('cu-ths').innerHTML=T.map(([a,b],i)=>`<div class="cu-t" style="--i:${i}"><span>${a}${k?': '+b:''}</span><em class="${k&&i<3?'ok':'no'}">${k&&i<3?'Blocked':'Possible'}</em></div>`).join('');box.classList.remove('in');void box.offsetWidth;box.classList.add('in');}
+  document.querySelectorAll('[data-cu]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.cu)));
+  box.addEventListener('anim-in',()=>{set(0);setTimeout(()=>set(1),2600);});
+  set(0);box.classList.remove('in');
+})();
+</script>
+
+<h2 id="sec-4">4. Disclosure: making the invisible visible</h2>
+<p>Custody ensures the assets are still there, but cannot tell principals whether the manager is doing well or how much risk he is taking. Another remedy is to require the manager to disclose regularly which ships he has bought, how risky each one is and how much he has charged in fees. As long as principals can tell good from bad, reliable managers win more mandates, unreliable ones have nowhere to hide, and the collapse of the lemons market can be avoided. For disclosure to be truthful, an independent party is often also needed to check the accounts.</p>
+<p>Greenstone, Oyer and Vissing-Jørgensen (2006) studied the 1964 US legislation that extended mandatory disclosure to over-the-counter companies. They found that the most affected companies earned excess returns of 11.5% to 22.1% relative to matched companies between the bill's proposal and its taking effect, showing that investors valued the additional information.</p>
+<p><strong>Today's counterpart.</strong> Funds must regularly publish their holdings, performance and fees; listed companies must publish audited financial reports.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Disclosure keeps the good ones</p><p class="figsub">Again twenty managers, 35% of them unreliable at the start. Once managers must disclose their holdings, risks and fees, principals can tell good from bad with some confidence and pay only for the value they can see. Drag how well disclosure lets principals tell them apart to see how many reliable managers remain after six rounds.</p></div><button class="replay" type="button" data-replay="ds">Replay</button></div>
+    <div class="ds" id="ds" data-anim></div>
+    <div class="sl"><label for="ds-d">How well principals can tell <b id="ds-dv"></b></label><input id="ds-d" type="range" min="0" max="100" step="10" value="0"></div>
+    <p class="ds-msg" id="ds-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>Illustrative: when they can tell, principals pay reliable managers 10 portions and unreliable ones 4; when they cannot, they pay the average; a reliable manager's actual pay is the two weighted by how well principals can tell, and when it falls below 8 portions, half of them leave. The rules are the same as in the previous figure, with disclosure added.</figcaption>
+</figure>
+<style>
+.ds{display:grid;gap:6px}
+.ds-r{display:grid;grid-template-columns:4.2em 1fr 7em;gap:10px;align-items:center;font-size:12.5px}
+.ds-r div{display:flex;flex-wrap:wrap;gap:3px}
+.ds-r i{width:12px;height:12px;border-radius:3px}
+.ds-r b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.ds-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  function draw(){const d=+$('ds-d').value/100;let G=13,B=7;const rows=[];
+    for(let k=0;k<6;k++){const avg=G+B?(10*G+4*B)/(G+B):0,pay=d*10+(1-d)*avg;rows.push([G,B,pay]);if(pay<8)G=Math.floor(G/2);if(d>0)B=Math.round(B*(1-d*.5));}
+    $('ds').innerHTML=rows.map(([g,b,p],k)=>`<div class="ds-r"><span>Round ${k+1}</span><div>${'<i style="background:var(--accent)"></i>'.repeat(g)}${'<i style="background:var(--warm)"></i>'.repeat(b)}</div><b>Reliable get ${p.toFixed(1)}</b></div>`).join('');
+    $('ds-dv').textContent=Math.round(d*100)+'%';const l=rows[5];
+    $('ds-msg').textContent=d===0?'Without disclosure, principals can only pay the average, and reliable managers leave round after round.':l[0]>=13?`Disclosure lets principals tell good from bad ${Math.round(d*100)}% of the way: reliable managers are paid for their value and all stay; unreliable managers find no mandates and gradually leave.`:`Disclosure does not go far enough; reliable managers are still leaving, and ${l[0]} ${l[0]===1?'remains':'remain'} after six rounds.`;}
+  $('ds-d').addEventListener('input',draw);
+  $('ds').addEventListener('anim-in',()=>{let v=0;$('ds-d').value=0;draw();const id=setInterval(()=>{v+=10;$('ds-d').value=v;draw();if(v>=80)clearInterval(id);},350);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-5">5. Sellers know more: suitability</h2>
+<p>Another conflict arises on the selling side. The manager earns different commissions on different ship shares; the riskiest shares often carry the highest commissions, and the elderly, who most need safety, are least able to understand the risks involved. If sellers look only at commissions, they will sell unsuitable things to the people they suit least.</p>
+<p>Mullainathan, Noeth and Schoar (2012) sent trained auditors posing as clients to consult financial advisers. They found that advisers often failed to correct clients' biases and instead reinforced those biases that worked in the advisers' favour, and tended to recommend actively managed funds with higher fees. Hence the requirement of suitability: sellers must first understand what buyers can bear and what they need, and recommend only products that match.</p>
+<p><strong>Today's counterpart.</strong> Risk-tolerance assessments before opening an account or buying a product, and rules that match products to clients by risk level.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Suitability: sell to those who can bear it</p><p class="figsub">Ten households can each bear a different level of loss, and three kinds of ship shares differ in risk and commission. Switch the basis on which the seller recommends to see how many households end up with ship shares beyond what they can bear.</p></div><button class="replay" type="button" data-replay="su">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Basis for recommendation">
+      <button type="button" data-su="fee" aria-pressed="true">Recommend by commission</button>
+      <button type="button" data-su="fit" aria-pressed="false">Recommend by suitability</button>
+    </div>
+    <div class="su" id="su" data-anim></div>
+    <div class="legend"><span><i style="background:var(--accent)"></i>Safe ship shares: 1% commission</span><span><i style="background:var(--gold)"></i>Medium risk: 2% commission</span><span><i style="background:var(--warm)"></i>High risk: 4% commission</span></div>
+    <p class="su-msg" id="su-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>Illustrative: each household's capacity to bear loss is low, medium or high; buying ship shares riskier than that capacity counts as unsuitable.</figcaption>
+</figure>
+<style>
+.su{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.su-h{background:var(--quote);border-radius:9px;padding:8px;font-size:12px;text-align:center;border:2px solid transparent;transition:border-color .3s;opacity:0;transform:translateY(5px);transition:opacity .35s,transform .35s,border-color .3s;transition-delay:calc(var(--i)*.07s)}
+.su.in .su-h{opacity:1;transform:none}
+.su-h b{display:block;font-size:12.5px} .su-h i{display:block;height:10px;border-radius:3px;margin-top:6px}
+.su-h.bad{border-color:var(--warm)}
+.su-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.su{grid-template-columns:repeat(2,1fr)}}
+</style>
+<script>
+(function(){
+  const T=[0,0,0,1,1,1,1,2,2,0],L=['low','medium','high'],C=['var(--accent)','var(--gold)','var(--warm)'],box=document.getElementById('su');
+  function set(m){document.querySelectorAll('[data-su]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.su===m)));
+    const P=T.map((t,i)=>m==='fee'?(i%3===0?1:2):t);let bad=0,com=0;
+    box.innerHTML=T.map((t,i)=>{const p=P[i],x=p>t;if(x)bad++;com+=[1,2,4][p];return `<div class="su-h${x?' bad':''}" style="--i:${i}"><b>Household ${i+1}</b>Can bear: ${L[t]}<i style="background:${C[p]}"></i></div>`;}).join('');
+    box.classList.remove('in');void box.offsetWidth;box.classList.add('in');
+    document.getElementById('su-msg').textContent=m==='fee'?`Recommending by commission, the seller collects more in commission (${com}% in total), but ${bad} households end up with ship shares beyond what they can bear, and the households least able to bear a loss are hurt most.`:`Recommending by suitability, every household gets ship shares that match what it can bear, and none is unsuitable; the seller's commission is somewhat lower (${com}% in total).`;}
+  document.querySelectorAll('[data-su]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.su)));
+  box.addEventListener('anim-in',()=>{set('fee');setTimeout(()=>set('fit'),2600);});
+  set('fee');box.classList.remove('in');
+})();
+</script>
+
+<h2 id="sec-6">6. Who watches the watchers</h2>
+<p>Custody, disclosure and suitability all need someone to check and enforce them: who confirms that the custodian really keeps the assets, who checks the disclosed accounts, who punishes those who break the rules. That role is the regulator. The stricter the regulation, the less fraud, but every household and every manager pays a cost for it: filling in reports, undergoing inspections, waiting for approvals. When the cost is too high, small managers cannot bear it, and the industry is left with only a few large players.</p>
+<p>Who makes the rules also shapes what the rules say. Each of the forty principal households is affected only a little by the rules, so few are willing to spend time pressing for better ones; the few large managers, by contrast, have a great deal at stake and find it easy to band together, so they actively try to influence the rule-makers. The rules may thus drift in favour of the existing managers: requiring newcomers to obtain licences first and limiting competition on fees both keep newcomers out and protect the incumbents.</p>
+<aside class="principle"><p class="pr-k">Derived so far: a principle</p><p class="pr-n">Regulatory capture</p><p class="pr-c"><span><em>Discipline</em>Economics › Regulatory economics</span><span><em>Type</em>Theory</span></p><p class="pr-s">Regulation, like anything else, has supply and demand; a regulated industry, whose stakes are concentrated and which is easy to organise, can often sway the rules, so that regulation is designed and operated mainly for the industry's own benefit.</p><dl><div><dt>Standing in the field</dt><dd>Stigler received the 1982 Nobel Memorial Prize in Economic Sciences "for his seminal studies of industrial structures, functioning of markets and causes and effects of public regulation"; the prize announcement said his studies of the causes of regulatory legislation opened up an entirely new area of economic research</dd></div><div><dt>Constraint it answers</dt><dd>Those who enforce the rules also need to be constrained</dd></div><div><dt>Premises</dt><dd>The regulated are few, with large stakes, and easy to organise; the public affected by the rules is numerous, with dispersed stakes</dd></div><div><dt>Proposed by</dt><dd>Stigler, 1971, in a paper titled "The theory of economic regulation"</dd></div><div><dt>Open question</dt><dd>How can rule-makers be made accountable to principals rather than to the regulated industry?</dd></div></dl></aside>
+<p>The strength of the rules therefore has a suitable range: it must keep losses from fraud small enough, without letting compliance costs swallow the benefits that delegation brings.</p>
+<p><strong>Today's counterpart.</strong> Securities regulators set rules for custody, disclosure and sales conduct and carry out inspections; regulators themselves are accountable to the legislature and subject to public scrutiny.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">How strict the rules: fraud losses and compliance costs</p><p class="figsub">Drag how strict the rules are to see the losses caused by fraud, the costs all parties pay to comply, and the sum of the two.</p></div><button class="replay" type="button" data-replay="ct">Replay</button></div>
+    <div class="ct" id="ct" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="Strictness of the rules and costs"><g id="ct-ax"></g><path id="ct-f" class="ct-f"/><path id="ct-c" class="ct-c"/><path id="ct-t" class="ct-t"/><circle id="ct-p" r="6" fill="var(--ink)"/></svg>
+      <div class="legend"><span><i style="background:var(--warm)"></i>Losses from fraud</span><span><i style="background:var(--blue)"></i>Cost of compliance</span><span><i style="background:var(--ink)"></i>Sum of the two</span></div>
+      <div class="sl"><label for="ct-x">Strictness of the rules <b id="ct-xv"></b></label><input id="ct-x" type="range" min="0" max="100" step="5" value="20"></div>
+      <p class="ct-msg" id="ct-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: fraud losses fall as the rules get stricter, while compliance costs rise; where the sum of the two is smallest lies the suitable range for the strength of the rules. Overly strict rules also push small managers out of the industry, which the figure does not count.</figcaption>
+</figure>
+<style>
+.ct svg{width:100%;height:auto;display:block}
+.ct-f{fill:none;stroke:var(--warm);stroke-width:2.2}
+.ct-c{fill:none;stroke:var(--blue);stroke-width:2.2}
+.ct-t{fill:none;stroke:var(--ink);stroke-width:2.8}
+.ct-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.ct svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),X0=46,X1=630,YT=12,YB=178,x=v=>X0+v*(X1-X0),y=v=>YB-v/12*(YB-YT);
+  const F=v=>10*Math.exp(-3.5*v),C=v=>.5+6*v*v,Tt=v=>F(v)+C(v);
+  $('ct-ax').innerHTML=[0,4,8,12].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+[0,.25,.5,.75,1].map(v=>`<text x="${x(v)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${['Loose','','Moderate','','Strict'][v*4]}</text>`).join('');
+  const path=f=>{let d='';for(let v=0;v<=1.0001;v+=.01)d+=(v?'L':'M')+x(v).toFixed(1)+','+y(Math.min(12,f(v))).toFixed(1);return d;};
+  $('ct-f').setAttribute('d',path(F));$('ct-c').setAttribute('d',path(C));$('ct-t').setAttribute('d',path(Tt));
+  let best=0,bv=1e9;for(let v=0;v<=1;v+=.01)if(Tt(v)<bv){bv=Tt(v);best=v;}
+  function draw(){const v=+$('ct-x').value/100;$('ct-p').setAttribute('cx',x(v));$('ct-p').setAttribute('cy',y(Tt(v)));$('ct-xv').textContent=Math.round(v*100)+'%';
+    $('ct-msg').textContent=Math.abs(v-best)<.08?`In this range the sum of the two is smallest: fraud losses ${F(v).toFixed(1)}, compliance costs ${C(v).toFixed(1)}.`:v<best?`The rules are too loose: fraud losses (${F(v).toFixed(1)}) far exceed compliance costs (${C(v).toFixed(1)}), and tightening the rules gains more than it costs.`:`The rules are too strict: compliance costs (${C(v).toFixed(1)}) already exceed the fraud losses they prevent (${F(v).toFixed(1)}); overly strict rules also push small managers out of the industry.`;}
+  $('ct-x').addEventListener('input',draw);
+  $('ct').addEventListener('anim-in',()=>{let v=0;$('ct-x').value=0;draw();const id=setInterval(()=>{v+=5;$('ct-x').value=v;draw();if(v>=100){clearInterval(id);setTimeout(()=>{$('ct-x').value=Math.round(best*20)*5;draw();},500);}},150);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-7">7. A village that sets rules: Civilization Simulator, version 11</h2>
+<p>The simulator unlocks the rule "Regulation &amp; custody". The village has twenty managers, some of them unreliable: without custody they misappropriate assets, and without a suitability requirement they sell risky ship shares to people who cannot bear the loss. You can switch custody, disclosure and suitability on or off separately and adjust the share of unreliable managers, and see principals' losses over twenty years and how many households are willing to delegate.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Civilization Simulator · Chapter 11: a village that sets rules</p><p class="figsub">Some of the twenty managers are unreliable. Switch custody, disclosure and suitability on or off separately to see principals' losses over twenty years and how many households are willing to delegate.</p></div><button class="replay" type="button" data-replay="cs11">Replay</button></div>
+    <div class="cs-rules"><span class="on">Shares</span><span class="on">Market</span><span class="on">Information in prices</span><span class="on">Delegation</span><span class="on">Regulation &amp; custody</span><span class="lock">Defaults · Ch. 12</span></div>
+    <div class="cs11" id="cs11" data-anim>
+      <svg viewBox="0 0 660 210" role="img" aria-label="Share of households willing to delegate"><g id="cs11-ax"></g><path id="cs11-p" class="cs11-p"/><g id="cs11-e"></g></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Households willing to delegate</span><span><i style="background:var(--warm)"></i>Years with a fraud collapse or risk event</span></div>
+      <div class="cs-sw"><label><input type="checkbox" id="cs11-cu"> Rule: independent custody</label><label><input type="checkbox" id="cs11-di"> Rule: mandatory disclosure</label><label><input type="checkbox" id="cs11-su"> Rule: suitability</label></div>
+      <div class="sl"><label for="cs11-b">Unreliable managers <b id="cs11-bv"></b></label><input id="cs11-b" type="range" min="0" max="60" step="5" value="25"></div>
+      <button type="button" class="replay" id="cs11-re">Another run of years</button>
+      <div class="cs11-out" id="cs11-out"></div>
+      <p class="cs11-msg" id="cs11-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model: forty households, 80% of them willing to delegate at the start; households that do not delegate store their grain themselves and earn nothing. The fleet's average return is 6% a year. Without custody, unreliable managers take 8% a year and cover it with false reports; once the cumulative theft exceeds 30%, the fraud collapses. With disclosure, principals have an even chance each year of seeing through them and switching managers. 30% of households cannot bear a large loss; without a suitability requirement, unreliable managers sell them high-risk ship shares, which suffer a 30% loss about once every seven years. With each loss, fewer households are willing to delegate, and the number recovers slowly in quiet years.</figcaption>
+</figure>
+<style>
+.cs11 svg{width:100%;height:auto;display:block}
+.cs11-p{fill:none;stroke:var(--accent);stroke-width:2.6}
+.cs11-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cs11-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs11-out span{display:block;font-size:11.5px;color:var(--faint)} .cs11-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.cs11-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs11-out{grid-template-columns:1fr}.cs11 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs11'+id),Y=20,NM=20;let seed=1111;
+  const X0=44,X1=650,YT=10,YB=176,x=t=>X0+t/Y*(X1-X0),y=v=>YB-v*(YB-YT);
+  function sim(b,cu,di,su){let s=seed;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};
+    const nB=Math.round(b*NM);let P=.8,bad=nB/NM,gap=0,theft=0,mis=0;const Ps=[P],ev=[];
+    for(let t=0;t<Y;t++){let loss=0;
+      // Theft: happens only without custody; collapses once cumulative theft exceeds 30%
+      if(!cu&&bad>0){gap+=.08;theft+=.08*bad*P;if(gap>=.3){loss+=gap*bad;if(gap*bad>.01)ev.push(t);gap=0;}}
+      // Disclosure: half of the unreliable managers are seen through each year
+      if(di)bad*=.5;
+      // Suitability: without it, the 30% of households who cannot bear losses are sold high-risk ship shares
+      if(r()<.15){const hit=su?0:.3*Math.min(1,bad*2+.1);if(hit>0){loss+=hit*.3;mis+=hit*.3*P;if(hit*.3>.01)ev.push(t+.5);}}
+      P=Math.max(.05,Math.min(.95,P+.06*(.9-P)-2.2*loss));Ps.push(P);}
+    return {Ps,ev:[...new Set(ev.map(Math.floor))],theft,mis};}
+  function draw(){const b=+$('-b').value/100,cu=$('-cu').checked,di=$('-di').checked,su=$('-su').checked,S=sim(b,cu,di,su);$('-bv').textContent=Math.round(b*100)+'%';
+    $('-ax').innerHTML=[0,.25,.5,.75,1].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text>`).join('')+[0,5,10,15,20].map(t=>`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">Year ${t}</text>`).join('');
+    $('-p').setAttribute('d',S.Ps.map((v,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(v).toFixed(1)).join(''));
+    $('-e').innerHTML=S.ev.map(t=>`<rect x="${x(t)}" y="${YT}" width="${(X1-X0)/Y}" height="${YB-YT}" fill="var(--warm-soft)"/>`).join('');
+    const end=S.Ps[Y];
+    $('-out').innerHTML=[['Households willing to delegate in year 20',Math.round(end*100)+'%'],['Assets misappropriated (relative to the village)',(S.theft*100).toFixed(0)+'%'],['Losses from selling to the wrong people',(S.mis*100).toFixed(1)+'%']].map(([a,v])=>`<div><span>${a}</span><b>${v}</b></div>`).join('');
+    const n=[cu,di,su].filter(Boolean).length;
+    $('-msg').textContent=b===0?'With no unreliable managers, the rules are barely needed, and the number of households willing to delegate rises steadily.':n===0?`No rules at all: frauds collapse again and again, households that cannot bear losses buy ship shares they should not have, the share of households willing to delegate falls to ${Math.round(end*100)}%, and even reliable managers cannot find mandates.`:n===3?`Custody, disclosure and suitability are all in place: assets cannot be misappropriated, unreliable managers are quickly seen through, ship shares are sold only to those who can bear the risk, and the share of households willing to delegate rises to ${Math.round(end*100)}%.`:`${cu?'With custody, assets cannot be misappropriated':'Without custody, theft still happens'}; ${di?'with disclosure, unreliable managers are gradually seen through':'without disclosure, principals cannot tell good from bad'}; ${su?'with a suitability requirement, ship shares are sold only to those who can bear the risk':'without a suitability requirement, households that cannot bear losses still buy high-risk ship shares'}. Each of the three lines of defence handles one thing; when one is missing, the corresponding losses appear.`;}
+  ['-cu','-di','-su','-b'].forEach(k=>$(k).addEventListener('input',draw));$('-re').addEventListener('click',()=>{seed=(seed*48271)%2147483647;draw();});
+  $('').addEventListener('anim-in',()=>{const s=[[0,0,0],[1,0,0],[1,1,0],[1,1,1]];s.forEach(([a,b,c],i)=>setTimeout(()=>{$('-cu').checked=!!a;$('-di').checked=!!b;$('-su').checked=!!c;draw();},300+i*2200));});
+  draw();
+})();
+</script>
+
+<h2 id="sec-8">8. What this step leaves open</h2>
+<p>Rules constrain trustees and sellers, but several questions remain unresolved:</p>
+<ol><li><strong>People make their own mistakes.</strong> Even when products are reliable and information is public, principals still chase rising prices, sell into falls and redeem too often, earning less than the products themselves.</li><li><strong>Rules can govern only what can be seen.</strong> What is disclosed are past figures; the rules cannot fully see the manager's judgement and motives at this moment.</li><li><strong>New trustees.</strong> If the one acting on others' behalf is no longer a person but an agent that can place orders directly, who holds custody over its actions, who checks them, and who is responsible when it makes a mistake?</li><li><strong>Whether the regulator itself can be trusted.</strong> Enforcing the rules depends on someone all parties trust, and that trust likewise needs constraints and accountability.</li></ol>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">What this step leaves open</p><p class="figsub">Four questions still unresolved once rules exist. Select a question to see the assumption it rests on.</p></div><button class="replay" type="button" data-replay="nx11">Replay</button></div>
+    <div class="nx" id="nx11" data-anim>
+      <div class="nx-src"><b>A village that sets rules</b><span>Custody, disclosure and suitability</span></div>
+      <div class="nx-list" id="nx11-l"></div>
+    </div>
+    <p class="nx-msg" id="nx11-msg" aria-live="polite"></p>
+  </div>
+</figure>
+<style>
+.nx{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:center}
+.nx-src{background:var(--ink);color:var(--bg);border-radius:10px;padding:14px 10px;text-align:center}
+.nx-src b{display:block;font-size:16px} .nx-src span{font-size:12px;opacity:.75}
+.nx-list{display:grid;gap:6px}
+.nx-i{font:inherit;text-align:left;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:9px 12px;color:var(--ink);opacity:0;transform:translateX(-8px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.3s)}
+.nx.in .nx-i{opacity:1;transform:none}
+.nx-i span{font-size:13.5px} .nx-i em{font-style:normal;font-size:11.5px;color:var(--faint);white-space:nowrap}
+.nx-i.sel{border-color:var(--accent)}
+.nx-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.nx{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const Q=[['People make their own mistakes','Chapter 12: Defaults','Assumption: if products are reliable and information is public, principals will make good decisions. Principals still chase rises, sell into falls and redeem too often.'],
+    ['Rules can govern only what can be seen','Part Two','Assumption: the disclosed figures are enough to reflect the manager\'s judgement and motives. Rules see the past, not the present moment.'],
+    ['New trustees','Part Two','Assumption: the trustee is a person. If the one acting for others is an agent that can place orders directly, who holds custody over its actions, who checks them, and who is responsible when it errs?'],
+    ['Whether the regulator itself can be trusted','Part Two','Assumption: the regulator is fair and competent. That trust likewise needs constraints and accountability.']];
+  const l=document.getElementById('nx11-l'),msg=document.getElementById('nx11-msg');
+  l.innerHTML=Q.map((q,i)=>`<button type="button" class="nx-i" style="--i:${i}" data-i="${i}"><span>${q[0]}</span><em>→ ${q[1]}</em></button>`).join('');
+  const bs=[...l.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));msg.textContent=Q[i][2];}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('nx11').addEventListener('anim-in',()=>{[0,1,2,3].forEach((i,k)=>setTimeout(()=>set(i),1600+k*1800));});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-9">9. Implications for products</h2>
+<p>Custody, information disclosure and suitability management are all now written into financial products themselves. Three implications follow. First, trustworthiness comes from institutions, not just from promises: who holds the assets and who can move them should be clear to users at a glance. Second, the value of disclosure lies in letting users tell good from bad; spelling out risks, fees and conflicts of interest is how a reliable product gets recognised in a market for credence goods. Third, whether a product suits the user matters as much as whether the product itself is excellent; suitability should be designed as a product feature, not treated as a formality before the sale.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: regulation and custody</p><p class="figsub">Four conclusions, each corresponding to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="g11summary">Replay</button></div>
+    <div class="g11summary" id="g11summary" data-anim><div class="g11summary-c" style="--i:0"><em>Lemons</em><b>When good cannot be told from bad, the good leave</b><p>Principals will pay only the average, reliable managers leave, and those who remain get worse and worse.</p></div><div class="g11summary-c" style="--i:1"><em>Custody</em><b>Assets out of the manager's hands</b><p>The manager can only give instructions, and the custodian reports directly to principals: theft and false reporting have nowhere to hide.</p></div><div class="g11summary-c warn" style="--i:2"><em>Disclosure and suitability</em><b>Visible, and sold to the right people</b><p>Disclosure lets the good be recognised; suitability makes sellers act in buyers' interests and recommend only matching products.</p></div><div class="g11summary-c warn" style="--i:3"><em>The price of rules</em><b>Regulation needs limits and constraints too</b><p>Compliance has costs, and overly strict rules push out small managers; regulators themselves also need to be held accountable.</p></div></div>
+  </div>
+</figure>
+<style>
+.g11summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g11summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g11summary-c.warn{border-left-color:var(--warm)}
+.g11summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g11summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g11summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g11summary.in .g11summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g11summary{grid-template-columns:1fr}}
+</style>
+
+<h2 id="sec-10">References</h2>
+<ul class="refs"><li>Akerlof, G. A. (1970). The market for “lemons”: Quality uncertainty and the market mechanism. <i>Quarterly Journal of Economics</i>, 84(3), 488–500.</li><li>Darby, M. R., &amp; Karni, E. (1973). Free competition and the optimal amount of fraud. <i>Journal of Law and Economics</i>, 16(1), 67–88.</li><li>Greenstone, M., Oyer, P., &amp; Vissing-Jørgensen, A. (2006). Mandated disclosure, stock returns, and the 1964 Securities Acts Amendments. <i>Quarterly Journal of Economics</i>, 121(2), 399–460.</li><li>Mullainathan, S., Noeth, M., &amp; Schoar, A. (2012). The market for financial advice: An audit study. NBER Working Paper No. 17929.</li><li>Nobel Prize Outreach. <i>The Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel 1982</i>. NobelPrize.org.</li><li>Nobel Prize Outreach. <i>The Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel 2001</i>. NobelPrize.org.</li><li>Stigler, G. J. (1971). The theory of economic regulation. <i>Bell Journal of Economics and Management Science</i>, 2(1), 3–21.</li><li>U.S. Securities and Exchange Commission (2009). Custody of funds or securities of clients by investment advisers. Release No. IA-2968.</li></ul>
+<footer class="nav"><a href="g-10.html">← Chapter 10: Ordinary people have neither the time nor the expertise</a><a href="g-12.html">Chapter 12: The institutions are in place, and people still make mistakes →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

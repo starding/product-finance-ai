@@ -1,0 +1,45 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">十二个约束，十二种制度</p><p class="figsub">每一章只加一个约束，长出一种制度；这种制度又留下下一个问题。点选任一步，看它的约束、制度与留下的问题。</p></div><button class="replay" type="button" data-replay="pc1">重播</button></div>
+    <div class="pc1" id="pc1" data-anim><div class="pc1-g" id="pc1-g"></div></div>
+    <div class="pc1-d" id="pc1-d" aria-live="polite"></div>
+  </div>
+</figure>
+<style>
+.pc1-g{display:grid;grid-template-columns:repeat(4,1fr);gap:8px 22px}
+.pc1-c{font:inherit;text-align:left;cursor:pointer;position:relative;background:var(--quote);border:1px solid transparent;border-radius:10px;padding:9px 11px;color:var(--ink);opacity:0;transform:translateY(8px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.18s)}
+.pc1.in .pc1-c{opacity:1;transform:none}
+.pc1-c em{display:block;font-style:normal;font-size:11px;color:var(--faint)}
+.pc1-c b{display:block;font-size:14.5px;margin-top:1px}
+.pc1-c.sel{border-color:var(--accent)}
+.pc1-c:not(:nth-child(4n))::after{content:"→";position:absolute;right:-17px;top:50%;transform:translateY(-50%);color:var(--faint);font-size:13px}
+.pc1-d{margin-top:14px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pc1-d div{background:var(--quote);border-radius:8px;padding:9px 11px;font-size:13.5px;line-height:1.55}
+.pc1-d span{display:block;font-size:11px;color:var(--faint)}
+.pc1-d a{font-size:12.5px}
+@media (max-width:640px){.pc1-g{grid-template-columns:repeat(2,1fr);gap:8px 22px}.pc1-c:not(:nth-child(4n))::after{content:none}.pc1-c:nth-child(odd)::after{content:"→"}.pc1-d{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const S=[['一个人，一年的收成','收入与消费不在同一时间','储蓄与留种','储藏会损耗，只能靠自己'],
+    ['两个人，缺的时间不同','缺粮的时间错开','借贷与利息','借出去的可能收不回来'],
+    ['借了不还怎么办','承诺可能不兑现','声誉、抵押与合同','人一多，交换的双方对不上'],
+    ['很多人一起交换','需要的双重巧合','货币','未来的收成好坏不定'],
+    ['收成好坏不定','未来的收成不确定','保险与风险分担','存的人要随时取，借的人要长期用'],
+    ['存的人要随时取，借的人要长期用','期限不匹配','银行','一个人出不起一艘船的钱'],
+    ['一个人出不起一艘船的钱','大项目的风险一人承担不起','股份与有限责任','急需时股份要能卖出去'],
+    ['证券要能卖出去','找到对手方需要时间与成本','市场、做市与经纪','人人都想利用自己的信息'],
+    ['价格里有所有人的信息','人人都想利用信息','价格中的信息','普通人没有时间也没有专长'],
+    ['普通人没有时间也没有专长','注意力与专长稀缺','委托','受托人可能不尽责'],
+    ['受托人可能不尽责','信息不对称与利益冲突','托管、披露、适当性与监管','制度齐备，人仍会犯错'],
+    ['制度齐备，人仍会犯错','人的决策偏差','默认选项与承诺工具','请人代为思考与操作的成本若骤降']];
+  const g=document.getElementById('pc1-g'),d=document.getElementById('pc1-d');
+  g.innerHTML=S.map((s,i)=>`<button type="button" class="pc1-c" style="--i:${i}"><em>第 ${i+1} 章</em><b>${s[2]}</b></button>`).join('');
+  const bs=[...g.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));const s=S[i];
+    d.innerHTML=`<div><span>约束</span>${s[1]}</div><div><span>长出的制度</span>${s[2]}<br><a href="g-${String(i+1).padStart(2,'0')}.html">打开第 ${i+1} 章：${s[0]}</a></div><div><span>留下的问题</span>${s[3]}</div>`;}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('pc1').addEventListener('anim-in',()=>{[0,5,9,11].forEach((i,k)=>setTimeout(()=>set(i),2400+k*1500));});
+  set(0);
+})();
+</script>

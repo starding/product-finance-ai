@@ -1,0 +1,55 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">三个问题：值不值得做、有没有条件做、敢不敢交</p><p class="figsub">选一件事，依次回答三个问题。前一个问题不成立，后面的不必再问；第三个问题决定前面的名义价值能兑现多少。</p></div><button class="replay" type="button" data-replay="q3">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="事务">
+      <button type="button" data-q3="0" aria-pressed="true">每周整理财经新闻</button>
+      <button type="button" data-q3="1" aria-pressed="false">偶尔查一次汇率</button>
+      <button type="button" data-q3="2" aria-pressed="false">修理家里的水管</button>
+      <button type="button" data-q3="3" aria-pressed="false">按计划提交订单</button>
+      <button type="button" data-q3="4" aria-pressed="false">管理养老资产配置</button>
+    </div>
+    <div class="q3" id="q3" data-anim>
+      <div class="q3-c" style="--i:0"><em>一</em><b>值不值得做</b><span>一年下来省下多少，是否换来原本做不到的事</span><small>分子与整体倍数</small><p></p><a href="ch19.html">第 19 章</a></div>
+      <div class="q3-c" style="--i:1"><em>二</em><b>有没有条件做</b><span>拿不拿得到信息与工具，能否到现场，有没有准入</span><small>不适用的部分</small><p></p><a href="ch20.html">第 20、21 章</a></div>
+      <div class="q3-c" style="--i:2"><em>三</em><b>敢不敢交</b><span>出错的后果多大，结果能否及时判定对错</span><small>说明与核对、出错后的返工</small><p></p><a href="ch22.html">第 22、23 章</a></div>
+    </div>
+    <p class="q3-msg" id="q3-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>五件事都是示例；「分子与整体倍数」等标注对应上方分解中的各项。</figcaption>
+</figure>
+<style>
+.q3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.q3-c{position:relative;background:var(--quote);border-radius:10px;padding:12px 12px 10px;display:flex;flex-direction:column;gap:4px;border-top:3px solid var(--line);transition:border-color .4s,opacity .4s}
+.q3-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.q3-c b{font-size:15px}
+.q3-c>span{font-size:12.5px;color:var(--muted);line-height:1.55}
+.q3-c small{font-size:11.5px;color:var(--faint)}
+.q3-c p{margin:6px 0 0;font-size:13.5px;line-height:1.6;min-height:4.8em;opacity:0;transform:translateY(4px);transition:opacity .4s,transform .4s}
+.q3-c a{font-size:12px;margin-top:auto;color:var(--accent);text-decoration:none}
+.q3-c.ok{border-top-color:var(--accent)} .q3-c.ok p{opacity:1;transform:none}
+.q3-c.no{border-top-color:var(--warm)} .q3-c.no p{opacity:1;transform:none;color:var(--warm)}
+.q3-c.half{border-top-color:var(--gold)} .q3-c.half p{opacity:1;transform:none}
+.q3-c.off{opacity:.45}
+.q3-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.q3{grid-template-columns:1fr}.q3-c p{min-height:0}}
+</style>
+<script>
+(function(){
+  // 每件事：三个问题的结果（ok 成立 / half 有条件成立 / no 不成立）与说明，最后是结论
+  const E=[
+    [['ok','每周都要做，一年几十次，交出去省下的时间可观。'],['ok','新闻与数据都在线上可得，代理拿得到。'],['ok','出错可以当场发现，后果轻微。'],'三个问题都成立：适合放手交出，只作抽查。'],
+    [['no','一年一两次，自己查比交代还快。'],null,null,'第一个问题就不成立：交代的固定成本高于自己完成，不必交出。'],
+    [['ok','请人上门费时费钱，值得省下。'],['no','要到现场动手，没有身体的代理做不到。'],null,'第二个问题不成立：缺的是现场操作的能力，代理只能给出检查清单。'],
+    [['ok','投入不多，但按时、按价执行很重要。'],['half','需要交易通道、账户授权与持牌机构的准入。'],['half','后果重大、不可撤回，但订单要素在生效前可以逐笔核对。'],'可以交出，但每一笔在生效前由本人确认。'],
+    [['ok','影响长期结果，值得持续投入。'],['ok','持仓、目标与市场数据都可以接入。'],['half','结果要多年才能判定对错，只能依靠事先的约定与过程记录。'],'可以交出，但信任要靠约定、过程记录与利益一致逐步建立。']];
+  const box=document.getElementById('q3'),cs=[...box.querySelectorAll('.q3-c')],msg=document.getElementById('q3-msg');let cur=0,tm=[];
+  function set(k){cur=k;tm.forEach(clearTimeout);tm=[];document.querySelectorAll('[data-q3]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.q3===k)));
+    cs.forEach(c=>{c.className='q3-c';c.querySelector('p').textContent='';});msg.textContent='';
+    const e=E[k];let stop=false;
+    cs.forEach((c,i)=>tm.push(setTimeout(()=>{if(stop||!e[i]){c.classList.add('off');return;}c.classList.add(e[i][0]);c.querySelector('p').textContent=e[i][1];if(e[i][0]==='no')stop=true;},250+i*650)));
+    tm.push(setTimeout(()=>{msg.textContent=e[3];},250+3*650));}
+  document.querySelectorAll('[data-q3]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.q3)));
+  box.addEventListener('anim-in',()=>set(cur));
+  set(0);
+})();
+</script>

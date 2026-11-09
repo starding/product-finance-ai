@@ -1,0 +1,43 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">价值股为什么收益更高：两种解释</p>
+    <p class="figsub">两种解释的机制不同，推论也不同。点按一个推论，看两种解释各自怎么回答。</p>
+    <div class="wy" id="wy" data-anim>
+      <div class="wy-col r" style="--i:0"><h5>风险解释</h5><p>价值股常是经营陷入困境的公司，经济不好时更容易进一步恶化。持有它们要承担“在坏时候更坏”的风险，因此要求更高回报。</p><em>代表：法玛与弗伦奇</em></div>
+      <div class="wy-col b" style="--i:1"><h5>行为解释</h5><p>投资者过度外推过去的表现：对前景暗淡的公司过于悲观，对热门公司过于乐观，使价值股被低估、成长股被高估。</p><em>代表：拉科尼肖克、施莱弗与维什尼（1994）</em></div>
+      <div class="wy-qs">
+        <button type="button" data-q="0">被广泛知晓后会不会减弱？</button>
+        <button type="button" data-q="1">在经济不好时表现如何？</button>
+        <button type="button" data-q="2">长期持有是否值得？</button>
+      </div>
+      <div class="wy-a"><div id="wy-ar"></div><div id="wy-ab"></div></div>
+    </div>
+  </div>
+  <figcaption>两种解释并不互斥，现实中可能同时起作用。</figcaption>
+</figure>
+<style>
+.wy{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.wy-col{border-radius:10px;padding:12px 14px;opacity:0;transform:translateY(8px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.4s)}
+.wy.in .wy-col{opacity:1;transform:none}
+.wy-col.r{background:var(--accent-soft)} .wy-col.b{background:rgba(47,95,158,.12)}
+.wy-col h5{margin:0 0 4px;font-size:15px}
+.wy-col p{margin:0;font-size:13px;line-height:1.6;color:var(--ink)}
+.wy-col em{display:block;margin-top:6px;font-style:normal;font-size:11px;color:var(--faint)}
+.wy-qs{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.wy-qs button{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:5px 12px;cursor:pointer}
+.wy-qs button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.wy-a{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.wy-a div{font-size:13.5px;line-height:1.6;background:var(--quote);border-radius:8px;padding:10px 12px;min-height:4.5em}
+@media (max-width:640px){.wy,.wy-a{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const A=[['不会消失：它是承担风险的补偿，只要风险还在，补偿就在。','可能减弱：定价错误被知晓后，交易会把它消耗掉。'],
+           ['表现更差：这正是它被视为风险的原因。','不一定更差：它的收益来自错误定价的修正，与经济好坏关系较弱。'],
+           ['值得，但要能承受在坏时候亏钱、甚至长期落后。','值得与否取决于这种错误定价还剩多少，以及交易成本是否吞掉了它。']];
+  const bs=[...document.querySelectorAll('[data-q]')];
+  const set=q=>{bs.forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.q===q)));document.getElementById('wy-ar').textContent='风险解释：'+A[q][0];document.getElementById('wy-ab').textContent='行为解释：'+A[q][1];};
+  bs.forEach(b=>b.addEventListener('click',()=>set(+b.dataset.q)));
+  set(0);
+})();
+</script>

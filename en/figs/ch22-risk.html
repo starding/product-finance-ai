@@ -1,0 +1,43 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Allocate checking effort by risk</p><p class="figsub">The agent returns 100 results: 10 involve funds or positions (high risk) and 90 are for internal reference (low risk). An error in a high-risk result causes 20 times the loss of one in a low-risk result. Switch the checking method.</p></div><button class="replay" type="button" data-replay="rk">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Checking method">
+      <button type="button" data-rk="all" aria-pressed="false">Check all</button>
+      <button type="button" data-rk="rand" aria-pressed="true">Random 20% sample</button>
+      <button type="button" data-rk="strat" aria-pressed="false">Stratify by risk</button>
+    </div>
+    <div class="rk" id="rk" data-anim>
+      <div class="rk-g" id="rk-g"></div>
+      <div class="legend"><span><i style="background:var(--warm)"></i>High risk</span><span><i style="background:var(--quote);border:1px solid var(--faint)"></i>Low risk</span><span><i style="background:var(--ink)"></i>Contains an error</span><span><i style="border:2px solid var(--accent);background:none"></i>Checked</span></div>
+      <div class="rk-out"><div><span>Results checked</span><b id="rk-n"></b></div><div><span>Loss from missed errors</span><b id="rk-l"></b></div></div>
+      <p class="rk-msg" id="rk-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative figures: 2 high-risk results and 5 low-risk results contain errors; every error that is checked is caught. On stratified sampling, see Neyman (1934).</figcaption>
+</figure>
+<style>
+.rk-g{display:grid;grid-template-columns:repeat(20,1fr);gap:3px}
+.rk-g i{aspect-ratio:1;border-radius:3px;background:var(--quote);border:2px solid transparent;position:relative;transition:border-color .3s}
+.rk-g i.h{background:var(--warm-soft)}
+.rk-g i.e::after{content:"";position:absolute;inset:30%;border-radius:50%;background:var(--ink)}
+.rk-g i.c{border-color:var(--accent)}
+.rk-out{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.rk-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.rk-out span{display:block;font-size:12px;color:var(--faint)} .rk-out b{font-size:19px;font-variant-numeric:tabular-nums}
+.rk-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const H=new Set([0,1,2,3,4,5,6,7,8,9]),E=new Set([2,7,23,41,58,66,90]);
+  const R=new Set([3,11,19,23,27,35,43,47,52,59,61,66,70,74,78,83,88,92,95,99]),ST=new Set([0,1,2,3,4,5,6,7,8,9,14,23,31,42,50,63,71,80,88,97]);
+  const g=document.getElementById('rk-g');g.innerHTML=Array.from({length:100},(_,i)=>`<i class="${H.has(i)?'h':''} ${E.has(i)?'e':''}"></i>`).join('');const cs=[...g.children];
+  const M={all:'Check all: every error is caught, but 100 results must be checked, and checking time eats up most of the saving.',rand:'Random 20% sample: less checking, but the sample does not distinguish by stakes, so errors in high-risk results are likely to be missed, and the loss is largest.',strat:'Stratify by risk: all 10 high-risk results are checked and one in ten low-risk results is sampled. The amount of checking is the same as the random sample, but the loss from missed errors is far smaller.'};
+  function set(k){document.querySelectorAll('[data-rk]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.rk===k)));
+    const S=k==='all'?null:k==='rand'?R:ST;let n=0,loss=0;
+    cs.forEach((c,i)=>{const on=!S||S.has(i);c.classList.toggle('c',on);if(on)n++;if(E.has(i)&&!on)loss+=H.has(i)?20:1;});
+    document.getElementById('rk-n').textContent=n;document.getElementById('rk-l').textContent=loss+' units';document.getElementById('rk-msg').textContent=M[k];}
+  document.querySelectorAll('[data-rk]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.rk)));
+  document.getElementById('rk').addEventListener('anim-in',()=>{['all','rand','strat'].forEach((k,i)=>setTimeout(()=>set(k),i*2200));});
+  set('rand');
+})();
+</script>

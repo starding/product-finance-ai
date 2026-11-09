@@ -1,0 +1,36 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Reasoning back from the moment of repayment</p><p class="figsub">The lender first decides whether to lend; the borrower decides in spring whether to repay. Switch between "Deal only once" and "Deal every year" to see the borrower's gains and losses at the moment of repayment, and the lender's choice beforehand.</p></div><button class="replay" type="button" data-replay="gm3">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Dealings">
+      <button type="button" data-gm3="once" aria-pressed="true">Deal only once</button>
+      <button type="button" data-gm3="rep" aria-pressed="false">Deal every year</button>
+    </div>
+    <div class="gm3" id="gm3" data-anim>
+      <svg viewBox="0 0 640 230" role="img" aria-label="Game tree for a loan"><g id="gm3-t"></g></svg>
+      <p class="gm3-msg" id="gm3-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: figures in brackets are (lender, borrower) gains or losses relative to not lending, in portions. When the two deal every year, a borrower who does not repay can never borrow again and loses the gains from borrowing in every later year, counted here as 5 portions.</figcaption>
+</figure>
+<style>
+.gm3 svg{width:100%;height:auto;display:block}
+.gm3-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.gm3 svg text{font-size:17px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  function node(x,y,t){return `<circle cx="${x}" cy="${y}" r="7" fill="var(--ink)"/><text x="${x}" y="${y-14}" text-anchor="middle" font-size="12.5" class="t-ink">${t}</text>`;}
+  function edge(x1,y1,x2,y2,lab,on){return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${on?'var(--accent)':'var(--line)'}" stroke-width="${on?3.5:2}"/><text x="${(x1+x2)/2+(x2>x1?8:-8)}" y="${(y1+y2)/2}" text-anchor="${x2>x1?'start':'end'}" font-size="12" class="${on?'t-accent':'t-muted'}">${lab}</text>`;}
+  function leaf(x,y,a,b,on){return `<rect x="${x-58}" y="${y}" width="116" height="34" rx="8" fill="${on?'var(--accent-soft)':'var(--quote)'}"/><text x="${x}" y="${y+22}" text-anchor="middle" font-size="13" class="t-ink">(${a}, ${b})</text>`;}
+  function set(k){document.querySelectorAll('[data-gm3]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.gm3===k)));
+    const rep=k==='rep',defB=rep?'4 − 5 = −1':'+4',repay=rep;
+    let h=node(320,34,'Lender: lend?')+edge(320,34,150,110,'Don\'t lend',!repay)+edge(320,34,470,110,'Lend',repay)+leaf(150,116,0,0,!repay)+node(470,110,'Borrower: repay?')+
+      edge(470,110,370,180,'Repay',repay)+edge(470,110,570,180,'Default',!repay)+leaf(370,184,'+1','+1',repay)+leaf(570,184,'−3',defB,false);
+    $('gm3-t').innerHTML=h;
+    $('gm3-msg').textContent=rep?'When the two deal every year, not repaying gains 4 portions now but loses borrowing in every later year, 1 portion less in total: repaying pays better. The lender foresees this and lends, and each side gains 1 portion.':'When the two deal only once, in spring not repaying gains 4 portions while repaying gains only 1, so the borrower will not repay. The lender foresees this and does not lend in autumn; both get 0. A loan that could have given each side 1 more portion never happens.';}
+  document.querySelectorAll('[data-gm3]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.gm3)));
+  $('gm3').addEventListener('anim-in',()=>{set('once');setTimeout(()=>set('rep'),3200);});
+  set('once');
+})();
+</script>

@@ -1,0 +1,46 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">Whether the same belief is enough depends on the stakes</p>
+    <p class="figsub">Drag the principal's belief about the trustee: the probability that the trustee acts in the principal's interest when no one is watching. The four tasks carry different stakes and so need different thresholds; switch the principal's capacity to bear loss.</p>
+    <div class="dc" id="dc" data-anim>
+      <div class="seg-btns" role="group" aria-label="Capacity to bear loss">
+        <button type="button" data-dc="0" aria-pressed="true">Higher capacity</button>
+        <button type="button" data-dc="1" aria-pressed="false">Lower capacity</button>
+      </div>
+      <div class="dc-sc"><div class="dc-t"><i id="dc-bar"></i></div><div id="dc-th"></div></div>
+      <div class="sl"><label for="dc-p">Belief <b id="dc-pv"></b></label><input id="dc-p" type="range" min="0" max="100" step="1" value="70"></div>
+      <div class="dc-list" id="dc-list"></div>
+      <p class="dc-msg" id="dc-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative thresholds. The distinction between trustworthiness (a belief) and trust (the decision to accept risk) follows Mayer, Davis and Schoorman (1995).</figcaption>
+</figure>
+<style>
+.dc-sc{position:relative;margin:28px 0 6px}
+.dc-t{height:18px;background:var(--quote);border-radius:9px;overflow:hidden}
+.dc-t i{display:block;height:100%;background:var(--accent);border-radius:9px;transition:width .3s}
+.dc-mk{position:absolute;top:-24px;transform:translateX(-50%);font-size:11px;color:var(--warm);white-space:nowrap;transition:left .4s}
+.dc-mk::after{content:"";position:absolute;left:50%;top:16px;height:30px;border-left:2px dashed var(--warm)}
+.dc-list{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
+.dc-i{border-radius:8px;padding:8px 10px;font-size:12.5px;background:var(--quote);border:1.5px solid var(--line);transition:all .3s}
+.dc-i b{display:block;font-size:13.5px}
+.dc-i.ok{background:var(--accent-soft);border-color:var(--accent)}
+.dc-i span{color:var(--faint)}
+.dc-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.dc-list{grid-template-columns:1fr 1fr}.dc-mk{font-size:10px}}
+</style>
+<script>
+(function(){
+  const T=[['Look up a figure',45],['Research a company',60],['Place an order',78],['Fully manage a pension',92]];let lo=0;
+  const $=id=>document.getElementById(id),sl=$('dc-p');
+  function r(){const p=+sl.value,add=lo?6:0;$('dc-pv').textContent=p+'%';$('dc-bar').style.width=p+'%';
+    $('dc-th').innerHTML=T.map(([n,t],i)=>`<span class="dc-mk" style="left:${Math.min(98,t+add)}%;top:${-24-(i%2)*0}px">${i+1}</span>`).join('');
+    $('dc-list').innerHTML=T.map(([n,t],i)=>{const ok=p>=t+add;return `<div class="dc-i${ok?' ok':''}"><b>${i+1}. ${n}</b><span>Threshold ${Math.min(99,t+add)}% · ${ok?'Hand over':'Hold back'}</span></div>`;}).join('');
+    const k=T.filter(([n,t])=>p>=t+add).length;
+    $('dc-msg').textContent=k===0?'The belief is too low: not even looking up a figure would be handed over.':k===4?'The belief is high enough that even discretionary management of a pension would be handed over.':`The same ${p}% belief is enough to hand over the first ${k} task${k>1?'s':''}, but not the tasks with larger stakes.${lo?' With lower capacity to bear loss, every threshold is higher.':''}`;}
+  document.querySelectorAll('[data-dc]').forEach(b=>b.addEventListener('click',()=>{lo=+b.dataset.dc;document.querySelectorAll('[data-dc]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));r();}));
+  sl.addEventListener('input',r);
+  $('dc').addEventListener('anim-in',()=>{let p=20;sl.value=p;r();const id=setInterval(()=>{p+=4;sl.value=p;r();if(p>=96){clearInterval(id);setTimeout(()=>{sl.value=70;r();},600);}},120);});
+  r();
+})();
+</script>

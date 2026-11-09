@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：市场</p><p class="figsub">四条结论，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="g08summary">重播</button></div>
+    <div class="g08summary" id="g08summary" data-anim><div class="g08summary-c" style="--i:0"><em>集中</em><b>人越多，越容易对上</b><p>买卖向少数几个集中的地方聚拢，成交的质量取决于那里的买方与卖方。</p></div><div class="g08summary-c" style="--i:1"><em>竞价</em><b>集中报价找出成交最多的价格</b><p>每个人只需报出自己的价格，集中竞价就能找到让好处最大的价格。</p></div><div class="g08summary-c warn" style="--i:2"><em>做市与价差</em><b>价差是即时成交的价格</b><p>做市商承担囤货的风险，交易越频繁、价格越平稳，价差越窄。</p></div><div class="g08summary-c warn" style="--i:3"><em>流动性</em><b>难卖的东西要更高的回报</b><p>流动性体现为等待、价差与折价；寻找与议价是劳动，它的成本决定经纪的形态。</p></div></div>
+  </div>
+</figure>
+<style>
+.g08summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g08summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g08summary-c.warn{border-left-color:var(--warm)}
+.g08summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g08summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g08summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g08summary.in .g08summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g08summary{grid-template-columns:1fr}}
+</style>

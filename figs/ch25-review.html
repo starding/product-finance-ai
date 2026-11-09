@@ -1,0 +1,35 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">委托会过期</p><p class="figsub">十年里发生了几件改变目标与约束的事。比较两种复核方式：只按年复核，或者事件发生时立即复核。红色段表示委托书已经不再符合实际、却仍在被执行的时间。</p></div><button class="replay" type="button" data-replay="rv">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="复核方式">
+      <button type="button" data-rv="y" aria-pressed="true">只按年复核</button>
+      <button type="button" data-rv="e" aria-pressed="false">按年复核，并在事件发生时立即复核</button>
+    </div>
+    <div class="rv" id="rv" data-anim>
+      <svg viewBox="0 0 640 150" role="img" aria-label="委托有效性的时间线"><g id="rv-g"></g></svg>
+      <p class="rv-msg" id="rv-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意时间线。投资政策说明书通常每年复核，并在重大变化时复核（Maginn 等，2007）。</figcaption>
+</figure>
+<style>
+.rv svg{width:100%;height:auto;display:block}
+.rv-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.rv svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const EV=[[1.4,'换工作，收入下降'],[3.7,'孩子出生'],[6.2,'买房，需要取出一笔钱'],[8.9,'目标临近']];
+  const X0=30,X1=620,x=t=>X0+t/10*(X1-X0),Y=70;
+  function set(k){document.querySelectorAll('[data-rv]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.rv===k)));
+    let g=`<line x1="${X0}" y1="${Y}" x2="${X1}" y2="${Y}" stroke="var(--accent)" stroke-width="10" stroke-linecap="round" opacity=".35"/>`,stale=0;
+    for(let yr=0;yr<=10;yr++)g+=`<line x1="${x(yr)}" y1="${Y-12}" x2="${x(yr)}" y2="${Y+12}" class="s-faint"/><text x="${x(yr)}" y="${Y+28}" text-anchor="middle" font-size="10" class="t-faint">${yr}</text>`;
+    EV.forEach(([t,l],i)=>{const end=k==='y'?Math.ceil(t):t+.05;stale+=end-t;g+=`<rect x="${x(t)}" y="${Y-5}" width="${Math.max(2,x(end)-x(t))}" height="10" fill="var(--warm)" rx="2"><animate attributeName="width" from="0" to="${Math.max(2,x(end)-x(t))}" dur=".6s"/></rect><circle cx="${x(t)}" cy="${Y-22}" r="4" fill="var(--warm)"/><text x="${x(t)}" y="${Y-30-(i%2)*14}" text-anchor="middle" font-size="11" class="t-ink">${l}</text>`;});
+    g+=`<text x="${X1}" y="${Y+44}" text-anchor="end" font-size="11" class="t-faint">年</text>`;
+    document.getElementById('rv-g').innerHTML=g;
+    document.getElementById('rv-msg').textContent=k==='y'?`只按年复核，四件事发生后，过期的委托书累计被继续执行了约 ${(stale*12).toFixed(0)} 个月。`:'事件发生时立即复核，过期的委托几乎不再被执行。代理可以持续检查委托的前提是否仍然成立，并在前提变化时提醒委托人。';}
+  document.querySelectorAll('[data-rv]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.rv)));
+  document.getElementById('rv').addEventListener('anim-in',()=>{set('y');setTimeout(()=>set('e'),2800);});
+  set('y');
+})();
+</script>

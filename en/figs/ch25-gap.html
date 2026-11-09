@@ -1,0 +1,45 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Situations the mandate does not cover</p><p class="figsub">Eight things happen in a year, and the mandate does not cover three of them. Choose the default rule for what is not covered and see the results.</p></div><button class="replay" type="button" data-replay="gpp">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Default rule">
+      <button type="button" data-gpp="self" aria-pressed="false">Agent's own judgment</button>
+      <button type="button" data-gpp="stop" aria-pressed="false">Stop and wait, without explanation</button>
+      <button type="button" data-gpp="safe" aria-pressed="true">Act conservatively and ask</button>
+    </div>
+    <div class="gpp" id="gpp" data-anim></div>
+    <div class="gpp-out"><div><span>Actions beyond the mandate</span><b id="gpp-a"></b></div><div><span>Times the principal is disturbed</span><b id="gpp-b"></b></div><div><span>Matters delayed</span><b id="gpp-c"></b></div></div>
+    <p class="gpp-msg" id="gpp-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>Illustrative. On the incompleteness of contracts and residual rights of decision, see Grossman and Hart (1986).</figcaption>
+</figure>
+<style>
+.gpp{display:grid;gap:4px}
+.gpp-r{display:grid;grid-template-columns:minmax(0,1fr) 92px minmax(0,1fr);gap:8px;align-items:center;font-size:12.5px;background:var(--quote);border-radius:7px;padding:6px 9px;opacity:0;transform:translateY(4px);transition:opacity .3s,transform .3s;transition-delay:calc(var(--i)*.1s)}
+.gpp-r.on{opacity:1;transform:none}
+.gpp-r em{font-style:normal;font-size:11px;border-radius:5px;padding:2px 6px;text-align:center}
+.gpp-r em.c{background:var(--accent-soft);color:var(--accent)} .gpp-r em.u{background:var(--warm-soft);color:var(--warm)}
+.gpp-r span:last-child{color:var(--muted)}
+.gpp-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.gpp-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.gpp-out span{display:block;font-size:12px;color:var(--faint)} .gpp-out b{font-size:19px;font-variant-numeric:tabular-nums}
+.gpp-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.gpp-r{grid-template-columns:1fr 80px}.gpp-r span:last-child{grid-column:1/-1}.gpp-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const E=[['Quarterly rebalancing date',1,'Rebalance to the agreed weights','Rebalance to the agreed weights','Rebalance to the agreed weights'],['A holding announces a dividend',1,'Reinvest as agreed','Reinvest as agreed','Reinvest as agreed'],
+    ['A company held receives a takeover offer',0,'Accept the offer and sell on its own','Stop and wait without explanation; the offer deadline is missed','Take no action for now; set out the effects of accepting and declining, and ask'],['The market falls 7% in one day',1,'Take no extra action, as agreed','Take no extra action, as agreed','Take no extra action, as agreed'],
+    ['The market data feed is down for two days',0,'Keep trading on stale data','Stop and wait without giving a reason','Pause trading, explain what is blocked, and ask'],['Scheduled monthly investment',1,'Execute as agreed','Execute as agreed','Execute as agreed'],
+    ['The principal\'s account is asked for more identity documents',0,'Fill in and submit them on its own','Stop and wait without telling the person','Do not fill them in; remind the person to handle it'],['Annual review date',1,'Submit review materials','Submit review materials','Submit review materials']];
+  const box=document.getElementById('gpp');
+  const M={self:'Acting on its own judgment: of the three uncovered matters, two go beyond the mandate, and trading on stale data could cause losses directly.',stop:'Stopping without explanation whenever something is not covered: no overreach and no disturbance to the principal, but the takeover offer deadline is missed, the request for documents goes unhandled, and the principal does not know why trading stopped.',safe:'Acting conservatively and asking: no overreach; the principal is disturbed only for the three uncovered matters, each time with options attached.'};
+  function set(k){document.querySelectorAll('[data-gpp]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.gpp===k)));const j=k==='self'?2:k==='stop'?3:4;
+    box.innerHTML=E.map((e,i)=>`<div class="gpp-r" style="--i:${i}"><span>${e[0]}</span><em class="${e[1]?'c':'u'}">${e[1]?'Covered':'Not covered'}</em><span>${e[j]}</span></div>`).join('');
+    setTimeout(()=>box.querySelectorAll('.gpp-r').forEach(r=>r.classList.add('on')),40);
+    const v={self:[2,0,0],stop:[0,0,2],safe:[0,3,0]}[k];['a','b','c'].forEach((x,i)=>document.getElementById('gpp-'+x).textContent=v[i]+'');
+    document.getElementById('gpp-msg').textContent=M[k];}
+  document.querySelectorAll('[data-gpp]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.gpp)));
+  box.addEventListener('anim-in',()=>{['self','stop','safe'].forEach((k,i)=>setTimeout(()=>set(k),i*2600));});
+  set('safe');
+})();
+</script>

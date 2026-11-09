@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：委托的边界怎样移动</p><p class="figsub">四条结论，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="g14summary">重播</button></div>
+    <div class="g14summary" id="g14summary" data-anim><div class="g14summary-c" style="--i:0"><em>门槛</em><b>固定成本除以家产</b><p>认知劳动变便宜，门槛下降；核对与担责决定门槛的下限。</p></div><div class="g14summary-c" style="--i:1"><em>专属</em><b>从一种安排到每户一种</b><p>过去只属于大户的定制，可以给到更多人家。</p></div><div class="g14summary-c warn" style="--i:2"><em>代理成本</em><b>监督降了，担保没降</b><p>三项代理成本中，只有监督随认知劳动明显下降。</p></div><div class="g14summary-c warn" style="--i:3"><em>立场</em><b>谁付钱，就为谁做事</b><p>看上去免费的代理，可能让委托人付得更多。</p></div></div>
+  </div>
+</figure>
+<style>
+.g14summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g14summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g14summary-c.warn{border-left-color:var(--warm)}
+.g14summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g14summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g14summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g14summary.in .g14summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g14summary{grid-template-columns:1fr}}
+</style>

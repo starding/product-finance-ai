@@ -1,0 +1,41 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">失误时，谁先说出来</p><p class="figsub">第 8 周代理发生一次失误。比较三种情形下用户信念的变化：产品主动先说明，用户发现后产品承认，用户发现后产品否认。</p></div><button class="replay" type="button" data-replay="th2">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="回应"><button type="button" data-th2="s" aria-pressed="true">主动先说明</button><button type="button" data-th2="a" aria-pressed="false">被发现后承认</button><button type="button" data-th2="d" aria-pressed="false">被发现后否认</button></div>
+    <div class="th2" id="th2" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="失误前后的信念"><g id="th2-ax"></g><path id="th2-ref" class="th2-r"/><path id="th2-p" class="th2-l"/></svg>
+      <div class="th2-steps" id="th2-steps"></div>
+      <p class="th2-msg" id="th2-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意曲线。抢先说明不利信息的效果见 Williams、Bourgeois 与 Croyle（1993），Arpan 与 Roskos-Ewoldsen（2005）。灰色虚线为没有失误时的路径。</figcaption>
+</figure>
+<style>
+.th2 svg{width:100%;height:auto;display:block}
+.th2-l{fill:none;stroke:var(--accent);stroke-width:2.5}
+.th2-r{fill:none;stroke:var(--faint);stroke-width:1.5;stroke-dasharray:4 4}
+.th2-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:6px}
+.th2-steps div{font-size:12px;line-height:1.5;background:var(--quote);border-radius:7px;padding:6px 8px;opacity:.35;transition:opacity .3s}
+.th2-steps div.on{opacity:1;background:var(--accent-soft)}
+.th2-steps b{display:block;font-size:12.5px}
+.th2-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.th2-steps{grid-template-columns:1fr 1fr}.th2 svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const W=24,X0=50,X1=620,YT=14,YB=176,x=w=>X0+w/W*(X1-X0),y=p=>YB-p*(YB-YT);
+  const run=k=>{let p=.4,o=[];for(let w=0;w<=W;w++){if(w===8){p=k==='s'?p*.78:k==='a'?p*.45:p*.22;}else if(k!=='none'||true){const r=k==='d'&&w>8?.02:.06;p+=(.9-p)*r;}o.push(p);}return o;};
+  const ref=(()=>{let p=.4,o=[];for(let w=0;w<=W;w++){p+=(.9-p)*.06;o.push(p);}return o;})();
+  const $=id=>document.getElementById(id),P=a=>a.map((p,w)=>(w?'L':'M')+x(w).toFixed(1)+','+y(p).toFixed(1)).join('');
+  $('th2-ax').innerHTML=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`+[0,.5,1].map(v=>`<text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text>`).join('')+[0,8,16,24].map(w=>`<text x="${x(w)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">第 ${w} 周</text>`).join('')+`<line x1="${x(8)}" x2="${x(8)}" y1="${YT}" y2="${YB}" stroke="var(--warm)" stroke-dasharray="3 3"/><text x="${x(8)+4}" y="${YT+10}" font-size="11" class="t-warm">失误</text>`;
+  $('th2-ref').setAttribute('d',P(ref));
+  const ST=[['发现即停止','暂停相关操作'],['尽快通知','通知受影响的用户'],['说明原因与影响','哪些操作、多少金额'],['补救与预防','补偿，并说明如何防止再发生']];
+  $('th2-steps').innerHTML=ST.map(([a,b])=>`<div><b>${a}</b>${b}</div>`).join('');
+  const M={s:'产品在用户发现之前主动说明，并给出处理流程：信念有所下降，但主动说明本身就是一条关于正直的证据，此后很快恢复。',a:'用户自己发现后产品才承认：失误加上隐瞒的嫌疑，信念下降一半以上。',d:'用户发现后产品否认：失误被看作正直问题，信念跌到很低，此后的良好记录也很难让它恢复。'};
+  function set(k){document.querySelectorAll('[data-th2]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.th2===k)));$('th2-p').setAttribute('d',P(run(k)));
+    [...$('th2-steps').children].forEach(d=>d.classList.toggle('on',k==='s'));$('th2-msg').textContent=M[k];}
+  document.querySelectorAll('[data-th2]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.th2)));
+  $('th2').addEventListener('anim-in',()=>{['d','a','s'].forEach((k,i)=>setTimeout(()=>set(k),i*2000));});
+  set('s');
+})();
+</script>

@@ -1,0 +1,57 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">跌下去容易，涨回来难</p>
+    <p class="figsub">拖动亏损幅度，看需要多大的涨幅才能回到原点。</p>
+    <div class="dd" id="dd" data-anim>
+      <svg viewBox="0 0 640 230" role="img" aria-label="亏损幅度与回本所需涨幅">
+        <g id="dd-axis"></g>
+        <path id="dd-curve" class="dd-curve"/>
+        <rect id="dd-down" class="dd-down" width="70"/>
+        <rect id="dd-up" class="dd-up" width="70"/>
+        <text id="dd-dt" font-size="13" text-anchor="middle" class="t-warm"></text>
+        <text id="dd-ut" font-size="13" text-anchor="middle" class="t-accent"></text>
+        <circle id="dd-dot" r="6" class="dd-dot"/>
+      </svg>
+      <div class="sl"><label for="dd-l">亏损幅度 <b id="dd-lv"></b></label><input id="dd-l" type="range" min="5" max="90" step="5" value="50"></div>
+      <p class="dd-msg" id="dd-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>回本所需涨幅 ＝ 亏损幅度 ÷（1 － 亏损幅度）。下跌按原来的金额计算比例，上涨按亏损后的金额计算比例，两者基数不同。</figcaption>
+</figure>
+<style>
+.dd svg{width:100%;height:auto;display:block}
+.dd-curve{fill:none;stroke:var(--ink);stroke-width:2}
+.dd-down{fill:var(--warm-soft);stroke:var(--warm);transition:y .3s,height .3s}
+.dd-up{fill:var(--accent-soft);stroke:var(--accent);transition:y .3s,height .3s}
+.dd-dot{fill:var(--ink)}
+.dd-msg{font-size:14px;margin:6px 0 0;min-height:1.7em}
+</style>
+<script>
+(function(){
+  const X0=56,X1=380,YT=14,YB=196, need=l=>l/(1-l)*100, x=l=>X0+(l-0)/(0.9)*(X1-X0), y=g=>YB-Math.min(g,400)/400*(YB-YT);
+  let a=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/><line x1="${X0}" y1="${YT}" x2="${X0}" y2="${YB}" class="s-faint"/>`;
+  [0,0.2,0.4,0.6,0.8].forEach(l=>a+=`<text x="${x(l)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${l*100}%</text>`);
+  [100,200,300,400].forEach(g=>a+=`<line x1="${X0}" y1="${y(g)}" x2="${X1}" y2="${y(g)}" class="s-line"/><text x="${X0-8}" y="${y(g)+4}" text-anchor="end" font-size="11" class="t-faint">${g}%</text>`);
+  a+=`<text x="${X1}" y="${YB+32}" text-anchor="end" font-size="11" class="t-faint">亏损幅度</text><text x="${X0}" y="${YT-2}" font-size="11" class="t-faint">回本所需涨幅</text>`;
+  const BX=440, BY=196, BH=170; // 右侧柱：以 100 为基准
+  a+=`<line x1="${BX-10}" y1="${BY}" x2="${BX+190}" y2="${BY}" class="s-faint"/><text x="${BX+35}" y="${BY+16}" text-anchor="middle" font-size="11" class="t-faint">亏损</text><text x="${BX+145}" y="${BY+16}" text-anchor="middle" font-size="11" class="t-faint">回本所需涨幅</text>`;
+  document.getElementById('dd-axis').innerHTML=a;
+  let d='';for(let i=0;i<=90;i++){const l=i/100;d+=(i?'L':'M')+x(l).toFixed(1)+','+y(need(l)).toFixed(1);}
+  document.getElementById('dd-curve').setAttribute('d',d);
+  const sl=document.getElementById('dd-l');
+  function render(){
+    const l=+sl.value/100, g=need(l);
+    document.getElementById('dd-lv').textContent=sl.value+'%';
+    const dot=document.getElementById('dd-dot');dot.setAttribute('cx',x(l));dot.setAttribute('cy',y(g));
+    const hD=l*100/400*BH, hU=Math.min(g,400)/400*BH;
+    const dn=document.getElementById('dd-down');dn.setAttribute('x',BX);dn.setAttribute('y',BY-hD);dn.setAttribute('height',hD);
+    const up=document.getElementById('dd-up');up.setAttribute('x',BX+110);up.setAttribute('y',BY-hU);up.setAttribute('height',hU);
+    const dt=document.getElementById('dd-dt');dt.setAttribute('x',BX+35);dt.setAttribute('y',BY-hD-6);dt.textContent='−'+sl.value+'%';
+    const ut=document.getElementById('dd-ut');ut.setAttribute('x',BX+145);ut.setAttribute('y',BY-hU-6);ut.textContent='+'+g.toFixed(0)+'%';
+    document.getElementById('dd-msg').textContent=`跌 ${sl.value}% 之后，需要涨 ${g.toFixed(1)}% 才能回到原点。`;
+  }
+  sl.addEventListener('input',render);
+  document.getElementById('dd').addEventListener('anim-in',()=>{let v=5;sl.value=v;render();const id=setInterval(()=>{v+=5;sl.value=v;render();if(v>=80){clearInterval(id);setTimeout(()=>{sl.value=50;render();},700);}},160);});
+  render();
+})();
+</script>

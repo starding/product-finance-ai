@@ -1,0 +1,30 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Narrow in calm times, wide in a hurry</p><p class="figsub">Drag the number of scribes quoting prices in the market, and see how much someone in a hurry to sell one ship share must give up, in calm times and when risk suddenly rises.</p></div><button class="replay" type="button" data-replay="sp17">Replay</button></div>
+    <div class="sp17" id="sp17" data-anim>
+      <div class="sp17-bars" id="sp17-b"></div>
+      <div class="sl"><label for="sp17-n">Quoting scribes <b id="sp17-nv"></b></label><input id="sp17-n" type="range" min="1" max="20" step="1" value="1"></div>
+      <p class="sp17-msg" id="sp17-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: when only one household quotes, the spread is 10%. The more quoters there are, the more they compete, and the calm-time spread narrows as 10% ÷ (number of quoters to the power 1.2), to a minimum of 0.2%. When risk suddenly rises, 90% of scribes stop quoting, and the spread is calculated from the quoters that remain.</figcaption>
+</figure>
+<style>
+.sp17-bars{display:grid;gap:12px;margin:4px 0 10px}
+.sp17-r{display:grid;grid-template-columns:9em 1fr 4em;gap:10px;align-items:center;font-size:12.5px}
+.sp17-r div{height:22px;background:var(--quote);border-radius:5px;overflow:hidden}
+.sp17-r i{display:block;height:100%;transition:width .4s}
+.sp17-r b{text-align:right;font-variant-numeric:tabular-nums}
+.sp17-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('sp17'+id),sp=n=>Math.max(.2,10/Math.pow(Math.max(1,n),1.2));
+  function draw(){const n=+$('-n').value,calm=sp(n),left=Math.max(1,Math.round(n*.1)),st=sp(left);$('-nv').textContent=n+'';
+    $('-b').innerHTML=[['Calm days',calm,'var(--accent)'],['When risk jumps',st,'var(--warm)']].map(([k,v,c])=>`<div class="sp17-r"><span>${k}</span><div><i style="width:${v*10}%;background:${c}"></i></div><b>${v.toFixed(1)}%</b></div>`).join('');
+    $('-msg').textContent=n===1?'With only one household quoting, someone in a hurry to sell must give up a tenth.':`With ${n} scribes competing to quote, a seller in calm times need give up only ${calm.toFixed(1)}%; when risk suddenly rises, only ${left} are still quoting, and the spread goes back to ${st.toFixed(1)}%. A narrow spread in normal times does not guarantee a narrow one in a hurry.`;}
+  $('-n').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{let v=1;$('-n').value=1;draw();const id=setInterval(()=>{v+=1;$('-n').value=v;draw();if(v>=20)clearInterval(id);},150);});
+  draw();
+})();
+</script>

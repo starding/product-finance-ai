@@ -1,0 +1,30 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">看不清好坏，好的会退出</p><p class="figsub">可靠的经理每年能为委托人创造 10 份的价值，不可靠的只有 4 份。委托人分不清，只肯按平均水平付费；可靠的经理收入低于 8 份就会改行。拖动起初不可靠经理的比例，看几轮之后还剩下谁。</p></div><button class="replay" type="button" data-replay="lm11">重播</button></div>
+    <div class="lm11" id="lm11" data-anim></div>
+    <div class="sl"><label for="lm11-b">起初不可靠的经理 <b id="lm11-bv"></b></label><input id="lm11-b" type="range" min="0" max="60" step="5" value="35"></div>
+    <p class="lm11-msg" id="lm11-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>示意：委托人按留下的经理的平均价值付费；每一轮，若付费低于 8 份，一半的可靠经理退出（阿克洛夫，1970 的简化）。</figcaption>
+</figure>
+<style>
+.lm11{display:grid;gap:6px}
+.lm11-r{display:grid;grid-template-columns:3.5em 1fr 6em;gap:10px;align-items:center;font-size:12.5px}
+.lm11-r div{display:flex;flex-wrap:wrap;gap:3px}
+.lm11-r i{width:12px;height:12px;border-radius:3px}
+.lm11-r b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.lm11-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  function draw(){const b0=+$('lm11-b').value/100;let G=Math.round(20*(1-b0)),B=20-G;const rows=[];
+    for(let k=0;k<6;k++){const pay=G+B?(10*G+4*B)/(G+B):0;rows.push([G,B,pay]);if(pay<8)G=Math.floor(G/2);}
+    $('lm11').innerHTML=rows.map(([g,b,p],k)=>`<div class="lm11-r"><span>第 ${k+1} 轮</span><div>${'<i style="background:var(--accent)"></i>'.repeat(g)}${'<i style="background:var(--warm)"></i>'.repeat(b)}</div><b>付费 ${p.toFixed(1)} 份</b></div>`).join('');
+    $('lm11-bv').textContent=Math.round(b0*100)+'%';const last=rows[5];
+    $('lm11-msg').textContent=rows[0][2]>=8?'不可靠的经理不多，平均付费仍不低于 8 份，可靠的经理愿意留下。':`起初不可靠的占 ${Math.round(b0*100)}%，平均付费只有 ${rows[0][2].toFixed(1)} 份，可靠的经理开始退出；留下的越来越差，付费越来越低。六轮之后只剩 ${last[0]} 位可靠的经理。`;}
+  $('lm11-b').addEventListener('input',draw);
+  $('lm11').addEventListener('anim-in',()=>{let v=0;$('lm11-b').value=0;draw();const id=setInterval(()=>{v+=5;$('lm11-b').value=v;draw();if(v>=50)clearInterval(id);},250);});
+  draw();
+})();
+</script>

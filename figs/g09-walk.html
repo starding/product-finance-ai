@@ -1,0 +1,29 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">一个规律被发现之后</p><p class="figsub">船总在丰收节后回来，份额总在节后上涨。拖动发现这个规律、提前买入的人有多少，看一年里价格的走势怎样变化。</p></div><button class="replay" type="button" data-replay="wk">重播</button></div>
+    <div class="wk" id="wk" data-anim>
+      <svg viewBox="0 0 640 200" role="img" aria-label="一年里的价格"><g id="wk-ax"></g><path id="wk-p" class="wk-p"/></svg>
+      <div class="sl"><label for="wk-n">提前买入的人 <b id="wk-nv"></b></label><input id="wk-n" type="range" min="0" max="100" step="5" value="0"></div>
+      <p class="wk-msg" id="wk-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：价值在第 9 个月（丰收节后）上升 2 份。提前买入的人越多，上涨发生得越早、越平缓；人人都知道时，上涨均匀地分布在全年，节后不再有可以预测的跳涨。</figcaption>
+</figure>
+<style>
+.wk svg{width:100%;height:auto;display:block}
+.wk-p{fill:none;stroke:var(--accent);stroke-width:2.6}
+.wk-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.wk svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),X0=46,X1=630,YT=12,YB=170,x=m=>X0+m/12*(X1-X0),y=v=>YB-(v-9.5)/3*(YB-YT);
+  $('wk-ax').innerHTML=[10,11,12].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+[0,3,6,9,12].map(m=>`<text x="${x(m)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">第 ${m} 月</text>`).join('')+`<line x1="${x(9)}" x2="${x(9)}" y1="${YT}" y2="${YB}" class="s-faint" stroke-dasharray="3 4"/><text x="${x(9)+4}" y="${YT+10}" font-size="11" class="t-muted">丰收节</text>`;
+  function draw(){const a=+$('wk-n').value/100;let d='';for(let m=0;m<=12;m+=.1){const jump=(1-a)*(m>=9?2:0),drift=a*2*m/12;d+=(m?'L':'M')+x(m).toFixed(1)+','+y(10+jump+drift).toFixed(1);}
+    $('wk-p').setAttribute('d',d);$('wk-nv').textContent=Math.round(a*100)+'%';
+    $('wk-msg').textContent=a===0?'没有人提前买入：价格在节后跳涨 2 份，这是一个人人可以预测、却没有人利用的规律。':a===1?'人人都提前买入：上涨被摊到全年，节后不再有跳涨。规律在被利用中消失，剩下的价格变化只来自新消息。':`${Math.round(a*100)}% 的人提前买入，节后的跳涨缩小到 ${(2*(1-a)).toFixed(1)} 份，上涨提前到了节前。`;}
+  $('wk-n').addEventListener('input',draw);
+  $('wk').addEventListener('anim-in',()=>{let v=0;$('wk-n').value=0;draw();const id=setInterval(()=>{v+=5;$('wk-n').value=v;draw();if(v>=100)clearInterval(id);},180);});
+  draw();
+})();
+</script>

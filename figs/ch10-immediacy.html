@@ -1,0 +1,78 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">买卖双方不会同时到达</p>
+    <p class="figsub">一小时内随机到达的买方（上）与卖方（下）。切换有无做市商，比较等待时间与付出的代价。</p>
+    <div class="seg-btns" role="group" aria-label="有无做市商">
+      <button type="button" data-im="0" aria-pressed="true">没有做市商：等对手出现</button>
+      <button type="button" data-im="1" aria-pressed="false">有做市商：立即成交</button>
+    </div>
+    <div class="im" id="im" data-anim>
+      <svg viewBox="0 0 640 190" role="img" aria-label="买卖双方到达时间与成交方式">
+        <g id="im-axis"></g>
+        <g id="im-links"></g>
+        <g id="im-dots"></g>
+        <g class="im-mm" id="im-mm"><rect x="8" y="80" width="72" height="30" rx="8"/><text x="44" y="100" text-anchor="middle" font-size="12" font-weight="700">做市商</text></g>
+      </svg>
+      <div class="im-out">
+        <div><span>平均等待时间</span><b id="im-w"></b></div>
+        <div><span>每笔交易付出的价差</span><b id="im-c"></b></div>
+      </div>
+      <p class="im-msg" id="im-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意模拟：买方与卖方各自平均每 4 分钟到达一位，到达时间随机；没有做市商时，先到者等待下一位对手，按到达顺序配对。价差为示例值。思路来自 Demsetz（1968）。</figcaption>
+</figure>
+<style>
+.im svg{width:100%;height:auto;display:block}
+.im-b{fill:var(--accent)} .im-s{fill:var(--warm)}
+.im-wait{stroke:var(--faint);stroke-width:3;opacity:.5}
+.im-link{stroke:var(--ink);stroke-width:1;opacity:.35}
+.im-mml{stroke:var(--accent);stroke-width:1;opacity:.45}
+.im-mm{opacity:0;transition:opacity .4s}
+.im-mm rect{fill:var(--accent-soft);stroke:var(--accent)}
+.im-mm text{fill:var(--ink)}
+.im[data-m="1"] .im-mm{opacity:1}
+.im-out{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.im-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.im-out span{display:block;font-size:12px;color:var(--faint)}
+.im-out b{font-size:20px;font-variant-numeric:tabular-nums}
+.im-msg{font-size:14px;margin:8px 0 0;min-height:1.7em}
+</style>
+<script>
+(function(){
+  const T=60,X0=96,X1=630,YB=40,YS=150,x=t=>X0+t/T*(X1-X0);
+  let seed=17; const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
+  const arr=()=>{const a=[];let t=0;while(true){t+=-4*Math.log(1-rnd());if(t>T)break;a.push(t);}return a;};
+  const B=arr(), S=arr();
+  let ax=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-line"/><line x1="${X0}" y1="${YS}" x2="${X1}" y2="${YS}" class="s-line"/>`;
+  ax+=`<text x="${X0-8}" y="${YB+4}" text-anchor="end" font-size="12" class="t-accent">买方</text><text x="${X0-8}" y="${YS+4}" text-anchor="end" font-size="12" class="t-warm">卖方</text>`;
+  [0,15,30,45,60].forEach(t=>ax+=`<text x="${x(t)}" y="182" text-anchor="middle" font-size="11" class="t-faint">${t} 分钟</text>`);
+  document.getElementById('im-axis').innerHTML=ax;
+  document.getElementById('im-dots').innerHTML=B.map(t=>`<circle class="im-b" cx="${x(t)}" cy="${YB}" r="5"/>`).join('')+S.map(t=>`<circle class="im-s" cx="${x(t)}" cy="${YS}" r="5"/>`).join('');
+  const im=document.getElementById('im'), links=document.getElementById('im-links');
+  function set(m){
+    im.dataset.m=m; document.querySelectorAll('[data-im]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.im===m)));
+    let h='', waits=[];
+    if(m===0){
+      const n=Math.min(B.length,S.length);
+      for(let i=0;i<n;i++){const tb=B[i],ts=S[i],tm=Math.max(tb,ts);waits.push(tm-Math.min(tb,ts));
+        const early=tb<ts?['b',tb]:['s',ts], yE=early[0]==='b'?YB:YS;
+        h+=`<line class="im-wait" x1="${x(early[1])}" y1="${yE}" x2="${x(tm)}" y2="${yE}"/><line class="im-link" x1="${x(tm)}" y1="${YB}" x2="${x(tm)}" y2="${YS}"/>`;}
+      const w=waits.reduce((s,v)=>s+v,0)/waits.length;
+      document.getElementById('im-w').textContent=w.toFixed(1)+' 分钟';
+      document.getElementById('im-c').textContent='0';
+      document.getElementById('im-msg').textContent=`${B.length-n+S.length-n>0?'还有 '+(B.length+S.length-2*n)+' 人到最后也没有等到对手。':''}先到的一方要等对手出现，等待期间价格可能变化。`;
+    } else {
+      B.forEach(t=>h+=`<line class="im-mml" x1="${x(t)}" y1="${YB}" x2="44" y2="80"/>`);
+      S.forEach(t=>h+=`<line class="im-mml" x1="${x(t)}" y1="${YS}" x2="44" y2="110"/>`);
+      document.getElementById('im-w').textContent='0 分钟';
+      document.getElementById('im-c').textContent='半个价差';
+      document.getElementById('im-msg').textContent='做市商随时与到达者成交，替双方弥合时间上的错配；每笔交易付出半个价差，作为这项服务的价格。';
+    }
+    links.innerHTML=h;
+  }
+  document.querySelectorAll('[data-im]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.im)));
+  im.addEventListener('anim-in',()=>{set(0);setTimeout(()=>set(1),2800);});
+  set(0);
+})();
+</script>

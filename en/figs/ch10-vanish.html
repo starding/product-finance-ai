@@ -1,0 +1,61 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">Liquidity vanishes first when it is needed most</p>
+    <p class="figsub">The same market sell order for 3,000 shares, filled in a calm market and in a violently swinging one. In the turmoil, market makers withdraw their quotes, and the bids left in the book are thin and far away.</p>
+    <div class="seg-btns" role="group" aria-label="Market conditions">
+      <button type="button" data-vn="0" aria-pressed="true">Calm market</button>
+      <button type="button" data-vn="1" aria-pressed="false">Violently swinging market</button>
+    </div>
+    <div class="vn" id="vn" data-anim>
+      <div class="vn-book" id="vn-book"></div>
+      <div class="vn-out">
+        <div><span>Average price</span><b id="vn-avg"></b></div>
+        <div><span>Last fill price</span><b id="vn-last"></b></div>
+        <div><span>Received below mid</span><b id="vn-cost"></b></div>
+      </div>
+      <p class="vn-msg" id="vn-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative order book, midpoint 100. For the real event, see the joint CFTC and SEC (2010) report on 6 May 2010: within minutes, bids for many stocks were almost entirely withdrawn, and some stocks traded at one cent.</figcaption>
+</figure>
+<style>
+.vn-book{display:grid;gap:4px;font-size:12px;font-variant-numeric:tabular-nums}
+.vn-r{display:grid;grid-template-columns:52px 1fr 52px;gap:8px;align-items:center;height:20px}
+.vn-r .p{text-align:right;color:var(--accent)}
+.vn-r .bar{height:14px;background:var(--quote);border-radius:3px;overflow:hidden;position:relative}
+.vn-r .bar i{position:absolute;left:0;top:0;bottom:0;background:var(--accent-soft);border-radius:3px;transition:width .6s ease}
+.vn-r .bar i.eat{background:var(--warm)}
+.vn-r .n{color:var(--muted)}
+.vn-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.vn-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.vn-out span{display:block;font-size:12px;color:var(--faint)}
+.vn-out b{font-size:19px;font-variant-numeric:tabular-nums}
+#vn-cost{color:var(--warm)}
+.vn-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.vn-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const Q=3000, MAX=1500;
+  const S=[
+    {lv:[[99.95,800],[99.90,900],[99.85,1000],[99.80,1100],[99.75,1200],[99.70,1300],[99.65,1400],[99.60,1500]],m:'The bids are deep and dense; the 3,000 shares are filled within the first few levels, receiving only a little less than the midpoint.'},
+    {lv:[[99.50,150],[99.00,120],[98.00,200],[96.00,150],[93.00,250],[88.00,300],[80.00,400],[60.00,500]],m:'Once quotes are withdrawn, the remaining bids are few and scattered. The same 3,000 shares are filled all the way down, and the last fills are far below the midpoint. Stop orders, which usually become market orders once triggered, are especially dangerous at such moments.'}
+  ];
+  const book=document.getElementById('vn-book');
+  function set(k){
+    document.querySelectorAll('[data-vn]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.vn===k)));
+    const lv=S[k].lv; let rem=Q, cash=0, last=0;
+    const eat=lv.map(([p,n])=>{const t=Math.min(rem,n);rem-=t;cash+=t*p;if(t>0)last=p;return t;});
+    const filled=Q-rem, avg=cash/filled;
+    book.innerHTML=lv.map(([p,n],i)=>`<div class="vn-r"><span class="p">${p.toFixed(2)}</span><span class="bar"><i style="width:${n/MAX*100}%"></i><i class="eat" style="width:0" data-w="${eat[i]/MAX*100}"></i></span><span class="n">${n}</span></div>`).join('');
+    setTimeout(()=>book.querySelectorAll('i.eat').forEach((e,i)=>setTimeout(()=>e.style.width=e.dataset.w+'%',i*140)),200);
+    document.getElementById('vn-avg').textContent=avg.toFixed(2)+(rem>0?' (not fully filled)':'');
+    document.getElementById('vn-last').textContent=last.toFixed(2);
+    document.getElementById('vn-cost').textContent=((100-avg)).toFixed(2)+' per share';
+    document.getElementById('vn-msg').textContent=S[k].m;
+  }
+  document.querySelectorAll('[data-vn]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.vn)));
+  document.getElementById('vn').addEventListener('anim-in',()=>{set(0);setTimeout(()=>set(1),3000);});
+  set(0);
+})();
+</script>

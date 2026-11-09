@@ -1,0 +1,56 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">Compensation follows systematic risk, not total risk</p>
+    <p class="figsub">Twelve example stocks. Arranged by total volatility, their expected returns look scattered; arranged by beta (how much they move with the market), they fall on a straight line. Tap any stock to see how its risk is made up.</p>
+    <div class="seg-btns" role="group" aria-label="Horizontal axis">
+      <button type="button" data-cx="tot" aria-pressed="true">X-axis: total volatility</button>
+      <button type="button" data-cx="beta" aria-pressed="false">X-axis: beta</button>
+    </div>
+    <div class="cp4" id="cp4" data-anim>
+      <svg viewBox="0 0 640 250" role="img" aria-label="Expected return against risk">
+        <g id="cp4-axis"></g>
+        <line id="cp4-sml" class="cp4-sml"/>
+        <g id="cp4-pts"></g>
+      </svg>
+      <p class="cp4-d" id="cp4-d" aria-live="polite">Tap any stock.</p>
+    </div>
+  </div>
+  <figcaption>Illustrative data constructed from the capital asset pricing model (Sharpe 1964): risk-free rate 3%, market risk premium 5%, market annual volatility 18%; each stock’s total volatility combines systematic and firm-specific risk. Empirically the line is flatter than the model predicts; see Black, Jensen and Scholes (1972) and Fama and French (1992).</figcaption>
+</figure>
+<style>
+.cp4 svg{width:100%;height:auto;display:block}
+.cp4-pt{cursor:pointer;transition:cx .8s ease}
+.cp4-pt circle{transition:cx .8s ease}
+.cp4-sml{stroke:var(--accent);stroke-width:2;stroke-dasharray:6 4;opacity:0;transition:opacity .5s .6s}
+.cp4[data-x="beta"] .cp4-sml{opacity:1}
+.cp4-d{font-size:14px;margin:6px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const RF=3, MRP=5, SM=18;
+  const D=[[0.4,30],[0.6,10],[0.7,45],[0.8,22],[0.9,5],[1.0,35],[1.1,15],[1.2,40],[1.3,8],[1.4,25],[1.6,12],[1.8,30]].map(([b,e],i)=>{const tot=Math.sqrt((b*SM)**2+e*e);return {i,b,e,tot,er:RF+b*MRP};});
+  const X0=56,X1=620,YT=14,YB=212, y=v=>YB-(v-2)/(13-2)*(YB-YT);
+  const xs={tot:v=>X0+(v-10)/(60-10)*(X1-X0), beta:v=>X0+(v-0.2)/(2.0-0.2)*(X1-X0)};
+  const cp=document.getElementById('cp4'), pts=document.getElementById('cp4-pts');
+  pts.innerHTML=D.map(d=>`<g class="cp4-pt" data-i="${d.i}"><circle r="7" cy="${y(d.er)}" fill="${d.e>25?'var(--warm)':'var(--accent)'}" opacity=".85"/></g>`).join('');
+  function axis(k){
+    let a=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`;
+    const ticks=k==='tot'?[10,20,30,40,50,60]:[0.4,0.8,1.2,1.6,2.0];
+    ticks.forEach(t=>a+=`<text x="${xs[k](t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${k==='tot'?t+'%':t.toFixed(1)}</text>`);
+    [4,6,8,10,12].forEach(v=>a+=`<line x1="${X0}" y1="${y(v)}" x2="${X1}" y2="${y(v)}" class="s-line"/><text x="${X0-8}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}%</text>`);
+    a+=`<text x="${X1}" y="${YB+32}" text-anchor="end" font-size="11" class="t-faint">${k==='tot'?'Total volatility (annual)':'Beta'}</text><text x="${X0}" y="${YT-2}" font-size="11" class="t-faint">Expected return</text>`;
+    document.getElementById('cp4-axis').innerHTML=a;
+  }
+  function set(k){
+    cp.dataset.x=k; document.querySelectorAll('[data-cx]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.cx===k)));
+    axis(k);
+    pts.querySelectorAll('.cp4-pt circle').forEach((c,i)=>c.setAttribute('cx',xs[k](k==='tot'?D[i].tot:D[i].b)));
+    const s=document.getElementById('cp4-sml');s.setAttribute('x1',xs.beta(0.2));s.setAttribute('y1',y(RF+0.2*MRP));s.setAttribute('x2',xs.beta(2.0));s.setAttribute('y2',y(RF+2.0*MRP));
+  }
+  pts.querySelectorAll('.cp4-pt').forEach(g=>g.addEventListener('click',()=>{const d=D[+g.dataset.i];
+    document.getElementById('cp4-d').textContent=`Total volatility ${d.tot.toFixed(0)}%: systematic risk ${(d.b*SM).toFixed(0)}% (beta ${d.b.toFixed(1)}), firm-specific risk ${d.e}%. Expected return ${d.er.toFixed(1)}%, determined by beta alone.${d.e>25?' Most of this stock’s risk is firm-specific, and bearing it earns no compensation.':''}`;}));
+  document.querySelectorAll('[data-cx]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.cx)));
+  cp.addEventListener('anim-in',()=>{set('tot');setTimeout(()=>set('beta'),2400);});
+  set('tot');
+})();
+</script>

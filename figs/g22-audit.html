@@ -1,0 +1,35 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">把核对花在哪里</p><p class="figsub">书记员一年做 300 件事，其中 6 件违约；违约多半发生在结果不好或触发条件的时候，也有一部分藏在结果好的事里。切换三种核对的方式，看花掉的工夫与查出的违约。</p></div><button class="replay" type="button" data-replay="ad22">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="核对方式">
+      <button type="button" data-ad22="all" aria-pressed="true">逐笔核对</button>
+      <button type="button" data-ad22="bad" aria-pressed="false">只查结果不好的</button>
+      <button type="button" data-ad22="mix" aria-pressed="false">结果不好或触发条件时细查，平时随机抽查一成</button>
+    </div>
+    <div class="ad22" id="ad22" data-anim>
+      <div class="ad22-bars" id="ad22-b"></div>
+      <p class="ad22-msg" id="ad22-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：300 件事中 30 件结果不好或触发了条件，其中藏着 4 件违约；其余 270 件中藏着 2 件违约。每件细查约需 6 分钟。随机抽查时，书记员不知道哪件会被查（汤森，1979 所说的只在结果不好时核查，加上随机抽查）。</figcaption>
+</figure>
+<style>
+.ad22-bars{display:grid;gap:12px;margin:6px 0 10px}
+.ad22-r{display:grid;grid-template-columns:8em 1fr 5em;gap:10px;align-items:center;font-size:12.5px}
+.ad22-r div{height:22px;background:var(--quote);border-radius:5px;overflow:hidden}
+.ad22-r i{display:block;height:100%;transition:width .4s}
+.ad22-r b{text-align:right;font-variant-numeric:tabular-nums}
+.ad22-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.ad22-r{grid-template-columns:1fr 5em}.ad22-r span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('ad22'+id);
+  const M={all:[300,6,'逐笔核对：一年查 300 件，花 30 个小时，6 件违约全部查出。他一年没有这么多时间。'],bad:[30,4,'只查结果不好的：一年查 30 件，花 3 个小时，查出 4 件；藏在好结果里的 2 件漏了过去，书记员也会学会把违约藏在好结果里。'],mix:[57,4.2,'结果不好或触发条件时细查，平时随机抽查一成：一年查 57 件，花不到 6 个小时，平均查出 4.2 件；更要紧的是，书记员不知道哪一件会被抽中，违约的念头随之变小。']};
+  function set(k){document.querySelectorAll('[data-ad22]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.ad22===k)));const [n,f,msg]=M[k];
+    $('-b').innerHTML=[['核对的件数',n,300,'var(--blue)',n+' 件'],['花掉的时间',n*.1,30,'var(--gold)',(n*.1).toFixed(1)+' 小时'],['查出的违约',f,6,'var(--accent)',f+' ／ 6 件']].map(([a,v,m,c,t])=>`<div class="ad22-r"><span>${a}</span><div><i style="width:${v/m*100}%;background:${c}"></i></div><b>${t}</b></div>`).join('');$('-msg').textContent=msg;}
+  document.querySelectorAll('[data-ad22]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.ad22)));
+  $('').addEventListener('anim-in',()=>{['all','bad','mix'].forEach((k,i)=>setTimeout(()=>set(k),300+i*2400));});
+  set('all');
+})();
+</script>

@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">第二部分小结：分解的每一项推出了什么</p><p class="figsub">切换视角：每一项的结论、对金融产品的含义，以及对 AI 进入金融产品的含义。</p></div><button class="replay" type="button" data-replay="rc2">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="视角">
+      <button type="button" data-rv2="c" aria-pressed="true">结论</button>
+      <button type="button" data-rv2="p" aria-pressed="false">对产品的含义</button>
+      <button type="button" data-rv2="a" aria-pressed="false">对 AI 的含义</button>
+    </div>
+    <div class="rc2" id="rc2" data-anim></div>
+  </div>
+  <figcaption>每一行对应分解中的一项。</figcaption>
+</figure>
+<style>
+.rc2{display:grid;gap:6px}
+.rc2-r{display:grid;grid-template-columns:150px 1fr;gap:12px;align-items:center;padding:10px 12px;border-radius:10px;background:var(--quote);opacity:0;transform:translateY(6px);transition:opacity .4s,transform .4s;transition-delay:calc(var(--i)*.15s)}
+.rc2.in .rc2-r{opacity:1;transform:none}
+.rc2-r b{font-size:14px;display:block}
+.rc2-r em{font-style:normal;font-size:11px;color:var(--faint)}
+.rc2-r p{margin:0;font-size:13.5px;line-height:1.6}
+.rc2-r.keep{background:rgba(160,120,24,.1)}
+.rc2-r .sign{display:inline-block;min-width:18px;margin-right:4px;font-size:11px;color:var(--faint);font-weight:700}
+@media (max-width:640px){.rc2-r{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const R=[
+    ['','任务','15',{c:'用户要的是完成一件事；金融任务源于在一生中安排收入与支出；结果受运气影响，完成的标准落在过程上。',p:'先问任务再推荐产品；事先写明目标、约束与检查方式；交付要完整，持续任务的每个周期都要有交代。',a:'AI 适合把任务说清、把过程留下记录，并在持续任务中按周期检查与报告。'}],
+    ['－','决策偏差','16',{c:'注意力有限，按参照点衡量得失，损失的分量约为收益的两倍；偏差有方向，可以被呈现方式与默认值改变。',p:'把与目标相关的信息放到前面；让评估频率与期限相匹配；默认选项站在用户一边。',a:'AI 可以在用户做决定的当下提供与目标相关的信息，但同样可能被用来诱导交易，需要约束其目标。'}],
+    ['约束','承受能力','17',{c:'承受力有能力、意愿与行为三个面，计划以最低的一面为准；意愿会变化，画像只能作统计描述。',p:'分别了解三个面，按最低的一面执行并定期复核；只用统计口径描述画像。',a:'AI 可以持续观察行为记录、在下跌前提前沟通，但不能对个人断言能承受多少。'}],
+    ['前提','信任','18',{c:'信任是对受托人在无人监督时按自己利益行事的信念，随证据按贝叶斯规则更新；收益证据诊断力很低，严重失误诊断力很高，所以信任建立慢、失去快；交不交出，还要看赌注是否越过门槛。',p:'提供诊断力高的过程证据；避免正直类失误，能力类失误如实说明并补救；敞口上限不随信任取消；追求与可信程度相称的信任。',a:'AI 代理是先验很弱的新受托人，模型版本变化还会让旧记录部分失效，信任要靠可诊断的记录重新积累。'}]
+  ];
+  const box=document.getElementById('rc2');
+  function set(v){document.querySelectorAll('[data-rv2]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.rv2===v)));
+    box.innerHTML=R.map(([s,n,ch,t],i)=>`<div class="rc2-r${n==='信任'?' keep':''}" style="--i:${i}"><div><b><span class="sign">${s}</span>${n}</b><em>第 ${ch} 章</em></div><p>${t[v]}</p></div>`).join('');
+    box.classList.remove('in');void box.offsetWidth;box.classList.add('in');}
+  document.querySelectorAll('[data-rv2]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.rv2)));
+  set('c'); box.classList.remove('in');
+})();
+</script>

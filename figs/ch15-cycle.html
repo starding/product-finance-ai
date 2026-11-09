@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">持续任务：没有消息意味着什么</p><p class="figsub">一项每周检查一次的跟踪任务，持续 16 周。切换显示方式：只在有变化时通知，或者每个周期都交代状态。</p></div><button class="replay" type="button" data-replay="cy">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="显示方式">
+      <button type="button" data-cy="alert" aria-pressed="true">只在有变化时通知</button>
+      <button type="button" data-cy="all" aria-pressed="false">每个周期都交代</button>
+    </div>
+    <div class="cy" id="cy" data-anim>
+      <div class="cy-row" id="cy-row"></div>
+      <div class="legend" id="cy-lg"></div>
+      <p class="cy-msg" id="cy-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意序列。漏报在当时无法被用户察觉，只能事后通过复核发现；本图为说明而直接标出。</figcaption>
+</figure>
+<style>
+.cy-row{display:grid;grid-template-columns:repeat(16,1fr);gap:4px;margin:6px 0 10px}
+.cy-c{display:flex;flex-direction:column;align-items:center;gap:4px;opacity:0;transform:translateY(6px);transition:opacity .3s,transform .3s;transition-delay:calc(var(--i)*.07s)}
+.cy.in .cy-c{opacity:1;transform:none}
+.cy-c i{width:100%;aspect-ratio:1;max-width:30px;border-radius:7px;background:var(--quote);border:1.5px solid var(--line);transition:background .3s,border-color .3s}
+.cy-c em{font-style:normal;font-size:10px;color:var(--faint)}
+.cy-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const K={chg:['有变化，已通知','var(--accent)'],ok:['正常，无变化','var(--accent-soft)'],blk:['检查受阻','var(--gold)'],miss:['漏报','var(--warm)'],wait:['等待用户确认','var(--blue)']};
+  const seq=['ok','ok','chg','ok','blk','blk','ok','ok','miss','ok','chg','wait','wait','ok','ok','ok'];
+  const row=document.getElementById('cy-row');
+  row.innerHTML=seq.map((s,i)=>`<div class="cy-c" style="--i:${i}"><i></i><em>${i+1}</em></div>`).join('');
+  const cs=[...row.querySelectorAll('i')];
+  function set(m){document.querySelectorAll('[data-cy]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.cy===m)));
+    cs.forEach((c,i)=>{const s=seq[i],show=m==='all'||s==='chg';c.style.background=show?K[s][1]:'var(--quote)';c.style.borderColor=show?K[s][1]:'var(--line)';});
+    document.getElementById('cy-lg').innerHTML=(m==='all'?Object.values(K):[K.chg,['没有消息','var(--quote)']]).map(([n,c])=>`<span><i style="background:${c};border:1px solid var(--line)"></i>${n}</span>`).join('');
+    document.getElementById('cy-msg').textContent=m==='all'?'每个周期都交代状态后，用户能看到第 5、6 周的检查没有完成，第 12、13 周有一项操作在等待自己确认；第 9 周的漏报也有了事后复核的线索。':'用户只收到 2 次通知，其余 14 周都是“没有消息”。其中混着检查受阻、漏报与等待确认，看起来却与一切正常完全一样。';}
+  document.querySelectorAll('[data-cy]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.cy)));
+  document.getElementById('cy').addEventListener('anim-in',()=>{set('alert');setTimeout(()=>set('all'),2800);});
+  set('alert');
+})();
+</script>

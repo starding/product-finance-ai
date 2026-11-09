@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">一个产品的五个部分</p><p class="figsub">五个部分从下往上叠成一个产品。点选一层，看用户在这一层看到什么、产品在这一层做什么，以及少了它会怎样。</p></div><button class="replay" type="button" data-replay="p3r">重播</button></div>
+    <div class="p3r" id="p3r" data-anim>
+      <div class="p3r-two"><div class="p3r-stack" id="p3r-s"></div><div class="p3r-d" id="p3r-d" aria-live="polite"></div></div>
+    </div>
+  </div>
+  <figcaption>五个部分依次由第 20～24 章推演得到；“少了它”一栏是对应各章模拟器的结论。</figcaption>
+</figure>
+<style>
+.p3r-two{display:grid;grid-template-columns:1fr 1.3fr;gap:14px;align-items:start}
+.p3r-stack{display:flex;flex-direction:column-reverse;gap:5px}
+.p3r-stack button{font:inherit;cursor:pointer;text-align:left;border:1px solid transparent;border-radius:9px;padding:10px 12px;color:var(--ink);font-size:14px;background:var(--c);opacity:0;transform:translateY(10px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.3s)}
+.p3r.in .p3r-stack button{opacity:1;transform:none}
+.p3r-stack button em{display:block;font-style:normal;font-size:11px;color:var(--faint)}
+.p3r-stack button.sel{border-color:var(--ink)}
+.p3r-d{display:grid;gap:8px}
+.p3r-d div{background:var(--quote);border-radius:8px;padding:9px 11px;font-size:13.5px;line-height:1.6}
+.p3r-d div:last-child{background:var(--warm-soft)}
+.p3r-d span{display:block;font-size:11px;color:var(--faint)}
+@media (max-width:640px){.p3r-two{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const L=[['承诺什么','第 20 章','三本账、每本账达到目标的把握与最坏的年景，以及一句“不承诺收益”。','从目标出发配置，承诺配置、执行、费用与风险边界，结果只交付一个分布。','产品只能承诺收益，而这是它做不到的。','rgba(31,111,92,.10)'],
+    ['委托参数与授权','第 21 章','一份看得懂的约定：目标、边界、规则、例外与期限；一年只被请示几次。','把约定交给系统强制执行，授权按大小与能否挽回分四级，写明何时回来问他。','要么事事请示、他不堪其扰，要么书记员自作主张。','rgba(31,111,92,.16)'],
+    ['过程记录与可核对的证据','第 22 章','一句话、关键节点、全部记录三层；每一步写明依据与当时的数值。','记录交第三方保存、不可修改；结果不好或触发时细查，平时随机抽查。','违约发现不了，坏年景又被错怪在书记员头上。','rgba(31,111,92,.22)'],
+    ['上限、确认与赔付','第 23 章','一年只确认几次不可挽回的操作，每次摆出后果；出了错，不必举证就有人赔。','层层设防、在快处放慢；执行错误与越界由运营者赔付并投保。','少数几次大的错误吞掉多年的积蓄，而且没有人赔。','rgba(31,111,92,.28)'],
+    ['信任的建立路径','第 24 章','授权从小事开始，守约一年放宽一级；出了小错只退一步。','借来昂贵的信号，按守约的记录逐级放宽，按错误的种类调整信任。','一开始全部交出，一次小错就让他彻底放弃；或者对骗人的书记员一再重新信任。','rgba(31,111,92,.34)']];
+  const st=document.getElementById('p3r-s'),d=document.getElementById('p3r-d');
+  st.innerHTML=L.map((l,i)=>`<button type="button" style="--i:${i};--c:${l[5]}"><em>${l[1]}</em>${l[0]}</button>`).join('');const bs=[...st.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));d.innerHTML=`<div><span>用户看到的</span>${L[i][2]}</div><div><span>产品做的</span>${L[i][3]}</div><div><span>少了它</span>${L[i][4]}</div>`;}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('p3r').addEventListener('anim-in',()=>{[0,1,2,3,4].forEach((i,k)=>setTimeout(()=>set(i),1800+k*1700));});
+  set(0);
+})();
+</script>

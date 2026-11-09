@@ -1,0 +1,59 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">Event studies: lining up thousands of announcements</p>
+    <p class="figsub">The horizontal axis is trading days from the announcement; the vertical axis is cumulative excess return. Switch between three typical cases.</p>
+    <div class="seg-btns" role="group" aria-label="Case">
+      <button type="button" data-ev="eff" aria-pressed="true">Rapid reaction</button>
+      <button type="button" data-ev="pead" aria-pressed="false">Post-announcement drift</button>
+      <button type="button" data-ev="leak" aria-pressed="false">Takeover target: leaked news</button>
+    </div>
+    <div class="ev" id="ev" data-anim>
+      <svg viewBox="0 0 640 260" role="img" aria-label="Cumulative excess return around the announcement">
+        <g id="ev-axis"></g>
+        <path id="ev-up" class="ev-l up"/><path id="ev-dn" class="ev-l dn"/>
+        <text id="ev-tu" font-size="12" class="t-accent"></text><text id="ev-td" font-size="12" class="t-warm"></text>
+      </svg>
+      <p class="ev-msg" id="ev-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative shapes based on the announcement studies of Ball and Brown (1968) and Fama et al. (1969), the post-earnings-announcement drift of Bernard and Thomas (1989), and the merger announcement study of Keown and Pinkerton (1981). Magnitudes are illustrative, not the specific estimates of these studies.</figcaption>
+</figure>
+<style>
+.ev svg{width:100%;height:auto;display:block}
+.ev-l{fill:none;stroke-width:2.5;stroke-linejoin:round}
+.ev-l.up{stroke:var(--accent)} .ev-l.dn{stroke:var(--warm)}
+.ev-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const D0=-20,D1=60,X0=50,X1=620,Y0=230,Y1=14,V0=-12,V1=28;
+  const x=d=>X0+(d-D0)/(D1-D0)*(X1-X0), y=v=>Y0-(v-V0)/(V1-V0)*(Y0-Y1);
+  let a=`<line x1="${X0}" y1="${y(0)}" x2="${X1}" y2="${y(0)}" class="s-faint"/>`;
+  [-20,-10,0,10,20,30,40,50,60].forEach(d=>a+=`<text x="${x(d)}" y="${Y0+16}" text-anchor="middle" font-size="11" class="t-faint">${d}</text>`);
+  [-10,10,20].forEach(v=>a+=`<line x1="${X0}" y1="${y(v)}" x2="${X1}" y2="${y(v)}" class="s-line"/><text x="${X0-8}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v>0?'+':''}${v}%</text>`);
+  a+=`<line x1="${x(0)}" y1="${Y1}" x2="${x(0)}" y2="${Y0}" class="s-faint" stroke-dasharray="3 3"/><text x="${x(0)+6}" y="${Y1+10}" font-size="11" class="t-muted">Announcement</text>`;
+  document.getElementById('ev-axis').innerHTML=a;
+  const S={
+    eff:{f:d=>d<-10?0:d<0?1.5*(d+10)/10:d<1?5:5, m:'Prices for both good and bad news jump to their new level on the announcement day and stay flat afterwards: there is no profitable pattern to follow. The small moves before the announcement come from market expectations.',b:true},
+    pead:{f:d=>d<-10?0:d<0?1*(d+10)/10:d<1?3.5:3.5+2.5*Math.min(1,d/60), m:'Prices react only partly on the announcement day and keep drifting in the same direction for dozens of trading days afterwards. This is one of the most robust anomalies, and it shows that information does not always enter prices in a single step.',b:true},
+    leak:{f:d=>d<-12?0:d<0?9*Math.pow((d+12)/12,1.6):d<1?25:25, m:'The takeover target’s share price starts rising more than ten trading days before the announcement. No public information exists yet; the rise comes from trading by people with non-public news, which is evidence that strong-form efficiency does not hold.',b:false}
+  };
+  const up=document.getElementById('ev-up'), dn=document.getElementById('ev-dn');
+  function path(f,sgn){let d='';for(let t=D0;t<=D1;t+=0.5){const v=sgn*f(t);d+=(d?'L':'M')+x(t).toFixed(1)+','+y(v).toFixed(1);}return d;}
+  function draw(el){const L=el.getTotalLength();el.style.transition='none';el.style.strokeDasharray=L;el.style.strokeDashoffset=L;el.getBoundingClientRect();el.style.transition='stroke-dashoffset 1.6s ease';el.style.strokeDashoffset=0;}
+  function set(k){
+    document.querySelectorAll('[data-ev]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.ev===k)));
+    const s=S[k];
+    up.setAttribute('d',path(s.f,1)); draw(up);
+    const tu=document.getElementById('ev-tu'), td=document.getElementById('ev-td');
+    tu.setAttribute('x',x(44));tu.setAttribute('y',y(s.f(60))-8);tu.textContent=k==='leak'?'Takeover target':'Good news';
+    if(s.b){dn.style.display='';dn.setAttribute('d',path(s.f,-1));draw(dn);td.setAttribute('x',x(44));td.setAttribute('y',y(-s.f(60))+18);td.textContent='Bad news';}
+    else{dn.style.display='none';td.textContent='';}
+    document.getElementById('ev-msg').textContent=s.m;
+  }
+  let touched=false;
+  document.querySelectorAll('[data-ev]').forEach(b=>b.addEventListener('click',()=>{touched=true;set(b.dataset.ev);}));
+  document.getElementById('ev').addEventListener('anim-in',()=>{if(!touched)set('eff');});
+  set('eff');
+})();
+</script>

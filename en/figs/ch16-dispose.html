@@ -1,0 +1,48 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The disposition effect: selling winners, keeping losers</p><p class="figsub">An account holding ten stocks needs to sell three to raise cash. Selling with the purchase price as the reference point and selling without regard to it leave different portfolios behind. Below are the empirical results of Odean (1998).</p></div><button class="replay" type="button" data-replay="ds">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="How to sell">
+      <button type="button" data-ds="ref" aria-pressed="true">Purchase price as reference</button>
+      <button type="button" data-ds="loss" aria-pressed="false">Sell losers first</button>
+    </div>
+    <div class="ds" id="ds" data-anim>
+      <div class="ds-pf" id="ds-pf"></div>
+      <p class="ds-msg" id="ds-msg" aria-live="polite"></p>
+      <div class="ds-ev">
+        <div><span>Share of winning positions sold</span><div class="ds-t"><i data-w="14.8" style="background:var(--accent)"></i></div><b>14.8%</b></div>
+        <div><span>Share of losing positions sold</span><div class="ds-t"><i data-w="9.8" style="background:var(--warm)"></i></div><b>9.8%</b></div>
+        <div><span>Next year: winners sold beat losers kept by</span><div class="ds-t"><i data-w="3.4" style="background:var(--ink)"></i></div><b>3.4 points</b></div>
+      </div>
+    </div>
+  </div>
+  <figcaption>The account above is illustrative. The figures below come from Odean's (1998) analysis of the 1987–1993 trading records of about 10,000 accounts at a US brokerage; bar lengths are drawn on a 0–20% scale. Where capital gains are taxed, selling losing stocks first can also reduce the tax bill.</figcaption>
+</figure>
+<style>
+.ds-pf{display:grid;grid-template-columns:repeat(10,1fr);gap:5px}
+.ds-pf div{border-radius:7px;padding:8px 2px;text-align:center;font-size:12px;font-variant-numeric:tabular-nums;border:1.5px solid transparent;transition:all .4s}
+.ds-pf .g{background:var(--accent-soft);color:var(--accent)} .ds-pf .l{background:var(--warm-soft);color:var(--warm)}
+.ds-pf .sold{opacity:.3;border-style:dashed;border-color:var(--faint);transform:translateY(6px)}
+.ds-msg{font-size:14px;margin:10px 0;min-height:3.4em}
+.ds-ev{display:grid;gap:6px;border-top:1px dashed var(--line);padding-top:10px}
+.ds-ev>div{display:grid;grid-template-columns:minmax(0,1.3fr) 1fr 90px;gap:10px;align-items:center;font-size:12.5px}
+.ds-t{height:14px;background:var(--quote);border-radius:4px;overflow:hidden}
+.ds-t i{display:block;height:100%;width:0;transition:width .7s ease}
+.ds-ev b{text-align:right;font-size:13px}
+@media (max-width:640px){.ds-pf{grid-template-columns:repeat(5,1fr)}.ds-ev>div{grid-template-columns:1fr 70px}.ds-ev .ds-t{grid-column:1/3;grid-row:2}}
+</style>
+<script>
+(function(){
+  const P=[32,-18,15,-25,8,-6,41,-12,22,-31];
+  const box=document.getElementById('ds-pf');box.innerHTML=P.map(v=>`<div class="${v>0?'g':'l'}">${v>0?'+':'−'}${Math.abs(v)}%</div>`).join('');
+  const cs=[...box.children];
+  function set(k){document.querySelectorAll('[data-ds]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.ds===k)));
+    const ix=P.map((v,i)=>i).sort((a,b)=>k==='ref'?P[b]-P[a]:P[a]-P[b]).slice(0,3);
+    cs.forEach((c,i)=>c.classList.toggle('sold',ix.includes(i)));
+    const left=P.filter((v,i)=>!ix.includes(i)),lo=left.filter(v=>v<0).length;
+    document.getElementById('ds-msg').textContent=k==='ref'?`The three biggest gainers were sold, "locking in the gains"; ${lo} of the seven stocks left are losers. Selling a losing stock means admitting the loss, so they were kept.`:`The three biggest losers were sold, and only ${lo} of the seven stocks left are losers. Both ways of selling raise similar amounts of cash; the only difference is whether one is willing to realize the loss.`;}
+  document.querySelectorAll('[data-ds]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.ds)));
+  const bars=[...document.querySelectorAll('.ds-t i')];
+  document.getElementById('ds').addEventListener('anim-in',()=>{set('ref');bars.forEach(b=>b.style.width='0');setTimeout(()=>bars.forEach((b,i)=>setTimeout(()=>b.style.width=(+b.dataset.w/20*100)+'%',i*300)),600);});
+  set('ref');bars.forEach(b=>b.style.width=(+b.dataset.w/20*100)+'%');
+})();
+</script>

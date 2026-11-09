@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">45 minutes of erroneous orders</p><p class="figsub">A deployment error leaves a trading system sending erroneous orders without pause. Play the cumulative loss; then switch on "cumulative loss limit and stop switch" to see the consequences of the same error.</p></div><button class="replay" type="button" id="ir-run">Play</button></div>
+    <label class="ir-chk"><input type="checkbox" id="ir-x"> Cumulative loss limit and automatic stop switch in place</label>
+    <div class="ir" id="ir" data-anim>
+      <svg viewBox="0 0 640 220" role="img" aria-label="Cumulative loss over time"><g id="ir-ax"></g><path id="ir-p" class="ir-l"/><line id="ir-cap" class="ir-cap"/></svg>
+      <div class="ir-out"><div><span>Time elapsed</span><b id="ir-t"></b></div><div><span>Cumulative loss</span><b id="ir-v"></b></div></div>
+      <p class="ir-msg" id="ir-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Based on the U.S. Securities and Exchange Commission's 2013 order on an incident in August 2012 (Release No. 34-70694): millions of erroneous orders were sent in about 45 minutes, with a loss of about $460 million. The path of the loss over time is illustrative; the limit of $10 million is also illustrative.</figcaption>
+</figure>
+<style>
+.ir-chk{display:flex;gap:6px;align-items:center;font-size:14px;margin-bottom:6px}
+.ir-chk input{accent-color:var(--accent);width:16px;height:16px}
+.ir svg{width:100%;height:auto;display:block}
+.ir-l{fill:none;stroke:var(--warm);stroke-width:2.5}
+.ir-cap{stroke:var(--accent);stroke-dasharray:5 4;stroke-width:2}
+.ir-out{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.ir-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.ir-out span{display:block;font-size:12px;color:var(--faint)} .ir-out b{font-size:19px;font-variant-numeric:tabular-nums}
+.ir-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.ir svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const X0=60,X1=620,YT=14,YB=185,x=t=>X0+t/45*(X1-X0),y=v=>YB-v/480*(YB-YT),L=t=>460*Math.pow(t/45,1.15),CAP=10;
+  const $=id=>document.getElementById(id),cb=$('ir-x');let tm;
+  $('ir-ax').innerHTML=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`+[0,100,200,300,400].map(v=>`<text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+[0,15,30,45].map(t=>`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${t} min</text>`).join('')+`<text x="${X0}" y="${YT-2}" font-size="11" class="t-faint">Cumulative loss ($ million)</text>`;
+  function draw(T){const cap=cb.checked;let d='',last=0,stop=null;for(let t=0;t<=T;t+=.25){let v=L(t);if(cap&&v>=CAP){v=CAP;if(stop===null)stop=t;}d+=(t?'L':'M')+x(t).toFixed(1)+','+y(v).toFixed(1);last=v;}
+    $('ir-p').setAttribute('d',d);$('ir-cap').setAttribute('x1',X0);$('ir-cap').setAttribute('x2',X1);$('ir-cap').setAttribute('y1',y(CAP));$('ir-cap').setAttribute('y2',y(CAP));$('ir-cap').style.opacity=cap?1:0;
+    $('ir-t').textContent=T.toFixed(0)+' min';$('ir-v').textContent='$'+last.toFixed(0)+' million';
+    $('ir-msg').textContent=cap?(stop!==null?`Cumulative losses hit the limit at about minute ${stop.toFixed(0)}; the system automatically stops sending new orders, and the loss stays at about $10 million.`:'The limit has not been reached yet.'):(T>=45?'With no limit and no stop switch, erroneous orders continued for about 45 minutes, with a loss of about $460 million. Orders cannot be withdrawn once filled.':'');}
+  function run(){clearInterval(tm);let T=0;draw(0);tm=setInterval(()=>{T+=1;draw(T);if(T>=45)clearInterval(tm);},70);}
+  $('ir-run').addEventListener('click',run);cb.addEventListener('change',run);
+  $('ir').addEventListener('anim-in',()=>{cb.checked=false;run();setTimeout(()=>{cb.checked=true;run();},4500);});
+  draw(45);
+})();
+</script>

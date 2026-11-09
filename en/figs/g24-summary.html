@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: trust takes time</p><p class="figsub">Four conclusions, each tied to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="g24summary">Replay</button></div>
+    <div class="g24summary" id="g24summary" data-anim><div class="g24summary-c" style="--i:0"><em>Three sources of trustworthiness</em><b>Ability, benevolence and integrity, each with evidence</b><p>Records prove ability, fees and goals prove benevolence, and the agreement and its verification prove integrity.</p></div><div class="g24summary-c" style="--i:1"><em>Signalling</em><b>Only costly signals are credible</b><p>A deposit, insurance, a licence and an audit are what a cheating operator cannot afford.</p></div><div class="g24summary-c warn" style="--i:2"><em>Starting small and reputation</em><b>Widen level by level; the record changes the judgement</b><p>The loss limit at each level is written down in advance, so a cheating scribe never gets authority worth cheating with.</p></div><div class="g24summary-c warn" style="--i:3"><em>Asymmetry</em><b>After a mistake, step back rather than reset to zero</b><p>Overstepping withdraws authority, a compensated execution error steps back one level, and a misjudgement does not step back.</p></div></div>
+  </div>
+</figure>
+<style>
+.g24summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g24summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g24summary-c.warn{border-left-color:var(--warm)}
+.g24summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g24summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g24summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g24summary.in .g24summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g24summary{grid-template-columns:1fr}}
+</style>

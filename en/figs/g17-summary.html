@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: agents become the main market participants</p><p class="figsub">Four conclusions, each corresponding to one mechanism in the chapter.</p></div><button class="replay" type="button" data-replay="g17summary">Replay</button></div>
+    <div class="g17summary" id="g17summary" data-anim><div class="g17summary-c" style="--i:0"><em>Rerun: the spread</em><b>Cheaper in normal times</b><p>Quoting and holding inventory cost scribes almost nothing, so spreads in calm times narrow sharply.</p></div><div class="g17summary-c" style="--i:1"><em>Information cascades</em><b>Scribes that resemble each other act at once</b><p>The same methods and data mean judgments are no longer independent, and uniform action may rest on very little information.</p></div><div class="g17summary-c warn" style="--i:2"><em>Liquidity spirals</em><b>Falls that cause falls</b><p>Rules for cutting positions and for margin trigger at the same time, and quoting scribes withdraw just when they are most needed.</p></div><div class="g17summary-c warn" style="--i:3"><em>Market design</em><b>Give the market time to breathe</b><p>Halts and circuit breakers break the spiral, and diversity among participants reduces action in the same direction.</p></div></div>
+  </div>
+</figure>
+<style>
+.g17summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g17summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g17summary-c.warn{border-left-color:var(--warm)}
+.g17summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g17summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g17summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g17summary.in .g17summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g17summary{grid-template-columns:1fr}}
+</style>

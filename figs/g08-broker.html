@@ -1,0 +1,33 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">三种卖法</p><p class="figsub">急着卖一份前景值 10 份的船股。点选一种卖法，比较要等多久、最后到手多少，以及代价付给了谁。</p></div><button class="replay" type="button" data-replay="bk">重播</button></div>
+    <div class="bk" id="bk" data-anim>
+      <button type="button" class="bk-c" data-i="0" style="--i:0"><b>自己找</b><span>挨家挨户问</span></button>
+      <button type="button" class="bk-c" data-i="1" style="--i:1"><b>托经纪人</b><span>他知道谁想买</span></button>
+      <button type="button" class="bk-c" data-i="2" style="--i:2"><b>卖给做市商</b><span>马上成交</span></button>
+    </div>
+    <dl class="bk-d" id="bk-d" aria-live="polite"></dl>
+  </div>
+  <figcaption>示意：自己找按最多等五天计算；经纪人一天内找到买方、收取 2% 的佣金；做市商的买价比前景值低价差的一半。</figcaption>
+</figure>
+<style>
+.bk{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.bk-c{font:inherit;text-align:left;cursor:pointer;background:var(--quote);border:1px solid transparent;border-radius:10px;padding:10px 12px;color:var(--ink);opacity:0;transform:translateY(6px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.25s)}
+.bk.in .bk-c{opacity:1;transform:none}
+.bk-c b{display:block;font-size:15px} .bk-c span{font-size:12.5px;color:var(--muted)}
+.bk-c.sel{border-color:var(--accent);background:var(--accent-soft)}
+.bk-d{display:grid;grid-template-columns:7em 1fr;gap:6px 14px;margin:14px 0 0;font-size:13.5px;line-height:1.6}
+.bk-d dt{color:var(--faint);font-size:12px;padding-top:2px} .bk-d dd{margin:0}
+@media (max-width:640px){.bk{grid-template-columns:1fr}.bk-d{grid-template-columns:1fr;gap:1px}.bk-d dd{margin-bottom:6px}}
+</style>
+<script>
+(function(){
+  const K=['要等多久','平均到手','代价付给了谁','适合'];
+  const D=[['最多五天，还可能卖不掉','约 9.0 份','自己的时间与急售的让价','不着急、认识许多人的卖方'],['一天之内','约 9.8 份（扣除 2% 佣金）','经纪人：为他掌握的信息与花费的时间付费','想卖个好价钱、又不愿自己奔走的卖方'],['马上','约 9.6 份（让出价差的一半）','做市商：为他承担的囤货风险付费','一刻也等不了的卖方']];
+  const d=document.getElementById('bk-d'),bs=[...document.querySelectorAll('.bk-c')];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));d.innerHTML=K.map((k,j)=>`<dt>${k}</dt><dd>${D[i][j]}</dd>`).join('');}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('bk').addEventListener('anim-in',()=>{[0,1,2].forEach((i,k)=>setTimeout(()=>set(i),400+k*1800));});
+  set(0);
+})();
+</script>

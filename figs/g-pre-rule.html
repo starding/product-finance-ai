@@ -1,0 +1,57 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">总则：今天的价值，换成对未来的可信索取权</p><p class="figsub">点选一种产品，看它主要在三个方向中的哪一个改进了这次交换。</p></div><button class="replay" type="button" data-replay="gr">重播</button></div>
+    <div class="gr" id="gr" data-anim>
+      <div class="gr-flow">
+        <div class="gr-box"><em>今天</em><b>一份价值</b></div>
+        <div class="gr-arrow"><i></i><span>换成</span></div>
+        <div class="gr-box"><em>未来</em><b>一份索取权</b><small>在约定的时间与情形下取回</small></div>
+      </div>
+      <div class="gr-lev">
+        <div class="gr-l" data-l="0"><b>可得</b><span>原本换不到的人能够换到</span></div>
+        <div class="gr-l" data-l="1"><b>可信</b><span>承诺在将来兑现</span></div>
+        <div class="gr-l" data-l="2"><b>便宜</b><span>换取的成本更低</span></div>
+      </div>
+      <div class="seg-btns gr-p" role="group" aria-label="产品">
+        <button type="button" data-gp="0" aria-pressed="false">助学贷款</button>
+        <button type="button" data-gp="1" aria-pressed="false">存款保险</button>
+        <button type="button" data-gp="2" aria-pressed="false">指数基金</button>
+        <button type="button" data-gp="3" aria-pressed="false">资产托管</button>
+        <button type="button" data-gp="4" aria-pressed="false">小额定投</button>
+      </div>
+      <p class="gr-msg" id="gr-msg" aria-live="polite"></p>
+    </div>
+  </div>
+</figure>
+<style>
+.gr-flow{display:grid;grid-template-columns:1fr 90px 1fr;align-items:center;gap:8px}
+.gr-box{background:var(--quote);border-radius:10px;padding:12px;text-align:center}
+.gr-box em{display:block;font-style:normal;font-size:11px;color:var(--faint)} .gr-box b{font-size:16px} .gr-box small{display:block;font-size:11.5px;color:var(--muted);margin-top:2px}
+.gr-arrow{position:relative;text-align:center;font-size:12px;color:var(--muted)}
+.gr-arrow i{position:absolute;left:0;right:8px;top:50%;border-top:2px solid var(--accent);transform-origin:left;transform:scaleX(0);transition:transform .7s}
+.gr-arrow i::after{content:"";position:absolute;right:-8px;top:-6px;border:5px solid transparent;border-left:8px solid var(--accent)}
+.gr.in .gr-arrow i{transform:none}
+.gr-arrow span{position:relative;top:-14px;background:var(--card);padding:0 4px}
+.gr-lev{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.gr-l{border-radius:10px;padding:10px 12px;border:1px solid var(--line);transition:background .3s,border-color .3s}
+.gr-l b{display:block;font-size:15px} .gr-l span{font-size:12px;color:var(--muted)}
+.gr-l.on{background:var(--accent-soft);border-color:var(--accent)}
+.gr-p{margin-bottom:0}
+.gr-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.gr-flow{grid-template-columns:1fr 60px 1fr}.gr-lev{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const P=[[0,'助学贷款：没有积蓄的年轻人，以未来的收入作抵，今天就能换到上学的钱。改进的是可得。'],
+    [1,'存款保险：银行即使倒闭，限额以内的存款也能取回。改进的是可信。'],
+    [2,'指数基金：不挑选个股，以很低的费用持有整个市场。改进的是便宜。'],
+    [1,'资产托管：基金的资产放在另一家机构，管理人不能随意挪用。改进的是可信。'],
+    [0,'小额定投：每月几百元也能买入分散的组合，原本够不上门槛的人可以参与。改进的是可得。']];
+  const ls=[...document.querySelectorAll('.gr-l')],msg=document.getElementById('gr-msg');
+  function set(k){document.querySelectorAll('[data-gp]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.gp===k)));
+    ls.forEach((l,i)=>l.classList.toggle('on',k>=0&&P[k][0]===i));msg.textContent=k>=0?P[k][1]:'每一种金融产品，都在三个方向中的至少一个上改进了这次交换。';}
+  document.querySelectorAll('[data-gp]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.gp)));
+  document.getElementById('gr').addEventListener('anim-in',()=>{set(-1);[0,1,2].forEach((k,i)=>setTimeout(()=>set(k),1000+i*2200));});
+  set(-1);
+})();
+</script>

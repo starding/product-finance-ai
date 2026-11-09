@@ -1,0 +1,66 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">文明模拟器 · 第 10 章：交给谁</p><p class="figsub">四十户人家各有 100 份家产投在船队上。三条线分别是自己打理、交给主动挑选的经理、交给只按份额持有全部的经理时，各户家产的中位数；点选一种查看细节。</p></div><button class="replay" type="button" data-replay="cs10">重播</button></div>
+    <div class="cs-rules"><span class="on">银行</span><span class="on">股份</span><span class="on">市场</span><span class="on">价格中的信息</span><span class="on">委托</span><span class="lock">监管与托管 · 第 11 章</span></div>
+    <div class="seg-btns" role="group" aria-label="打理方式">
+      <button type="button" data-cs10="self" aria-pressed="false">自己打理</button>
+      <button type="button" data-cs10="active" aria-pressed="true">交给主动挑选的经理</button>
+      <button type="button" data-cs10="passive" aria-pressed="false">只按份额持有全部</button>
+    </div>
+    <div class="cs10" id="cs10" data-anim>
+      <svg viewBox="0 0 660 220" role="img" aria-label="三种打理方式下家产的中位数"><g id="cs10-ax"></g><path id="cs10-band" class="cs10-band"/><g id="cs10-l"></g></svg>
+      <div class="legend"><span><i style="background:var(--faint)"></i>自己打理</span><span><i style="background:var(--warm)"></i>主动挑选的经理</span><span><i style="background:var(--accent)"></i>只按份额持有全部</span><span><i style="background:var(--quote);border:1px solid var(--line)"></i>所选方式下十分之一到十分之九的户</span></div>
+      <div class="cs10-ctl">
+        <div class="sl"><label for="cs10-s">真有本事的经理 <b id="cs10-sv"></b></label><input id="cs10-s" type="range" min="0" max="60" step="10" value="20"></div>
+        <div class="sl"><label for="cs10-f">主动挑选的费用 <b id="cs10-fv"></b></label><input id="cs10-f" type="range" min="0.5" max="2.5" step="0.1" value="1.5"></div>
+      </div>
+      <div class="cs-sw"><label><input type="checkbox" id="cs10-c"> 委托人每年追着去年业绩最好的经理换人</label></div>
+      <button type="button" class="replay" id="cs10-re">换一组年景</button>
+      <div class="cs10-out" id="cs10-out"></div>
+      <p class="cs10-msg" id="cs10-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意模型：船队每年平均收益 6%、波动 15%。自己打理：每户的结果另有个别波动，并因交易与判断失误每年少 1%，每周花 3 小时。主动挑选：十位经理，真有本事的每年多赚 2%，其余没有，各有个别波动；扣除所选费用。只按份额持有全部：得到船队的平均收益，费用 0.1%。追着换人时，委托人每年转向去年业绩最好的经理，并为换人多付 0.5% 的成本。</figcaption>
+</figure>
+<style>
+.cs10 svg{width:100%;height:auto;display:block}
+.cs10-band{fill:var(--quote);stroke:none}
+.cs10-ctl{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px}
+.cs10-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cs10-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs10-out span{display:block;font-size:11.5px;color:var(--faint)} .cs10-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.cs10-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs10-ctl{grid-template-columns:1fr;gap:4px}.cs10-out{grid-template-columns:1fr}.cs10 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs10'+id),N=40,Y=20,M=10;let mode='active',seed=1010;
+  const X0=44,X1=650,YT=10,YB=186,x=t=>X0+t/Y*(X1-X0);
+  function sim(sk,fee,chase){let s=seed;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};const g=()=>{let u=0;while(!u)u=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r());};
+    const nS=Math.round(sk*M),alpha=Array.from({length:M},(_,j)=>j<nS?.02:0);
+    const W={self:Array(N).fill(100),active:Array(N).fill(100),passive:Array(N).fill(100)},H={self:[],active:[],passive:[]},pick=Array.from({length:N},(_,i)=>i%M);
+    let last=Array(M).fill(0);
+    const snap=()=>{for(const k in W){H[k].push(W[k].slice().sort((a,b)=>a-b));}};snap();
+    for(let t=0;t<Y;t++){const m=.06+.15*g(),mr=alpha.map(a=>m+a+.06*g());
+      for(let i=0;i<N;i++){W.self[i]*=Math.max(.05,1+m-.01+.08*g());W.passive[i]*=1+m-.001;
+        let j=pick[i],cost=fee;if(chase){j=last.indexOf(Math.max(...last));if(t>0)cost+=.005;}W.active[i]*=Math.max(.05,1+mr[j]-cost);}
+      last=mr.slice();snap();}
+    return H;}
+  function draw(){const sk=+$('-s').value/100,fee=+$('-f').value/100,chase=$('-c').checked,H=sim(sk,fee,chase);
+    $('-sv').textContent=Math.round(sk*100)+'%';$('-fv').textContent=(fee*100).toFixed(1)+'%';
+    const q=(a,p)=>a[Math.floor(p*(a.length-1))],all=[].concat(...Object.values(H).map(h=>h.map(a=>q(a,.9)))),mx=Math.max(400,...all),y=v=>YB-Math.min(v,mx)/mx*(YB-YT);
+    $('-ax').innerHTML=[0,.25,.5,.75,1].map(k=>{const v=Math.round(mx*k/100)*100;return `<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`;}).join('')+[0,5,10,15,20].map(t=>`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">第 ${t} 年</text>`).join('');
+    const h=H[mode];$('-band').setAttribute('d','M'+h.map((a,t)=>x(t)+','+y(q(a,.9))).join('L')+'L'+h.map((a,t)=>x(t)+','+y(q(a,.1))).reverse().join('L')+'Z');
+    const C={self:'var(--faint)',active:'var(--warm)',passive:'var(--accent)'};
+    $('-l').innerHTML=Object.keys(H).map(k=>`<path d="${H[k].map((a,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(q(a,.5)).toFixed(1)).join('')}" fill="none" stroke="${C[k]}" stroke-width="${k===mode?3:1.4}" opacity="${k===mode?1:.55}"/>`).join('');
+    const med=k=>q(H[k][Y],.5),hrs={self:3*52,active:0,passive:0};
+    $('-out').innerHTML=[['第 20 年家产的中位数',Math.round(med(mode))+' 份'],['十分之一到十分之九的户',Math.round(q(H[mode][Y],.1))+'～'+Math.round(q(H[mode][Y],.9))+' 份'],['每年花掉的时间',hrs[mode]?hrs[mode]+' 小时':'几乎不花']].map(([a,b])=>`<div><span>${a}</span><b>${b}</b></div>`).join('');
+    const p=med('passive'),a=med('active');
+    $('-msg').textContent=mode==='self'?`自己打理，每年花 156 小时，判断与交易的失误让中位数落在 ${Math.round(med('self'))} 份，户与户之间的差距也最大。`:mode==='passive'?`只按份额持有全部，不研究、不挑选，费用很低，中位数 ${Math.round(p)} 份，各户几乎一样。`:
+      `交给主动挑选的经理，中位数 ${Math.round(a)} 份，${a>=p?'略高于':'低于'}只按份额持有的 ${Math.round(p)} 份。${sk===0?'没有一位经理真有本事，费用就是纯粹的损失。':''}${chase?'追着去年的冠军换人，常常换到刚交过好运的经理，还要多付换人的成本。':'试试勾选“追着换人”，或把费用调高。'}`;}
+  document.querySelectorAll('[data-cs10]').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.cs10;document.querySelectorAll('[data-cs10]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  ['-s','-f','-c'].forEach(k=>$(k).addEventListener('input',draw));$('-re').addEventListener('click',()=>{seed=(seed*48271)%2147483647;draw();});
+  $('').addEventListener('anim-in',()=>{['self','active','passive'].forEach((k,i)=>setTimeout(()=>{mode=k;document.querySelectorAll('[data-cs10]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.cs10===k)));draw();},300+i*2400));});
+  draw();
+})();
+</script>

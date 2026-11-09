@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：用户不在场</p><p class="figsub">四条结论，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="g21summary">重播</button></div>
+    <div class="g21summary" id="g21summary" data-anim><div class="g21summary-c" style="--i:0"><em>不完全契约</em><b>写不到的情形要有归属</b><p>剩余的决定权给谁，要事先讲清：可挽回的按约定的精神处理，不可挽回的等他回来。</p></div><div class="g21summary-c" style="--i:1"><em>约定</em><b>目标、边界、规则、例外与期限</b><p>让平时的大多数事不必请示，又保留最后的控制。</p></div><div class="g21summary-c warn" style="--i:2"><em>重跑：最小权限</em><b>按大小与能否挽回分四级</b><p>自行处理、事后告知、事前确认与禁止，边界随信任调整。</p></div><div class="g21summary-c warn" style="--i:3"><em>正式与实际权威</em><b>把“何时回来问”写进约定</b><p>数量、事件与时间三类触发，防止实际的决定权不知不觉地转走。</p></div></div>
+  </div>
+</figure>
+<style>
+.g21summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g21summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g21summary-c.warn{border-left-color:var(--warm)}
+.g21summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g21summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g21summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g21summary.in .g21summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g21summary{grid-template-columns:1fr}}
+</style>

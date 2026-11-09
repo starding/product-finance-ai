@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">If the only test is "beat the benchmark", which strategy wins?</p><p class="figsub">Strategy B keeps selling out-of-the-money put options: in normal times it earns a little every month, and in a crash it suffers heavy losses. Drag the time to see both curves; then switch on the tail-risk constraint.</p></div><button class="replay" type="button" data-replay="gm">Replay</button></div>
+    <label class="gm-chk"><input type="checkbox" id="gm-x"> Add to the mandate: no single month's loss may exceed 15% (including stress scenarios)</label>
+    <div class="gm" id="gm" data-anim>
+      <svg viewBox="0 0 640 220" role="img" aria-label="Cumulative net value of two strategies"><g id="gm-ax"></g><path id="gm-a" class="gm-l a"/><path id="gm-b" class="gm-l b"/><text id="gm-tag" font-size="12" class="t-warm"></text></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>A: hold the index</span><span><i style="background:var(--warm)"></i>B: keep selling put options</span></div>
+      <div class="sl"><label for="gm-t">Months elapsed <b id="gm-tv"></b></label><input id="gm-t" type="range" min="1" max="120" step="1" value="96"></div>
+      <p class="gm-msg" id="gm-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative paths, based on the hypothetical fund constructed by Lo (2001). On indicators that cease to be reliable once made targets, see Goodhart (1975); on AI systems gaming their metrics, see Amodei et al. (2016).</figcaption>
+</figure>
+<style>
+.gm-chk{display:flex;gap:6px;align-items:center;font-size:14px;margin-bottom:6px}
+.gm-chk input{accent-color:var(--accent);width:16px;height:16px}
+.gm svg{width:100%;height:auto;display:block}
+.gm-l{fill:none;stroke-width:2.5} .gm-l.a{stroke:var(--accent)} .gm-l.b{stroke:var(--warm);transition:opacity .3s}
+.gm-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.gm svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  let s=4;const rnd=()=>{s=(s*9301+49297)%233280;return s/233280;};
+  const A=[1],B=[1];for(let m=1;m<=120;m++){const z=(rnd()+rnd()+rnd()-1.5)*2;let ra=.008+.04*z;if(m===100)ra=-.22;if(m===101)ra=-.08;A.push(A[m-1]*(1+ra));B.push(B[m-1]*(1+(m===100?-.6:m===101?-.15:.011)));}
+  const X0=50,X1=620,YT=14,YB=190,mx=Math.max(...A,...B),x=m=>X0+m/120*(X1-X0),y=v=>YB-(v-.4)/(mx-.4)*(YB-YT);
+  const $=id=>document.getElementById(id),sl=$('gm-t'),cb=$('gm-x');
+  $('gm-ax').innerHTML=`<line x1="${X0}" y1="${y(1)}" x2="${X1}" y2="${y(1)}" class="s-faint" stroke-dasharray="3 3"/><line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`+[0,2,4,6,8,10].map(k=>`<text x="${x(k*12)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">Year ${k}</text>`).join('')+`<text x="${X0-6}" y="${y(1)+4}" text-anchor="end" font-size="11" class="t-faint">1.0</text>`;
+  const P=(S,T)=>S.slice(0,T+1).map((v,i)=>(i?'L':'M')+x(i).toFixed(1)+','+y(v).toFixed(1)).join('');
+  function r(){const T=+sl.value,on=cb.checked;$('gm-a').setAttribute('d',P(A,T));$('gm-b').setAttribute('d',P(B,T));$('gm-b').style.opacity=on?.15:1;$('gm-tv').textContent='Month '+T;
+    const tag=$('gm-tag');tag.setAttribute('x',x(Math.min(T,110))+6);tag.setAttribute('y',y(B[T])-8);tag.textContent=on?'Not allowed':'';
+    $('gm-msg').textContent=on?'Under a stress scenario, B could lose more than half in a single month, breaching the constraint: it was never among the permitted choices. A goal must be paired with a risk constraint that covers the tail.':T<100?`For the first ${T} months, B's net value stays above A's and its curve is smooth; it looks like the better choice. If the only test is "beat the benchmark", the agent will pick it.`:`In month 100 the market crashes and B loses 60% in one month: it gives back all the excess return of the previous eight-plus years and ends up behind A.`;}
+  sl.addEventListener('input',r);cb.addEventListener('change',r);
+  $('gm').addEventListener('anim-in',()=>{cb.checked=false;let T=1;sl.value=1;r();const id=setInterval(()=>{T+=2;sl.value=Math.min(T,120);r();if(T>=120){clearInterval(id);setTimeout(()=>{cb.checked=true;r();},900);}},50);});
+  r();
+})();
+</script>

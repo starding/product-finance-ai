@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: turning instructions into a mandate</p><p class="figsub">Four design requirements, each corresponding to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="ch25summary">Replay</button></div>
+    <div class="ch25summary" id="ch25summary" data-anim><div class="ch25summary-c" style="--i:0"><em>One sentence is not enough</em><b>Make the mandate an object in the product</b><p>Goals, constraints, exception rules and period of validity are each visible and editable, and every step the agent takes can be traced to one of them.</p></div><div class="ch25summary-c" style="--i:1"><em>The measure shapes behaviour</em><b>State return, risk, benchmark and horizon in the goal</b><p>Translate wishes such as "steady" into measures that can be checked, and ask the principal to confirm them.</p></div><div class="ch25summary-c warn" style="--i:2"><em>Measurable goals get gamed</em><b>Pair the goal with risk constraints that cover the tail</b><p>Test strategies under stress scenarios, not just against the benchmark.</p></div><div class="ch25summary-c warn" style="--i:3"><em>Mandates are incomplete and expire</em><b>Default to acting conservatively and asking; review on events</b><p>In situations not covered, pause and put forward options; remind the principal to review when income, family or goals change.</p></div></div>
+  </div>
+</figure>
+<style>
+.ch25summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch25summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch25summary-c.warn{border-left-color:var(--warm)}
+.ch25summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch25summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch25summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch25summary.in .ch25summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch25summary{grid-template-columns:1fr}}
+</style>

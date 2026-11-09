@@ -1,0 +1,688 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ordinary people have neither the time nor the expertise</title>
+<meta name="description" content="Product × Finance × AI: Derived from Zero, Chapter 10: people who farm have no time to study shipping, so they hand their ship shares to someone who knows the trade. Delegation saves time and spreads the cost of research, and it also brings the principal–agent problem: ability is hard to see, effort is invisible, profit-sharing encourages risk-taking, and the gains from skill mostly go to the manager; the cheapest delegation is to hold everything in proportion">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="g-10">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="Contents">
+<div class="side-head"><a class="sidetitle" href="index.html">Product × Finance × AI<small>Financial Products in the Age of AI</small></a></div>
+<div class="side-view" role="group" aria-label="Way of reading"><a href="preface.html">Decomposition</a><a href="g-preface.html" class="on" aria-current="true">Derivation</a></div>
+<a class="side-about" href="index.html#about">About this book</a>
+<a class="" href="g-preface.html"><span class="n">Preface</span>The best way to understand financial products is to build them from zero</a>
+<a class="side-part" href="g-part1.html"><span class="pn">Part One</span>From 0 to 1: how a world without finance grows finance</a>
+<a class="" href="g-01.html"><span class="n">1</span>One person, one year&#x27;s harvest</a>
+<a class="" href="g-02.html"><span class="n">2</span>Two people, short of grain at different times</a>
+<a class="" href="g-03.html"><span class="n">3</span>What if a loan is not repaid</a>
+<a class="" href="g-04.html"><span class="n">4</span>Exchange among many</a>
+<a class="" href="g-05.html"><span class="n">5</span>Harvests good and bad</a>
+<a class="" href="g-06.html"><span class="n">6</span>Savers may need their grain at any time; borrowers need it for years</a>
+<a class="" href="g-07.html"><span class="n">7</span>No one household can pay for a ship</a>
+<a class="" href="g-08.html"><span class="n">8</span>Securities must be saleable</a>
+<a class="" href="g-09.html"><span class="n">9</span>Prices carry everyone&#x27;s information</a>
+<a class=" cur" href="g-10.html" aria-current="page"><span class="n">10</span>Ordinary people have neither the time nor the expertise</a>
+<a class="" href="g-11.html"><span class="n">11</span>Trustees may not do their duty</a>
+<a class="" href="g-12.html"><span class="n">12</span>The institutions are in place, and people still make mistakes</a>
+<a class="side-part" href="g-part2.html"><span class="pn">Part Two</span>Changing one parameter: when agency becomes almost free</a>
+<a class="" href="g-13.html"><span class="n">13</span>A new parameter: the cost of cognitive labour collapses</a>
+<a class="" href="g-14.html"><span class="n">14</span>Can everyone have a personal agent?</a>
+<a class="" href="g-15.html"><span class="n">15</span>Who guarantees an agent&#x27;s promises</a>
+<a class="" href="g-16.html"><span class="n">16</span>If everyone has an analyst</a>
+<a class="" href="g-17.html"><span class="n">17</span>Agents become the main market participants</a>
+<a class="" href="g-18.html"><span class="n">18</span>Can an agent correct human bias?</a>
+<a class="" href="g-19.html"><span class="n">19</span>What did not change</a>
+<a class="side-part" href="g-part3.html"><span class="pn">Part Three</span>Deriving a product in the new world</a>
+<a class="" href="g-20.html"><span class="n">20</span>One person and one sum of money</a>
+<a class="" href="g-21.html"><span class="n">21</span>The user is not present</a>
+<a class="" href="g-22.html"><span class="n">22</span>The user cannot see the process</a>
+<a class="" href="g-23.html"><span class="n">23</span>Agents make mistakes</a>
+<a class="" href="g-24.html"><span class="n">24</span>Trust takes time</a>
+<a class="side-app" href="g-epilogue.html"><span class="n">Epilogue</span>Back to the governing rule</a>
+<a class="side-app" href="method.html"><span class="n">Appendix</span>How this book was written</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="Open contents" title="Contents"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">Product × Finance × AI: Financial Products in the Age of AI</a><span>Part One  From 0 to 1</span><a class="langlink" href="../g-10.html" hreflang="zh-CN">中文</a></header>
+
+<div class="chapno">Chapter 10</div><h1>Ordinary people have neither the time nor the expertise<small>Principals and agents</small></h1>
+<blockquote><p>As the ships multiplied and the news grew more complicated, people who farmed had neither the time nor the expertise to judge which ship to buy. Handing their ship shares to someone who knew the trade became the natural choice: he studied shipping full time, and with many households' money pooled together, the cost of research was spread across them. Delegation saved time, and it also brought new problems. Whether the manager was any good could not be told from a few years of results; whether he was trying, the principal could not see; giving him a share of the profits made him favour risk; and even if he really was skilled, the benefit mostly went to him through the size of the money he managed and the fees he charged. The cheapest delegation was to ask someone simply to hold all the ship shares in proportion, without picking and without research.</p></blockquote>
+<h2 id="sec-1">1. Farmers have no time to study shipping</h2>
+<p>A household has to work in the fields every day. To judge which ship is worth buying, one must find out about the captain's character, the risks of the route and conditions on other islands, and keep watching prices in the market square. All this takes a great deal of time, and doing it well takes experience. For a farmer, spending that time on farming is usually a better deal than studying shipping. In <i>The Wealth of Nations</i>, Smith (1776) saw the division of labour as the main source of growing wealth: each person concentrates on what they do best, and then they trade with one another.</p>
+<p><strong>Today's counterpart.</strong> Most people have neither the time to study company accounts and industry changes nor the training to do so.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Manage it yourself, or pay someone</p><p class="figsub">Drag a household's wealth and the hours per week it would take to study shipping itself, and compare the time spent managing it yourself with the fee paid each year for someone else to manage it.</p></div><button class="replay" type="button" data-replay="tm">Replay</button></div>
+    <div class="tm" id="tm" data-anim>
+      <div class="tm-b"><span>Do it yourself: time spent, in grain</span><div><i id="tm-s" style="background:var(--warm)"></i></div><b id="tm-sv"></b></div>
+      <div class="tm-b"><span>Pay someone: fee per year</span><div><i id="tm-f" style="background:var(--blue)"></i></div><b id="tm-fv"></b></div>
+      <div class="tm-sl">
+        <div class="sl"><label for="tm-w">Wealth <b id="tm-wv"></b></label><input id="tm-w" type="range" min="20" max="1000" step="20" value="200"></div>
+        <div class="sl"><label for="tm-h">Hours needed per week <b id="tm-hv"></b></label><input id="tm-h" type="range" min="0" max="10" step="0.5" value="3"></div>
+      </div>
+      <p class="tm-msg" id="tm-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: each hour spent on research, if spent farming instead, would yield 0.05 portions more grain; having someone manage the shares costs 1.5% of wealth a year in fees.</figcaption>
+</figure>
+<style>
+.tm-b{display:grid;grid-template-columns:13em 1fr 4.5em;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.tm-b div{height:16px;background:var(--quote);border-radius:4px;overflow:hidden}
+.tm-b i{display:block;height:100%;transition:width .3s}
+.tm-b b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.tm-sl{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.tm-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.tm-b{grid-template-columns:1fr 4.5em}.tm-b span{grid-column:1/-1}.tm-sl{grid-template-columns:1fr;gap:4px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  function draw(){const w=+$('tm-w').value,h=+$('tm-h').value,s=h*52*.05,f=w*.015,M=Math.max(s,f,10);
+    $('tm-s').style.width=s/M*100+'%';$('tm-f').style.width=f/M*100+'%';$('tm-sv').textContent=s.toFixed(1);$('tm-fv').textContent=f.toFixed(1);$('tm-wv').textContent=w+' portions';$('tm-hv').textContent=h+(h===1?' hour':' hours');
+    $('tm-msg').textContent=h===0?'Spending no time managing it yourself means leaving it unattended: that too is a choice, and its price is that no one is looking after it.':s>f?`Spending ${h} hours a week means ${s.toFixed(1)} portions less grain a year, more than the ${f.toFixed(1)}-portion fee for paying someone: for households without much wealth, paying someone is the better deal.`:`The more wealth, the higher the fee: ${w} portions of wealth cost ${f.toFixed(1)} portions a year, more than the ${s.toFixed(1)} portions your own time would cost. Wealthier households either manage it themselves or look for a cheaper form of delegation.`;}
+  ['tm-w','tm-h'].forEach(k=>$(k).addEventListener('input',draw));
+  $('tm').addEventListener('anim-in',()=>{let v=20;$('tm-w').value=v;draw();const id=setInterval(()=>{v+=40;$('tm-w').value=Math.min(v,1000);draw();if(v>=1000)clearInterval(id);},120);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-2">2. Handing money to someone who knows the trade</h2>
+<p>One villager knows shipping well. He proposes that each household hand him its ship shares to manage together; he will distribute the returns according to each household's share and charge a small fee each year. Researching a ship is costly for a single household, but he needs to research it only once and can apply the result to all his principals' money; the more households delegate to him, the lower the research cost per household. This is the embryo of an investment fund.</p>
+<p>The essence of delegation is handing the right to act to someone else: the manager decides for the principals which ship to buy and when to sell. The manager's aims do not fully coincide with the principals', and the principals pay a price for this, which can be divided into three components. The first is the cost of keeping watch on the manager: checking his books and finding out what he has bought. The second is what the manager spends to reassure the principals: publishing his accounts regularly and staking part of his own wealth alongside theirs. The third is the loss that remains because their interests still diverge after both have been done. Neither monitoring nor bonding is better the more of it there is: if an extra unit of monitoring saves less than a unit of loss, it is not worth it. What the principal wants is the smallest total of the three.</p>
+<aside class="principle"><p class="pr-k">Derived so far: a principle</p><p class="pr-n">The three components of agency costs</p><p class="pr-c"><span><em>Discipline</em>Finance › Corporate finance (agency theory)</span><span><em>Type</em>Theory</span></p><p class="pr-s">Agency costs consist of three components: the principal's monitoring costs, the agent's bonding costs and the residual loss; the principal chooses monitoring and bonding so that the sum of the three is smallest.</p><dl><div><dt>Standing in the field</dt><dd>Framed the relationship between shareholders and managers as an agency relationship and defined agency costs; contract theory, which studies incentives and contracts, earned Hart and Holmström the Nobel Memorial Prize in Economic Sciences in 2016</dd></div><div><dt>Constraint it answers</dt><dd>The agent's interests differ from the principal's, and the agent's actions cannot be fully seen</dd></div><div><dt>Premises</dt><dd>Monitoring and bonding both consume resources; interests cannot be made fully aligned</dd></div><div><dt>Proposed by</dt><dd>Jensen and Meckling, 1976</dd></div><div><dt>Open question</dt><dd>Can the principal design a pay scheme under which the manager chooses of his own accord to act in the principal's interest?</dd></div></dl></aside>
+<p>Earlier, Ross (1973) had posed, as a general economic problem, how a principal should design pay so that an agent acts in the principal's interest.</p>
+<p><strong>Today's counterpart.</strong> A fund pools many investors' money, which a fund manager manages as a whole; returns are distributed by share, and a management fee is charged.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Research once, use it on everyone's money</p><p class="figsub">Researching the fleet costs 30 portions of grain a year. Drag the number of households that hand their ship shares to the same manager to see the research cost per household.</p></div><button class="replay" type="button" data-replay="scl">Replay</button></div>
+    <div class="scl" id="scl" data-anim>
+      <svg viewBox="0 0 640 200" role="img" aria-label="Number of households and research cost per household"><g id="scl-ax"></g><path id="scl-c" class="scl-c"/><circle id="scl-p" r="6" fill="var(--ink)"/></svg>
+      <div class="sl"><label for="scl-n">Households delegating <b id="scl-nv"></b></label><input id="scl-n" type="range" min="0" max="100" step="1" value="0"></div>
+      <p class="scl-msg" id="scl-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the cost of research does not depend on how much money is managed; per household it is 30 ÷ number of households. The horizontal axis uses a logarithmic scale.</figcaption>
+</figure>
+<style>
+.scl svg{width:100%;height:auto;display:block}
+.scl-c{fill:none;stroke:var(--accent);stroke-width:2.5}
+.scl-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.scl svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),X0=46,X1=630,YT=12,YB=170,lx=n=>X0+Math.log(n)/Math.log(500)*(X1-X0),y=v=>YB-v/30*(YB-YT),nOf=v=>Math.max(1,Math.round(Math.pow(500,v/100)));
+  $('scl-ax').innerHTML=[0,10,20,30].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+[1,5,10,50,100,500].map(n=>`<text x="${lx(n)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${n}</text>`).join('')+`<text x="${X1}" y="${YT+10}" text-anchor="end" font-size="11" class="t-muted">Households (log scale)</text>`;
+  let d='';for(let n=1;n<=500;n*=1.05)d+=(n===1?'M':'L')+lx(n).toFixed(1)+','+y(30/n).toFixed(1);$('scl-c').setAttribute('d',d);
+  function draw(){const n=nOf(+$('scl-n').value),c=30/n;$('scl-p').setAttribute('cx',lx(n));$('scl-p').setAttribute('cy',y(c));$('scl-nv').textContent=n;
+    $('scl-msg').textContent=n===1?'A household researching on its own bears the whole 30-portion cost alone.':`With ${n} households delegating to the same manager, each bears only ${c<1?c.toFixed(2):c.toFixed(1)} portions. Research is paid for once and used many times; this is the scale advantage of delegation and of funds.`;}
+  $('scl-n').addEventListener('input',draw);
+  $('scl').addEventListener('anim-in',()=>{let v=0;$('scl-n').value=0;draw();const id=setInterval(()=>{v+=4;$('scl-n').value=Math.min(v,100);draw();if(v>=100)clearInterval(id);},120);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-3">3. Choosing the wrong person: ability is hard to see</h2>
+<p>More than one villager is willing to manage shares for others. Whom should one choose? The most direct way is to look at past results. But a ship's success depends heavily on luck, and a few years of results say little: even if no manager had any skill, luck alone would always put a few of them at the top. Telling reliably from results that a manager is genuinely skilled often takes more years than his whole career.</p>
+<p>Fama and French (2010) used simulations to test the performance of actively managed US funds and found that, after fees, very few funds consistently beat their benchmark in a way that luck could not explain. Other researchers argue that this method lacks statistical power and may underestimate the ability of a small number of funds (Harvey and Liu, 2022).</p>
+<p><strong>Today's counterpart.</strong> The funds at the top of the rankings are often replaced by a different set a few years later.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">A few years cannot separate skill from luck</p><p class="figsub">A hundred managers have no skill at all; whatever they earn above the average each year is pure luck. Drag the number of years observed to see their average excess returns; then drag the size of true skill to see how many years it takes to tell it apart.</p></div><button class="replay" type="button" data-replay="lc">Replay</button></div>
+    <div class="lc" id="lc" data-anim>
+      <svg viewBox="0 0 640 170" role="img" aria-label="Average excess returns of a hundred managers"><g id="lc-ax"></g><g id="lc-d"></g></svg>
+      <div class="lc-sl">
+        <div class="sl"><label for="lc-t">Years observed <b id="lc-tv"></b></label><input id="lc-t" type="range" min="1" max="30" step="1" value="3"></div>
+        <div class="sl"><label for="lc-a">True skill adds per year <b id="lc-av"></b></label><input id="lc-a" type="range" min="0.5" max="4" step="0.5" value="2"></div>
+      </div>
+      <p class="lc-msg" id="lc-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: each manager's yearly excess return fluctuates randomly by about 8 percentage points. Each dot is a manager's average excess return over the observation period; the dark dots are the top ten. To detect, with about 95% confidence, true skill that adds a per year, the number of years needed is roughly (2 × 8 ÷ a)².</figcaption>
+</figure>
+<style>
+.lc svg{width:100%;height:auto;display:block}
+.lc-sl{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.lc-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.lc-sl{grid-template-columns:1fr;gap:4px}.lc svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);let s=1010;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};const g=()=>{let u=0;while(!u)u=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r());};
+  const Z=Array.from({length:100},()=>Array.from({length:30},()=>8*g())),X0=40,X1=630,YM=86,x=v=>X0+(v+12)/24*(X1-X0);
+  $('lc-ax').innerHTML=`<line x1="${X0}" x2="${X1}" y1="${YM+30}" y2="${YM+30}" class="s-faint"/>`+[-12,-8,-4,0,4,8,12].map(v=>`<text x="${x(v)}" y="${YM+46}" text-anchor="middle" font-size="11" class="t-faint">${v>0?'+':''}${v}%</text>`).join('')+`<line x1="${x(0)}" x2="${x(0)}" y1="14" y2="${YM+30}" class="s-faint" stroke-dasharray="3 4"/><text x="${X1}" y="${YM+62}" text-anchor="end" font-size="11" class="t-muted">Average yearly excess over the period</text>`;
+  function draw(){const T=+$('lc-t').value,a=+$('lc-a').value,M=Z.map(z=>z.slice(0,T).reduce((p,q)=>p+q,0)/T),ord=M.map((v,i)=>[v,i]).sort((p,q)=>q[0]-p[0]),top=new Set(ord.slice(0,10).map(o=>o[1]));
+    $('lc-d').innerHTML=M.map((v,i)=>`<circle cx="${x(Math.max(-12,Math.min(12,v))).toFixed(1)}" cy="${(YM+((i*37)%50)-25).toFixed(1)}" r="4" fill="${top.has(i)?'var(--ink)':'var(--accent)'}" fill-opacity="${top.has(i)?.9:.35}"/>`).join('');
+    $('lc-tv').textContent=T+(T===1?' year':' years');$('lc-av').textContent=a+(a===1?' point':' points');const need=Math.pow(2*8/a,2),t10=ord[9][0];
+    $('lc-msg').textContent=`Over ${T} ${T===1?'year':'years'}, the top ten all average at least +${t10.toFixed(1)}% a year in excess returns, yet theirs is pure luck. Reliably detecting true skill that adds ${a} percentage ${a===1?'point':'points'} a year takes about ${Math.round(need)} years${need>40?', longer than a manager\'s career':''}.`;}
+  ['lc-t','lc-a'].forEach(k=>$(k).addEventListener('input',draw));
+  $('lc').addEventListener('anim-in',()=>{let v=1;$('lc-t').value=1;draw();const id=setInterval(()=>{v++;$('lc-t').value=v;draw();if(v>=30)clearInterval(id);},150);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-4">4. Trying or not: invisible effort</h2>
+<p>Once a manager is chosen, there is another question: is he trying? He can go to sea every day to gather news, or sit at home and place orders at random. The principal sees only the result, not the effort, and the result is mixed with luck. If he receives a fixed fee each year, his income is the same whether he tries or not, and he has little reason to try. If his pay is tied to results, he has a reason, but he also bears luck risk that should not be his.</p>
+<p>The dilemma arises because the principal sees too little. If the principal could also see other things, such as whether the manager goes to sea each day, or how other ships fared in the same year, luck and effort could be separated to some extent: if every ship had a poor harvest that year, the manager's poor result is not entirely his fault. Any information that reveals a little more about effort is worth writing into the pay agreement: pay becomes less entangled with luck while the incentive does not weaken. The more the principal can see, the cheaper it is to keep the agent in line.</p>
+<aside class="principle"><p class="pr-k">Derived so far: a principle</p><p class="pr-n">The informativeness principle</p><p class="pr-c"><span><em>Discipline</em>Economics › Contract theory (principal–agent)</span><span><em>Type</em>Theoretical model</span></p><p class="pr-s">Any information that reveals the agent's actions, even partially, improves the contract when written into the pay agreement; the more the principal sees, the cheaper it is to give the agent incentives.</p><dl><div><dt>Standing in the field</dt><dd>Holmström and Hart received the 2016 Nobel Memorial Prize in Economic Sciences "for their contributions to contract theory"; MIT's report on the prize listed the informativeness principle introduced in this paper among his contributions to the principal–agent problem</dd></div><div><dt>Constraint it answers</dt><dd>The principal cannot see the agent's effort, and results are mixed with luck</dd></div><div><dt>Premises</dt><dd>The agent is more averse to bearing risk than the principal; the additional information is related to the agent's actions and is not mere noise</dd></div><div><dt>Proposed by</dt><dd>Holmström, 1979, in a paper titled "Moral hazard and observability"</dd></div><div><dt>Open question</dt><dd>Who provides the information that can be seen, and can it be trusted?</dd></div></dl></aside>
+<p><strong>Today's counterpart.</strong> Fund managers' pay usually includes a part tied to performance; funds must also disclose their holdings and trades regularly, letting investors see more.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">How much pay to tie to results</p><p class="figsub">The principal cannot see whether the manager is trying, only results mixed with luck. Drag the share of the manager's pay tied to results to see how hard he tries, what the principal gets, and the luck risk the manager is forced to bear.</p></div><button class="replay" type="button" data-replay="ef">Replay</button></div>
+    <div class="ef" id="ef" data-anim>
+      <div class="ef-b"><span>How hard the manager tries</span><div><i id="ef-e" style="background:var(--accent)"></i></div><b id="ef-ev"></b></div>
+      <div class="ef-b"><span>Luck risk the manager bears</span><div><i id="ef-r" style="background:var(--warm)"></i></div><b id="ef-rv"></b></div>
+      <div class="ef-b"><span>Principal's take after pay</span><div><i id="ef-n" style="background:var(--blue)"></i></div><b id="ef-nv"></b></div>
+      <div class="sl"><label for="ef-k">Share of pay tied to results <b id="ef-kv"></b></label><input id="ef-k" type="range" min="0" max="100" step="5" value="0"></div>
+      <div class="cs-sw"><label><input type="checkbox" id="ef-o"> The principal can also see the manager's holdings and trading records</label></div>
+      <p class="ef-msg" id="ef-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: how hard the manager tries is proportional to the share tied to results; the harder he tries, the higher the fleet's return, but he must be compensated for bearing luck risk, and the compensation rises with the square of the share. When holdings and trading records can be seen, luck plays a smaller part in the result, and the same share brings less risk (Holmström, 1979).</figcaption>
+</figure>
+<style>
+.ef-b{display:grid;grid-template-columns:11em 1fr 4em;gap:10px;align-items:center;font-size:13px;margin:7px 0}
+.ef-b div{height:14px;background:var(--quote);border-radius:4px;overflow:hidden}
+.ef-b i{display:block;height:100%;transition:width .3s}
+.ef-b b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.ef-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.ef-b{grid-template-columns:1fr 4em}.ef-b span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  function at(k,o){const e=k,risk=k*k*(o?.4:1),net=4*e-1.5*e*e-2.2*risk;return [e,risk,net];}
+  function draw(){const k=+$('ef-k').value/100,o=$('ef-o').checked,[e,risk,net]=at(k,o);
+    let best=0,bv=-1e9;for(let q=0;q<=1.0001;q+=.05){const v=at(q,o)[2];if(v>bv){bv=v;best=q;}}
+    $('ef-e').style.width=e*100+'%';$('ef-r').style.width=risk*100+'%';$('ef-n').style.width=Math.max(0,net)/2.5*100+'%';
+    $('ef-ev').textContent=Math.round(e*100)+'%';$('ef-rv').textContent=risk.toFixed(2);$('ef-nv').textContent=net.toFixed(2);$('ef-kv').textContent=Math.round(k*100)+'%';
+    $('ef-msg').textContent=k===0?'With fixed pay, the manager earns the same whether he tries or not: he has no reason to try.':`${Math.round(k*100)}% tied to results: the manager tries harder, but must also be compensated for the luck risk he bears. The best share for the principal is about ${Math.round(best*100)}%. ${o?'With holdings and trading records visible, luck plays a smaller part, the best share rises, and the principal gets more too.':'Tick the option below to see what happens when the principal can see more.'}`;}
+  ['ef-k','ef-o'].forEach(k=>$(k).addEventListener('input',draw));
+  $('ef').addEventListener('anim-in',()=>{let v=0;$('ef-k').value=0;draw();const id=setInterval(()=>{v+=5;$('ef-k').value=v;draw();if(v>=100)clearInterval(id);},150);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-5">5. Profit-sharing encourages risk-taking</h2>
+<p>Suppose the agreement gives the manager 20% of the gains while the principals bear the losses themselves. The manager is then in the position of holding an option that can only win: the more volatile the outcome, the more he expects to receive, and the more risk the principals bear. The manager therefore has reason to bet on riskier ships.</p>
+<p>The remedies follow from this: a performance fee is charged only once value exceeds its previous highest level, and the manager must invest some of his own money, sharing the principals' fortunes.</p>
+<p><strong>Today's counterpart.</strong> The "high-water mark" common in private funds, and requirements that fund managers invest in the products they manage, are both responses to this problem.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">A share of gains without losses encourages risk</p><p class="figsub">The manager takes 20% of each year's gains, while the principals bear the losses. Drag the amount of risk the manager chooses to see the expected fee he receives and the principals' expected take after the fee.</p></div><button class="replay" type="button" data-replay="op">Replay</button></div>
+    <div class="op" id="op" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="Risk and each side's expected take"><g id="op-ax"></g><path id="op-m" class="op-m"/><path id="op-i" class="op-i"/><line id="op-v" class="s-faint"/></svg>
+      <div class="legend"><span><i style="background:var(--warm)"></i>Manager's expected fee</span><span><i style="background:var(--accent)"></i>Principals' expected take after the fee</span></div>
+      <div class="sl"><label for="op-s">Risk (volatility of yearly returns) <b id="op-sv"></b></label><input id="op-s" type="range" min="0" max="50" step="1" value="10"></div>
+      <div class="cs-sw"><label><input type="checkbox" id="op-h"> High-water mark: no fee until losses are recovered</label></div>
+      <p class="op-msg" id="op-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: yearly returns follow a normal distribution with a mean of 5% and the chosen volatility; fee = 20% × the positive part of the return. The high-water mark is simplified to a one-year version in which the previous year's loss is deducted from the fee base; the conclusion points the same way.</figcaption>
+</figure>
+<style>
+.op svg{width:100%;height:auto;display:block}
+.op-m{fill:none;stroke:var(--warm);stroke-width:2.5}
+.op-i{fill:none;stroke:var(--accent);stroke-width:2.5}
+.op-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.op svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),X0=46,X1=630,YT=12,YB=178,x=s=>X0+s/.5*(X1-X0),y=v=>YB-(v+.01)/.07*(YB-YT);
+  const phi=z=>Math.exp(-z*z/2)/Math.sqrt(2*Math.PI),Phi=z=>{const t=1/(1+.2316419*Math.abs(z)),d=.3989423*Math.exp(-z*z/2),p=d*t*(.3193815+t*(-.3565638+t*(1.781478+t*(-1.821256+t*1.330274))));return z>0?1-p:p;};
+  const Epos=(m,s)=>s<1e-6?Math.max(m,0):m*Phi(m/s)+s*phi(m/s);
+  function fee(s,h){const m=.05;if(!h)return .2*Epos(m,s);return .2*Math.max(0,Epos(m,s)-.5*Math.max(0,s*phi(m/s)-m*(1-Phi(m/s))));}
+  $('op-ax').innerHTML=[0,.02,.04,.06].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${Math.round(v*100)}%</text>`).join('')+[0,.1,.2,.3,.4,.5].map(s=>`<text x="${x(s)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${Math.round(s*100)}%</text>`).join('');
+  function draw(){const h=$('op-h').checked;let pm='',pi='';for(let s=0;s<=.5;s+=.005){const f=fee(s,h);pm+=(s?'L':'M')+x(s).toFixed(1)+','+y(f).toFixed(1);pi+=(s?'L':'M')+x(s).toFixed(1)+','+y(.05-f).toFixed(1);}
+    $('op-m').setAttribute('d',pm);$('op-i').setAttribute('d',pi);const s=+$('op-s').value/100,f=fee(s,h);
+    $('op-v').setAttribute('x1',x(s));$('op-v').setAttribute('x2',x(s));$('op-v').setAttribute('y1',YT);$('op-v').setAttribute('y2',YB);$('op-sv').textContent=Math.round(s*100)+'%';
+    $('op-msg').textContent=`At ${Math.round(s*100)}% volatility, the manager expects ${(f*100).toFixed(2)}% and the principals expect ${((.05-f)*100).toFixed(2)}%. The average return is unchanged, yet the higher the volatility, the more the manager takes and the less the principals get: the manager has reason to bet on riskier ships.${h?' The high-water mark makes the manager recover losses first, so the payoff from taking risk shrinks.':''}`;}
+  ['op-s','op-h'].forEach(k=>$(k).addEventListener('input',draw));
+  $('op').addEventListener('anim-in',()=>{let v=0;$('op-s').value=0;draw();const id=setInterval(()=>{v+=2;$('op-s').value=v;draw();if(v>=50)clearInterval(id);},100);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-6">6. Who gets the benefit of skill</h2>
+<p>Suppose there really is a manager in the village more skilled than the others. Word spreads, and more and more people hand him their ship shares. But only a few ships are worth betting on, and the more money he manages, the harder it is for him to find equally good opportunities; his margin above the average shrinks as he grows. As long as handing shares to him is still a better deal than handing them to others, people keep moving their shares over, until, after fees, giving them to him earns no more than giving them to someone else. At that point his skill has not disappeared; its benefit has simply turned into the size of the money he manages and the fees he collects. Even if most managers are genuinely skilled, what principals get after fees is a return comparable to passive holding. People who move their money to chase performance are not foolish; it is precisely their inflows that keep performance from persisting.</p>
+<aside class="principle"><p class="pr-k">Derived so far: a principle</p><p class="pr-n">Money chases performance; performance does not persist</p><p class="pr-c"><span><em>Discipline</em>Finance › Investment management (mutual funds)</span><span><em>Type</em>Theoretical model</span></p><p class="pr-s">When active management has decreasing returns to scale and principals compete to hand their money to good managers, money flows to the managers who perform well until their excess return after fees disappears; the benefit of skill goes to the manager through size and fees, so past performance does not predict future performance.</p><dl><div><dt>Standing in the field</dt><dd>The paper is titled "Mutual fund flows and performance in rational markets"; it won the fifth Stephen A. Ross Prize in Financial Economics, whose committee said it redefined the questions that mutual fund research asks</dd></div><div><dt>Constraint it answers</dt><dd>Principals cannot tell a manager's skill and can only infer it from performance</dd></div><div><dt>Premises</dt><dd>Active management has decreasing returns to scale; principals rationally update their judgement of a manager's skill from past performance; the supply of capital is competitive</dd></div><div><dt>Proposed by</dt><dd>Berk and Green, 2004</dd></div><div><dt>Open question</dt><dd>If principals' judgements of managers' skill are systematically optimistic, where will the money flow?</dd></div></dl></aside>
+<p>The model does not assume that managers lack skill. By the authors' calibration, most managers are skilled enough at least to earn back their own fees.</p>
+<p><strong>Today's counterpart.</strong> Funds with outstanding performance often grow rapidly in size, and their later performance often reverts to the ordinary.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Who gets the benefit of skill</p><p class="figsub">The more money a manager runs, the harder it is to find equally good opportunities, and his excess return falls as he grows. Drag his level of skill to see how large he grows before money stops flowing in, and what the principals and the manager each get.</p></div><button class="replay" type="button" data-replay="bg">Replay</button></div>
+    <div class="bg" id="bg" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="Size and excess return after fees"><g id="bg-ax"></g><path id="bg-c" class="bg-c"/><circle id="bg-p" r="6" fill="var(--ink)"/></svg>
+      <div class="sl"><label for="bg-a">Manager's skill (extra return on the first money) <b id="bg-av"></b></label><input id="bg-a" type="range" min="1" max="6" step="0.5" value="4"></div>
+      <div class="bg-out"><div><span>Size reached as money flows in</span><b id="bg-q"></b></div><div><span>Principals' excess return after fees</span><b id="bg-i"></b></div><div><span>Manager's fees per year</span><b id="bg-f"></b></div></div>
+      <p class="bg-msg" id="bg-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: at size q, the excess return after a 1% fee = skill − 0.03 × q − 1%; money keeps flowing in until the principals' excess return after fees falls to zero (a simplification of Berk and Green, 2004). Size is measured in units of 100 portions.</figcaption>
+</figure>
+<style>
+.bg svg{width:100%;height:auto;display:block}
+.bg-c{fill:none;stroke:var(--accent);stroke-width:2.5}
+.bg-out{display:flex;gap:24px;flex-wrap:wrap;margin-top:8px}
+.bg-out div{display:flex;flex-direction:column} .bg-out span{font-size:12px;color:var(--faint)} .bg-out b{font-size:20px;font-variant-numeric:tabular-nums}
+.bg-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.bg svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),X0=46,X1=630,YT=12,YB=178,x=q=>X0+q/200*(X1-X0),y=v=>YB-(v+1)/6*(YB-YT);
+  $('bg-ax').innerHTML=[-1,0,1,2,3,4,5].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="${v===0?'s-faint':'s-line'}"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v>0?'+':''}${v}%</text>`).join('')+[0,50,100,150,200].map(q=>`<text x="${x(q)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${q}</text>`).join('')+`<text x="${X1}" y="${YB-6}" text-anchor="end" font-size="11" class="t-muted">Money he manages (hundreds of portions)</text>`;
+  function draw(){const a=+$('bg-a').value,net=q=>a-.03*q-1,q=Math.max(0,(a-1)/.03);
+    $('bg-c').setAttribute('d',`M${x(0)},${y(net(0))}L${x(200)},${y(net(200))}`);$('bg-p').setAttribute('cx',x(Math.min(q,200)));$('bg-p').setAttribute('cy',y(0));
+    $('bg-av').textContent=a+'%';$('bg-q').textContent=(Math.round(q)*100).toLocaleString('en-US')+' portions';$('bg-i').textContent='0%';$('bg-f').textContent=Math.round(q*100*.01)+' portions';
+    $('bg-msg').textContent=`For a manager with ${a}% skill, money flows in until he manages about ${(Math.round(q)*100).toLocaleString('en-US')} portions. At that point the principals' excess return after fees is exactly zero, and the manager collects about ${Math.round(q)} portions in fees a year. The greater the skill, the larger the size and the higher the manager's income, while the principals still get only the average: the benefit of skill goes to the manager.`;}
+  $('bg-a').addEventListener('input',draw);
+  $('bg').addEventListener('anim-in',()=>{let v=1;$('bg-a').value=1;draw();const id=setInterval(()=>{v+=.5;$('bg-a').value=v;draw();if(v>=6)clearInterval(id);},350);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-7">7. The cheapest delegation: hold everything in proportion</h2>
+<p>Since picking a manager is hard, and picking itself rarely beats the average, there is a simpler form of delegation: ask someone simply to hold all ship shares in proportion to each ship's share, with no research, no picking and no market timing, for a very low fee. The principals then get the average return of the whole village fleet, and save the cost of research and the risk of picking. The difference in fees looks small, but it compounds year after year: a gap of a little over one percentage point a year adds up to a large sum over several decades.</p>
+<p>In 1976, the first index fund for ordinary investors was launched. Many people saw it as a joke at the time; it later became the default choice of millions of people.</p>
+<p><strong>Today's counterpart.</strong> Index funds and other products that hold all stocks in proportion to market share usually charge far lower fees than actively managed funds.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Fees compound year after year</p><p class="figsub">Two identical sums of 100 portions both earn the fleet's average return of 6% a year; only the fees differ. Drag the two fees and the number of years held to see how far apart they end up.</p></div><button class="replay" type="button" data-replay="ps">Replay</button></div>
+    <div class="ps" id="ps" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="Growth of wealth under two fee levels"><g id="ps-ax"></g><path id="ps-a" class="ps-a"/><path id="ps-b" class="ps-b"/></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Hold everything in proportion</span><span><i style="background:var(--warm)"></i>Active picking</span></div>
+      <div class="ps-sl">
+        <div class="sl"><label for="ps-f1">Fee for holding in proportion <b id="ps-f1v"></b></label><input id="ps-f1" type="range" min="0" max="1" step="0.05" value="0.1"></div>
+        <div class="sl"><label for="ps-f2">Fee for active picking <b id="ps-f2v"></b></label><input id="ps-f2" type="range" min="0.5" max="3" step="0.1" value="1.5"></div>
+        <div class="sl"><label for="ps-t">Years held <b id="ps-tv"></b></label><input id="ps-t" type="range" min="5" max="40" step="1" value="30"></div>
+      </div>
+      <p class="ps-msg" id="ps-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: assumes that active picking earns the average return before fees; Sharpe's (1991) arithmetic shows this holds for active investors as a group.</figcaption>
+</figure>
+<style>
+.ps svg{width:100%;height:auto;display:block}
+.ps-a{fill:none;stroke:var(--accent);stroke-width:2.5}
+.ps-b{fill:none;stroke:var(--warm);stroke-width:2.5}
+.ps-sl{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.ps-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.ps-sl{grid-template-columns:1fr;gap:4px}.ps svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),X0=46,X1=630,YT=12,YB=178;
+  function draw(){const f1=+$('ps-f1').value/100,f2=+$('ps-f2').value/100,T=+$('ps-t').value,A=t=>100*Math.pow(1.06-f1,t),B=t=>100*Math.pow(1.06-f2,t),M=A(T)*1.08,x=t=>X0+t/T*(X1-X0),y=v=>YB-v/M*(YB-YT);
+    $('ps-ax').innerHTML=[0,.25,.5,.75,1].map(k=>{const v=Math.round(M*k/50)*50;return `<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`;}).join('')+[0,.25,.5,.75,1].map(k=>`<text x="${x(T*k)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">Year ${Math.round(T*k)}</text>`).join('');
+    let pa='',pb='';for(let t=0;t<=T;t+=T/100){pa+=(t?'L':'M')+x(t).toFixed(1)+','+y(A(t)).toFixed(1);pb+=(t?'L':'M')+x(t).toFixed(1)+','+y(B(t)).toFixed(1);}$('ps-a').setAttribute('d',pa);$('ps-b').setAttribute('d',pb);
+    $('ps-f1v').textContent=(f1*100).toFixed(2)+'%';$('ps-f2v').textContent=(f2*100).toFixed(1)+'%';$('ps-tv').textContent=T+' years';
+    const a=A(T),b=B(T);$('ps-msg').textContent=`After ${T} years, 100 portions held in proportion grow to ${Math.round(a)} portions, while actively picked they grow to ${Math.round(b)}, ${Math.round((1-b/a)*100)}% less. A gap of only ${((f2-f1)*100).toFixed(1)} percentage points a year compounds into a difference this large.`;}
+  ['ps-f1','ps-f2','ps-t'].forEach(k=>$(k).addEventListener('input',draw));
+  $('ps').addEventListener('anim-in',()=>{let v=5;$('ps-t').value=5;draw();const id=setInterval(()=>{v+=1;$('ps-t').value=v;draw();if(v>=40)clearInterval(id);},80);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-8">8. Whom to hand it to: Civilization Simulator, version 10</h2>
+<p>The simulator unlocks the rule "Delegation". Forty households can manage their ship shares themselves, hand them to a manager who picks actively, or hand them to a manager who simply holds everything in proportion. You can adjust the share of managers who are genuinely skilled, the fee for active management, and whether principals switch to whichever manager did best last year, and see each household's wealth after twenty years and the time spent each year.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Civilization Simulator · Chapter 10: whom to hand it to</p><p class="figsub">Forty households each have 100 portions of wealth invested in the fleet. The three lines show the median household wealth when households manage it themselves, hand it to managers who pick actively, or hand it to a manager who holds everything in proportion; select one to see the details.</p></div><button class="replay" type="button" data-replay="cs10">Replay</button></div>
+    <div class="cs-rules"><span class="on">Bank</span><span class="on">Shares</span><span class="on">Market</span><span class="on">Information in prices</span><span class="on">Delegation</span><span class="lock">Regulation &amp; custody · Ch. 11</span></div>
+    <div class="seg-btns" role="group" aria-label="How the shares are managed">
+      <button type="button" data-cs10="self" aria-pressed="false">Do it yourself</button>
+      <button type="button" data-cs10="active" aria-pressed="true">Active manager</button>
+      <button type="button" data-cs10="passive" aria-pressed="false">Hold everything in proportion</button>
+    </div>
+    <div class="cs10" id="cs10" data-anim>
+      <svg viewBox="0 0 660 220" role="img" aria-label="Median wealth under three ways of managing"><g id="cs10-ax"></g><path id="cs10-band" class="cs10-band"/><g id="cs10-l"></g></svg>
+      <div class="legend"><span><i style="background:var(--faint)"></i>Do it yourself</span><span><i style="background:var(--warm)"></i>Active managers</span><span><i style="background:var(--accent)"></i>Hold everything in proportion</span><span><i style="background:var(--quote);border:1px solid var(--line)"></i>10th to 90th percentile of households for the selected option</span></div>
+      <div class="cs10-ctl">
+        <div class="sl"><label for="cs10-s">Managers with real skill <b id="cs10-sv"></b></label><input id="cs10-s" type="range" min="0" max="60" step="10" value="20"></div>
+        <div class="sl"><label for="cs10-f">Fee for active picking <b id="cs10-fv"></b></label><input id="cs10-f" type="range" min="0.5" max="2.5" step="0.1" value="1.5"></div>
+      </div>
+      <div class="cs-sw"><label><input type="checkbox" id="cs10-c"> Each year principals switch to last year's best-performing manager</label></div>
+      <button type="button" class="replay" id="cs10-re">Another run of years</button>
+      <div class="cs10-out" id="cs10-out"></div>
+      <p class="cs10-msg" id="cs10-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model: the fleet's average return is 6% a year with 15% volatility. Do it yourself: each household's result has its own additional fluctuation, is 1% lower each year because of trading and errors of judgement, and takes 3 hours a week. Active managers: ten managers; those with real skill earn 2% more a year, the rest do not, and each has its own fluctuation; the chosen fee is deducted. Hold everything in proportion: earns the fleet's average return, with a fee of 0.1%. When switching, principals move each year to last year's best-performing manager and pay an extra 0.5% for switching.</figcaption>
+</figure>
+<style>
+.cs10 svg{width:100%;height:auto;display:block}
+.cs10-band{fill:var(--quote);stroke:none}
+.cs10-ctl{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px}
+.cs10-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cs10-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs10-out span{display:block;font-size:11.5px;color:var(--faint)} .cs10-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.cs10-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs10-ctl{grid-template-columns:1fr;gap:4px}.cs10-out{grid-template-columns:1fr}.cs10 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs10'+id),N=40,Y=20,M=10;let mode='active',seed=1010;
+  const X0=44,X1=650,YT=10,YB=186,x=t=>X0+t/Y*(X1-X0);
+  function sim(sk,fee,chase){let s=seed;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};const g=()=>{let u=0;while(!u)u=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r());};
+    const nS=Math.round(sk*M),alpha=Array.from({length:M},(_,j)=>j<nS?.02:0);
+    const W={self:Array(N).fill(100),active:Array(N).fill(100),passive:Array(N).fill(100)},H={self:[],active:[],passive:[]},pick=Array.from({length:N},(_,i)=>i%M);
+    let last=Array(M).fill(0);
+    const snap=()=>{for(const k in W){H[k].push(W[k].slice().sort((a,b)=>a-b));}};snap();
+    for(let t=0;t<Y;t++){const m=.06+.15*g(),mr=alpha.map(a=>m+a+.06*g());
+      for(let i=0;i<N;i++){W.self[i]*=Math.max(.05,1+m-.01+.08*g());W.passive[i]*=1+m-.001;
+        let j=pick[i],cost=fee;if(chase){j=last.indexOf(Math.max(...last));if(t>0)cost+=.005;}W.active[i]*=Math.max(.05,1+mr[j]-cost);}
+      last=mr.slice();snap();}
+    return H;}
+  function draw(){const sk=+$('-s').value/100,fee=+$('-f').value/100,chase=$('-c').checked,H=sim(sk,fee,chase);
+    $('-sv').textContent=Math.round(sk*100)+'%';$('-fv').textContent=(fee*100).toFixed(1)+'%';
+    const q=(a,p)=>a[Math.floor(p*(a.length-1))],all=[].concat(...Object.values(H).map(h=>h.map(a=>q(a,.9)))),mx=Math.max(400,...all),y=v=>YB-Math.min(v,mx)/mx*(YB-YT);
+    $('-ax').innerHTML=[0,.25,.5,.75,1].map(k=>{const v=Math.round(mx*k/100)*100;return `<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`;}).join('')+[0,5,10,15,20].map(t=>`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">Year ${t}</text>`).join('');
+    const h=H[mode];$('-band').setAttribute('d','M'+h.map((a,t)=>x(t)+','+y(q(a,.9))).join('L')+'L'+h.map((a,t)=>x(t)+','+y(q(a,.1))).reverse().join('L')+'Z');
+    const C={self:'var(--faint)',active:'var(--warm)',passive:'var(--accent)'};
+    $('-l').innerHTML=Object.keys(H).map(k=>`<path d="${H[k].map((a,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(q(a,.5)).toFixed(1)).join('')}" fill="none" stroke="${C[k]}" stroke-width="${k===mode?3:1.4}" opacity="${k===mode?1:.55}"/>`).join('');
+    const med=k=>q(H[k][Y],.5),hrs={self:3*52,active:0,passive:0};
+    $('-out').innerHTML=[['Median wealth in year 20',Math.round(med(mode))+' portions'],['10th to 90th percentile of households',Math.round(q(H[mode][Y],.1))+'–'+Math.round(q(H[mode][Y],.9))+' portions'],['Time spent per year',hrs[mode]?hrs[mode]+' hours':'Almost none']].map(([a,b])=>`<div><span>${a}</span><b>${b}</b></div>`).join('');
+    const p=med('passive'),a=med('active');
+    $('-msg').textContent=mode==='self'?`Managing it yourself takes 156 hours a year; errors of judgement and trading leave the median at ${Math.round(med('self'))} portions, and the gaps between households are the widest.`:mode==='passive'?`Holding everything in proportion, with no research, no picking and very low fees, gives a median of ${Math.round(p)} portions, and households end up almost the same.`:
+      `Handing it to active managers gives a median of ${Math.round(a)} portions, ${a>=p?'slightly above':'below'} the ${Math.round(p)} portions from holding in proportion. ${sk===0?'No manager has real skill, so the fee is a pure loss. ':''}${chase?'Switching to last year\'s champion often means switching to a manager who has just been lucky, and paying extra for the switch.':'Try ticking the switching option, or raising the fee.'}`;}
+  document.querySelectorAll('[data-cs10]').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.cs10;document.querySelectorAll('[data-cs10]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  ['-s','-f','-c'].forEach(k=>$(k).addEventListener('input',draw));$('-re').addEventListener('click',()=>{seed=(seed*48271)%2147483647;draw();});
+  $('').addEventListener('anim-in',()=>{['self','active','passive'].forEach((k,i)=>setTimeout(()=>{mode=k;document.querySelectorAll('[data-cs10]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.cs10===k)));draw();},300+i*2400));});
+  draw();
+})();
+</script>
+
+<h2 id="sec-9">9. What this step leaves open</h2>
+<p>Delegation lets ordinary people take part in complex investment too, but new questions follow:</p>
+<ol><li><strong>Managers may misappropriate principals' assets.</strong> He holds everyone's ship shares; how can the principals confirm they are still there?</li><li><strong>Sellers know more.</strong> A manager knows far more about a product's risks than the principal. He may talk only about returns and not about risks, or recommend unsuitable products to people they do not suit.</li><li><strong>Principals make their own mistakes.</strong> Switching managers to chase last year's performance and redeeming during falls often leave principals with lower returns than the funds themselves earned.</li><li><strong>Delegation itself is expensive.</strong> Research, monitoring and fees all cost money; if these costs fell sharply, how would the boundary of delegation shift?</li></ol>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">What this step leaves open</p><p class="figsub">Four questions still unresolved once delegation exists. Select a question to see the assumption it rests on.</p></div><button class="replay" type="button" data-replay="nx10">Replay</button></div>
+    <div class="nx" id="nx10" data-anim>
+      <div class="nx-src"><b>Whom to hand it to</b><span>Principals and agents</span></div>
+      <div class="nx-list" id="nx10-l"></div>
+    </div>
+    <p class="nx-msg" id="nx10-msg" aria-live="polite"></p>
+  </div>
+</figure>
+<style>
+.nx{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:center}
+.nx-src{background:var(--ink);color:var(--bg);border-radius:10px;padding:14px 10px;text-align:center}
+.nx-src b{display:block;font-size:16px} .nx-src span{font-size:12px;opacity:.75}
+.nx-list{display:grid;gap:6px}
+.nx-i{font:inherit;text-align:left;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:9px 12px;color:var(--ink);opacity:0;transform:translateX(-8px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.3s)}
+.nx.in .nx-i{opacity:1;transform:none}
+.nx-i span{font-size:13.5px} .nx-i em{font-style:normal;font-size:11.5px;color:var(--faint);white-space:nowrap}
+.nx-i.sel{border-color:var(--accent)}
+.nx-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.nx{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const Q=[['Managers may misappropriate principals\' assets','Chapter 11: Regulation & custody','Assumption: the ship shares stay in the manager\'s hands, untouched. How can principals confirm they are still there?'],
+    ['Sellers know more','Chapter 11: Regulation & custody','Assumption: the manager explains the risks truthfully. He may talk only about returns, or recommend unsuitable products to people they do not suit.'],
+    ['Principals make their own mistakes','Chapter 12: Defaults','Assumption: principals will stick to holding for the long term. Switching managers to chase performance and redeeming in falls often leave them with lower returns than the fund itself.'],
+    ['Delegation itself is expensive','Part Two','Assumption: the costs of research, monitoring and fees stay fixed. If these costs fell sharply, how would the boundary of delegation shift?']];
+  const l=document.getElementById('nx10-l'),msg=document.getElementById('nx10-msg');
+  l.innerHTML=Q.map((q,i)=>`<button type="button" class="nx-i" style="--i:${i}" data-i="${i}"><span>${q[0]}</span><em>→ ${q[1]}</em></button>`).join('');
+  const bs=[...l.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));msg.textContent=Q[i][2];}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('nx10').addEventListener('anim-in',()=>{[0,1,2,3].forEach((i,k)=>setTimeout(()=>set(i),1600+k*1800));});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-10">10. Implications for products</h2>
+<p>Funds, investment advisers and all kinds of products that manage money on clients' behalf are built on the mechanisms in this chapter. Three implications follow. First, the value of delegation comes from the time saved and the research cost shared, and its price is the agency cost; a delegation product should make clear what principals pay and what they get. Second, past performance is mixed with luck, and recommending managers by short-term rankings is unreliable; the more of the process the principal can see, the more credible the delegation. Third, the cheapest delegation is often also the hardest to beat; the higher a delegation product's fees, the more it needs to explain what the extra payment buys.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: delegation</p><p class="figsub">Four conclusions, each corresponding to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="g10summary">Replay</button></div>
+    <div class="g10summary" id="g10summary" data-anim><div class="g10summary-c" style="--i:0"><em>Value of delegation</em><b>Saves time, shares research</b><p>Research once and use it on every principal's money; the price is agency costs.</p></div><div class="g10summary-c" style="--i:1"><em>Ability is hard to see</em><b>A few years of results are mostly luck</b><p>Reliably telling true skill apart often takes more years than a career.</p></div><div class="g10summary-c warn" style="--i:2"><em>Incentives</em><b>Results-linked pay and a visible process</b><p>Linking pay makes the manager try, and also makes him bear luck; the more can be seen, the cheaper the constraint; a share of gains without losses encourages risk.</p></div><div class="g10summary-c warn" style="--i:3"><em>The cheapest delegation</em><b>Hold everything in proportion</b><p>The benefit of skill mostly goes to the manager; fees compound year after year into a large sum over decades.</p></div></div>
+  </div>
+</figure>
+<style>
+.g10summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g10summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g10summary-c.warn{border-left-color:var(--warm)}
+.g10summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g10summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g10summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g10summary.in .g10summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g10summary{grid-template-columns:1fr}}
+</style>
+
+<h2 id="sec-11">References</h2>
+<ul class="refs"><li>Berk, J. B., &amp; Green, R. C. (2004). Mutual fund flows and performance in rational markets. <i>Journal of Political Economy</i>, 112(6), 1269–1295.</li><li>Fama, E. F., &amp; French, K. R. (2010). Luck versus skill in the cross-section of mutual fund returns. <i>Journal of Finance</i>, 65(5), 1915–1947.</li><li>Harvey, C. R., &amp; Liu, Y. (2022). Luck versus skill in the cross section of mutual fund returns: Reexamining the evidence. <i>Journal of Finance</i>, 77(3), 1921–1966.</li><li>Holmström, B. (1979). Moral hazard and observability. <i>Bell Journal of Economics</i>, 10(1), 74–91.</li><li>Jensen, M. C., &amp; Meckling, W. H. (1976). Theory of the firm: Managerial behavior, agency costs and ownership structure. <i>Journal of Financial Economics</i>, 3(4), 305–360.</li><li>Nobel Prize Outreach. <i>The Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel 2016</i>. NobelPrize.org.</li><li>Ross, S. A. (1973). The economic theory of agency: The principal's problem. <i>American Economic Review</i>, 63(2), 134–139.</li><li>Smith, A. (1776). <i>An Inquiry into the Nature and Causes of the Wealth of Nations</i>. London: W. Strahan and T. Cadell.</li><li>Vanguard (2026). 50 years, 50 facts: Indexing since 1976. https://corporate.vanguard.com/content/corporatesite/us/en/corp/articles/50-years-50-facts-indexing-since-1976.html</li></ul>
+<footer class="nav"><a href="g-09.html">← Chapter 9: Prices carry everyone's information</a><a href="g-11.html">Chapter 11: Trustees may not do their duty →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

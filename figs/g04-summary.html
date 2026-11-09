@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：货币</p><p class="figsub">四条结论，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="g04summary">重播</button></div>
+    <div class="g04summary" id="g04summary" data-anim><div class="g04summary-c" style="--i:0"><em>交换的媒介</em><b>交换只需对上一半</b><p>一种人人都接受的东西，让交换不再需要双重巧合。</p></div><div class="g04summary-c" style="--i:1"><em>记账单位</em><b>一把共同的尺子</b><p>十种物品要记四十五个比例，有了货币只需十个价格。</p></div><div class="g04summary-c warn" style="--i:2"><em>记录</em><b>货币是一种简便的记录</b><p>它记下谁为别人付出过；记录越可靠，越多交换可以靠记录完成。</p></div><div class="g04summary-c warn" style="--i:3"><em>信念与纪律</em><b>价值靠信念与发行的纪律</b><p>人们不再相信下一个人会接受，或者发行失去纪律，货币就会贬值。</p></div></div>
+  </div>
+</figure>
+<style>
+.g04summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g04summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g04summary-c.warn{border-left-color:var(--warm)}
+.g04summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g04summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g04summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g04summary.in .g04summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g04summary{grid-template-columns:1fr}}
+</style>

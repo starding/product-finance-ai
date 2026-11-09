@@ -1,0 +1,50 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">计划写的承受力与下跌时的实际承受力</p><p class="figsub">一个组合先下跌约一半，此后用数年恢复并创出新高。拖动“实际能承受的跌幅”：跌幅一旦超过它，投资者就卖出并持有现金，看最终结果与持有到底相差多少。</p></div><button class="replay" type="button" data-replay="dd">重播</button></div>
+    <div class="dd" id="dd" data-anim>
+      <svg viewBox="0 0 640 230" role="img" aria-label="下跌与恢复路径"><g id="dd-ax"></g><path id="dd-p" class="dd-l"/><path id="dd-c" class="dd-c"/><line id="dd-th" class="dd-th"/><text id="dd-tt" font-size="11" class="t-warm"></text><circle id="dd-s" r="6" fill="var(--warm)"/></svg>
+      <div class="sl"><label for="dd-r">实际能承受的跌幅 <b id="dd-rv"></b></label><input id="dd-r" type="range" min="10" max="60" step="5" value="25"></div>
+      <div class="dd-out"><div><span>持有到底</span><b id="dd-h"></b></div><div><span>按实际承受力</span><b id="dd-a"></b></div></div>
+      <p class="dd-msg" id="dd-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意路径，形态接近一次严重的熊市及其恢复，不对应任何具体指数；简化为卖出后不再买回。危机中个人投资者的感受与交易变化见 Hoffmann、Post 与 Pennings（2013）。</figcaption>
+</figure>
+<style>
+.dd svg{width:100%;height:auto;display:block}
+.dd-l{fill:none;stroke:var(--accent);stroke-width:2.5;stroke-dasharray:1500;stroke-dashoffset:1500;transition:stroke-dashoffset 2s ease}
+.dd.in .dd-l{stroke-dashoffset:0}
+.dd-c{fill:none;stroke:var(--warm);stroke-width:2.5;stroke-dasharray:5 4}
+.dd-th{stroke:var(--warm);stroke-dasharray:3 3;opacity:.6}
+.dd-out{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.dd-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.dd-out span{display:block;font-size:12px;color:var(--faint)} .dd-out b{font-size:19px;font-variant-numeric:tabular-nums}
+.dd-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.dd svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const K=[[0,100],[6,106],[12,88],[17,70],[22,58],[26,52],[30,60],[36,72],[44,82],[52,95],[60,108],[72,128]];
+  const v=t=>{for(let i=1;i<K.length;i++)if(t<=K[i][0]){const [a,va]=K[i-1],[b,vb]=K[i];return va+(vb-va)*(t-a)/(b-a);}return K[K.length-1][1];};
+  const X0=50,X1=620,YT=12,YB=200,x=t=>X0+t/72*(X1-X0),y=p=>YB-(p-40)/(140-40)*(YB-YT);
+  const $=id=>document.getElementById(id);
+  let a=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`;
+  [40,70,100,130].forEach(p=>a+=`<text x="${X0-6}" y="${y(p)+4}" text-anchor="end" font-size="11" class="t-faint">${p}</text>`);
+  [0,1,2,3,4,5,6].forEach(k=>a+=`<text x="${x(k*12)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${k?'第 '+k+' 年':'开始'}</text>`);
+  $('dd-ax').innerHTML=a;
+  let d='';for(let t=0;t<=72;t+=.5)d+=(t?'L':'M')+x(t).toFixed(1)+','+y(v(t)).toFixed(1);$('dd-p').setAttribute('d',d);
+  const sl=$('dd-r');
+  function r(){const tol=+sl.value/100;let pk=0,ts=null;for(let t=0;t<=72;t+=.5){pk=Math.max(pk,v(t));if(v(t)<=pk*(1-tol)){ts=t;break;}}
+    $('dd-rv').textContent=sl.value+'%';$('dd-h').textContent=v(72).toFixed(0);
+    const th=106*(1-tol);$('dd-th').setAttribute('x1',X0);$('dd-th').setAttribute('x2',X1);$('dd-th').setAttribute('y1',y(th));$('dd-th').setAttribute('y2',y(th));
+    $('dd-tt').setAttribute('x',X1);$('dd-tt').setAttribute('text-anchor','end');$('dd-tt').setAttribute('y',y(th)-5);$('dd-tt').textContent=th>=40?'承受线':'';
+    if(ts===null){$('dd-s').setAttribute('opacity',0);$('dd-c').setAttribute('d','');$('dd-a').textContent=v(72).toFixed(0);
+      $('dd-msg').textContent='实际承受力超过了这次下跌的幅度，投资者坚持到了恢复，结果与持有到底相同。';return;}
+    const sv=v(ts);$('dd-s').setAttribute('opacity',1);$('dd-s').setAttribute('cx',x(ts));$('dd-s').setAttribute('cy',y(sv));
+    $('dd-c').setAttribute('d',`M${x(ts)},${y(sv)}L${X1},${y(sv)}`);$('dd-a').textContent=sv.toFixed(0);
+    $('dd-msg').textContent=`跌幅达到 ${sl.value}% 时卖出，账面损失变为实际损失，此后错过了全部恢复：最终为 ${sv.toFixed(0)}，持有到底为 ${v(72).toFixed(0)}。${+sl.value<=30?'计划上写的承受力若高于实际，差距会在最坏的时候兑现。':''}`;}
+  sl.addEventListener('input',r);
+  $('dd').addEventListener('anim-in',()=>{sl.value=60;r();setTimeout(()=>{let k=60;const id=setInterval(()=>{k-=5;sl.value=k;r();if(k<=25)clearInterval(id);},300);},2000);});
+  r();
+})();
+</script>

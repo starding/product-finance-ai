@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: keeping the agent on the user's side</p><p class="figsub">Four design requirements, each corresponding to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="ch27summary">Replay</button></div>
+    <div class="ch27summary" id="ch27summary" data-anim><div class="ch27summary-c" style="--i:0"><em>The agent has several principals</em><b>Make clear that the agent serves the user</b><p>Write the mandate and the user's net value into the agent's objective, and tell users where the platform makes its money.</p></div><div class="ch27summary-c" style="--i:1"><em>The conflict is written into the objective</em><b>Do not evaluate the agent on trading volume or time spent</b><p>Base the metrics mainly on the user's net value and adherence to the mandate, and monitor how often trades are suggested.</p></div><div class="ch27summary-c warn" style="--i:2"><em>Disclosure is not enough</em><b>Handle conflicts through structure</b><p>Revenue does not vary with trades or recommendations; product revenue is hidden when advising; bias in advice is independently audited at regular intervals.</p></div><div class="ch27summary-c warn" style="--i:3"><em>Liability follows control</em><b>Assign liability to the least-cost avoider, and keep complete records</b><p>Execution and data errors are borne by the party in control; every key action records inputs, basis, authorization and checks, which ground compensation and improvement when things go wrong.</p></div></div>
+  </div>
+</figure>
+<style>
+.ch27summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch27summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch27summary-c.warn{border-left-color:var(--warm)}
+.ch27summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch27summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch27summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch27summary.in .ch27summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch27summary{grid-template-columns:1fr}}
+</style>

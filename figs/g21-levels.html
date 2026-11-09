@@ -1,0 +1,34 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">按大小与能否挽回分级</p><p class="figsub">每件事按两个问题归入四级。拖动“已建立的信任”，看自行处理的边界怎样移动；点选一格查看例子。</p></div><button class="replay" type="button" data-replay="lv21">重播</button></div>
+    <div class="lv21" id="lv21" data-anim>
+      <div class="lv21-g" id="lv21-g"></div>
+      <div class="sl"><label for="lv21-t">已建立的信任 <b id="lv21-tv"></b></label><input id="lv21-t" type="range" min="0" max="3" step="1" value="0"></div>
+      <p class="lv21-msg" id="lv21-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：“小”指不超过家产的 2%；信任增长之后，“小”的门槛每守约一年放宽一级，依次为 5%、10% 与 25%。不可挽回且大的事，无论信任多高都须事先确认。</figcaption>
+</figure>
+<style>
+.lv21-g{display:grid;grid-template-columns:5.5em 1fr 1fr;gap:6px;font-size:13px}
+.lv21-g .h{color:var(--faint);font-size:12px;align-self:end}
+.lv21-g button{font:inherit;cursor:pointer;text-align:left;border:1px solid transparent;border-radius:9px;padding:9px 10px;font-size:13px;line-height:1.5;color:var(--ink);background:var(--c);transition:background .4s,border-color .3s}
+.lv21-g button b{display:block;font-size:14px}
+.lv21-g button.sel{border-color:var(--ink)}
+.lv21-msg{font-size:14px;margin:10px 0 0;min-height:4.6em;background:var(--quote);border-radius:9px;padding:10px 12px}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('lv21'+id),T=['刚开始','一年守约','两年守约','三年守约'],TH=['2%','5%','10%','25%'];let sel=0;
+  const L={self:['自行处理，事后记下','var(--accent-soft)'],tell:['先做，及时告知','rgba(47,95,158,.14)'],conf:['事先由他确认','var(--warm-soft)'],no:['禁止','var(--quote)']};
+  const C=[['小','可挽回','self','按时定投；按约定的比例调回；在限额内买入。'],['小','不可挽回','tell','在约定范围内卖出少量船股去交一笔小额费用。'],['大','可挽回','tell','较大比例的调整，例如风暴后把养老账户的船股比例调回约定值。'],['大','不可挽回','conf','把粮食转出粮仓；修改约定本身；提前动用盖房或养老的钱。']];
+  function draw(){const t=+$('-t').value;$('-tv').textContent=T[t]+'（“小”指不超过家产的 '+TH[t]+'）';
+    const lv=i=>{let k=C[i][2];if(t>=1&&i===1)k='self';if(t>=2&&i===2)k='self';return k;};
+    $('-g').innerHTML=`<span></span><span class="h">可挽回</span><span class="h">不可挽回</span><span class="h">小</span>${[0,1].map(i=>`<button type="button" data-i="${i}" class="${sel===i?'sel':''}" style="--c:${L[lv(i)][1]}"><b>${L[lv(i)][0]}</b></button>`).join('')}<span class="h">大</span>${[2,3].map(i=>`<button type="button" data-i="${i}" class="${sel===i?'sel':''}" style="--c:${L[lv(i)][1]}"><b>${L[lv(i)][0]}</b></button>`).join('')}`;
+    $('-g').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{sel=+b.dataset.i;draw();}));
+    $('-msg').textContent=`${C[sel][0]}而${C[sel][1]}：${C[sel][3]}现在的处理方式是“${L[lv(sel)][0]}”。`+(t>0?'信任增长之后，更多的事交给书记员自行处理；可最右下角那一格始终要他亲自确认。':'');}
+  $('-t').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{[[0,0],[0,3],[1,1],[2,2],[3,2]].forEach(([t,s],i)=>setTimeout(()=>{$('-t').value=t;sel=s;draw();},300+i*1800));});
+  draw();
+})();
+</script>

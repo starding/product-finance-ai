@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The five parts of a product</p><p class="figsub">The five parts stack from the bottom up into one product. Choose a layer to see what the user sees there, what the product does there, and what happens without it.</p></div><button class="replay" type="button" data-replay="p3r">Replay</button></div>
+    <div class="p3r" id="p3r" data-anim>
+      <div class="p3r-two"><div class="p3r-stack" id="p3r-s"></div><div class="p3r-d" id="p3r-d" aria-live="polite"></div></div>
+    </div>
+  </div>
+  <figcaption>The five parts are derived in Chapters 20 to 24 in turn; the "Without it" column gives the conclusions of the corresponding chapter simulators.</figcaption>
+</figure>
+<style>
+.p3r-two{display:grid;grid-template-columns:1fr 1.3fr;gap:14px;align-items:start}
+.p3r-stack{display:flex;flex-direction:column-reverse;gap:5px}
+.p3r-stack button{font:inherit;cursor:pointer;text-align:left;border:1px solid transparent;border-radius:9px;padding:10px 12px;color:var(--ink);font-size:14px;background:var(--c);opacity:0;transform:translateY(10px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.3s)}
+.p3r.in .p3r-stack button{opacity:1;transform:none}
+.p3r-stack button em{display:block;font-style:normal;font-size:11px;color:var(--faint)}
+.p3r-stack button.sel{border-color:var(--ink)}
+.p3r-d{display:grid;gap:8px}
+.p3r-d div{background:var(--quote);border-radius:8px;padding:9px 11px;font-size:13.5px;line-height:1.6}
+.p3r-d div:last-child{background:var(--warm-soft)}
+.p3r-d span{display:block;font-size:11px;color:var(--faint)}
+@media (max-width:640px){.p3r-two{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const L=[['What to promise','Chapter 20','Three accounts, the likelihood that each reaches its goal and its worst run of years, and one line: "No return is promised."','It allocates from the goals; it promises the allocation, execution, fees and risk limits, and delivers the result only as a distribution.','The product can only promise returns, which is something it cannot do.','rgba(31,111,92,.10)'],
+    ['Mandate and authority','Chapter 21','An agreement he can understand: goals, limits, rules, exceptions and term; he is consulted only a few times a year.','The system enforces the agreement; authority has four levels according to size and whether the action can be undone, with a written statement of when to come back and ask him.','Either he is consulted on everything and worn out by it, or the scribe acts on its own.','rgba(31,111,92,.16)'],
+    ['Process records and verifiable evidence','Chapter 22','Three layers: one sentence, key points, the full record; each step states its basis and the figures at the time.','Records are held by a third party and cannot be altered; they are examined closely when results are poor or a trigger fires, and spot-checked at random otherwise.','Breaches go undetected, and bad years are wrongly blamed on the scribe.','rgba(31,111,92,.22)'],
+    ['Limits, confirmation and compensation','Chapter 23','Only a few irreversible actions a year need confirmation, each with its consequences set out; when something goes wrong, someone pays without his having to prove it.','Defences in layers, slowing down where things move fast; the operator pays for execution errors and breaches of limits, and insures against them.','A few large errors wipe out years of savings, and no one pays.','rgba(31,111,92,.28)'],
+    ['The path to trust','Chapter 24','Authority starts with small matters and widens one level for each year of kept agreements; a small error moves it back only one step.','It borrows costly signals, widens authority step by step on the record of kept agreements, and adjusts trust according to the kind of error.','He hands over everything at the start and gives up entirely after one small error; or he trusts a deceitful scribe again and again.','rgba(31,111,92,.34)']];
+  const st=document.getElementById('p3r-s'),d=document.getElementById('p3r-d');
+  st.innerHTML=L.map((l,i)=>`<button type="button" style="--i:${i};--c:${l[5]}"><em>${l[1]}</em>${l[0]}</button>`).join('');const bs=[...st.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));d.innerHTML=`<div><span>What the user sees</span>${L[i][2]}</div><div><span>What the product does</span>${L[i][3]}</div><div><span>Without it</span>${L[i][4]}</div>`;}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('p3r').addEventListener('anim-in',()=>{[0,1,2,3,4].forEach((i,k)=>setTimeout(()=>set(i),1800+k*1700));});
+  set(0);
+})();
+</script>

@@ -1,0 +1,30 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">流水账与证据</p><p class="figsub">同样的四条记录，切换两种写法，看他能否一眼判断每一步是否守约。</p></div><button class="replay" type="button" data-replay="wy22">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="写法">
+      <button type="button" data-wy22="0" aria-pressed="true">流水账</button>
+      <button type="button" data-wy22="1" aria-pressed="false">写明依据与当时的数值</button>
+    </div>
+    <div class="wy22" id="wy22" data-anim><div class="wy22-l" id="wy22-l"></div><p class="wy22-msg" id="wy22-msg" aria-live="polite"></p></div>
+  </div>
+  <figcaption>示意：记录的内容为虚构的例子。</figcaption>
+</figure>
+<style>
+.wy22-l{display:grid;gap:5px}
+.wy22-l div{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:8px 10px;border-radius:8px;background:var(--quote);font-size:13.5px;line-height:1.55}
+.wy22-l em{font-style:normal;font-size:12px;padding:1px 9px;border-radius:999px;white-space:nowrap}
+.wy22-l em.ok{background:var(--accent-soft);color:var(--accent)} .wy22-l em.q{background:var(--warm-soft);color:var(--warm)} .wy22-l em.u{background:var(--bg);color:var(--faint);border:1px solid var(--line)}
+.wy22-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('wy22'+id);
+  const R=[['卖出 2 份船股','卖出 2 份船股：养老账户船股比例升到 86%（约定 80%，偏离超过五个百分点），按约定第三条调回','ok'],['存入 0.017','存入 0.017：发薪后按约定第三条存入 20%','ok'],['买入 1 份新船队的船股','买入 1 份新船队的船股：依据……（无对应条款）','q'],['卖出盖房账户的稳妥份额','卖出盖房账户的稳妥份额：你于 6 月 15 日确认动用一部分盖房的钱看病（确认记录 #41）','ok']];
+  function set(k){document.querySelectorAll('[data-wy22]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.wy22===k)));
+    $('-l').innerHTML=R.map(([a,b,c])=>`<div><span>${k?b:a}</span><em class="${k?c:'u'}">${k?(c==='ok'?'守约':'说不出依据'):'看不出'}</em></div>`).join('');
+    $('-msg').textContent=k?'写明依据与当时的数值之后，四条中三条一眼可知守约；第三笔说不出依据，正是他该追问的那一条。':'流水账只告诉他做了什么，他看不出哪一步守约、哪一步越界。';}
+  document.querySelectorAll('[data-wy22]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.wy22)));
+  $('').addEventListener('anim-in',()=>{set(0);setTimeout(()=>set(1),2400);});
+  set(0);
+})();
+</script>

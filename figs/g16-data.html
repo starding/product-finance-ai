@@ -1,0 +1,33 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">优势从公开报告转到独占的数据</p><p class="figsub">把可以带来优势的信息分成两类：公开报告里能读出的，和只有少数人掌握的。拖动认知劳动的价格，看两类信息各自还剩多少优势。</p></div><button class="replay" type="button" data-replay="dt16">重播</button></div>
+    <div class="dt16" id="dt16" data-anim>
+      <div class="dt16-bars" id="dt16-b"></div>
+      <div class="sl"><label for="dt16-c">认知劳动的价格 <b id="dt16-cv"></b></label><input id="dt16-c" type="range" min="0" max="2" step="0.1" value="0"></div>
+      <p class="dt16-msg" id="dt16-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：公开报告的优势按“打听的人停在哪里”一图的模型计算，为全村知情者每年合计赚到的份数；独占数据的优势每年 3 份，由占一成的数据持有者分享，不随认知劳动的价格变化。</figcaption>
+</figure>
+<style>
+.dt16-bars{display:grid;gap:12px;margin:6px 0 10px}
+.dt16-r{display:grid;grid-template-columns:9em 1fr 7.5em;gap:10px;align-items:center;font-size:12.5px}
+.dt16-r div{height:22px;background:var(--quote);border-radius:5px;overflow:hidden}
+.dt16-r i{display:block;height:100%;transition:width .4s}
+.dt16-r b{text-align:right;font-variant-numeric:tabular-nums}
+.dt16-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.dt16-r{grid-template-columns:1fr 7.5em}.dt16-r span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('dt16'+id),N=40,V=9.6,K=.1,VX=3;
+  const gain=f=>V*(K/(f+K))*(1-f)/(f*N);
+  function eq(c){if(gain(1/N)<=c)return 1/N;let lo=1/N,hi=.999;if(gain(hi)>c)return hi;for(let k=0;k<60;k++){const m=(lo+hi)/2;if(gain(m)>c)lo=m;else hi=m;}return lo;}
+  function draw(){const a=Math.pow(10,-+$('-c').value),f=eq(.8*a),pub=V*(K/(f+K))*(1-f),perPub=pub/(f*N),perX=VX/(.1*N);$('-cv').textContent=a>=.1?Math.round(a*100)+'%':(a*100).toFixed(1)+'%';
+    $('-b').innerHTML=[['公开报告的优势（合计）',pub,'var(--accent)',pub.toFixed(2)+' 份／年'],['每位读报告的人',perPub,'var(--accent)',perPub.toFixed(2)+' 份／年'],['独占数据的优势（合计）',VX,'var(--warm)',VX.toFixed(2)+' 份／年'],['每户数据持有者',perX,'var(--warm)',perX.toFixed(2)+' 份／年']].map(([k,v,c,t])=>`<div class="dt16-r"><span>${k}</span><div><i style="width:${Math.min(100,v/V*100*1.6)}%;background:${c}"></i></div><b>${t}</b></div>`).join('');
+    $('-msg').textContent=a===1?`认知劳动按原价计：读公开报告的人还不多，合计能赚 ${pub.toFixed(1)} 份，比独占数据的 3 份还多。`:`认知劳动的价格降到 ${a>=.1?Math.round(a*100):(a*100).toFixed(1)}%：读公开报告的人增加到约 ${Math.round(f*100)}%，合计只剩 ${pub.toFixed(2)} 份，每人 ${perPub.toFixed(2)} 份；独占数据的 3 份一点没少，每户持有者仍有 ${perX.toFixed(2)} 份。`;}
+  $('-c').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{let v=0;$('-c').value=0;draw();const id=setInterval(()=>{v+=.1;$('-c').value=v.toFixed(1);draw();if(v>=2)clearInterval(id);},150);});
+  draw();
+})();
+</script>

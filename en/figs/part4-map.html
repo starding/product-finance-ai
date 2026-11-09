@@ -1,0 +1,65 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The decomposition of net value and the structure of Part Four</p><p class="figsub">Start from a product that pursues returns alone and add design layer by layer to see how outcome, effort, risk and net value change. The chapters for each layer are below.</p></div><button class="replay" type="button" data-replay="pm4">Replay</button></div>
+    <div class="pm4-lv" role="group" aria-label="Design layers">
+      <label><input type="checkbox" data-l="v"> Value layer: promise only what can be delivered and verified</label>
+      <label><input type="checkbox" data-l="c"> Contract layer: agree on goals, authority and liability</label>
+      <label><input type="checkbox" data-l="i"> Implementation layer: capability assembly, process visibility and assurance</label>
+      <label><input type="checkbox" data-l="t" checked> Trust: the user has reason to believe</label>
+    </div>
+    <div class="pm4" id="pm4" data-anim>
+      <div class="pm4-row" data-k="r"><span>Outcome</span><div class="pm4-t"><i style="background:var(--accent)"></i></div><b></b></div>
+      <div class="pm4-row" data-k="e"><span>－ User's effort</span><div class="pm4-t"><i style="background:var(--gold)"></i></div><b></b></div>
+      <div class="pm4-row" data-k="k"><span>－ Risk borne by the user</span><div class="pm4-t"><i style="background:var(--warm)"></i></div><b></b></div>
+      <div class="pm4-row tot" data-k="n"><span>＝ Net value</span><div class="pm4-t"><i style="background:var(--ink)"></i></div><b></b></div>
+      <p class="pm4-msg" id="pm4-msg" aria-live="polite"></p>
+    </div>
+    <div class="pm4-cols">
+      <div class="pm4-c" style="--c:var(--accent)"><b>Value layer</b><span>What to promise</span><a href="ch24.html"><em>24</em>What to promise</a></div>
+      <div class="pm4-c" style="--c:var(--blue)"><b>Contract layer</b><span>On what terms</span><a href="ch25.html"><em>25</em>Mandate parameters</a><a href="ch26.html"><em>26</em>Authority and irreversible exposure</a><a href="ch27.html"><em>27</em>Liability and conflicts of interest</a></div>
+      <div class="pm4-c" style="--c:var(--gold)"><b>Implementation layer</b><span>How to deliver</span><a href="ch28.html"><em>28</em>Capability assembly and process visibility</a><a href="ch29.html"><em>29</em>Assurance level</a></div>
+      <div class="pm4-c" style="--c:var(--warm)"><b>Trust</b><span>The long-term relationship</span><a href="ch30.html"><em>30</em>How trust is built</a><a href="ch31.html"><em>31</em>Design principles</a></div>
+    </div>
+  </div>
+  <figcaption>Illustrative numbers; they show only the direction in which each layer of design acts. The outcome is constrained by the market, effort and risk by the user, and how much effort can be taken on by AI.</figcaption>
+</figure>
+<style>
+.pm4-lv{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px;margin-bottom:10px}
+.pm4-lv label{display:flex;gap:6px;align-items:center;font-size:13.5px;cursor:pointer}
+.pm4-lv input{accent-color:var(--accent);width:16px;height:16px}
+.pm4-row{display:grid;grid-template-columns:120px 1fr 56px;gap:10px;align-items:center;font-size:13px;margin:6px 0}
+.pm4-row>span{color:var(--muted)}
+.pm4-row.tot>span{color:var(--ink);font-weight:700}
+.pm4-row b{text-align:right;font-variant-numeric:tabular-nums}
+.pm4-t{height:18px;background:var(--quote);border-radius:5px;overflow:hidden}
+.pm4-t i{display:block;height:100%;width:0;border-radius:5px;transition:width .6s ease}
+.pm4-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+.pm4-cols{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.pm4-c{border-top:3px solid var(--c);background:var(--quote);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:4px}
+.pm4-c b{font-size:13.5px}
+.pm4-c>span:not(.todo){font-size:12px;color:var(--muted)}
+.pm4-c a,.pm4-c .todo{font-size:12.5px;border-radius:7px;padding:5px 8px;text-decoration:none;line-height:1.35}
+.pm4-c a{background:var(--surface);border:1px solid var(--accent);color:var(--ink)}
+.pm4-c a:hover{background:var(--accent-soft)}
+.pm4-c .todo{background:var(--surface);color:var(--faint);border:1px solid var(--line)}
+.pm4-c em{font-style:normal;color:var(--faint);margin-right:6px}
+@media (max-width:640px){.pm4-lv{grid-template-columns:1fr}.pm4-cols{grid-template-columns:1fr 1fr}.pm4-row{grid-template-columns:96px 1fr 44px}}
+</style>
+<script>
+(function(){
+  const $=s=>document.querySelector(s),rows=[...document.querySelectorAll('.pm4-row')];
+  function r(){const on=k=>$(`[data-l="${k}"]`).checked;
+    let R=70,E=35,K=30;
+    if(on("v")){R=60;K-=15;}           // no longer promising returns it cannot deliver: the headline outcome falls, and so does the risk of disappointment and chasing
+    if(on('c')){K-=8;E-=5;}            // goals, authority and liability clearly agreed
+    if(on('i')){E-=18;R+=6;K-=4;}      // the agent takes on effort; execution and discipline improve the outcome
+    let N=R-E-K;if(!on('t'))N=0;
+    const V={r:R,e:E,k:K,n:Math.max(N,0)};
+    rows.forEach(row=>{const k=row.dataset.k,v=V[k];setTimeout(()=>row.querySelector('i').style.width=v+'%',40);row.querySelector('b').textContent=k==='n'&&!on('t')?'0':v;});
+    const n=[on('v'),on('c'),on('i')].filter(Boolean).length;
+    $('#pm4-msg').textContent=!on('t')?'If the user does not trust the promise, even the best design goes unused: net value is zero.':n===0?'A product that pursues returns alone: the headline outcome is highest, but the user spends a great deal of time watching the market and bears risks that are not made clear, so net value is small.':n===3?'All three layers of design are in place: the headline outcome is not the highest, but effort and risk fall sharply, and net value is highest.':'Each layer of design added removes part of the effort or the risk.';}
+  document.querySelectorAll('[data-l]').forEach(i=>i.addEventListener('change',r));
+  $('#pm4').addEventListener('anim-in',()=>{['v','c','i'].forEach(k=>$(`[data-l="${k}"]`).checked=false);$('[data-l="t"]').checked=true;r();['v','c','i'].forEach((k,j)=>setTimeout(()=>{$(`[data-l="${k}"]`).checked=true;r();},1500*(j+1)));});
+  r();
+})();
+</script>

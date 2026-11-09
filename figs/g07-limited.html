@@ -1,0 +1,32 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">有限责任：最多亏掉投进去的</p><p class="figsub">三户人家各出 1 份，与别人合造一艘船。船沉了，还欠船员工钱与赊来的货共 30 份。切换两种责任，看三户各自损失多少。</p></div><button class="replay" type="button" data-replay="lm">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="责任">
+      <button type="button" data-lm="u" aria-pressed="true">无限责任</button>
+      <button type="button" data-lm="l" aria-pressed="false">有限责任</button>
+    </div>
+    <div class="lm" id="lm" data-anim></div>
+    <p class="lm-msg" id="lm-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>示意：无限责任时，债主可以向任何一位出资人追讨全部债务，通常先找家底最厚的一户；有限责任时，船的债务以船自己的财产为限，没有还清的部分由债主承担。</figcaption>
+</figure>
+<style>
+.lm{display:grid;gap:8px}
+.lm-r{display:grid;grid-template-columns:7em 1fr 6em;gap:10px;align-items:center;font-size:13px}
+.lm-t{display:flex;height:18px;background:var(--quote);border-radius:4px;overflow:hidden}
+.lm-t i{display:block;height:100%;transition:width .5s}
+.lm-r b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.lm-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const H=[['家底 40 份',40],['家底 12 份',12],['家底 3 份',3]],$=id=>document.getElementById(id);
+  function set(k){document.querySelectorAll('[data-lm]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lm===k)));
+    let debt=30;const loss=H.map(()=>1);if(k==='u'){for(const i of [0,1,2]){const pay=Math.min(debt,H[i][1]-1);loss[i]+=pay;debt-=pay;}}
+    $('lm').innerHTML=H.map((h,i)=>`<div class="lm-r"><span>${h[0]}</span><div class="lm-t"><i style="width:${loss[i]/h[1]*100}%;background:var(--warm)"></i><i style="width:${(h[1]-loss[i])/h[1]*100}%;background:var(--accent);opacity:.35"></i></div><b>损失 ${loss[i]} 份</b></div>`).join('');
+    $('lm-msg').textContent=k==='u'?'无限责任时，债主找上家底最厚的一户，他为 1 份的出资赔上 31 份。富裕的人家因此不敢投资陌生的船，也不愿与家底薄的人一起出资。':'有限责任时，每户最多损失投进去的 1 份；没有还清的 30 份由债主承担，所以债主会事先要求更高的利息或抵押。出资人不必再关心别人有多少家产，份额也可以放心转让。';}
+  document.querySelectorAll('[data-lm]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.lm)));
+  $('lm').addEventListener('anim-in',()=>{set('u');setTimeout(()=>set('l'),2600);});
+  set('u');
+})();
+</script>

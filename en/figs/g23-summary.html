@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: agents make mistakes</p><p class="figsub">Four conclusions, each tied to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="g23summary">Replay</button></div>
+    <div class="g23summary" id="g23summary" data-anim><div class="g23summary-c" style="--i:0"><em>Three kinds of mistake</em><b>Consequences allocated by kind</b><p>The operator pays for execution errors and overstepping; the user bears misjudgements under the agreement; the records decide which kind each one is.</p></div><div class="g23summary-c" style="--i:1"><em>Swiss cheese model</em><b>Layered, independent defences</b><p>No line of defence is foolproof, and lines that share a hole fail together.</p></div><div class="g23summary-c warn" style="--i:2"><em>Normal accidents</em><b>Deliberately slow down where things move fast</b><p>Limits, automatic stops on anomalies and delays catch errors before they spread.</p></div><div class="g23summary-c warn" style="--i:3"><em>Rerun: irreversibility and vicarious liability</em><b>Few, weighty confirmations; compensation written in advance</b><p>Confirm only operations that cannot be undone, and set out their consequences; the operator insures, and compensation does not depend on the user proving anything.</p></div></div>
+  </div>
+</figure>
+<style>
+.g23summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g23summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g23summary-c.warn{border-left-color:var(--warm)}
+.g23summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g23summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g23summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g23summary.in .g23summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g23summary{grid-template-columns:1fr}}
+</style>

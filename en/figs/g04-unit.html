@@ -1,0 +1,29 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">A common yardstick</p><p class="figsub">Drag the number of kinds of goods. Without a unit of account, every pair of goods needs its own rate of exchange; with money, each good needs only one price.</p></div><button class="replay" type="button" data-replay="un">Replay</button></div>
+    <div class="un" id="un" data-anim>
+      <div class="un-grid"><div><b>No unit of account</b><div class="un-dots" id="un-a"></div><span id="un-av"></span></div><div><b>Money as the unit</b><div class="un-dots" id="un-m"></div><span id="un-mv"></span></div></div>
+      <div class="sl"><label for="un-k">Kinds of goods <b id="un-kv"></b></label><input id="un-k" type="range" min="2" max="20" step="1" value="10"></div>
+    </div>
+  </div>
+  <figcaption>Without a unit of account, the number of rates is number of kinds × (number of kinds − 1) ÷ 2. With money as the unit, each good has one price, so the number of prices equals the number of kinds of goods (money itself not included).</figcaption>
+</figure>
+<style>
+.un-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.un-grid>div{background:var(--quote);border-radius:10px;padding:10px 12px}
+.un-grid b{font-size:14px} .un-grid span{display:block;font-size:13px;margin-top:6px;font-variant-numeric:tabular-nums}
+.un-dots{display:flex;flex-wrap:wrap;gap:2px;margin-top:8px;min-height:60px;align-content:flex-start}
+.un-dots i{width:7px;height:7px;border-radius:2px;background:var(--warm)}
+#un-m i{background:var(--accent)}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  function draw(){const k=+$('un-k').value,a=k*(k-1)/2,m=k;$('un-kv').textContent=k+' kinds';
+    $('un-a').innerHTML='<i></i>'.repeat(a);$('un-m').innerHTML='<i></i>'.repeat(m);
+    $('un-av').textContent=`${a} rates of exchange to remember`;$('un-mv').textContent=`Only ${m} prices`;}
+  $('un-k').addEventListener('input',draw);
+  $('un').addEventListener('anim-in',()=>{let v=2;$('un-k').value=2;draw();const id=setInterval(()=>{v++;$('un-k').value=v;draw();if(v>=20)clearInterval(id);},180);});
+  draw();
+})();
+</script>

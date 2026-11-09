@@ -1,0 +1,32 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">可达的份额取决于配套</p><p class="figsub">一百个格子代表一百份职业。切换两种口径，看有多少职业的一半以上任务会受到大模型的影响。</p></div><button class="replay" type="button" data-replay="rc13">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="口径">
+      <button type="button" data-rc13="0" aria-pressed="true">只用简单界面的大模型</button>
+      <button type="button" data-rc13="1" aria-pressed="false">加上建在大模型之上的软件</button>
+    </div>
+    <div class="rc13" id="rc13" data-anim>
+      <div class="rc13-g" id="rc13-g"></div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>一半以上的任务受到影响</span><span><i style="background:var(--quote);border:1px solid var(--line)"></i>其余</span></div>
+      <p class="rc13-msg" id="rc13-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>数据：埃隆杜、曼宁、米什金与罗克（2024，《科学》）：约 1.8% 与 46% 以上。格子按百分数四舍五入，1.8% 画作 2 格。受影响不等于被替代。</figcaption>
+</figure>
+<style>
+.rc13-g{display:grid;grid-template-columns:repeat(20,1fr);gap:4px;max-width:480px}
+.rc13-g i{aspect-ratio:1;border-radius:3px;background:var(--quote);border:1px solid var(--line);transition:background .3s;transition-delay:calc(var(--i)*8ms)}
+.rc13-g i.on{background:var(--accent);border-color:var(--accent)}
+.rc13-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('rc13'+id),V=[2,46];
+  $('-g').innerHTML=Array.from({length:100},(_,i)=>`<i style="--i:${i}"></i>`).join('');const cs=[...$('-g').children];
+  function set(k){document.querySelectorAll('[data-rc13]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.rc13===k)));cs.forEach((c,i)=>c.classList.toggle('on',i<V[k]));
+    $('-msg').textContent=k?'计入建立在大模型之上的软件与工具，一半以上任务受到影响的职业升到 46% 以上：书记员要配上账本、表格与通道，才能真正接手工作。':'只用简单界面的大模型时，一半以上任务受到影响的职业约占 1.8%：会读会写，还不等于能接手一件完整的工作。';}
+  document.querySelectorAll('[data-rc13]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.rc13)));
+  $('').addEventListener('anim-in',()=>{set(0);setTimeout(()=>set(1),2200);});
+  set(0);
+})();
+</script>

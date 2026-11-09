@@ -1,0 +1,26 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">第一部分十二章的案例，按六问复核</p><p class="figsub">点选一章，看它的案例、引入的唯一约束、今天的对应、第二部分的伏笔、出处与模拟器规则。</p></div></div>
+    <div class="ms-ch" id="ms-ch"></div>
+    <dl class="ms-d" id="ms-d" aria-live="polite"></dl>
+  </div>
+  <figcaption>第 3 章及以后为写作前的计划，写作时可能调整；“弱”表示第二部分只轻微涉及。</figcaption>
+</figure>
+<style>
+.ms-ch{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+.ms-ch button{font:inherit;font-size:12.5px;width:34px;height:30px;border-radius:7px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+.ms-ch button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.ms-d{display:grid;grid-template-columns:8em 1fr;gap:6px 14px;margin:0;font-size:13.5px;line-height:1.6}
+.ms-d dt{color:var(--faint);font-size:12px;padding-top:2px} .ms-d dd{margin:0}
+@media (max-width:640px){.ms-d{grid-template-columns:1fr;gap:1px}.ms-d dd{margin-bottom:6px}}
+</style>
+<script>
+(function(){
+  const D=[[1, "一个人，一年的收成", "秋收一次、月月吃饭；粮食损耗；留种；一生", "收入与消费不在同一时间", "月薪与退休；现金被通胀侵蚀；教育是留种", "用钱的时间是交给代理的第一个参数（第 20 章）", "伯努利 1738；费雪 1930；莫迪利安尼与布伦伯格 1954", "储蓄、留种、损耗"], [2, "两个人，缺的时间不同", "秋收与春收的两人互借", "有第二个人，缺粮的时间错开", "发薪日前的周转；存款与贷款", "弱：撮合借贷双方的成本", "霍默与西拉 2005；最高人民法院 2020", "借贷"], [3, "借了不还怎么办", "借了不还：抵押、声誉、合同", "承诺可能不兑现", "信用记录；抵押贷款", "核实与担保（第 15 章）", "斯蒂格利茨与韦斯 1981；克雷普斯等 1982", "承诺"], [4, "很多人一起交换", "人一多，物物交换对不上；最后一代人无人可借", "交换需要双重巧合；寿命有限", "账户与支付；养老金", "支付可由代理执行（第 17 章）", "杰文斯 1875；萨缪尔森 1958；清泷与赖特 1989", "货币"], [5, "收成好坏不定", "收成好坏不定，几户人家互相分担", "未来的状态不确定", "保险；分散的组合", "风险不因 AI 而消失（第 19 章）", "阿罗 1964；博尔奇 1962", "保险"], [6, "存的人要随时取，借的人要长期用", "存粮的人要随时取，种果园的人要借很多年", "期限不匹配", "活期存款与房贷", "期限与流动性不因 AI 而消失（第 19 章）", "戴蒙德与迪布维格 1983", "银行"], [7, "一个人出不起一艘船的钱", "造一艘船，一个人出不起", "单个人承担不了大项目的风险", "股票与债券", "不重跑（为第 8 章作铺垫）", "荷兰东印度公司 1602 年的史实", "股份"], [8, "证券要能卖出去", "股份要能卖给别人", "找到对手方需要时间与成本", "交易所与经纪", "代理成为市场参与者（第 17 章）", "德姆塞茨 1968", "市场"], [9, "价格里有所有人的信息", "有人先知道收成，价格随之变化", "人人都想利用信息", "指数基金", "信息优势的再次消耗（第 16 章）", "哈耶克 1945；格罗斯曼与斯蒂格利茨 1980", "价格中的信息"], [10, "普通人没有时间也没有专长", "种地的人没空研究航运", "注意力与专长稀缺", "基金与投资顾问", "主角（第 14 章）", "罗斯 1973；詹森与麦克林 1976", "委托"], [11, "受托人可能不尽责", "管钱的人可能挪用", "信息不对称与利益冲突", "托管、披露与适当性", "核对与责任（第 15 章）", "阿克洛夫 1970；达比与卡尼 1973", "监管与托管"], [12, "制度齐备，人仍会犯错", "计划好的储蓄半途而废", "人的决策偏差", "定投；自动加入的养老计划", "代理能否矫正偏差（第 18 章）", "马德里安与谢伊 2001；塞勒与贝纳茨 2004", "默认选项"]];
+  const K=['岛上的案例','唯一的新约束（单一）','今天的对应','第二部分的伏笔','出处','模拟器规则'];
+  const ch=document.getElementById('ms-ch'),d=document.getElementById('ms-d');
+  ch.innerHTML=D.map((r,i)=>`<button type="button" data-i="${i}" aria-pressed="false" title="${r[1]}">${r[0]}</button>`).join('');
+  function set(i){[...ch.children].forEach((b,j)=>b.setAttribute('aria-pressed',String(j===i)));const r=D[i];d.innerHTML=`<dt>第 ${r[0]} 章</dt><dd><b>${r[1]}</b></dd>`+K.map((k,j)=>`<dt>${k}</dt><dd>${r[j+2]}</dd>`).join('');}
+  [...ch.children].forEach((b,i)=>b.addEventListener('click',()=>set(i)));set(1);
+})();
+</script>

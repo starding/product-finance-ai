@@ -1,0 +1,47 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">监管强度的取舍</p>
+    <p class="figsub">保护带来的好处随监管加强而递减，合规成本与对供给的限制则递增。拖动监管强度，看净效果在哪里最大。</p>
+    <div class="co" id="co" data-anim>
+      <svg viewBox="0 0 640 230" role="img" aria-label="监管强度与好处、成本、净效果">
+        <g id="co-axis"></g>
+        <path id="co-b" class="co-l b"/><path id="co-c" class="co-l c"/><path id="co-n" class="co-l n"/>
+        <line id="co-cur" class="co-cur" y1="14" y2="196"/><circle id="co-dot" r="6" class="co-dot"/>
+        <text id="co-opt" font-size="11" class="t-accent" text-anchor="middle"></text>
+      </svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>保护带来的好处</span><span><i style="background:var(--warm)"></i>合规成本与对供给的限制</span><span><i style="background:var(--ink)"></i>净效果</span></div>
+      <div class="sl" style="margin-top:8px"><label for="co-s">监管强度 <b id="co-sv"></b></label><input id="co-s" type="range" min="0" max="100" step="5" value="30"></div>
+      <p class="co-msg" id="co-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意曲线，只表示方向，不对应任何测量。监管还可能被所监管的行业影响，即“监管俘获”，见 Stigler（1971）。</figcaption>
+</figure>
+<style>
+.co svg{width:100%;height:auto;display:block}
+.co-l{fill:none;stroke-width:2.5}
+.co-l.b{stroke:var(--accent)} .co-l.c{stroke:var(--warm)} .co-l.n{stroke:var(--ink);stroke-dasharray:6 4}
+.co-cur{stroke:var(--faint);stroke-dasharray:3 3}
+.co-dot{fill:var(--ink)}
+.co-msg{font-size:14px;margin:6px 0 0;min-height:1.7em}
+</style>
+<script>
+(function(){
+  const X0=50,X1=620,YT=14,YB=196,x=s=>X0+s/100*(X1-X0),y=v=>YB-(v+20)/(100+20)*(YB-YT);
+  const B=s=>90*(1-Math.exp(-s/22)), C=s=>0.009*s*s+0.1*s, Nf=s=>B(s)-C(s);
+  let a=`<line x1="${X0}" y1="${y(0)}" x2="${X1}" y2="${y(0)}" class="s-faint"/>`;
+  [0,25,50,75,100].forEach(s=>a+=`<text x="${x(s)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${s===0?'无监管':s===100?'极严':''}</text>`);
+  document.getElementById('co-axis').innerHTML=a;
+  const P=f=>{let d='';for(let s=0;s<=100;s++)d+=(s?'L':'M')+x(s).toFixed(1)+','+y(f(s)).toFixed(1);return d;};
+  document.getElementById('co-b').setAttribute('d',P(B));document.getElementById('co-c').setAttribute('d',P(C));document.getElementById('co-n').setAttribute('d',P(Nf));
+  let opt=0;for(let s=0;s<=100;s++)if(Nf(s)>Nf(opt))opt=s;
+  const ot=document.getElementById('co-opt');ot.setAttribute('x',x(opt));ot.setAttribute('y',y(Nf(opt))-12);ot.textContent='净效果最大';
+  const sl=document.getElementById('co-s');
+  function r(){const s=+sl.value,c=document.getElementById('co-cur');c.setAttribute('x1',x(s));c.setAttribute('x2',x(s));
+    const d=document.getElementById('co-dot');d.setAttribute('cx',x(s));d.setAttribute('cy',y(Nf(s)));
+    document.getElementById('co-sv').textContent=s;
+    document.getElementById('co-msg').textContent=s<opt-10?'监管不足：信息不对称与利益冲突得不到约束，弱势一方承担损失。':s>opt+10?'监管过度：合规成本转嫁给客户，产品供给与创新受到抑制，净效果下降。':'接近平衡：保护的好处与成本大致相当。';}
+  sl.addEventListener('input',r);
+  document.getElementById('co').addEventListener('anim-in',()=>{let v=0;sl.value=v;r();const id=setInterval(()=>{v+=5;sl.value=v;r();if(v>=90){clearInterval(id);setTimeout(()=>{sl.value=opt;r();},600);}},140);});
+  r();
+})();
+</script>

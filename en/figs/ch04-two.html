@@ -1,0 +1,56 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">Half in each of two stocks</p>
+    <p class="figsub">The two stocks have the same expected return and volatility. Adjust how closely they move together (the correlation coefficient) and see how volatile a half-and-half portfolio is.</p>
+    <div class="tw" id="tw" data-anim>
+      <svg viewBox="0 0 640 220" role="img" aria-label="Value paths of two stocks and the portfolio">
+        <g id="tw-axis"></g>
+        <path id="tw-a" class="tw-l a"/><path id="tw-b" class="tw-l b"/><path id="tw-p" class="tw-l p"/>
+      </svg>
+      <div class="legend"><span><i style="background:var(--blue)"></i>Stock A</span><span><i style="background:var(--warm)"></i>Stock B</span><span><i style="background:var(--ink)"></i>Half-and-half portfolio</span></div>
+      <div class="sl" style="margin-top:10px"><label for="tw-r">Correlation <b id="tw-rv"></b></label><input id="tw-r" type="range" min="-1" max="1" step="0.1" value="0.3"><div class="hint">1 means perfectly in step, 0 means unrelated, −1 means perfectly opposite</div></div>
+      <div class="tw-out">
+        <div><span>Annual volatility of one stock</span><b>25%</b></div>
+        <div><span>Annual volatility of the portfolio</span><b id="tw-pv"></b></div>
+        <div><span>Expected return of the portfolio</span><b>Same as one stock</b></div>
+      </div>
+    </div>
+  </div>
+  <figcaption>Example parameters: both stocks have an annualized expected return of 7% and volatility of 25%, simulated monthly over 5 years. The portfolio is rebalanced to half and half each month. On the idea of diversification, see Markowitz (1952).</figcaption>
+</figure>
+<style>
+.tw svg{width:100%;height:auto;display:block}
+.tw-l{fill:none;stroke-width:1.8}
+.tw-l.a{stroke:var(--blue);opacity:.8} .tw-l.b{stroke:var(--warm);opacity:.8} .tw-l.p{stroke:var(--ink);stroke-width:2.6}
+.tw-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tw-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.tw-out span{display:block;font-size:12px;color:var(--faint)}
+.tw-out b{font-size:19px;font-variant-numeric:tabular-nums}
+#tw-pv{color:var(--accent)}
+@media (max-width:640px){.tw-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const N=60, MU=0.07/12, SG=0.25/Math.sqrt(12), X0=50, X1=620, YT=14, YB=196;
+  let seed=41; const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
+  const g=()=>{let u=0,v=0;while(!u)u=rnd();v=rnd();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);};
+  const Z1=Array.from({length:N},g), Z2=Array.from({length:N},g);
+  const x=t=>X0+t/N*(X1-X0);
+  const r=document.getElementById('tw-r');
+  function render(){
+    const rho=+r.value; document.getElementById('tw-rv').textContent=rho.toFixed(1);
+    let a=100,b=100,p=100; const A=[a],B=[b],P=[p];
+    for(let t=0;t<N;t++){const e1=Z1[t], e2=rho*Z1[t]+Math.sqrt(Math.max(0,1-rho*rho))*Z2[t];
+      const ra=MU+SG*e1, rb=MU+SG*e2; a*=1+ra; b*=1+rb; p*=1+(ra+rb)/2; A.push(a);B.push(b);P.push(p);}
+    const all=A.concat(B,P), lo=Math.min(...all)*0.95, hi=Math.max(...all)*1.05, y=v=>YB-(v-lo)/(hi-lo)*(YB-YT);
+    let ax=`<line x1="${X0}" y1="${y(100)}" x2="${X1}" y2="${y(100)}" class="s-line"/><text x="${X0-8}" y="${y(100)+4}" text-anchor="end" font-size="11" class="t-faint">100</text>`;
+    [0,1,2,3,4,5].forEach(k=>ax+=`<text x="${x(k*12)}" y="${YB+18}" text-anchor="middle" font-size="11" class="t-faint">Year ${k}</text>`);
+    document.getElementById('tw-axis').innerHTML=ax;
+    const L=arr=>'M'+arr.map((v,t)=>`${x(t).toFixed(1)},${y(v).toFixed(1)}`).join('L');
+    document.getElementById('tw-a').setAttribute('d',L(A));document.getElementById('tw-b').setAttribute('d',L(B));document.getElementById('tw-p').setAttribute('d',L(P));
+    document.getElementById('tw-pv').textContent=(25*Math.sqrt((1+rho)/2)).toFixed(1)+'%';
+  }
+  r.addEventListener('input',render); render();
+  document.getElementById('tw').addEventListener('anim-in',()=>{let v=1;r.value=v;render();const id=setInterval(()=>{v=Math.round((v-0.1)*10)/10;r.value=v;render();if(v<=0.3)clearInterval(id);},120);});
+})();
+</script>

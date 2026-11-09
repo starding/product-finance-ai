@@ -1,0 +1,49 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">主动管理基本定律</p><p class="figsub">信息比率 ≈ 转移系数 × 信息系数 × √有效广度。调节三个参数，看信息比率、对应的年化超额收益，以及确认这份技能需要多少年。打开“判断彼此相关”，看名义上的判断次数如何缩水。</p></div><button class="replay" type="button" data-replay="lw">重播</button></div>
+    <div class="lw" id="lw" data-anim>
+      <div class="lw-eq"><span>信息比率</span><b id="lw-ir"></b><em>＝</em><span>转移系数</span><b id="lw-tcv"></b><em>×</em><span>信息系数</span><b id="lw-icv"></b><em>× √</em><span>有效广度</span><b id="lw-bev"></b></div>
+      <div class="lw-sl">
+        <div class="sl"><label for="lw-ic">信息系数：每次判断与结果的相关程度 <b id="lw-icl"></b></label><input id="lw-ic" type="range" min="1" max="15" step="1" value="5"></div>
+        <div class="sl"><label for="lw-b">每年的判断次数 <b id="lw-bl"></b></label><input id="lw-b" type="range" min="0" max="100" step="1" value="50"></div>
+        <div class="sl"><label for="lw-tc">转移系数：约束之后保留的比例 <b id="lw-tcl"></b></label><input id="lw-tc" type="range" min="20" max="100" step="5" value="100"></div>
+      </div>
+      <label class="lw-chk"><input type="checkbox" id="lw-x"> 判断彼此相关（平均相关系数 0.2，例如反复押注同一个行业或因子）</label>
+      <div class="lw-out"><div><span>跟踪误差 6% 时的年化超额收益</span><b id="lw-a"></b></div><div><span>以 95% 的把握确认技能所需年数</span><b id="lw-y"></b></div></div>
+      <p class="lw-msg" id="lw-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>按 Grinold（1989）的基本定律与 Clarke、de Silva 与 Thorley（2002）的转移系数计算；有效广度 ＝ 判断次数 ÷ [1 ＋（判断次数 － 1）× 平均相关系数]；所需年数 ＝（2 ÷ 信息比率）²。信息系数 0.05 已算良好、信息比率 0.5 已属前列的经验判断见 Grinold 与 Kahn（2000）。</figcaption>
+</figure>
+<style>
+.lw-eq{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;background:var(--quote);border-radius:10px;padding:10px 12px;font-size:12.5px;color:var(--faint)}
+.lw-eq b{font-size:18px;color:var(--ink);font-variant-numeric:tabular-nums;margin-right:4px}
+.lw-eq b#lw-ir{color:var(--accent);font-size:22px}
+.lw-eq em{font-style:normal;color:var(--muted);font-size:15px}
+.lw-sl{display:grid;gap:2px;margin-top:8px}
+.lw-chk{display:flex;gap:6px;align-items:center;font-size:13.5px;margin:6px 0}
+.lw-chk input{accent-color:var(--warm);width:16px;height:16px;flex:none}
+.lw-out{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.lw-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.lw-out span{display:block;font-size:12px;color:var(--faint)} .lw-out b{font-size:19px;font-variant-numeric:tabular-nums}
+.lw-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.lw-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),ic=$('lw-ic'),bb=$('lw-b'),tc=$('lw-tc'),cx=$('lw-x');
+  const N=t=>Math.round(Math.pow(10,t/100*3.3));
+  function r(){const I=+ic.value/100,n=Math.max(1,N(+bb.value)),T=+tc.value/100,rho=cx.checked?.2:0,be=n/(1+(n-1)*rho),ir=T*I*Math.sqrt(be),yrs=Math.pow(2/ir,2);
+    $('lw-icl').textContent=I.toFixed(2);$('lw-bl').textContent=n+' 次';$('lw-tcl').textContent=T.toFixed(2);
+    $('lw-ir').textContent=ir.toFixed(2);$('lw-tcv').textContent=T.toFixed(2);$('lw-icv').textContent=I.toFixed(2);$('lw-bev').textContent=be<10?be.toFixed(1):Math.round(be);
+    $('lw-a').textContent=(ir*6).toFixed(1)+'%';$('lw-y').textContent=yrs>100?'超过 100 年':yrs<1?'不到 1 年':Math.round(yrs)+' 年';
+    let m;if(cx.checked&&n>20)m=`名义上每年 ${n} 次判断，彼此相关之后只相当于约 ${be.toFixed(1)} 次独立判断：判断再多，有效广度也很难超过 5。`;
+    else if(ir<.3)m='信息比率很低：超额收益与跟踪误差相比很小，要很多年才能与运气区分。';
+    else if(ir<.6)m='信息比率处在优秀经理的水平。即使如此，确认这份技能也需要十年以上的记录。';
+    else m='信息比率很高，需要判断既准又多、彼此独立，约束也很少：现实中能长期保持的经理极少。';
+    $('lw-msg').textContent=m;}
+  [ic,bb,tc].forEach(e=>e.addEventListener('input',r));cx.addEventListener('change',r);
+  $('lw').addEventListener('anim-in',()=>{cx.checked=false;tc.value=100;ic.value=5;let t=0;bb.value=0;r();const id=setInterval(()=>{t+=5;bb.value=t;r();if(t>=100){clearInterval(id);setTimeout(()=>{cx.checked=true;r();setTimeout(()=>{cx.checked=false;bb.value=50;r();},2200);},800);}},110);});
+  r();
+})();
+</script>

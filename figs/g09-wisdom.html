@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">许多人的猜测汇总起来更准</p><p class="figsub">每个人凭自己的经验猜一头牛的重量，单个人可能相差很远。拖动参加猜测的人数，看所有猜测的中位数离真实重量有多近。</p></div><button class="replay" type="button" data-replay="ws">重播</button></div>
+    <div class="ws" id="ws" data-anim>
+      <svg viewBox="0 0 640 200" role="img" aria-label="猜测的分布"><g id="ws-ax"></g><g id="ws-b"></g><line id="ws-t" class="ws-t"/><line id="ws-m" class="ws-m"/></svg>
+      <div class="legend"><span><i style="background:var(--ink)"></i>真实重量</span><span><i style="background:var(--accent)"></i>所有猜测的中位数</span></div>
+      <div class="sl"><label for="ws-n">参加猜测的人数 <b id="ws-nv"></b></label><input id="ws-n" type="range" min="0" max="100" step="1" value="0"></div>
+      <p class="ws-msg" id="ws-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：每人的猜测等于真实重量加上一个随机误差，误差的大小约为真实重量的一成；这里的数字是模拟的，不是高尔顿（1907）的原始数据。高尔顿记录的 787 份猜测，中位数与实际重量相差不到百分之一。</figcaption>
+</figure>
+<style>
+.ws svg{width:100%;height:auto;display:block}
+.ws-t{stroke:var(--ink);stroke-width:2}
+.ws-m{stroke:var(--accent);stroke-width:2.4;stroke-dasharray:5 3}
+.ws-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.ws svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),T=1200;let s=1907;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};const g=()=>{let u=0;while(!u)u=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r());};
+  const G=Array.from({length:800},()=>T+120*g()),X0=40,X1=630,YT=10,YB=170,lo=850,hi=1550,nb=35,bw=(X1-X0)/nb,x=v=>X0+(v-lo)/(hi-lo)*(X1-X0);
+  $('ws-ax').innerHTML=`<line x1="${X0}" x2="${X1}" y1="${YB}" y2="${YB}" class="s-faint"/>`+[900,1000,1100,1200,1300,1400,1500].map(v=>`<text x="${x(v)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${v}</text>`).join('')+`<text x="${X1}" y="${YB-6}" text-anchor="end" font-size="11" class="t-muted">猜测的重量（磅）</text>`;
+  ['ws-t'].forEach(k=>{$(k).setAttribute('x1',x(T));$(k).setAttribute('x2',x(T));$(k).setAttribute('y1',YT);$(k).setAttribute('y2',YB);});
+  const nOf=v=>Math.max(1,Math.round(Math.pow(800,v/100)));
+  function draw(){const n=nOf(+$('ws-n').value),S=G.slice(0,n).slice().sort((a,b)=>a-b),med=n%2?S[(n-1)/2]:(S[n/2-1]+S[n/2])/2,c=Array(nb).fill(0);
+    S.forEach(v=>{const i=Math.floor((v-lo)/(hi-lo)*nb);if(i>=0&&i<nb)c[i]++;});const mx=Math.max(...c,1);
+    $('ws-b').innerHTML=c.map((k,i)=>`<rect x="${X0+i*bw+1}" y="${YB-k/mx*(YB-YT-10)}" width="${bw-2}" height="${k/mx*(YB-YT-10)}" fill="var(--accent)" opacity=".35" rx="1"/>`).join('');
+    $('ws-m').setAttribute('x1',x(med));$('ws-m').setAttribute('x2',x(med));$('ws-m').setAttribute('y1',YT);$('ws-m').setAttribute('y2',YB);$('ws-nv').textContent=n+' 人';
+    const err=Math.abs(med-T)/T*100,ind=S.reduce((a,v)=>a+Math.abs(v-T),0)/n/T*100;
+    $('ws-msg').textContent=n===1?`只有一个人猜，他差了 ${err.toFixed(1)}%。`:`${n} 人的猜测中，单个人平均相差 ${ind.toFixed(1)}%，中位数只差 ${err.toFixed(1)}%。各人的误差相互抵消，汇总比其中绝大多数人都准。`;}
+  $('ws-n').addEventListener('input',draw);
+  $('ws').addEventListener('anim-in',()=>{let v=0;$('ws-n').value=0;draw();const id=setInterval(()=>{v+=4;$('ws-n').value=Math.min(v,100);draw();if(v>=100)clearInterval(id);},120);});
+  draw();
+})();
+</script>

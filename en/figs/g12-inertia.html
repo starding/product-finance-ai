@@ -1,0 +1,40 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">What happens when people do nothing</p><p class="figsub">A hundred new employees, eight in ten of whom want to join the savings plan. Each month, each person has only a certain probability of actually acting to change their status. On the left, "opt in voluntarily"; on the right, "enrolled automatically, free to opt out".</p></div><button class="replay" type="button" data-replay="in12">Replay</button></div>
+    <div class="in12" id="in12" data-anim>
+      <div class="in12-two"><div><p class="in12-h">Opt in voluntarily</p><div class="in12-dots" id="in12-a"></div><b id="in12-av"></b></div><div><p class="in12-h">Enrolled automatically, free to opt out</p><div class="in12-dots" id="in12-b"></div><b id="in12-bv"></b></div></div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Saving</span><span><i style="background:var(--quote);border:1px solid var(--line)"></i>Not saving</span><span><i style="outline:2px solid var(--warm);outline-offset:-2px;background:transparent"></i>Status differs from the person's wish</span></div>
+      <div class="sl"><label for="in12-m">Months since joining <b id="in12-mv"></b></label><input id="in12-m" type="range" min="0" max="36" step="1" value="12"></div>
+      <div class="sl"><label for="in12-p">Monthly probability of actually acting <b id="in12-pv"></b></label><input id="in12-p" type="range" min="2" max="40" step="2" value="6"></div>
+      <p class="in12-msg" id="in12-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model: those who want to join and those who do not change their status only in the month they "act", and the probability of acting is the same every month. Madrian and Shea (2001) found that after a US company switched to automatic enrolment, participation among new employees rose sharply, and most stayed at the default contribution rate and fund.</figcaption>
+</figure>
+<style>
+.in12-two{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.in12-h{margin:0 0 6px;font-size:13px;color:var(--muted)}
+.in12-dots{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;max-width:260px}
+.in12-dots i{aspect-ratio:1;border-radius:50%;background:var(--quote);border:1px solid var(--line);transition:background .35s}
+.in12-dots i.on{background:var(--accent);border-color:var(--accent)}
+.in12-dots i.bad{outline:2px solid var(--warm);outline-offset:1px}
+.in12-two b{display:block;font-size:18px;margin-top:6px;font-variant-numeric:tabular-nums}
+.in12-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.in12-two{gap:12px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('in12'+id);let s=1201;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};
+  // Each person: whether they want to join, and a sequence of random draws for acting
+  const P=Array.from({length:100},(_,i)=>({want:i%5!==4,u:Array.from({length:37},r)}));
+  const st=(auto,m,p)=>P.map(q=>{let on=auto;for(let t=0;t<m;t++)if(on!==q.want&&q.u[t]<p)on=q.want;return on;});
+  function box(el,arr){el.innerHTML=arr.map((on,i)=>`<i class="${on?'on':''}${on!==P[i].want?' bad':''}"></i>`).join('');}
+  function draw(){const m=+$('-m').value,p=+$('-p').value/100;$('-mv').textContent=m+(m===1?' month':' months');$('-pv').textContent=Math.round(p*100)+'%';
+    const A=st(false,m,p),B=st(true,m,p),a=A.filter(Boolean).length,b=B.filter(Boolean).length;box($('-a'),A);box($('-b'),B);
+    $('-av').textContent=`Saving ${a}%`;$('-bv').textContent=`Saving ${b}%`;
+    $('-msg').textContent=m===0?'On the first day: with voluntary opt-in nobody is saving; with automatic enrolment everyone is. After that, only those who actually act change their status.':`Month ${m}: ${a}% are saving under voluntary opt-in, ${b}% under automatic enrolment. People on both sides have exactly the same wishes; the only difference is what happens when they do nothing.`;}
+  ['-m','-p'].forEach(k=>$(k).addEventListener('input',draw));
+  $('').addEventListener('anim-in',()=>{let m=0;$('-m').value=0;draw();const id=setInterval(()=>{m+=1;$('-m').value=m;draw();if(m>=24)clearInterval(id);},160);});
+  draw();
+})();
+</script>

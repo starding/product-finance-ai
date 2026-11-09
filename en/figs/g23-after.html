@@ -1,0 +1,27 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Six steps after a mistake</p><p class="figsub">After grain meant for the house account was deposited into the retirement account by mistake, what the scribe and the operator do, in order. Select a step to see the details.</p></div><button class="replay" type="button" data-replay="af23">Replay</button></div>
+    <div class="af23" id="af23" data-anim><div class="af23-s" id="af23-s"></div><p class="af23-msg" id="af23-msg" aria-live="polite"></p></div>
+  </div>
+  <figcaption>Illustrative: the example is fictional.</figcaption>
+</figure>
+<style>
+.af23-s{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.af23-s button{font:inherit;cursor:pointer;text-align:left;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:8px 9px;font-size:13px;color:var(--ink);opacity:0;transform:translateY(6px);transition:opacity .35s,transform .35s,border-color .3s;transition-delay:calc(var(--i)*.2s)}
+.af23.in .af23-s button{opacity:1;transform:none}
+.af23-s button em{display:block;font-style:normal;font-size:11px;color:var(--faint)}
+.af23-s button.sel{border-color:var(--accent)}
+.af23-msg{font-size:14px;margin:10px 0 0;min-height:4.6em;background:var(--quote);border-radius:9px;padding:10px 12px}
+@media (max-width:640px){.af23-s{grid-template-columns:repeat(3,1fr)}}
+</style>
+<script>
+(function(){
+  const S=[['Detect','Reconciliation afterwards finds that this month\'s deposit into the retirement account is 0.017 more than the agreement specifies, and the house account is short by the same amount.'],['Reverse','The excess is moved back to the house account at that day\'s price; any price difference before the transfer is counted in the next step\'s compensation.'],['Compensate','Under the agreement, execution errors are paid in full by the operator: it makes up the price difference and the forgone return, without his having to make a claim.'],['Find the cause','Why the error got past the defences: the pre-execution check verified only the total, not the destination.'],['Fix the defences','The pre-execution check gains an item, "destination matches the agreement"; this change is written into the records.'],['Inform','One sentence tells him what happened, how much was paid and what was changed; the full account can be found in the key steps and the complete records.']];
+  const s=document.getElementById('af23-s'),m=document.getElementById('af23-msg');
+  s.innerHTML=S.map((x,i)=>`<button type="button" style="--i:${i}"><em>Step ${i+1}</em>${x[0]}</button>`).join('');const bs=[...s.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));m.textContent=S[i][1];}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('af23').addEventListener('anim-in',()=>{[0,1,2,3,4,5].forEach((i,k)=>setTimeout(()=>set(i),1000+k*1500));});
+  set(0);
+})();
+</script>

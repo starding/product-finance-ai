@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: designing for real risk tolerance</p><p class="figsub">Four design requirements, each corresponding to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="ch17summary">Replay</button></div>
+    <div class="ch17summary" id="ch17summary" data-anim><div class="ch17summary-c" style="--i:0"><em>Risk tolerance has three faces</em><b>Understand capacity, willingness and behaviour separately</b><p>Beyond the questionnaire, take in assets, income, horizon and actual trading records from past declines.</p></div><div class="ch17summary-c" style="--i:1"><em>Wealth is more than financial assets</em><b>Count human capital and the timing of spending in capacity</b><p>Ask about the stability of income and plans for using the money, and let age and the nature of income shape the recommended risk level.</p></div><div class="ch17summary-c warn" style="--i:2"><em>Willingness shifts with the market</em><b>Act on the lowest face, and review regularly</b><p>When willingness exceeds capacity, explain why and set limits; reassess after a sharp rise or fall and as the goal approaches.</p></div><div class="ch17summary-c warn" style="--i:3"><em>A profile is a statistical description</em><b>Phrase it only in statistical terms</b><p>Say "how similar investors have usually behaved in the past", show the differences within the group, and do not assert how much any individual can bear.</p></div></div>
+  </div>
+</figure>
+<style>
+.ch17summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch17summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch17summary-c.warn{border-left-color:var(--warm)}
+.ch17summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch17summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch17summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch17summary.in .ch17summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch17summary{grid-template-columns:1fr}}
+</style>

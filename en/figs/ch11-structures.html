@@ -1,0 +1,50 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">Three market structures: who supplies liquidity</p>
+    <p class="figsub">Switch structures to see how orders flow and who stands on the other side.</p>
+    <div class="seg-btns" role="group" aria-label="Market structure">
+      <button type="button" data-st="quote" aria-pressed="true">Quote-driven</button>
+      <button type="button" data-st="order" aria-pressed="false">Order-driven</button>
+      <button type="button" data-st="broker" aria-pressed="false">Brokered</button>
+    </div>
+    <div class="st" id="st" data-anim>
+      <svg viewBox="0 0 640 220" role="img" aria-label="Diagram of market structures">
+        <g id="st-g"></g>
+      </svg>
+      <div class="st-d" id="st-d" aria-live="polite"></div>
+    </div>
+  </div>
+  <figcaption>Classification follows Harris (2003) and Madhavan (2000). Most real markets are hybrids.</figcaption>
+</figure>
+<style>
+.st svg{width:100%;height:auto;display:block}
+.st-n rect{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+.st-n.c rect{fill:var(--accent-soft);stroke:var(--accent)}
+.st-n text{fill:var(--ink)}
+.st-f{fill:none;stroke:var(--faint);stroke-width:1.6;stroke-dasharray:5 5;animation:stflow 1.2s linear infinite}
+.st-f.b{stroke:var(--accent)} .st-f.s{stroke:var(--warm)}
+@keyframes stflow{to{stroke-dashoffset:-20}}
+.st-d{font-size:14px;line-height:1.7;background:var(--quote);border-radius:10px;padding:10px 14px;margin-top:8px}
+.st-d dl{display:grid;grid-template-columns:110px 1fr;gap:2px 10px;margin:0}
+.st-d dt{font-size:12px;color:var(--faint);padding-top:3px}
+.st-d dd{margin:0}
+</style>
+<script>
+(function(){
+  const node=(x,y,w,t,c)=>`<g class="st-n ${c||''}"><rect x="${x-w/2}" y="${y-18}" width="${w}" height="36" rx="10"/><text x="${x}" y="${y+5}" text-anchor="middle" font-size="13" font-weight="700">${t}</text></g>`;
+  const L=(x1,y1,x2,y2,c)=>`<path class="st-f ${c}" d="M${x1},${y1} L${x2},${y2}"/>`;
+  const D={
+    quote:{g:node(320,110,120,'Market maker','c')+node(90,50,110,'Buyer')+node(90,170,110,'Seller')+node(550,50,110,'Buyer')+node(550,170,110,'Seller')+L(145,55,260,100,'b')+L(145,165,260,120,'s')+L(495,55,380,100,'b')+L(495,165,380,120,'s'),
+      d:[['Counterparty','The market maker: every trader trades with it'],['Liquidity from','Market makers who continuously quote bids and asks and bear inventory and adverse-selection risk'],['Common in','Bonds, foreign exchange, some over-the-counter markets']]},
+    order:{g:node(320,110,150,'Order book','c')+node(90,50,110,'Limit buy')+node(90,170,110,'Limit sell')+node(550,50,110,'Market buy')+node(550,170,110,'Market sell')+L(145,55,245,100,'b')+L(145,165,245,120,'s')+L(495,55,395,100,'b')+L(495,165,395,120,'s'),
+      d:[['Counterparty','Other traders: the exchange only matches orders by its rules'],['Liquidity from','Traders who post limit orders; those in a hurry trade against them with market orders'],['Common in','Most stock and futures exchanges today']]},
+    broker:{g:node(320,110,120,'Broker','c')+node(90,110,120,'Block seller')+node(550,110,124,'Potential buyer')+L(150,110,260,110,'s')+L(380,110,490,110,'b')+`<text x="320" y="170" text-anchor="middle" font-size="12" class="t-muted">The broker finds and matches counterparties one by one, with no public quotes</text>`,
+      d:[['Counterparty','Another trader the broker finds'],['Liquidity from','The broker\'s client network and search'],['Common in','Block trades, very illiquid assets']]}
+  };
+  function set(k){document.querySelectorAll('[data-st]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.st===k)));
+    document.getElementById('st-g').innerHTML=D[k].g;
+    document.getElementById('st-d').innerHTML='<dl>'+D[k].d.map(([a,b])=>`<dt>${a}</dt><dd>${b}</dd>`).join('')+'</dl>';}
+  document.querySelectorAll('[data-st]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.st)));
+  set('quote');
+})();
+</script>

@@ -1,0 +1,60 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Traders sorted by motive</p><p class="figsub">Tap any type to see why they trade and whom they profit from or lose to.</p></div><button class="replay" type="button" data-replay="tx">Replay</button></div>
+    <div class="tx" id="tx" data-anim>
+      <div class="tx-col u" style="--i:0"><h5>Utilitarian<span>For benefits other than trading profit</span></h5>
+        <button data-k="inv">Investors and borrowers</button><button data-k="exc">Asset exchangers</button><button data-k="hed">Hedgers</button><button data-k="app">Apprentice traders</button><button data-k="fun">Trading for fun</button></div>
+      <div class="tx-col p" style="--i:1"><h5>Profit-motivated<span>For the profit from trading itself</span></h5>
+        <div class="tx-sub">Speculators · informed traders</div><button data-k="val">Value traders</button><button data-k="new">News traders</button>
+        <div class="tx-sub">Speculators · parasitic</div><button data-k="par">Front-runners, quote matchers and sentiment-oriented traders</button>
+        <div class="tx-sub">Speculators · manipulators</div><button data-k="man" class="bad">Market manipulators</button>
+        <div class="tx-sub">Liquidity suppliers</div><button data-k="dea">Dealers</button><button data-k="arb">Arbitrageurs</button></div>
+      <div class="tx-col f" style="--i:2"><h5>Futile<span>Believe they can profit; on average do not</span><em>Based on the 1993 working paper</em></h5>
+        <button data-k="ine">Inefficient traders</button>
+        <div class="tx-sub">A subtype of inefficient traders</div><button data-k="pse">Pseudo-informed traders</button></div>
+    </div>
+    <div class="tx-d" id="tx-d" aria-live="polite">Tap any type of trader.</div>
+  </div>
+  <figcaption>The main types of utilitarian and profit-motivated traders follow Harris (2015). Market manipulators follow Harris (1993), where they sit alongside parasitic traders as profit-motivated traders. Futile traders and their subtypes follow Harris (1993): futile traders divide into inefficient traders and victimised traders (the latter not shown here), and pseudo-informed traders are a kind of inefficient trader; the 2015 version no longer lists futile traders separately. Apprentice traders are listed as utilitarian in the 1993 paper.</figcaption>
+</figure>
+<style>
+.tx{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tx-col{border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:6px;opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.tx.in .tx-col{opacity:1;transform:none}
+.tx-col.u{background:rgba(47,95,158,.1)} .tx-col.p{background:var(--accent-soft)} .tx-col.f{background:var(--warm-soft)}
+.tx-col h5{margin:0 0 4px;font-size:16px}
+.tx-col h5 span{display:block;font-size:12px;font-weight:400;color:var(--muted)}
+.tx-col h5 em{font-style:normal;font-size:11px;font-weight:400;color:var(--faint)}
+.tx-sub{font-size:11px;color:var(--faint);margin-top:4px}
+.tx button{font:inherit;font-size:13px;text-align:left;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:6px 9px;cursor:pointer}
+.tx button:hover{border-color:var(--ink)}
+.tx button.sel{border-color:var(--ink);box-shadow:0 0 0 2px var(--line)}
+.tx button.bad{border-style:dashed;color:var(--warm)}
+.tx-d{margin-top:12px;font-size:14px;line-height:1.7;min-height:5.2em;background:var(--quote);border-radius:10px;padding:10px 14px}
+.tx-d dl{display:grid;grid-template-columns:92px 1fr;gap:2px 10px;margin:4px 0 0}
+.tx-d dt{font-size:12px;color:var(--faint);padding-top:3px}
+.tx-d dd{margin:0}
+@media (max-width:640px){.tx{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const D={
+    inv:['Investors and borrowers','Move today\'s money into the future, or bring future income forward.','Trading costs are the price of moving money across time; on average they lose slightly to profit-motivated traders.','Buying an index fund regularly for retirement; selling holdings when the money is needed.'],
+    exc:['Asset exchangers','Need to swap into another asset: exchanging currency, cashing out, rebalancing.','Pay the spread for immediate execution.','Exchanging currency before going abroad; redeeming a fund to pay tuition.'],
+    hed:['Hedgers','Reduce an existing risk exposure.','Pay a small cost on average in exchange for certainty of outcome.','An exporter sells foreign currency forward to lock in its revenue.'],
+    app:['Apprentice traders','Trade in order to learn how to trade.','Pay their tuition to more experienced counterparties; those who learn become winners, those who do not usually quit.','Practising with a small sum of money.'],
+    fun:['Trading for fun','Trading itself is enjoyable.','Pay for entertainment, but often underestimate how much.','Favouring low-priced, highly volatile "lottery-type" stocks.'],
+    val:['Value traders','Estimate an asset\'s true value and trade when the price departs from it.','Profit from those who trade with them when price departs from value; make prices more efficient.','Buying an undervalued company after studying its financial statements.'],
+    new:['News traders','Trade before prices fully reflect the news.','Profit from those who react more slowly; speed decides success.','An institution that places orders within seconds of an announcement.'],
+    par:['Parasitic traders','Anticipate other people\'s orders and trade ahead of them, or follow large orders.','Profit from the trading costs of those they anticipate; bring no new information and harm liquidity.','Spotting a large buy order, buying first, then selling to it at a higher price.'],
+    man:['Market manipulators','Spread rumours, place fake orders, corner and squeeze, and the like.','Profit from traders they mislead; prohibited by law in every major jurisdiction.','Buying first, spreading favourable rumours, then selling.'],
+    dea:['Dealers','Quote both a bid and an ask and wait for others to trade with them.','Earn the bid-ask spread from those in a hurry to trade; supply liquidity.','A market maker on an exchange.'],
+    arb:['Arbitrageurs','Buy and sell at once when the price gap between related assets moves out of line.','Profit from the traders who created the gap; carry liquidity from one market to another.','Buying an asset where it is cheap and selling it where it is dear, on two exchanges at once.'],
+    pse:['Pseudo-informed traders','A subtype of inefficient traders: believe they hold valuable information that is in fact already in the price or has no predictive power.','Lose to the truly informed and to dealers, and bear trading costs.','Chasing a rising stock after seeing a news alert.'],
+    ine:['Inefficient traders','Trade in poor ways and pay unnecessary costs.','Leave the extra spread and market-impact costs to dealers and parasitic traders.','Trading a large amount with a market order when liquidity is very poor.']
+  };
+  const d=document.getElementById('tx-d'), bs=[...document.querySelectorAll('#tx button')];
+  bs.forEach(b=>b.addEventListener('click',()=>{bs.forEach(x=>x.classList.toggle('sel',x===b));const v=D[b.dataset.k];
+    d.innerHTML=`<b>${v[0]}</b><dl><dt>Why they trade</dt><dd>${v[1]}</dd><dt>Win or lose</dt><dd>${v[2]}</dd><dt>Example</dt><dd>${v[3]}</dd></dl>`;}));
+})();
+</script>

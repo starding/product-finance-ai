@@ -1,0 +1,28 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">名义上他决定，实际上谁决定</p><p class="figsub">书记员一年向他提出 10 个要紧的方案，其中 2 个实际上不合他的心意。拖动他一年花在了解情况上的时间，看他能识破几个，以及实际的决定权落在谁手里。</p></div><button class="replay" type="button" data-replay="au21">重播</button></div>
+    <div class="au21" id="au21" data-anim>
+      <div class="au21-g" id="au21-g"></div>
+      <div class="sl"><label for="au21-h">他花在了解情况上的时间 <b id="au21-hv"></b></label><input id="au21-h" type="range" min="0" max="60" step="2" value="4"></div>
+      <p class="au21-msg" id="au21-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：他识破一个不合心意的方案的把握为 时间 ÷（时间 ＋ 10 小时）；没有识破的方案，他照样点头（阿吉翁与梯若尔，1997 所说的正式权威与实际权威之分）。</figcaption>
+</figure>
+<style>
+.au21-g{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;margin:6px 0 10px}
+.au21-g i{aspect-ratio:1;border-radius:8px;background:var(--accent-soft);display:grid;place-items:center;font-style:normal;font-size:12px;transition:background .3s}
+.au21-g i.bad{background:var(--warm)} .au21-g i.caught{background:var(--quote);outline:2px solid var(--warm);outline-offset:-2px;color:var(--warm)}
+.au21-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('au21'+id);
+  function draw(){const h=+$('-h').value,p=h/(h+10),caught=Math.round(2*p*10)/10;$('-hv').textContent=h+' 小时';
+    $('-g').innerHTML=Array.from({length:10},(_,i)=>{if(i<2){const c=i<Math.round(caught);return `<i class="${c?'caught':'bad'}">${c?'否决':'通过'}</i>`;}return `<i>通过</i>`;}).join('');
+    $('-msg').textContent=h===0?'他从不花时间了解情况，十个方案全部点头通过：名义上的决定权在他，实际的决定权全在书记员。':`一年花 ${h} 小时了解情况，平均能识破 ${caught.toFixed(1)} 个不合心意的方案。${h<10?'他花的时间太少，实际的决定权大部分在书记员手里。':'他掌握的信息越多，实际的决定权越多地回到他手里；代价是要花时间。'}`;}
+  $('-h').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{let v=0;$('-h').value=0;draw();const id=setInterval(()=>{v+=2;$('-h').value=v;draw();if(v>=40)clearInterval(id);},120);});
+  draw();
+})();
+</script>

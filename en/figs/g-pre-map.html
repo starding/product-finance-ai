@@ -1,0 +1,35 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Change one parameter: the cost of agency</p><p class="figsub">Drag the slider to lower the cost of having someone think and act on your behalf from high to low, and see which of the twelve steps of Part One are affected.</p></div><button class="replay" type="button" data-replay="gm">Replay</button></div>
+    <div class="gm" id="gm" data-anim>
+      <div class="sl"><label for="gm-s">Cost of agency <b id="gm-v"></b></label><input id="gm-s" type="range" min="0" max="100" value="100"></div>
+      <div class="gm-steps" id="gm-steps"></div>
+      <div class="legend"><span><i style="background:var(--warm)"></i>Affected; rerun in Part Two</span><span><i style="background:var(--quote);border:1px solid var(--line)"></i>Not changed by this</span></div>
+      <p class="gm-msg" id="gm-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>The degree to which each step is affected is illustrative; the derivation itself is in Part Two.</figcaption>
+</figure>
+<style>
+.gm-steps{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin:12px 0 4px}
+.gm-c{border-radius:8px;padding:8px;background:var(--quote);font-size:12.5px;line-height:1.45;transition:background .4s,color .4s;min-height:58px}
+.gm-c em{display:block;font-style:normal;font-size:10.5px;color:var(--faint)}
+.gm-c.hit{background:var(--warm-soft);color:var(--warm)}
+.gm-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.gm-steps{grid-template-columns:repeat(3,1fr)}}
+</style>
+<script>
+(function(){
+  // 每一步：名称、受代理成本影响的门槛（代理成本低于此值时受影响；0 表示不受影响）
+  const S=[['Saving and seed',0],['Lending',0],['Commitment',55],['Money',0],['Insurance',0],['Bank',0],['Shares',0],['Market',40],['Information in prices',50],['Delegation',80],['Regulation & custody',60],['Defaults',70]];
+  const $=id=>document.getElementById(id),sl=$('gm-s');
+  $('gm-steps').innerHTML=S.map((s,i)=>`<div class="gm-c" data-i="${i}"><em>${i+1}</em>${s[0]}</div>`).join('');
+  const cs=[...document.querySelectorAll('.gm-c')];
+  function draw(){const v=+sl.value;$('gm-v').textContent=v>66?'high':v>33?'medium':'low';let n=0;
+    cs.forEach((c,i)=>{const hit=S[i][1]>0&&v<S[i][1];c.classList.toggle('hit',hit);if(hit)n++;});
+    $('gm-msg').textContent=n?`At this cost of agency, ${n} step${n>1?'s':''} must be derived again. Delegation is affected first, then human bias, regulation and commitment, then information in prices and the market. The basic problems of time, risk and saving are not affected.`:'When the cost of agency is high, the institutions derived in Part One are what we have today: ordinary people hand their money to a few professional institutions.';}
+  sl.addEventListener('input',draw);
+  $('gm').addEventListener('anim-in',()=>{let v=100;sl.value=v;draw();const id=setInterval(()=>{v-=4;sl.value=v;draw();if(v<=10)clearInterval(id);},90);});
+  draw();
+})();
+</script>

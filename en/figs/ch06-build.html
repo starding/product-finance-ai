@@ -1,0 +1,65 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">How a factor is built</p><p class="figsub">Forty stocks sorted by book-to-market ratio: buy the highest 30% and sell the lowest 30%; the return of this long-short portfolio is the value factor return for the period.</p></div><button class="replay" type="button" id="bd-re">Another period</button></div>
+    <div class="bd" id="bd" data-anim>
+      <svg viewBox="0 0 640 200" role="img" aria-label="Building a long-short portfolio by sorting on book-to-market ratio">
+        <g id="bd-axis"></g><g id="bd-dots"></g>
+        <rect id="bd-s" class="bd-zone s" y="20" height="140"/><rect id="bd-l" class="bd-zone l" y="20" height="140"/>
+        <text id="bd-st" class="t-warm" font-size="12" text-anchor="middle" y="16">Sell: lowest 30% book-to-market</text>
+        <text id="bd-lt" class="t-accent" font-size="12" text-anchor="middle" y="16">Buy: highest 30% book-to-market</text>
+      </svg>
+      <div class="bd-out">
+        <div><span>Average return of the long group</span><b id="bd-a"></b></div>
+        <div><span>Average return of the short group</span><b id="bd-b"></b></div>
+        <div><span>Value factor return (long minus short)</span><b id="bd-f"></b></div>
+      </div>
+    </div>
+  </div>
+  <figcaption>Illustrative simulation: each stock’s return = the common market return + a small premium related to book-to-market ratio + firm-specific noise. Subtracting short from long cancels the common market part, leaving the return related to the characteristic. Construction follows Fama and French (1993).</figcaption>
+</figure>
+<style>
+.bd svg{width:100%;height:auto;display:block}
+.bd-dot{transition:cx .9s ease,cy .9s ease,fill .3s}
+.bd-zone{opacity:0;transition:opacity .4s .9s}
+.bd-zone.s{fill:var(--warm-soft)} .bd-zone.l{fill:var(--accent-soft)}
+#bd-st,#bd-lt{opacity:0;transition:opacity .4s 1s}
+.bd.sorted .bd-zone,.bd.sorted #bd-st,.bd.sorted #bd-lt{opacity:1}
+.bd-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.bd-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.bd-out span{display:block;font-size:12px;color:var(--faint)}
+.bd-out b{font-size:19px;font-variant-numeric:tabular-nums}
+#bd-f{color:var(--accent)}
+@media (max-width:640px){.bd-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const N=40,X0=40,X1=620,YM=90,bd=document.getElementById('bd'),dots=document.getElementById('bd-dots');
+  const g=()=>{let u=0,v=0;while(!u)u=Math.random();v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);};
+  const x=i=>X0+(i+0.5)/N*(X1-X0);
+  dots.innerHTML=Array.from({length:N},()=>'<circle class="bd-dot" r="6"/>').join('');
+  const cs=[...dots.children];
+  let ax=`<line x1="${X0}" y1="${YM}" x2="${X1}" y2="${YM}" class="s-line"/><text x="${X0}" y="188" font-size="11" class="t-faint">Book-to-market: low</text><text x="${X1}" y="188" text-anchor="end" font-size="11" class="t-faint">high</text><text x="${X0-6}" y="${YM+4}" text-anchor="end" font-size="10" class="t-faint">0</text>`;
+  document.getElementById('bd-axis').innerHTML=ax;
+  const k=Math.round(N*0.3);
+  document.getElementById('bd-s').setAttribute('x',X0);document.getElementById('bd-s').setAttribute('width',x(k-1)-X0+8);
+  document.getElementById('bd-l').setAttribute('x',x(N-k)-8);document.getElementById('bd-l').setAttribute('width',X1-x(N-k)+8);
+  document.getElementById('bd-st').setAttribute('x',(X0+x(k-1))/2);document.getElementById('bd-lt').setAttribute('x',(x(N-k)+X1)/2);
+  function run(){
+    bd.classList.remove('sorted');
+    const mkt=0.01*g(), S=Array.from({length:N},()=>{const bm=Math.random();return {bm,r:mkt+0.006*(bm-0.5)+0.04*g()};});
+    const order=S.map((s,i)=>i);
+    cs.forEach((c,i)=>{c.setAttribute('cx',X0+Math.random()*(X1-X0));c.setAttribute('cy',YM-S[i].r*900);c.style.fill='var(--gray-mark)';});
+    setTimeout(()=>{
+      const sorted=order.slice().sort((a,b)=>S[a].bm-S[b].bm);
+      sorted.forEach((i,pos)=>{const c=cs[i];c.setAttribute('cx',x(pos));c.style.fill=pos<k?'var(--warm)':pos>=N-k?'var(--accent)':'var(--gray-mark)';});
+      bd.classList.add('sorted');
+      const L=sorted.slice(N-k).map(i=>S[i].r), Sh=sorted.slice(0,k).map(i=>S[i].r), avg=a=>a.reduce((p,q)=>p+q,0)/a.length;
+      const pct=v=>(v>0?'+':'')+(v*100).toFixed(2)+'%';
+      document.getElementById('bd-a').textContent=pct(avg(L));document.getElementById('bd-b').textContent=pct(avg(Sh));document.getElementById('bd-f').textContent=pct(avg(L)-avg(Sh));
+    },700);
+  }
+  document.getElementById('bd-re').addEventListener('click',run);
+  bd.addEventListener('anim-in',run);
+  run();
+})();
+</script>

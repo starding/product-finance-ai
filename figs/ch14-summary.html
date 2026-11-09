@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：把监管要求设计进产品</p><p class="figsub">四条设计要求，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="ch14summary">重播</button></div>
+    <div class="ch14summary" id="ch14summary" data-anim><div class="ch14summary-c" style="--i:0"><em>信息要可核验、可比较</em><b>把披露设计成可核验的形式</b><p>关键信息用统一口径展示，附上来源与时间，方便用户与第三方核对。</p></div><div class="ch14summary-c" style="--i:1"><em>适当性是机构的判断责任</em><b>推荐前先了解用户，并留下记录</b><p>推荐依据用户的情况，而不是销售目标；不适合时要明确说不。</p></div><div class="ch14summary-c warn" style="--i:2"><em>收入方式决定推荐倾向</em><b>披露自己从哪里赚钱</b><p>说明费用、佣金与订单流付费等安排，让用户判断利益冲突。</p></div><div class="ch14summary-c warn" style="--i:3"><em>恐慌会自我实现</em><b>在动荡时提供确定的信息</b><p>清楚说明资产托管、保障范围与限额，减少因不确定引发的恐慌操作。</p></div></div>
+  </div>
+</figure>
+<style>
+.ch14summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch14summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch14summary-c.warn{border-left-color:var(--warm)}
+.ch14summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch14summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch14summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch14summary.in .ch14summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch14summary{grid-template-columns:1fr}}
+</style>

@@ -1,0 +1,40 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">什么都不做时会发生什么</p><p class="figsub">一百位新员工，其中八成想参加储蓄计划。每个月，每个人只有一定的把握真的动手去改自己的状态。左边是“自愿报名加入”，右边是“自动加入、可以退出”。</p></div><button class="replay" type="button" data-replay="in12">重播</button></div>
+    <div class="in12" id="in12" data-anim>
+      <div class="in12-two"><div><p class="in12-h">自愿报名加入</p><div class="in12-dots" id="in12-a"></div><b id="in12-av"></b></div><div><p class="in12-h">自动加入、可以退出</p><div class="in12-dots" id="in12-b"></div><b id="in12-bv"></b></div></div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>参加储蓄</span><span><i style="background:var(--quote);border:1px solid var(--line)"></i>没有参加</span><span><i style="outline:2px solid var(--warm);outline-offset:-2px;background:transparent"></i>状态与本人意愿不一致</span></div>
+      <div class="sl"><label for="in12-m">入职后第几个月 <b id="in12-mv"></b></label><input id="in12-m" type="range" min="0" max="36" step="1" value="12"></div>
+      <div class="sl"><label for="in12-p">每个月真的动手的把握 <b id="in12-pv"></b></label><input id="in12-p" type="range" min="2" max="40" step="2" value="6"></div>
+      <p class="in12-msg" id="in12-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意模型：想参加与不想参加的人各自只在“动手”的那个月改变状态，动手的把握每月相同。马德里安与谢伊（2001）发现，一家美国公司改为自动加入后，新员工的参加比例大幅提高，多数人停留在默认的缴费比例与基金上。</figcaption>
+</figure>
+<style>
+.in12-two{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.in12-h{margin:0 0 6px;font-size:13px;color:var(--muted)}
+.in12-dots{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;max-width:260px}
+.in12-dots i{aspect-ratio:1;border-radius:50%;background:var(--quote);border:1px solid var(--line);transition:background .35s}
+.in12-dots i.on{background:var(--accent);border-color:var(--accent)}
+.in12-dots i.bad{outline:2px solid var(--warm);outline-offset:1px}
+.in12-two b{display:block;font-size:18px;margin-top:6px;font-variant-numeric:tabular-nums}
+.in12-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.in12-two{gap:12px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('in12'+id);let s=1201;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};
+  // 每个人：是否想参加、动手所需的随机数序列
+  const P=Array.from({length:100},(_,i)=>({want:i%5!==4,u:Array.from({length:37},r)}));
+  const st=(auto,m,p)=>P.map(q=>{let on=auto;for(let t=0;t<m;t++)if(on!==q.want&&q.u[t]<p)on=q.want;return on;});
+  function box(el,arr){el.innerHTML=arr.map((on,i)=>`<i class="${on?'on':''}${on!==P[i].want?' bad':''}"></i>`).join('');}
+  function draw(){const m=+$('-m').value,p=+$('-p').value/100;$('-mv').textContent=m+' 个月';$('-pv').textContent=Math.round(p*100)+'%';
+    const A=st(false,m,p),B=st(true,m,p),a=A.filter(Boolean).length,b=B.filter(Boolean).length;box($('-a'),A);box($('-b'),B);
+    $('-av').textContent=`参加 ${a}%`;$('-bv').textContent=`参加 ${b}%`;
+    $('-msg').textContent=m===0?'入职当天：自愿加入时无人参加，自动加入时人人参加。此后只有真的动手的人才会改变状态。':`第 ${m} 个月：自愿加入的参加 ${a}%，自动加入的参加 ${b}%。两边的人意愿完全相同，差别只在什么都不做时会发生什么。`;}
+  ['-m','-p'].forEach(k=>$(k).addEventListener('input',draw));
+  $('').addEventListener('anim-in',()=>{let m=0;$('-m').value=0;draw();const id=setInterval(()=>{m+=1;$('-m').value=m;draw();if(m>=24)clearInterval(id);},160);});
+  draw();
+})();
+</script>

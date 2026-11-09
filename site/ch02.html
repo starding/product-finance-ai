@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>利率与期限</title>
+<meta name="description" content="《产品×金融×AI：AI 时代的金融产品》第 2 章：利率是跨时间交换的价格，补偿要按购买力衡量，期限要与用钱时间匹配">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="ch02">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="全书目录">
+<div class="side-head"><a class="sidetitle" href="index.html">产品×金融×AI<small>AI 时代的金融产品</small></a></div>
+<div class="side-view" role="group" aria-label="阅读方式"><a href="preface.html" class="on" aria-current="true">分解式</a><a href="g-preface.html">生成式</a></div>
+<a class="side-about" href="index.html#about">关于本书</a>
+<a class="" href="preface.html"><span class="n">序</span>为什么金融产品在 AI 时代需要重新学</a>
+<a class="side-part" href="part1.html"><span class="pn">第一部分</span>市场：收益与风险从何而来</a>
+<a class="" href="ch01.html"><span class="n">1</span>金融产品卖的是什么</a>
+<a class=" cur" href="ch02.html" aria-current="page"><span class="n">2</span>利率与期限</a>
+<a class="" href="ch03.html"><span class="n">3</span>风险长什么样</a>
+<a class="" href="ch04.html"><span class="n">4</span>分散：哪些风险有补偿</a>
+<a class="" href="ch05.html"><span class="n">5</span>复利与波动拖累</a>
+<a class="" href="ch06.html"><span class="n">6</span>因子：风险补偿可以分解</a>
+<a class="" href="ch07.html"><span class="n">7</span>价格为什么难以预测</a>
+<a class="" href="ch08.html"><span class="n">8</span>信息如何进入价格</a>
+<a class="" href="ch09.html"><span class="n">9</span>市场里的交易者</a>
+<a class="" href="ch10.html"><span class="n">10</span>流动性与买卖价差</a>
+<a class="" href="ch11.html"><span class="n">11</span>订单、规则与市场结构</a>
+<a class="" href="ch12.html"><span class="n">12</span>主动管理的算术</a>
+<a class="" href="ch13.html"><span class="n">13</span>承诺如何被兑现</a>
+<a class="" href="ch14.html"><span class="n">14</span>监管为何存在</a>
+<a class="side-part" href="part2.html"><span class="pn">第二部分</span>用户：人要什么、能承受什么</a>
+<a class="" href="ch15.html"><span class="n">15</span>用户要完成的任务</a>
+<a class="" href="ch16.html"><span class="n">16</span>用户如何做决定</a>
+<a class="" href="ch17.html"><span class="n">17</span>用户能承受什么</a>
+<a class="" href="ch18.html"><span class="n">18</span>用户如何判断与信任</a>
+<a class="side-part" href="part3.html"><span class="pn">第三部分</span>AI：代理能替人做多少</a>
+<a class="" href="ch19.html"><span class="n">19</span>放大倍数：理论与实测</a>
+<a class="" href="ch20.html"><span class="n">20</span>哪些事务能交给 AI</a>
+<a class="" href="ch21.html"><span class="n">21</span>能力从哪里来、在哪里失效</a>
+<a class="" href="ch22.html"><span class="n">22</span>可验证性：核对的成本</a>
+<a class="" href="ch23.html"><span class="n">23</span>金融场景的特殊约束</a>
+<a class="side-part" href="part4.html"><span class="pn">第四部分</span>设计：在三组约束下设计金融产品</a>
+<a class="" href="ch24.html"><span class="n">24</span>承诺什么</a>
+<a class="" href="ch25.html"><span class="n">25</span>委托参数：交代的目标与约束</a>
+<a class="" href="ch26.html"><span class="n">26</span>授权与不可逆敞口</a>
+<a class="" href="ch27.html"><span class="n">27</span>责任与利益冲突</a>
+<a class="" href="ch28.html"><span class="n">28</span>能力装配与过程可见</a>
+<a class="" href="ch29.html"><span class="n">29</span>保障强度</a>
+<a class="" href="ch30.html"><span class="n">30</span>信任如何建立</a>
+<a class="" href="ch31.html"><span class="n">31</span>设计原则</a>
+<a class="side-app" href="estimates.html"><span class="n">附录</span>作者估算的方法与数据</a>
+<a class="side-app" href="method.html"><span class="n">附录</span>本书的写法</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="展开目录" title="目录"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">产品×金融×AI：AI 时代的金融产品</a><span>第一部分 · 第一篇　时间补偿：等待的价格</span><a class="langlink" href="en/ch02.html" hreflang="en">English</a></header>
+
+<div class="chapno">第 2 章</div><h1>利率与期限<small>等待的价格</small></h1>
+<div class="eqstrip" aria-label="本章在回报等式中的位置"><span class="lbl">实际回报 ＝</span><span class="cur">时间补偿</span><a class="" href="ch03.html">＋风险补偿</a><a class="" href="ch07.html">＋信息优势</a><a class="" href="ch10.html">－交易成本</a><span class="">＋运气</span><span class="keep"><a href="ch13.html">前提：承诺得到兑现</a></span></div>
+<blockquote><p>回报等式的第一项是时间补偿：把今天的钱留到将来，本身就应当得到补偿。利率是这种跨时间交换的价格，由人们的耐心与投资机会共同决定。真正的补偿要按购买力衡量；而当承诺兑现的时间与用钱的时间不一致，这份补偿就会打折扣。</p></blockquote>
+<h2 id="sec-1">一、为什么等待要有回报</h2>
+<p>人一生的收入与支出在时间上并不匹配。年轻时收入低，中年时收入高于支出，退休后几乎没有收入。企业也一样：建厂、研发需要现在投入，回报在若干年后才到来。</p>
+<p>于是市场上有两类人：一类人现在有余钱、愿意推迟消费，另一类人现在需要钱、将来有能力偿还。让两者交换，双方的处境都能变好。费雪在 1930 年的《利息理论》中把这个道理讲清楚了：利率是这种跨时间交换的价格，它一边取决于人们愿意等待多久，一边取决于手中的钱投入生产能带来多少回报。莫迪利亚尼与布伦伯格在 1954 年提出的生命周期假说进一步指出：人们倾向于在一生中平滑消费，收入高时储蓄，收入低时借入或动用储蓄。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">一生中的收入与消费</p><p class="figsub">拖动年龄，看这一阶段是在储蓄，还是在借入或动用储蓄。</p></div><button class="replay" type="button" data-replay="lc">重播</button></div>
+    <div class="lc" id="lc" data-anim>
+      <svg viewBox="0 0 640 280" role="img" aria-label="生命周期中收入与消费的示意曲线">
+        <g id="lc-grid"></g>
+        <path id="lc-save" class="lc-area save"/>
+        <path id="lc-borrow" class="lc-area borrow"/>
+        <path id="lc-dis" class="lc-area dis"/>
+        <path id="lc-inc" class="lc-line inc"/>
+        <path id="lc-con" class="lc-line con"/>
+        <line id="lc-cur" y1="20" y2="240" class="lc-cur"/>
+        <circle id="lc-di" r="5" class="lc-dot inc"/>
+        <circle id="lc-dc" r="5" class="lc-dot con"/>
+        <text id="lc-tinc" font-size="12" class="t-accent">收入</text>
+        <text id="lc-tcon" font-size="12" class="t-warm">消费</text>
+      </svg>
+      <div class="sl"><label for="lc-age">年龄 <b id="lc-av"></b></label><input id="lc-age" type="range" min="22" max="85" value="45"></div>
+      <p class="lc-msg" id="lc-msg" aria-live="polite"></p>
+      <div class="legend"><span><i style="background:var(--accent-soft)"></i>收入高于消费：储蓄</span><span><i style="background:var(--warm-soft)"></i>消费高于收入：借入或动用储蓄</span></div>
+    </div>
+  </div>
+  <figcaption>示意曲线，不对应任何统计数据。生命周期假说见 Modigliani 与 Brumberg（1954）：人们倾向于在一生中平滑消费，在收入高的阶段储蓄，在收入低的阶段借入或动用储蓄。</figcaption>
+</figure>
+<style>
+.lc svg{width:100%;height:auto;display:block;margin-bottom:8px}
+.lc-line{fill:none;stroke-width:2.5;stroke-linecap:round;stroke-dasharray:1200;stroke-dashoffset:1200}
+.lc-line.inc{stroke:var(--accent)} .lc-line.con{stroke:var(--warm)}
+.lc.in .lc-line{animation:lcdraw 1.6s ease forwards}
+.lc.in .lc-line.con{animation-delay:.3s}
+@keyframes lcdraw{to{stroke-dashoffset:0}}
+.lc-area{opacity:0;transition:opacity .6s 1.6s}
+.lc.in .lc-area{opacity:1}
+.lc-area.save{fill:var(--accent-soft)} .lc-area.borrow,.lc-area.dis{fill:var(--warm-soft)}
+.lc-cur{stroke:var(--ink);stroke-width:1;stroke-dasharray:3 3}
+.lc-dot.inc{fill:var(--accent)} .lc-dot.con{fill:var(--warm)}
+.lc-msg{font-size:14px;color:var(--ink);min-height:1.7em;margin:0 0 6px}
+</style>
+<script>
+(function(){
+  const X0=46,X1=620,Y0=240,Y1=24, A0=22, A1=85;
+  const x=a=>X0+(a-A0)/(A1-A0)*(X1-X0), y=v=>Y0-v/11*(Y0-Y1);
+  // 示意：收入在 50 岁左右达到高峰，65 岁退休后降为养老金；消费平缓上升
+  const inc=a=>a<65?2.5+7.5*Math.sin(Math.PI*Math.min(1,(a-20)/56)):2.2;
+  const con=a=>4.6+1.8*Math.min(1,(a-22)/30)-0.4*Math.max(0,(a-70)/15);
+  const ages=[];for(let a=A0;a<=A1;a+=0.25)ages.push(a);
+  const line=f=>ages.map((a,i)=>(i?'L':'M')+x(a).toFixed(1)+','+y(f(a)).toFixed(1)).join('');
+  const area=(lo,hi)=>{const s=ages.filter(a=>a>=lo&&a<=hi);return 'M'+s.map(a=>x(a).toFixed(1)+','+y(inc(a)).toFixed(1)).join('L')+'L'+s.slice().reverse().map(a=>x(a).toFixed(1)+','+y(con(a)).toFixed(1)).join('L')+'Z';};
+  const cross=[];for(let i=1;i<ages.length;i++){const d0=inc(ages[i-1])-con(ages[i-1]),d1=inc(ages[i])-con(ages[i]);if(d0*d1<=0)cross.push(ages[i]);}
+  const c1=cross[0]||28, c2=cross.find(a=>a>c1+5)||64;
+  document.getElementById('lc-inc').setAttribute('d',line(inc));
+  document.getElementById('lc-con').setAttribute('d',line(con));
+  document.getElementById('lc-borrow').setAttribute('d',area(A0,c1));
+  document.getElementById('lc-save').setAttribute('d',area(c1,c2));
+  document.getElementById('lc-dis').setAttribute('d',area(c2,A1));
+  let g='';[30,40,50,60,70,80].forEach(a=>{g+=`<line x1="${x(a)}" y1="${Y1}" x2="${x(a)}" y2="${Y0}" class="s-line"/><text x="${x(a)}" y="${Y0+18}" text-anchor="middle" font-size="11" class="t-faint">${a} 岁</text>`;});
+  g+=`<line x1="${X0}" y1="${Y0}" x2="${X1}" y2="${Y0}" class="s-faint"/><text x="${x(65)}" y="${Y1+6}" text-anchor="middle" font-size="11" class="t-faint">退休</text><line x1="${x(65)}" y1="${Y1+12}" x2="${x(65)}" y2="${Y0}" class="s-faint" stroke-dasharray="2 3"/>`;
+  document.getElementById('lc-grid').innerHTML=g;
+  const ti=document.getElementById('lc-tinc'),tc=document.getElementById('lc-tcon');
+  ti.setAttribute('x',x(46));ti.setAttribute('y',y(inc(46))-10);tc.setAttribute('x',x(36));tc.setAttribute('y',y(con(36))+20);
+  const age=document.getElementById('lc-age');
+  function render(){
+    const a=+age.value, X=x(a);
+    document.getElementById('lc-av').textContent=a+' 岁';
+    const cur=document.getElementById('lc-cur');cur.setAttribute('x1',X);cur.setAttribute('x2',X);
+    const di=document.getElementById('lc-di'),dc=document.getElementById('lc-dc');
+    di.setAttribute('cx',X);di.setAttribute('cy',y(inc(a)));dc.setAttribute('cx',X);dc.setAttribute('cy',y(con(a)));
+    const msg=a<c1?'收入低于想要的消费：借入（例如助学贷款、按揭），由将来的收入偿还。':a<c2?'收入高于消费：储蓄与投资，把今天的钱留给将来。':'收入降为养老金，低于消费：动用此前的储蓄。';
+    document.getElementById('lc-msg').textContent=msg;
+  }
+  age.addEventListener('input',render); render();
+  document.getElementById('lc').addEventListener('anim-in',()=>{let a=22;const t=setInterval(()=>{a+=1;age.value=a;render();if(a>=45)clearInterval(t);},60);});
+})();
+</script>
+
+<h2 id="sec-2">二、名义回报与实际回报</h2>
+<p>存款单上写的利率是名义利率，它承诺的是将来拿回多少元钱。可是将来的一元钱能买到的东西，可能少于今天。费雪同样指出，衡量等待的回报，应当看扣除通胀之后的实际利率：大致等于名义利率减去通胀率。名义利率 2%、通胀 3% 时，存款金额在增长，购买力却在减少。</p>
+<figure>
+  <div class="card">
+    <p class="figtitle">金额在增长，购买力未必</p>
+    <p class="figsub">10,000 元存 20 年。调节名义利率与通胀率，比较账户上的金额与它能买到的东西。</p>
+    <div class="rl" id="rl" data-anim>
+      <svg viewBox="0 0 640 230" role="img" aria-label="名义金额与实际购买力随时间的变化">
+        <g id="rl-axis"></g>
+        <path id="rl-n" class="rl-l n"/><path id="rl-r" class="rl-l r"/>
+        <text id="rl-tn" font-size="12" class="t-ink">账户金额</text><text id="rl-tr" font-size="12" class="t-warm">按今天的物价计算的购买力</text>
+      </svg>
+      <div class="rl-ctrl">
+        <div class="sl"><label for="rl-i">名义利率 <b id="rl-iv"></b></label><input id="rl-i" type="range" min="0" max="8" step="0.5" value="2"></div>
+        <div class="sl"><label for="rl-p">通胀率 <b id="rl-pv"></b></label><input id="rl-p" type="range" min="0" max="8" step="0.5" value="3"></div>
+      </div>
+      <div class="rl-out">
+        <div><span>实际利率</span><b id="rl-rr"></b></div>
+        <div><span>20 年后账户金额</span><b id="rl-fn"></b></div>
+        <div><span>20 年后的购买力</span><b id="rl-fr"></b></div>
+      </div>
+    </div>
+  </div>
+  <figcaption>示例参数。实际利率按（1＋名义利率）÷（1＋通胀率）－1 计算，近似等于两者之差；关系见 Fisher（1930）。</figcaption>
+</figure>
+<style>
+.rl svg{width:100%;height:auto;display:block}
+.rl-l{fill:none;stroke-width:2.5}
+.rl-l.n{stroke:var(--ink)} .rl-l.r{stroke:var(--warm)}
+.rl-ctrl{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.rl-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.rl-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.rl-out span{display:block;font-size:12px;color:var(--faint)}
+.rl-out b{font-size:19px;font-variant-numeric:tabular-nums}
+#rl-rr.neg{color:var(--warm)}
+@media (max-width:640px){.rl-ctrl,.rl-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const T=20,X0=56,X1=620,Y0=196,Y1=16,V0=0,x=t=>X0+t/T*(X1-X0);
+  let V1=20000; const y=v=>Y0-(v-V0)/(V1-V0)*(Y0-Y1);
+  function axis(){let a=`<line x1="${X0}" y1="${Y0}" x2="${X1}" y2="${Y0}" class="s-faint"/>`;
+    [0,5,10,15,20].forEach(t=>a+=`<text x="${x(t)}" y="${Y0+16}" text-anchor="middle" font-size="11" class="t-faint">${t} 年</text>`);
+    const st=V1/4;for(let v=st;v<=V1;v+=st)a+=`<line x1="${X0}" y1="${y(v)}" x2="${X1}" y2="${y(v)}" class="s-line"/><text x="${X0-8}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${(v/10000).toFixed(v%10000?1:0)} 万</text>`;
+    document.getElementById('rl-axis').innerHTML=a;}
+  const i=document.getElementById('rl-i'), p=document.getElementById('rl-p'), fmt=v=>Math.round(v).toLocaleString('zh-CN');
+  function render(){
+    const r=+i.value/100, q=+p.value/100;
+    document.getElementById('rl-iv').textContent=i.value+'%'; document.getElementById('rl-pv').textContent=p.value+'%';
+    const N=t=>10000*Math.pow(1+r,t), R=t=>N(t)/Math.pow(1+q,t);
+    V1=Math.max(20000,Math.ceil(Math.max(N(T),R(T))/10000)*10000); axis();
+    const P=f=>'M'+Array.from({length:T+1},(_,t)=>`${x(t).toFixed(1)},${y(Math.min(V1,f(t))).toFixed(1)}`).join('L');
+    document.getElementById('rl-n').setAttribute('d',P(N)); document.getElementById('rl-r').setAttribute('d',P(R));
+    const tn=document.getElementById('rl-tn'),tr=document.getElementById('rl-tr');
+    tn.setAttribute('x',x(13));tn.setAttribute('y',y(Math.min(V1,N(13)))-8);tr.setAttribute('x',x(9));tr.setAttribute('y',y(R(9))+18);
+    const rr=(1+r)/(1+q)-1, e=document.getElementById('rl-rr');
+    e.textContent=(rr*100).toFixed(2)+'%'; e.className=rr<0?'neg':'';
+    document.getElementById('rl-fn').textContent=fmt(N(T))+' 元'; document.getElementById('rl-fr').textContent=fmt(R(T))+' 元';
+  }
+  [i,p].forEach(el=>el.addEventListener('input',render)); render();
+})();
+</script>
+
+<p>这意味着，“保本”这个词本身就需要说明口径：保的是名义金额，还是购买力。</p>
+<h2 id="sec-3">三、期限：承诺兑现的时间与用钱的时间</h2>
+<p>期限是时间补偿的另一面。如果用钱的时间早于承诺兑现的时间，就只能提前支取或在市场上卖掉，往往要接受折价；如果承诺兑现得太早，钱又会闲置在收益更低的地方。产品的期限是否与用户的用钱时间吻合，是金融产品的第一个设计问题。</p>
+<figure>
+  <div class="card">
+    <p class="figtitle">期限错配的代价</p>
+    <p class="figsub">10,000 元存三年定期。拖动用钱的时间，看提前支取损失多少利息。</p>
+    <div class="mm" id="mm" data-anim>
+      <svg viewBox="0 0 640 96" role="img" aria-label="存款期限与用钱时间">
+        <line x1="40" y1="44" x2="600" y2="44" class="s-faint"/>
+        <g id="mm-ticks"></g>
+        <rect id="mm-term" y="34" height="20" rx="10" class="mm-term"/>
+        <text id="mm-tl" y="26" font-size="12" text-anchor="middle" class="t-accent">定期三年，到期才按 2% 计息</text>
+        <line id="mm-need" y1="32" y2="74" class="mm-need"/>
+        <text id="mm-nl" y="90" font-size="12" text-anchor="middle" class="t-warm">需要用钱</text>
+      </svg>
+      <div class="sl"><label for="mm-t">需要用钱的时间 <b id="mm-tv"></b></label><input id="mm-t" type="range" min="0.5" max="5" step="0.5" value="1.5"></div>
+      <div class="mm-bars">
+        <div class="mm-row"><span>期限匹配时可得</span><div class="mm-track"><i id="mm-b1" class="ok"></i></div><b id="mm-v1"></b></div>
+        <div class="mm-row"><span>实际得到</span><div class="mm-track"><i id="mm-b2"></i></div><b id="mm-v2"></b></div>
+      </div>
+      <p class="mm-msg" id="mm-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示例利率：三年定期年利率 2%，提前支取按活期年利率 0.2% 计息；“期限匹配时可得”指选择与用钱时间一致的存款期限、按 2% 计息的结果。实际规则以各银行为准。债券提前卖出时不损失利息，但卖出价格取决于当时的市场利率，可能低于买入价。</figcaption>
+</figure>
+<style>
+.mm svg{width:100%;height:auto;display:block;margin-bottom:6px}
+.mm-term{fill:var(--accent-soft);stroke:var(--accent)}
+.mm-need{stroke:var(--warm);stroke-width:2;stroke-dasharray:4 3}
+.mm-bars{display:grid;gap:8px;margin:6px 0}
+.mm-row{display:grid;grid-template-columns:110px 1fr 80px;gap:10px;align-items:center;font-size:13px}
+.mm-row b{text-align:right;font-variant-numeric:tabular-nums}
+.mm-track{height:16px;background:var(--quote);border-radius:4px;overflow:hidden}
+.mm-track i{display:block;height:100%;background:var(--warm);transition:width .3s}
+.mm-track i.ok{background:var(--accent)}
+.mm-msg{font-size:14px;margin:8px 0 0;min-height:1.7em}
+</style>
+<script>
+(function(){
+  const X0=40,X1=600,T=5,x=t=>X0+t/T*(X1-X0), P=10000;
+  let tk='';for(let t=0;t<=5;t++)tk+=`<line x1="${x(t)}" y1="40" x2="${x(t)}" y2="48" class="s-faint"/><text x="${x(t)}" y="62" text-anchor="middle" font-size="11" class="t-faint">${t===0?'今天':t+' 年'}</text>`;
+  document.getElementById('mm-ticks').innerHTML=tk;
+  const term=document.getElementById('mm-term');term.setAttribute('x',x(0));term.setAttribute('width',x(3)-x(0));
+  document.getElementById('mm-tl').setAttribute('x',(x(0)+x(3))/2);
+  const s=document.getElementById('mm-t'), fmt=v=>Math.round(v).toLocaleString('zh-CN');
+  function render(){
+    const t=+s.value;
+    document.getElementById('mm-tv').textContent=t+' 年后';
+    const nd=document.getElementById('mm-need');nd.setAttribute('x1',x(t));nd.setAttribute('x2',x(t));
+    document.getElementById('mm-nl').setAttribute('x',x(t));
+    const ideal=P*Math.pow(1.02,t);
+    const act=t<3?P*Math.pow(1.002,t):P*Math.pow(1.02,3)*Math.pow(1.002,t-3);
+    const max=P*Math.pow(1.02,5), lo=P*0.98, w=v=>((v-lo)/(max-lo)*100)+'%';
+    document.getElementById('mm-b1').style.width=w(ideal);document.getElementById('mm-b2').style.width=w(act);
+    document.getElementById('mm-v1').textContent=fmt(ideal)+' 元';document.getElementById('mm-v2').textContent=fmt(act)+' 元';
+    document.getElementById('mm-msg').textContent=t<3
+      ?`用钱早于到期：只能提前支取，按活期计息，少得 ${fmt(ideal-act)} 元。`
+      :t===3?'用钱时间与期限一致：拿到全部承诺的利息。'
+      :`到期后钱闲置在活期里：少得 ${fmt(ideal-act)} 元。期限过短同样有代价。`;
+  }
+  s.addEventListener('input',render); render();
+  document.getElementById('mm').addEventListener('anim-in',()=>{let v=0.5;const id=setInterval(()=>{v+=0.5;s.value=v;render();if(v>=4.5){clearInterval(id);setTimeout(()=>{s.value=1.5;render();},700);}},350);});
+})();
+</script>
+
+<h2 id="sec-4">四、对产品设计的含义</h2>
+<p>时间补偿看似最简单，却最容易在产品说明中被含糊带过。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：把时间补偿说清楚</p><p class="figsub">三条设计要求，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="ch02summary">重播</button></div>
+    <div class="ch02summary" id="ch02summary" data-anim><div class="ch02summary-c" style="--i:0"><em>等待需要补偿</em><b>标明回报对应的期限</b><p>同一个收益率，持有一个月与持有三年的含义完全不同；年化与持有期收益要分开写。</p></div><div class="ch02summary-c" style="--i:1"><em>名义不等于实际</em><b>说明“保本”保的是什么</b><p>区分保名义金额与保购买力；长期产品同时展示扣除通胀后的结果。</p></div><div class="ch02summary-c warn" style="--i:2"><em>期限错配有代价</em><b>先问用钱时间，再推荐期限</b><p>展示提前支取或中途卖出的规则与代价，让用户在购买前就知道。</p></div></div>
+  </div>
+</figure>
+<style>
+.ch02summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch02summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch02summary-c.warn{border-left-color:var(--warm)}
+.ch02summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch02summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch02summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch02summary.in .ch02summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch02summary{grid-template-columns:1fr}}
+</style>
+
+<h2 id="sec-5">参考文献</h2>
+<ul class="refs"><li>Fisher, I. (1930). <i>The theory of interest</i>. Macmillan.</li><li>Modigliani, F. &amp; Brumberg, R. (1954). Utility analysis and the consumption function: An interpretation of cross-section data. In K. Kurihara (Ed.), <i>Post-Keynesian economics</i> (pp. 388–436). Rutgers University Press.</li></ul>
+<footer class="nav"><a href="ch01.html">← 第 1 章　金融产品卖的是什么</a><a href="ch03.html">第 3 章　风险长什么样 →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

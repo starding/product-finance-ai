@@ -1,0 +1,40 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Summary of Part Three: what each term of the decomposition yields</p><p class="figsub">Switch views: each term's conclusion, its implications for product design, and the constraints in finance.</p></div><button class="replay" type="button" data-replay="rc3">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="View">
+      <button type="button" data-rv3="c" aria-pressed="true">Conclusions</button>
+      <button type="button" data-rv3="p" aria-pressed="false">Implications for products</button>
+      <button type="button" data-rv3="a" aria-pressed="false">Constraints in finance</button>
+    </div>
+    <div class="rc3" id="rc3" data-anim></div>
+  </div>
+  <figcaption>Each row corresponds to one term of the decomposition; chapter numbers are shown beneath each term.</figcaption>
+</figure>
+<style>
+.rc3{display:grid;gap:6px}
+.rc3-r{display:grid;grid-template-columns:150px 1fr;gap:12px;align-items:center;padding:10px 12px;border-radius:10px;background:var(--quote);opacity:0;transform:translateY(6px);transition:opacity .4s,transform .4s;transition-delay:calc(var(--i)*.15s)}
+.rc3.in .rc3-r{opacity:1;transform:none}
+.rc3-r b{font-size:14px;display:block}
+.rc3-r em{font-style:normal;font-size:11px;color:var(--faint)}
+.rc3-r p{margin:0;font-size:13.5px;line-height:1.6}
+.rc3-r.keep{background:rgba(160,120,24,.1)}
+.rc3-r .sign{display:inline-block;min-width:18px;margin-right:4px;font-size:11px;color:var(--faint);font-weight:700}
+@media (max-width:640px){.rc3-r{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const R=[
+    ['','Overview','19',{c:'Measured by the principal\'s effort, observed amplification factors mostly sit around 1.0–1.2×, far below the theoretical range.',p:'Measure value by the principal\'s effort, not by how long the agent runs.',a:'In financial delegation the benchmark is the user\'s actual behaviour; many people do no research to begin with.'}],
+    ['Denominator','Portion not applicable','20',{c:'The share the agent can reach, is permitted to handle and is worth handing over sets the upper limit of the amplification factor.',p:'First widen the scope the agent can take on completely, and take on recurring tasks first.',a:'Information tasks have the highest applicable share; allocation and execution need the user\'s authorization and confirmation.'}],
+    ['Denominator','Rework after errors','21',{c:'Errors accumulate over steps, the boundary of capability is jagged, and when unsure an agent tends to guess.',p:'Shorten the stretches without checks, state the scope of application, and reward saying "I don\'t know".',a:'Financial figures must come from data sources and calculation, with source and time stated.'}],
+    ['Denominator','Specifying and checking','22',{c:'The time spent checking caps the amplification factor; tasks that are cheaper to check than to generate are the best to hand over.',p:'Write clear acceptance criteria, show key actions and evidence, and grade checking by risk.',a:'Investment judgements can hardly be checked in the short run; results involving money must be confirmed item by item.'}],
+    ['Constraint','Finance','23',{c:'Markets respond, so the value of prediction declines as it spreads; trading errors are hard to reverse, and similar agents act together.',p:'Value lies in cost, discipline, behaviour and accessibility; grade authority and set limits.',a:'Do not sell prediction; avoid identical rules triggering at the same time.'}]
+  ];
+  const box=document.getElementById('rc3');
+  function set(v){document.querySelectorAll('[data-rv3]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.rv3===v)));
+    box.innerHTML=R.map(([s,n,ch,t],i)=>`<div class="rc3-r${n==='Finance'?' keep':''}" style="--i:${i}"><div><b><span class="sign">${s}</span>${n}</b><em>Ch. ${ch}</em></div><p>${t[v]}</p></div>`).join('');
+    box.classList.remove('in');void box.offsetWidth;box.classList.add('in');}
+  document.querySelectorAll('[data-rv3]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.rv3)));
+  set('c'); box.classList.remove('in');
+})();
+</script>

@@ -1,0 +1,57 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">After the price hits a limit</p><p class="figsub">The same sharp fall under two mechanisms.</p></div><button class="replay" type="button" data-replay="br">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Mechanism">
+      <button type="button" data-br="halt" aria-pressed="true">Halt, then resume</button>
+      <button type="button" data-br="limit" aria-pressed="false">Limit down: no trades below the limit today</button>
+    </div>
+    <div class="br" id="br" data-anim>
+      <svg viewBox="0 0 640 220" role="img" aria-label="Price before and after hitting the limit">
+        <g id="br-axis"></g>
+        <rect id="br-zone" class="br-zone" y="14" height="176"/>
+        <text id="br-zt" font-size="11" text-anchor="middle" class="t-warm"></text>
+        <path id="br-path" class="br-path"/>
+      </svg>
+      <p class="br-msg" id="br-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative price path. The halt case is modelled on the US "limit up–limit down" mechanism for individual stocks: when the price moves outside the band, trading halts for a few minutes and then resumes with a call auction. The limit-down case is modelled on the 10% daily price limit on China's A-share main boards.</figcaption>
+</figure>
+<style>
+.br svg{width:100%;height:auto;display:block}
+.br-path{fill:none;stroke:var(--ink);stroke-width:2;stroke-linejoin:round}
+.br-zone{fill:var(--warm-soft)}
+.br-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+.br-lv{stroke:var(--warm);stroke-dasharray:5 4}
+</style>
+<script>
+(function(){
+  const X0=50,X1=620,YT=14,YB=190,T=100,x=t=>X0+t/T*(X1-X0),y=p=>YB-(p-86)/(102-86)*(YB-YT);
+  let a='';[90,95,100].forEach(v=>a+=`<line x1="${X0}" y1="${y(v)}" x2="${X1}" y2="${y(v)}" class="s-line"/><text x="${X0-8}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`);
+  a+=`<text x="${X0}" y="212" font-size="11" class="t-faint">Open</text><text x="${X1}" y="212" text-anchor="end" font-size="11" class="t-faint">Close</text>`;
+  const ax=document.getElementById('br-axis'), path=document.getElementById('br-path'), zone=document.getElementById('br-zone'), zt=document.getElementById('br-zt');
+  const base=t=>t<30?100-0.05*t:t<42?98.5-((t-30)/12)*8.5:90+((t-42)/58)*2.5*Math.sin((t-42)/9)+((t-42)/58)*1.5;
+  function set(k){
+    document.querySelectorAll('[data-br]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.br===k)));
+    let pts=[];
+    if(k==='halt'){
+      for(let t=0;t<=40;t++)pts.push([t,Math.max(base(t),93)]);
+      for(let t=46;t<=T;t++)pts.push([t,base(t)+0.6]);
+      ax.innerHTML=a+`<line class="br-lv" x1="${X0}" y1="${y(93)}" x2="${X1}" y2="${y(93)}"/><text x="${X1}" y="${y(93)-5}" text-anchor="end" font-size="11" class="t-warm">Lower band</text>`;
+      zone.setAttribute('x',x(40));zone.setAttribute('width',x(46)-x(40));zt.setAttribute('x',(x(40)+x(46))/2);zt.setAttribute('y',30);zt.textContent='Halt';
+      path.setAttribute('d','M'+pts.slice(0,41).map(([t,p])=>`${x(t).toFixed(1)},${y(p).toFixed(1)}`).join('L')+'M'+pts.slice(41).map(([t,p])=>`${x(t).toFixed(1)},${y(p).toFixed(1)}`).join('L'));
+      document.getElementById('br-msg').textContent='When the price falls to the lower band, trading halts for a few minutes. Buyers and sellers have time to reassess and add orders, and continuous trading then resumes with a call auction. Nothing can trade during the halt.';
+    } else {
+      for(let t=0;t<=T;t++)pts.push([t,Math.max(base(t),90)]);
+      ax.innerHTML=a+`<line class="br-lv" x1="${X0}" y1="${y(90)}" x2="${X1}" y2="${y(90)}"/><text x="${X1}" y="${y(90)+14}" text-anchor="end" font-size="11" class="t-warm">Limit-down price 90 (−10% from the prior close of 100)</text>`;
+      zone.setAttribute('x',x(42));zone.setAttribute('width',x(T)-x(42));zt.setAttribute('x',(x(42)+x(T))/2);zt.setAttribute('y',30);zt.textContent='Sell orders queue at the limit';
+      path.setAttribute('d','M'+pts.map(([t,p])=>`${x(t).toFixed(1)},${y(p).toFixed(1)}`).join('L'));
+      document.getElementById('br-msg').textContent='The price cannot go below the limit-down price that day. If sellers far outnumber buyers, sell orders can only queue at the limit and many people cannot sell that day; the pressure carries over to the next trading day.';
+    }
+    const L=path.getTotalLength();path.style.transition='none';path.style.strokeDasharray=L;path.style.strokeDashoffset=L;path.getBoundingClientRect();path.style.transition='stroke-dashoffset 1.8s ease';path.style.strokeDashoffset=0;
+  }
+  document.querySelectorAll('[data-br]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.br)));
+  document.getElementById('br').addEventListener('anim-in',()=>set(document.querySelector('[data-br][aria-pressed="true"]').dataset.br));
+  set('halt');
+})();
+</script>

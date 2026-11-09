@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">先积累声誉，再透支它</p><p class="figsub">一个不可靠的受托人在前 15 期都表现良好。委托人的信念随之上升，交给它的金额也越来越大；第 16 期出现一次性的大机会。切换委托人是否设有与赌注相称的上限。</p></div><button class="replay" type="button" data-replay="mk">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="上限">
+      <button type="button" data-mk="0" aria-pressed="true">交出的金额随信念增加</button>
+      <button type="button" data-mk="1" aria-pressed="false">设有单次敞口上限</button>
+    </div>
+    <div class="mk" id="mk" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="信念、敞口与损失"><g id="mk-g"></g></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>委托人的信念</span><span><i style="background:var(--blue)"></i>交给受托人的金额</span><span><i style="background:var(--warm)"></i>损失</span></div>
+      <p class="mk-msg" id="mk-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意。声誉被策略性地积累与利用，见 Kreps 与 Wilson（1982）、Milgrom 与 Roberts（1982）。</figcaption>
+</figure>
+<style>
+.mk svg{width:100%;height:auto;display:block}
+.mk-b{transition:height .5s ease,y .5s ease}
+.mk-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.mk svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const N=18,X0=40,X1=620,YT=14,YB=176,w=(X1-X0)/N,x=i=>X0+i*w;
+  const bel=[];let L=Math.log(.3/.7);for(let i=0;i<N;i++){bel.push(1/(1+Math.exp(-L)));L+=Math.log(.97/.8);}
+  function set(k){document.querySelectorAll('[data-mk]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mk===k)));
+    const cap=k==='1';let g=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`,line='';
+    bel.forEach((b,i)=>{const amt=cap?Math.min(b,.35):b,h=amt*(YB-YT)*.9,loss=i===15?h:0;
+      g+=`<rect class="mk-b" x="${x(i)+w*.2}" width="${w*.6}" y="${YB-h}" height="${h}" rx="2" fill="${i===15?'var(--warm)':'var(--blue)'}" opacity="${i>15?.25:i===15?1:.6}"/>`;
+      line+=(i?'L':'M')+(x(i)+w/2).toFixed(1)+','+(YB-b*(YB-YT)).toFixed(1);
+      if(i%3===0)g+=`<text x="${x(i)+w/2}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${i+1}</text>`;});
+    g+=`<path d="${line}" fill="none" stroke="var(--accent)" stroke-width="2.5"/><text x="${x(15)+w/2}" y="${YT+10}" text-anchor="middle" font-size="11" class="t-warm">透支</text>`;
+    document.getElementById('mk-g').innerHTML=g;
+    document.getElementById('mk-msg').textContent=cap?'设有单次敞口上限：信念再高，一次交出的金额也不超过上限。受托人透支声誉时，损失被限制在上限之内，这样做对它也不再划算。':'信念随良好记录上升，交出的金额随之增加；第 16 期，受托人抓住一次性的大机会透支声誉，损失与此前积累的信任一样大。良好记录不能代替上限。';}
+  document.querySelectorAll('[data-mk]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.mk)));
+  document.getElementById('mk').addEventListener('anim-in',()=>{set('0');setTimeout(()=>set('1'),2800);});
+  set('0');
+})();
+</script>

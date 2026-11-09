@@ -1,0 +1,40 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Trust is built slowly and lost quickly</p><p class="figsub">Forty interactions between a user and a service. At the 24th, an ability failure occurs, such as a calculation error. Switch the response to the failure and see how trust changes.</p></div><button class="replay" type="button" data-replay="as">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Response">
+      <button type="button" data-as="none" aria-pressed="false">No failure</button>
+      <button type="button" data-as="deny" aria-pressed="false">Denied after failure</button>
+      <button type="button" data-as="own" aria-pressed="true">Explained and put right</button>
+    </div>
+    <div class="as" id="as" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="Trust across the number of interactions"><g id="as-ax"></g><path id="as-ref" class="as-r"/><path id="as-p" class="as-l"/></svg>
+      <p class="as-msg" id="as-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative curves: a good interaction has a likelihood ratio close to 1 and a serious failure a large one, so belief rises and falls asymmetrically. The asymmetry of trust is from Slovic (1993). Kim, Ferrin, Cooper and Dirks (2004) found that for ability failures an apology repairs trust better than a denial; for integrity failures the finding reverses, and a denial works better than an apology. The figure shows only the ability-failure case. The grey dashed line is the path with no failure.</figcaption>
+</figure>
+<style>
+.as svg{width:100%;height:auto;display:block}
+.as-l{fill:none;stroke:var(--accent);stroke-width:2.5}
+.as-r{fill:none;stroke:var(--faint);stroke-width:1.5;stroke-dasharray:4 4}
+.as-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.as svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const run=k=>{let t=10,o=[t];for(let i=1;i<=40;i++){if(i===24&&k!=='none')t=k==='deny'?t*.35:t*.7;else t+=(100-t)*(k==='deny'&&i>24?.03:.07);o.push(t);}return o;};
+  const X0=50,X1=620,YT=14,YB=180,x=i=>X0+i/40*(X1-X0),y=v=>YB-v/100*(YB-YT);
+  const $=id=>document.getElementById(id),P=a=>a.map((v,i)=>(i?'L':'M')+x(i).toFixed(1)+','+y(v).toFixed(1)).join('');
+  $('as-ax').innerHTML=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`+[0,50,100].map(v=>`<text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+
+    [1,10,20,30,40].map(i=>`<text x="${x(i)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">#${i}</text>`).join('')+`<line x1="${x(24)}" y1="${YT}" x2="${x(24)}" y2="${YB}" stroke="var(--warm)" stroke-dasharray="3 3"/><text x="${x(24)+4}" y="${YT+10}" font-size="11" class="t-warm">Failure</text><text x="${X0}" y="${YT-2}" font-size="11" class="t-faint">Trust</text>`;
+  $('as-ref').setAttribute('d',P(run('none')));
+  const M={none:'Each good interaction adds only a little trust; it takes more than twenty before trust nears a high level.',deny:'When an ability failure is denied, the user sees no willingness to improve. Trust falls further, and later good records restore it only slowly.',own:'The ability failure is admitted candidly, with an account of what happened, whom it affected and how it will be improved. This is evidence of willingness to improve: trust still falls, but by less, and then recovers step by step.'};
+  function set(k,anim){document.querySelectorAll('[data-as]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.as===k)));
+    const a=run(k),p=$('as-p');p.setAttribute('d',P(a));
+    if(anim){const L=p.getTotalLength();p.style.transition='none';p.style.strokeDasharray=L;p.style.strokeDashoffset=L;setTimeout(()=>{p.style.transition='stroke-dashoffset 1.8s ease';p.style.strokeDashoffset=0;},40);}else{p.style.strokeDasharray='';p.style.strokeDashoffset='';}
+    $('as-msg').textContent=M[k];}
+  document.querySelectorAll('[data-as]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.as,true)));
+  $('as').addEventListener('anim-in',()=>{set('none',true);setTimeout(()=>set('deny',true),2600);setTimeout(()=>set('own',true),5200);});
+  set('own',false);
+})();
+</script>

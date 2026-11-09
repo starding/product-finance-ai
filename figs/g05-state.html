@@ -1,0 +1,38 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">保险：按情形兑付的索取权</p><p class="figsub">九成的年份收 13 份，一成的年份遭灾只收 3 份。投保后每年交一笔保费，灾年得到 10 份赔付。拖动保费中的附加部分，看投保是否划算。</p></div><button class="replay" type="button" data-replay="st5">重播</button></div>
+    <div class="st5" id="st5" data-anim>
+      <div class="st5-g">
+        <div><b>丰年（九成）</b><div class="st5-row"><span>不投保</span><i id="st5-a0"></i><em id="st5-a0v"></em></div><div class="st5-row"><span>投保</span><i id="st5-a1" class="on"></i><em id="st5-a1v"></em></div></div>
+        <div><b>灾年（一成）</b><div class="st5-row"><span>不投保</span><i id="st5-b0"></i><em id="st5-b0v"></em></div><div class="st5-row"><span>投保</span><i id="st5-b1" class="on"></i><em id="st5-b1v"></em></div></div>
+      </div>
+      <div class="sl"><label for="st5-l">保费中的附加部分 <b id="st5-lv"></b></label><input id="st5-l" type="range" min="0" max="100" step="5" value="20"></div>
+      <p class="st5-msg" id="st5-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：预期赔付为每年 1 份；保费 ＝ 预期赔付 ×（1 ＋ 附加部分），附加部分用于承担风险的补偿与经营费用。是否划算按对数满足感比较。</figcaption>
+</figure>
+<style>
+.st5-g{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.st5-g>div{background:var(--quote);border-radius:10px;padding:10px 12px}
+.st5-g b{font-size:14px;display:block;margin-bottom:6px}
+.st5-row{display:grid;grid-template-columns:3.6em 1fr 3.6em;gap:8px;align-items:center;font-size:12.5px;margin:4px 0}
+.st5-row i{display:block;height:12px;border-radius:3px;background:var(--faint);transition:width .4s}
+.st5-row i.on{background:var(--accent)}
+.st5-row em{font-style:normal;font-variant-numeric:tabular-nums;text-align:right}
+.st5-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.st5-g{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),W=v=>v/14*100+'%';
+  function draw(){const l=+$('st5-l').value/100,P=1*(1+l),a0=13,b0=3,a1=13-P,b1=3-P+10;
+    [['a0',a0],['a1',a1],['b0',b0],['b1',b1]].forEach(([k,v])=>{$('st5-'+k).style.width=W(v);$('st5-'+k+'v').textContent=v.toFixed(1)+' 份';});
+    const U0=.9*Math.log(a0)+.1*Math.log(b0),U1=.9*Math.log(a1)+.1*Math.log(b1),ce0=Math.exp(U0),ce1=Math.exp(U1);
+    $('st5-lv').textContent=Math.round(l*100)+'%';
+    $('st5-msg').textContent=U1>=U0?`保费 ${P.toFixed(2)} 份：丰年少吃一点，灾年多吃很多。投保后相当于每年稳定收 ${ce1.toFixed(2)} 份，高于不投保的 ${ce0.toFixed(2)} 份，即使保费高于预期赔付也划算。`:`附加部分太高，保费 ${P.toFixed(2)} 份：投保后相当于每年稳定收 ${ce1.toFixed(2)} 份，低于不投保的 ${ce0.toFixed(2)} 份，不再划算。`;}
+  $('st5-l').addEventListener('input',draw);
+  $('st5').addEventListener('anim-in',()=>{let v=0;$('st5-l').value=0;draw();const id=setInterval(()=>{v+=10;$('st5-l').value=v;draw();if(v>=100)clearInterval(id);},300);});
+  draw();
+})();
+</script>

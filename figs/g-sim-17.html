@@ -1,0 +1,48 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">文明模拟器 · 第 17 章：书记员的集市</p><p class="figsub">四十位书记员买卖同一种船股，基本价值为 100。第 5 步起，一位大户的书记员连续十步卖出大单。调整出自同一运营者、方法相同的书记员所占的比例，打开或关掉熔断，看这一天价格的走势。</p></div><button class="replay" type="button" data-replay="cs17">重播</button></div>
+    <div class="cs-rules"><span class="on">市场</span><span class="on">参数：认知劳动的价格</span><span class="on">代理的担保</span><span class="on">人人都有分析师</span><span class="on">代理成为市场参与者</span><span class="lock">代理与人的偏差 · 第 18 章</span></div>
+    <div class="cs17" id="cs17" data-anim>
+      <svg viewBox="0 0 660 220" role="img" aria-label="一天之内的价格"><g id="cs17-ax"></g><g id="cs17-pz"></g><path id="cs17-b" class="cs17-b"/><path id="cs17-p" class="cs17-p"/></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>价格</span><span><i style="background:var(--faint)"></i>没有书记员同质化时的价格</span><span><i style="background:var(--warm-soft)"></i>熔断暂停</span></div>
+      <div class="sl"><label for="cs17-s">出自同一运营者的书记员 <b id="cs17-sv"></b></label><input id="cs17-s" type="range" min="0" max="90" step="10" value="50"></div>
+      <div class="cs-sw"><label><input type="checkbox" id="cs17-k"> 规则：熔断（一步之内跌超 4 个点，暂停 3 步）</label></div>
+      <div class="cs17-out" id="cs17-out"></div>
+      <p class="cs17-msg" id="cs17-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意模型：每位书记员都遵守“亏损达到一定比例即卖出”的规则；出自同一运营者的书记员阈值相同、同时触发，其余书记员的阈值分散在 4%～16%。三分之一的书记员替集市报价，价格一步之内跌超 1.5 个点时，它们撤走四分之三的报价。愿意按低价买入的人家，价格越低买得越多。暂停期间价格向基本价值回升五分之一，卖出规则不触发。</figcaption>
+</figure>
+<style>
+.cs17 svg{width:100%;height:auto;display:block}
+.cs17-p{fill:none;stroke:var(--accent);stroke-width:2.6}
+.cs17-b{fill:none;stroke:var(--faint);stroke-width:1.6;stroke-dasharray:5 4}
+.cs17-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cs17-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs17-out span{display:block;font-size:11.5px;color:var(--faint)} .cs17-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.cs17-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs17-out{grid-template-columns:1fr}.cs17 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs17'+id),N=40,T=60,TH=.04,BIG=5,VB=.12,X0=44,X1=628,YT=10,YB=180,x=t=>X0+t/T*(X1-X0),y=v=>YB-(v-40)/62*(YB-YT);
+  function sim(same,brk){let s=1717;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};
+    const ns=Math.round(same*N),ag=[];for(let i=0;i<N;i++)ag.push({th:i<ns?TH:TH*(1+r()*3),sold:false,mm:i%3===0});
+    let p=100,pause=0;const P=[p],Z=[];
+    for(let t=1;t<=T;t++){if(pause>0){pause--;Z.push(t);p+=(100-p)*.2;P.push(p);continue;}
+      let sell=(t>=5&&t<15)?BIG:0;for(const a of ag){if(!a.sold&&(100-p)/100>=a.th){a.sold=true;sell+=1.5;}}
+      const prev=P[P.length-1],fall=P.length>1&&(P[P.length-2]-prev)>1.5,mm=ag.filter(a=>a.mm&&!a.sold).length,depth=2+(fall?mm*.25:mm);
+      p=Math.min(100,p-(sell-Math.max(0,100-p)*VB)/depth*2);if(brk&&(prev-p)>4)pause=3;P.push(p);}
+    const mn=Math.min(...P),ti=P.indexOf(mn),rec=P.findIndex((v,i)=>i>ti&&v>=97);return {P,Z,mn,rec};}
+  function draw(){const sm=+$('-s').value/100,bk=$('-k').checked,S=sim(sm,bk),B=sim(0,false);$('-sv').textContent=Math.round(sm*100)+'%';
+    $('-ax').innerHTML=[40,60,80,100].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+[0,15,30,45,60].map(t=>`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">第 ${t} 步</text>`).join('');
+    $('-pz').innerHTML=S.Z.map(t=>`<rect x="${x(t-1)}" y="${YT}" width="${(X1-X0)/T}" height="${YB-YT}" fill="var(--warm-soft)"/>`).join('');
+    const L=P=>P.map((v,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(v).toFixed(1)).join('');$('-p').setAttribute('d',L(S.P));$('-b').setAttribute('d',sm>0||bk?L(B.P):'');
+    $('-out').innerHTML=[['最低价',S.mn.toFixed(1)],['最大跌幅',(100-S.mn).toFixed(1)+'%'],['回到 97 以上',S.rec>0?'第 '+S.rec+' 步':(S.mn>=97?'始终在 97 以上':'当天未回到')]].map(([a,v])=>`<div><span>${a}</span><b>${v}</b></div>`).join('');
+    const d=100-S.mn;
+    $('-msg').textContent=sm===0?(bk?'书记员的方法各不相同，大单的冲击被分散的卖出与低价买入的人家吸收，熔断几乎用不上。':`书记员的方法各不相同，减仓的门槛分散，大单只让价格跌了 ${d.toFixed(1)}%。`):d>30?`出自同一运营者的书记员占 ${Math.round(sm*100)}%，它们在同一刻触发卖出，报价的书记员同时撤走，价格最低跌到 ${S.mn.toFixed(0)}。`+(bk?(d>40?'熔断来得太晚：同步的卖出在一步之内就已压垮价格。':''):'试试打开熔断。'):`出自同一运营者的书记员占 ${Math.round(sm*100)}%，`+(bk?`熔断在价格急跌时暂停交易，让低价买入的人家到场、让书记员的规则不再连环触发，最大跌幅控制在 ${d.toFixed(1)}%。`:`最大跌幅 ${d.toFixed(1)}%。`);}
+  ['-s','-k'].forEach(k=>$(k).addEventListener('input',draw));
+  $('').addEventListener('anim-in',()=>{[[0,0],[50,0],[50,1],[90,1]].forEach(([v,b],i)=>setTimeout(()=>{$('-s').value=v;$('-k').checked=!!b;draw();},300+i*2200));});
+  draw();
+})();
+</script>

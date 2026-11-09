@@ -1,0 +1,57 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The governing rule: today's value, turned into credible claims on the future</p><p class="figsub">Choose a product to see in which of the three directions it mainly improves this exchange.</p></div><button class="replay" type="button" data-replay="gr">Replay</button></div>
+    <div class="gr" id="gr" data-anim>
+      <div class="gr-flow">
+        <div class="gr-box"><em>Today</em><b>Some value</b></div>
+        <div class="gr-arrow"><i></i><span>turned into</span></div>
+        <div class="gr-box"><em>Future</em><b>A claim</b><small>Collected at the agreed time and in the agreed circumstances</small></div>
+      </div>
+      <div class="gr-lev">
+        <div class="gr-l" data-l="0"><b>Accessible</b><span>People who could not make the exchange now can</span></div>
+        <div class="gr-l" data-l="1"><b>Credible</b><span>The promise is kept in the future</span></div>
+        <div class="gr-l" data-l="2"><b>Cheaper</b><span>The exchange costs less</span></div>
+      </div>
+      <div class="seg-btns gr-p" role="group" aria-label="Product">
+        <button type="button" data-gp="0" aria-pressed="false">Student loan</button>
+        <button type="button" data-gp="1" aria-pressed="false">Deposit insurance</button>
+        <button type="button" data-gp="2" aria-pressed="false">Index fund</button>
+        <button type="button" data-gp="3" aria-pressed="false">Asset custody</button>
+        <button type="button" data-gp="4" aria-pressed="false">Small regular investing</button>
+      </div>
+      <p class="gr-msg" id="gr-msg" aria-live="polite"></p>
+    </div>
+  </div>
+</figure>
+<style>
+.gr-flow{display:grid;grid-template-columns:1fr 90px 1fr;align-items:center;gap:8px}
+.gr-box{background:var(--quote);border-radius:10px;padding:12px;text-align:center}
+.gr-box em{display:block;font-style:normal;font-size:11px;color:var(--faint)} .gr-box b{font-size:16px} .gr-box small{display:block;font-size:11.5px;color:var(--muted);margin-top:2px}
+.gr-arrow{position:relative;text-align:center;font-size:12px;color:var(--muted)}
+.gr-arrow i{position:absolute;left:0;right:8px;top:50%;border-top:2px solid var(--accent);transform-origin:left;transform:scaleX(0);transition:transform .7s}
+.gr-arrow i::after{content:"";position:absolute;right:-8px;top:-6px;border:5px solid transparent;border-left:8px solid var(--accent)}
+.gr.in .gr-arrow i{transform:none}
+.gr-arrow span{position:relative;top:-14px;background:var(--card);padding:0 4px}
+.gr-lev{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.gr-l{border-radius:10px;padding:10px 12px;border:1px solid var(--line);transition:background .3s,border-color .3s}
+.gr-l b{display:block;font-size:15px} .gr-l span{font-size:12px;color:var(--muted)}
+.gr-l.on{background:var(--accent-soft);border-color:var(--accent)}
+.gr-p{margin-bottom:0}
+.gr-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.gr-flow{grid-template-columns:1fr 60px 1fr}.gr-lev{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const P=[[0,'Student loan: a young person without savings pledges future income and gets the money for school today. What improves is accessibility.'],
+    [1,'Deposit insurance: even if the bank fails, deposits up to the limit can be recovered. What improves is credibility.'],
+    [2,'Index fund: instead of picking individual stocks, it holds the whole market for a very low fee. What improves is cost.'],
+    [1,'Asset custody: the fund\'s assets are held at a different institution, so the manager cannot divert them at will. What improves is credibility.'],
+    [0,'Small regular investing: a few hundred a month buys a diversified portfolio, so people below the old minimums can take part. What improves is accessibility.']];
+  const ls=[...document.querySelectorAll('.gr-l')],msg=document.getElementById('gr-msg');
+  function set(k){document.querySelectorAll('[data-gp]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.gp===k)));
+    ls.forEach((l,i)=>l.classList.toggle('on',k>=0&&P[k][0]===i));msg.textContent=k>=0?P[k][1]:'Every financial product improves this exchange in at least one of the three directions.';}
+  document.querySelectorAll('[data-gp]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.gp)));
+  document.getElementById('gr').addEventListener('anim-in',()=>{set(-1);[0,1,2].forEach((k,i)=>setTimeout(()=>set(k),1000+i*2200));});
+  set(-1);
+})();
+</script>

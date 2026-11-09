@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: present outcomes in the true shape of risk</p><p class="figsub">Four design requirements, each corresponding to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="ch03summary">Replay</button></div>
+    <div class="ch03summary" id="ch03summary" data-anim><div class="ch03summary-c" style="--i:0"><em>Uncertainty widens with time</em><b>Use ranges and probabilities instead of point forecasts</b><p>Show the range of possible outcomes over different holding periods, rather than a single target price or an average return.</p></div><div class="ch03summary-c" style="--i:1"><em>Long-run positive returns are drowned in short-run volatility</em><b>Explain "the probability of a gain" by holding period</b><p>The probability of a gain differs greatly between a one-day and a ten-year holding; do not use long-run conclusions to steer short-term trading.</p></div><div class="ch03summary-c" style="--i:2"><em>Volatility clusters</em><b>Use models and AI where estimation is possible</b><p>Volatility and risk exposure are more worth estimating than direction; update risk warnings promptly when volatility rises.</p></div><div class="ch03summary-c warn" style="--i:3"><em>Extreme outcomes are more frequent than the normal distribution predicts</em><b>Stress-test for fat tails, not the normal distribution</b><p>Show extreme episodes that have actually occurred, not only the range of volatility "under normal conditions".</p></div></div>
+  </div>
+</figure>
+<style>
+.ch03summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch03summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch03summary-c.warn{border-left-color:var(--warm)}
+.ch03summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch03summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch03summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch03summary.in .ch03summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch03summary{grid-template-columns:1fr}}
+</style>

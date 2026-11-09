@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Those who cannot pay will not be very careful</p><p class="figsub">One mistake costs the principal 100 portions. The grain manager can spend more effort checking to reduce mistakes, but checking has a cost. Drag his property and see how much effort he spends checking and how much the principal expects to lose each year; then make whoever deploys him liable and insured.</p></div><button class="replay" type="button" data-replay="pf15">Replay</button></div>
+    <div class="pf15" id="pf15" data-anim>
+      <svg viewBox="0 0 660 220" role="img" aria-label="Property and the principal's expected loss"><g id="pf15-g"></g></svg>
+      <div class="sl"><label for="pf15-a">Grain manager's property <b id="pf15-av"></b></label><input id="pf15-a" type="range" min="0" max="100" step="5" value="20"></div>
+      <div class="cs-sw"><label><input type="checkbox" id="pf15-c"> Whoever deploys him bears liability for compensation and insures against it</label></div>
+      <div class="pf15-out" id="pf15-out"></div>
+      <p class="pf15-msg" id="pf15-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the probability of a mistake is 30% × e^(−checking), and each unit of checking costs 4 portions. The grain manager chooses the level of checking that minimizes "cost of checking + probability of a mistake × the amount he actually has to pay", where the amount he actually has to pay is the smaller of the loss and his property (a simplification of Shavell, 1986). Vertical axis: the principal's expected loss per year, in portions.</figcaption>
+</figure>
+<style>
+.pf15 svg{width:100%;height:auto;display:block}
+.pf15-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.pf15-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.pf15-out span{display:block;font-size:11.5px;color:var(--faint)} .pf15-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.pf15-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.pf15-out{grid-template-columns:1fr}.pf15 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('pf15'+id),H=100,X0=50,X1=628,YT=12,YB=180,x=a=>X0+a/H*(X1-X0),y=v=>YB-v/32*(YB-YT);
+  const care=pay=>Math.max(0,Math.log(.3*pay/4)),loss=pay=>.3*Math.exp(-care(pay))*H;
+  function draw(){const a=+$('-a').value,c=$('-c').checked,pay=c?H:Math.min(a,H),k=care(pay),L=loss(pay);$('-av').textContent=a+' portions';
+    let h=[0,10,20,30].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+[0,25,50,75,100].map(v=>`<text x="${x(v)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${v}</text>`).join('')+`<text x="${X1}" y="${YB+30}" text-anchor="end" font-size="11" class="t-faint">Grain manager's property (portions) →</text>`;
+    let d='';for(let v=0;v<=H;v++)d+=(v?'L':'M')+x(v).toFixed(1)+','+y(loss(v)).toFixed(1);
+    h+=`<path d="${d}" fill="none" stroke="var(--warm)" stroke-width="2.6"/>`;
+    if(c)h+=`<line x1="${X0}" x2="${X1}" y1="${y(loss(H))}" y2="${y(loss(H))}" stroke="var(--accent)" stroke-width="2.6" stroke-dasharray="6 4"/><text x="${X0+6}" y="${y(loss(H))-6}" font-size="11" fill="var(--accent)">Deployer liable and insured</text>`;
+    h+=`<circle cx="${x(a)}" cy="${y(L)}" r="7" fill="${c?'var(--accent)':'var(--warm)'}"/>`;
+    $('-g').innerHTML=h;
+    $('-out').innerHTML=[['Effort spent checking',k.toFixed(2)+' portions'],['Probability of a mistake',(.3*Math.exp(-k)*100).toFixed(0)+'%'],['Principal\'s expected loss per year',L.toFixed(1)+' portions']].map(([p,v])=>`<div><span>${p}</span><b>${v}</b></div>`).join('');
+    $('-msg').textContent=c?`Compensation is borne by a deployer who has property and is insured. He decides how much to check based on the full loss of 100 portions, and the probability of a mistake falls to ${(.3*Math.exp(-k)*100).toFixed(0)}%, regardless of how much property the grain manager himself has.`:a<14?`The grain manager has only ${a} portions of property, which is the most he can pay for a mistake, so he does not check at all: the principal expects to lose ${L.toFixed(0)} portions a year. A scribe has zero property and sits exactly here.`:a<H?`With ${a} portions of property, he decides how much to check based only on the ${a} portions he might have to pay. The principal expects to lose ${L.toFixed(1)} portions a year, more than the ${loss(H).toFixed(1)} portions when his property is sufficient.`:'His property is enough to cover the full loss, so he decides how much to check based on the full loss, and the principal\'s expected loss is at its lowest.';}
+  ['-a','-c'].forEach(k=>$(k).addEventListener('input',draw));
+  $('').addEventListener('anim-in',()=>{$('-c').checked=false;let v=100;$('-a').value=100;draw();const id=setInterval(()=>{v-=5;$('-a').value=v;draw();if(v<=0){clearInterval(id);setTimeout(()=>{$('-c').checked=true;draw();},1200);}},110);});
+  draw();
+})();
+</script>

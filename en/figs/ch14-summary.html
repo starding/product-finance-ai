@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: designing regulatory requirements into the product</p><p class="figsub">Four design requirements, each corresponding to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="ch14summary">Replay</button></div>
+    <div class="ch14summary" id="ch14summary" data-anim><div class="ch14summary-c" style="--i:0"><em>Information must be verifiable and comparable</em><b>Design disclosure in a verifiable form</b><p>Show key information on a consistent basis, with its source and time, so users and third parties can check it.</p></div><div class="ch14summary-c" style="--i:1"><em>Suitability is the institution's responsibility to judge</em><b>Understand the user before recommending, and keep a record</b><p>Base recommendations on the user's situation, not on sales targets; when something does not fit, say no clearly.</p></div><div class="ch14summary-c warn" style="--i:2"><em>How you are paid shapes what you recommend</em><b>Disclose where your revenue comes from</b><p>Explain fees, commissions, payment for order flow and similar arrangements, so users can judge the conflicts of interest.</p></div><div class="ch14summary-c warn" style="--i:3"><em>Panic is self-fulfilling</em><b>Provide certain information in turbulent times</b><p>State clearly how assets are held in custody and the scope and limits of protection, to reduce panic actions driven by uncertainty.</p></div></div>
+  </div>
+</figure>
+<style>
+.ch14summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch14summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch14summary-c.warn{border-left-color:var(--warm)}
+.ch14summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch14summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch14summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch14summary.in .ch14summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch14summary{grid-template-columns:1fr}}
+</style>

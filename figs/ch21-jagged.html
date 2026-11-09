@@ -1,0 +1,38 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">锯齿状的能力边界</p><p class="figsub">十二项看起来难度相近的任务，锯齿线是代理的能力边界。切换是否使用代理，看边界内外的结果怎样变化。</p></div><button class="replay" type="button" data-replay="jg">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="是否使用代理">
+      <button type="button" data-jg="no" aria-pressed="true">不使用代理</button>
+      <button type="button" data-jg="ai" aria-pressed="false">使用代理</button>
+    </div>
+    <div class="jg" id="jg" data-anim>
+      <svg viewBox="0 0 640 230" role="img" aria-label="任务与能力边界"><g id="jg-g"></g></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>边界之内</span><span><i style="background:var(--warm)"></i>边界之外</span><span><i style="background:var(--quote);border:1px solid var(--faint)"></i>代理表现出的把握</span></div>
+      <p class="jg-msg" id="jg-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意。实验结果来自 Dell'Acqua 等（2023）对 758 名咨询顾问的研究：边界之内的任务，使用代理者多完成 12.2%、快 25.1%、质量高 40% 以上；边界之外的任务，使用代理者得出正确结论的比例低约 19 个百分点。</figcaption>
+</figure>
+<style>
+.jg svg{width:100%;height:auto;display:block}
+.jg-b{transition:y .6s ease,height .6s ease}
+.jg-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const IN=[1,1,0,1,1,1,0,1,0,1,1,0],n=12,X0=30,X1=620,YB=200,YT=20,w=(X1-X0)/n,x=i=>X0+i*w;
+  const base=60,y=v=>YB-v/100*(YB-YT);let fr='M'+X0+','+y(88);
+  IN.forEach((v,i)=>{const h=v?88:45;fr+=`L${x(i)},${y(h)}L${x(i)+w},${y(h)}`;});
+  let g=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/><path d="${fr}" fill="none" stroke="var(--ink)" stroke-width="1.5" stroke-dasharray="4 3"/><text x="${X1}" y="${y(95)}" text-anchor="end" font-size="11" class="t-faint">能力边界</text>`;
+  IN.forEach((v,i)=>{g+=`<rect class="jg-c" x="${x(i)+w*.2}" width="${w*.6}" y="${y(80)}" height="${y(0)-y(80)}" rx="3" fill="var(--quote)" stroke="var(--faint)" stroke-dasharray="2 2" opacity="0"/><rect class="jg-b" data-i="${i}" x="${x(i)+w*.28}" width="${w*.44}" rx="3" fill="${v?'var(--accent)':'var(--warm)'}" style="y:${y(base)}px;height:${y(0)-y(base)}px"/><text x="${x(i)+w/2}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${i+1}</text>`;});
+  document.getElementById('jg-g').innerHTML=g;
+  const bs=[...document.querySelectorAll('.jg-b')],cs=[...document.querySelectorAll('.jg-c')];
+  function set(k){document.querySelectorAll('[data-jg]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.jg===k)));
+    bs.forEach((b,i)=>{const v=k==='ai'?(IN[i]?85:41):base;b.style.y=y(v)+'px';b.style.height=(y(0)-y(v))+'px';});
+    cs.forEach(c=>c.setAttribute('opacity',k==='ai'?1:0));
+    document.getElementById('jg-msg').textContent=k==='ai'?'边界之内的任务，结果明显变好；边界之外的任务，结果反而变差。代理在两类任务上表现出的把握几乎相同（虚线框），使用者很难从外观分辨。':'不使用代理时，十二项任务的完成质量大致相同。';}
+  document.querySelectorAll('[data-jg]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.jg)));
+  document.getElementById('jg').addEventListener('anim-in',()=>{set('no');setTimeout(()=>set('ai'),1800);});
+  set('no');
+})();
+</script>

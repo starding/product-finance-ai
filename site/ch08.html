@@ -1,0 +1,677 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>信息如何进入价格</title>
+<meta name="description" content="《产品×金融×AI：AI 时代的金融产品》第 8 章：价格汇总分散的信息，效率由有利可图的知情交易维持">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="ch08">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="全书目录">
+<div class="side-head"><a class="sidetitle" href="index.html">产品×金融×AI<small>AI 时代的金融产品</small></a></div>
+<div class="side-view" role="group" aria-label="阅读方式"><a href="preface.html" class="on" aria-current="true">分解式</a><a href="g-preface.html">生成式</a></div>
+<a class="side-about" href="index.html#about">关于本书</a>
+<a class="" href="preface.html"><span class="n">序</span>为什么金融产品在 AI 时代需要重新学</a>
+<a class="side-part" href="part1.html"><span class="pn">第一部分</span>市场：收益与风险从何而来</a>
+<a class="" href="ch01.html"><span class="n">1</span>金融产品卖的是什么</a>
+<a class="" href="ch02.html"><span class="n">2</span>利率与期限</a>
+<a class="" href="ch03.html"><span class="n">3</span>风险长什么样</a>
+<a class="" href="ch04.html"><span class="n">4</span>分散：哪些风险有补偿</a>
+<a class="" href="ch05.html"><span class="n">5</span>复利与波动拖累</a>
+<a class="" href="ch06.html"><span class="n">6</span>因子：风险补偿可以分解</a>
+<a class="" href="ch07.html"><span class="n">7</span>价格为什么难以预测</a>
+<a class=" cur" href="ch08.html" aria-current="page"><span class="n">8</span>信息如何进入价格</a>
+<a class="" href="ch09.html"><span class="n">9</span>市场里的交易者</a>
+<a class="" href="ch10.html"><span class="n">10</span>流动性与买卖价差</a>
+<a class="" href="ch11.html"><span class="n">11</span>订单、规则与市场结构</a>
+<a class="" href="ch12.html"><span class="n">12</span>主动管理的算术</a>
+<a class="" href="ch13.html"><span class="n">13</span>承诺如何被兑现</a>
+<a class="" href="ch14.html"><span class="n">14</span>监管为何存在</a>
+<a class="side-part" href="part2.html"><span class="pn">第二部分</span>用户：人要什么、能承受什么</a>
+<a class="" href="ch15.html"><span class="n">15</span>用户要完成的任务</a>
+<a class="" href="ch16.html"><span class="n">16</span>用户如何做决定</a>
+<a class="" href="ch17.html"><span class="n">17</span>用户能承受什么</a>
+<a class="" href="ch18.html"><span class="n">18</span>用户如何判断与信任</a>
+<a class="side-part" href="part3.html"><span class="pn">第三部分</span>AI：代理能替人做多少</a>
+<a class="" href="ch19.html"><span class="n">19</span>放大倍数：理论与实测</a>
+<a class="" href="ch20.html"><span class="n">20</span>哪些事务能交给 AI</a>
+<a class="" href="ch21.html"><span class="n">21</span>能力从哪里来、在哪里失效</a>
+<a class="" href="ch22.html"><span class="n">22</span>可验证性：核对的成本</a>
+<a class="" href="ch23.html"><span class="n">23</span>金融场景的特殊约束</a>
+<a class="side-part" href="part4.html"><span class="pn">第四部分</span>设计：在三组约束下设计金融产品</a>
+<a class="" href="ch24.html"><span class="n">24</span>承诺什么</a>
+<a class="" href="ch25.html"><span class="n">25</span>委托参数：交代的目标与约束</a>
+<a class="" href="ch26.html"><span class="n">26</span>授权与不可逆敞口</a>
+<a class="" href="ch27.html"><span class="n">27</span>责任与利益冲突</a>
+<a class="" href="ch28.html"><span class="n">28</span>能力装配与过程可见</a>
+<a class="" href="ch29.html"><span class="n">29</span>保障强度</a>
+<a class="" href="ch30.html"><span class="n">30</span>信任如何建立</a>
+<a class="" href="ch31.html"><span class="n">31</span>设计原则</a>
+<a class="side-app" href="estimates.html"><span class="n">附录</span>作者估算的方法与数据</a>
+<a class="side-app" href="method.html"><span class="n">附录</span>本书的写法</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="展开目录" title="目录"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">产品×金融×AI：AI 时代的金融产品</a><span>第一部分 · 第三篇　信息优势：零和的部分</span><a class="langlink" href="en/ch08.html" hreflang="en">English</a></header>
+
+<div class="chapno">第 8 章</div><h1>信息如何进入价格<small>有效市场与它的代价</small></h1>
+<div class="eqstrip" aria-label="本章在回报等式中的位置"><span class="lbl">实际回报 ＝</span><a class="" href="ch02.html">时间补偿</a><a class="" href="ch03.html">＋风险补偿</a><span class="cur">＋信息优势</span><a class="" href="ch10.html">－交易成本</a><span class="">＋运气</span><span class="keep"><a href="ch13.html">前提：承诺得到兑现</a></span></div>
+<blockquote><p>信息优势既然存在上限，它又从何而来？价格是一台汇总信息的机器：分散在无数人手里的信息，通过交易压缩成一个数字，公开信息进入价格的速度以分钟计。但这台机器并不免费运转：只有当收集信息有利可图，才会有人去收集。所以市场只能接近有效，信息优势不会完全消失，只会小到恰好补偿收集信息的成本。</p></blockquote>
+<h2 id="sec-1">一、价格汇总分散的信息</h2>
+<p>1945 年，哈耶克在《知识在社会中的运用》中举了一个例子：假设某处锡矿停产，或者锡出现了新的用途，锡变得更稀缺。世界各地使用锡的人不需要知道发生了什么，也不需要知道原因，只要看到锡价上涨，就会节约用锡、改用替代品。没有任何一个人掌握全部信息，价格却把它们汇总起来，并协调了所有人的行动。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">锡价如何协调千万人的行动</p><p class="figsub">左侧发生的事，右侧的使用者看不到；他们只看到价格。</p></div><button class="replay" type="button" data-replay="hk">重播</button></div>
+    <div class="hk" id="hk" data-anim>
+      <svg viewBox="0 0 640 270" role="img" aria-label="锡矿停产经由锡价影响各地使用者">
+        <g class="hk-ev"><rect x="14" y="104" width="128" height="62" rx="12"/><text x="78" y="131" text-anchor="middle" font-size="14" font-weight="700">某处锡矿停产</text><text x="78" y="151" text-anchor="middle" font-size="11">锡变得更稀缺</text></g>
+        <path d="M142,135 L232,135" class="hk-arrow a1"/>
+        <g class="hk-price"><circle cx="290" cy="135" r="54"/><text x="290" y="124" text-anchor="middle" font-size="12" class="t-muted">锡价</text><text x="290" y="152" text-anchor="middle" font-size="24" font-weight="700" id="hk-p">100</text></g>
+        <line x1="372" y1="18" x2="372" y2="252" class="hk-wall"/>
+        <text x="380" y="262" font-size="11" class="t-faint">使用者看不到原因，只看到价格</text>
+        <g id="hk-users"></g>
+      </svg>
+    </div>
+  </div>
+  <figcaption>Hayek（1945）的例子。没有任何一个使用者知道锡为什么变贵，每个人只是根据价格调整自己的行为，合起来却恰好是应对锡短缺所需要的行动。</figcaption>
+</figure>
+<style>
+.hk svg{width:100%;height:auto;display:block}
+.hk-ev rect{fill:var(--warm-soft);stroke:var(--warm);stroke-width:1.5}
+.hk-ev text{fill:var(--ink)}
+.hk-ev{opacity:0;transition:opacity .4s}
+.hk.in .hk-ev{opacity:1}
+.hk-arrow{fill:none;stroke:var(--warm);stroke-width:2;stroke-dasharray:100;stroke-dashoffset:100;transition:stroke-dashoffset .6s .5s}
+.hk.in .hk-arrow{stroke-dashoffset:0}
+.hk-price circle{fill:var(--surface);stroke:var(--accent);stroke-width:2;transition:fill .4s}
+.hk.in .hk-price circle{fill:var(--accent-soft);transition-delay:1.1s}
+#hk-p{fill:var(--accent)}
+.hk-wall{stroke:var(--faint);stroke-dasharray:4 4}
+.hk-u rect{fill:var(--quote);stroke:var(--line);transition:fill .4s,stroke .4s}
+.hk-u text{fill:var(--ink)}
+.hk-u .act{fill:var(--accent);opacity:0;transition:opacity .4s}
+.hk-ln{stroke:var(--accent);stroke-width:1.5;stroke-dasharray:4 3;opacity:0;transition:opacity .4s}
+.hk.in .hk-u rect{fill:var(--accent-soft);stroke:var(--accent);transition-delay:var(--d)}
+.hk.in .hk-u .act,.hk.in .hk-ln{opacity:1;transition-delay:var(--d)}
+</style>
+<script>
+(function(){
+  const U=[['罐头厂','改用更薄的镀层'],['电子厂','减少焊料用量'],['玩具厂','改用其他金属'],['回收商','加紧回收旧锡'],['另一处矿山','扩大开采']];
+  let s='';
+  U.forEach(([n,a],i)=>{const y=22+i*46, d=(1.6+i*0.25)+'s';
+    s+=`<line class="hk-ln" style="--d:${d}" x1="344" y1="135" x2="396" y2="${y+18}"/>`;
+    s+=`<g class="hk-u" style="--d:${d}"><rect x="396" y="${y}" width="232" height="36" rx="8"/><text x="408" y="${y+23}" font-size="13" font-weight="700">${n}</text><text class="act" x="616" y="${y+23}" text-anchor="end" font-size="12">${a}</text></g>`;});
+  document.getElementById('hk-users').innerHTML=s;
+  const p=document.getElementById('hk-p');
+  document.getElementById('hk').addEventListener('anim-in',()=>{p.textContent='100';let v=100;setTimeout(function up(){v+=3;p.textContent=v;if(v<130)setTimeout(up,40);},1100);});
+})();
+</script>
+
+<p>金融市场把这种机制推到了极致。一家公司的股价，汇总了供应商、客户、员工、分析师与无数投资者各自掌握的零散信息。问题在于：信息进入价格有多快、有多完整，又是谁在推动它进入。</p>
+<h2 id="sec-2">二、三种强度的有效</h2>
+<p>法玛在 1970 年的综述中，按照“价格反映了哪一类信息”把有效市场分为三种强度：</p>
+<ul><li><strong>弱式有效</strong>：价格已经反映了过去的价格与成交量，凭历史走势无法获得超额收益。</li><li><strong>半强式有效</strong>：价格已经反映了全部公开信息，如财报、公告与新闻。</li><li><strong>强式有效</strong>：价格连未公开的内部信息也已经反映。</li></ul>
+<p>三者是包含关系，每一层都可以用数据检验。</p>
+<figure>
+  <div class="card">
+    <p class="figtitle">三种强度的有效市场</p>
+    <p class="figsub">内圈的信息包含于外圈。点按任一层，查看它如何检验、结论如何。</p>
+    <div class="fm" id="fm" data-anim>
+      <svg viewBox="0 0 320 300" role="img" aria-label="弱式、半强式、强式有效的包含关系">
+        <g class="fm-r" data-f="strong" style="--i:2"><circle cx="160" cy="150" r="140"/><text x="160" y="34" text-anchor="middle" font-size="13" font-weight="700">强式：全部信息</text><text x="160" y="52" text-anchor="middle" font-size="11">含未公开的内部信息</text></g>
+        <g class="fm-r" data-f="semi" style="--i:1"><circle cx="160" cy="168" r="100"/><text x="160" y="96" text-anchor="middle" font-size="13" font-weight="700">半强式：公开信息</text><text x="160" y="114" text-anchor="middle" font-size="11">财报、公告、新闻</text></g>
+        <g class="fm-r" data-f="weak" style="--i:0"><circle cx="160" cy="194" r="58"/><text x="160" y="190" text-anchor="middle" font-size="13" font-weight="700">弱式</text><text x="160" y="208" text-anchor="middle" font-size="11">历史价格与成交量</text></g>
+      </svg>
+      <div class="fm-panel" id="fm-panel" aria-live="polite"></div>
+    </div>
+  </div>
+  <figcaption>分类见 Fama（1970）。检验结论为文献的主流看法。</figcaption>
+</figure>
+<style>
+.fm{display:grid;grid-template-columns:minmax(0,1fr) 1.1fr;gap:18px;align-items:center}
+.fm svg{width:100%;max-width:340px;height:auto;display:block;margin:0 auto}
+.fm-r{cursor:pointer;opacity:0;transform-box:fill-box;transform-origin:center;transform:scale(.85);transition:opacity .5s,transform .5s;transition-delay:calc(var(--i)*.35s)}
+.fm.in .fm-r{opacity:1;transform:none}
+.fm-r circle{fill:var(--surface);stroke:var(--line);stroke-width:1.5;transition:fill .3s,stroke .3s}
+.fm-r[data-f="weak"] circle,.fm-r[data-f="semi"] circle{fill:var(--accent-soft)}
+.fm-r[data-f="strong"] circle{fill:var(--warm-soft)}
+.fm-r.sel circle{stroke:var(--ink);stroke-width:2.5}
+.fm-r text{fill:var(--ink);pointer-events:none}
+.fm-panel{font-size:14px;line-height:1.7}
+.fm-panel h4{margin:0 0 6px;font-size:16px}
+.fm-panel dl{display:grid;grid-template-columns:72px 1fr;gap:4px 10px;margin:0}
+.fm-panel dt{color:var(--faint);font-size:12px;padding-top:3px}
+.fm-panel dd{margin:0}
+.fm-badge{display:inline-block;font-size:12px;padding:1px 10px;border-radius:999px;margin-left:8px;vertical-align:2px}
+.fm-badge.ok{background:var(--accent-soft);color:var(--accent)}
+.fm-badge.no{background:var(--warm-soft);color:var(--warm)}
+@media (max-width:640px){.fm{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const D={
+    weak:{t:'弱式有效',b:['大体成立','ok'],test:'凭历史价格能否预测未来收益：相邻收益的相关性、技术分析规则的收益。',ev:'相关性接近零；过滤规则扣除成本后不优于买入并持有（Fama 1965；Fama 与 Blume 1966）。动量等少数规律存在，但幅度小且在发表后减弱。'},
+    semi:{t:'半强式有效',b:['大体成立','ok'],test:'事件研究：公告前后的超额收益是否在公告后继续出现可获利的规律。',ev:'拆股与盈利信息大多在公告前后迅速反映（Fama 等 1969；Ball 与 Brown 1968）；盈余公告后漂移是重要例外（Bernard 与 Thomas 1989）。'},
+    strong:{t:'强式有效',b:['不成立','no'],test:'掌握未公开信息的人能否获得超额收益。',ev:'公司内部人士交易自家股票获得超额收益（Jaffe 1974）；并购目标在公告前已明显上涨（Keown 与 Pinkerton 1981）。这正是禁止内幕交易的依据。'}
+  };
+  const panel=document.getElementById('fm-panel'), rs=[...document.querySelectorAll('.fm-r')];
+  function show(f){rs.forEach(r=>r.classList.toggle('sel',r.dataset.f===f));const d=D[f];
+    panel.innerHTML=`<h4>${d.t}<span class="fm-badge ${d.b[1]}">${d.b[0]}</span></h4><dl><dt>怎么检验</dt><dd>${d.test}</dd><dt>证据</dt><dd>${d.ev}</dd></dl>`;}
+  rs.forEach(r=>r.addEventListener('click',()=>show(r.dataset.f)));
+  document.getElementById('fm').addEventListener('anim-in',()=>{let k=0;const seq=['weak','semi','strong'];const t=setInterval(()=>{show(seq[k]);if(++k>=3)clearInterval(t);},1500);});
+  show('weak');
+})();
+</script>
+
+<p>检验的结果是：弱式与半强式大体成立；强式不成立。贾菲在 1974 年发现，公司内部人士买卖自家股票能够获得超额收益；基翁与平克顿在 1981 年发现，并购目标公司的股价在公告之前就已明显上涨，说明消息在公告前已经泄露并被用于交易。正因为强式有效不成立，各国才立法禁止利用未公开的重大信息进行交易：内幕信息的优势是真实存在的，法律要阻止的正是这种优势。</p>
+<h2 id="sec-3">三、事件研究：价格如何对新闻作出反应</h2>
+<p>检验半强式有效的标准方法是事件研究：把大量公司在同一类事件（如公布盈利、拆股、并购）前后的超额收益对齐并加总，观察价格在事件前后如何变化。1968 年，鲍尔与布朗用这种方法研究年度盈利公告，发现盈利好坏所包含的信息，大部分在公告之前就已经反映在价格里。1969 年，法玛、费希尔、詹森与罗尔研究拆股，发现价格的调整在拆股之前完成，之后没有可供获利的规律。</p>
+<figure>
+  <div class="card">
+    <p class="figtitle">事件研究：把上千次公告对齐来看</p>
+    <p class="figsub">横轴为距公告日的交易日数，纵轴为累计超额收益。切换三种典型情形。</p>
+    <div class="seg-btns" role="group" aria-label="情形">
+      <button type="button" data-ev="eff" aria-pressed="true">迅速反应</button>
+      <button type="button" data-ev="pead" aria-pressed="false">公告后漂移</button>
+      <button type="button" data-ev="leak" aria-pressed="false">并购目标：消息泄露</button>
+    </div>
+    <div class="ev" id="ev" data-anim>
+      <svg viewBox="0 0 640 260" role="img" aria-label="公告前后的累计超额收益">
+        <g id="ev-axis"></g>
+        <path id="ev-up" class="ev-l up"/><path id="ev-dn" class="ev-l dn"/>
+        <text id="ev-tu" font-size="12" class="t-accent"></text><text id="ev-td" font-size="12" class="t-warm"></text>
+      </svg>
+      <p class="ev-msg" id="ev-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意形状，依据 Ball 与 Brown（1968）、Fama 等（1969）的公告研究，Bernard 与 Thomas（1989）的盈余公告后漂移，以及 Keown 与 Pinkerton（1981）的并购公告研究；幅度为示意，不是这些研究的具体估计。</figcaption>
+</figure>
+<style>
+.ev svg{width:100%;height:auto;display:block}
+.ev-l{fill:none;stroke-width:2.5;stroke-linejoin:round}
+.ev-l.up{stroke:var(--accent)} .ev-l.dn{stroke:var(--warm)}
+.ev-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const D0=-20,D1=60,X0=50,X1=620,Y0=230,Y1=14,V0=-12,V1=28;
+  const x=d=>X0+(d-D0)/(D1-D0)*(X1-X0), y=v=>Y0-(v-V0)/(V1-V0)*(Y0-Y1);
+  let a=`<line x1="${X0}" y1="${y(0)}" x2="${X1}" y2="${y(0)}" class="s-faint"/>`;
+  [-20,-10,0,10,20,30,40,50,60].forEach(d=>a+=`<text x="${x(d)}" y="${Y0+16}" text-anchor="middle" font-size="11" class="t-faint">${d}</text>`);
+  [-10,10,20].forEach(v=>a+=`<line x1="${X0}" y1="${y(v)}" x2="${X1}" y2="${y(v)}" class="s-line"/><text x="${X0-8}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v>0?'+':''}${v}%</text>`);
+  a+=`<line x1="${x(0)}" y1="${Y1}" x2="${x(0)}" y2="${Y0}" class="s-faint" stroke-dasharray="3 3"/><text x="${x(0)+6}" y="${Y1+10}" font-size="11" class="t-muted">公告日</text>`;
+  document.getElementById('ev-axis').innerHTML=a;
+  const S={
+    eff:{f:d=>d<-10?0:d<0?1.5*(d+10)/10:d<1?5:5, m:'好消息与坏消息的价格在公告当天跳到位，此后保持平稳：没有可供获利的后续规律。公告前的小幅变化来自市场的预期。',b:true},
+    pead:{f:d=>d<-10?0:d<0?1*(d+10)/10:d<1?3.5:3.5+2.5*Math.min(1,d/60), m:'价格在公告日只反应了一部分，此后几十个交易日继续朝同一方向漂移。这是最稳健的异象之一，说明信息并非总是一步到位地进入价格。',b:true},
+    leak:{f:d=>d<-12?0:d<0?9*Math.pow((d+12)/12,1.6):d<1?25:25, m:'并购目标的股价在公告前十几个交易日就开始上涨。公开信息此时尚不存在，上涨来自掌握未公开消息的人的交易，这是强式有效不成立的证据。',b:false}
+  };
+  const up=document.getElementById('ev-up'), dn=document.getElementById('ev-dn');
+  function path(f,sgn){let d='';for(let t=D0;t<=D1;t+=0.5){const v=sgn*f(t);d+=(d?'L':'M')+x(t).toFixed(1)+','+y(v).toFixed(1);}return d;}
+  function draw(el){const L=el.getTotalLength();el.style.transition='none';el.style.strokeDasharray=L;el.style.strokeDashoffset=L;el.getBoundingClientRect();el.style.transition='stroke-dashoffset 1.6s ease';el.style.strokeDashoffset=0;}
+  function set(k){
+    document.querySelectorAll('[data-ev]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.ev===k)));
+    const s=S[k];
+    up.setAttribute('d',path(s.f,1)); draw(up);
+    const tu=document.getElementById('ev-tu'), td=document.getElementById('ev-td');
+    tu.setAttribute('x',x(44));tu.setAttribute('y',y(s.f(60))-8);tu.textContent=k==='leak'?'并购目标':'好消息';
+    if(s.b){dn.style.display='';dn.setAttribute('d',path(s.f,-1));draw(dn);td.setAttribute('x',x(44));td.setAttribute('y',y(-s.f(60))+18);td.textContent='坏消息';}
+    else{dn.style.display='none';td.textContent='';}
+    document.getElementById('ev-msg').textContent=s.m;
+  }
+  let touched=false;
+  document.querySelectorAll('[data-ev]').forEach(b=>b.addEventListener('click',()=>{touched=true;set(b.dataset.ev);}));
+  document.getElementById('ev').addEventListener('anim-in',()=>{if(!touched)set('eff');});
+  set('eff');
+})();
+</script>
+
+<p>也有不那么干净的结果。伯纳德与托马斯在 1989 年确认，盈利超出预期的公司，公告后的几十个交易日里股价还会继续朝同一方向缓慢漂移，即“盈余公告后漂移”。这是最稳健的异象之一，也说明价格吸收信息并非总是一步到位。</p>
+<h2 id="sec-4">四、反应的速度：以分钟计</h2>
+<p>价格吸收公开信息有多快？帕特尔与沃尔夫森在 1984 年用逐笔成交数据研究盈利与股利公告，发现价格的主要反应发生在公告后的几分钟到十几分钟之内。布斯与格林在 2002 年研究电视财经节目对个股的点评，发现价格在播出后几秒钟内就开始变动，正面点评约一分钟内被价格吸收，负面点评用时稍长。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">公开新闻多快进入价格</p><p class="figsub">新闻发布后，价格调整完成的比例。时间轴为分钟，对数刻度。</p></div><button class="replay" type="button" data-replay="sp">重播</button></div>
+    <div class="sp" id="sp" data-anim>
+      <svg viewBox="0 0 640 250" role="img" aria-label="新闻发布后价格调整完成比例随时间的变化">
+        <g id="sp-axis"></g>
+        <path id="sp-a" class="sp-l a"/><path id="sp-b" class="sp-l b"/>
+        <line id="sp-me" class="sp-me" y1="14" y2="214"/>
+        <text id="sp-mt" font-size="11" text-anchor="start" class="t-warm">个人读完新闻并下单（示意）</text>
+        <text id="sp-la" font-size="11" class="t-accent">1980 年代</text><text id="sp-lb" font-size="11" class="t-ink">2000 年前后</text>
+        <line id="sp-cur" class="sp-cur" y1="14" y2="214"/>
+      </svg>
+      <div class="sp-out">
+        <div><span>经过时间</span><b id="sp-t"></b></div>
+        <div><span>1980 年代的盈利公告</span><b id="sp-va" class="t-accent-c"></b></div>
+        <div><span>2000 年前后的电视点评</span><b id="sp-vb"></b></div>
+      </div>
+    </div>
+  </div>
+  <figcaption>示意曲线：1980 年代一组依据 Patell 与 Wolfson（1984），主要反应在几分钟到十几分钟内完成；2000 年前后一组依据 Busse 与 Green（2002）对正面点评的研究，约一分钟内被吸收。今天的交易速度更快。</figcaption>
+</figure>
+<style>
+.sp svg{width:100%;height:auto;display:block}
+.sp-l{fill:none;stroke-width:2.5}
+.sp-l.a{stroke:var(--accent)} .sp-l.b{stroke:var(--ink)}
+.sp-me{stroke:var(--warm);stroke-width:1.5;stroke-dasharray:4 3}
+.sp-cur{stroke:var(--faint);stroke-width:1}
+.sp-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px}
+.sp-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.sp-out span{display:block;font-size:12px;color:var(--faint)}
+.sp-out b{font-size:20px;font-variant-numeric:tabular-nums}
+#sp-va{color:var(--accent)}
+@media (max-width:640px){.sp-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const T0=0.05,T1=60,X0=50,X1=620,Y0=214,Y1=14;
+  const x=t=>X0+Math.log10(t/T0)/Math.log10(T1/T0)*(X1-X0), y=v=>Y0-v*(Y0-Y1);
+  const fa=t=>1-Math.exp(-t/5), fb=t=>1-Math.exp(-t/0.3);
+  let a=`<line x1="${X0}" y1="${Y0}" x2="${X1}" y2="${Y0}" class="s-faint"/>`;
+  [[0.1,'6 秒'],[0.5,'30 秒'],[1,'1 分钟'],[5,'5 分钟'],[15,'15 分钟'],[60,'1 小时']].forEach(([t,l])=>a+=`<line x1="${x(t)}" y1="${Y1}" x2="${x(t)}" y2="${Y0}" class="s-line"/><text x="${x(t)}" y="${Y0+16}" text-anchor="middle" font-size="11" class="t-faint">${l}</text>`);
+  [0.5,1].forEach(v=>a+=`<text x="${X0-8}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text>`);
+  document.getElementById('sp-axis').innerHTML=a;
+  const P=f=>{let d='';for(let i=0;i<=200;i++){const t=T0*Math.pow(T1/T0,i/200);d+=(d?'L':'M')+x(t).toFixed(1)+','+y(f(t)).toFixed(1);}return d;};
+  document.getElementById('sp-a').setAttribute('d',P(fa));
+  document.getElementById('sp-b').setAttribute('d',P(fb));
+  const me=document.getElementById('sp-me');me.setAttribute('x1',x(3));me.setAttribute('x2',x(3));
+  const mt=document.getElementById('sp-mt');mt.setAttribute('x',x(3)+6);mt.setAttribute('y',y(0.12));
+  const la=document.getElementById('sp-la');la.setAttribute('x',x(12)+6);la.setAttribute('y',y(fa(12))+16);
+  const lb=document.getElementById('sp-lb');lb.setAttribute('x',x(0.07));lb.setAttribute('y',y(0.9));
+  const cur=document.getElementById('sp-cur');
+  function at(t){cur.setAttribute('x1',x(t));cur.setAttribute('x2',x(t));
+    document.getElementById('sp-t').textContent=t<1?Math.round(t*60)+' 秒':t.toFixed(t<10?1:0)+' 分钟';
+    document.getElementById('sp-va').textContent=Math.round(fa(t)*100)+'%';
+    document.getElementById('sp-vb').textContent=Math.round(fb(t)*100)+'%';}
+  document.getElementById('sp').addEventListener('anim-in',()=>{let i=0;const id=setInterval(()=>{i++;at(T0*Math.pow(T1/T0,i/120));if(i>=120){clearInterval(id);at(3);}},30);});
+  at(3);
+})();
+</script>
+
+<p>对普通投资者而言，这意味着：看到一条公开新闻时再据此交易，价格多半已经反映了它。</p>
+<h2 id="sec-5">五、效率的代价：格罗斯曼—斯蒂格利茨悖论</h2>
+<p>如果价格已经反映了全部信息，就没有人愿意花钱收集信息，因为收集来的信息已经包含在价格里，无利可图。可是如果没有人收集信息，价格又怎么会反映信息？格罗斯曼与斯蒂格利茨在 1980 年指出，完全有效的市场在逻辑上不可能存在。均衡状态下，价格只部分地反映信息，留下的那一点无效，恰好足以补偿知情交易者收集信息的成本。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">完全有效的市场为何不可能</p><p class="figsub">四个环节首尾相接；循环最终停在“接近有效、但不完全”的位置。</p></div><button class="replay" type="button" data-replay="px">重播</button></div>
+    <div class="px" id="px" data-anim>
+      <div class="px-ring">
+        <div class="px-n n0"><b>价格充分反映信息</b><span>已无未被利用的信息</span></div>
+        <div class="px-n n1"><b>收集信息无利可图</b><span>知情交易者退出</span></div>
+        <div class="px-n n2"><b>价格不再反映信息</b><span>出现可获利的偏差</span></div>
+        <div class="px-n n3"><b>收集信息有利可图</b><span>知情交易者进入</span></div>
+        <svg class="px-arrows" viewBox="0 0 400 300" aria-hidden="true">
+          <path d="M268,62 C320,80 340,110 342,128"/><path d="M342,172 C338,200 318,224 268,238"/><path d="M132,238 C80,222 60,200 58,172"/><path d="M58,128 C62,100 82,78 132,62"/>
+        </svg>
+        <div class="px-c"><span>效率</span><b id="px-g">—</b></div>
+      </div>
+      <div class="px-bar"><div class="px-fill" id="px-fill"></div><span class="px-eq" id="px-eq">均衡</span></div>
+      <p class="px-msg" id="px-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>按 Grossman 与 Stiglitz（1980）的论证示意。效率的数值只表示方向，不对应任何市场的测量；均衡位置取决于收集信息的成本：成本越低，均衡越接近完全有效。</figcaption>
+</figure>
+<style>
+.px-ring{position:relative;max-width:440px;margin:0 auto;aspect-ratio:4/3}
+.px-arrows{position:absolute;inset:0;width:100%;height:100%}
+.px-arrows path{fill:none;stroke:var(--faint);stroke-width:1.6;stroke-dasharray:4 4;animation:pxflow 1.4s linear infinite}
+@keyframes pxflow{to{stroke-dashoffset:-16}}
+.px-n{position:absolute;width:42%;background:var(--surface);border:1.5px solid var(--line);border-radius:10px;padding:8px 10px;font-size:13px;line-height:1.4;text-align:center;transition:border-color .3s,background .3s,transform .3s;z-index:1}
+.px-n b{display:block;font-size:13.5px}
+.px-n span{font-size:11.5px;color:var(--faint)}
+.px-n.n0{left:29%;top:0}.px-n.n1{right:0;top:38%}.px-n.n2{left:29%;bottom:0}.px-n.n3{left:0;top:38%}
+.px-n.on{border-color:var(--accent);background:var(--accent-soft);transform:scale(1.04)}
+.px-c{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center}
+.px-c span{display:block;font-size:11px;color:var(--faint)}
+.px-c b{font-size:24px;font-variant-numeric:tabular-nums}
+.px-bar{position:relative;height:10px;background:var(--quote);border-radius:5px;margin:16px 0 4px}
+.px-fill{height:100%;background:var(--accent);border-radius:5px;width:0;transition:width .5s}
+.px-eq{position:absolute;top:14px;left:85%;transform:translateX(-50%);font-size:11px;color:var(--warm);opacity:0;transition:opacity .4s}
+.px-eq::before{content:"";position:absolute;left:50%;top:-14px;width:2px;height:12px;background:var(--warm)}
+.px-eq.on{opacity:1}
+.px-msg{font-size:14px;margin:18px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const nodes=[...document.querySelectorAll('#px .px-n')], g=document.getElementById('px-g'), fill=document.getElementById('px-fill'), eq=document.getElementById('px-eq'), msg=document.getElementById('px-msg');
+  // 效率在 100% 与较低水平之间来回摆动，幅度逐步收敛到均衡 85%
+  const seq=[[0,100],[1,100],[2,62],[3,62],[0,96],[1,96],[2,74],[3,74],[0,90],[1,90],[2,80],[3,80],[0,85]];
+  const M=['假设价格已经充分反映信息。','既然信息已在价格里，花钱收集信息就得不到回报，知情交易者退出。','没有人收集信息，价格开始偏离价值，出现可获利的偏差。','偏差带来利润，又吸引知情交易者进入，推动价格重新反映信息。'];
+  let timer;
+  function run(){clearTimeout(timer);eq.classList.remove('on');let k=0;
+    (function step(){const [n,e]=seq[k];nodes.forEach((x,i)=>x.classList.toggle('on',i===n));g.textContent=e+'%';fill.style.width=e+'%';msg.textContent=k===seq.length-1?'循环最终停在接近有效但不完全的位置：剩下的那一点无效，恰好补偿知情交易者收集信息的成本。':M[n];
+      if(++k<seq.length)timer=setTimeout(step,1100);else{eq.classList.add('on');nodes.forEach(x=>x.classList.remove('on'));}})();}
+  document.getElementById('px').addEventListener('anim-in',run);
+  g.textContent='100%';fill.style.width='100%';msg.textContent=M[0];
+})();
+</script>
+
+<p>这一悖论把“有效”从一种状态变成了一种过程：市场之所以接近有效，是因为一直有人为了利润在推动它趋向有效。</p>
+<h2 id="sec-6">六、知情交易者如何藏身于噪声</h2>
+<p>知情交易者推动信息进入价格，但他们并不想让信息一下子进入价格，因为价格一动，他们的优势就没有了。凯尔在 1985 年建立了一个模型：知情交易者把订单拆开，分多次交易，混在大量并不掌握信息的“噪声交易”之中；做市商只能看到总的订单流，无法分辨哪些来自知情者，只能根据订单流的不平衡逐步调整价格。结果是，信息一点一点地进入价格，到交易结束时完全反映出来；噪声交易越多，知情者藏得越好、赚得越多，但价格最终仍会到达真实价值。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">知情交易者如何藏身于噪声</p><p class="figsub">只有知情者知道股票真实价值为 110，当前价格 100。他把买单拆成 20 次，混在噪声交易里；做市商只看到总订单流，据此调整价格。</p></div><button class="replay" type="button" id="ky-run">重新模拟</button></div>
+    <div class="ky" id="ky" data-anim>
+      <svg viewBox="0 0 640 230" role="img" aria-label="价格逐步向真实价值收敛">
+        <g id="ky-axis"></g>
+        <g id="ky-flow"></g>
+        <path id="ky-path" class="ky-path"/>
+      </svg>
+      <div class="sl"><label for="ky-n">噪声交易的规模 <b id="ky-nv"></b></label><input id="ky-n" type="range" min="1" max="5" step="1" value="2"><div class="hint">噪声越多，知情者的订单越不显眼</div></div>
+      <div class="ky-out">
+        <div><span>最后一次交易后的价格</span><b id="ky-p"></b></div>
+        <div><span>知情者每次的买入量（平均）</span><b id="ky-q"></b></div>
+        <div><span>知情者的利润</span><b id="ky-pi"></b></div>
+      </div>
+    </div>
+  </div>
+  <figcaption>按 Kyle（1985）的思路简化：做市商按订单流的不平衡调整价格，噪声越多，同样的订单流对价格的影响越小；知情者据此把剩余的价差平均分到剩下的交易次数里。柱形为每次的订单流，绿色为知情者的部分，灰色为噪声。数字为示意。</figcaption>
+</figure>
+<style>
+.ky svg{width:100%;height:auto;display:block}
+.ky-path{fill:none;stroke:var(--accent);stroke-width:2.5;stroke-linejoin:round}
+#ky-flow rect.inf{fill:var(--accent);opacity:.75}
+#ky-flow rect.noi{fill:var(--gray-mark);opacity:.55}
+.ky-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ky-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.ky-out span{display:block;font-size:12px;color:var(--faint)}
+.ky-out b{font-size:20px;font-variant-numeric:tabular-nums}
+@media (max-width:640px){.ky-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const N=20,V=110,P0=100,X0=50,X1=620,YP0=120,YP1=14,YF=200;
+  const x=t=>X0+t/N*(X1-X0), y=p=>YP0-(p-97)/(113-97)*(YP0-YP1);
+  let a=`<line x1="${X0}" y1="${y(V)}" x2="${X1}" y2="${y(V)}" class="s-faint" stroke-dasharray="4 3"/><text x="${X1}" y="${y(V)-6}" text-anchor="end" font-size="11" class="t-muted">真实价值 110</text>`;
+  a+=`<line x1="${X0}" y1="${y(P0)}" x2="${X1}" y2="${y(P0)}" class="s-line"/><text x="${X0-8}" y="${y(P0)+4}" text-anchor="end" font-size="11" class="t-faint">100</text>`;
+  a+=`<line x1="${X0}" y1="${YF}" x2="${X1}" y2="${YF}" class="s-faint"/><text x="${X0-8}" y="${YF+4}" text-anchor="end" font-size="10" class="t-faint">订单流</text>`;
+  for(let t=0;t<=N;t+=5)a+=`<text x="${x(t)}" y="${YF+24}" text-anchor="middle" font-size="11" class="t-faint">第 ${t} 次</text>`;
+  document.getElementById('ky-axis').innerHTML=a;
+  const s=document.getElementById('ky-n');
+  const gauss=()=>{let u=0,v=0;while(!u)u=Math.random();v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);};
+  let timer;
+  function run(){
+    clearInterval(timer);
+    const sn=+s.value, lam=0.5/sn; // 噪声越大，做市商对订单流越不敏感
+    document.getElementById('ky-nv').textContent=['','很少','较少','中等','较多','很多'][sn];
+    let p=P0, prof=0, qs=0, pts=[[0,P0]], bars='', t=0;
+    const path=document.getElementById('ky-path'), flow=document.getElementById('ky-flow');
+    flow.innerHTML=''; path.setAttribute('d',`M${x(0)},${y(P0)}`);
+    timer=setInterval(()=>{
+      t++; const xi=(V-p)/(lam*(N-t+1)), u=sn*1.6*gauss(), np=p+lam*(xi+u);
+      prof+=xi*(V-np); qs+=xi; p=np; pts.push([t,p]);
+      const bw=(X1-X0)/N*0.7, bx=x(t)-bw, sc=4;
+      const hi=Math.max(-40,Math.min(40,xi*sc)), hu=Math.max(-40,Math.min(40,u*sc));
+      flow.insertAdjacentHTML('beforeend',`<rect class="inf" x="${bx}" y="${hi>=0?YF-hi:YF}" width="${bw/2}" height="${Math.abs(hi)}"/><rect class="noi" x="${bx+bw/2}" y="${hu>=0?YF-hu:YF}" width="${bw/2}" height="${Math.abs(hu)}"/>`);
+      path.setAttribute('d','M'+pts.map(([tt,pp])=>`${x(tt).toFixed(1)},${y(Math.max(97,Math.min(113,pp))).toFixed(1)}`).join('L'));
+      document.getElementById('ky-p').textContent=p.toFixed(1);
+      document.getElementById('ky-q').textContent=(qs/t).toFixed(1);
+      document.getElementById('ky-pi').textContent=prof.toFixed(0);
+      if(t>=N)clearInterval(timer);
+    },110);
+  }
+  s.addEventListener('input',run);
+  document.getElementById('ky-run').addEventListener('click',run);
+  document.getElementById('ky').addEventListener('anim-in',run);
+  document.getElementById('ky-nv').textContent='较少';
+})();
+</script>
+
+<p>布莱克在 1986 年把这一点概括为：噪声使金融市场成为可能，也使它不完美。没有噪声交易，知情者无从获利，也就没有人去收集信息；有了噪声交易，价格又会偏离价值。</p>
+<h2 id="sec-7">七、对产品设计的含义</h2>
+<p>信息进入价格的方式，决定了金融信息产品能为用户提供什么，不能提供什么。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：信息产品能提供什么</p><p class="figsub">四条设计要求，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="s03">重播</button></div>
+    <div class="s03" id="s03" data-anim>
+      <div class="s03-c" style="--i:0"><em>公开信息以分钟计进入价格</em><b>不以“比市场先知道”为卖点</b><p>推送公开新闻时，价格多半已经反映；速度竞赛属于专业机构，不属于个人投资者。</p></div>
+      <div class="s03-c" style="--i:1"><em>价格只告诉结果，不告诉原因</em><b>把新闻与用户自身联系起来</b><p>说明一条信息与用户持仓、目标与约定的关系，比抢先报道更有价值。</p></div>
+      <div class="s03-c warn" style="--i:2"><em>强式有效不成立</em><b>守住未公开信息的边界</b><p>AI 不得获取、推断或传播未公开的重大信息；数据来源与使用范围要可追溯。</p></div>
+      <div class="s03-c" style="--i:3"><em>效率有代价，噪声难免</em><b>帮助用户不做“噪声交易者”</b><p>对追逐消息的频繁交易给出成本与证据，让用户的交易建立在自己的目标上。</p></div>
+    </div>
+  </div>
+</figure>
+<style>
+.s03{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.s03-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.s03-c.warn{border-left-color:var(--warm)}
+.s03-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.s03-c b{display:block;font-size:15px;margin:2px 0 4px}
+.s03-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.s03.in .s03-c{opacity:1;transform:none}
+@media (max-width:640px){.s03{grid-template-columns:1fr}}
+</style>
+
+<h2 id="sec-8">参考文献</h2>
+<ul class="refs"><li>Hayek, F. (1945). The use of knowledge in society. <i>American Economic Review</i>, 35(4), 519–530.</li><li>Ball, R. &amp; Brown, P. (1968). An empirical evaluation of accounting income numbers. <i>Journal of Accounting Research</i>, 6(2), 159–178.</li><li>Fama, E., Fisher, L., Jensen, M. &amp; Roll, R. (1969). The adjustment of stock prices to new information. <i>International Economic Review</i>, 10(1), 1–21.</li><li>Fama, E. (1970). Efficient capital markets: A review of theory and empirical work. <i>Journal of Finance</i>, 25(2), 383–417.</li><li>Jaffe, J. (1974). Special information and insider trading. <i>Journal of Business</i>, 47(3), 410–428.</li><li>Grossman, S. &amp; Stiglitz, J. (1980). On the impossibility of informationally efficient markets. <i>American Economic Review</i>, 70(3), 393–408.</li><li>Keown, A. &amp; Pinkerton, J. (1981). Merger announcements and insider trading activity: An empirical investigation. <i>Journal of Finance</i>, 36(4), 855–869.</li><li>Patell, J. &amp; Wolfson, M. (1984). The intraday speed of adjustment of stock prices to earnings and dividend announcements. <i>Journal of Financial Economics</i>, 13(2), 223–252.</li><li>Kyle, A. (1985). Continuous auctions and insider trading. <i>Econometrica</i>, 53(6), 1315–1335.</li><li>Black, F. (1986). Noise. <i>Journal of Finance</i>, 41(3), 529–543.</li><li>Bernard, V. &amp; Thomas, J. (1989). Post-earnings-announcement drift: Delayed price response or risk premium? <i>Journal of Accounting Research</i>, 27(Supplement), 1–36.</li><li>Busse, J. &amp; Green, T. C. (2002). Market efficiency in real time. <i>Journal of Financial Economics</i>, 65(3), 415–437.</li></ul>
+<footer class="nav"><a href="ch07.html">← 第 7 章　价格为什么难以预测</a><a href="ch09.html">第 9 章　市场里的交易者 →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

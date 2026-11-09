@@ -1,0 +1,29 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Pooled together, the share withdrawn each year is quite stable</p><p class="figsub">Each household has a one-in-ten chance each year of coming to withdraw its grain. Drag the number of depositing households and see how much the granary must keep back to be 99% sure of meeting the year’s withdrawals.</p></div><button class="replay" type="button" data-replay="po">Replay</button></div>
+    <div class="po" id="po" data-anim>
+      <div class="po-bar"><i id="po-r"></i><i id="po-l"></i></div>
+      <div class="legend"><span><i style="background:var(--gold)"></i>Kept back for withdrawals</span><span><i style="background:var(--accent)"></i>Can be lent long-term to orchard planters</span></div>
+      <div class="sl"><label for="po-n">Depositing households <b id="po-nv"></b></label><input id="po-n" type="range" min="1" max="500" step="1" value="1"></div>
+      <p class="po-msg" id="po-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: every household stores the same amount and withdrawals are independent; the share kept back is the 99th percentile of the number of households withdrawing that year (computed exactly from the binomial distribution).</figcaption>
+</figure>
+<style>
+.po-bar{display:flex;height:30px;border-radius:6px;overflow:hidden;background:var(--quote)}
+.po-bar i{display:block;height:100%;transition:width .4s}
+#po-r{background:var(--gold)} #po-l{background:var(--accent)}
+.po-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),p=.1;
+  function q99(n){let c=0,pr=Math.pow(1-p,n),k=0;c=pr;while(c<.99&&k<n){pr=pr*(n-k)/(k+1)*p/(1-p);k++;c+=pr;}return k;}
+  function draw(){const n=+$('po-n').value,k=q99(n),res=k/n;$('po-r').style.width=res*100+'%';$('po-l').style.width=(1-res)*100+'%';$('po-nv').textContent=n+(n===1?' household':' households');
+    $('po-msg').textContent=n===1?'With only one household, it may withdraw all its grain at any time, and the granary cannot lend a single portion.':`With ${n} households, being 99% sure requires keeping back only ${Math.round(res*100)}%; the other ${Math.round((1-res)*100)}% can be lent long-term. The more households, the closer the share kept back comes to the one in ten who withdraw each year.`;}
+  $('po-n').addEventListener('input',draw);
+  $('po').addEventListener('anim-in',()=>{const seq=[1,5,10,20,50,100,200,500];seq.forEach((v,i)=>setTimeout(()=>{$('po-n').value=v;draw();},200+i*450));});
+  draw();
+})();
+</script>

@@ -1,0 +1,45 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">承受力的三个面</p><p class="figsub">三位投资者在问卷中都选择了“愿意承担较高风险”。切换查看，比较三个面的高低，以及计划最终能按哪一档执行。</p></div><button class="replay" type="button" data-replay="fc">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="投资者">
+      <button type="button" data-fc="a" aria-pressed="true">三十岁，收入稳定</button>
+      <button type="button" data-fc="b" aria-pressed="false">五十八岁，两年后退休</button>
+      <button type="button" data-fc="c" aria-pressed="false">上次大跌中卖出过</button>
+    </div>
+    <div class="fc" id="fc" data-anim>
+      <div class="fc-bars" id="fc-bars"></div>
+      <p class="fc-msg" id="fc-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意。五档从低到高；虚线为三个面中最低的一档，即计划可以执行的上限。</figcaption>
+</figure>
+<style>
+.fc-bars{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:18px;height:200px;align-items:end;padding:0 8px;border-bottom:1px solid var(--faint)}
+.fc-b{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.fc-b i{display:block;width:70%;max-width:110px;border-radius:6px 6px 0 0;height:0;transition:height .6s ease}
+.fc-b b{font-size:13px;margin-bottom:4px}
+.fc-cap{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;padding:0 8px;margin-top:6px;text-align:center;font-size:13px}
+.fc-cap span{color:var(--faint);font-size:11.5px;display:block}
+.fc-line{position:absolute;left:0;right:0;border-top:2px dashed var(--ink);transition:bottom .6s ease}
+.fc-line em{position:absolute;left:0;top:-18px;font-style:normal;font-size:11.5px;background:var(--surface);padding:0 4px}
+.fc-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const N=['能力','意愿','行为'],D=['客观上能承受多少','主观上愿意承担多少','下跌时实际承受了多少'],C=['var(--blue)','var(--accent)','var(--warm)'],L=['','很低','较低','中等','较高','很高'];
+  const P={a:[5,4,4,'三个面都较高，且大致一致：计划可以按较高的一档执行。行为一面尚未经过大跌检验，仍需在下跌中复核。'],
+    b:[2,4,3,'意愿较高，能力却较低：这笔钱是全部积蓄，两年后就要使用。计划只能按能力一档执行，否则一次下跌可能直接影响退休生活。'],
+    c:[5,5,2,'能力与意愿都很高，但上一次大跌时在跌幅过半前就卖出了。行为记录显示的实际承受力最低，计划应以它为准。']};
+  const box=document.getElementById('fc');
+  box.querySelector('.fc-bars').innerHTML=N.map((n,i)=>`<div class="fc-b"><i id="fc-i${i}" style="background:${C[i]}"></i></div>`).join('')+'<div class="fc-line" id="fc-line"><em id="fc-le"></em></div>';
+  box.querySelector('.fc-bars').insertAdjacentHTML('afterend','<div class="fc-cap">'+N.map((n,i)=>`<div>${n}：<b id="fc-v${i}"></b><span>${D[i]}</span></div>`).join('')+'</div>');
+  function set(k,anim){document.querySelectorAll('[data-fc]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.fc===k)));
+    const v=P[k];if(anim)N.forEach((n,i)=>document.getElementById('fc-i'+i).style.height='0');
+    setTimeout(()=>{N.forEach((n,i)=>{document.getElementById('fc-i'+i).style.height=v[i]/5*180+'px';document.getElementById('fc-v'+i).textContent=L[v[i]];});
+      const m=Math.min(v[0],v[1],v[2]);document.getElementById('fc-line').style.bottom=m/5*180+'px';document.getElementById('fc-le').textContent='计划上限：'+L[m];},anim?60:0);
+    document.getElementById('fc-msg').textContent=v[3];}
+  document.querySelectorAll('[data-fc]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.fc,false)));
+  box.addEventListener('anim-in',()=>{set('a',true);setTimeout(()=>set('b'),2600);setTimeout(()=>set('c'),5200);});
+  set('a',false);
+})();
+</script>

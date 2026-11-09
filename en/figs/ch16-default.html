@@ -1,0 +1,41 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The same people, different defaults</p><p class="figsub">Left: how many new employees join a retirement savings plan when it changes from "opt in voluntarily" to "enrolled automatically, free to opt out". Right: the savings rate of participants in the "Save More Tomorrow" plan, which rises automatically with each pay rise.</p></div><button class="replay" type="button" data-replay="df">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Default">
+      <button type="button" data-df="in" aria-pressed="true">Opt in voluntarily</button>
+      <button type="button" data-df="auto" aria-pressed="false">Enrolled automatically, free to opt out</button>
+    </div>
+    <div class="df" id="df" data-anim>
+      <div class="df-l"><div class="df-dots" id="df-dots"></div><p id="df-n"></p></div>
+      <div class="df-r"><svg viewBox="0 0 300 180" role="img" aria-label="Savings rate rising with pay rises"><g id="df-st"></g></svg></div>
+    </div>
+    <p class="df-msg" id="df-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>Participation rates of about 37% and about 86% come from Madrian and Shea's (2001) study of one US company's 401(k) plan; savings rates from 3.5% to 13.6% come from Thaler and Benartzi (2004), where the three middle steps are the values after the first three pay rises and 13.6% is the value after the fourth, all taken from Table 2 of the original paper.</figcaption>
+</figure>
+<style>
+.df{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:center}
+.df-dots{display:grid;grid-template-columns:repeat(10,1fr);gap:4px}
+.df-dots i{aspect-ratio:1;border-radius:50%;background:var(--line);transition:background .3s;transition-delay:calc(var(--i)*6ms)}
+.df-dots i.on{background:var(--accent)}
+.df-l p{font-size:13px;margin:8px 0 0}
+.df-r svg{width:100%;height:auto;display:block}
+.df-b{transition:height .5s ease,y .5s ease}
+.df-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.df{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),dots=$('df-dots');dots.innerHTML=Array.from({length:100},(_,i)=>`<i style="--i:${i}"></i>`).join('');
+  const ds=[...dots.children],ST=[3.5,6.5,9.4,11.6,13.6],YB=150,h=v=>v/15*(YB-14);
+  $('df-st').innerHTML=`<line x1="10" y1="${YB}" x2="295" y2="${YB}" class="s-faint"/>`+ST.map((v,i)=>`<rect class="df-b" x="${18+i*56}" width="40" rx="3" fill="var(--accent)" style="y:${YB}px;height:0"/><text class="df-t t-ink" x="${38+i*56}" y="${YB-h(v)-5}" text-anchor="middle" font-size="12" opacity="0">${v}%</text><text x="${38+i*56}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${i?'Raise '+i:'On joining'}</text>`).join('');
+  function stairs(){[...document.querySelectorAll('.df-b')].forEach((r,i)=>{r.style.y=YB+'px';r.style.height='0px';setTimeout(()=>{r.style.y=(YB-h(ST[i]))+'px';r.style.height=h(ST[i])+'px';},100+i*350);});
+    [...document.querySelectorAll('.df-t')].forEach((t,i)=>{t.setAttribute('opacity',0);setTimeout(()=>t.setAttribute('opacity',1),500+i*350);});}
+  function set(k){document.querySelectorAll('[data-df]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.df===k)));const n=k==='in'?37:86;
+    ds.forEach((d,i)=>d.classList.toggle('on',i<n));$('df-n').textContent=`About ${n} of 100 new employees join`;
+    $('df-msg').textContent=k==='in'?'When joining requires filling in a form, most people never act. The reason is inertia and procrastination, not an unwillingness to save.':'Once joining is the default and leaving is possible at any time, participation more than doubles. Freedom of choice is not reduced; the only change is what happens when people do nothing.';}
+  document.querySelectorAll('[data-df]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.df)));
+  $('df').addEventListener('anim-in',()=>{set('in');stairs();setTimeout(()=>set('auto'),2600);});
+  set('in');ST.forEach((v,i)=>{const r=document.querySelectorAll('.df-b')[i];r.style.y=(YB-h(v))+'px';r.style.height=h(v)+'px';document.querySelectorAll('.df-t')[i].setAttribute('opacity',1);});
+})();
+</script>

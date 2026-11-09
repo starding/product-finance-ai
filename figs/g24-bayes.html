@@ -1,0 +1,40 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">记录一点点改变判断</p><p class="figsub">书记员有两类：可靠的一年出 0～1 次小错，不可靠的一年出一到两次。他起初的判断取决于借来的信号。切换书记员实际的类型与起初的判断，看十年里他认为“它可靠”的概率怎样变化。</p></div><button class="replay" type="button" data-replay="by24">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="实际类型">
+      <button type="button" data-by24t="good" aria-pressed="true">实际可靠</button>
+      <button type="button" data-by24t="bad" aria-pressed="false">实际不可靠</button>
+    </div>
+    <div class="seg-btns" role="group" aria-label="起初的判断">
+      <button type="button" data-by24p=".5" aria-pressed="true">没有信号：起初五成</button>
+      <button type="button" data-by24p=".8" aria-pressed="false">有昂贵的信号：起初八成</button>
+    </div>
+    <div class="by24" id="by24" data-anim>
+      <svg viewBox="0 0 660 200" role="img" aria-label="认为它可靠的概率"><g id="by24-g"></g></svg>
+      <p class="by24-msg" id="by24-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：可靠类型每年出错的次数服从均值 0.5 的泊松分布，不可靠类型服从均值 1.5 的泊松分布；他每年按观察到的出错次数，用贝叶斯法则更新判断（克雷普斯与威尔逊，1982 所说的对类型的判断随行为修正）。圆点下方的数字为当年观察到的出错次数。</figcaption>
+</figure>
+<style>
+.by24 svg{width:100%;height:auto;display:block}
+.by24-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.by24 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('by24'+id);let type='good',prior=.5;const X0=50,X1=628,YT=12,YB=160,x=t=>X0+t/10*(X1-X0),y=v=>YB-v*(YB-YT);
+  const pois=(l,k)=>{let p=Math.exp(-l);for(let i=1;i<=k;i++)p*=l/i;return p;};
+  function obs(){let s=2424+(type==='good'?0:7);const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};const l=type==='good'?.5:1.5;return Array.from({length:10},()=>{let k=0,p=Math.exp(-l),u=r(),a=p;while(u>a){k++;p*=l/k;a+=p;}return k;});}
+  function draw(){const O=obs(),P=[prior];O.forEach(k=>{const q=P[P.length-1],a=q*pois(.5,k),b=(1-q)*pois(1.5,k);P.push(a/(a+b));});
+    let h=[0,.25,.5,.75,1].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text>`).join('')+[0,2,4,6,8,10].map(t=>`<text x="${x(t)}" y="${YB+30}" text-anchor="middle" font-size="11" class="t-faint">第 ${t} 年</text>`).join('');
+    h+=`<path d="${P.map((v,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(v).toFixed(1)).join('')}" fill="none" stroke="var(--accent)" stroke-width="2.6"/>`+P.map((v,t)=>`<circle cx="${x(t)}" cy="${y(v)}" r="4.5" fill="var(--accent)"/>`+(t?`<text x="${x(t)}" y="${YB+15}" text-anchor="middle" font-size="11" fill="${O[t-1]>1?'var(--warm)':'var(--muted)'}">${O[t-1]}</text>`:'')).join('');
+    $('-g').innerHTML=h;const end=P[10];
+    $('-msg').textContent=type==='good'?`实际可靠：起初 ${Math.round(prior*100)}%，三年后为 ${Math.round(P[3]*100)}%，十年后为 ${Math.min(99,Math.round(end*100))}%。偶尔一年出错多一些，判断会往下挪，但不会归零。`:`实际不可靠：起初 ${Math.round(prior*100)}%，三年后降到 ${Math.round(P[3]*100)}%，十年后只剩 ${Math.max(1,Math.round(end*100))}%。${prior>.5?'昂贵的信号让它的起点更高，可记录很快就把它拉了下来；而不可靠的运营者本来就付不起这样的信号。':''}`;}
+  const tb=[...document.querySelectorAll('[data-by24t]')],pb=[...document.querySelectorAll('[data-by24p]')];
+  tb.forEach(b=>b.addEventListener('click',()=>{type=b.dataset.by24t;tb.forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  pb.forEach(b=>b.addEventListener('click',()=>{prior=+b.dataset.by24p;pb.forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  $('').addEventListener('anim-in',()=>{[['good',.5],['good',.8],['bad',.8]].forEach(([t,p],i)=>setTimeout(()=>{type=t;prior=p;tb.forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.by24t===t)));pb.forEach(x=>x.setAttribute('aria-pressed',String(+x.dataset.by24p===p)));draw();},300+i*2200));});
+  draw();
+})();
+</script>

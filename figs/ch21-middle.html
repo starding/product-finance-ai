@@ -1,0 +1,44 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">关键信息放在中间，最容易被忽略</p>
+    <p class="figsub">给模型 20 份材料，其中只有一份包含答案。拖动这份材料所在的位置，看回答的正确率；打开“先筛选相关材料”，比较效果。</p>
+    <div class="md" id="md" data-anim>
+      <div class="md-docs" id="md-docs"></div>
+      <svg viewBox="0 0 640 190" role="img" aria-label="关键信息位置与正确率"><g id="md-ax"></g><path id="md-p" class="md-l"/><path id="md-f" class="md-f"/><circle id="md-d" r="6" fill="var(--ink)"/></svg>
+      <div class="sl"><label for="md-s">包含答案的材料所在位置 <b id="md-sv"></b></label><input id="md-s" type="range" min="1" max="20" step="1" value="10"></div>
+      <label class="md-chk"><input type="checkbox" id="md-x"> 先筛选相关材料，只交给模型最相关的三份</label>
+      <p class="md-msg" id="md-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意曲线，形态依据 Liu 等（2024）在多文档问答实验中的发现：关键信息位于开头或结尾时正确率较高，位于中间时明显下降。</figcaption>
+</figure>
+<style>
+.md-docs{display:grid;grid-template-columns:repeat(20,1fr);gap:3px;margin-bottom:6px}
+.md-docs i{height:22px;border-radius:3px;background:var(--quote);border:1px solid var(--line);transition:background .25s}
+.md-docs i.k{background:var(--gold);border-color:var(--gold)}
+.md-docs i.dim{opacity:.2}
+.md svg{width:100%;height:auto;display:block}
+.md-l{fill:none;stroke:var(--warm);stroke-width:2.5}
+.md-f{fill:none;stroke:var(--accent);stroke-width:2.5;transition:opacity .3s}
+.md-chk{display:flex;gap:6px;align-items:center;font-size:14px;margin-top:4px}
+.md-chk input{accent-color:var(--accent);width:16px;height:16px}
+.md-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.md svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const A=k=>{const u=(k-1)/19;return 54+22*Math.pow(2*u-1,2);},F=86;
+  const X0=56,X1=620,YT=14,YB=160,x=k=>X0+(k-1)/19*(X1-X0),y=v=>YB-(v-40)/(100-40)*(YB-YT);
+  const $=id=>document.getElementById(id),sl=$('md-s'),cb=$('md-x'),docs=$('md-docs');
+  docs.innerHTML='<i></i>'.repeat(20);const ds=[...docs.children];
+  $('md-ax').innerHTML=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`+[40,60,80,100].map(v=>`<text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}%</text>`).join('')+[1,5,10,15,20].map(k=>`<text x="${x(k)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">第 ${k} 份</text>`).join('');
+  let d='';for(let k=1;k<=20;k+=.25)d+=(k>1?'L':'M')+x(k).toFixed(1)+','+y(A(k)).toFixed(1);$('md-p').setAttribute('d',d);
+  $('md-f').setAttribute('d',`M${x(1)},${y(F)}L${x(20)},${y(F)}`);
+  function r(){const k=+sl.value,on=cb.checked;ds.forEach((e,i)=>{e.classList.toggle('k',i+1===k);e.classList.toggle('dim',on&&i+1!==k&&Math.abs(i+1-k)>1);});
+    $('md-f').style.opacity=on?1:0;const v=on?F:A(k);$('md-d').setAttribute('cx',x(k));$('md-d').setAttribute('cy',y(v));$('md-sv').textContent='第 '+k+' 份';
+    $('md-msg').textContent=on?`先按任务筛选出最相关的三份材料，关键信息不再被淹没，正确率约为 ${F}%，与它原来的位置无关。`:`关键信息位于第 ${k} 份时，正确率约为 ${A(k).toFixed(0)}%。${k>4&&k<17?'材料越长，中间的内容越容易被忽略。':'位于开头或结尾时，模型能较好地利用它。'}`;}
+  sl.addEventListener('input',r);cb.addEventListener('change',r);
+  $('md').addEventListener('anim-in',()=>{cb.checked=false;let k=1;sl.value=1;r();const id=setInterval(()=>{k++;sl.value=k;r();if(k>=20){clearInterval(id);setTimeout(()=>{sl.value=10;r();setTimeout(()=>{cb.checked=true;r();},800);},500);}},120);});
+  r();
+})();
+</script>

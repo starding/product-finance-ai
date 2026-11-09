@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Lent for five years: will an emergency come first?</p><p class="figsub">Fifty households store grain, and each has some chance of an emergency every year. Drag the chance of an emergency and the length of the loan, and see how many households will need their grain back before the term ends.</p></div><button class="replay" type="button" data-replay="mi">Replay</button></div>
+    <div class="mi" id="mi" data-anim>
+      <div class="mi-dots" id="mi-d"></div>
+      <div class="legend"><span><i style="background:var(--warm)"></i>Emergency before the term ends</span><span><i style="background:var(--quote);border:1px solid var(--line)"></i>No emergency before the term ends</span></div>
+      <div class="mi-sl">
+        <div class="sl"><label for="mi-p">Chance of an emergency per household per year <b id="mi-pv"></b></label><input id="mi-p" type="range" min="2" max="30" step="1" value="10"></div>
+        <div class="sl"><label for="mi-t">Length of the loan <b id="mi-tv"></b></label><input id="mi-t" type="range" min="1" max="10" step="1" value="5"></div>
+      </div>
+      <p class="mi-msg" id="mi-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: emergencies are independent across households and years; the chance of at least one emergency before the term ends = 1 − (1 − yearly chance)^years. The timing of each square’s emergencies comes from one fixed set of random numbers.</figcaption>
+</figure>
+<style>
+.mi-dots{display:grid;grid-template-columns:repeat(10,1fr);gap:5px}
+.mi-dots i{height:22px;border-radius:5px;background:var(--quote);transition:background .3s}
+.mi-dots i.on{background:var(--warm)}
+.mi-sl{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:10px}
+.mi-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.mi-sl{grid-template-columns:1fr;gap:4px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);let s=99;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};
+  const U=Array.from({length:50},()=>Array.from({length:10},()=>r()));
+  $('mi-d').innerHTML='<i></i>'.repeat(50);const ds=[...$('mi-d').children];
+  function draw(){const p=+$('mi-p').value/100,T=+$('mi-t').value;let n=0;
+    ds.forEach((d,i)=>{const hit=U[i].slice(0,T).some(u=>u<p);d.classList.toggle('on',hit);if(hit)n++;});
+    const q=1-Math.pow(1-p,T);$('mi-pv').textContent=Math.round(p*100)+'%';$('mi-tv').textContent=T+(T===1?' year':' years');
+    $('mi-msg').textContent=`With a ${Math.round(p*100)}% chance of an emergency each year and a ${T}-year loan, each household has about a ${Math.round(q*100)}% chance of an emergency before the term ends: ${n} of the fifty households will need their grain back partway through. Few people are willing to make such a loan directly.`;}
+  ['mi-p','mi-t'].forEach(k=>$(k).addEventListener('input',draw));
+  $('mi').addEventListener('anim-in',()=>{let v=1;$('mi-t').value=1;draw();const id=setInterval(()=>{v++;$('mi-t').value=v;draw();if(v>=10)clearInterval(id);},350);});
+  draw();
+})();
+</script>

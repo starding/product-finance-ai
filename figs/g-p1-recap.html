@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">第一部分小结</p><p class="figsub">十二种制度，分三个角度看：各自的结论、对产品的含义，以及请人代为思考与操作的成本骤降时会怎样。</p></div><button class="replay" type="button" data-replay="pr1">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="角度">
+      <button type="button" data-pr1="0" aria-pressed="true">结论</button>
+      <button type="button" data-pr1="1" aria-pressed="false">对产品</button>
+      <button type="button" data-pr1="2" aria-pressed="false">代理成本下降时</button>
+    </div>
+    <div class="pr1" id="pr1" data-anim><div class="pr1-g" id="pr1-g"></div>
+      <div class="legend" id="pr1-lg" hidden><span><i style="background:var(--warm-soft)"></i>受影响，要重新推演</span><span><i style="background:var(--quote);border:1px solid var(--line)"></i>影响较弱或不因此改变</span></div>
+    </div>
+  </div>
+  <figcaption>“代理成本下降时”各项的影响程度为判断，不是测算。</figcaption>
+</figure>
+<style>
+.pr1-g{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pr1-c{background:var(--quote);border-radius:9px;padding:9px 11px;font-size:13px;line-height:1.55;color:var(--muted);opacity:0;transform:translateY(6px);transition:opacity .35s,transform .35s,background .3s;transition-delay:calc(var(--i)*.06s)}
+.pr1.in .pr1-c{opacity:1;transform:none}
+.pr1-c b{display:block;font-size:13.5px;color:var(--ink);margin-bottom:2px}
+.pr1-c.hit{background:var(--warm-soft)}
+.pr1 .legend{margin-top:10px}
+@media (max-width:640px){.pr1-g{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const N=['储蓄与留种','借贷与利息','承诺','货币','保险','银行','股份','市场','价格中的信息','委托','监管与托管','默认选项'];
+  const T=[[ '跨时间平滑消费；留种是最早的投资。','缺粮时间错开的两个人都能从借贷中得益；利息是等待的价格。','承诺可信，借贷才会发生；声誉与抵押各有边界。','货币解决双重巧合，也让世代之间可以交换。','个别风险可以分担，全村共同的风险分散不掉。','期限转换创造了流动性，也带来挤兑。','股份让大项目可行；有限责任让互不相识的人敢于出资。','流动性有价；买卖价差是找到对手方的成本。','价格汇集了所有人的信息；信息优势在竞争中被消耗。','委托省下时间，也带来代理成本；最便宜的委托最难被超越。','托管、披露与适当性让委托可信；规则本身也有成本。','人有偏差与惯性；好的默认选项帮人守住自己的计划。'],
+    ['储蓄产品：用钱的时间是第一个参数。','存款与贷款：利率是时间的价格。','征信与抵押：可信的记录降低借贷的成本。','支付与账户：交换的基础设施。','保险与分散的组合：分担能分担的，讲清分不掉的。','存款与准备金：随时可取，需要有人兜底。','股票与债券：剩余收益与固定的索取权。','交易所与经纪：降低找到对手方的成本。','指数基金：不与价格竞争。','基金与投资顾问：说清委托人付出了什么、得到了什么。','托管、披露与适当性：把可信写进产品本身。','定投与默认选项：用户实际拿到的收益才是标准。'],
+    [['用钱的时间，是交给代理的第一个参数。',0],['撮合借贷双方的成本下降，影响较弱。',0],['记录越易得、越可信，声誉越有力；核实与担保要重新推演。',1],['支付可以由代理执行。',0],['风险可以估计、定价与分担；分散不掉的部分不会消失。',0],['期限与流动性不会消失；信息与转账越快，挤兑越快。',0],['本身不重跑；所有权与控制权的分离，是委托的起点。',0],['寻找与议价的成本下降，代理成为市场参与者。',1],['研究越便宜、做的人越多，信息优势越小。',1],['研究、监督与费用的成本下降，委托的边界移动。',1],['能下单的代理由谁托管、谁核对、出了错谁负责。',1],['代理能否矫正偏差，又是否会利用偏差。',1]]];
+  const g=document.getElementById('pr1-g'),lg=document.getElementById('pr1-lg'),bs=[...document.querySelectorAll('[data-pr1]')];
+  function set(k){bs.forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.pr1===k)));lg.hidden=k!==2;
+    g.innerHTML=N.map((n,i)=>{const v=T[k][i],txt=k===2?v[0]:v,hit=k===2&&v[1];return `<div class="pr1-c${hit?' hit':''}" style="--i:${i}"><b>${i+1}　${n}</b>${txt}</div>`;}).join('');}
+  bs.forEach(b=>b.addEventListener('click',()=>set(+b.dataset.pr1)));
+  document.getElementById('pr1').addEventListener('anim-in',()=>{[0,1,2].forEach((k,i)=>setTimeout(()=>set(k),300+i*2600));});
+  set(0);
+})();
+</script>

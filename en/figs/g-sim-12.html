@@ -1,0 +1,74 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Civilization Simulator · Chapter 12: Keeping to the plan</p><p class="figsub">Forty households save for old age thirty years from now, and each intends to save 12% of its income. Turn automatic saving, automatic regular investment and the cooling-off period on or off, and adjust how strongly people weight the present and how readily they sell in panic. See how much each household has saved after thirty years, and the return principals actually receive.</p></div><button class="replay" type="button" data-replay="cs12">Replay</button></div>
+    <div class="cs-rules"><span class="on">Shares</span><span class="on">Market</span><span class="on">Information in prices</span><span class="on">Delegation</span><span class="on">Regulation &amp; custody</span><span class="on">Defaults</span><span class="lock">Agency costs fall · Part Two</span></div>
+    <div class="cs12" id="cs12" data-anim>
+      <svg viewBox="0 0 660 220" role="img" aria-label="Median household savings over thirty years"><g id="cs12-ax"></g><path id="cs12-band" class="cs12-band"/><path id="cs12-base" class="cs12-base"/><path id="cs12-p" class="cs12-p"/><g id="cs12-e"></g></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Median savings</span><span><i style="background:var(--quote);border:1px solid var(--line)"></i>Households from the 10th to the 90th percentile</span><span><i style="background:var(--faint)"></i>Median with all three rules off</span><span><i style="background:var(--warm-soft)"></i>Years of sharp declines</span></div>
+      <div class="cs-sw"><label><input type="checkbox" id="cs12-au"> Rule: automatic saving (enrolled by default, 12% set aside)</label><label><input type="checkbox" id="cs12-dc"> Rule: automatic regular investment (buy on schedule every year)</label><label><input type="checkbox" id="cs12-co"> Rule: cooling-off period (selling after a sharp decline must wait a while)</label></div>
+      <div class="cs12-ctl">
+        <div class="sl"><label for="cs12-b">Weight on the present <b id="cs12-bv"></b></label><input id="cs12-b" type="range" min="0" max="50" step="5" value="30"></div>
+        <div class="sl"><label for="cs12-q">Tendency to sell in panic <b id="cs12-qv"></b></label><input id="cs12-q" type="range" min="0" max="60" step="5" value="30"></div>
+      </div>
+      <button type="button" class="replay" id="cs12-re">Another run of years</button>
+      <div class="cs12-out" id="cs12-out"></div>
+      <p class="cs12-msg" id="cs12-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model: each household earns 1 portion a year, and savings are measured in "years of income". Ship shares return 7% a year on average with 12% volatility, and about once every twelve years suffer an extra 25% decline. Without automatic saving, households must join on their own; the more they weight the present, the later they start and the smaller the share they save. With automatic saving, 12% is set aside from the first year. Without automatic regular investment, households save and buy more after a strong year and buy less after a fall. After a sharp decline, households prone to panic sell, hold cash for three years and then buy back; with a cooling-off period, only one in five actually sells. The return from "investing on schedule and never selling" is the internal rate of return of a household that buys 12% on schedule every year in the same run of years.</figcaption>
+</figure>
+<style>
+.cs12 svg{width:100%;height:auto;display:block}
+.cs12-p{fill:none;stroke:var(--accent);stroke-width:2.8}
+.cs12-base{fill:none;stroke:var(--faint);stroke-width:1.6;stroke-dasharray:5 4}
+.cs12-band{fill:var(--quote);stroke:none}
+.cs12-ctl{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px}
+.cs12-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cs12-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs12-out span{display:block;font-size:11.5px;color:var(--faint)} .cs12-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.cs12-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs12-ctl{grid-template-columns:1fr;gap:4px}.cs12-out{grid-template-columns:1fr}.cs12 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs12'+id),N=40,Y=30;let seed=15838;
+  const X0=44,X1=628,YT=10,YB=186,x=t=>X0+t/Y*(X1-X0);
+  function irr(f,end){let lo=-.5,hi=.5;for(let k=0;k<80;k++){const m=(lo+hi)/2;let v=0;f.forEach((c,t)=>v+=c*Math.pow(1+m,Y-t));if(v>end)hi=m;else lo=m;}return (lo+hi)/2;}
+  function sim(beta,panic,auto,dca,cool){let s=seed;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};const g=()=>{let u=0;while(!u)u=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r());};
+    const R=[],crash=[];for(let t=0;t<Y;t++){let v=.07+.12*g();if(r()<.08)v-=.25;R.push(v);if(v<-.12)crash.push(t);}
+    const H=[];for(let i=0;i<N;i++)H.push({b:Math.max(.3,Math.min(1,beta+.15*(r()*2-1))),pz:r(),start:auto?0:-1,out:-1,W:0,cash:0});
+    const agg=Array(Y).fill(0),Q=[[0,0,0]];
+    for(let t=0;t<Y;t++){for(const h of H){
+        // Joining on one's own: the more weight on the present, the later the start
+        if(h.start<0&&r()<.3*h.b)h.start=t;
+        let sv=h.start>=0?(auto?.12:.12*h.b):0;
+        // Without automatic regular investment: buy more after a strong year
+        if(!dca&&t>0)sv*=Math.max(0,Math.min(2,1+5*(R[t-1]-.07)));
+        // Panic selling after a sharp decline
+        if(t>0&&R[t-1]<-.12&&h.out<0&&r()<panic*2*h.pz*(cool?.2:1)){h.cash+=h.W;agg[t]-=h.W;h.W=0;h.out=3;}
+        if(h.out>0){h.cash+=sv;h.out--;if(h.out===0){h.W+=h.cash;agg[t]+=h.cash;h.cash=0;h.out=-1;}}
+        else{h.W+=sv;agg[t]+=sv;}
+        h.W*=1+R[t];}
+      const v=H.map(h=>h.W+h.cash).sort((a,b)=>a-b);Q.push([v[4],v[20],v[35]]);}
+    // Investing on schedule and never selling, in the same run of years
+    let D=0;const fd=[];for(let t=0;t<Y;t++){fd.push(.12);D=(D+.12)*(1+R[t]);}
+    const end=H.reduce((a,h)=>a+h.W+h.cash,0);
+    return {Q,crash,inv:irr(agg,end),ref:irr(fd,D),fin:H.map(h=>h.W+h.cash)};}
+  function draw(){const beta=1-$('-b').value/100,pq=$('-q').value/100,au=$('-au').checked,dc=$('-dc').checked,co=$('-co').checked;
+    $('-bv').textContent=$('-b').value+'%';$('-qv').textContent=$('-q').value+'%';
+    const S=sim(beta,pq,au,dc,co),B=sim(beta,pq,false,false,false),mx=Math.max(4,...S.Q.map(q=>q[2]),...B.Q.map(q=>q[1]))*1.05,y=v=>YB-v/mx*(YB-YT);
+    const step=mx>12?4:2;let ax='';for(let v=0;v<=mx;v+=step)ax+=`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v} yrs</text>`;
+    $('-ax').innerHTML=ax+[0,10,20,30].map(t=>`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">Year ${t}</text>`).join('');
+    $('-e').innerHTML=S.crash.map(t=>`<rect x="${x(t)}" y="${YT}" width="${(X1-X0)/Y}" height="${YB-YT}" fill="var(--warm-soft)" opacity=".7"/>`).join('');
+    const L=(a,k)=>a.map((q,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(q[k]).toFixed(1)).join('');
+    $('-p').setAttribute('d',L(S.Q,1));$('-base').setAttribute('d',(au||dc||co)?L(B.Q,1):'');
+    $('-band').setAttribute('d','M'+S.Q.map((q,t)=>x(t)+','+y(q[2])).join('L')+'L'+S.Q.map((q,t)=>x(t)+','+y(q[0])).reverse().join('L')+'Z');
+    const m=S.Q[Y][1],lo=S.Q[Y][0],pc=v=>(v*100).toFixed(1)+'%';
+    $('-out').innerHTML=[['Median savings in year 30',m.toFixed(1)+' years of income'],['Lowest tenth of households',lo.toFixed(1)+' years of income'],['Principals\' actual / on schedule',pc(S.inv)+' / '+pc(S.ref)]].map(([a,b])=>`<div><span>${a}</span><b>${b}</b></div>`).join('');
+    const n=[au,dc,co].filter(Boolean).length,gap=(S.ref-S.inv)*100;
+    $('-msg').textContent=n===0?`All three rules off: many households are slow to start, and they save a smaller share than they intended; chasing gains, selling into losses and panic selling also leave their return ${gap.toFixed(1)} percentage points below investing on schedule. After thirty years the median is only ${m.toFixed(1)} years of income.`:n===3?`All three rules on: every household saves to plan from the first year, buys on schedule and rarely sells even after a sharp decline. The median rises to ${m.toFixed(1)} years of income, and even the lowest tenth of households have ${lo.toFixed(1)} years; the actual return differs from investing on schedule by ${gap.toFixed(1)} percentage points.`:`${au?'Automatic saving has every household saving to plan from the first year':'Without automatic saving, many households are slow to start'}; ${dc?'automatic regular investment stops purchases from chasing last year\'s gains and losses':'without automatic regular investment, people buy more after gains and less after falls'}; ${co?'the cooling-off period sharply reduces selling after sharp declines':'without a cooling-off period, quite a few households sell near the bottom after sharp declines'}. Each of the three rules addresses one bias: automatic saving governs how much is saved, and the other two govern how much is received.`;}
+  ['-au','-dc','-co','-b','-q'].forEach(k=>$(k).addEventListener('input',draw));$('-re').addEventListener('click',()=>{seed=(seed*48271)%2147483647;draw();});
+  $('').addEventListener('anim-in',()=>{[[0,0,0],[1,0,0],[1,1,0],[1,1,1]].forEach(([a,b,c],i)=>setTimeout(()=>{$('-au').checked=!!a;$('-dc').checked=!!b;$('-co').checked=!!c;draw();},300+i*2200));});
+  draw();
+})();
+</script>

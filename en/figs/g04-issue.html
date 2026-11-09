@@ -1,0 +1,31 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Discipline in issuing: more money, no more goods</p><p class="figsub">Drag the annual rate at which new money is added and see prices, and the purchasing power of 100 units of cash, over twenty years. The island's produce grows 2% a year.</p></div><button class="replay" type="button" data-replay="is">Replay</button></div>
+    <div class="is" id="is" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="Prices and purchasing power"><g id="is-ax"></g><path id="is-p" class="is-p"/><path id="is-v" class="is-v"/></svg>
+      <div class="legend"><span><i style="background:var(--warm)"></i>Price level (year 0 = 100)</span><span><i style="background:var(--accent)"></i>Purchasing power of 100 units of cash</span></div>
+      <div class="sl"><label for="is-g">New money each year <b id="is-gv"></b></label><input id="is-g" type="range" min="0" max="15" step="0.5" value="2"></div>
+      <p class="is-msg" id="is-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: following Fisher's (1911) equation of exchange and assuming the velocity of money is constant, the annual rate of price increase is roughly the growth rate of money minus the growth rate of produce.</figcaption>
+</figure>
+<style>
+.is svg{width:100%;height:auto;display:block}
+.is-p{fill:none;stroke:var(--warm);stroke-width:2.4}
+.is-v{fill:none;stroke:var(--accent);stroke-width:2.4}
+.is-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.is svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),X0=46,X1=630,YT=12,YB=180,x=t=>X0+t/20*(X1-X0),ly=v=>YB-(Math.log(v)-Math.log(20))/(Math.log(600)-Math.log(20))*(YB-YT);
+  $('is-ax').innerHTML=[25,50,100,200,400].map(v=>`<line x1="${X0}" x2="${X1}" y1="${ly(v)}" y2="${ly(v)}" class="s-line"/><text x="${X0-6}" y="${ly(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+[0,5,10,15,20].map(t=>`<text x="${x(t)}" y="${YB+16}" text-anchor="${t===20?'end':'middle'}" font-size="11" class="t-faint">Year ${t}</text>`).join('');
+  function draw(){const g=+$('is-g').value/100,pi=(1+g)/1.02-1;let p='',v='';for(let t=0;t<=20;t++){const P=100*Math.pow(1+pi,t);p+=(t?'L':'M')+x(t)+','+ly(Math.max(P,20)).toFixed(1);v+=(t?'L':'M')+x(t)+','+ly(Math.max(1e4/P,20)).toFixed(1);}
+    $('is-p').setAttribute('d',p);$('is-v').setAttribute('d',v);$('is-gv').textContent=(g*100).toFixed(1)+'%';
+    const P20=100*Math.pow(1+pi,20);$('is-msg').textContent=Math.abs(pi)<.0005?'New money grows in step with produce: prices are stable, and the purchasing power of cash is unchanged.':pi>0?`Prices rise by about ${(pi*100).toFixed(1)}% a year; after twenty years, 100 units of cash buy only what ${Math.round(1e4/P20)} units used to. Holding money is like storing grain that rots.`:`Money grows more slowly than produce, prices fall by about ${(-pi*100).toFixed(1)}% a year, and the purchasing power of cash rises; but persistently falling prices lead people to put off spending and borrowing, which has its own cost.`;}
+  $('is-g').addEventListener('input',draw);
+  $('is').addEventListener('anim-in',()=>{let v=2;$('is-g').value=v;draw();const id=setInterval(()=>{v+=.5;$('is-g').value=v;draw();if(v>=12)clearInterval(id);},150);});
+  draw();
+})();
+</script>

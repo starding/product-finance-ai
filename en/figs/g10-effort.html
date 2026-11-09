@@ -1,0 +1,36 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">How much pay to tie to results</p><p class="figsub">The principal cannot see whether the manager is trying, only results mixed with luck. Drag the share of the manager's pay tied to results to see how hard he tries, what the principal gets, and the luck risk the manager is forced to bear.</p></div><button class="replay" type="button" data-replay="ef">Replay</button></div>
+    <div class="ef" id="ef" data-anim>
+      <div class="ef-b"><span>How hard the manager tries</span><div><i id="ef-e" style="background:var(--accent)"></i></div><b id="ef-ev"></b></div>
+      <div class="ef-b"><span>Luck risk the manager bears</span><div><i id="ef-r" style="background:var(--warm)"></i></div><b id="ef-rv"></b></div>
+      <div class="ef-b"><span>Principal's take after pay</span><div><i id="ef-n" style="background:var(--blue)"></i></div><b id="ef-nv"></b></div>
+      <div class="sl"><label for="ef-k">Share of pay tied to results <b id="ef-kv"></b></label><input id="ef-k" type="range" min="0" max="100" step="5" value="0"></div>
+      <div class="cs-sw"><label><input type="checkbox" id="ef-o"> The principal can also see the manager's holdings and trading records</label></div>
+      <p class="ef-msg" id="ef-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: how hard the manager tries is proportional to the share tied to results; the harder he tries, the higher the fleet's return, but he must be compensated for bearing luck risk, and the compensation rises with the square of the share. When holdings and trading records can be seen, luck plays a smaller part in the result, and the same share brings less risk (Holmström, 1979).</figcaption>
+</figure>
+<style>
+.ef-b{display:grid;grid-template-columns:11em 1fr 4em;gap:10px;align-items:center;font-size:13px;margin:7px 0}
+.ef-b div{height:14px;background:var(--quote);border-radius:4px;overflow:hidden}
+.ef-b i{display:block;height:100%;transition:width .3s}
+.ef-b b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.ef-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.ef-b{grid-template-columns:1fr 4em}.ef-b span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  function at(k,o){const e=k,risk=k*k*(o?.4:1),net=4*e-1.5*e*e-2.2*risk;return [e,risk,net];}
+  function draw(){const k=+$('ef-k').value/100,o=$('ef-o').checked,[e,risk,net]=at(k,o);
+    let best=0,bv=-1e9;for(let q=0;q<=1.0001;q+=.05){const v=at(q,o)[2];if(v>bv){bv=v;best=q;}}
+    $('ef-e').style.width=e*100+'%';$('ef-r').style.width=risk*100+'%';$('ef-n').style.width=Math.max(0,net)/2.5*100+'%';
+    $('ef-ev').textContent=Math.round(e*100)+'%';$('ef-rv').textContent=risk.toFixed(2);$('ef-nv').textContent=net.toFixed(2);$('ef-kv').textContent=Math.round(k*100)+'%';
+    $('ef-msg').textContent=k===0?'With fixed pay, the manager earns the same whether he tries or not: he has no reason to try.':`${Math.round(k*100)}% tied to results: the manager tries harder, but must also be compensated for the luck risk he bears. The best share for the principal is about ${Math.round(best*100)}%. ${o?'With holdings and trading records visible, luck plays a smaller part, the best share rises, and the principal gets more too.':'Tick the option below to see what happens when the principal can see more.'}`;}
+  ['ef-k','ef-o'].forEach(k=>$(k).addEventListener('input',draw));
+  $('ef').addEventListener('anim-in',()=>{let v=0;$('ef-k').value=0;draw();const id=setInterval(()=>{v+=5;$('ef-k').value=v;draw();if(v>=100)clearInterval(id);},150);});
+  draw();
+})();
+</script>

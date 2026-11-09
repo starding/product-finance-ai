@@ -1,0 +1,27 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">错了之后的六步</p><p class="figsub">把盖房账户的粮食错存进养老账户之后，书记员与运营者依次做的事。点选一步查看细节。</p></div><button class="replay" type="button" data-replay="af23">重播</button></div>
+    <div class="af23" id="af23" data-anim><div class="af23-s" id="af23-s"></div><p class="af23-msg" id="af23-msg" aria-live="polite"></p></div>
+  </div>
+  <figcaption>示意：例子为虚构。</figcaption>
+</figure>
+<style>
+.af23-s{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.af23-s button{font:inherit;cursor:pointer;text-align:left;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:8px 9px;font-size:13px;color:var(--ink);opacity:0;transform:translateY(6px);transition:opacity .35s,transform .35s,border-color .3s;transition-delay:calc(var(--i)*.2s)}
+.af23.in .af23-s button{opacity:1;transform:none}
+.af23-s button em{display:block;font-style:normal;font-size:11px;color:var(--faint)}
+.af23-s button.sel{border-color:var(--accent)}
+.af23-msg{font-size:14px;margin:10px 0 0;min-height:4.6em;background:var(--quote);border-radius:9px;padding:10px 12px}
+@media (max-width:640px){.af23-s{grid-template-columns:repeat(3,1fr)}}
+</style>
+<script>
+(function(){
+  const S=[['发现','事后核对发现：本月存入养老账户的数额比约定多 0.017，盖房账户少了同样多。'],['撤回','把多存的部分按当天价格转回盖房账户；转回之前的价格差，计入下一步的赔付。'],['赔付','按约定，执行错误由运营者全额赔付：补上价格差与少得的收益，不需要他提出申请。'],['找原因','错误为什么穿过了防线：执行前的检查只核对总数，没有核对去向。'],['改防线','执行前的检查增加“去向与约定一致”一项；这一改动写进记录。'],['告知','用一句话告诉他发生了什么、赔了多少、改了什么；详细经过在关键节点与全部记录中可查。']];
+  const s=document.getElementById('af23-s'),m=document.getElementById('af23-msg');
+  s.innerHTML=S.map((x,i)=>`<button type="button" style="--i:${i}"><em>第 ${i+1} 步</em>${x[0]}</button>`).join('');const bs=[...s.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));m.textContent=S[i][1];}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('af23').addEventListener('anim-in',()=>{[0,1,2,3,4,5].forEach((i,k)=>setTimeout(()=>set(i),1000+k*1500));});
+  set(0);
+})();
+</script>

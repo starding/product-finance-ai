@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：委托</p><p class="figsub">四条结论，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="g10summary">重播</button></div>
+    <div class="g10summary" id="g10summary" data-anim><div class="g10summary-c" style="--i:0"><em>委托的价值</em><b>省下时间，分摊研究</b><p>研究一次，用在所有委托人的钱上；代价是代理成本。</p></div><div class="g10summary-c" style="--i:1"><em>能力看不清</em><b>几年的业绩多半是运气</b><p>要可靠地分辨真本事，所需的年数往往比职业生涯还长。</p></div><div class="g10summary-c warn" style="--i:2"><em>激励</em><b>报酬挂钩与看得见的过程</b><p>挂钩让经理用心，也让他承担运气；能看到的越多，约束越便宜；只赚不赔的分成鼓励冒险。</p></div><div class="g10summary-c warn" style="--i:3"><em>最便宜的委托</em><b>只按份额持有全部</b><p>技能的好处多半归了经理；费用年年累积，几十年就是很大一笔。</p></div></div>
+  </div>
+</figure>
+<style>
+.g10summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g10summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g10summary-c.warn{border-left-color:var(--warm)}
+.g10summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g10summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g10summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g10summary.in .g10summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g10summary{grid-template-columns:1fr}}
+</style>

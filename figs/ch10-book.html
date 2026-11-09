@@ -1,0 +1,79 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">订单簿：流动性的四个方面</p>
+    <p class="figsub">上方是卖单，下方是买单。拖动市价买入的数量，看它吃掉几档卖单、成交均价是多少；再看订单簿如何恢复。</p>
+    <div class="ob" id="ob" data-anim>
+      <div class="ob-book" id="ob-book"></div>
+      <div class="ob-side">
+        <div class="sl"><label for="ob-q">市价买入 <b id="ob-qv"></b></label><input id="ob-q" type="range" min="100" max="6000" step="100" value="300"></div>
+        <div class="ob-out">
+          <div><span>成交均价</span><b id="ob-avg"></b></div>
+          <div><span>相对中间价多付</span><b id="ob-cost"></b></div>
+          <div><span>吃掉的价位</span><b id="ob-lv"></b></div>
+        </div>
+        <button type="button" class="replay" id="ob-rec">成交后，看订单簿如何恢复</button>
+        <ul class="ob-dim">
+          <li><b>宽度</b>：最低卖价与最高买价之差，本例为 0.10</li>
+          <li><b>深度</b>：各价位挂单的数量</li>
+          <li><b>即时性</b>：市价单可以立即成交</li>
+          <li><b>弹性</b>：被大单冲击后，新挂单补上的速度</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <figcaption>示例订单簿，中间价 100.00，每档相差 0.05 元，挂单数量为示意。四个方面的划分依据 Harris（2003）。</figcaption>
+</figure>
+<style>
+.ob{display:grid;grid-template-columns:minmax(0,1fr) 1fr;gap:18px;align-items:start}
+.ob-book{font-size:12px;font-variant-numeric:tabular-nums}
+.ob-r{display:grid;grid-template-columns:56px 1fr 52px;gap:8px;align-items:center;height:22px}
+.ob-r .p{text-align:right}
+.ob-r .bar{position:relative;height:14px;background:var(--quote);border-radius:3px;overflow:hidden}
+.ob-r .bar i{position:absolute;left:0;top:0;bottom:0;border-radius:3px;transition:width .4s ease}
+.ob-r.ask .p{color:var(--warm)} .ob-r.ask .bar i.full{background:var(--warm-soft)} .ob-r.ask .bar i.eat{background:var(--warm)}
+.ob-r.bid .p{color:var(--accent)} .ob-r.bid .bar i.full{background:var(--accent-soft)}
+.ob-r .n{color:var(--muted)}
+.ob-mid{display:grid;grid-template-columns:56px 1fr;gap:8px;height:22px;align-items:center;color:var(--faint);font-size:11px}
+.ob-mid span:last-child{border-top:1px dashed var(--faint);padding-top:2px}
+.ob-out{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
+.ob-out div{background:var(--quote);border-radius:8px;padding:6px 8px}
+.ob-out span{display:block;font-size:11px;color:var(--faint)}
+.ob-out b{font-size:16px;font-variant-numeric:tabular-nums}
+.ob-dim{font-size:12.5px;color:var(--muted);padding-left:1.1em;margin:12px 0 0;line-height:1.7}
+@media (max-width:640px){.ob{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const MID=100, STEP=0.05, L=8;
+  const askQ=[300,500,700,900,1100,1200,1300,1500], bidQ=[400,500,800,900,1000,1200,1400,1500];
+  let ask=askQ.slice();
+  const book=document.getElementById('ob-book'), q=document.getElementById('ob-q');
+  const maxQ=1600;
+  function render(eatN){
+    let h='';
+    for(let i=L-1;i>=0;i--){const p=(MID+STEP*(i+1)).toFixed(2), full=ask[i], eat=Math.min(full,Math.max(0,eatN[i]||0));
+      h+=`<div class="ob-r ask"><span class="p">${p}</span><span class="bar"><i class="full" style="width:${full/maxQ*100}%"></i><i class="eat" style="width:${eat/maxQ*100}%"></i></span><span class="n">${full}</span></div>`;}
+    h+=`<div class="ob-mid"><span>中间价</span><span>${MID.toFixed(2)}</span></div>`;
+    for(let i=0;i<L;i++){const p=(MID-STEP*(i+1)).toFixed(2);h+=`<div class="ob-r bid"><span class="p">${p}</span><span class="bar"><i class="full" style="width:${bidQ[i]/maxQ*100}%"></i></span><span class="n">${bidQ[i]}</span></div>`;}
+    book.innerHTML=h;
+  }
+  function calc(){
+    const Q=+q.value; let rem=Q, cost=0, lv=0; const eat=[];
+    for(let i=0;i<L&&rem>0;i++){const t=Math.min(rem,ask[i]);eat[i]=t;cost+=t*(MID+STEP*(i+1));rem-=t;if(t>0)lv++;}
+    const filled=Q-rem, avg=cost/filled;
+    document.getElementById('ob-qv').textContent=Q.toLocaleString()+' 股';
+    document.getElementById('ob-avg').textContent=avg.toFixed(3);
+    document.getElementById('ob-cost').textContent=((avg-MID)/MID*10000).toFixed(1)+' 个基点';
+    document.getElementById('ob-lv').textContent=lv+' 档';
+    render(eat);
+    return eat;
+  }
+  q.addEventListener('input',()=>{ask=askQ.slice();calc();});
+  document.getElementById('ob-rec').addEventListener('click',()=>{
+    const eat=calc(); ask=askQ.map((v,i)=>v-(eat[i]||0)); render([]);
+    let k=0; const id=setInterval(()=>{k++;ask=ask.map((v,i)=>Math.min(askQ[i],v+Math.round(askQ[i]/6)));render([]);if(k>=6){clearInterval(id);ask=askQ.slice();calc();}},450);
+  });
+  document.getElementById('ob').addEventListener('anim-in',()=>{let v=100;q.value=v;calc();const id=setInterval(()=>{v+=200;q.value=v;ask=askQ.slice();calc();if(v>=2500)clearInterval(id);},120);});
+  calc();
+})();
+</script>

@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Staged release: a defect affects only a few</p><p class="figsub">A new version carries a defect the evaluation missed; it will only be discovered after 1,000 uses. Each dot represents 100 users. Switch the release method and see how many users are affected when the defect is found.</p></div><button class="replay" type="button" id="ro-run">Release again</button></div>
+    <div class="seg-btns" role="group" aria-label="Release method"><button type="button" data-ro="all" aria-pressed="true">Full release at once</button><button type="button" data-ro="st" aria-pressed="false">Staged release: 1% → 10% → 100%</button></div>
+    <div class="ro" id="ro" data-anim>
+      <div class="ro-g" id="ro-g"></div>
+      <div class="ro-out"><div><span>Users affected when the defect is found</span><b id="ro-n"></b></div><div><span>Current stage</span><b id="ro-s"></b></div></div>
+      <p class="ro-msg" id="ro-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: 10,000 users in all, each using the function once a day. On staged release, see Beyer and colleagues (2016). For functions that affect trades and money, the first stage can run without taking effect.</figcaption>
+</figure>
+<style>
+.ro-g{display:grid;grid-template-columns:repeat(20,1fr);gap:4px}
+.ro-g i{aspect-ratio:1;border-radius:50%;background:var(--quote);border:1.5px solid var(--line);transition:all .3s}
+.ro-g i.n{background:var(--blue);border-color:var(--blue)}
+.ro-g i.b{background:var(--warm);border-color:var(--warm)}
+.ro-out{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.ro-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.ro-out span{display:block;font-size:12px;color:var(--faint)} .ro-out b{font-size:19px;font-variant-numeric:tabular-nums}
+.ro-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const g=document.getElementById('ro-g');g.innerHTML='<i></i>'.repeat(100);const cs=[...g.children];let mode='all',tm;
+  function run(){clearInterval(tm);cs.forEach(c=>c.className='');let step=0;const plan=mode==='all'?[100]:[1,10,100];let k=0;
+    const show=(n,bad)=>{cs.forEach((c,i)=>c.className=i<n?(bad?'b':'n'):'');};
+    tm=setInterval(()=>{if(k>=plan.length){clearInterval(tm);return;}const n=plan[k];show(n,false);document.getElementById('ro-s').textContent=n+'%'+(mode==='st'&&n===1?' (runs 10 days)':'');
+      const exposures=n*100*(mode==='st'?10:1);if(exposures>=1000){clearInterval(tm);setTimeout(()=>{show(n,true);document.getElementById('ro-n').textContent=(n*100).toLocaleString('en-US')+' users';document.getElementById('ro-msg').textContent=mode==='all'?'Full release at once: there are 10,000 uses on the first day, and by the time the defect is found, all 10,000 users have been affected.':'Staged release: the first stage has only 100 users, and the defect is found after ten days, at 1,000 cumulative uses. Only 1% of users have been affected, and the version is withdrawn before the release widens.';},500);}
+      k++;},900);
+    document.getElementById('ro-n').textContent='—';document.getElementById('ro-msg').textContent='';}
+  document.querySelectorAll('[data-ro]').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.ro;document.querySelectorAll('[data-ro]').forEach(z=>z.setAttribute('aria-pressed',String(z===b)));run();}));
+  document.getElementById('ro-run').addEventListener('click',run);
+  document.getElementById('ro').addEventListener('anim-in',()=>{mode='all';document.querySelectorAll('[data-ro]').forEach(z=>z.setAttribute('aria-pressed',String(z.dataset.ro==='all')));run();setTimeout(()=>{document.querySelector('[data-ro=st]').click();},3000);});
+  run();
+})();
+</script>

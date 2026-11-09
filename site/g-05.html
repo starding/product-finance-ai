@@ -1,0 +1,639 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>收成好坏不定</title>
+<meta name="description" content="《产品×金融×AI：从零推演》第 5 章：收成有丰有歉。自己多存是一种办法，但代价很大；许多户一起分担，各家自己的坏运气可以相互抵消，全村一起遭遇的灾害却分散不掉，必须有人承担并得到补偿；保险是一种按情形兑付的索取权，也带来投保之后不小心与风险高的人更想投保两个新问题">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="g-05">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="全书目录">
+<div class="side-head"><a class="sidetitle" href="index.html">产品×金融×AI<small>AI 时代的金融产品</small></a></div>
+<div class="side-view" role="group" aria-label="阅读方式"><a href="preface.html">分解式</a><a href="g-preface.html" class="on" aria-current="true">生成式</a></div>
+<a class="side-about" href="index.html#about">关于本书</a>
+<a class="" href="g-preface.html"><span class="n">序</span>理解金融产品最好的方法，是从零造一个</a>
+<a class="side-part" href="g-part1.html"><span class="pn">第一部分</span>从 0 到 1：一个没有金融的世界如何长出金融</a>
+<a class="" href="g-01.html"><span class="n">1</span>一个人，一年的收成</a>
+<a class="" href="g-02.html"><span class="n">2</span>两个人，缺的时间不同</a>
+<a class="" href="g-03.html"><span class="n">3</span>借了不还怎么办</a>
+<a class="" href="g-04.html"><span class="n">4</span>很多人一起交换</a>
+<a class=" cur" href="g-05.html" aria-current="page"><span class="n">5</span>收成好坏不定</a>
+<a class="" href="g-06.html"><span class="n">6</span>存的人要随时取，借的人要长期用</a>
+<a class="" href="g-07.html"><span class="n">7</span>一个人出不起一艘船的钱</a>
+<a class="" href="g-08.html"><span class="n">8</span>证券要能卖出去</a>
+<a class="" href="g-09.html"><span class="n">9</span>价格里有所有人的信息</a>
+<a class="" href="g-10.html"><span class="n">10</span>普通人没有时间也没有专长</a>
+<a class="" href="g-11.html"><span class="n">11</span>受托人可能不尽责</a>
+<a class="" href="g-12.html"><span class="n">12</span>制度齐备，人仍会犯错</a>
+<a class="side-part" href="g-part2.html"><span class="pn">第二部分</span>改变一个参数：当代理变得几乎免费</a>
+<a class="" href="g-13.html"><span class="n">13</span>新参数：认知劳动的成本骤降</a>
+<a class="" href="g-14.html"><span class="n">14</span>人人都能有专属代理人吗</a>
+<a class="" href="g-15.html"><span class="n">15</span>谁来为代理人的承诺担保</a>
+<a class="" href="g-16.html"><span class="n">16</span>如果人人都有分析师</a>
+<a class="" href="g-17.html"><span class="n">17</span>代理人成为市场的主要参与者</a>
+<a class="" href="g-18.html"><span class="n">18</span>代理人能否矫正人的偏差</a>
+<a class="" href="g-19.html"><span class="n">19</span>没有改变的东西</a>
+<a class="side-part" href="g-part3.html"><span class="pn">第三部分</span>在新的世界里推演一个产品</a>
+<a class="" href="g-20.html"><span class="n">20</span>一个人和一笔钱</a>
+<a class="" href="g-21.html"><span class="n">21</span>用户不在场</a>
+<a class="" href="g-22.html"><span class="n">22</span>用户看不见过程</a>
+<a class="" href="g-23.html"><span class="n">23</span>代理会出错</a>
+<a class="" href="g-24.html"><span class="n">24</span>信任需要时间</a>
+<a class="side-app" href="g-epilogue.html"><span class="n">结语</span>回到总则</a>
+<a class="side-app" href="method.html"><span class="n">附录</span>本书的写法</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="展开目录" title="目录"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">产品×金融×AI：AI 时代的金融产品</a><span>第一部分　从 0 到 1</span><a class="langlink" href="en/g-05.html" hreflang="en">English</a></header>
+
+<div class="chapno">第 5 章</div><h1>收成好坏不定<small>保险与分散</small></h1>
+<blockquote><p>收成不会总是如约到来，而是有丰有歉：虫害可能只落在一家的地里，旱灾却让全村同时歉收。一户人家可以自己多存一些以备荒年，但储备越多，损耗与占用越大。许多户一起分担，各家自己的坏运气可以相互抵消，户数越多，每户承担的波动越小；全村一起遭遇的灾害却分散不掉，只能由愿意承担的人承担，并为此得到补偿。保险是一种按情形兑付的索取权：好年景交出一点，坏年景取回许多。它也带来两个新问题：投保之后不再小心，以及风险高的人更想投保。</p></blockquote>
+<h2 id="sec-1">一、收成有丰有歉</h2>
+<p>岛上的每一户，收成都在年年变化。有的年份风调雨顺，收得比平常多；有的年份遭了虫害，收得很少。按照边际效用递减的道理，同样的平均收成，波动越大，日子越难过：丰年多出来的那几份，弥补不了荒年少掉的那几份。</p>
+<p><strong>今天的对应。</strong>收入的波动、意外的医疗支出与财产损失，是今天每个家庭都面对的风险。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">平均一样，波动越大越难过</p><p class="figsub">两户人家二十年的平均收成都是 12 份。拖动其中一户收成的波动，比较两户“相当于每年稳定收多少”。</p></div><button class="replay" type="button" data-replay="lk">重播</button></div>
+    <div class="lk" id="lk" data-anim>
+      <svg viewBox="0 0 640 200" role="img" aria-label="两户人家二十年的收成"><g id="lk-ax"></g><g id="lk-b"></g></svg>
+      <div class="legend"><span><i style="background:var(--faint)"></i>收成稳定的一户</span><span><i style="background:var(--accent)"></i>收成波动的一户</span></div>
+      <div class="sl"><label for="lk-s">波动的大小 <b id="lk-sv"></b></label><input id="lk-s" type="range" min="0" max="50" step="5" value="35"></div>
+      <p class="lk-msg" id="lk-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：波动的一户每年收成 ＝ 12 ×（1 ＋ 波动大小 × 随机数），随机数固定，并调整为平均恰为 12 份。“相当于每年稳定收多少”按对数满足感折算。</figcaption>
+</figure>
+<style>
+.lk svg{width:100%;height:auto;display:block}
+.lk-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.lk svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),Z=[.3,-1.2,.8,.1,-.4,1.5,-.9,.2,.6,-1.8,.9,.4,-.2,1.1,-.7,.05,-1.3,.7,1.0,-.45],m=Z.reduce((a,b)=>a+b,0)/Z.length,ZZ=Z.map(z=>z-m);
+  const X0=40,X1=630,YT=10,YB=170,W=(X1-X0)/20,y=v=>YB-v/24*(YB-YT);
+  $('lk-ax').innerHTML=[0,6,12,18,24].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+[1,5,10,15,20].map(t=>`<text x="${X0+W*(t-.5)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">第 ${t} 年</text>`).join('');
+  function draw(){const s=+$('lk-s').value/100,H=ZZ.map(z=>Math.max(.5,12*(1+s*z)));
+    $('lk-b').innerHTML=H.map((h,t)=>`<rect x="${X0+W*t+W*.12}" y="${y(12)}" width="${W*.34}" height="${YB-y(12)}" fill="var(--faint)" opacity=".55"/><rect x="${X0+W*t+W*.5}" y="${y(h)}" width="${W*.34}" height="${YB-y(h)}" fill="var(--accent)"/>`).join('');
+    const ce=Math.exp(H.reduce((a,h)=>a+Math.log(h),0)/H.length);$('lk-sv').textContent=Math.round(s*100)+'%';
+    $('lk-msg').textContent=s===0?'没有波动时，两户完全一样。':`平均同样是 12 份，波动的一户相当于每年稳定收 ${ce.toFixed(1)} 份，比稳定的一户少 ${(12-ce).toFixed(1)} 份：丰年多出来的，弥补不了荒年少掉的。`;}
+  $('lk-s').addEventListener('input',draw);
+  $('lk').addEventListener('anim-in',()=>{let v=0;$('lk-s').value=0;draw();const id=setInterval(()=>{v+=5;$('lk-s').value=v;draw();if(v>=45)clearInterval(id);},200);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-2">二、自己扛：预防性储蓄</h2>
+<p>最直接的办法是丰年多存，以备荒年。荒年少吃一份带来的痛苦，远大于丰年多吃一份带来的满足；而且手上越少，再少一份就痛得越快。于是来年的收成越难预料，留到荒年的那一份就越值钱，今天多存一份也就越值得。为不测而多留的这部分储蓄称为预防性储蓄。勒兰德（1968）在模型中证明，只要满足感具有这一性质（按对数计算的满足感就具有），将来的收入越不确定，人们今天存得越多。可是自己扛的代价很大：要扛住一次大的歉收，就要常年存着一大笔储备，它在仓里损耗，也不能拿去留种或借给别人。备得少，荒年仍会挨饿；备得多，大部分年份都白白放着。</p>
+<p><strong>今天的对应。</strong>常见的理财建议是先留出几个月的生活费作为应急储备，正是预防性储蓄。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">自己扛：储备多少才够</p><p class="figsub">一户人家每年想吃 12 份，收成随机波动。拖动常年保有的储备，看一千年里挨饿的年份比例，以及储备每年白白损耗的粮食。</p></div><button class="replay" type="button" data-replay="bf">重播</button></div>
+    <div class="bf" id="bf" data-anim>
+      <div class="bf-b"><span>挨饿的年份</span><div><i id="bf-h" style="background:var(--warm)"></i></div><b id="bf-hv"></b></div>
+      <div class="bf-b"><span>每年损耗的粮食</span><div><i id="bf-l" style="background:var(--gold)"></i></div><b id="bf-lv"></b></div>
+      <div class="sl"><label for="bf-s">常年保有的储备 <b id="bf-sv"></b></label><input id="bf-s" type="range" min="0" max="24" step="2" value="0"></div>
+      <p class="bf-msg" id="bf-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：收成平均 12 份、波动约四成；储备每年损耗一成，丰年补足到设定的数量；一年吃到不足 9 份即算挨饿。按同一组一千年的随机收成计算。</figcaption>
+</figure>
+<style>
+.bf-b{display:grid;grid-template-columns:7.5em 1fr 4.5em;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.bf-b div{height:16px;background:var(--quote);border-radius:4px;overflow:hidden}
+.bf-b i{display:block;height:100%;transition:width .3s}
+.bf-b b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.bf-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);let s=7;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};
+  const g=()=>{let u=0;while(!u)u=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r());};
+  const H=Array.from({length:1000},()=>Math.max(0,12*(1+.4*g())));
+  function run(B){let st=B,hungry=0,lost=0;for(const h of H){let have=h+st,c=Math.min(12,have);if(c<9)hungry++;have-=c;st=Math.min(B,have);lost+=st*.1;st*=.9;}return [hungry/H.length,lost/H.length];}
+  function draw(){const B=+$('bf-s').value,[h,l]=run(B);$('bf-h').style.width=h/.3*100+'%';$('bf-l').style.width=l/2.4*100+'%';
+    $('bf-hv').textContent=Math.round(h*100)+'%';$('bf-lv').textContent=l.toFixed(1)+' 份';$('bf-sv').textContent=B+' 份';
+    $('bf-msg').textContent=B===0?`不留储备，大约每 ${Math.round(1/h)} 年就有一年挨饿。`:`常年保有 ${B} 份储备，挨饿的年份降到 ${Math.round(h*100)}%，代价是每年白白损耗约 ${l.toFixed(1)} 份。${h>.02?'储备再多，荒年连着荒年时仍可能挨饿。':''}`;}
+  $('bf-s').addEventListener('input',draw);
+  $('bf').addEventListener('anim-in',()=>{let v=0;$('bf-s').value=0;draw();const id=setInterval(()=>{v+=2;$('bf-s').value=v;draw();if(v>=24)clearInterval(id);},260);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-3">三、一起承担：互相保险</h2>
+<p>如果村里许多户约定：每年各交出一点粮食放进公仓，哪户遭了虫害，就从公仓里补给他。各家的虫害互不相关，今年是这户，明年是那户，公仓收进的与付出的大体相当。户数越多，这种抵消越充分：只要各家的坏运气互不相关，平均到每户的波动大致按户数的平方根缩小。</p>
+<p>这种互助的办法历史很长。罗马法的《学说汇纂》收录了所谓罗德海法：船遇风暴时，为了减轻船重而抛弃部分货物，损失由船上所有货主按比例分担。汤森（1994）研究印度三个村庄的家庭数据发现，各户的消费主要随全村的平均消费变化，受自家收入、疾病与失业的影响不大，说明村民之间存在相当程度的相互保险；但这种保险并不完全，在其中一个村庄，没有土地的人得到的保障更少。</p>
+<p><strong>今天的对应。</strong>保险公司把许多投保人的保费汇集起来，赔付其中少数出险的人；持有许多只股票的组合，把各家公司自己的坏运气相互抵消，道理相同。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">一起扛：户数越多，各家的坏运气越能抵消</p><p class="figsub">各家的虫害互不相关。拖动加入公仓的户数，看平均到每户的收成怎样集中在 12 份附近。</p></div><button class="replay" type="button" data-replay="pl">重播</button></div>
+    <div class="pl" id="pl" data-anim>
+      <svg viewBox="0 0 640 200" role="img" aria-label="每户分到的收成的分布"><g id="pl-ax"></g><g id="pl-b"></g></svg>
+      <div class="sl"><label for="pl-n">加入公仓的户数 <b id="pl-nv"></b></label><input id="pl-n" type="range" min="1" max="50" step="1" value="1"></div>
+      <p class="pl-msg" id="pl-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：每户收成平均 12 份、波动约四成，各户互不相关；公仓把全部收成平均分给各户。柱子为两千年里每户分到的收成的分布，浅色区域为不足 9 份。</figcaption>
+</figure>
+<style>
+.pl svg{width:100%;height:auto;display:block}
+.pl-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.pl svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);let s=11;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};
+  const g=()=>{let u=0;while(!u)u=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r());};
+  const Z=Array.from({length:2000},()=>Array.from({length:50},()=>g()));
+  const X0=40,X1=630,YT=10,YB=170,lo=0,hi=24,nb=24,bw=(X1-X0)/nb,x=v=>X0+(v-lo)/(hi-lo)*(X1-X0);
+  $('pl-ax').innerHTML=`<rect x="${X0}" y="${YT}" width="${x(9)-X0}" height="${YB-YT}" fill="var(--warm-soft)"/><line x1="${X0}" x2="${X1}" y1="${YB}" y2="${YB}" class="s-faint"/>`+[0,6,9,12,18,24].map(v=>`<text x="${x(v)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${v}</text>`).join('')+`<text x="${X1}" y="${YB-6}" text-anchor="end" font-size="11" class="t-muted">每户分到的份数</text>`;
+  function draw(){const n=+$('pl-n').value,c=Array(nb).fill(0);let bad=0;
+    for(const row of Z){let m=0;for(let i=0;i<n;i++)m+=row[i];m/=n;const v=Math.max(0,12*(1+.4*m));if(v<9)bad++;c[Math.min(nb-1,Math.floor((v-lo)/(hi-lo)*nb))]++;}
+    const mx=Math.max(...c);$('pl-b').innerHTML=c.map((k,i)=>`<rect x="${X0+i*bw+1}" y="${YB-k/mx*(YB-YT-8)}" width="${bw-2}" height="${k/mx*(YB-YT-8)}" fill="var(--accent)" rx="1"/>`).join('');
+    $('pl-nv').textContent=n+' 户';$('pl-msg').textContent=n===1?`独自承担时，约 ${Math.round(bad/20)}% 的年份分到不足 9 份。`:`${n} 户一起分担，每户收成的波动缩小到原来的约 ${Math.round(100/Math.sqrt(n))}%，不足 9 份的年份降到 ${(bad/20).toFixed(1)}%。`;}
+  $('pl-n').addEventListener('input',draw);
+  $('pl').addEventListener('anim-in',()=>{const seq=[1,2,4,8,16,32,50];seq.forEach((v,i)=>setTimeout(()=>{$('pl-n').value=v;draw();},200+i*500));});
+  draw();
+})();
+</script>
+
+<h2 id="sec-4">四、分散不掉的风险</h2>
+<p>互相保险有一个界限。如果一场旱灾让全村同时歉收，公仓里收进的少、要付出的多，户数再多也无济于事。各家的风险中，只属于自家的那一部分可以分散掉；全村共同的那一部分，无论多少户凑在一起，都分散不掉。由此可以推出最好的分担安排是什么样子：只要还有哪一户承担着只属于自家的起落，把这份起落交给公仓与别人分摊，他的日子更稳，别人也几乎不受影响，各户都能变得更好。所以在最好的安排下，各家自己的坏运气全部被分担掉，每户最终的所得只随全村的总收成起落。</p>
+<aside class="principle"><p class="pr-k">推演至此，得到一条原理</p><p class="pr-n">风险分担的相互性</p><p class="pr-c"><span><em>学科</em>经济学 › 不确定性经济学（风险分担）</span><span><em>类型</em>定理</span></p><p class="pr-s">在最有效的风险分担安排下，每个人最终的所得只取决于全体的总收成；只属于个人的风险全部被分担掉，每个人承担的只是总体的风险。</p><dl><div><dt>在学科中的位置</dt><dd>论文题为《再保险市场的均衡》，把商品市场的均衡理论推广到不确定的情形；其中对最优风险交换的刻画在后来的文献中通称“博尔奇定理”，又称风险分担的相互性原理</dd></div><div><dt>回应的约束</dt><dd>收成好坏不定，一户承担不了全部的起落</dd></div><div><dt>成立的前提</dt><dd>各方都厌恶风险；各方对各种情形发生的可能性看法一致；约定的分担事后能够兑现</dd></div><div><dt>提出者</dt><dd>博尔奇，1962，以再保险公司之间的风险交换为对象</dd></div><div><dt>留下的问题</dt><dd>总体的风险由谁承担、承担者要得到多少补偿；各方能够随时退出时，这样的约定能否维持</dd></div></dl></aside>
+<p>分散不掉的风险不会消失，它只能由某些人承担：家底厚、更能承受损失的人，可以收下别人交来的一点粮食，在灾年替别人承担一部分损失。承担风险的人要为此得到补偿，否则不会有人愿意承担。</p>
+<p><strong>今天的对应。</strong>分散的组合在市场整体下跌时仍会下跌；保险公司把自己扛不住的巨灾风险，再交给再保险公司分担。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">分散不掉的风险</p><p class="figsub">每户的收成波动由两部分构成：自家的运气与全村共同的年景。拖动共同年景所占的比重，看户数增加时每户承担的波动能降到哪里。</p></div><button class="replay" type="button" data-replay="cm">重播</button></div>
+    <div class="cm" id="cm" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="户数与每户承担的波动"><g id="cm-ax"></g><path id="cm-c" class="cm-c"/><line id="cm-f" class="cm-f"/><text id="cm-ft" font-size="12" class="t-warm"></text></svg>
+      <div class="sl"><label for="cm-r">共同年景所占的比重 <b id="cm-rv"></b></label><input id="cm-r" type="range" min="0" max="100" step="5" value="30"></div>
+      <p class="cm-msg" id="cm-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：比重指共同年景在每户收成方差中所占的比例。分担之后每户承担的波动 ＝ 原有波动 × √（比重 ＋（1 − 比重）÷ 户数），户数无限多时降到 原有波动 × √比重。</figcaption>
+</figure>
+<style>
+.cm svg{width:100%;height:auto;display:block}
+.cm-c{fill:none;stroke:var(--accent);stroke-width:2.5}
+.cm-f{stroke:var(--warm);stroke-width:1.6;stroke-dasharray:5 4}
+.cm-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.cm svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),X0=50,X1=630,YT=12,YB=180,lx=n=>X0+Math.log(n)/Math.log(100)*(X1-X0),y=v=>YB-v*(YB-YT);
+  $('cm-ax').innerHTML=[0,.25,.5,.75,1].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text>`).join('')+[1,2,5,10,20,50,100].map(n=>`<text x="${lx(n)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${n} 户</text>`).join('');
+  function draw(){const r=+$('cm-r').value/100;let d='';for(let n=1;n<=100;n*=1.05)d+=(n===1?'M':'L')+lx(n).toFixed(1)+','+y(Math.sqrt(r+(1-r)/n)).toFixed(1);$('cm-c').setAttribute('d',d);
+    const f=Math.sqrt(r);['x1','x2'].forEach((k,i)=>$('cm-f').setAttribute(k,i?X1:X0));$('cm-f').setAttribute('y1',y(f));$('cm-f').setAttribute('y2',y(f));
+    $('cm-ft').setAttribute('x',X1-4);$('cm-ft').setAttribute('y',y(f)-6);$('cm-ft').setAttribute('text-anchor','end');$('cm-ft').textContent=`分散不掉：${Math.round(f*100)}%`;
+    $('cm-rv').textContent=Math.round(r*100)+'%';
+    $('cm-msg').textContent=r===0?'各家的风险互不相关时，户数越多，每户承担的波动越接近零。':r===1?'所有风险都是全村共同的年景时，再多的户数也分担不了任何波动。':`共同年景占 ${Math.round(r*100)}% 时，户数再多，每户仍要承担原有波动的 ${Math.round(f*100)}%：这部分只能由愿意承担的人承担，并为此得到补偿。`;}
+  $('cm-r').addEventListener('input',draw);
+  $('cm').addEventListener('anim-in',()=>{let v=0;$('cm-r').value=0;draw();const id=setInterval(()=>{v+=5;$('cm-r').value=v;draw();if(v>=60)clearInterval(id);},200);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-5">五、按情形兑付的索取权</h2>
+<p>保险把风险变成了一种价格。投保人在每一年都交出一笔确定的保费，换来一个承诺：如果遭了灾，就得到赔付；如果没有，就什么也不得。这是一种按情形兑付的索取权。把这种思路推到底：旱年、涝年、虫害之年、丰年，如果每一种情形都有一份只在这种情形下兑付的索取权可以买卖，最怕旱灾的人家就多买旱年兑付的那一份，地势高、不怕旱的人家就卖出这一份，换取别的情形下的粮食。每户都按自己的处境买进卖出，风险就会流到最愿意、也最能承担它的人手里，不必为每一种灾害单独设立一个公仓。</p>
+<aside class="principle"><p class="pr-k">推演至此，得到一条原理</p><p class="pr-n">按情形兑付的索取权</p><p class="pr-c"><span><em>学科</em>经济学 › 一般均衡理论（不确定性下的资源配置）</span><span><em>类型</em>理论模型</span></p><p class="pr-s">如果对每一种可能的情形都有一份只在该情形下兑付的索取权可以买卖，人们就能通过交易把风险分配给最愿意承担的人，达到最有效的风险分担。</p><dl><div><dt>在学科中的位置</dt><dd>把一般均衡理论推广到不确定的情形，这种只在一种情形下兑付的索取权通称“阿罗证券”；1972 年诺贝尔经济学奖授予希克斯与阿罗，颁奖理由是“对一般经济均衡理论与福利理论的开创性贡献”</dd></div><div><dt>回应的约束</dt><dd>收成好坏不定，不同的人怕的是不同的情形</dd></div><div><dt>成立的前提</dt><dd>各种情形可以事先列明；事后能够核实发生的是哪一种情形；每一种情形都有对应的索取权可以买卖</dd></div><div><dt>提出者</dt><dd>阿罗，1953；论文以法文发表于巴黎一次风险理论研讨会的文集，1964 年英译发表</dd></div><div><dt>留下的问题</dt><dd>可能的情形太多，不可能每一种都有对应的索取权；有些情形事后难以核实，或者一方比另一方更清楚</dd></div></dl></aside>
+<p>保费由两部分构成：预期的赔付，加上承担风险的补偿与经营的费用。分散得开的风险，补偿可以很低；分散不掉的风险，补偿必然更高。</p>
+<p><strong>今天的对应。</strong>财产险、健康险与寿险的保费，都可以拆成预期赔付与附加费用两部分；期权也是一种按情形兑付的索取权。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">保险：按情形兑付的索取权</p><p class="figsub">九成的年份收 13 份，一成的年份遭灾只收 3 份。投保后每年交一笔保费，灾年得到 10 份赔付。拖动保费中的附加部分，看投保是否划算。</p></div><button class="replay" type="button" data-replay="st5">重播</button></div>
+    <div class="st5" id="st5" data-anim>
+      <div class="st5-g">
+        <div><b>丰年（九成）</b><div class="st5-row"><span>不投保</span><i id="st5-a0"></i><em id="st5-a0v"></em></div><div class="st5-row"><span>投保</span><i id="st5-a1" class="on"></i><em id="st5-a1v"></em></div></div>
+        <div><b>灾年（一成）</b><div class="st5-row"><span>不投保</span><i id="st5-b0"></i><em id="st5-b0v"></em></div><div class="st5-row"><span>投保</span><i id="st5-b1" class="on"></i><em id="st5-b1v"></em></div></div>
+      </div>
+      <div class="sl"><label for="st5-l">保费中的附加部分 <b id="st5-lv"></b></label><input id="st5-l" type="range" min="0" max="100" step="5" value="20"></div>
+      <p class="st5-msg" id="st5-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：预期赔付为每年 1 份；保费 ＝ 预期赔付 ×（1 ＋ 附加部分），附加部分用于承担风险的补偿与经营费用。是否划算按对数满足感比较。</figcaption>
+</figure>
+<style>
+.st5-g{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.st5-g>div{background:var(--quote);border-radius:10px;padding:10px 12px}
+.st5-g b{font-size:14px;display:block;margin-bottom:6px}
+.st5-row{display:grid;grid-template-columns:3.6em 1fr 3.6em;gap:8px;align-items:center;font-size:12.5px;margin:4px 0}
+.st5-row i{display:block;height:12px;border-radius:3px;background:var(--faint);transition:width .4s}
+.st5-row i.on{background:var(--accent)}
+.st5-row em{font-style:normal;font-variant-numeric:tabular-nums;text-align:right}
+.st5-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.st5-g{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),W=v=>v/14*100+'%';
+  function draw(){const l=+$('st5-l').value/100,P=1*(1+l),a0=13,b0=3,a1=13-P,b1=3-P+10;
+    [['a0',a0],['a1',a1],['b0',b0],['b1',b1]].forEach(([k,v])=>{$('st5-'+k).style.width=W(v);$('st5-'+k+'v').textContent=v.toFixed(1)+' 份';});
+    const U0=.9*Math.log(a0)+.1*Math.log(b0),U1=.9*Math.log(a1)+.1*Math.log(b1),ce0=Math.exp(U0),ce1=Math.exp(U1);
+    $('st5-lv').textContent=Math.round(l*100)+'%';
+    $('st5-msg').textContent=U1>=U0?`保费 ${P.toFixed(2)} 份：丰年少吃一点，灾年多吃很多。投保后相当于每年稳定收 ${ce1.toFixed(2)} 份，高于不投保的 ${ce0.toFixed(2)} 份，即使保费高于预期赔付也划算。`:`附加部分太高，保费 ${P.toFixed(2)} 份：投保后相当于每年稳定收 ${ce1.toFixed(2)} 份，低于不投保的 ${ce0.toFixed(2)} 份，不再划算。`;}
+  $('st5-l').addEventListener('input',draw);
+  $('st5').addEventListener('anim-in',()=>{let v=0;$('st5-l').value=0;draw();const id=setInterval(()=>{v+=10;$('st5-l').value=v;draw();if(v>=100)clearInterval(id);},300);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-6">六、保险带来的新问题</h2>
+<p>保险解决了风险的分担，也带来了两个新问题。第一，投了保之后，人们可能不再那样小心：既然虫害有公仓补偿，何必费力防治。这种现象称为道德风险，阿罗（1963）与波利（1968）讨论过它在医疗保险中的表现。第二，最想投保的往往是风险最高的人：地势低洼、最怕水灾的人家最积极地加入，而每户的地势如何，自己最清楚，管公仓的人却看不全。如果所有人交同样的保费，低风险的人觉得不划算而退出，留下的人风险越来越高，保费只好越来越贵。</p>
+<p>管公仓的人看不清每户的风险，却可以让各户自己透露出来：给出两种约定，一种保费低，但遭灾时自己先承担一部分损失；另一种保费高，遭灾时全数补偿。地势高、很少遭水灾的人家不在乎自担的那一部分，会选保费低的；地势低洼的人家几乎年年要用到补偿，宁可多交保费，选全数补偿的。各户的选择把他们分成了不同的风险类别。代价是，为了让高风险的人不去冒充低风险的人，低风险的人只能得到一部分保障。</p>
+<aside class="principle"><p class="pr-k">推演至此，得到一条原理</p><p class="pr-n">保险市场的逆向选择</p><p class="pr-c"><span><em>学科</em>经济学 › 信息经济学（保险市场）</span><span><em>类型</em>理论模型</span></p><p class="pr-s">投保人比保险方更清楚自己的风险时，统一的保费会把低风险的人挤出去；保险方可以给出自担比例不同的几种合同，让投保人按自己的风险自行选择，代价是低风险的人只能得到部分保障。</p><dl><div><dt>在学科中的位置</dt><dd>2001 年诺贝尔经济学奖授予阿克洛夫、斯彭斯与斯蒂格利茨，颁奖理由是“对信息不对称市场的分析”；颁奖资料以这项研究说明，保险公司通过可供选择的合同，让投保人按自己的选择分入不同的风险类别</dd></div><div><dt>回应的约束</dt><dd>收成好坏不定，投保人的风险保险方看不清</dd></div><div><dt>成立的前提</dt><dd>投保人比保险方更了解自己的风险；保险方之间相互竞争；合同可以规定保费与保障的多少</dd></div><div><dt>提出者</dt><dd>罗斯柴尔德与斯蒂格利茨，1976；他们同时指出，这样的竞争市场可能根本不存在均衡</dd></div><div><dt>留下的问题</dt><dd>低风险的人得不到充分的保障；强制所有人一起加入能否改善</dd></div></dl></aside>
+<p>应对的办法也由此而来：让投保人自己承担一部分损失，即免赔额与共同承担，使他仍有防范的动力，也让不同风险的人自行分开；按风险高低区分保费，或者让所有人一起加入，避免只有高风险的人投保。</p>
+<p><strong>今天的对应。</strong>保险合同中的免赔额与自付比例、按年龄与健康状况区分的保费，以及强制参加的社会保险，都是对这两个问题的回应。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">免赔额：让投保人仍有防范的动力</p><p class="figsub">遭灾时损失 10 份。拖动投保人自己承担的比例，看他防治虫害的力度、遭灾的概率与保费怎样变化。</p></div><button class="replay" type="button" data-replay="mh">重播</button></div>
+    <div class="mh" id="mh" data-anim>
+      <div class="mh-b"><span>防治虫害的力度</span><div><i id="mh-e" style="background:var(--accent)"></i></div><b id="mh-ev"></b></div>
+      <div class="mh-b"><span>遭灾的概率</span><div><i id="mh-p" style="background:var(--warm)"></i></div><b id="mh-pv"></b></div>
+      <div class="mh-b"><span>每年的保费</span><div><i id="mh-q" style="background:var(--gold)"></i></div><b id="mh-qv"></b></div>
+      <div class="mh-b"><span>灾年自己承担</span><div><i id="mh-s" style="background:var(--faint)"></i></div><b id="mh-sv"></b></div>
+      <div class="sl"><label for="mh-k">自己承担的比例 <b id="mh-kv"></b></label><input id="mh-k" type="range" min="0" max="100" step="5" value="0"></div>
+      <p class="mh-msg" id="mh-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：防治越用力，遭灾的概率越低；投保人只为自己承担的那部分损失而防治，防治的力度与自己承担的比例成正比。保费按预期赔付计算。</figcaption>
+</figure>
+<style>
+.mh-b{display:grid;grid-template-columns:8em 1fr 4.5em;gap:10px;align-items:center;font-size:13px;margin:7px 0}
+.mh-b div{height:14px;background:var(--quote);border-radius:4px;overflow:hidden}
+.mh-b i{display:block;height:100%;transition:width .3s}
+.mh-b b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.mh-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  function draw(){const k=+$('mh-k').value/100,e=k,p=.3-.2*e,q=p*(1-k)*10,s=10*k;
+    $('mh-e').style.width=e*100+'%';$('mh-p').style.width=p/.3*100+'%';$('mh-q').style.width=q/3*100+'%';$('mh-s').style.width=s/10*100+'%';
+    $('mh-ev').textContent=Math.round(e*100)+'%';$('mh-pv').textContent=Math.round(p*100)+'%';$('mh-qv').textContent=q.toFixed(2)+' 份';$('mh-sv').textContent=s.toFixed(1)+' 份';$('mh-kv').textContent=Math.round(k*100)+'%';
+    $('mh-msg').textContent=k===0?'损失全部由公仓赔付，投保人没有任何防治的动力，遭灾的概率最高，保费也最贵。':k===1?'损失全部自己承担，防治最用力，但这已经等于没有保险。':`自己承担 ${Math.round(k*100)}% 的损失，投保人仍会防治，遭灾的概率降到 ${Math.round(p*100)}%，保费降到 ${q.toFixed(2)} 份；代价是灾年自己要承担 ${s.toFixed(1)} 份。免赔额就是在保障与防范之间取舍。`;}
+  $('mh-k').addEventListener('input',draw);
+  $('mh').addEventListener('anim-in',()=>{let v=0;$('mh-k').value=0;draw();const id=setInterval(()=>{v+=5;$('mh-k').value=v;draw();if(v>=40)clearInterval(id);},180);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-7">七、互助的村子：文明模拟器第五版</h2>
+<p>模拟器解锁了“保险”这条规则。村里二十户人家，收成每年随机变化：一部分是各家自己的运气，一部分是全村共同的年景。可以选择各家自己储备、加入互助公仓，或者两者兼用，调整全村共同年景所占的比重，看三十年里挨饿的户次与每户吃到的粮食的波动。</p>
+<p>可以看到，各自储备对付不了连着两次的灾年，互助公仓对付不了全村一起歉收的年份：只靠公仓而不留储备，全村歉收时所有人会同时挨饿。分散与储备对付的是两种不同的风险，两者兼用时挨饿最少。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">文明模拟器 · 第 5 章：互助的村子</p><p class="figsub">二十户人家，收成每年随机变化。选择各自储备、加入互助公仓或两者兼用，拖动全村共同年景所占的比重，看三十年里挨饿的户次与每户吃到的粮食的波动。</p></div><button class="replay" type="button" data-replay="cs5">重播</button></div>
+    <div class="cs-rules"><span class="on">储蓄</span><span class="on">留种</span><span class="on">借贷</span><span class="on">承诺</span><span class="on">货币</span><span class="on">保险</span><span class="lock">银行 · 第 6 章</span></div>
+    <div class="seg-btns" role="group" aria-label="应对办法">
+      <button type="button" data-cs5="self" aria-pressed="false">各自储备</button>
+      <button type="button" data-cs5="pool" aria-pressed="false">互助公仓</button>
+      <button type="button" data-cs5="both" aria-pressed="true">两者兼用</button>
+    </div>
+    <div class="cs5" id="cs5" data-anim>
+      <svg viewBox="0 0 660 210" role="img" aria-label="三十年里三户人家吃到的粮食"><g id="cs5-ax"></g><g id="cs5-l"></g></svg>
+      <div class="legend" id="cs5-lg"></div>
+      <div class="cs5-ctl">
+        <div class="sl"><label for="cs5-r">全村共同年景所占的比重 <b id="cs5-rv"></b></label><input id="cs5-r" type="range" min="0" max="100" step="10" value="30"></div>
+        <button type="button" class="replay" id="cs5-re">换一组年景</button>
+      </div>
+      <div class="cs5-out" id="cs5-out"></div>
+      <p class="cs5-msg" id="cs5-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意模型：每户收成平均 12 份、波动约四成，其中按设定比重来自全村共同的年景，其余来自各家自己的运气。各自储备：每户常年保有 6 份储备，每年损耗一成。互助公仓：全村收成平均分给各户。两者兼用：先平均分配，各户再保有储备。一年吃到不足 9 份即算挨饿。</figcaption>
+</figure>
+<style>
+.cs5 svg{width:100%;height:auto;display:block}
+.cs5-ctl{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:end;margin-top:8px}
+.cs5-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cs5-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs5-out span{display:block;font-size:11.5px;color:var(--faint)} .cs5-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.cs5-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs5-ctl{grid-template-columns:1fr}.cs5-out{grid-template-columns:1fr}.cs5 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs5'+id),N=20,Y=30,SIG=.4,B=6,NEED=9;let mode='both',seed=20261021;
+  const X0=40,X1=650,YT=10,YB=180,x=t=>X0+(t+.5)/Y*(X1-X0),y=v=>YB-Math.min(v,24)/24*(YB-YT);
+  const C=['var(--accent)','var(--warm)','var(--blue)'];
+  $('-lg').innerHTML=['第一户','第二户','第三户'].map((n,i)=>`<span><i style="background:${C[i]}"></i>${n}吃到的粮食</span>`).join('')+'<span><i style="background:var(--warm-soft)"></i>不足 9 份即挨饿</span>';
+  function shocks(){let s=seed;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};const g=()=>{let u=0;while(!u)u=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r());};
+    return {z:Array.from({length:Y},()=>g()),e:Array.from({length:Y},()=>Array.from({length:N},()=>g()))};}
+  function sim(rho){const S=shocks(),st=Array(N).fill(0),cons=[];
+    for(let t=0;t<Y;t++){const h=Array.from({length:N},(_,i)=>Math.max(0,12*(1+SIG*(Math.sqrt(rho)*S.z[t]+Math.sqrt(1-rho)*S.e[t][i]))));
+      let get=h.slice();if(mode!=='self'){const m=h.reduce((a,b)=>a+b,0)/N;get=Array(N).fill(m);}
+      const row=[];for(let i=0;i<N;i++){if(mode==='pool'){row.push(Math.min(get[i],16));continue;}let have=get[i]+st[i],c=Math.min(12,have);row.push(c);have-=c;st[i]=Math.min(B,have)*.9;}
+      cons.push(row);}
+    return cons;}
+  function draw(){const rho=+$('-r').value/100,cons=sim(rho);
+    $('-ax').innerHTML=`<rect x="${X0}" y="${y(NEED)}" width="${X1-X0}" height="${YB-y(NEED)}" fill="var(--warm-soft)"/>`+[0,6,12,18,24].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+[1,10,20,30].map(t=>`<text x="${x(t-1)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">第 ${t} 年</text>`).join('');
+    $('-l').innerHTML=[0,1,2].map(i=>`<path d="${cons.map((r,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(r[i]).toFixed(1)).join('')}" fill="none" stroke="${C[i]}" stroke-width="2" opacity=".9"/>`).join('');
+    let hungry=0,all=[];cons.forEach(r=>r.forEach(v=>{if(v<NEED)hungry++;all.push(v);}));
+    const per=[...Array(N).keys()].map(i=>{const v=cons.map(r=>r[i]),m=v.reduce((a,b)=>a+b,0)/Y;return Math.sqrt(v.reduce((a,b)=>a+(b-m)*(b-m),0)/Y)/12;});
+    const sd=per.reduce((a,b)=>a+b,0)/N,ce=Math.exp(all.reduce((a,v)=>a+Math.log(Math.max(v,.5)),0)/all.length);
+    $('-rv').textContent=Math.round(rho*100)+'%';
+    $('-out').innerHTML=[['三十年里挨饿的户次',hungry],['每户吃到的粮食的波动',Math.round(sd*100)+'%'],['相当于每年稳定吃',ce.toFixed(1)+' 份']].map(([a,b])=>`<div><span>${a}</span><b>${b}</b></div>`).join('');
+    $('-msg').textContent=mode==='self'?`各自储备时，一户连着遭两次灾就扛不住：三十年里挨饿 ${hungry} 户次，储备还在仓里不断损耗。`:
+      rho===0?`各家的运气互不相关，平均分配几乎消除了波动：挨饿 ${hungry} 户次。`:rho>=.99?'所有波动都来自全村共同的年景，互助公仓分担不了任何风险：各户一起丰收，也一起挨饿。':
+      mode==='pool'?`共同年景占 ${Math.round(rho*100)}%：平均分配抵消了各家自己的坏运气，但公仓不留储备，全村一起歉收的年份二十户同时挨饿，三十年共 ${hungry} 户次。分散只能对付各家自己的风险。`:
+      `共同年景占 ${Math.round(rho*100)}%：公仓抵消各家自己的坏运气，各户的储备再扛过一部分全村的歉收，挨饿降到 ${hungry} 户次。分散与储备对付的是两种不同的风险。`;}
+  document.querySelectorAll('[data-cs5]').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.cs5;document.querySelectorAll('[data-cs5]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  $('-r').addEventListener('input',draw);$('-re').addEventListener('click',()=>{seed=(seed*48271)%2147483647;draw();});
+  $('').addEventListener('anim-in',()=>{['self','pool','both'].forEach((k,i)=>setTimeout(()=>{mode=k;document.querySelectorAll('[data-cs5]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.cs5===k)));draw();},300+i*2400));});
+  draw();
+})();
+</script>
+
+<h2 id="sec-8">八、这一步留下的问题</h2>
+<p>有了保险，各家自己的坏运气可以分担，但还有几个问题没有解决：</p>
+<ol><li><strong>存的人要随时取，借的人要长期用。</strong>公仓与存粮都要能随时动用，开荒、种果园的人却要借很多年。</li><li><strong>大项目的风险一户扛不起。</strong>造一艘船、开一片新地，成败都很大，一户人家既出不起钱，也承担不起失败。</li><li><strong>分散不掉的风险由谁承担、得到多少补偿。</strong>这需要一种办法，让愿意承担风险的人按份额分享收益。</li><li><strong>投保之后不小心、风险高的人更想投保。</strong>这些问题的根源是信息不对称，在受托管理别人财产时会更加突出。</li></ol>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">这一步留下的问题</p><p class="figsub">有了保险之后仍未解决的四个问题。点选一个问题，看它隐含的假设。</p></div><button class="replay" type="button" data-replay="nx5">重播</button></div>
+    <div class="nx" id="nx5" data-anim>
+      <div class="nx-src"><b>互助的村子</b><span>储备、分担与保险</span></div>
+      <div class="nx-list" id="nx5-l"></div>
+    </div>
+    <p class="nx-msg" id="nx5-msg" aria-live="polite"></p>
+  </div>
+</figure>
+<style>
+.nx{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:center}
+.nx-src{background:var(--ink);color:var(--bg);border-radius:10px;padding:14px 10px;text-align:center}
+.nx-src b{display:block;font-size:16px} .nx-src span{font-size:12px;opacity:.75}
+.nx-list{display:grid;gap:6px}
+.nx-i{font:inherit;text-align:left;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:9px 12px;color:var(--ink);opacity:0;transform:translateX(-8px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.3s)}
+.nx.in .nx-i{opacity:1;transform:none}
+.nx-i span{font-size:13.5px} .nx-i em{font-style:normal;font-size:11.5px;color:var(--faint);white-space:nowrap}
+.nx-i.sel{border-color:var(--accent)}
+.nx-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.nx{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const Q=[['存的人要随时取，借的人要长期用','第 6 章 银行','隐含的假设：储备与公仓都能随时动用。开荒、种果园的人却要借很多年。'],
+    ['大项目的风险一户扛不起','第 7 章 股份','隐含的假设：每户只种自己的地。造一艘船、开一片新地，成败都很大。'],
+    ['分散不掉的风险由谁承担','第 7 章 股份','隐含的假设：总有人愿意承担全村共同的风险。需要一种办法，让承担风险的人按份额分享收益。'],
+    ['投保之后不小心、风险高的人更想投保','第 11 章 监管与托管','隐含的假设：公仓知道每户有多小心、风险有多高。信息不对称在替别人管钱时会更加突出。']];
+  const l=document.getElementById('nx5-l'),msg=document.getElementById('nx5-msg');
+  l.innerHTML=Q.map((q,i)=>`<button type="button" class="nx-i" style="--i:${i}" data-i="${i}"><span>${q[0]}</span><em>→ ${q[1]}</em></button>`).join('');
+  const bs=[...l.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));msg.textContent=Q[i][2];}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('nx5').addEventListener('anim-in',()=>{[0,1,2,3].forEach((i,k)=>setTimeout(()=>set(i),1600+k*1800));});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-9">九、对产品的含义</h2>
+<p>保险产品与分散持有的投资组合，都建立在本章的机制上。由此得到三条含义。第一，分散是几乎免费的改进：只属于个别对象的风险可以通过分散消除，不必为它承担，也不应为它要求补偿。第二，分散不掉的风险不会因为任何产品而消失，只能被转移给更能承受的人，并且要付出代价；一个产品如果声称消除了这种风险，就要追问风险转移到了哪里。第三，保险与分散都要面对信息不对称，设计时要让用户保留适当的责任，并避免只吸引风险最高的人。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：保险与分散</p><p class="figsub">四条结论，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="g05summary">重播</button></div>
+    <div class="g05summary" id="g05summary" data-anim><div class="g05summary-c" style="--i:0"><em>自己扛</em><b>预防性储蓄代价很大</b><p>要扛住大的歉收，就要常年放着一大笔储备，它在损耗、也不能另作他用。</p></div><div class="g05summary-c" style="--i:1"><em>一起扛</em><b>各家自己的坏运气可以抵消</b><p>户数越多抵消越充分，平均到每户的波动大致按户数的平方根缩小。</p></div><div class="g05summary-c warn" style="--i:2"><em>分散不掉</em><b>共同的风险只能转移</b><p>全村一起歉收时，户数再多也无济于事；承担它的人要得到补偿。</p></div><div class="g05summary-c warn" style="--i:3"><em>新问题</em><b>保险会改变人的行为</b><p>投保之后不再小心，风险高的人更想投保；免赔额与区分保费是对策。</p></div></div>
+  </div>
+</figure>
+<style>
+.g05summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g05summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g05summary-c.warn{border-left-color:var(--warm)}
+.g05summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g05summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g05summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g05summary.in .g05summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g05summary{grid-template-columns:1fr}}
+</style>
+
+<h2 id="sec-10">参考文献</h2>
+<ul class="refs"><li>Arrow, K. J. (1953). Le rôle des valeurs boursières pour la répartition la meilleure des risques. <i>Économétrie</i> (Colloques Internationaux du Centre National de la Recherche Scientifique), 11, 41–47.</li><li>Arrow, K. J. (1963). Uncertainty and the welfare economics of medical care. <i>American Economic Review</i>, 53(5), 941–973.</li><li>Arrow, K. J. (1964). The role of securities in the optimal allocation of risk-bearing. <i>Review of Economic Studies</i>, 31(2), 91–96.</li><li>Borch, K. (1962). Equilibrium in a reinsurance market. <i>Econometrica</i>, 30(3), 424–444.</li><li>Digest of Justinian, 14.2 (<i>De lege Rhodia de iactu</i>).</li><li>Leland, H. E. (1968). Saving and uncertainty: The precautionary demand for saving. <i>Quarterly Journal of Economics</i>, 82(3), 465–473.</li><li>Nobel Prize Outreach. <i>The Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel 1972</i>. NobelPrize.org.</li><li>Nobel Prize Outreach. <i>The Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel 2001</i>. NobelPrize.org.</li><li>Pauly, M. V. (1968). The economics of moral hazard: Comment. <i>American Economic Review</i>, 58(3), 531–537.</li><li>Rothschild, M., &amp; Stiglitz, J. (1976). Equilibrium in competitive insurance markets: An essay on the economics of imperfect information. <i>Quarterly Journal of Economics</i>, 90(4), 629–649.</li><li>Townsend, R. M. (1994). Risk and insurance in village India. <i>Econometrica</i>, 62(3), 539–591.</li></ul>
+<footer class="nav"><a href="g-04.html">← 第 4 章　很多人一起交换</a><a href="g-06.html">第 6 章　存的人要随时取，借的人要长期用 →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The fundamental law of active management</p><p class="figsub">Information ratio ≈ transfer coefficient × information coefficient × √effective breadth. Adjust the three parameters to see the information ratio, the corresponding annual excess return, and how many years it takes to confirm the skill. Turn on "judgments are correlated" to see how the nominal number of judgments shrinks.</p></div><button class="replay" type="button" data-replay="lw">Replay</button></div>
+    <div class="lw" id="lw" data-anim>
+      <div class="lw-eq"><span>Information ratio</span><b id="lw-ir"></b><em>=</em><span>Transfer coefficient</span><b id="lw-tcv"></b><em>×</em><span>Information coefficient</span><b id="lw-icv"></b><em>× √</em><span>Effective breadth</span><b id="lw-bev"></b></div>
+      <div class="lw-sl">
+        <div class="sl"><label for="lw-ic">Information coefficient: correlation of each judgment with the outcome <b id="lw-icl"></b></label><input id="lw-ic" type="range" min="1" max="15" step="1" value="5"></div>
+        <div class="sl"><label for="lw-b">Judgments per year <b id="lw-bl"></b></label><input id="lw-b" type="range" min="0" max="100" step="1" value="50"></div>
+        <div class="sl"><label for="lw-tc">Transfer coefficient: share kept after constraints <b id="lw-tcl"></b></label><input id="lw-tc" type="range" min="20" max="100" step="5" value="100"></div>
+      </div>
+      <label class="lw-chk"><input type="checkbox" id="lw-x"> Judgments are correlated (average correlation 0.2, e.g. repeated bets on the same sector or factor)</label>
+      <div class="lw-out"><div><span>Annual excess return at 6% tracking error</span><b id="lw-a"></b></div><div><span>Years to confirm skill with 95% confidence</span><b id="lw-y"></b></div></div>
+      <p class="lw-msg" id="lw-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Calculated with the fundamental law of Grinold (1989) and the transfer coefficient of Clarke, de Silva and Thorley (2002). Effective breadth = number of judgments ÷ [1 + (number of judgments − 1) × average correlation]; years required = (2 ÷ information ratio)². The rules of thumb that an information coefficient of 0.05 is already good and an information ratio of 0.5 is already top tier are from Grinold and Kahn (2000).</figcaption>
+</figure>
+<style>
+.lw-eq{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;background:var(--quote);border-radius:10px;padding:10px 12px;font-size:12.5px;color:var(--faint)}
+.lw-eq b{font-size:18px;color:var(--ink);font-variant-numeric:tabular-nums;margin-right:4px}
+.lw-eq b#lw-ir{color:var(--accent);font-size:22px}
+.lw-eq em{font-style:normal;color:var(--muted);font-size:15px}
+.lw-sl{display:grid;gap:2px;margin-top:8px}
+.lw-chk{display:flex;gap:6px;align-items:center;font-size:13.5px;margin:6px 0}
+.lw-chk input{accent-color:var(--warm);width:16px;height:16px;flex:none}
+.lw-out{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.lw-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.lw-out span{display:block;font-size:12px;color:var(--faint)} .lw-out b{font-size:19px;font-variant-numeric:tabular-nums}
+.lw-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.lw-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),ic=$('lw-ic'),bb=$('lw-b'),tc=$('lw-tc'),cx=$('lw-x');
+  const N=t=>Math.round(Math.pow(10,t/100*3.3));
+  function r(){const I=+ic.value/100,n=Math.max(1,N(+bb.value)),T=+tc.value/100,rho=cx.checked?.2:0,be=n/(1+(n-1)*rho),ir=T*I*Math.sqrt(be),yrs=Math.pow(2/ir,2);
+    $('lw-icl').textContent=I.toFixed(2);$('lw-bl').textContent=String(n);$('lw-tcl').textContent=T.toFixed(2);
+    $('lw-ir').textContent=ir.toFixed(2);$('lw-tcv').textContent=T.toFixed(2);$('lw-icv').textContent=I.toFixed(2);$('lw-bev').textContent=be<10?be.toFixed(1):Math.round(be);
+    $('lw-a').textContent=(ir*6).toFixed(1)+'%';$('lw-y').textContent=yrs>100?'More than 100 years':yrs<1?'Less than 1 year':Math.round(yrs)+' years';
+    let m;if(cx.checked&&n>20)m=`Nominally ${n} judgments a year, but once they are correlated they are worth only about ${be.toFixed(1)} independent judgments: however many judgments are made, effective breadth can hardly exceed 5.`;
+    else if(ir<.3)m='The information ratio is very low: excess return is small relative to tracking error, and it takes many years to tell it apart from luck.';
+    else if(ir<.6)m='The information ratio is at the level of a top manager. Even so, confirming the skill needs a record of more than ten years.';
+    else m='The information ratio is very high. It requires judgments that are accurate, numerous and independent, with few constraints: very few managers sustain this in practice.';
+    $('lw-msg').textContent=m;}
+  [ic,bb,tc].forEach(e=>e.addEventListener('input',r));cx.addEventListener('change',r);
+  $('lw').addEventListener('anim-in',()=>{cx.checked=false;tc.value=100;ic.value=5;let t=0;bb.value=0;r();const id=setInterval(()=>{t+=5;bb.value=t;r();if(t>=100){clearInterval(id);setTimeout(()=>{cx.checked=true;r();setTimeout(()=>{cx.checked=false;bb.value=50;r();},2200);},800);}},110);});
+  r();
+})();
+</script>

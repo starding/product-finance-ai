@@ -1,0 +1,42 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">能力的三个来源</p>
+    <p class="figsub">任务：比较两只基金近三年的费用与最大回撤。勾选或取消三个来源，看代理给出的结果怎样变化。</p>
+    <div class="sr" id="sr" data-anim>
+      <div class="sr-in">
+        <label class="sr-k" style="--c:var(--accent)"><input type="checkbox" data-sr="m" checked><b>模型</b><span>理解问题、组织步骤、写出结论</span></label>
+        <label class="sr-k" style="--c:var(--blue)"><input type="checkbox" data-sr="c" checked><b>上下文</b><span>是哪两只基金、关心哪段期限</span></label>
+        <label class="sr-k" style="--c:var(--gold)"><input type="checkbox" data-sr="t" checked><b>工具</b><span>查询最新净值、精确计算回撤</span></label>
+      </div>
+      <div class="sr-out" id="sr-out"><em id="sr-st"></em><p id="sr-tx"></p></div>
+    </div>
+  </div>
+  <figcaption>示意。工具对计算与事实类错误的作用见 Schick 等（2023）与 Gao 等（2023）。</figcaption>
+</figure>
+<style>
+.sr-in{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.sr-k{display:flex;flex-direction:column;gap:3px;border:1.5px solid var(--line);border-top:3px solid var(--c);border-radius:10px;padding:8px 10px;cursor:pointer;background:var(--surface);transition:opacity .3s}
+.sr-k input{accent-color:var(--c);width:16px;height:16px}
+.sr-k b{font-size:14px} .sr-k span{font-size:12px;color:var(--muted);line-height:1.5}
+.sr-k:has(input:not(:checked)){opacity:.45}
+.sr-out{margin-top:10px;border-radius:10px;padding:12px 14px;background:var(--quote);border-left:3px solid var(--accent);min-height:6.4em;transition:border-color .3s}
+.sr-out.bad{border-left-color:var(--warm)}
+.sr-out em{display:block;font-style:normal;font-size:12px;color:var(--faint);margin-bottom:4px}
+.sr-out p{margin:0;font-size:14px;line-height:1.7}
+@media (max-width:640px){.sr-in{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=s=>document.querySelector(s);
+  function r(){const m=$('[data-sr=m]').checked,c=$('[data-sr=c]').checked,t=$('[data-sr=t]').checked;let st,tx,ok=false;
+    if(!m){st='无法完成';tx='没有模型，就没有人理解这个问题、安排步骤并组织结论；数据与工具都只是原料。';}
+    else if(!c&&!t){st='泛泛而谈，数字不可信';tx='“费用较低的基金长期更有优势，回撤反映了风险……”不知道比较的是哪两只基金，也没有数据，只能给出一般原则，或者编出几个看似合理的数字。';}
+    else if(!c){st='数据准确，但答非所问';tx='代理查到了数据，却不知道委托人指的是哪两只基金、关心哪段期限，只能自行假设，结果可能与需求无关。';}
+    else if(!t){st='对象正确，数字可能是凭记忆编的';tx='代理知道要比较什么，但查不到最新的净值，算不出精确的回撤：给出的费用与回撤可能过时，甚至是错的，而且看起来同样确定。';}
+    else{st='可以交付';tx='两只基金近三年的费率与最大回撤并列，注明数据来源与截止日期，计算过程可以复核。';ok=true;}
+    $('#sr-st').textContent=st;$('#sr-tx').textContent=tx;$('#sr-out').classList.toggle('bad',!ok);}
+  document.querySelectorAll('[data-sr]').forEach(i=>i.addEventListener('change',r));
+  $('#sr').addEventListener('anim-in',()=>{const seq=[['t',false],['c',false],['t',true],['c',true]];seq.forEach(([k,v],i)=>setTimeout(()=>{$('[data-sr='+k+']').checked=v;r();},900+i*1800));});
+  r();
+})();
+</script>

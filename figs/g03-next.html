@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">这一步留下的问题</p><p class="figsub">承诺可信之后仍未解决的四个问题。点选一个问题，看它隐含的假设。</p></div><button class="replay" type="button" data-replay="nx3">重播</button></div>
+    <div class="nx" id="nx3" data-anim>
+      <div class="nx-src"><b>守约的村子</b><span>声誉、抵押与执行</span></div>
+      <div class="nx-list" id="nx3-l"></div>
+    </div>
+    <p class="nx-msg" id="nx3-msg" aria-live="polite"></p>
+  </div>
+</figure>
+<style>
+.nx{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:center}
+.nx-src{background:var(--ink);color:var(--bg);border-radius:10px;padding:14px 10px;text-align:center}
+.nx-src b{display:block;font-size:16px} .nx-src span{font-size:12px;opacity:.75}
+.nx-list{display:grid;gap:6px}
+.nx-i{font:inherit;text-align:left;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:9px 12px;color:var(--ink);opacity:0;transform:translateX(-8px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.3s)}
+.nx.in .nx-i{opacity:1;transform:none}
+.nx-i span{font-size:13.5px} .nx-i em{font-style:normal;font-size:11.5px;color:var(--faint);white-space:nowrap}
+.nx-i.sel{border-color:var(--accent)}
+.nx-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.nx{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const Q=[['找到合适的对方仍然不易','第 4 章 货币','隐含的假设：谁有余粮、谁缺粮，彼此知道。人一多，交换本身就需要成本。'],
+    ['年老的问题仍未解决','第 4 章 货币','隐含的假设：对方几十年后仍有收入。承诺再可信，最年轻的一代也找不到更年轻的人来借。'],
+    ['不能还的违约依然存在','第 5 章 保险','隐含的假设：收成总会如约到来。一旦歉收，再守信的人也还不上。'],
+    ['没有资产的人被挡在门外','第 6 章 银行','隐含的假设：出借人只能逐户判断。把许多人的存粮汇集起来、按户分散借出，能否让风险变小、门槛变低？']];
+  const l=document.getElementById('nx3-l'),msg=document.getElementById('nx3-msg');
+  l.innerHTML=Q.map((q,i)=>`<button type="button" class="nx-i" style="--i:${i}" data-i="${i}"><span>${q[0]}</span><em>→ ${q[1]}</em></button>`).join('');
+  const bs=[...l.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));msg.textContent=Q[i][2];}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('nx3').addEventListener('anim-in',()=>{[0,1,2,3].forEach((i,k)=>setTimeout(()=>set(i),1600+k*1800));});
+  set(0);
+})();
+</script>

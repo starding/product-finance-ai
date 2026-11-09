@@ -1,0 +1,40 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">信任建立得慢，失去得快</p><p class="figsub">用户与一项服务的 40 次交往。第 24 次发生一次能力类失误，例如一次计算错误。切换失误后的回应方式，看信任怎样变化。</p></div><button class="replay" type="button" data-replay="as">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="回应方式">
+      <button type="button" data-as="none" aria-pressed="false">没有失误</button>
+      <button type="button" data-as="deny" aria-pressed="false">失误后否认</button>
+      <button type="button" data-as="own" aria-pressed="true">如实说明并补救</button>
+    </div>
+    <div class="as" id="as" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="信任随交往次数变化"><g id="as-ax"></g><path id="as-ref" class="as-r"/><path id="as-p" class="as-l"/></svg>
+      <p class="as-msg" id="as-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意曲线：良好交往的似然比接近 1，严重失误的似然比很大，信念的涨落因此不对称。信任的不对称见 Slovic（1993）。Kim、Ferrin、Cooper 与 Dirks（2004）发现，对能力类失误，道歉比否认更能修复信任；对正直类失误，结论相反，否认比道歉更有效。图中只画能力类失误的情形。灰色虚线为没有失误时的路径。</figcaption>
+</figure>
+<style>
+.as svg{width:100%;height:auto;display:block}
+.as-l{fill:none;stroke:var(--accent);stroke-width:2.5}
+.as-r{fill:none;stroke:var(--faint);stroke-width:1.5;stroke-dasharray:4 4}
+.as-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.as svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const run=k=>{let t=10,o=[t];for(let i=1;i<=40;i++){if(i===24&&k!=='none')t=k==='deny'?t*.35:t*.7;else t+=(100-t)*(k==='deny'&&i>24?.03:.07);o.push(t);}return o;};
+  const X0=50,X1=620,YT=14,YB=180,x=i=>X0+i/40*(X1-X0),y=v=>YB-v/100*(YB-YT);
+  const $=id=>document.getElementById(id),P=a=>a.map((v,i)=>(i?'L':'M')+x(i).toFixed(1)+','+y(v).toFixed(1)).join('');
+  $('as-ax').innerHTML=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`+[0,50,100].map(v=>`<text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+
+    [1,10,20,30,40].map(i=>`<text x="${x(i)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">第 ${i} 次</text>`).join('')+`<line x1="${x(24)}" y1="${YT}" x2="${x(24)}" y2="${YB}" stroke="var(--warm)" stroke-dasharray="3 3"/><text x="${x(24)+4}" y="${YT+10}" font-size="11" class="t-warm">失误</text><text x="${X0}" y="${YT-2}" font-size="11" class="t-faint">信任程度</text>`;
+  $('as-ref').setAttribute('d',P(run('none')));
+  const M={none:'每一次良好的交往只让信任增加一点，二十多次之后才接近较高的水平。',deny:'对能力类失误予以否认，用户看不到改进的意愿，信任跌得更深，此后的良好记录也只能让它缓慢恢复。',own:'坦率承认能力类失误，说明发生了什么、影响了谁、怎样改进：这是愿意改进的证据，信任仍会下降，但下降得少，此后也能逐步恢复。'};
+  function set(k,anim){document.querySelectorAll('[data-as]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.as===k)));
+    const a=run(k),p=$('as-p');p.setAttribute('d',P(a));
+    if(anim){const L=p.getTotalLength();p.style.transition='none';p.style.strokeDasharray=L;p.style.strokeDashoffset=L;setTimeout(()=>{p.style.transition='stroke-dashoffset 1.8s ease';p.style.strokeDashoffset=0;},40);}else{p.style.strokeDasharray='';p.style.strokeDashoffset='';}
+    $('as-msg').textContent=M[k];}
+  document.querySelectorAll('[data-as]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.as,true)));
+  $('as').addEventListener('anim-in',()=>{set('none',true);setTimeout(()=>set('deny',true),2600);setTimeout(()=>set('own',true),5200);});
+  set('own',false);
+})();
+</script>

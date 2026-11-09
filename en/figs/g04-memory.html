@@ -1,0 +1,42 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Money and the ledger: two ways of recording the same thing</p><p class="figsub">Three households take turns giving to the next: the grain farmer gives grain to the salt-maker, the salt-maker gives salt to the weaver, the weaver gives cloth to the grain farmer. Click "Next step" to compare the two ways of recording.</p></div><button class="replay" type="button" data-replay="mm">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Way of recording">
+      <button type="button" data-mm="coin" aria-pressed="true">Money</button>
+      <button type="button" data-mm="book" aria-pressed="false">A ledger shared by the village</button>
+    </div>
+    <div class="mm" id="mm" data-anim>
+      <div class="mm-h" id="mm-h"></div>
+      <div class="mm-ctl"><button type="button" class="replay" id="mm-next">Next step</button><span id="mm-step"></span></div>
+      <p class="mm-msg" id="mm-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Kocherlakota (1998) showed that where credible commitments cannot be made, any exchange arrangement that money can achieve can also be achieved with a complete ledger; money is a convenient form of record.</figcaption>
+</figure>
+<style>
+.mm-h{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mm-p{background:var(--quote);border-radius:10px;padding:10px 12px;min-height:92px;transition:box-shadow .3s}
+.mm-p.on{box-shadow:0 0 0 2px var(--accent)}
+.mm-p b{font-size:14px;display:block} .mm-p span{font-size:12.5px;color:var(--muted);display:block;margin-top:4px;line-height:1.55}
+.mm-p i{display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--gold);margin-right:3px;vertical-align:-1px}
+.mm-ctl{display:flex;align-items:center;gap:10px;margin-top:10px;font-size:12.5px;color:var(--faint)}
+.mm-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.mm-h{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),P=['Grain farmer','Salt-maker','Weaver'],GD=['grain','salt','cloth'];let mode='coin',k=0;
+  const S=[['The grain farmer gives grain to the salt-maker'],['The salt-maker gives salt to the weaver'],['The weaver gives cloth to the grain farmer']];
+  function draw(){const coins=[1,0,0],book=[];
+    for(let s=0;s<k;s++){const a=s%3,b=(s+1)%3;if(mode==='coin'){coins[b]-=1;coins[a]+=1;}book.push(`${P[a]} gave ${GD[a]} to ${P[b]}`);}
+    // Money: at first the grain farmer holds no shell; the salt-maker pays one shell for grain
+    const c=[0,1,0];for(let s=0;s<k;s++){const a=s%3,b=(s+1)%3;c[b]-=1;c[a]+=1;}
+    $('mm-h').innerHTML=P.map((p,i)=>`<div class="mm-p${k>0&&((k-1)%3===i||(k%3)===i)?' on':''}"><b>${p}</b><span>${mode==='coin'?(c[i]>0?'<i></i>'.repeat(c[i])+` Holds ${c[i]} shell${c[i]>1?'s':''}`:'Holds no shells'):'Ledger: gave '+(book.filter(x=>x.startsWith(p)).length)+' times, received '+(book.filter(x=>x.includes('to '+p)).length)+' times'}</span></div>`).join('');
+    $('mm-step').textContent=k?`Step ${k}: ${S[(k-1)%3][0]}`:'Not started';
+    $('mm-msg').textContent=mode==='coin'?'One shell passes among the three households: whoever holds the shell has given to someone and not yet been repaid. No one needs to remember every dealing in the village.':'The village shares one ledger recording who has given to whom. As long as everyone can see it and no one can alter it, the ledger can do everything the shell can, and can record more detail as well.';}
+  document.querySelectorAll('[data-mm]').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.mm;document.querySelectorAll('[data-mm]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  $('mm-next').addEventListener('click',()=>{k=k>=6?0:k+1;draw();});
+  $('mm').addEventListener('anim-in',()=>{k=0;draw();[1,2,3].forEach((s,i)=>setTimeout(()=>{k=s;draw();},800+i*1300));});
+  draw();
+})();
+</script>

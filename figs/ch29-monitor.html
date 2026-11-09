@@ -1,0 +1,35 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">没有改动代码，表现也会变差</p><p class="figsub">一项提醒功能上线 60 天的漏报率。第 35 天市场进入新的状态，数据源也调整了格式。切换是否有持续监控与自动回退。</p></div><button class="replay" type="button" data-replay="mn2">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="监控"><button type="button" data-mn2="0" aria-pressed="true">上线后不再监控</button><button type="button" data-mn2="1" aria-pressed="false">持续监控与自动回退</button></div>
+    <div class="mn2" id="mn2" data-anim>
+      <svg viewBox="0 0 640 200" role="img" aria-label="漏报率随时间变化"><g id="mn2-ax"></g><path id="mn2-p" class="mn2-l"/><g id="mn2-m"></g></svg>
+      <p class="mn2-msg" id="mn2-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意曲线。机器学习系统中随时间累积的隐性问题见 Sculley 等（2015）。告警门槛为 2%。</figcaption>
+</figure>
+<style>
+.mn2 svg{width:100%;height:auto;display:block}
+.mn2-l{fill:none;stroke:var(--accent);stroke-width:2.5;stroke-dasharray:1400;stroke-dashoffset:1400;transition:stroke-dashoffset 2s ease}
+.mn2.in .mn2-l{stroke-dashoffset:0}
+.mn2-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.mn2 svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  let s=9;const rnd=()=>{s=(s*9301+49297)%233280;return s/233280;};const noise=Array.from({length:61},()=>(rnd()-.5)*.5);
+  const X0=50,X1=620,YT=14,YB=170,x=d=>X0+d/60*(X1-X0),y=v=>YB-v/5*(YB-YT);
+  const $=id=>document.getElementById(id);
+  $('mn2-ax').innerHTML=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`+[0,1,2,3,4,5].map(v=>`<text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}%</text>`).join('')+[0,15,30,45,60].map(d=>`<text x="${x(d)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">第 ${d} 天</text>`).join('')+`<line x1="${X0}" x2="${X1}" y1="${y(2)}" y2="${y(2)}" stroke="var(--warm)" stroke-dasharray="4 4"/><text x="${X1}" y="${y(2)-5}" text-anchor="end" font-size="11" class="t-warm">告警门槛</text><line x1="${x(35)}" x2="${x(35)}" y1="${YT}" y2="${YB}" class="s-faint" stroke-dasharray="2 3"/><text x="${x(35)+4}" y="${YT+10}" font-size="11" class="t-faint">市场与数据源变化</text>`;
+  function set(k){document.querySelectorAll('[data-mn2]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.mn2===k)));
+    const v=[];for(let d=0;d<=60;d++){let base=d<35?1:Math.min(4,1+(d-35)*.6);if(k&&d>=38)base=1.1;v.push(Math.max(.2,base+noise[d]));}
+    const p=$('mn2-p');p.style.transition='none';p.style.strokeDashoffset=1400;p.setAttribute('d',v.map((u,d)=>(d?'L':'M')+x(d).toFixed(1)+','+y(u).toFixed(1)).join(''));void p.getBoundingClientRect();p.style.transition='stroke-dashoffset 2s ease';p.style.strokeDashoffset=0;
+    $('mn2-m').innerHTML=k?`<circle cx="${x(37)}" cy="${y(v[37])}" r="6" fill="var(--warm)"/><text x="${x(37)+8}" y="${y(v[37])-8}" font-size="11" class="t-warm">告警，回退到保守模式</text>`:'';
+    const missed=v.slice(35).reduce((a,u)=>a+u,0)*2;
+    $('mn2-msg').textContent=k?`第 37 天漏报率越过门槛，系统告警并回退到保守模式，第 38 天起恢复正常；变化之后累计漏报约 ${missed.toFixed(0)} 次（每天约 200 次提醒）。`:`第 35 天之后漏报率悄悄升到约 4%，没有任何人发现；到第 60 天，变化之后累计漏报约 ${missed.toFixed(0)} 次。`;}
+  document.querySelectorAll('[data-mn2]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.mn2)));
+  $('mn2').addEventListener('anim-in',()=>{set(0);setTimeout(()=>set(1),3000);});
+  set(0);
+})();
+</script>

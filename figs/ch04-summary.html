@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：让分散成为默认</p><p class="figsub">四条设计要求，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="ch04summary">重播</button></div>
+    <div class="ch04summary" id="ch04summary" data-anim><div class="ch04summary-c" style="--i:0"><em>个别风险得不到补偿</em><b>把分散作为默认选项</b><p>新用户的第一个组合默认是分散的；集中持有时，明确提示承担了多少得不到补偿的个别风险。</p></div><div class="ch04summary-c" style="--i:1"><em>风险看的是对组合的贡献</em><b>按组合展示风险</b><p>评估一笔交易时，看它给整个组合带来多少系统风险，而不只看这只股票自身的波动。</p></div><div class="ch04summary-c warn" style="--i:2"><em>少数股票创造大部分财富</em><b>不鼓励押注少数“明星股”</b><p>说明集中持股更可能错过少数大赢家，而不是更可能抓住它们。</p></div><div class="ch04summary-c warn" style="--i:3"><em>下跌时相关性上升</em><b>压力测试使用下跌时期的相关性</b><p>组合风险的估计要包含危机时期，不能只用平静时期的数据。</p></div></div>
+  </div>
+</figure>
+<style>
+.ch04summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch04summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch04summary-c.warn{border-left-color:var(--warm)}
+.ch04summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch04summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch04summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch04summary.in .ch04summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch04summary{grid-template-columns:1fr}}
+</style>

@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Back to the governing rule</title>
+<meta name="description" content="Epilogue to Product × Finance × AI: Derived from Zero. Returning to the governing rule of the Preface, it asks which side of making claims on the future more accessible, more credible and cheaper each of the three parts addresses; all the principles obtained in the book are placed on one chart by order of derivation and year proposed">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="g-epilogue">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="Contents">
+<div class="side-head"><a class="sidetitle" href="index.html">Product × Finance × AI<small>Financial Products in the Age of AI</small></a></div>
+<div class="side-view" role="group" aria-label="Way of reading"><a href="preface.html">Decomposition</a><a href="g-preface.html" class="on" aria-current="true">Derivation</a></div>
+<a class="side-about" href="index.html#about">About this book</a>
+<a class="" href="g-preface.html"><span class="n">Preface</span>The best way to understand financial products is to build them from zero</a>
+<a class="side-part" href="g-part1.html"><span class="pn">Part One</span>From 0 to 1: how a world without finance grows finance</a>
+<a class="" href="g-01.html"><span class="n">1</span>One person, one year&#x27;s harvest</a>
+<a class="" href="g-02.html"><span class="n">2</span>Two people, short of grain at different times</a>
+<a class="" href="g-03.html"><span class="n">3</span>What if a loan is not repaid</a>
+<a class="" href="g-04.html"><span class="n">4</span>Exchange among many</a>
+<a class="" href="g-05.html"><span class="n">5</span>Harvests good and bad</a>
+<a class="" href="g-06.html"><span class="n">6</span>Savers may need their grain at any time; borrowers need it for years</a>
+<a class="" href="g-07.html"><span class="n">7</span>No one household can pay for a ship</a>
+<a class="" href="g-08.html"><span class="n">8</span>Securities must be saleable</a>
+<a class="" href="g-09.html"><span class="n">9</span>Prices carry everyone&#x27;s information</a>
+<a class="" href="g-10.html"><span class="n">10</span>Ordinary people have neither the time nor the expertise</a>
+<a class="" href="g-11.html"><span class="n">11</span>Trustees may not do their duty</a>
+<a class="" href="g-12.html"><span class="n">12</span>The institutions are in place, and people still make mistakes</a>
+<a class="side-part" href="g-part2.html"><span class="pn">Part Two</span>Changing one parameter: when agency becomes almost free</a>
+<a class="" href="g-13.html"><span class="n">13</span>A new parameter: the cost of cognitive labour collapses</a>
+<a class="" href="g-14.html"><span class="n">14</span>Can everyone have a personal agent?</a>
+<a class="" href="g-15.html"><span class="n">15</span>Who guarantees an agent&#x27;s promises</a>
+<a class="" href="g-16.html"><span class="n">16</span>If everyone has an analyst</a>
+<a class="" href="g-17.html"><span class="n">17</span>Agents become the main market participants</a>
+<a class="" href="g-18.html"><span class="n">18</span>Can an agent correct human bias?</a>
+<a class="" href="g-19.html"><span class="n">19</span>What did not change</a>
+<a class="side-part" href="g-part3.html"><span class="pn">Part Three</span>Deriving a product in the new world</a>
+<a class="" href="g-20.html"><span class="n">20</span>One person and one sum of money</a>
+<a class="" href="g-21.html"><span class="n">21</span>The user is not present</a>
+<a class="" href="g-22.html"><span class="n">22</span>The user cannot see the process</a>
+<a class="" href="g-23.html"><span class="n">23</span>Agents make mistakes</a>
+<a class="" href="g-24.html"><span class="n">24</span>Trust takes time</a>
+<a class="side-app cur" href="g-epilogue.html" aria-current="page"><span class="n">Epilogue</span>Back to the governing rule</a>
+<a class="side-app" href="method.html"><span class="n">Appendix</span>How this book was written</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="Open contents" title="Contents"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">Product × Finance × AI: Financial Products in the Age of AI</a><span>Epilogue</span><a class="langlink" href="../g-epilogue.html" hreflang="zh-CN">中文</a></header>
+
+<div class="chapno">Preface</div><h1>Back to the governing rule</h1>
+<blockquote><p>Finance turns today's value into credible claims on the future. Every financial product is a way, under some constraint, to make such claims more accessible, more credible or cheaper. Part One started from one person's yearly harvest and derived today's financial institutions. Part Two changed only one parameter, the price of cognitive labour, and showed which constraints loosen, which tighten and which stay the same. Part Three started from one person and one sum of money and derived a product. The derivations of all three parts can be tested with these three words.</p></blockquote>
+<h2 id="sec-1">1. Accessible, credible, cheaper</h2>
+<p>In Part One, saving, lending, money, insurance, banks, shares and markets let people who could not make the exchange before obtain claims on the future: this is "accessible". Commitments, custody, disclosure and regulation make sure these claims are honoured in the future: this is "credible". Diversification, index funds and defaults bring down the cost of the exchange: this is "cheaper".</p>
+<p>In Part Two, almost free cognitive labour first moves "cheaper" and "accessible" a long way forward: research, comparison and execution cost almost nothing, and personalized arrangements no longer belong only to large clients. Yet "credible" tightens instead. Agents cannot afford to pay for their mistakes, can change their names, resemble one another, and are close at hand at the very moments when people are most impulsive; each of these calls for new guarantees, records and lines of defence.</p>
+<p>In Part Three, four of the product's five parts answer to "credible": the agreement and authority, verifiable records, limits, confirmation and compensation, and the path to building trust. This is no accident. In a world where cognitive labour is almost free, cheapness and accessibility arrive by themselves; what is scarce is credibility. The value of a product depends more and more on what gives the user grounds to trust it.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Three parts and three words</p><p class="figsub">Choose a word to see what the derivation in each of the three parts did for it.</p></div><button class="replay" type="button" data-replay="er">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Word">
+      <button type="button" data-er="0" aria-pressed="true">Accessible</button>
+      <button type="button" data-er="1" aria-pressed="false">Credible</button>
+      <button type="button" data-er="2" aria-pressed="false">Cheaper</button>
+    </div>
+    <div class="er" id="er" data-anim><div class="er-g" id="er-g"></div><p class="er-msg" id="er-msg" aria-live="polite"></p></div>
+  </div>
+</figure>
+<style>
+.er-g{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.er-c{background:var(--quote);border-radius:10px;padding:10px 12px;font-size:13.5px;line-height:1.6;border-top:4px solid var(--c);opacity:0;transform:translateY(6px);transition:opacity .4s,transform .4s;transition-delay:calc(var(--i)*.2s)}
+.er.in .er-c{opacity:1;transform:none}
+.er-c em{display:block;font-style:normal;font-size:11.5px;color:var(--faint)}
+.er-c b{display:block;font-size:12px;margin-top:4px;color:var(--c)}
+.er-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.er-g{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const W=[[['Part One','Saving, lending, money, insurance, banks, shares and markets let people who could not make the exchange before obtain claims on the future.','Institutions grew'],['Part Two','Research and comparison are almost free, the threshold for delegation falls, and personalized arrangements no longer belong only to large clients; checking and accountability set the floor of that threshold.','Loosened'],['Part Three','Starting from one person\'s goals, the three accounts give each goal its own arrangement.','Built into the product']],
+    [['Part One','Commitments, custody, disclosure, suitability and regulation make sure claims are honoured in the future.','Institutions grew'],['Part Two','Agents cannot afford to pay for mistakes, can change their names, resemble one another and are present at critical moments: the demands for guarantees, records and defences tighten instead.','Tightened'],['Part Three','Four of the five parts answer to it: the agreement and authority, verifiable records, limits, confirmation and compensation, and the path to building trust.','Built into the product']],
+    [['Part One','Diversification, index funds and defaults bring down the cost of the exchange.','Institutions grew'],['Part Two','Cognitive labour is almost free, and the costs of fees, mistakes and execution fall sharply; time, systemic risk and irreversibility do not change.','Loosened, with a floor'],['Part Three','It promises a cap on fees and gives the savings back to the user.','Built into the product']]];
+  const M=['Accessible: Part Two moves it a long way forward, and Part Three builds it into each person\'s goals.','Credible: in a world where cognitive labour is almost free, it is the scarcest thing, and most of the product answers to it.','Cheaper: it arrives by itself as the price of cognitive labour falls, but time, systemic risk and irreversible loss set a floor beneath it.'];
+  const C=['var(--accent)','var(--warm)','var(--blue)'],g=document.getElementById('er-g'),m=document.getElementById('er-msg'),bs=[...document.querySelectorAll('[data-er]')];
+  function set(k){bs.forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.er===k)));g.innerHTML=W[k].map(([p,t,tag],i)=>`<div class="er-c" style="--i:${i};--c:${C[k]}"><em>${p}</em>${t}<b>${tag}</b></div>`).join('');m.textContent=M[k];}
+  bs.forEach(b=>b.addEventListener('click',()=>set(+b.dataset.er)));
+  document.getElementById('er').addEventListener('anim-in',()=>{[0,1,2].forEach((k,i)=>setTimeout(()=>set(k),300+i*2600));});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-2">2. The principles of the book</h2>
+<p>All the principles obtained in the book's derivations are placed on one chart: the order of derivation runs along the horizontal axis and the year proposed along the vertical axis. Most of the principles in Part One were proposed only in the middle and later decades of the twentieth century, while the institutions they explain often existed long before. Parts Two and Three retest many of them and borrow new principles from law, psychology, computer science and safety science.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Where the principles sit</p><p class="figsub">Across: the order of the derivation. Up: the year each principle was proposed. Tap a dot to see the principle and who proposed it. A principle that comes later in the logic but earlier in history shows practice growing institutions before theory explained them.</p></div><button class="replay" type="button" data-replay="pp0">Replay</button></div>
+    <div class="pp" id="pp0" data-anim>
+      <svg viewBox="0 0 660 300" role="img" aria-label="Principles by order of derivation and year proposed"><g id="pp0-g"></g></svg>
+      <div class="legend" id="pp0-lg"></div>
+      <div class="pp-d" id="pp0-d" aria-live="polite"></div>
+    </div>
+  </div>
+  <figcaption>Dots are collected automatically from each chapter's principle cards. The vertical axis is split at 1900; earlier years are compressed. Several principles from one chapter are spread left to right in order of appearance. Hollow dots are principles re-examined in Part Two, drawn at the chapter where they are re-examined.</figcaption>
+</figure>
+<style>
+.pp svg{width:100%;height:auto;display:block}
+.pp circle{cursor:pointer;transition:r .2s}
+.pp circle.sel{stroke:var(--ink);stroke-width:2.5}
+.pp-d{margin-top:10px;background:var(--quote);border-radius:9px;padding:10px 12px;font-size:13.5px;line-height:1.65;min-height:5.5em}
+.pp-d b{font-size:15px} .pp-d span{color:var(--faint);font-size:12px}
+@media (max-width:640px){.pp svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const C=[{"ch": 1, "file": "g-01", "title": "One person, one year's harvest", "name": "Diminishing marginal utility", "rerun": false, "s": "The more one has of something, the less satisfaction one more unit brings.", "sub": "Economics › Microeconomics (utility theory)", "who": "Daniel Bernoulli, 1738; he assumed that satisfaction grows with the logarithm of wealth rather than in proportion to it", "y": 1738}, {"ch": 1, "file": "g-01", "title": "One person, one year's harvest", "name": "Life-cycle and permanent-income hypotheses", "rerun": false, "s": "People set their consumption according to their lifetime or long-run income rather than their current income; temporary highs and lows in income are absorbed mainly by saving and drawing down savings.", "sub": "Economics › Macroeconomics (theory of consumption and saving)", "who": "Modigliani and Brumberg, 1954, proposed the life-cycle hypothesis; Friedman, 1957, proposed the permanent-income hypothesis", "y": 1954}, {"ch": 1, "file": "g-01", "title": "One person, one year's harvest", "name": "Fisher's theory of interest", "rerun": false, "s": "The interest rate is determined jointly by two things: people's preference for present consumption, that is, impatience; and the return from putting today's resources into production, that is, investment opportunity.", "sub": "Economics › Theory of capital and interest", "who": "Fisher, 1930", "y": 1930}, {"ch": 2, "file": "g-02", "title": "Two people, short of grain at different times", "name": "Present goods are worth more than future goods", "rerun": false, "s": "Goods of the same kind and quantity are generally worth more today than in the future. One reason is that people's needs and supplies differ at different moments; those who are short now and expect plenty later value present goods especially highly. Interest is the expression of this difference in value.", "sub": "Economics › Theory of capital and interest", "who": "Böhm-Bawerk, 1889, *The Positive Theory of Capital*; the book gives three reasons, the other two being that people tend to underestimate future needs and that present goods can be put into production", "y": 1889}, {"ch": 3, "file": "g-03", "title": "What if a loan is not repaid", "name": "Reputation mechanism", "rerun": false, "s": "When dealings repeat and a default is seen and passed on, the gain from defaulting now cannot outweigh the cooperation lost in the future, so a promise can be credible without outside enforcement.", "sub": "Economics › Game theory (repeated games)", "who": "Kreps, Milgrom, Roberts and Wilson, 1982. They showed that even when dealings are finite in number, as long as each side is slightly uncertain about the other's type, concern for reputation is enough to sustain cooperation", "y": 1982}, {"ch": 3, "file": "g-03", "title": "What if a loan is not repaid", "name": "Collateral as incentive and screen", "rerun": false, "s": "Collateral makes a defaulter lose more than default gains; and letting borrowers choose for themselves between more collateral and lower interest separates borrowers of different confidence.", "sub": "Economics › Information economics (credit markets)", "who": "Bester, 1985, proposed the screening role of collateral", "y": 1985}, {"ch": 3, "file": "g-03", "title": "What if a loan is not repaid", "name": "Credit rationing", "rerun": false, "s": "When borrowers' risk cannot be seen, raising the interest rate drives out prudent borrowers and leaves riskier ones; lenders therefore prefer to lend limited amounts at a lower rate rather than raise the price until the supply of and demand for loans are equal.", "sub": "Economics › Information economics (credit markets)", "who": "Stiglitz and Weiss, 1981", "y": 1981}, {"ch": 4, "file": "g-04", "title": "Exchange among many", "name": "Spontaneous emergence of a medium of exchange", "rerun": false, "s": "The good that changes hands most easily is accepted by more and more people, and the more people accept it the more easily it changes hands, until it becomes the general medium of exchange; which good wins depends both on its own properties and on people's beliefs.", "sub": "Economics › Monetary economics (search models)", "who": "Menger, 1892, proposed that money emerges spontaneously from the goods that change hands most easily; Kiyotaki and Wright, 1989, gave a formal model", "y": 1892}, {"ch": 4, "file": "g-04", "title": "Exchange among many", "name": "Money is memory", "rerun": false, "s": "Where people cannot make credible commitments, any exchange arrangement that can be achieved with money can also be achieved with a complete record of everyone's history of dealings; money is a convenient form of such a record.", "sub": "Economics › Monetary economics", "who": "Kocherlakota, 1998", "y": 1998}, {"ch": 4, "file": "g-04", "title": "Exchange among many", "name": "Money in the overlapping-generations model", "rerun": false, "s": "When generations overlap, people earn while young but not when old, and no borrower can be found who will repay in future, a money accepted by one generation after another, or a social agreement under which each young generation supports the old of its day, can ensure that every generation has food in old age, leaving every generation better off than if each stored for itself.", "sub": "Economics › Macroeconomics (overlapping-generations models)", "who": "Samuelson, 1958", "y": 1958}, {"ch": 5, "file": "g-05", "title": "Harvests good and bad", "name": "Mutuality of risk sharing", "rerun": false, "s": "Under the most efficient risk-sharing arrangement, what each person finally receives depends only on the total harvest of all; risk belonging to individuals alone is entirely shared away, and each person bears only the aggregate risk.", "sub": "Economics › Economics of uncertainty (risk sharing)", "who": "Borch, 1962, studying the exchange of risk between reinsurers", "y": 1962}, {"ch": 5, "file": "g-05", "title": "Harvests good and bad", "name": "State-contingent claims", "rerun": false, "s": "If for every possible state there is a claim, paying out only in that state, that can be bought and sold, people can trade to allocate risk to those most willing to bear it and achieve the most efficient sharing of risk.", "sub": "Economics › General equilibrium theory (resource allocation under uncertainty)", "who": "Arrow, 1953; the paper was published in French in the proceedings of a colloquium on risk theory in Paris, and an English translation was published in 1964", "y": 1953}, {"ch": 5, "file": "g-05", "title": "Harvests good and bad", "name": "Adverse selection in insurance markets", "rerun": false, "s": "When policyholders know their own risk better than the insurer does, a uniform premium drives out low-risk people; the insurer can offer several contracts with different shares of self-borne loss and let policyholders choose according to their own risk, at the cost that low-risk people receive only partial cover.", "sub": "Economics › Information economics (insurance markets)", "who": "Rothschild and Stiglitz, 1976; they also showed that such a competitive market may have no equilibrium at all", "y": 1976}, {"ch": 6, "file": "g-06", "title": "Savers may need their grain at any time; borrowers need it for years", "name": "Bank-run model", "rerun": false, "s": "A bank turns deposits that can be withdrawn at any time into long-term loans, giving depositors liquidity none of them could obtain alone; the same arrangement also has another outcome, in which everyone fears that others will withdraw first and all come at once, and even a well-run bank fails.", "sub": "Economics › Financial economics (banking theory)", "who": "Diamond and Dybvig, 1983", "y": 1983}, {"ch": 6, "file": "g-06", "title": "Savers may need their grain at any time; borrowers need it for years", "name": "Delegated monitoring", "rerun": false, "s": "An intermediary that monitors borrowers on behalf of many depositors saves the duplicated cost of each depositor checking separately; because the intermediary makes many independent loans at once, their risks offset one another, depositors need only judge whether the intermediary itself is reliable, and the question of who monitors the monitor is thereby resolved.", "sub": "Economics › Financial economics (financial intermediation theory)", "who": "Diamond, 1984", "y": 1984}, {"ch": 7, "file": "g-07", "title": "No one household can pay for a ship", "name": "The economic case for limited liability", "rerun": false, "s": "When investors bear losses only up to what they put in, they need not monitor the managers or the wealth of other investors, shares can be freely transferred and priced by the market, and diversified investment becomes feasible; the cost is that part of the loss from failure is shifted to creditors.", "sub": "Economics › Law and economics (corporate law)", "who": "Easterbrook and Fischel, 1985", "y": 1985}, {"ch": 7, "file": "g-07", "title": "No one household can pay for a ship", "name": "Modigliani–Miller theorem", "rerun": false, "s": "In the absence of taxes, bankruptcy costs and differences in information, and when everyone can borrow on the same terms, the total value of a firm does not depend on how it is divided between debt and equity.", "sub": "Finance › Corporate finance (capital structure)", "who": "Modigliani and Miller, 1958", "y": 1958}, {"ch": 8, "file": "g-08", "title": "Securities must be saleable", "name": "The spread is the price of immediacy", "rerun": false, "s": "Under competition, the bid-ask spread measures the cost of trading immediately without waiting; the party standing ready to trade is compensated by the spread for the time and risk of holding inventory.", "sub": "Finance › Market microstructure", "who": "Demsetz, 1968; the paper notes that a market maker can either act for others or trade on its own account, and in the latter role is compensated by the spread for the risk of holding inventory", "y": 1968}, {"ch": 8, "file": "g-08", "title": "Securities must be saleable", "name": "Liquidity premium", "rerun": false, "s": "An asset's expected return includes compensation for trading costs, and the higher the trading costs, the higher the expected return; assets with high trading costs are held by investors with long holding periods, so the rise in return as trading costs increase gradually becomes smaller.", "sub": "Finance › Asset pricing (liquidity)", "who": "Amihud and Mendelson, 1986", "y": 1986}, {"ch": 9, "file": "g-09", "title": "Prices carry everyone's information", "name": "Efficient market hypothesis", "rerun": false, "s": "Prices fully reflect available information; only new information moves them, and new information cannot be known in advance, so price changes cannot be predicted.", "sub": "Finance › Asset pricing", "who": "Samuelson, 1965, proved that properly anticipated prices change unpredictably; Fama, 1970, called a market whose prices fully reflect available information an efficient market, and distinguished weak, semi-strong and strong forms by the scope of the information", "y": 1965}, {"ch": 9, "file": "g-09", "title": "Prices carry everyone's information", "name": "Grossman–Stiglitz paradox", "rerun": false, "s": "When gathering information is costly, prices cannot fully reflect all information; in equilibrium the share of informed traders is such that the benefit of gathering information just offsets its cost, and prices convey only part of what the informed know.", "sub": "Economics › Information economics (financial markets)", "who": "Grossman and Stiglitz, 1980", "y": 1980}, {"ch": 9, "file": "g-09", "title": "Prices carry everyone's information", "name": "The arithmetic of active management", "rerun": false, "s": "Before costs, the average return of active managers as a group equals that of passive investors who hold everything; after costs, active managers as a group must fall behind.", "sub": "Finance › Investment management", "who": "Sharpe, 1991", "y": 1991}, {"ch": 10, "file": "g-10", "title": "Ordinary people have neither the time nor the expertise", "name": "The three components of agency costs", "rerun": false, "s": "Agency costs consist of three components: the principal's monitoring costs, the agent's bonding costs and the residual loss; the principal chooses monitoring and bonding so that the sum of the three is smallest.", "sub": "Finance › Corporate finance (agency theory)", "who": "Jensen and Meckling, 1976", "y": 1976}, {"ch": 10, "file": "g-10", "title": "Ordinary people have neither the time nor the expertise", "name": "The informativeness principle", "rerun": false, "s": "Any information that reveals the agent's actions, even partially, improves the contract when written into the pay agreement; the more the principal sees, the cheaper it is to give the agent incentives.", "sub": "Economics › Contract theory (principal–agent)", "who": "Holmström, 1979, in a paper titled \"Moral hazard and observability\"", "y": 1979}, {"ch": 10, "file": "g-10", "title": "Ordinary people have neither the time nor the expertise", "name": "Money chases performance; performance does not persist", "rerun": false, "s": "When active management has decreasing returns to scale and principals compete to hand their money to good managers, money flows to the managers who perform well until their excess return after fees disappears; the benefit of skill goes to the manager through size and fees, so past performance does not predict future performance.", "sub": "Finance › Investment management (mutual funds)", "who": "Berk and Green, 2004", "y": 2004}, {"ch": 11, "file": "g-11", "title": "Trustees may not do their duty", "name": "The market for lemons", "rerun": false, "s": "When sellers know quality and buyers do not, buyers will pay only for average quality, so sellers of good quality leave, average quality falls, and the market may shrink all the way down to only its worst part.", "sub": "Economics › Information economics", "who": "Akerlof, 1970; the paper uses the used-car market as its example, where a bad used car is commonly called a \"lemon\" in the United States", "y": 1970}, {"ch": 11, "file": "g-11", "title": "Trustees may not do their duty", "name": "Credence goods", "rerun": false, "s": "The quality of some goods and services cannot be judged by buyers even after use, only taken on trust from the seller; when the seller is also responsible for judging what the buyer needs, fraud can persist even under full competition.", "sub": "Economics › Information economics", "who": "Darby and Karni, 1973; at its core, the seller holds more information than the buyer, and diagnosis and service are provided by the same party", "y": 1973}, {"ch": 11, "file": "g-11", "title": "Trustees may not do their duty", "name": "Regulatory capture", "rerun": false, "s": "Regulation, like anything else, has supply and demand; a regulated industry, whose stakes are concentrated and which is easy to organise, can often sway the rules, so that regulation is designed and operated mainly for the industry's own benefit.", "sub": "Economics › Regulatory economics", "who": "Stigler, 1971, in a paper titled \"The theory of economic regulation\"", "y": 1971}, {"ch": 12, "file": "g-12", "title": "The institutions are in place, and people still make mistakes", "name": "Quasi-hyperbolic discounting", "rerun": false, "s": "People are especially impatient about the immediate future and comparatively patient about the more distant future; so plans made today for the future are ones they will not want to carry out when the future arrives, which gives them a motive to restrict their own choices in advance.", "sub": "Economics › Behavioural economics (intertemporal choice)", "who": "Laibson, 1997; this form of discounting was first used by Phelps and Pollak (1968) for intergenerational saving, and Laibson applied it to the choices of one person at different points in time", "y": 1997}, {"ch": 12, "file": "g-12", "title": "The institutions are in place, and people still make mistakes", "name": "Choice architecture", "rerun": false, "s": "How options are presented, including their order, the default and the steps required, systematically affects what people choose; since no presentation is neutral, people can be steered, without forbidding any option or appreciably changing incentives, towards the option they would choose after thinking it through, a design known as a nudge.", "sub": "Economics › Behavioural economics (behavioural public policy)", "who": "Thaler and Sunstein, 2008", "y": 2008}, {"ch": 13, "file": "g-13", "title": "A new parameter: the cost of cognitive labour collapses", "name": "Amdahl's law", "rerun": false, "s": "When only part of a job can be sped up, the overall speed-up is limited by the part that cannot: if the part that cannot be sped up is a fraction s of the whole, then however much faster the rest becomes, the whole can be at most 1/s times faster.", "sub": "Computer science › Computer architecture (parallel computing)", "who": "Amdahl, 1967, in a discussion of the prospects for multiprocessor parallel computing", "y": 1967}, {"ch": 14, "file": "g-14", "title": "Can everyone have a personal agent?", "name": "Cost disease", "rerun": false, "s": "When productivity in one trade stagnates while productivity in other trades keeps rising, wages in the first trade must still rise with the general level, so its relative price keeps climbing.", "sub": "Economics › Economic growth and service-sector economics", "who": "Baumol, 1967, using education, health care and live performance as examples", "y": 1967}, {"ch": 14, "file": "g-14", "title": "Can everyone have a personal agent?", "name": "Transaction costs and the boundary of the firm", "rerun": false, "s": "Whether a task is done oneself, handed to the market or handed to an organization depends on the relative costs of the different approaches; when the cost of one approach falls, the boundary moves towards it.", "sub": "Economics › New institutional economics (transaction cost economics)", "who": "Coase, 1937", "y": 1937}, {"ch": 14, "file": "g-14", "title": "Can everyone have a personal agent?", "name": "The three components of agency costs", "rerun": true, "s": "Agency costs consist of three components, the principal's monitoring costs, the agent's bonding costs and the residual loss, and the principal chooses monitoring and bonding so as to minimize their sum.", "sub": "Finance › Corporate finance (agency theory)", "who": "Jensen and Meckling, 1976", "y": 1976}, {"ch": 14, "file": "g-14", "title": "Can everyone have a personal agent?", "name": "Commissions and biased advice", "rerun": false, "s": "When an adviser's pay comes from the seller, recommendations respond to the incentives the seller offers, and sellers turn to competing through commissions; rules such as mandatory disclosure and caps on commissions sometimes have unintended consequences.", "sub": "Economics › Industrial organization and financial intermediation", "who": "Inderst and Ottaviani, 2012, using retail financial products and medical services as examples", "y": 2012}, {"ch": 15, "file": "g-15", "title": "Who guarantees an agent's promises", "name": "The judgment-proof problem", "rerun": false, "s": "When a potential injurer's assets are smaller than the harm he may cause, liability can take only what he owns; he therefore sets his level of care by what he himself could lose rather than by the loss others could suffer, takes too little care, and is unwilling to buy liability insurance of his own accord.", "sub": "Law and economics › Tort liability", "who": "Shavell, 1986", "y": 1986}, {"ch": 15, "file": "g-15", "title": "Who guarantees an agent's promises", "name": "Reputation mechanism", "rerun": true, "s": "When dealings repeat and defaults are seen and passed on, the immediate gain from defaulting cannot outweigh the cooperation lost in the future, and promises become credible without outside enforcement.", "sub": "Economics › Game theory (repeated games)", "who": "Kreps, Milgrom, Roberts and Wilson, 1982", "y": 1982}, {"ch": 15, "file": "g-15", "title": "Who guarantees an agent's promises", "name": "The economic case for vicarious liability", "rerun": false, "s": "When an agent cannot pay compensation, making the principal who controls the agent and owns assets liable for the agent's wrongs leads the principal to count expected compensation as a cost, to strengthen the selection, monitoring and restraint of the agent, and to spread the risk through insurance.", "sub": "Law and economics › Agency law and tort liability", "who": "Sykes, 1984", "y": 1984}, {"ch": 15, "file": "g-15", "title": "Who guarantees an agent's promises", "name": "Principle of least privilege", "rerun": false, "s": "Every program and every user of a system should hold only the least privilege needed to complete its work; the harm that a single error or a single abuse can cause is then confined within that privilege.", "sub": "Computer science › Information security", "who": "Saltzer and Schroeder, 1975", "y": 1975}, {"ch": 16, "file": "g-16", "title": "If everyone has an analyst", "name": "Grossman–Stiglitz paradox", "rerun": true, "s": "When acquiring information is costly, prices cannot fully reflect all information; in equilibrium the share of informed traders makes the return from acquiring information just cover its cost, and prices convey only part of what the informed know.", "sub": "Economics › Information economics (financial markets)", "who": "Grossman and Stiglitz, 1980", "y": 1980}, {"ch": 16, "file": "g-16", "title": "If everyone has an analyst", "name": "Private and social value of information", "rerun": false, "s": "Information that only changes who owns wealth, without changing production or decisions, is valuable to whoever obtains it but may be worth nothing to society as a whole; people therefore invest too many resources in obtaining such information first.", "sub": "Economics › Information economics", "who": "Hirshleifer, 1971", "y": 1971}, {"ch": 16, "file": "g-16", "title": "If everyone has an analyst", "name": "A wealth of information creates a poverty of attention", "rerun": false, "s": "Information consumes the attention of its recipients; the richer the information, the scarcer attention becomes, and organizations and systems should be designed to economize on recipients' attention rather than to supply more information.", "sub": "Management and economics › Organization and decision theory", "who": "Simon, 1971", "y": 1971}, {"ch": 16, "file": "g-16", "title": "If everyone has an analyst", "name": "The arithmetic of active management", "rerun": true, "s": "Before costs, the average return of active managers as a group equals that of investors who passively hold everything; after costs, active managers as a group must fall behind.", "sub": "Finance › Investment management", "who": "Sharpe, 1991", "y": 1991}, {"ch": 17, "file": "g-17", "title": "Agents become the main market participants", "name": "The spread is the price of immediacy", "rerun": true, "s": "Under competition, the bid-ask spread measures the cost of trading immediately without waiting; the party standing ready to trade is compensated through the spread for the time and risk of holding inventory.", "sub": "Finance › Market microstructure", "who": "Demsetz, 1968", "y": 1968}, {"ch": 17, "file": "g-17", "title": "Agents become the main market participants", "name": "Information cascades", "rerun": false, "s": "When each person can see how those before them acted, there comes a point at which following predecessors is more reasonable than relying on one's own information, and later arrivals stop taking their own information into account; mass conformity may therefore rest on very little information and is easily overturned as a whole by a little new news.", "sub": "Economics › Information economics (social learning)", "who": "Bikhchandani, Hirshleifer and Welch, 1992; Banerjee, 1992", "y": 1992}, {"ch": 17, "file": "g-17", "title": "Agents become the main market participants", "name": "Liquidity spirals", "rerun": false, "s": "When those who make markets and trade depend on borrowed funds, losses from falling prices and tightening margins force them to sell, and selling makes the market harder to trade in and prices lower; funding liquidity and market liquidity reinforce each other, and liquidity can suddenly dry up.", "sub": "Finance › Asset pricing and market microstructure (liquidity)", "who": "Brunnermeier and Pedersen, 2009", "y": 2009}, {"ch": 18, "file": "g-18", "title": "Can an agent correct human bias?", "name": "Choice architecture", "rerun": true, "s": "The way options are presented, including their order, the default and the steps required, systematically affects what people choose. Since no presentation is neutral, one can, without forbidding any option or noticeably changing incentives, steer people toward the option they would choose after thinking it through; such a design is called a nudge.", "sub": "Economics › Behavioural economics (behavioural public policy)", "who": "Thaler and Sunstein, 2008", "y": 2008}, {"ch": 18, "file": "g-18", "title": "Can an agent correct human bias?", "name": "Quasi-hyperbolic discounting", "rerun": true, "s": "People are especially impatient about the immediate future and relatively patient about the more distant future. As a result, plans made today for the future are ones the future self will not want to carry out, which gives people a motive to restrict their own choices in advance.", "sub": "Economics › Behavioural economics (intertemporal choice)", "who": "Laibson, 1997", "y": 1997}, {"ch": 18, "file": "g-18", "title": "Can an agent correct human bias?", "name": "Misuse and disuse of automation", "rerun": false, "s": "When people work with automated systems, they often do not use them according to how reliable the systems actually are. Over-reliance that leads to lax monitoring and biased decisions is called misuse; not using, or under-using, a system because of false alarms or errors is called disuse; automating without regard to the effect on people is called abuse by the designer.", "sub": "Psychology › Human factors (humans and automation)", "who": "Parasuraman and Riley, 1997", "y": 1997}, {"ch": 19, "file": "g-19", "title": "What did not change", "name": "Life-cycle and permanent-income hypotheses", "rerun": true, "s": "People plan their consumption according to their lifetime or long-run income, not their current income; temporary highs and lows in income are absorbed mainly by saving and by drawing on savings.", "sub": "Economics › Macroeconomics (theory of consumption and saving)", "who": "Modigliani and Brumberg, 1954; Friedman, 1957", "y": 1954}, {"ch": 19, "file": "g-19", "title": "What did not change", "name": "Mutuality of risk sharing", "rerun": true, "s": "Under the most efficient risk-sharing arrangement, each person's final share depends only on the total harvest of everyone; risks that belong to individuals are fully shared away, and each person bears only the aggregate risk.", "sub": "Economics › Economics of uncertainty (risk sharing)", "who": "Borch, 1962", "y": 1962}, {"ch": 19, "file": "g-19", "title": "What did not change", "name": "Capital asset pricing model", "rerun": false, "s": "In a market where all investors can diversify fully, the expected return of an asset depends only on how much it moves with the market as a whole, that is, on its systematic risk; individual risk can be diversified away and therefore earns no compensation.", "sub": "Finance › Asset pricing", "who": "Sharpe, 1964", "y": 1964}, {"ch": 19, "file": "g-19", "title": "What did not change", "name": "Irreversibility effect", "rerun": false, "s": "When a decision cannot be withdrawn and information about its consequences arrives over time, keeping future options open has value; ignoring that value leads people to make irreversible decisions too early or too extensively.", "sub": "Economics › Decision-making under uncertainty (environmental and investment economics)", "who": "Arrow and Fisher, 1974; Henry, 1974", "y": 1974}, {"ch": 20, "file": "g-20", "title": "One person and one sum of money", "name": "Merton's portfolio choice", "rerun": false, "s": "When the returns on risky assets are unpredictable and the investor's degree of risk aversion does not change with wealth, among other conditions, the optimal share an investor puts in risky assets equals the risky asset's return in excess of the risk-free return, divided by the product of the risk-aversion coefficient and the square of the risky asset's volatility; this share does not change with the investment horizon or the amount of wealth.", "sub": "Finance › Portfolio theory (intertemporal portfolio choice)", "who": "Merton, 1969; Samuelson, 1969", "y": 1969}, {"ch": 20, "file": "g-20", "title": "One person and one sum of money", "name": "Human capital and life-cycle portfolios", "rerun": false, "s": "Future labour income is an asset and should be counted in the portfolio together with financial wealth. The steadier the labour income and the more room there is to adjust how much one works and when one retires, the more risk financial wealth can bear, and the risk taken when young can be higher than when old.", "sub": "Finance › Portfolio theory (life-cycle financial planning)", "who": "Bodie, Merton and Samuelson, 1992", "y": 1992}, {"ch": 20, "file": "g-20", "title": "One person and one sum of money", "name": "Goal-based mental accounts", "rerun": false, "s": "Wealth is divided by goal into several mental accounts, and each account chooses its portfolio according to its own horizon and threshold, with risk defined as the probability that the account falls short of its threshold when it comes due; under certain conditions, the aggregate portfolio formed by combining the accounts is still mean–variance efficient.", "sub": "Finance › Behavioural finance (portfolio choice)", "who": "Das, Markowitz, Scheid and Statman, 2010; the concept of mental accounting comes from Thaler, 1985", "y": 2010}, {"ch": 21, "file": "g-21", "title": "The user is not present", "name": "Incomplete contracts and residual control rights", "rerun": false, "s": "A contract cannot specify every contingency in advance; who holds the right to decide in the cases the contract does not cover, that is, the residual control rights, affects both parties' investment beforehand and their behaviour afterwards, and is therefore an important arrangement in its own right.", "sub": "Economics › Contract theory", "who": "Grossman and Hart, 1986; Hart and Moore, 1990", "y": 1986}, {"ch": 21, "file": "g-21", "title": "The user is not present", "name": "Principle of least privilege", "rerun": true, "s": "Every program and every user of a system should hold only the least privilege needed to do its work; the damage that one error or one abuse can cause is then confined within that privilege.", "sub": "Computer science › Information security", "who": "Saltzer and Schroeder, 1975", "y": 1975}, {"ch": 21, "file": "g-21", "title": "The user is not present", "name": "Formal and real authority", "rerun": false, "s": "The party holding the right to decide (formal authority) does not necessarily control the decision in practice (real authority); real authority depends on who holds the information. The more real authority the agent has, the stronger its incentive to take initiative, and the less control the principal keeps over decisions.", "sub": "Economics › Organizational economics (contract theory)", "who": "Aghion and Tirole, 1997", "y": 1997}, {"ch": 22, "file": "g-22", "title": "The user cannot see the process", "name": "Unravelling in information disclosure", "rerun": false, "s": "When the seller's information can be verified and disclosure costs little, the highest-quality sellers disclose voluntarily to set themselves apart, the others follow one by one, and in the end almost everything is disclosed; buyers therefore read non-disclosure as bad news.", "sub": "Economics › Information economics (voluntary disclosure)", "who": "Grossman, 1981; Milgrom, 1981", "y": 1981}, {"ch": 22, "file": "g-22", "title": "The user cannot see the process", "name": "Costly state verification", "rerun": false, "s": "When it is costly for the principal to observe the outcome the agent reports, the optimal agreement verifies only when the reported outcome is poor; under certain conditions such an agreement takes the form of a standard debt contract: if the agreed repayment is made there is no verification, and only when it cannot be made is there verification and takeover.", "sub": "Economics › Contract theory (financial contracting)", "who": "Townsend, 1979", "y": 1979}, {"ch": 22, "file": "g-22", "title": "The user cannot see the process", "name": "A wealth of information creates a poverty of attention", "rerun": true, "s": "Information consumes the attention of its recipients; the richer the information, the scarcer the attention, so organizations and systems should be designed to economize on the recipient's attention rather than to supply more information.", "sub": "Management and economics › Organization and decision theory", "who": "Simon, 1971", "y": 1971}, {"ch": 23, "file": "g-23", "title": "Agents make mistakes", "name": "Swiss cheese model", "rerun": false, "s": "Accidents in complex systems are rarely caused by a single failure; they occur when holes in several lines of defence happen to line up at the same moment. The key to reducing accidents lies not in blaming individuals but in setting up multiple, mutually independent lines of defence and continually finding and repairing the holes in them.", "sub": "Psychology › Human factors and safety science", "who": "Reason, 1990; set out with a diagram in the BMJ in 2000", "y": 1990}, {"ch": 23, "file": "g-23", "title": "Agents make mistakes", "name": "Normal accidents", "rerun": false, "s": "In systems whose interactions are complex and whose coupling is tight, components interact in unexpected ways, and a failure in one place spreads quickly and unstoppably to others. Accidents in such systems are an inevitable result of the system's characteristics and are called \"normal accidents\". Only by loosening the coupling can a system absorb failures without losing stability.", "sub": "Sociology › Organizations and technological risk", "who": "Perrow, 1984", "y": 1984}, {"ch": 23, "file": "g-23", "title": "Agents make mistakes", "name": "Irreversibility effect", "rerun": true, "s": "When a decision cannot be reversed and information about its consequences will arrive over time, keeping future options open has value; ignoring this value leads people to make irreversible decisions too early or too extensively.", "sub": "Economics › Decision under uncertainty (environmental and investment economics)", "who": "Arrow and Fisher, 1974; Henry, 1974", "y": 1974}, {"ch": 23, "file": "g-23", "title": "Agents make mistakes", "name": "The economic case for vicarious liability", "rerun": true, "s": "When an agent cannot pay for its own wrongs, making a principal that has control over the agent and has assets liable for those wrongs leads the principal to count expected compensation as a cost, to select, monitor and constrain the agent more carefully, and to spread the risk through insurance.", "sub": "Law and economics › Agency law and tort liability", "who": "Sykes, 1984", "y": 1984}, {"ch": 24, "file": "g-24", "title": "Trust takes time", "name": "Three sources of trustworthiness", "rerun": false, "s": "Trust is one party's willingness to be exposed to risk from another party's actions without being able to monitor or control that party. How trustworthy the other party is depends on three things, ability, benevolence and integrity, and how much trust is given also depends on the principal's own propensity to trust.", "sub": "Management › Organizational behaviour (trust)", "who": "Mayer, Davis and Schoorman, 1995", "y": 1995}, {"ch": 24, "file": "g-24", "title": "Trust takes time", "name": "Signalling", "rerun": false, "s": "A party with private information can credibly convey its type by taking an action that would be too costly for a low-quality type. As long as the cost of the action differs by type, different types will make different choices, and the market can tell them apart.", "sub": "Economics › Information economics", "who": "Spence, 1973", "y": 1973}, {"ch": 24, "file": "g-24", "title": "Trust takes time", "name": "Starting small", "rerun": false, "s": "In a long-term relationship where each side is unsure whether the other is reliable, starting the scale of dealings small and increasing it as cooperation continues is an arrangement that makes both sides willing to keep cooperating; the growth in scale makes early betrayal unprofitable for an unreliable party.", "sub": "Economics › Game theory (relational contracts)", "who": "Watson, 1999", "y": 1999}, {"ch": 24, "file": "g-24", "title": "Trust takes time", "name": "Building a reputation", "rerun": false, "s": "When it is uncertain whether one party is a \"keeps-its-word type\", the other party continually revises its judgement on the basis of past behaviour. Even when the number of interactions is finite, the wish to keep a reputation as a keeps-its-word type can lead a party that has an incentive to betray to keep its word for a long time.", "sub": "Economics › Game theory (reputation theory)", "who": "Kreps and Wilson, 1982; Milgrom and Roberts, 1982", "y": 1982}],$=id=>document.getElementById('pp0'+id);if(!C.length){$('-d').textContent='No principle cards in this part yet.';return;}
+  const top=s=>(s.split('›')[0]||'').trim(),Ds=[...new Set(C.map(c=>top(c.sub)))],COL=['var(--accent)','var(--blue)','var(--warm)','var(--gold)','var(--ink)','var(--faint)','#8b5fb0','#2f8f8f'];
+  const chs=[...new Set(C.map(c=>c.ch))].sort((a,b)=>a-b),X0=56,X1=640,YT=14,YB=262;
+  const ys=C.filter(c=>c.y).map(c=>c.y),y0=Math.min(1900,Math.floor((Math.min(...ys)-10)/50)*50),y1=Math.ceil((Math.max(...ys)+5)/10)*10,BR=1900,YM=YB-(y0<BR?.2:0)*(YB-YT),yy=v=>v>=BR||y0>=BR?YM-(v-Math.max(y0,BR))/(y1-Math.max(y0,BR))*(YM-YT):YB-(v-y0)/(BR-y0)*(YB-YM);
+  const xs=chs.length>1?(X1-X0)/(chs.length-1):0,cx=(c,i)=>{const same=C.filter(d=>d.ch===c.ch),k=same.indexOf(c);return X0+chs.indexOf(c.ch)*xs+(k-(same.length-1)/2)*Math.min(14,xs/3);};
+  const TK=[...(y0<BR?[y0,(y0+BR)/2]:[]),...Array.from({length:Math.floor((y1-Math.max(y0,BR))/25)+1},(_,k)=>Math.max(y0,BR)+k*25)];let h=(y0<BR?`<line x1="${X0}" x2="${X1}" y1="${YM}" y2="${YM}" stroke="var(--faint)" stroke-dasharray="2 4"/><text x="${X1}" y="${YM+12}" text-anchor="end" font-size="10" class="t-faint">before 1900, compressed</text>`:'');for(const v of TK)h+=`<line x1="${X0}" x2="${X1}" y1="${yy(v)}" y2="${yy(v)}" class="s-line"/><text x="${X0-8}" y="${yy(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`;
+  chs.forEach((ch,i)=>{h+=`<text x="${X0+i*xs}" y="${YB+20}" text-anchor="middle" font-size="11" class="t-faint">${ch}</text>`;});
+  h+=`<text x="${X1}" y="${YB+34}" text-anchor="end" font-size="11" class="t-faint">Order of derivation (chapter) →</text>`;
+  C.forEach((c,i)=>{if(!c.y)return;const col=COL[Ds.indexOf(top(c.sub))%COL.length];h+=`<circle data-i="${i}" cx="${cx(c,i)}" cy="${yy(c.y)}" r="0" fill="${c.rerun?'var(--bg)':col}" stroke="${col}" stroke-width="${c.rerun?2.5:1}"/>`;});
+  $('-g').innerHTML=h;$('-lg').innerHTML=Ds.map((d,i)=>`<span><i style="background:${COL[i%COL.length]}"></i>${d||'Other'}</span>`).join('');
+  const dots=[...$('-g').querySelectorAll('circle')];
+  function set(i){const c=C[i];dots.forEach(d=>d.classList.toggle('sel',+d.dataset.i===i));
+    $('-d').innerHTML=`<span>Chapter ${c.ch} · ${c.sub}${c.rerun?' · re-examined':''}</span><br><b>${c.name}</b>　<span>${c.who}</span><br>${c.s}<br><a href="${c.file}.html">Open Chapter ${c.ch}: ${c.title}</a>`;}
+  dots.forEach(d=>d.addEventListener('click',()=>set(+d.dataset.i)));
+  // 找一对逻辑在后、年份更早差距最大的原理作为默认展示
+  let best=0,bi=0;C.forEach((a,i)=>C.forEach(b=>{if(a.y&&b.y&&a.ch>b.ch&&b.y-a.y>best){best=b.y-a.y;bi=i;}}));
+  const grow=()=>dots.forEach((d,k)=>setTimeout(()=>d.setAttribute('r',6),k*60));
+  $('').addEventListener('anim-in',()=>{dots.forEach(d=>d.setAttribute('r',0));grow();setTimeout(()=>set(bi),dots.length*60+400);});
+  dots.forEach(d=>d.setAttribute('r',6));set(bi);
+})();
+</script>
+<footer class="nav"><a href="g-24.html">← Chapter 24: Trust takes time</a><a href="method.html">Appendix: How this book was written →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

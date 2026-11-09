@@ -1,0 +1,34 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">按收益评价，好产品常常显得更差</p>
+    <p class="figsub">产品甲确实比乙好：每年多 1 个百分点（示意）。拖动评价期限，比较两种评价方式下，甲被正确判断为更好的概率。</p>
+    <div class="sg" id="sg" data-anim>
+      <svg viewBox="0 0 640 200" role="img" aria-label="评价期限与判断正确率"><g id="sg-ax"></g><path id="sg-a" class="sg-l a"/><path id="sg-b" class="sg-l b"/><circle id="sg-d1" r="6" fill="var(--warm)"/><circle id="sg-d2" r="6" fill="var(--accent)"/></svg>
+      <div class="legend"><span><i style="background:var(--warm)"></i>按收益比较</span><span><i style="background:var(--accent)"></i>按过程指标比较</span></div>
+      <div class="sl"><label for="sg-t">评价期限 <b id="sg-tv"></b></label><input id="sg-t" type="range" min="1" max="30" step="1" value="1"></div>
+      <p class="sg-msg" id="sg-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意计算：两只产品收益之差的年化波动取 10%，判断正确的概率 ＝ Φ(1% × √期限 ÷ 10%)；过程指标（费用、配置偏离、周期交代）每月可查，噪声很小，判断正确率按 98% 计。约定应建立在最能反映努力程度的信号上，见 Holmström（1979）。</figcaption>
+</figure>
+<style>
+.sg svg{width:100%;height:auto;display:block}
+.sg-l{fill:none;stroke-width:2.5} .sg-l.a{stroke:var(--warm)} .sg-l.b{stroke:var(--accent)}
+.sg-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.sg svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const Phi=z=>{const t=1/(1+.2316419*Math.abs(z)),d=.3989423*Math.exp(-z*z/2),p=d*t*(.3193815+t*(-.3565638+t*(1.781478+t*(-1.821256+t*1.330274))));return z>0?1-p:p;};
+  const A=T=>Phi(.01*Math.sqrt(T)/.10),B=()=>.98;
+  const X0=56,X1=620,YT=14,YB=170,x=T=>X0+(T-1)/29*(X1-X0),y=v=>YB-(v-.4)/.6*(YB-YT);
+  const $=id=>document.getElementById(id),sl=$('sg-t');
+  $('sg-ax').innerHTML=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`+[.5,.75,1].map(v=>`<text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text><line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/>`).join('')+[1,10,20,30].map(T=>`<text x="${x(T)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${T} 年</text>`).join('')+`<text x="${X1}" y="${y(.5)-5}" text-anchor="end" font-size="11" class="t-faint">与抛硬币相同</text>`;
+  let a='',b='';for(let T=1;T<=30;T+=.25){a+=(T>1?'L':'M')+x(T).toFixed(1)+','+y(A(T)).toFixed(1);b+=(T>1?'L':'M')+x(T).toFixed(1)+','+y(B()).toFixed(1);}$('sg-a').setAttribute('d',a);$('sg-b').setAttribute('d',b);
+  function r(){const T=+sl.value;$('sg-tv').textContent=T+' 年';$('sg-d1').setAttribute('cx',x(T));$('sg-d1').setAttribute('cy',y(A(T)));$('sg-d2').setAttribute('cx',x(T));$('sg-d2').setAttribute('cy',y(B()));
+    $('sg-msg').textContent=`按 ${T} 年的收益比较，更好的产品只有 ${(A(T)*100).toFixed(0)}% 的概率胜出；按每月可查的过程指标比较，几乎每次都能分清。${T<=3?'短期收益接近抛硬币：承诺收益，等于承诺运气。':'即使拉长到几十年，收益比较也远不如过程指标可靠。'}`;}
+  sl.addEventListener('input',r);
+  $('sg').addEventListener('anim-in',()=>{let T=1;sl.value=1;r();const id=setInterval(()=>{T++;sl.value=T;r();if(T>=30){clearInterval(id);setTimeout(()=>{sl.value=1;r();},700);}},90);});
+  r();
+})();
+</script>

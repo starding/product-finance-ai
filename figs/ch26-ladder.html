@@ -1,0 +1,36 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">授权的六级阶梯</p><p class="figsub">点按一级，看最后一步由谁完成、用户要做什么，以及用户付出的注意力与承担的敞口。</p></div><button class="replay" type="button" data-replay="ld2">重播</button></div>
+    <div class="ld2" id="ld2" data-anim></div>
+    <div class="ld2-d" id="ld2-d"></div>
+  </div>
+  <figcaption>六级为本书的归纳，参照 Sheridan 与 Verplank（1978）的自动化十级与 Parasuraman、Sheridan 与 Wickens（2000）的四环节模型。注意力与敞口为示意。</figcaption>
+</figure>
+<style>
+.ld2{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;align-items:end;height:190px}
+.ld2-s{font:inherit;border:1.5px solid var(--line);border-radius:8px 8px 0 0;background:color-mix(in srgb,var(--accent) var(--a),var(--surface));color:var(--ink);cursor:pointer;display:flex;flex-direction:column;justify-content:flex-start;padding:6px;text-align:left;height:0;transition:height .5s ease,border-color .2s;transition-delay:calc(var(--i)*.12s)}
+.ld2.in .ld2-s{height:var(--h)}
+.ld2-s em{font-style:normal;font-size:11px;color:var(--faint)}
+.ld2-s b{font-size:12.5px;line-height:1.35}
+.ld2-s.sel{border-color:var(--ink)}
+.ld2-d{margin-top:10px;background:var(--quote);border-radius:10px;padding:10px 12px;display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;font-size:13px;line-height:1.6}
+.ld2-d em{font-style:normal;font-size:11.5px;color:var(--faint);display:block}
+.ld2-m{display:grid;grid-template-columns:70px 1fr;gap:8px;align-items:center;font-size:12px}
+.ld2-m span{color:var(--faint)}
+.ld2-t{height:10px;background:var(--surface);border-radius:5px;overflow:hidden}
+.ld2-t i{display:block;height:100%;border-radius:5px;transition:width .4s}
+@media (max-width:640px){.ld2{grid-template-columns:repeat(3,1fr);height:auto}.ld2-s,.ld2.in .ld2-s{height:auto;min-height:60px}.ld2-d{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const L=[['只提供信息','本人','自己判断、自己操作','整理一只持仓的最新公告',90,5],['起草方案','本人','审阅方案后自己执行','拟好一份再平衡方案',70,10],['逐笔确认','代理，经本人逐笔确认','每一笔都点确认','代理下单前逐笔请示',50,25],['方案批准','代理，在方案内执行','批准一个方案','批准“每月定投 2000 元”',25,45],['限时可否决','代理，本人未否决时执行','在时限内看一眼，必要时否决','“明天上午执行再平衡，如需取消请回复”',15,65],['范围内自主','代理','设定范围，事后查看报告','在约定比例内自动再平衡',5,85]];
+  const box=document.getElementById('ld2');
+  box.innerHTML=L.map(([n],i)=>`<button type="button" class="ld2-s" data-i="${i}" style="--i:${i};--h:${50+i*28}px;--a:${8+i*7}%"><em>第 ${i+1} 级</em><b>${n}</b></button>`).join('');
+  const bs=[...box.children];
+  function sel(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));const [n,who,user,ex,att,exp]=L[i];
+    document.getElementById('ld2-d').innerHTML=`<div><em>最后一步由谁完成</em>${who}</div><div><em>用户要做什么</em>${user}</div><div><em>例子</em>${ex}</div><div><div class="ld2-m"><span>用户的注意力</span><div class="ld2-t"><i style="width:${att}%;background:var(--gold)"></i></div></div><div class="ld2-m"><span>承担的敞口</span><div class="ld2-t"><i style="width:${exp}%;background:var(--warm)"></i></div></div></div>`;}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>sel(i)));
+  box.addEventListener('anim-in',()=>{[0,1,2,3,4,5].forEach(i=>setTimeout(()=>sel(i),700+i*700));});
+  sel(2);
+})();
+</script>

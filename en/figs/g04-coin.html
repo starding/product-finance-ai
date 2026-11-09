@@ -1,0 +1,31 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Double coincidence: the more goods, the harder to match</p><p class="figsub">Drag the number of kinds of goods on the island and compare how many people one must meet, on average, to complete one exchange by direct barter and by first exchanging for money.</p></div><button class="replay" type="button" data-replay="cn">Replay</button></div>
+    <div class="cn" id="cn" data-anim>
+      <div class="cn-b"><span>Barter</span><div><i id="cn-a" style="background:var(--warm)"></i></div><b id="cn-av"></b></div>
+      <div class="cn-b"><span>Via money</span><div><i id="cn-m" style="background:var(--accent)"></i></div><b id="cn-mv"></b></div>
+      <div class="sl"><label for="cn-k">Kinds of goods <b id="cn-kv"></b></label><input id="cn-k" type="range" min="2" max="12" step="1" value="6"></div>
+      <p class="cn-msg" id="cn-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: each person has one kind of good and wants another; the chance that a person met at random has what I want is 1 ÷ (number of kinds − 1). Barter also requires that the other person happen to want what I have, so the probabilities multiply. Via money, the sale and the purchase each need to match on one side only, in two steps.</figcaption>
+</figure>
+<style>
+.cn-b{display:grid;grid-template-columns:7em 1fr 5.5em;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.cn-b div{height:18px;background:var(--quote);border-radius:4px;overflow:hidden}
+.cn-b i{display:block;height:100%;transition:width .4s}
+.cn-b b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.cn-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  function draw(){const k=+$('cn-k').value,p=1/(k-1),barter=1/(p*p),money=2/p,M=121;
+    $('cn-a').style.width=Math.min(barter,M)/M*100+'%';$('cn-m').style.width=Math.min(money,M)/M*100+'%';
+    $('cn-av').textContent=Math.round(barter)+' people';$('cn-mv').textContent=Math.round(money)+' people';$('cn-kv').textContent=k+' kinds';
+    $('cn-msg').textContent=k===2?'With only two kinds of goods, anyone one meets is sure to need exactly what the other has, and barter is the most direct.':`With ${k} kinds of goods, barter requires meeting ${Math.round(barter)} people on average to find a match; selling for money first and then buying with it requires meeting only about ${Math.round(money)}. The more kinds, the wider the gap.`;}
+  $('cn-k').addEventListener('input',draw);
+  $('cn').addEventListener('anim-in',()=>{let v=2;$('cn-k').value=2;draw();const id=setInterval(()=>{v++;$('cn-k').value=v;draw();if(v>=12)clearInterval(id);},350);});
+  draw();
+})();
+</script>

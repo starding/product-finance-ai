@@ -1,0 +1,47 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">文明模拟器 · 第 21 章：他不在场的十年</p><p class="figsub">十年里，书记员每年要处理约二十件例行的事，并不时遇到风暴、家里的变故、约定写不到的新情况与悄悄的偏离。打开或关掉三条规则，调整他一年能认真回答几次请示，看各类结果。</p></div><button class="replay" type="button" data-replay="cs21">重播</button></div>
+    <div class="cs-rules"><span class="on">产品：承诺什么</span><span class="on">产品：委托参数与授权</span><span class="lock">过程记录与可核对的证据 · 第 22 章</span></div>
+    <div class="cs21" id="cs21" data-anim>
+      <div class="cs21-bars" id="cs21-b"></div>
+      <div class="cs-sw"><label><input type="checkbox" id="cs21-g"> 规则：分级授权（例行的小事自行处理，不再逐件请示）</label><label><input type="checkbox" id="cs21-x"> 规则：例外与触发条款（变故与写不到的不可挽回之事，停下来问他）</label><label><input type="checkbox" id="cs21-r"> 规则：每年定期复核</label></div>
+      <div class="sl"><label for="cs21-f">他一年能认真回答的请示 <b id="cs21-fv"></b></label><input id="cs21-f" type="range" min="2" max="30" step="1" value="12"></div>
+      <button type="button" class="replay" id="cs21-re">换一组十年</button>
+      <p class="cs21-msg" id="cs21-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意模型：每年约二十件例行的事；每年三成的可能遇到风暴（数量触发，书记员总会请示）；每年三成五的可能遇到家里的变故；每年三成的可能遇到约定写不到的新情况，其中一半做了不能挽回；每年两成的可能出现悄悄的偏离，只有定期复核能发现。没有分级授权时，例行的事也逐件请示；他认真回答的把握为“一年能认真回答的次数 ÷ 一年请示的次数”（不超过 1）。</figcaption>
+</figure>
+<style>
+.cs21-bars{display:grid;gap:10px;margin:4px 0 10px}
+.cs21-r{display:grid;grid-template-columns:9.5em 1fr 4.5em;gap:10px;align-items:center;font-size:12.5px}
+.cs21-r div{height:22px;background:var(--quote);border-radius:5px;overflow:hidden}
+.cs21-r i{display:block;height:100%;transition:width .4s}
+.cs21-r b{text-align:right;font-variant-numeric:tabular-nums}
+.cs21-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs21-r{grid-template-columns:1fr 4.5em}.cs21-r span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs21'+id);let seed=2121;
+  function sim(grad,exc,rev,f){let s=seed;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};
+    let ok=0,miss=0,blind=0,asks=0,carefulAns=0;
+    for(let y=0;y<10;y++){const items=[];const nr=18+Math.floor(r()*5);for(let k=0;k<nr;k++)items.push('routine');
+      if(r()<.3)items.push('crash');if(r()<.35)items.push('life');if(r()<.3)items.push(r()<.5?'newIrr':'newRev');const drift=r()<.2;
+      const ask=items.filter(t=>t==='crash'||(!grad&&t==='routine')||(exc&&(t==='life'||t==='newIrr'))||(!grad&&t==='newRev'));
+      const n=ask.length+(rev?1:0)+(rev&&drift?0:0);asks+=n;const care=n?Math.min(1,f/n):1;
+      for(const t of items){const asked=ask.includes(t);
+        if(t==='routine'){if(!asked)ok++;else{ if(r()<care)ok++;else blind+=0;}}
+        else if(t==='newRev'){if(!asked)ok++;else ok++;}
+        else if(t==='crash'||t==='life'||t==='newIrr'){if(asked){if(r()<care)ok++;else blind++;}else miss++;}}
+      if(drift){if(rev){if(r()<care)ok++;else blind++;}else miss++;}}
+    return {ok,miss,blind,asks:asks/10};}
+  function draw(){const g=$('-g').checked,x=$('-x').checked,v=$('-r').checked,f=+$('-f').value,S=sim(g,x,v,f);$('-fv').textContent=f+' 次';
+    $('-b').innerHTML=[['妥善处理的事',S.ok,230,'var(--accent)',S.ok+' 件'],['该问而没问',S.miss,15,'var(--warm)',S.miss+' 件'],['问了，他却没看就点头',S.blind,15,'var(--gold)',S.blind+' 件'],['每年请示的次数',S.asks,25,'var(--blue)',S.asks.toFixed(1)+' 次']].map(([k,val,m,c,t])=>`<div class="cs21-r"><span>${k}</span><div><i style="width:${Math.min(100,val/m*100)}%;background:${c}"></i></div><b>${t}</b></div>`).join('');
+    const n=[g,x,v].filter(Boolean).length;
+    $('-msg').textContent=!g?`没有分级授权：例行的小事也逐件请示，一年请示 ${S.asks.toFixed(0)} 次，他只能认真看其中 ${f} 次，${S.blind} 件要紧的事在他没看就点头中通过。`:n===3?`三条规则都在：例行的事书记员自己做，变故与写不到的不可挽回之事停下来问他，每年复核一次；一年请示约 ${S.asks.toFixed(0)} 次，该问而没问的只有 ${S.miss} 件。`:`${x?'有例外与触发条款，变故与不可挽回的新情况会停下来问他':'没有例外与触发条款，家里的变故与写不到的不可挽回之事，书记员只能自作主张'}；${v?'每年复核，悄悄的偏离能被发现':'没有定期复核，悄悄的偏离一直没人发现'}。该问而没问的 ${S.miss} 件。`;}
+  ['-g','-x','-r','-f'].forEach(k=>$(k).addEventListener('input',draw));$('-re').addEventListener('click',()=>{seed=(seed*48271)%2147483647;draw();});
+  $('').addEventListener('anim-in',()=>{[[0,0,0],[1,0,0],[1,1,0],[1,1,1]].forEach(([a,b,c],i)=>setTimeout(()=>{$('-g').checked=!!a;$('-x').checked=!!b;$('-r').checked=!!c;draw();},300+i*2200));});
+  draw();
+})();
+</script>

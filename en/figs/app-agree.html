@@ -1,0 +1,25 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">How closely the two coders agreed</p><p class="figsub">The κ coefficient removes agreement due to chance: 0 means no better than random judgment, 1 means complete agreement. Reachable proportions are continuous values, measured with correlation coefficients.</p></div><button class="replay" type="button" data-replay="ag">Replay</button></div>
+    <div class="ag" id="ag" data-anim></div>
+    <div class="legend"><span><i style="background:var(--accent)"></i>κ coefficient or correlation coefficient</span><span><i style="background:var(--faint)"></i>Share in exact agreement</span></div>
+  </div>
+  <figcaption>On the κ coefficient, see Cohen (1960); ordered grades use linearly weighted κ, see Cohen (1968). Data in reliability.json and activities-332.csv.</figcaption>
+</figure>
+<style>
+.ag{display:grid;gap:8px}
+.ag-r{display:grid;grid-template-columns:12em 1fr 9em;gap:10px;align-items:center;font-size:13px}
+.ag-t{position:relative;height:16px;background:var(--quote);border-radius:4px;overflow:hidden}
+.ag-t i{position:absolute;left:0;top:0;height:100%;border-radius:4px;transform-origin:left;transform:scaleX(0);transition:transform .8s;transition-delay:calc(var(--i)*.12s)}
+.ag-t i.p{background:var(--faint);opacity:.45} .ag-t i.k{background:var(--accent);height:8px;top:4px}
+.ag.in .ag-t i{transform:none}
+.ag-r b{font-weight:500;font-size:12.5px;font-variant-numeric:tabular-nums}
+.ag-r small{color:var(--faint);font-size:11.5px;font-weight:400}
+@media (max-width:640px){.ag-r{grid-template-columns:1fr;gap:3px}}
+</style>
+<script>
+(function(){
+  const R=[['Domain of affair (6 types)',.948,.961,'κ'],['Class of affair (17 types)',.904,.922,'κ'],['Reachable proportion: Chat',.877,null,'r'],['Reachable proportion: Agent',.934,null,'r'],['Reachable proportion: Embodied Agent',.838,null,'r'],['Consequences of default (4 grades)',.717,.72,'weighted κ'],['Verifiability of results (4 grades)',.834,.846,'weighted κ']];
+  document.getElementById('ag').innerHTML=R.map(([n,k,p,t],i)=>`<div class="ag-r" style="--i:${i}"><span>${n}</span><div class="ag-t">${p!==null?`<i class="p" style="width:${p*100}%;--i:${i}"></i>`:''}<i class="k" style="width:${k*100}%;--i:${i}"></i></div><b>${t} ${k.toFixed(2)}${p!==null?`<small>  agree ${Math.round(p*100)}%</small>`:''}</b></div>`).join('');
+})();
+</script>

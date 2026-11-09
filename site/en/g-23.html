@@ -1,0 +1,640 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agents make mistakes</title>
+<meta name="description" content="Chapter 23 of Product × Finance × AI: Derived from Zero. However faithfully the scribe keeps the agreement, it will still make mistakes, and some of them cannot be undone. Mistakes come in three kinds, and the consequences fall on different people. No single line of defence is foolproof, so defences must be layered. The scribe is fast and its actions are tightly linked, so an error can spread before anyone notices it; it must be slowed down at key points. The limit on each step determines the worst possible loss, and irreversible operations require confirmation. When something goes wrong, someone must pay, and the rules for compensation must be written in advance. After a mistake, its cause must be written back into the agreement">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="g-23">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="Contents">
+<div class="side-head"><a class="sidetitle" href="index.html">Product × Finance × AI<small>Financial Products in the Age of AI</small></a></div>
+<div class="side-view" role="group" aria-label="Way of reading"><a href="preface.html">Decomposition</a><a href="g-preface.html" class="on" aria-current="true">Derivation</a></div>
+<a class="side-about" href="index.html#about">About this book</a>
+<a class="" href="g-preface.html"><span class="n">Preface</span>The best way to understand financial products is to build them from zero</a>
+<a class="side-part" href="g-part1.html"><span class="pn">Part One</span>From 0 to 1: how a world without finance grows finance</a>
+<a class="" href="g-01.html"><span class="n">1</span>One person, one year&#x27;s harvest</a>
+<a class="" href="g-02.html"><span class="n">2</span>Two people, short of grain at different times</a>
+<a class="" href="g-03.html"><span class="n">3</span>What if a loan is not repaid</a>
+<a class="" href="g-04.html"><span class="n">4</span>Exchange among many</a>
+<a class="" href="g-05.html"><span class="n">5</span>Harvests good and bad</a>
+<a class="" href="g-06.html"><span class="n">6</span>Savers may need their grain at any time; borrowers need it for years</a>
+<a class="" href="g-07.html"><span class="n">7</span>No one household can pay for a ship</a>
+<a class="" href="g-08.html"><span class="n">8</span>Securities must be saleable</a>
+<a class="" href="g-09.html"><span class="n">9</span>Prices carry everyone&#x27;s information</a>
+<a class="" href="g-10.html"><span class="n">10</span>Ordinary people have neither the time nor the expertise</a>
+<a class="" href="g-11.html"><span class="n">11</span>Trustees may not do their duty</a>
+<a class="" href="g-12.html"><span class="n">12</span>The institutions are in place, and people still make mistakes</a>
+<a class="side-part" href="g-part2.html"><span class="pn">Part Two</span>Changing one parameter: when agency becomes almost free</a>
+<a class="" href="g-13.html"><span class="n">13</span>A new parameter: the cost of cognitive labour collapses</a>
+<a class="" href="g-14.html"><span class="n">14</span>Can everyone have a personal agent?</a>
+<a class="" href="g-15.html"><span class="n">15</span>Who guarantees an agent&#x27;s promises</a>
+<a class="" href="g-16.html"><span class="n">16</span>If everyone has an analyst</a>
+<a class="" href="g-17.html"><span class="n">17</span>Agents become the main market participants</a>
+<a class="" href="g-18.html"><span class="n">18</span>Can an agent correct human bias?</a>
+<a class="" href="g-19.html"><span class="n">19</span>What did not change</a>
+<a class="side-part" href="g-part3.html"><span class="pn">Part Three</span>Deriving a product in the new world</a>
+<a class="" href="g-20.html"><span class="n">20</span>One person and one sum of money</a>
+<a class="" href="g-21.html"><span class="n">21</span>The user is not present</a>
+<a class="" href="g-22.html"><span class="n">22</span>The user cannot see the process</a>
+<a class=" cur" href="g-23.html" aria-current="page"><span class="n">23</span>Agents make mistakes</a>
+<a class="" href="g-24.html"><span class="n">24</span>Trust takes time</a>
+<a class="side-app" href="g-epilogue.html"><span class="n">Epilogue</span>Back to the governing rule</a>
+<a class="side-app" href="method.html"><span class="n">Appendix</span>How this book was written</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="Open contents" title="Contents"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">Product × Finance × AI: Financial Products in the Age of AI</a><span>Part Three  Deriving a product</span><a class="langlink" href="../g-23.html" hreflang="zh-CN">中文</a></header>
+
+<div class="chapno">Chapter 23</div><h1>Agents make mistakes<small>Limits, confirmation and compensation</small></h1>
+<blockquote><p>The agreement is clearly written and the process is visible, yet the scribe will still make mistakes. It may deposit grain meant for the house account into the retirement account, execute "sell 2 portions" as "sell 20 portions", or keep the agreement perfectly and still misjudge. Some mistakes can be corrected the next day; others, once made, cannot be undone. No single line of defence is foolproof. The only option is to layer defences so that the chance of one error passing through all of them becomes very small. The scribe is fast and its actions are tightly linked, so an error can spread quickly before anyone notices it; it must therefore be slowed down at key points. The limit on each step determines the worst possible loss, and operations that cannot be undone require his own confirmation. When something goes wrong, who pays and how much must be written into the agreement in advance. After a mistake, the cause must also be found and written back into the agreement.</p></blockquote>
+<h2 id="sec-1">1. The scribe makes mistakes</h2>
+<p>The scribe's mistakes come in three kinds, and they differ in nature. The first is an execution error: the agreement says to sell 2 portions and it sells 20; the grain should go into the house account and it goes into the retirement account. This is the scribe's own fault. The second is overstepping: it takes risks outside the boundaries of the agreement, or makes trades that conflict with his interests. This is a breach of the agreement. The third is a misjudgement: it keeps the agreement completely, shifts the share of ship shares back before a storm as the agreement says, and the storm comes anyway. This is no one's fault; it is a risk the agreement itself has accepted.</p>
+<p>The consequences of the three kinds should fall on different people. Execution errors and overstepping are paid for by the party that deploys the scribe, the operator. A misjudgement is borne by him, as the agreement provides, and he knows in advance that such cases can occur. If no one can tell which kind a mistake is, compensation cannot even be discussed. This is one reason the previous step required the scribe to keep "what was known at the time" and "which clause it relied on".</p>
+<p>There is one new constraint: agents make mistakes, and some consequences cannot be undone.</p>
+<p><strong>Today's counterpart.</strong> Investor protection funds provide cover when a brokerage fails and client assets are missing, but they do not cover falls in the value of securities. The Securities Investor Protection Corporation in the United States covers each account up to $500,000, including up to $250,000 in cash, and states explicitly that market losses are not covered.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Three kinds of mistake, three kinds of consequence</p><p class="figsub">Select a kind of mistake to see an example, whose fault it is, who bears the consequences, and how the records tell it apart.</p></div><button class="replay" type="button" data-replay="ty23">Replay</button></div>
+    <div class="ty23" id="ty23" data-anim>
+      <div class="ty23-g" id="ty23-g"></div>
+      <div class="ty23-d" id="ty23-d" aria-live="polite"></div>
+    </div>
+  </div>
+  <figcaption>Illustrative: the examples are fictional.</figcaption>
+</figure>
+<style>
+.ty23-g{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ty23-g button{font:inherit;cursor:pointer;text-align:left;border:1px solid transparent;border-radius:10px;padding:10px 12px;font-size:14px;color:var(--ink);background:var(--c);opacity:0;transform:translateY(6px);transition:opacity .35s,transform .35s,border-color .3s;transition-delay:calc(var(--i)*.2s)}
+.ty23.in .ty23-g button{opacity:1;transform:none}
+.ty23-g button.sel{border-color:var(--ink)}
+.ty23-g em{display:block;font-style:normal;font-size:11.5px;color:var(--faint)}
+.ty23-d{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.ty23-d div{background:var(--quote);border-radius:8px;padding:8px 10px;font-size:13px;line-height:1.55}
+.ty23-d span{display:block;font-size:11px;color:var(--faint)}
+@media (max-width:640px){.ty23-g{grid-template-columns:1fr}.ty23-d{grid-template-columns:1fr 1fr}}
+</style>
+<script>
+(function(){
+  const T=[['Execution error','The scribe\'s own fault','The agreement says sell 2 portions and it sells 20; grain meant for the house account goes into the retirement account.','The scribe\'s fault','The operator pays in full','The records show the amount or destination differs from the instruction','var(--warm-soft)'],
+    ['Overstepping','A breach of the agreement','It takes extra risk outside the boundaries of the agreement, or makes trades that conflict with his interests.','A breach of the agreement','The operator pays, and the penalties in the agreement apply','The records show the step cannot cite a clause of the agreement, or crossed a boundary','var(--warm-soft)'],
+    ['Misjudgement','A risk the agreement itself accepts','Exactly as the agreement says, it shifts the share of ship shares back before a storm, and the storm comes anyway.','No one is at fault','He bears it, as the agreement provides','The records show the step cites a clause of the agreement and the information at the time supported it','var(--accent-soft)']];
+  const g=document.getElementById('ty23-g'),d=document.getElementById('ty23-d');
+  g.innerHTML=T.map((t,i)=>`<button type="button" style="--i:${i};--c:${t[6]}"><em>${t[1]}</em>${t[0]}</button>`).join('');const bs=[...g.children];
+  function set(i){const t=T[i];bs.forEach((b,j)=>b.classList.toggle('sel',j===i));d.innerHTML=[['Example',t[2]],['Whose fault',t[3]],['Who bears the consequences',t[4]],['How the records tell',t[5]]].map(([a,b])=>`<div><span>${a}</span>${b}</div>`).join('');}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('ty23').addEventListener('anim-in',()=>{[0,1,2].forEach((i,k)=>setTimeout(()=>set(i),1000+k*2000));});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-2">2. Layered defences</h2>
+<p>For an error to cause a loss, it must first pass through several checkpoints: the boundaries of the agreement, automatic checks before execution, the limit on each step, confirmation of key operations, and reconciliation afterwards. Every checkpoint has holes: the boundaries are incompletely written, the checks miss something, the limit is set too high, he does not read carefully when confirming, the reconciliation sample misses the error. As long as the holes in different checkpoints are not in the same place, it is hard for one error to pass through all of them at once. But if several checkpoints share the same hole, for example if they all rely on one set of the scribe's own data, they will fail together.</p>
+<aside class="principle"><p class="pr-k">Derived so far: a principle</p><p class="pr-n">Swiss cheese model</p><p class="pr-c"><span><em>Discipline</em>Psychology › Human factors and safety science</span><span><em>Type</em>Theoretical model</span></p><p class="pr-s">Accidents in complex systems are rarely caused by a single failure; they occur when holes in several lines of defence happen to line up at the same moment. The key to reducing accidents lies not in blaming individuals but in setting up multiple, mutually independent lines of defence and continually finding and repairing the holes in them.</p><dl><div><dt>Standing in the field</dt><dd>Reason used the model, in discussing two views of human error, to illustrate the "system approach": attention to working conditions and defences rather than only to blaming individuals</dd></div><div><dt>Constraint it answers</dt><dd>Agents make mistakes, and every line of defence has holes</dd></div><div><dt>Premises</dt><dd>The holes in different lines of defence are independent of one another; holes can be found and repaired</dd></div><div><dt>Proposed by</dt><dd>Reason, 1990; set out with a diagram in the BMJ in 2000</dd></div><div><dt>Open question</dt><dd>Are the lines of defence really independent, or do they share the same hole?</dd></div></dl></aside>
+<p><strong>Today's counterpart.</strong> The Surgical Safety Checklist published by the World Health Organization in 2008 divides an operation into three checkpoints: before anaesthesia, before skin incision, and before the patient leaves the operating room. At each checkpoint the team confirms every item before continuing.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Five lines of defence</p><p class="figsub">To cause a loss, an error must pass through five lines of defence. Drag the share of errors each line misses, then tick "several lines share one set of data", and see how many of 10,000 errors pass through every line.</p></div><button class="replay" type="button" data-replay="ch23">Replay</button></div>
+    <div class="ch23" id="ch23" data-anim>
+      <div class="ch23-l" id="ch23-l"></div>
+      <div class="sl"><label for="ch23-p">Share each line misses <b id="ch23-pv"></b></label><input id="ch23-p" type="range" min="5" max="60" step="5" value="20"></div>
+      <div class="cs-sw"><label><input type="checkbox" id="ch23-c"> The last three lines share one set of the scribe's own data: if one misses, the other two miss too</label></div>
+      <p class="ch23-msg" id="ch23-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the five lines of defence, in order, are the boundaries of the agreement, automatic checks before execution, the limit on each step, confirmation of key operations, and reconciliation afterwards (Reason's Swiss cheese model).</figcaption>
+</figure>
+<style>
+.ch23-l{display:grid;gap:6px;margin:6px 0 10px}
+.ch23-r{display:grid;grid-template-columns:9.5em 1fr 5.5em;gap:10px;align-items:center;font-size:12.5px}
+.ch23-r div{height:20px;background:var(--quote);border-radius:5px;overflow:hidden}
+.ch23-r i{display:block;height:100%;background:var(--warm);transition:width .5s}
+.ch23-r b{text-align:right;font-variant-numeric:tabular-nums}
+.ch23-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.ch23-r{grid-template-columns:1fr 5.5em}.ch23-r span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('ch23'+id),L=['the boundaries','pre-execution checks','the per-step limit','confirmation','reconciliation'];
+  function draw(){const p=+$('-p').value/100,c=$('-c').checked;$('-pv').textContent=Math.round(p*100)+'%';let n=10000;const R=[];
+    L.forEach((l,i)=>{if(c&&(i===3||i===4)){}else n*=p;R.push([l,n]);});
+    $('-l').innerHTML=`<div class="ch23-r"><span>Errors that occur</span><div><i style="width:100%"></i></div><b>10000</b></div>`+R.map(([l,v])=>`<div class="ch23-r"><span>Pass ${l}</span><div><i style="width:${Math.max(.3,v/100)}%"></i></div><b>${v<10?v.toFixed(1):Math.round(v)}</b></div>`).join('');
+    const end=R[4][1];$('-msg').textContent=c?`The last three lines share one set of data, so in effect there are only three: ${end<10?end.toFixed(1):Math.round(end)} of 10,000 errors pass through every line, ${Math.round(1/(p*p))} times as many as when the lines are independent.`:`Each line misses ${Math.round(p*100)}% and all five are independent: only ${end<10?end.toFixed(1):Math.round(end)} of 10,000 errors pass through every line. None of them is foolproof, yet together they rarely fail.`;}
+  ['-p','-c'].forEach(k=>$(k).addEventListener('input',draw));
+  $('').addEventListener('anim-in',()=>{$('-c').checked=false;draw();setTimeout(()=>{$('-c').checked=true;draw();},2200);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-3">3. Fast and tightly linked</h2>
+<p>When people make mistakes, they usually make them slowly, and others have time to notice. When the scribe makes a mistake, it can repeat it a thousand times in a second. Each of its steps also drives the next: a sale triggers a rebalancing, the rebalancing triggers a purchase, and the purchase changes the proportions again. Before anyone notices, an error can spread rapidly along this chain. The more tightly the parts of a system are connected and the faster they move, the harder it is to stop an error midway; only where the system is looser and slower does an error have a chance of being caught.</p>
+<aside class="principle"><p class="pr-k">Derived so far: a principle</p><p class="pr-n">Normal accidents</p><p class="pr-c"><span><em>Discipline</em>Sociology › Organizations and technological risk</span><span><em>Type</em>Theory</span></p><p class="pr-s">In systems whose interactions are complex and whose coupling is tight, components interact in unexpected ways, and a failure in one place spreads quickly and unstoppably to others. Accidents in such systems are an inevitable result of the system's characteristics and are called "normal accidents". Only by loosening the coupling can a system absorb failures without losing stability.</p><dl><div><dt>Standing in the field</dt><dd>Perrow wrote the book shortly after the Three Mile Island nuclear accident; it classifies high-risk technologies along two dimensions, interactive complexity and tightness of coupling, and the framework has since been widely used to analyse major accidents such as Chernobyl and Fukushima</dd></div><div><dt>Constraint it answers</dt><dd>Agents act quickly and continuously, so an error in one place spreads fast</dd></div><div><dt>Premises</dt><dd>Unexpected interactions exist between parts of the system; coupling is tight, leaving no time to intervene midway</dd></div><div><dt>Proposed by</dt><dd>Perrow, 1984</dd></div><div><dt>Open question</dt><dd>Where to slow down, and by how much</dd></div></dl></aside>
+<p>A 2013 order of the U.S. Securities and Exchange Commission describes an incident. On 1 August 2012, while a U.S. market maker was deploying new trading software, one of its eight servers was not updated, and a piece of old code that had been unused for years was triggered again. In 45 minutes it sent millions of orders into the market, executed more than 4 million trades in 154 stocks, and ultimately lost more than $460 million. The order found that the firm lacked adequate controls to limit the risks of market access; it was the first enforcement case under that rule.</p>
+<p><strong>Today's counterpart.</strong> The market access rule requires brokers to set credit and capital thresholds before orders enter the market, so as to block erroneous orders.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Fast and tight: no time to stop the error</p><p class="figsub">A faulty scribe sends 100 erroneous orders per second. Drag the time it takes to discover the error, then turn on two ways of slowing down, and see how many erroneous orders go out.</p></div><button class="replay" type="button" data-replay="cp23">Replay</button></div>
+    <div class="cp23" id="cp23" data-anim>
+      <div class="cp23-bars" id="cp23-b"></div>
+      <div class="sl"><label for="cp23-t">Time to discover the error <b id="cp23-tv"></b></label><input id="cp23-t" type="range" min="1" max="60" step="1" value="45"></div>
+      <div class="cs-sw"><label><input type="checkbox" id="cp23-l"> Daily volume limit: stop automatically once the total exceeds 500 orders</label><label><input type="checkbox" id="cp23-k"> Automatic stop on anomalies: halt when orders in one minute exceed ten times the usual number</label></div>
+      <p class="cp23-msg" id="cp23-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: each erroneous order causes an average loss of 0.01 portions. In the 2012 incident at a U.S. market maker, the error lasted about 45 minutes (U.S. Securities and Exchange Commission, 2013); the time unit in this figure is minutes.</figcaption>
+</figure>
+<style>
+.cp23-bars{display:grid;gap:12px;margin:6px 0 10px}
+.cp23-r{display:grid;grid-template-columns:9.5em 1fr 7em;gap:10px;align-items:center;font-size:12.5px}
+.cp23-r div{height:22px;background:var(--quote);border-radius:5px;overflow:hidden}
+.cp23-r i{display:block;height:100%;transition:width .4s}
+.cp23-r b{text-align:right;font-variant-numeric:tabular-nums}
+.cp23-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cp23-r{grid-template-columns:1fr 7em}.cp23-r span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cp23'+id),RATE=100*60;
+  function draw(){const t=+$('-t').value,lim=$('-l').checked,ks=$('-k').checked;$('-tv').textContent=t+(t===1?' minute':' minutes');
+    let n=RATE*t;if(ks)n=Math.min(n,RATE*1);if(lim)n=Math.min(n,500);const loss=n*.01,mx=RATE*60;
+    $('-b').innerHTML=[['Erroneous orders sent',n,mx,'var(--warm)',Math.round(n).toLocaleString('en-US')+' orders'],['Loss caused',loss,mx*.01,'var(--warm)',Math.round(loss).toLocaleString('en-US')+' portions']].map(([a,v,m,c,s])=>`<div class="cp23-r"><span>${a}</span><div><i style="width:${Math.max(.3,v/m*100)}%;background:${c}"></i></div><b>${s}</b></div>`).join('');
+    $('-msg').textContent=!lim&&!ks?`It takes ${t} ${t===1?'minute':'minutes'} to notice, and ${Math.round(n).toLocaleString('en-US')} erroneous orders have already gone out. The scribe moves too fast for a person to keep up.`:`${ks?'The automatic stop on anomalies caught it within one minute':''}${ks&&lim?'; ':''}${lim?(ks?'the':'The')+' daily volume limit kept erroneous orders under 500':''}. The loss is ${Math.round(loss)} portions, almost regardless of how soon the error is discovered.`;}
+  ['-t','-l','-k'].forEach(k=>$(k).addEventListener('input',draw));
+  $('').addEventListener('anim-in',()=>{$('-l').checked=false;$('-k').checked=false;let v=1;$('-t').value=1;draw();const id=setInterval(()=>{v+=2;$('-t').value=v;draw();if(v>=45){clearInterval(id);setTimeout(()=>{$('-k').checked=true;draw();},900);setTimeout(()=>{$('-l').checked=true;draw();},1900);}},80);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-4">4. Limits determine the worst loss</h2>
+<p>Since mistakes are unavoidable, the first task is to work out how bad the worst case can be. The most grain a single mistake can move depends on how much that step is allowed to move. The most that mistakes can accumulate in one day depends on the daily total limit. Set limits on every step, every day and every account, for example no more than 2% of household wealth per step and no more than 5% cumulatively per day, and the worst loss changes from "everything he owns" to an amount known in advance. The limits need not be very low; they only need to match the amount the task actually requires. If he invests 2 portions each month, there is no need to allow a purchase of 20 portions at once.</p>
+<p><strong>Today's counterpart.</strong> Bank cards and online payments usually carry per-transaction and daily limits, and amounts above the limit require additional verification.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Limits determine the worst loss</p><p class="figsub">The scribe makes 20 mistakes a year. The losses vary in size, and now and then one is very large. Add three layers of limits one by one, and see the total loss for the year and the worst single loss.</p></div><button class="replay" type="button" data-replay="cp23b">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Limits">
+      <button type="button" data-cpb="0" aria-pressed="true">No limit</button>
+      <button type="button" data-cpb="1" aria-pressed="false">Each step at most 2% of household wealth</button>
+      <button type="button" data-cpb="2" aria-pressed="false">Plus at most 5% cumulatively per day</button>
+    </div>
+    <div class="cpb" id="cpb" data-anim>
+      <svg viewBox="0 0 660 180" role="img" aria-label="Losses from twenty mistakes"><g id="cpb-g"></g></svg>
+      <div class="cpb-out" id="cpb-out"></div>
+    </div>
+  </div>
+  <figcaption>Illustrative: the losses from the twenty mistakes are expressed as a percentage of household wealth. Most are below 1%, with the occasional very large one; the 13th and 14th mistakes occur on the same day. The vertical axis is drawn up to 30%.</figcaption>
+</figure>
+<style>
+.cpb svg{width:100%;height:auto;display:block}
+.cpb rect{transition:height .5s,y .5s}
+.cpb-out{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.cpb-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cpb-out span{display:block;font-size:11.5px;color:var(--faint)} .cpb-out b{font-size:18px;font-variant-numeric:tabular-nums}
+@media (max-width:640px){.cpb-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cpb'+id),E=[.3,.8,.2,1.1,.5,.4,2.6,.3,.6,.2,.9,.4,4,3.5,.3,.7,28,.5,.2,.6],X0=40,X1=628,YB=160,YT=10,bw=(X1-X0)/20,y=v=>YB-Math.min(30,v)/30*(YB-YT);
+  function set(k){document.querySelectorAll('[data-cpb]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.cpb===k)));
+    let L=E.map(v=>k>=1?Math.min(2,v):v);if(k>=2){const d=L[12]+L[13];if(d>5){L[13]=Math.max(0,5-L[12]);}}
+    let h=[0,10,20,30].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}%</text>`).join('');
+    L.forEach((v,i)=>{h+=`<rect x="${X0+i*bw+4}" y="${y(v)}" width="${bw-8}" height="${YB-y(v)}" fill="var(--warm)"/>`;});
+    $('-g').innerHTML=h;const tot=L.reduce((a,b)=>a+b,0),mx=Math.max(...L);
+    $('-out').innerHTML=[['Total loss for the year',tot.toFixed(1)+'%'],['Worst single loss',mx.toFixed(1)+'%']].map(([a,b])=>`<div><span>${a}</span><b>${b}</b></div>`).join('');}
+  document.querySelectorAll('[data-cpb]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.cpb)));
+  $('').addEventListener('anim-in',()=>{[0,1,2].forEach((k,i)=>setTimeout(()=>set(k),300+i*2000));});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-5">5. Confirmation and slowing down</h2>
+<p>Operations that cannot be undone, such as moving grain out of the granary, drawing on the house money early, or changing the agreement, require his own confirmation. Yet by the twentieth confirmation he no longer reads what he is confirming. For confirmation to work, it must be rare and carry weight: require it only for operations that cannot be undone, and when asking, set out the consequences of the step rather than offering only an "Agree" button. For very large amounts, wait for a period after confirmation before executing, leaving room for him and the scribe to change their minds.</p>
+<aside class="principle"><p class="pr-k">Rerun: a principle re-examined</p><p class="pr-n">Irreversibility effect</p><p class="pr-c"><span><em>Discipline</em>Economics › Decision under uncertainty (environmental and investment economics)</span><span><em>Type</em>Theoretical model</span></p><p class="pr-s">When a decision cannot be reversed and information about its consequences will arrive over time, keeping future options open has value; ignoring this value leads people to make irreversible decisions too early or too extensively.</p><dl><div><dt>Standing in the field</dt><dd>Arrow and Fisher and, separately, Henry reached this result in 1974; later literature treats the two papers together as the origin of the "irreversibility effect". Arrow and Fisher also introduced the concept of "quasi-option value"</dd></div><div><dt>Constraint it answers</dt><dd>The future is uncertain, and some losses cannot be recovered once they occur</dd></div><div><dt>Premises</dt><dd>The decision cannot be reversed, or reversing it is very costly; information about the consequences arrives over time</dd></div><div><dt>Proposed by</dt><dd>Arrow and Fisher, 1974; Henry, 1974</dd></div><div><dt>Open question</dt><dd>How long is long enough to wait?</dd></div><div><dt>After the rerun</dt><dd>Applied to products, large operations that cannot be undone are executed only after a delay following confirmation; information that arrives during the delay, including his own change of mind and alerts about anomalies, can still stop them</dd></div></dl></aside>
+<p><strong>Today's counterpart.</strong> A 2016 notice of the People's Bank of China provides that when an individual transfers money to another person through an automated teller machine, the issuing bank carries out the transfer only 24 hours after accepting it, and during this period the individual may ask to cancel it.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Confirmations should be rare and carry weight</p><p class="figsub">In a year there are 4 operations that cannot be undone, and 1 of them is in fact wrong. Switch between two ways of confirming, and see how many times a year he is asked to confirm, whether he reads carefully, and whether that one error is stopped.</p></div><button class="replay" type="button" data-replay="cf23">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Approach">
+      <button type="button" data-cf23="all" aria-pressed="true">Confirm everything, with only an "Agree" button</button>
+      <button type="button" data-cf23="key" aria-pressed="false">Confirm only irreversible steps, show consequences, delay large ones a day</button>
+    </div>
+    <div class="cf23" id="cf23" data-anim>
+      <div class="cf23-bars" id="cf23-b"></div>
+      <p class="cf23-msg" id="cf23-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: in a year he can read only about 12 confirmations carefully. When he does read carefully, a confirmation that sets out the consequences lets him spot the error 90% of the time, while one with only an "Agree" button does so only 30% of the time. During a one-day delay, the scribe's anomaly checks can stop half of the errors he missed (the value of keeping options open described by Arrow and Fisher, and by Henry).</figcaption>
+</figure>
+<style>
+.cf23-bars{display:grid;gap:12px;margin:6px 0 10px}
+.cf23-r{display:grid;grid-template-columns:11em 1fr 5.5em;gap:10px;align-items:center;font-size:12.5px}
+.cf23-r div{height:22px;background:var(--quote);border-radius:5px;overflow:hidden}
+.cf23-r i{display:block;height:100%;transition:width .4s}
+.cf23-r b{text-align:right;font-variant-numeric:tabular-nums}
+.cf23-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cf23-r{grid-template-columns:1fr 5.5em}.cf23-r span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cf23'+id);
+  const S={all:{n:200,care:12/200,hit:.3,delay:0},key:{n:4,care:1,hit:.9,delay:.5}};
+  function set(k){document.querySelectorAll('[data-cf23]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.cf23===k)));const s=S[k],p=s.care*s.hit,stop=p+(1-p)*s.delay;
+    $('-b').innerHTML=[['Confirmations per year',s.n,200,'var(--blue)',s.n+' times'],['Share read carefully',s.care,1,'var(--gold)',Math.round(s.care*100)+'%'],['Chance the error is stopped',stop,1,'var(--accent)',Math.round(stop*100)+'%']].map(([a,v,m,c,t])=>`<div class="cf23-r"><span>${a}</span><div><i style="width:${Math.max(.5,v/m*100)}%;background:${c}"></i></div><b>${t}</b></div>`).join('');
+    $('-msg').textContent=k==='all'?'Confirming everything means 200 confirmations a year, and he reads only 6% of them carefully. Even when he does, an "Agree" button rarely helps him spot an error: that one error will almost certainly get through.':'Confirming only the 4 irreversible operations, he reads each one carefully. Setting out the consequences gives him a 90% chance of spotting the error, and the one-day delay adds another line of defence: that one error will almost certainly be stopped.';}
+  document.querySelectorAll('[data-cf23]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.cf23)));
+  $('').addEventListener('anim-in',()=>{set('all');setTimeout(()=>set('key'),2400);});
+  set('all');
+})();
+</script>
+
+<h2 id="sec-6">6. Who pays</h2>
+<p>Limits and confirmation make errors smaller and rarer, but they cannot make them disappear. When something goes wrong, the rules for compensation must be written in advance. Execution errors and overstepping are compensated in full by the operator: as long as the records show that the scribe breached the agreement or executed incorrectly, he is not required to prove who was at fault. Misjudgements are borne by him under the agreement, but when the agreement is made the scribe must tell him how large such losses could be. The operator insures against these payouts, turning occasional large compensation payments into a predictable annual cost.</p>
+<aside class="principle"><p class="pr-k">Rerun: a principle re-examined</p><p class="pr-n">The economic case for vicarious liability</p><p class="pr-c"><span><em>Discipline</em>Law and economics › Agency law and tort liability</span><span><em>Type</em>Theory</span></p><p class="pr-s">When an agent cannot pay for its own wrongs, making a principal that has control over the agent and has assets liable for those wrongs leads the principal to count expected compensation as a cost, to select, monitor and constrain the agent more carefully, and to spread the risk through insurance.</p><dl><div><dt>Standing in the field</dt><dd>The paper, titled "The economics of vicarious liability", uses a principal–agent model to analyse why employers should be liable for their employees' wrongs; this line of analysis starts from the agent's inability to pay</dd></div><div><dt>Constraint it answers</dt><dd>The agent's promises may not be kept, and the agent itself cannot afford to pay</dd></div><div><dt>Premises</dt><dd>The principal can influence the agent's behaviour; the principal's assets are sufficient to pay, or it can buy insurance</dd></div><div><dt>Proposed by</dt><dd>Sykes, 1984</dd></div><div><dt>Open question</dt><dd>Who decides where the line falls between a misjudgement and an execution error?</dd></div><div><dt>After the rerun</dt><dd>Applied to products, compensation rules are written into the agreement by kind of error: execution errors and overstepping are compensated in full by the operator, which insures against them, while misjudgements are borne by the user under the agreement; the records determine which kind each error belongs to</dd></div></dl></aside>
+<p><strong>Today's counterpart.</strong> The Financial Industry Regulatory Authority in the United States provides an arbitration procedure for disputes between investors and brokers.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Who pays</p><p class="figsub">Four kinds of loss, four places they fall. Select a row to see the basis and conditions for compensation.</p></div><button class="replay" type="button" data-replay="py23">Replay</button></div>
+    <div class="py23" id="py23" data-anim><div class="py23-t" id="py23-t"></div><p class="py23-msg" id="py23-msg" aria-live="polite"></p></div>
+  </div>
+  <figcaption>Illustrative: the compensation rules are a product design derived in this book, not a restatement of any current regulation; the row "Broker fails, assets missing" follows the scope of protection of the Securities Investor Protection Corporation.</figcaption>
+</figure>
+<style>
+.py23-t{display:grid;gap:5px}
+.py23-t button{font:inherit;cursor:pointer;display:grid;grid-template-columns:1.2fr 1fr;gap:10px;text-align:left;border:1px solid transparent;border-radius:9px;padding:9px 12px;background:var(--quote);color:var(--ink);font-size:13.5px;opacity:0;transform:translateX(-6px);transition:opacity .35s,transform .35s,border-color .3s;transition-delay:calc(var(--i)*.15s)}
+.py23.in .py23-t button{opacity:1;transform:none}
+.py23-t button.sel{border-color:var(--ink)}
+.py23-t b{font-weight:600} .py23-t span{color:var(--c)}
+.py23-msg{font-size:14px;margin:10px 0 0;min-height:4.6em;background:var(--quote);border-radius:9px;padding:10px 12px}
+</style>
+<script>
+(function(){
+  const R=[['Execution error','The operator pays in full','var(--warm)','As long as the records show that the amount or destination differs from the instruction, the loss is paid in full, without requiring him to prove how it arose; the operator insures against this.'],['Overstepping','The operator pays, and the agreement\'s penalties apply','var(--warm)','If the records show that the step crossed a boundary or cannot cite a clause of the agreement, it is treated as overstepping. In addition to compensation, the penalties written into the agreement (for example, refunding that year\'s fees) take effect.'],['Misjudgement','He bears it, as the agreement provides','var(--accent)','The scribe kept the agreement completely and decided on the information available at the time, but the outcome was poor. This is a risk the agreement itself accepts; when the agreement was made, he was told how large such losses could be.'],['Broker fails, assets missing','The investor protection fund covers it up to a limit','var(--blue)','Assets are held by an independent custodian. If the custodian or the broker fails and assets are missing, the investor protection fund covers them up to a limit; losses from market declines are not covered.']];
+  const t=document.getElementById('py23-t'),m=document.getElementById('py23-msg');
+  t.innerHTML=R.map((r,i)=>`<button type="button" style="--i:${i};--c:${r[2]}"><b>${r[0]}</b><span>${r[1]}</span></button>`).join('');const bs=[...t.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));m.textContent=R[i][3];}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('py23').addEventListener('anim-in',()=>{[0,1,2,3].forEach((i,k)=>setTimeout(()=>set(i),1000+k*1800));});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-7">7. After the mistake</h2>
+<p>Paying compensation does not close the matter. The same mistake will happen again unless someone finds out why it passed through every line of defence: was something left out of the agreement, was a limit set too high, or were the consequences not set out clearly enough at confirmation? Once the cause is found, what needs to change is often not the scribe but the agreement and the defences themselves. The change must also be written into the records so that he knows why the agreement changed. Some mistakes can still be reversed shortly after they occur: a clearly erroneous trade can be cancelled on application within a set time.</p>
+<p><strong>Today's counterpart.</strong> FINRA rules allow trades with clearly erroneous terms, such as price or quantity, to be reviewed and, where the conditions are met, cancelled.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Six steps after a mistake</p><p class="figsub">After grain meant for the house account was deposited into the retirement account by mistake, what the scribe and the operator do, in order. Select a step to see the details.</p></div><button class="replay" type="button" data-replay="af23">Replay</button></div>
+    <div class="af23" id="af23" data-anim><div class="af23-s" id="af23-s"></div><p class="af23-msg" id="af23-msg" aria-live="polite"></p></div>
+  </div>
+  <figcaption>Illustrative: the example is fictional.</figcaption>
+</figure>
+<style>
+.af23-s{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.af23-s button{font:inherit;cursor:pointer;text-align:left;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:8px 9px;font-size:13px;color:var(--ink);opacity:0;transform:translateY(6px);transition:opacity .35s,transform .35s,border-color .3s;transition-delay:calc(var(--i)*.2s)}
+.af23.in .af23-s button{opacity:1;transform:none}
+.af23-s button em{display:block;font-style:normal;font-size:11px;color:var(--faint)}
+.af23-s button.sel{border-color:var(--accent)}
+.af23-msg{font-size:14px;margin:10px 0 0;min-height:4.6em;background:var(--quote);border-radius:9px;padding:10px 12px}
+@media (max-width:640px){.af23-s{grid-template-columns:repeat(3,1fr)}}
+</style>
+<script>
+(function(){
+  const S=[['Detect','Reconciliation afterwards finds that this month\'s deposit into the retirement account is 0.017 more than the agreement specifies, and the house account is short by the same amount.'],['Reverse','The excess is moved back to the house account at that day\'s price; any price difference before the transfer is counted in the next step\'s compensation.'],['Compensate','Under the agreement, execution errors are paid in full by the operator: it makes up the price difference and the forgone return, without his having to make a claim.'],['Find the cause','Why the error got past the defences: the pre-execution check verified only the total, not the destination.'],['Fix the defences','The pre-execution check gains an item, "destination matches the agreement"; this change is written into the records.'],['Inform','One sentence tells him what happened, how much was paid and what was changed; the full account can be found in the key steps and the complete records.']];
+  const s=document.getElementById('af23-s'),m=document.getElementById('af23-msg');
+  s.innerHTML=S.map((x,i)=>`<button type="button" style="--i:${i}"><em>Step ${i+1}</em>${x[0]}</button>`).join('');const bs=[...s.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));m.textContent=S[i][1];}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('af23').addEventListener('anim-in',()=>{[0,1,2,3,4,5].forEach((i,k)=>setTimeout(()=>set(i),1000+k*1500));});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-8">8. Ten years behind the defences: Civilization Simulator, version 23</h2>
+<p>The simulator unlocks "limits, confirmation and compensation". Over ten years the scribe makes two kinds of mistakes, execution errors and overstepping; misjudgements are market risk accepted by the agreement and are not counted. You can turn on or off the per-step and per-day limits, confirmation and delay for irreversible operations, and the operator's compensation, and adjust how often the scribe makes mistakes. Then see the losses caused by mistakes over ten years, the part he bears himself, the extra fees he pays for this protection, and how many times he is asked to confirm.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Civilization Simulator · Chapter 23: ten years behind the defences</p><p class="figsub">Over ten years the scribe makes two kinds of mistakes, execution errors and overstepping, and some of them occur in operations that cannot be undone. Turn three rules on or off and adjust how often mistakes occur, and see the losses caused over ten years, the part he absorbs himself, and what he pays for protection in confirmations and fees.</p></div><button class="replay" type="button" data-replay="cs23">Replay</button></div>
+    <div class="cs-rules"><span class="on">Product: what to promise</span><span class="on">Product: mandate and authority</span><span class="on">Product: process records</span><span class="on">Product: limits, confirmation and compensation</span><span class="lock">The path to trust · Ch. 24</span></div>
+    <div class="cs23" id="cs23" data-anim>
+      <div class="cs23-bars" id="cs23-b"></div>
+      <div class="cs-sw"><label><input type="checkbox" id="cs23-c"> Rule: per-step and per-day limits</label><label><input type="checkbox" id="cs23-f"> Rule: confirmation and delay for irreversible operations</label><label><input type="checkbox" id="cs23-p"> Rule: the operator compensates and insures</label></div>
+      <div class="sl"><label for="cs23-m">Frequency of mistakes <b id="cs23-mv"></b></label><input id="cs23-m" type="range" min="0.5" max="3" step="0.25" value="1"></div>
+      <p class="cs23-msg" id="cs23-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model: the figure shows expected values over ten years, with losses as a percentage of household wealth. At the baseline frequency, there are 2 execution errors a year; 98% of them lose about 0.2%, and the rest about 10%. Overstepping occurs 0.3 times a year, with an average loss of 2%. With limits, a single execution error loses no more than 2%, and losses from overstepping are halved. 20% of both kinds of mistake occur in operations that cannot be undone, and confirmation with delay stops 80% of these. When the operator compensates, all losses from execution errors and overstepping are paid, and the cost of compensation and insurance is added to his annual fees at 1.2 times. Misjudgements are market risk accepted by the agreement and are not shown.</figcaption>
+</figure>
+<style>
+.cs23-bars{display:grid;gap:10px;margin:4px 0 10px}
+.cs23-r{display:grid;grid-template-columns:11em 1fr 5.5em;gap:10px;align-items:center;font-size:12.5px}
+.cs23-r div{height:22px;background:var(--quote);border-radius:5px;overflow:hidden}
+.cs23-r i{display:block;height:100%;transition:width .4s}
+.cs23-r b{text-align:right;font-variant-numeric:tabular-nums}
+.cs23-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs23-r{grid-template-columns:1fr 5.5em}.cs23-r span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs23'+id);
+  function calc(cap,conf,pay,m){const ne=20*m,nv=3*m,le=cap?.98*.2+.02*2:.98*.2+.02*10,lv=cap?1:2,keep=conf?(1-.2*.8):1,loss=(ne*le+nv*lv)*keep;
+    return {loss,unpaid:pay?0:loss,fee:pay?loss/10*1.2:0,confirms:conf?4:0};}
+  function draw(){const c=$('-c').checked,f=$('-f').checked,p=$('-p').checked,m=+$('-m').value,S=calc(c,f,p,m),B=calc(0,0,0,m);$('-mv').textContent=m.toFixed(2)+'×';
+    $('-b').innerHTML=[['Ten-year loss from mistakes',S.loss,B.loss,'var(--warm)',S.loss.toFixed(1)+'%'],['Of which he absorbs',S.unpaid,B.loss,'var(--warm)',S.unpaid.toFixed(1)+'%'],['Extra fees per year',S.fee,3,'var(--blue)',S.fee.toFixed(2)+'%'],['Confirmations per year',S.confirms,10,'var(--gold)',S.confirms+' times']].map(([a,v,mx,col,t])=>`<div class="cs23-r"><span>${a}</span><div><i style="width:${Math.min(100,v/Math.max(mx,.01)*100)}%;background:${col}"></i></div><b>${t}</b></div>`).join('');
+    const n=[c,f,p].filter(Boolean).length;
+    $('-msg').textContent=n===0?`No defences at all: over ten years, mistakes cause a loss of about ${S.loss.toFixed(0)}%, all absorbed by him; most of it comes from a few large mistakes.`:n===3?`All three in place: limits cut off the large mistakes, confirmation and delay stop most irreversible mistakes, and the ten-year loss falls to about ${S.loss.toFixed(1)}%, all paid by the operator. The price is about ${S.fee.toFixed(2)}% a year in extra fees and 4 confirmations. Insurance costs a little more than the expected loss; in return, losses no longer fall on him alone, and he no longer faces a sudden large loss.`:`${c?'Limits cut off the large mistakes':'Without limits, a few large mistakes make up most of the loss'}; ${f?'confirmation and delay stop most irreversible mistakes':'no one stops the irreversible mistakes'}; ${p?'the operator pays for the losses':'he absorbs all the losses himself'}. The ten-year loss is about ${S.loss.toFixed(1)}%.`;}
+  ['-c','-f','-p','-m'].forEach(k=>$(k).addEventListener('input',draw));
+  $('').addEventListener('anim-in',()=>{[[0,0,0],[1,0,0],[1,1,0],[1,1,1]].forEach(([a,b,c],i)=>setTimeout(()=>{$('-c').checked=!!a;$('-f').checked=!!b;$('-p').checked=!!c;draw();},300+i*2200));});
+  draw();
+})();
+</script>
+
+<h2 id="sec-9">9. What this step leaves open</h2>
+<p>Defences, limits and compensation keep the consequences of mistakes under control, but several questions remain unresolved:</p>
+<ol><li><strong>At the very beginning.</strong> A scribe that has just opened for business has no record. On what basis should he begin to trust it?</li><li><strong>How much trust.</strong> Once a record of keeping the agreement builds up, how far and how fast can the authority be widened?</li><li><strong>Trust after a mistake.</strong> After one mistake, does trust fall to zero, or does it only step back one level?</li><li><strong>The whole product.</strong> Promises, the agreement, records, defences and compensation: what kind of product do they make together?</li></ol>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">What this step leaves open</p><p class="figsub">Four questions that remain once the consequences of mistakes are under control. Select a question to see the assumption it hides.</p></div><button class="replay" type="button" data-replay="nx23">Replay</button></div>
+    <div class="nx" id="nx23" data-anim>
+      <div class="nx-src"><b>Behind the defences</b><span>Limits, confirmation and compensation</span></div>
+      <div class="nx-list" id="nx23-l"></div>
+    </div>
+    <p class="nx-msg" id="nx23-msg" aria-live="polite"></p>
+  </div>
+</figure>
+<style>
+.nx{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:center}
+.nx-src{background:var(--ink);color:var(--bg);border-radius:10px;padding:14px 10px;text-align:center}
+.nx-src b{display:block;font-size:16px} .nx-src span{font-size:12px;opacity:.75}
+.nx-list{display:grid;gap:6px}
+.nx-i{font:inherit;text-align:left;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:9px 12px;color:var(--ink);opacity:0;transform:translateX(-8px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.3s)}
+.nx.in .nx-i{opacity:1;transform:none}
+.nx-i span{font-size:13.5px} .nx-i em{font-style:normal;font-size:11.5px;color:var(--faint);white-space:nowrap}
+.nx-i.sel{border-color:var(--accent)}
+.nx-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.nx{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const Q=[['At the very beginning','Chapter 24','Hidden assumption: the scribe already has a record of keeping the agreement. A scribe that has just opened for business: on what basis should he begin to trust it?'],
+    ['How much trust','Chapter 24','Hidden assumption: authority is set once and never changes. Once a record of keeping the agreement builds up, how far and how fast can the authority be widened?'],
+    ['Trust after a mistake','Chapter 24','Hidden assumption: trust is either there or not. After one mistake, does trust fall to zero, or does it only step back one level?'],
+    ['The whole product','Part Three summary','Hidden assumption: the parts can be designed separately. Promises, the agreement, records, defences and compensation: what kind of product do they make together?']];
+  const l=document.getElementById('nx23-l'),msg=document.getElementById('nx23-msg');
+  l.innerHTML=Q.map((q,i)=>`<button type="button" class="nx-i" style="--i:${i}" data-i="${i}"><span>${q[0]}</span><em>→ ${q[1]}</em></button>`).join('');
+  const bs=[...l.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));msg.textContent=Q[i][2];}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('nx23').addEventListener('anim-in',()=>{[0,1,2,3].forEach((i,k)=>setTimeout(()=>set(i),1600+k*1800));});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-10">10. Implications for products</h2>
+<p>For a wealth-management product built around an agent, the fourth part to grow is "limits, confirmation and compensation". Three implications follow. First, allocate consequences by kind of error: execution errors and overstepping are compensated by the operator, which insures against them; misjudgements are borne by the user under the agreement, and the user is told at the outset how large they could be; the records determine which kind each error belongs to. Second, layer the defences and rely on none of them alone: the boundaries of the agreement, checks before execution, per-step and per-day limits, confirmation and delay for irreversible operations, and reconciliation afterwards, with the lines of defence kept as independent of one another as possible. Third, deliberately slow down where things move fast: limits and delays let errors be caught before they spread; after a mistake, find the cause, change the agreement and the defences, and tell the user why they changed.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: agents make mistakes</p><p class="figsub">Four conclusions, each tied to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="g23summary">Replay</button></div>
+    <div class="g23summary" id="g23summary" data-anim><div class="g23summary-c" style="--i:0"><em>Three kinds of mistake</em><b>Consequences allocated by kind</b><p>The operator pays for execution errors and overstepping; the user bears misjudgements under the agreement; the records decide which kind each one is.</p></div><div class="g23summary-c" style="--i:1"><em>Swiss cheese model</em><b>Layered, independent defences</b><p>No line of defence is foolproof, and lines that share a hole fail together.</p></div><div class="g23summary-c warn" style="--i:2"><em>Normal accidents</em><b>Deliberately slow down where things move fast</b><p>Limits, automatic stops on anomalies and delays catch errors before they spread.</p></div><div class="g23summary-c warn" style="--i:3"><em>Rerun: irreversibility and vicarious liability</em><b>Few, weighty confirmations; compensation written in advance</b><p>Confirm only operations that cannot be undone, and set out their consequences; the operator insures, and compensation does not depend on the user proving anything.</p></div></div>
+  </div>
+</figure>
+<style>
+.g23summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g23summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g23summary-c.warn{border-left-color:var(--warm)}
+.g23summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g23summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g23summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g23summary.in .g23summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g23summary{grid-template-columns:1fr}}
+</style>
+
+<h2 id="sec-11">References</h2>
+<ul class="refs"><li>Arrow, K. J., &amp; Fisher, A. C. (1974). Environmental preservation, uncertainty, and irreversibility. <i>Quarterly Journal of Economics</i>, 88(2), 312–319.</li><li>FINRA. Code of Arbitration Procedure for Customer Disputes (Rule 12000 Series). Financial Industry Regulatory Authority Rulebook.</li><li>FINRA. Rule 11890 Series: Clearly Erroneous Transactions. Financial Industry Regulatory Authority Rulebook.</li><li>Henry, C. (1974). Investment decisions under uncertainty: The "irreversibility effect". <i>American Economic Review</i>, 64(6), 1006–1012.</li><li>People's Bank of China (2016). Notice on Strengthening Payment and Settlement Management to Prevent New Types of Telecommunications and Online Crime (Yinfa [2016] No. 261).</li><li>Perrow, C. (1984). <i>Normal Accidents: Living with High-Risk Technologies</i>. New York: Basic Books.</li><li>Reason, J. (1990). <i>Human Error</i>. Cambridge: Cambridge University Press.</li><li>Reason, J. (2000). Human error: Models and management. <i>BMJ</i>, 320(7237), 768–770.</li><li>Securities Investor Protection Corporation. What SIPC protects. https://www.sipc.org/for-investors/what-sipc-protects</li><li>Sykes, A. O. (1984). The economics of vicarious liability. <i>Yale Law Journal</i>, 93, 1231–1280.</li><li>U.S. Securities and Exchange Commission (2010). Risk management controls for brokers or dealers with market access (Rule 15c3-5). Release No. 34-63241.</li><li>U.S. Securities and Exchange Commission (2013). Order instituting administrative and cease-and-desist proceedings. Release No. 34-70694.</li><li>World Health Organization (2008). <i>WHO Surgical Safety Checklist</i>. Geneva: WHO.</li></ul>
+<footer class="nav"><a href="g-22.html">← Chapter 22: The user cannot see the process</a><a href="g-24.html">Chapter 24: Trust takes time →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

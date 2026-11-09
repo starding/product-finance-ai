@@ -1,0 +1,38 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">惯性把人留在默认上</p><p class="figsub">四十户人家各有合适的储蓄比例（圆点），多数人停在默认上（横线）。切换统一的默认与每户专属的默认，再让一部分人家在第五年收入下降，看默认是否跟着调整。</p></div><button class="replay" type="button" data-replay="df18">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="默认">
+      <button type="button" data-df18="one" aria-pressed="true">统一默认 12%</button>
+      <button type="button" data-df18="own" aria-pressed="false">每户专属</button>
+    </div>
+    <div class="df18" id="df18" data-anim>
+      <svg viewBox="0 0 660 200" role="img" aria-label="合适的比例与默认"><g id="df18-g"></g></svg>
+      <div class="cs-sw"><label><input type="checkbox" id="df18-c"> 第五年：四分之一的人家收入下降，合适的比例随之降低</label></div>
+      <p class="df18-msg" id="df18-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：合适的比例在 6%～18% 之间；七成人家停在默认上。每户专属的默认由书记员按每户的情况设定，情况变化时随之调整。偏离超过 3 个百分点记为“明显偏离”。</figcaption>
+</figure>
+<style>
+.df18 svg{width:100%;height:auto;display:block}
+.df18-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.df18 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('df18'+id);let mode='one',s=1801;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};
+  const N=40,I=Array.from({length:N},()=>.06+.12*r()),stick=Array.from({length:N},()=>r()<.7),cut=Array.from({length:N},(_,i)=>i%4===1);
+  const X0=50,X1=628,YT=10,YB=170,x=i=>X0+(i+.5)/N*(X1-X0),y=v=>YB-v/.2*(YB-YT);
+  function draw(){const ch=$('-c').checked,ideal=I.map((v,i)=>ch&&cut[i]?Math.max(.02,v-.06):v),dft=ideal.map((v,i)=>mode==='own'?v:.12),got=ideal.map((v,i)=>stick[i]?(mode==='own'?(ch&&cut[i]?ideal[i]:I[i]):.12):v);
+    const got2=mode==='own'?dft:got;
+    let h=[0,.05,.1,.15,.2].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${Math.round(v*100)}%</text>`).join('');
+    let off=0;ideal.forEach((v,i)=>{const g=stick[i]?got2[i]:v;if(Math.abs(g-v)>.03)off++;h+=`<line x1="${x(i)}" x2="${x(i)}" y1="${y(v)}" y2="${y(g)}" stroke="var(--warm)" stroke-width="2"/><line x1="${x(i)-6}" x2="${x(i)+6}" y1="${y(g)}" y2="${y(g)}" stroke="var(--ink)" stroke-width="2"/><circle cx="${x(i)}" cy="${y(v)}" r="4" fill="${ch&&cut[i]?'var(--blue)':'var(--accent)'}"/>`;});
+    $('-g').innerHTML=h;
+    $('-msg').textContent=mode==='one'?`统一默认 12%：停在默认上的人家中，${off} 户明显偏离了自己合适的比例；打算多存的存少了，手头紧的又存多了。`+(ch?'收入下降的人家仍按 12% 扣存，生活更紧了。':''):`每户专属：书记员按每户的情况设定默认，停在默认上也就停在了合适的位置，明显偏离的只有 ${off} 户。`+(ch?'收入下降之后，默认随之调低。':'');}
+  const bs=[...document.querySelectorAll('[data-df18]')];
+  function set(m){mode=m;bs.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.df18===m)));draw();}
+  bs.forEach(b=>b.addEventListener('click',()=>set(b.dataset.df18)));$('-c').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{$('-c').checked=false;set('one');setTimeout(()=>{$('-c').checked=true;draw();},1800);setTimeout(()=>set('own'),3600);});
+  draw();
+})();
+</script>

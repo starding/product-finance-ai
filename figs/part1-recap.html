@@ -1,0 +1,41 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">第一部分小结：等式的每一项推出了什么</p><p class="figsub">切换视角：每一项的结论、对金融产品的含义，以及对 AI 进入金融产品的含义。</p></div><button class="replay" type="button" data-replay="rc1">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="视角">
+      <button type="button" data-rv="c" aria-pressed="true">结论</button>
+      <button type="button" data-rv="p" aria-pressed="false">对产品的含义</button>
+      <button type="button" data-rv="a" aria-pressed="false">对 AI 的含义</button>
+    </div>
+    <div class="rc1" id="rc1" data-anim></div>
+  </div>
+  <figcaption>每一行对应第一部分的一篇；括号内为章号。</figcaption>
+</figure>
+<style>
+.rc1{display:grid;gap:6px}
+.rc1-r{display:grid;grid-template-columns:150px 1fr;gap:12px;align-items:center;padding:10px 12px;border-radius:10px;background:var(--quote);opacity:0;transform:translateY(6px);transition:opacity .4s,transform .4s;transition-delay:calc(var(--i)*.15s)}
+.rc1.in .rc1-r{opacity:1;transform:none}
+.rc1-r b{font-size:14px;display:block}
+.rc1-r em{font-style:normal;font-size:11px;color:var(--faint)}
+.rc1-r p{margin:0;font-size:13.5px;line-height:1.6}
+.rc1-r.keep{background:rgba(160,120,24,.1)}
+.rc1-r .sign{display:inline-block;width:18px;color:var(--faint);font-weight:700}
+@media (max-width:640px){.rc1-r{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const R=[
+    ['＋','时间补偿','2',{c:'等待本身应得补偿；补偿要按购买力衡量，期限要与用钱时间匹配。',p:'标明回报对应的期限与口径，先问用钱时间。',a:'AI 可以帮用户把用钱计划说清楚，但不能创造时间补偿。'}],
+    ['＋','风险补偿','3–6',{c:'只有分散不掉的系统风险才有补偿；波动压低复合收益；长期收益可分解为少数因子。',p:'分散作为默认；用复合收益、中位数与回撤说明结果；按因子看清收益来源。',a:'AI 适合估计风险、拆解因子暴露、维持分散与再平衡的纪律。'}],
+    ['＋','信息优势','7–9',{c:'价格难以预测；公开信息以分钟计进入价格；信息优势是零和的，且在竞争中被消耗。',p:'不以预测方向为承诺；新闻标注时间与已反映程度；不鼓励没有优势的交易。',a:'AI 让分析变便宜，靠分析获得的优势会随普及而缩小；AI 的价值不在预测价格。'}],
+    ['－','交易成本','10–11',{c:'价差、冲击与规则使交易整体变为负和；流动性在最需要时最先消失。',p:'下单前展示真实成本；不急的交易耐心成交；动荡时提示风险。',a:'AI 可以降低执行成本、选择合适的订单与时机，这是可以持续的价值。'}],
+    ['＋','运气','12',{c:'主动管理整体跑输，扣费后多数基金的真实超额收益为负；短期业绩主要是运气；投资者拿到的收益常低于产品收益。',p:'不以短期排名推荐；展示用户自己的资金加权收益；按可坚持的程度推荐方法。',a:'AI 可以帮助用户坚持计划、减少追涨杀跌，缩小理论与实际之间的距离。'}],
+    ['','前提：承诺兑现','13–14',{c:'信任品需要制度：披露、托管、中央对手方、适当性、利益冲突管理与存款保险。',p:'把可核验、托管、适当性与利益冲突披露设计成产品功能。',a:'AI 代理是新的承诺方，同样需要可核验的过程、清楚的责任与利益的一致。'}]
+  ];
+  const box=document.getElementById('rc1');
+  function set(v){document.querySelectorAll('[data-rv]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.rv===v)));
+    box.innerHTML=R.map(([s,n,ch,t],i)=>`<div class="rc1-r${n.startsWith('前提')?' keep':''}" style="--i:${i}"><div><b><span class="sign">${s}</span>${n}</b><em>第 ${ch} 章</em></div><p>${t[v]}</p></div>`).join('');
+    box.classList.remove('in');void box.offsetWidth;box.classList.add('in');}
+  document.querySelectorAll('[data-rv]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.rv)));
+  set('c'); box.classList.remove('in');
+})();
+</script>

@@ -1,0 +1,36 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">报酬与业绩挂钩多少</p><p class="figsub">委托人看不到经理是否用心，只看得到夹杂着运气的结果。拖动经理报酬中与业绩挂钩的比例，看他用心的程度、委托人的所得，以及经理被迫承担的运气风险。</p></div><button class="replay" type="button" data-replay="ef">重播</button></div>
+    <div class="ef" id="ef" data-anim>
+      <div class="ef-b"><span>经理用心的程度</span><div><i id="ef-e" style="background:var(--accent)"></i></div><b id="ef-ev"></b></div>
+      <div class="ef-b"><span>经理承担的运气风险</span><div><i id="ef-r" style="background:var(--warm)"></i></div><b id="ef-rv"></b></div>
+      <div class="ef-b"><span>委托人扣除报酬后的所得</span><div><i id="ef-n" style="background:var(--blue)"></i></div><b id="ef-nv"></b></div>
+      <div class="sl"><label for="ef-k">报酬中与业绩挂钩的比例 <b id="ef-kv"></b></label><input id="ef-k" type="range" min="0" max="100" step="5" value="0"></div>
+      <div class="cs-sw"><label><input type="checkbox" id="ef-o"> 委托人还能看到经理的持仓与交易记录</label></div>
+      <p class="ef-msg" id="ef-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：经理用心的程度与挂钩比例成正比；他越用心，船队的收益越高，但他要为承担运气风险得到补偿，补偿随挂钩比例的平方上升。能看到持仓与交易记录时，结果中的运气成分变小，同样的挂钩比例带来的风险更低（霍姆斯特罗姆，1979）。</figcaption>
+</figure>
+<style>
+.ef-b{display:grid;grid-template-columns:11em 1fr 4em;gap:10px;align-items:center;font-size:13px;margin:7px 0}
+.ef-b div{height:14px;background:var(--quote);border-radius:4px;overflow:hidden}
+.ef-b i{display:block;height:100%;transition:width .3s}
+.ef-b b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.ef-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.ef-b{grid-template-columns:1fr 4em}.ef-b span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  function at(k,o){const e=k,risk=k*k*(o?.4:1),net=4*e-1.5*e*e-2.2*risk;return [e,risk,net];}
+  function draw(){const k=+$('ef-k').value/100,o=$('ef-o').checked,[e,risk,net]=at(k,o);
+    let best=0,bv=-1e9;for(let q=0;q<=1.0001;q+=.05){const v=at(q,o)[2];if(v>bv){bv=v;best=q;}}
+    $('ef-e').style.width=e*100+'%';$('ef-r').style.width=risk*100+'%';$('ef-n').style.width=Math.max(0,net)/2.5*100+'%';
+    $('ef-ev').textContent=Math.round(e*100)+'%';$('ef-rv').textContent=risk.toFixed(2);$('ef-nv').textContent=net.toFixed(2);$('ef-kv').textContent=Math.round(k*100)+'%';
+    $('ef-msg').textContent=k===0?'报酬固定，用心不用心收入都一样：经理没有用心的动力。':`挂钩 ${Math.round(k*100)}%：经理更用心了，但也要为承担的运气风险得到补偿。对委托人最好的比例约为 ${Math.round(best*100)}%。${o?'能看到持仓与交易记录，运气的成分变小，最好的挂钩比例随之提高，委托人也得到更多。':'勾选下面的选项，看委托人能看到更多时会怎样。'}`;}
+  ['ef-k','ef-o'].forEach(k=>$(k).addEventListener('input',draw));
+  $('ef').addEventListener('anim-in',()=>{let v=0;$('ef-k').value=0;draw();const id=setInterval(()=>{v+=5;$('ef-k').value=v;draw();if(v>=100)clearInterval(id);},150);});
+  draw();
+})();
+</script>

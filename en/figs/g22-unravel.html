@@ -1,0 +1,33 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Silence becomes bad news</p><p class="figsub">Ten scribes score from 1 to 10 on how well they keep the agreement, and each decides whether to make its verifiable records public. The principal treats every scribe that does not disclose as having their average score. Click "Next round" to see who discloses.</p></div><button class="replay" type="button" data-replay="ur22">Replay</button></div>
+    <div class="ur22" id="ur22" data-anim>
+      <div class="ur22-g" id="ur22-g"></div>
+      <div class="ur22-ctl"><button type="button" class="replay" id="ur22-n">Next round</button><button type="button" class="replay" id="ur22-r">Start over</button><label class="cs-sw"><input type="checkbox" id="ur22-s"> The principal is not sceptical enough of silence (treats it as a 7)</label></div>
+      <p class="ur22-msg" id="ur22-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: a scribe discloses when its own score exceeds the principal's estimate for those who do not disclose (the unravelling process of Grossman, 1981, and Milgrom, 1981). When the principal is "not sceptical enough", it always treats non-disclosers as a 7, matching the insufficient scepticism of receivers in the experiments of Jin, Luca and Martin (2021).</figcaption>
+</figure>
+<style>
+.ur22-g{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:6px;margin:6px 0}
+.ur22-g div{border-radius:8px;padding:8px 2px;text-align:center;font-size:13px;background:var(--quote);transition:background .4s,color .4s}
+.ur22-g div b{display:block;font-size:16px}
+.ur22-g div.d{background:var(--accent);color:var(--bg)}
+.ur22-ctl{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:6px}
+.ur22-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+.ur22-g>*{min-width:0;overflow-wrap:anywhere}
+@media (max-width:640px){.ur22-g{gap:3px}.ur22-g div{font-size:9.5px;padding:6px 1px}.ur22-g div b{font-size:14px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('ur22'+id);let D=new Set(),round=0;
+  const est=()=>{if($('-s').checked)return 7;const u=[...Array(10).keys()].map(i=>i+1).filter(v=>!D.has(v));return u.length?u.reduce((a,b)=>a+b,0)/u.length:0;};
+  function draw(){const e=est();$('-g').innerHTML=[...Array(10).keys()].map(i=>{const v=10-i;return `<div class="${D.has(v)?'d':''}"><b>${v}</b>${D.has(v)?'Open':'Silent'}</div>`;}).join('');
+    $('-msg').textContent=round===0?`At first nobody discloses, so the principal can only treat everyone as the average, ${e.toFixed(1)}.`:D.size>=9&&!$('-s').checked?`Round ${round}: every scribe except the worst has disclosed; the principal knows at a glance which one stayed silent. Silence has become bad news.`:`Round ${round}: ${D.size} have disclosed, and the principal's estimate for non-disclosers falls to ${e.toFixed(1)}. `+($('-s').checked?'The principal is not sceptical enough of silence, so scribes scoring below 7 have no reason to disclose, and the unravelling stops.':'Scribes scoring above this estimate will disclose in the next round too.');}
+  function step(){const e=est();for(let v=1;v<=10;v++)if(v>e)D.add(v);round++;draw();}
+  $('-n').addEventListener('click',step);$('-r').addEventListener('click',()=>{D=new Set();round=0;draw();});$('-s').addEventListener('input',()=>{D=new Set();round=0;draw();});
+  $('').addEventListener('anim-in',()=>{D=new Set();round=0;$('-s').checked=false;draw();[1,2,3,4,5].forEach((k,i)=>setTimeout(step,900+i*1100));});
+  draw();
+})();
+</script>

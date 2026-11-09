@@ -1,0 +1,30 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">A running log, or evidence</p><p class="figsub">The same four entries, written two ways. Switch between them and see whether he can tell at a glance if each step kept to the agreement.</p></div><button class="replay" type="button" data-replay="wy22">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Way of writing">
+      <button type="button" data-wy22="0" aria-pressed="true">Running log</button>
+      <button type="button" data-wy22="1" aria-pressed="false">With basis and figures at the time</button>
+    </div>
+    <div class="wy22" id="wy22" data-anim><div class="wy22-l" id="wy22-l"></div><p class="wy22-msg" id="wy22-msg" aria-live="polite"></p></div>
+  </div>
+  <figcaption>Illustrative: the record entries are invented examples.</figcaption>
+</figure>
+<style>
+.wy22-l{display:grid;gap:5px}
+.wy22-l div{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:8px 10px;border-radius:8px;background:var(--quote);font-size:13.5px;line-height:1.55}
+.wy22-l em{font-style:normal;font-size:12px;padding:1px 9px;border-radius:999px;white-space:nowrap}
+.wy22-l em.ok{background:var(--accent-soft);color:var(--accent)} .wy22-l em.q{background:var(--warm-soft);color:var(--warm)} .wy22-l em.u{background:var(--bg);color:var(--faint);border:1px solid var(--line)}
+.wy22-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('wy22'+id);
+  const R=[['Sold 2 ship shares','Sold 2 ship shares: the retirement account\'s ship-share proportion had risen to 86% (agreed 80%, a deviation of more than five percentage points); brought back per clause 3 of the agreement','ok'],['Deposited 0.017','Deposited 0.017: 20% deposited after pay, per clause 3 of the agreement','ok'],['Bought 1 share in a new fleet','Bought 1 share in a new fleet: basis… (no corresponding clause)','q'],['Sold safe holdings in the house account','Sold safe holdings in the house account: on Jun 15 you confirmed using part of the house money for medical care (confirmation record #41)','ok']];
+  function set(k){document.querySelectorAll('[data-wy22]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.wy22===k)));
+    $('-l').innerHTML=R.map(([a,b,c])=>`<div><span>${k?b:a}</span><em class="${k?c:'u'}">${k?(c==='ok'?'Kept':'No basis given'):'Unclear'}</em></div>`).join('');
+    $('-msg').textContent=k?'With the basis and the figures at the time written in, three of the four entries visibly keep to the agreement; the third gives no basis, and that is exactly the one he should question.':'A running log tells him only what was done; he cannot see which step kept to the agreement and which crossed a boundary.';}
+  document.querySelectorAll('[data-wy22]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.wy22)));
+  $('').addEventListener('anim-in',()=>{set(0);setTimeout(()=>set(1),2400);});
+  set(0);
+})();
+</script>

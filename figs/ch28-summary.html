@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：让实现可以被核查</p><p class="figsub">四条设计要求，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="ch28summary">重播</button></div>
+    <div class="ch28summary" id="ch28summary" data-anim><div class="ch28summary-c" style="--i:0"><em>做成与做对</em><b>分别建设通用能力与金融专有能力</b><p>数据、计算、约束检查、交易接口与合规检查决定结果对不对，要单独评测。</p></div><div class="ch28summary-c" style="--i:1"><em>两种组织方式</em><b>按任务选择现场装配或固定流程</b><p>路径固定、服务多人的任务做成评测过的固定流程，供代理调用。</p></div><div class="ch28summary-c warn" style="--i:2"><em>关系要有载体</em><b>把委托书、组合与记录存为长期对象</b><p>每个数据与决定按时点保存，复盘用当时所知。</p></div><div class="ch28summary-c warn" style="--i:3"><em>过程要可见、可回放</em><b>用任务面板呈现等待、受阻与进行中</b><p>保存输入、条款与模型版本；换版本前回放检验，并告知差异。</p></div></div>
+  </div>
+</figure>
+<style>
+.ch28summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch28summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch28summary-c.warn{border-left-color:var(--warm)}
+.ch28summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch28summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch28summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch28summary.in .ch28summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch28summary{grid-template-columns:1fr}}
+</style>

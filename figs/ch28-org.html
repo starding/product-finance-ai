@@ -1,0 +1,31 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">现场装配，还是固定流程</p>
+    <p class="figsub">横轴是任务路径的确定程度，纵轴是同一任务服务的人数与频率。点按一项任务查看适合的组织方式。</p>
+    <div class="og" id="og" data-anim>
+      <svg viewBox="0 0 640 280" role="img" aria-label="任务的组织方式"><g id="og-ax"></g><g id="og-pts"></g></svg>
+      <p class="og-msg" id="og-msg" aria-live="polite">点按一项任务。</p>
+    </div>
+  </div>
+  <figcaption>示意位置。按例外多少与可分析程度区分任务的框架见 Perrow（1967）。</figcaption>
+</figure>
+<style>
+.og svg{width:100%;height:auto;display:block}
+.og-p{cursor:pointer;opacity:0;transition:opacity .4s;transition-delay:calc(var(--i)*.12s)}
+.og.in .og-p{opacity:1}
+.og-p.sel circle{stroke:var(--ink);stroke-width:2.5}
+.og-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.og svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const T=[['研究一家公司',12,40,'a','路径因公司而异，需要现场判断查什么、怎么算：由代理现场装配。'],['回答个人化的问题',15,15,'a','依赖委托人的情况，事先无法确定步骤：现场装配。'],['复盘一段时间的决定',36,30,'a','每次复盘的重点不同，可以调用固定的归因计算作为其中一步。'],['每日行情摘要',85,90,'f','步骤固定、服务许多人、要求一致：做成经过评测的固定流程。'],['期权与供股到期提醒',90,75,'f','触发规则明确、漏报代价高：固定流程，按规则触发，由模型负责解释。'],['定期组合体检',80,66,'f','检查项固定，结果需要一致可比：固定流程。'],['持续跟踪持仓',55,42,'m','检查本身是固定流程；发现异常后的解释与建议由代理现场完成：两者衔接。']];
+  const X0=60,X1=610,YT=14,YB=240,x=v=>X0+v/100*(X1-X0),y=v=>YB-v/100*(YB-YT),C={a:'var(--accent)',f:'var(--blue)',m:'var(--gold)'};
+  document.getElementById('og-ax').innerHTML=`<rect x="${x(0)}" y="${y(100)}" width="${x(50)-x(0)}" height="${y(0)-y(100)}" fill="var(--accent-soft)" opacity=".45"/><rect x="${x(50)}" y="${y(100)}" width="${x(100)-x(50)}" height="${y(0)-y(100)}" fill="rgba(47,95,158,.08)"/>`+
+    `<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/><line x1="${X0}" y1="${YT}" x2="${X0}" y2="${YB}" class="s-faint"/><text x="${X0}" y="${YB+18}" font-size="11" class="t-faint">路径不确定</text><text x="${X1}" y="${YB+18}" text-anchor="end" font-size="11" class="t-faint">路径固定 →</text><text x="${X0-6}" y="${YT+8}" text-anchor="end" font-size="11" class="t-faint">多</text><text x="${X0-6}" y="${YB}" text-anchor="end" font-size="11" class="t-faint">少</text>`+
+    `<text x="${x(25)}" y="${y(96)}" text-anchor="middle" font-size="12" class="t-accent">现场装配</text><text x="${x(75)}" y="${y(96)}" text-anchor="middle" font-size="12" fill="var(--blue)">固定流程</text>`;
+  document.getElementById('og-pts').innerHTML=T.map(([n,a,b,k],i)=>`<g class="og-p" data-i="${i}" style="--i:${i}"><circle cx="${x(a)}" cy="${y(b)}" r="7" fill="${C[k]}"/><text x="${x(a)+(a>70?-11:11)}" y="${y(b)+4}" text-anchor="${a>70?'end':'start'}" font-size="12" class="t-ink">${n}</text></g>`).join('');
+  const ps=[...document.querySelectorAll('.og-p')];
+  ps.forEach((p,i)=>p.addEventListener('click',()=>{ps.forEach(q=>q.classList.toggle('sel',q===p));document.getElementById('og-msg').textContent=T[i][0]+'：'+T[i][4];}));
+})();
+</script>

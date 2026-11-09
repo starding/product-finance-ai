@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">一个代理，几个委托人</p><p class="figsub">切换视图：钱从哪里流向哪里，谁在设定代理的目标，以及代理应当服务于谁。线越粗，影响越大（示意）。</p></div><button class="replay" type="button" data-replay="pt">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="视图">
+      <button type="button" data-pt="m" aria-pressed="true">钱的流向</button>
+      <button type="button" data-pt="g" aria-pressed="false">目标由谁设定</button>
+      <button type="button" data-pt="s" aria-pressed="false">应当服务于谁</button>
+    </div>
+    <div class="pt" id="pt" data-anim>
+      <svg viewBox="0 0 640 260" role="img" aria-label="代理与各方的关系"><defs><marker id="pt-ar" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" fill="context-stroke"/></marker></defs><g id="pt-e"></g><g id="pt-n"></g></svg>
+      <p class="pt-msg" id="pt-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意结构。一个代理人同时受多个委托人影响的情形称为共同代理，见 Bernheim 与 Whinston（1986）。</figcaption>
+</figure>
+<style>
+.pt svg{width:100%;height:auto;display:block}
+.pt-ln{fill:none;transition:stroke-width .5s,opacity .5s}
+.pt-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.pt svg text{font-size:17px}}
+</style>
+<script>
+(function(){
+  const N={a:[320,130,'代理','var(--ink)'],u:[90,130,'用户','var(--accent)'],p:[550,130,'平台','var(--blue)'],i:[430,235,'产品发行方','var(--gold)'],m:[210,235,'模型提供方','var(--faint)']};
+  const E={m:[['u','p',5,'订阅费、交易佣金'],['i','p',6,'销售分成'],['p','m',3,'调用费用'],['p','a',2,'']],
+    g:[['p','a',7,'目标与评价指标'],['m','a',4,'模型的训练目标'],['u','a',2,'委托书'],['i','a',2,'产品信息与推广']],
+    s:[['a','u',8,'按用户的委托书与净价值行事'],['a','p',1,''],['a','i',1,'']]};
+  const M={m:'用户付的钱流向平台，平台还从产品发行方获得分成，再向模型提供方付费。代理本身不收钱，但它的提供者从多处收钱。',g:'设定代理目标影响最大的是平台：用什么指标评价代理，代理就朝什么方向优化。用户通过委托书影响它，但往往不是影响最大的一方。',s:'代理应当服务的是用户：按用户的委托书与净价值行事。前两张图与这张图之间的差距，就是利益冲突。'};
+  const $=id=>document.getElementById(id);
+  $('pt-n').innerHTML=Object.entries(N).map(([k,[x,y,t,c]])=>`<g><circle cx="${x}" cy="${y}" r="${k==='a'?38:30}" fill="var(--surface)" stroke="${c}" stroke-width="2.5"/><text x="${x}" y="${y+4}" text-anchor="middle" font-size="${k==='a'?14:12}" class="t-ink">${t}</text></g>`).join('');
+  function set(k){document.querySelectorAll('[data-pt]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.pt===k)));
+    $('pt-e').innerHTML=E[k].map(([f,t,w,l])=>{const [x1,y1]=N[f],[x2,y2]=N[t],dx=x2-x1,dy=y2-y1,L=Math.hypot(dx,dy),r1=f==='a'?40:32,r2=t==='a'?42:34,sx=x1+dx/L*r1,sy=y1+dy/L*r1,ex=x2-dx/L*r2,ey=y2-dy/L*r2,mx=(sx+ex)/2-dy/L*18,my=(sy+ey)/2+dx/L*18;
+      return `<path class="pt-ln" d="M${sx},${sy}Q${mx},${my} ${ex},${ey}" stroke="${N[k==='s'?t:f][3]}" stroke-width="${w*1.3}" opacity="${w>1?.85:.25}" marker-end="url(#pt-ar)"/>${l?`<text x="${mx}" y="${my-6}" text-anchor="middle" font-size="11" class="t-muted">${l}</text>`:''}`;}).join('');
+    $('pt-msg').textContent=M[k];}
+  document.querySelectorAll('[data-pt]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.pt)));
+  $('pt').addEventListener('anim-in',()=>{['m','g','s'].forEach((k,i)=>setTimeout(()=>set(k),i*2600));});
+  set('m');
+})();
+</script>

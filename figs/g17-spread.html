@@ -1,0 +1,30 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">平时很窄，急时很宽</p><p class="figsub">拖动替集市报价的书记员数目，看平静时与风险骤增时，急着卖一份船股要让出多少。</p></div><button class="replay" type="button" data-replay="sp17">重播</button></div>
+    <div class="sp17" id="sp17" data-anim>
+      <div class="sp17-bars" id="sp17-b"></div>
+      <div class="sl"><label for="sp17-n">报价的书记员 <b id="sp17-nv"></b></label><input id="sp17-n" type="range" min="1" max="20" step="1" value="1"></div>
+      <p class="sp17-msg" id="sp17-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：只有一户人家报价时，价差为 10%；报价者越多，彼此竞争，平静时的价差按 10% ÷（报价者数目的 1.2 次方）收窄，最低 0.2%。风险骤增时，九成的书记员停止报价，价差按剩下的报价者计算。</figcaption>
+</figure>
+<style>
+.sp17-bars{display:grid;gap:12px;margin:4px 0 10px}
+.sp17-r{display:grid;grid-template-columns:7em 1fr 4em;gap:10px;align-items:center;font-size:12.5px}
+.sp17-r div{height:22px;background:var(--quote);border-radius:5px;overflow:hidden}
+.sp17-r i{display:block;height:100%;transition:width .4s}
+.sp17-r b{text-align:right;font-variant-numeric:tabular-nums}
+.sp17-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('sp17'+id),sp=n=>Math.max(.2,10/Math.pow(Math.max(1,n),1.2));
+  function draw(){const n=+$('-n').value,calm=sp(n),left=Math.max(1,Math.round(n*.1)),st=sp(left);$('-nv').textContent=n+' 位';
+    $('-b').innerHTML=[['平静的日子',calm,'var(--accent)'],['风险骤增时',st,'var(--warm)']].map(([k,v,c])=>`<div class="sp17-r"><span>${k}</span><div><i style="width:${v*10}%;background:${c}"></i></div><b>${v.toFixed(1)}%</b></div>`).join('');
+    $('-msg').textContent=n===1?'只有一户人家报价，急着卖就要让出一成。':`${n} 位书记员竞相报价，平静时只需让出 ${calm.toFixed(1)}%；风险骤增时只剩 ${left} 位还在报价，价差回到 ${st.toFixed(1)}%。平时的窄价差，并不保证急时也窄。`;}
+  $('-n').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{let v=1;$('-n').value=1;draw();const id=setInterval(()=>{v+=1;$('-n').value=v;draw();if(v>=20)clearInterval(id);},150);});
+  draw();
+})();
+</script>

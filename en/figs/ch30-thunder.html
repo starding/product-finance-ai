@@ -1,0 +1,41 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">When there is a mistake, who speaks first</p><p class="figsub">In week 8 the agent makes a mistake. Compare how the user's belief changes in three cases: the product discloses it first; the product admits it after the user finds it; the product denies it after the user finds it.</p></div><button class="replay" type="button" data-replay="th2">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Response"><button type="button" data-th2="s" aria-pressed="true">Disclose first</button><button type="button" data-th2="a" aria-pressed="false">Admit when found</button><button type="button" data-th2="d" aria-pressed="false">Deny when found</button></div>
+    <div class="th2" id="th2" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="Belief before and after the mistake"><g id="th2-ax"></g><path id="th2-ref" class="th2-r"/><path id="th2-p" class="th2-l"/></svg>
+      <div class="th2-steps" id="th2-steps"></div>
+      <p class="th2-msg" id="th2-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative curves. On the effect of disclosing unfavourable information first, see Williams, Bourgeois and Croyle (1993) and Arpan and Roskos-Ewoldsen (2005). The grey dashed line is the path with no mistake.</figcaption>
+</figure>
+<style>
+.th2 svg{width:100%;height:auto;display:block}
+.th2-l{fill:none;stroke:var(--accent);stroke-width:2.5}
+.th2-r{fill:none;stroke:var(--faint);stroke-width:1.5;stroke-dasharray:4 4}
+.th2-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:6px}
+.th2-steps div{font-size:12px;line-height:1.5;background:var(--quote);border-radius:7px;padding:6px 8px;opacity:.35;transition:opacity .3s}
+.th2-steps div.on{opacity:1;background:var(--accent-soft)}
+.th2-steps b{display:block;font-size:12.5px}
+.th2-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.th2-steps{grid-template-columns:1fr 1fr}.th2 svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const W=24,X0=50,X1=620,YT=14,YB=176,x=w=>X0+w/W*(X1-X0),y=p=>YB-p*(YB-YT);
+  const run=k=>{let p=.4,o=[];for(let w=0;w<=W;w++){if(w===8){p=k==='s'?p*.78:k==='a'?p*.45:p*.22;}else if(k!=='none'||true){const r=k==='d'&&w>8?.02:.06;p+=(.9-p)*r;}o.push(p);}return o;};
+  const ref=(()=>{let p=.4,o=[];for(let w=0;w<=W;w++){p+=(.9-p)*.06;o.push(p);}return o;})();
+  const $=id=>document.getElementById(id),P=a=>a.map((p,w)=>(w?'L':'M')+x(w).toFixed(1)+','+y(p).toFixed(1)).join('');
+  $('th2-ax').innerHTML=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`+[0,.5,1].map(v=>`<text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text>`).join('')+[0,8,16,24].map(w=>`<text x="${x(w)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">Week ${w}</text>`).join('')+`<line x1="${x(8)}" x2="${x(8)}" y1="${YT}" y2="${YB}" stroke="var(--warm)" stroke-dasharray="3 3"/><text x="${x(8)+4}" y="${YT+10}" font-size="11" class="t-warm">Mistake</text>`;
+  $('th2-ref').setAttribute('d',P(ref));
+  const ST=[['Stop on discovery','Pause the related operations'],['Notify quickly','Notify affected users'],['Explain cause and impact','Which operations, how much money'],['Remedy and prevent','Compensate, and say how a recurrence will be prevented']];
+  $('th2-steps').innerHTML=ST.map(([a,b])=>`<div><b>${a}</b>${b}</div>`).join('');
+  const M={s:'The product discloses the mistake before the user finds it, and sets out how it is being handled: the belief falls somewhat, but the disclosure is itself evidence of integrity, and the belief soon recovers.',a:'The product admits the mistake only after the user finds it: the mistake plus a suspicion of concealment cuts the belief by more than half.',d:'The product denies the mistake after the user finds it: the mistake is seen as a matter of integrity, the belief falls very low, and a good record afterwards struggles to restore it.'};
+  function set(k){document.querySelectorAll('[data-th2]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.th2===k)));$('th2-p').setAttribute('d',P(run(k)));
+    [...$('th2-steps').children].forEach(d=>d.classList.toggle('on',k==='s'));$('th2-msg').textContent=M[k];}
+  document.querySelectorAll('[data-th2]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.th2)));
+  $('th2').addEventListener('anim-in',()=>{['d','a','s'].forEach((k,i)=>setTimeout(()=>set(k),i*2000));});
+  set('s');
+})();
+</script>

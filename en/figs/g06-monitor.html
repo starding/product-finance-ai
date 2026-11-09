@@ -1,0 +1,35 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Watching borrowers on behalf of depositors</p><p class="figsub">Drag the number of depositing households and orchard-planting households, and compare the number of inspections needed when every depositor inspects every orchard with the number needed when the granary inspects on everyone’s behalf.</p></div><button class="replay" type="button" data-replay="mo">Replay</button></div>
+    <div class="mo" id="mo" data-anim>
+      <div class="mo-b"><span>Each inspects</span><div><i id="mo-a" style="background:var(--warm)"></i></div><b id="mo-av"></b></div>
+      <div class="mo-b"><span>Granary inspects</span><div><i id="mo-b" style="background:var(--accent)"></i></div><b id="mo-bv"></b></div>
+      <div class="mo-sl">
+        <div class="sl"><label for="mo-d">Depositing households <b id="mo-dv"></b></label><input id="mo-d" type="range" min="1" max="100" step="1" value="50"></div>
+        <div class="sl"><label for="mo-n">Orchard-planting households <b id="mo-nv"></b></label><input id="mo-n" type="range" min="1" max="20" step="1" value="10"></div>
+      </div>
+      <p class="mo-msg" id="mo-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: when every depositor spreads grain across every orchard, inspecting separately takes depositors × orchards inspections; with the granary inspecting for everyone it takes only as many inspections as there are orchards, and depositors need only judge whether the granary itself is reliable (Diamond, 1984).</figcaption>
+</figure>
+<style>
+.mo-b{display:grid;grid-template-columns:9em 1fr 5em;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.mo-b div{height:18px;background:var(--quote);border-radius:4px;overflow:hidden}
+.mo-b i{display:block;height:100%;transition:width .4s}
+.mo-b b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.mo-sl{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.mo-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.mo-sl{grid-template-columns:1fr;gap:4px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  function draw(){const D=+$('mo-d').value,N=+$('mo-n').value,a=D*N,b=N,M=2000;
+    $('mo-a').style.width=Math.min(a,M)/M*100+'%';$('mo-b').style.width=Math.max(.5,b/M*100)+'%';$('mo-av').textContent=a;$('mo-bv').textContent=b;$('mo-dv').textContent=D;$('mo-nv').textContent=N;
+    $('mo-msg').textContent=D===1?'With only one depositing household, it makes no difference who inspects.':`${D} households each inspecting ${N} orchards takes ${a} inspections in all; the granary inspecting for everyone takes only ${b}. The more costly inspection is, the more valuable this delegation; once inspection becomes cheap, the reasons for delegating change too.`;}
+  ['mo-d','mo-n'].forEach(k=>$(k).addEventListener('input',draw));
+  $('mo').addEventListener('anim-in',()=>{let v=1;$('mo-d').value=1;draw();const id=setInterval(()=>{v+=7;$('mo-d').value=Math.min(v,100);draw();if(v>=100)clearInterval(id);},150);});
+  draw();
+})();
+</script>

@@ -1,0 +1,32 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Limited liability: lose at most what you put in</p><p class="figsub">Three households each put 1 portion into a ship built together with others. The ship sinks, still owing 30 portions in crew wages and goods bought on credit. Switch between the two kinds of liability and see how much each household loses.</p></div><button class="replay" type="button" data-replay="lm">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Liability">
+      <button type="button" data-lm="u" aria-pressed="true">Unlimited liability</button>
+      <button type="button" data-lm="l" aria-pressed="false">Limited liability</button>
+    </div>
+    <div class="lm" id="lm" data-anim></div>
+    <p class="lm-msg" id="lm-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>Illustrative: under unlimited liability, creditors can pursue any investor for the whole debt and usually go first to the wealthiest household; under limited liability, the ship’s debts are limited to the ship’s own assets, and creditors bear whatever is left unpaid.</figcaption>
+</figure>
+<style>
+.lm{display:grid;gap:8px}
+.lm-r{display:grid;grid-template-columns:7em 1fr 6em;gap:10px;align-items:center;font-size:13px}
+.lm-t{display:flex;height:18px;background:var(--quote);border-radius:4px;overflow:hidden}
+.lm-t i{display:block;height:100%;transition:width .5s}
+.lm-r b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.lm-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const H=[['Wealth: 40',40],['Wealth: 12',12],['Wealth: 3',3]],$=id=>document.getElementById(id);
+  function set(k){document.querySelectorAll('[data-lm]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lm===k)));
+    let debt=30;const loss=H.map(()=>1);if(k==='u'){for(const i of [0,1,2]){const pay=Math.min(debt,H[i][1]-1);loss[i]+=pay;debt-=pay;}}
+    $('lm').innerHTML=H.map((h,i)=>`<div class="lm-r"><span>${h[0]}</span><div class="lm-t"><i style="width:${loss[i]/h[1]*100}%;background:var(--warm)"></i><i style="width:${(h[1]-loss[i])/h[1]*100}%;background:var(--accent);opacity:.35"></i></div><b>Loses ${loss[i]}</b></div>`).join('');
+    $('lm-msg').textContent=k==='u'?'Under unlimited liability, creditors go to the wealthiest household, which loses 31 portions on an investment of 1. Well-off households therefore dare not invest in unfamiliar ships, and are unwilling to invest alongside households of slender means.':'Under limited liability, each household loses at most the 1 portion it put in; the 30 portions left unpaid fall on the creditors, so creditors demand higher interest or collateral in advance. Investors no longer need to care how much others own, and shares can be transferred without worry.';}
+  document.querySelectorAll('[data-lm]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.lm)));
+  $('lm').addEventListener('anim-in',()=>{set('u');setTimeout(()=>set('l'),2600);});
+  set('u');
+})();
+</script>

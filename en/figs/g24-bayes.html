@@ -1,0 +1,40 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The record gradually changes the judgement</p><p class="figsub">There are two types of scribe: a reliable one makes 0 to 1 small mistakes a year, an unreliable one makes one or two. His initial judgement depends on the borrowed signals. Switch the scribe's actual type and his initial judgement, and see how his estimate of the probability that "it is reliable" changes over ten years.</p></div><button class="replay" type="button" data-replay="by24">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Actual type">
+      <button type="button" data-by24t="good" aria-pressed="true">Actually reliable</button>
+      <button type="button" data-by24t="bad" aria-pressed="false">Actually unreliable</button>
+    </div>
+    <div class="seg-btns" role="group" aria-label="Initial judgement">
+      <button type="button" data-by24p=".5" aria-pressed="true">No signal: starts at 50%</button>
+      <button type="button" data-by24p=".8" aria-pressed="false">Costly signal: starts at 80%</button>
+    </div>
+    <div class="by24" id="by24" data-anim>
+      <svg viewBox="0 0 660 200" role="img" aria-label="Probability that it is reliable"><g id="by24-g"></g></svg>
+      <p class="by24-msg" id="by24-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the number of mistakes per year follows a Poisson distribution with mean 0.5 for the reliable type and mean 1.5 for the unreliable type. Each year he updates his judgement by Bayes' rule according to the number of mistakes observed (judgements about type revised in light of behaviour, as in Kreps and Wilson, 1982). The number below each dot is the number of mistakes observed that year.</figcaption>
+</figure>
+<style>
+.by24 svg{width:100%;height:auto;display:block}
+.by24-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.by24 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('by24'+id);let type='good',prior=.5;const X0=50,X1=628,YT=12,YB=160,x=t=>X0+t/10*(X1-X0),y=v=>YB-v*(YB-YT);
+  const pois=(l,k)=>{let p=Math.exp(-l);for(let i=1;i<=k;i++)p*=l/i;return p;};
+  function obs(){let s=2424+(type==='good'?0:7);const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};const l=type==='good'?.5:1.5;return Array.from({length:10},()=>{let k=0,p=Math.exp(-l),u=r(),a=p;while(u>a){k++;p*=l/k;a+=p;}return k;});}
+  function draw(){const O=obs(),P=[prior];O.forEach(k=>{const q=P[P.length-1],a=q*pois(.5,k),b=(1-q)*pois(1.5,k);P.push(a/(a+b));});
+    let h=[0,.25,.5,.75,1].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text>`).join('')+[0,2,4,6,8,10].map(t=>`<text x="${x(t)}" y="${YB+30}" text-anchor="middle" font-size="11" class="t-faint">Year ${t}</text>`).join('');
+    h+=`<path d="${P.map((v,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(v).toFixed(1)).join('')}" fill="none" stroke="var(--accent)" stroke-width="2.6"/>`+P.map((v,t)=>`<circle cx="${x(t)}" cy="${y(v)}" r="4.5" fill="var(--accent)"/>`+(t?`<text x="${x(t)}" y="${YB+15}" text-anchor="middle" font-size="11" fill="${O[t-1]>1?'var(--warm)':'var(--muted)'}">${O[t-1]}</text>`:'')).join('');
+    $('-g').innerHTML=h;const end=P[10];
+    $('-msg').textContent=type==='good'?`Actually reliable: it starts at ${Math.round(prior*100)}%, is ${Math.round(P[3]*100)}% after three years and ${Math.min(99,Math.round(end*100))}% after ten. A year with a few more mistakes moves the judgement down, but never to zero.`:`Actually unreliable: it starts at ${Math.round(prior*100)}%, falls to ${Math.round(P[3]*100)}% after three years and is only ${Math.max(1,Math.round(end*100))}% after ten. ${prior>.5?'The costly signal gives it a higher starting point, but the record soon pulls it down; and an unreliable operator could not have afforded such a signal in the first place.':''}`;}
+  const tb=[...document.querySelectorAll('[data-by24t]')],pb=[...document.querySelectorAll('[data-by24p]')];
+  tb.forEach(b=>b.addEventListener('click',()=>{type=b.dataset.by24t;tb.forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  pb.forEach(b=>b.addEventListener('click',()=>{prior=+b.dataset.by24p;pb.forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  $('').addEventListener('anim-in',()=>{[['good',.5],['good',.8],['bad',.8]].forEach(([t,p],i)=>setTimeout(()=>{type=t;prior=p;tb.forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.by24t===t)));pb.forEach(x=>x.setAttribute('aria-pressed',String(+x.dataset.by24p===p)));draw();},300+i*2200));});
+  draw();
+})();
+</script>

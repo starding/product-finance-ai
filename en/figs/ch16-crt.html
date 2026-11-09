@@ -1,0 +1,46 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">Fast intuition and careful checking</p>
+    <p class="figsub">A bat and a ball cost $1.10 in total, and the bat costs $1 more than the ball. How much does the ball cost? Pick an answer first.</p>
+    <div class="crt" id="crt" data-anim>
+      <div class="crt-opts">
+        <button type="button" data-c="10"><b>$0.10</b><span>The answer that comes to mind first</span></button>
+        <button type="button" data-c="5"><b>$0.05</b><span>Needs a pause to work out</span></button>
+      </div>
+      <div class="crt-chk" id="crt-chk" hidden>
+        <div class="crt-row"><span>Ball</span><i id="crt-b"></i><b id="crt-bv"></b></div>
+        <div class="crt-row"><span>Bat</span><i id="crt-r"></i><b id="crt-rv"></b></div>
+        <div class="crt-row tot"><span>Total</span><em id="crt-t"></em></div>
+      </div>
+      <p class="crt-msg" id="crt-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>The question comes from Frederick's (2005) Cognitive Reflection Test. The fast mode of thinking produces an answer that looks reasonable; only by spending attention to check it does one find that it does not satisfy the conditions of the question.</figcaption>
+</figure>
+<style>
+.crt-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.crt-opts button{font:inherit;text-align:left;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);padding:12px 14px;cursor:pointer}
+.crt-opts b{display:block;font-size:20px} .crt-opts span{font-size:12px;color:var(--faint)}
+.crt-opts button.sel{border-color:var(--ink)}
+.crt-opts button.ok{background:var(--accent-soft);border-color:var(--accent)}
+.crt-opts button.bad{background:var(--warm-soft);border-color:var(--warm)}
+.crt-chk{margin-top:12px;display:grid;gap:6px}
+.crt-row{display:grid;grid-template-columns:44px 1fr 70px;gap:10px;align-items:center;font-size:13px}
+.crt-row i{display:block;height:16px;border-radius:4px;width:0;transition:width .6s ease}
+.crt-row b{text-align:right;font-variant-numeric:tabular-nums}
+.crt-row.tot em{grid-column:2/4;font-style:normal;font-size:14px}
+.crt-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),bs=[...document.querySelectorAll('[data-c]')];
+  function pick(c){bs.forEach(b=>{b.classList.toggle('sel',b.dataset.c==c);b.classList.toggle('ok',b.dataset.c==='5'&&c!==null);b.classList.toggle('bad',b.dataset.c==='10'&&c==='10');});
+    const ball=+c/100,racket=ball+1,sum=ball+racket;$('crt-chk').hidden=false;
+    $('crt-b').style.background='var(--gold)';$('crt-r').style.background='var(--accent)';$('crt-b').style.width='0';$('crt-r').style.width='0';
+    setTimeout(()=>{$('crt-b').style.width=ball/1.2*100+'%';$('crt-r').style.width=racket/1.2*100+'%';},40);
+    $('crt-bv').textContent='$'+ball.toFixed(2);$('crt-rv').textContent='$'+racket.toFixed(2);
+    const right=Math.abs(sum-1.1)<1e-9;$('crt-t').innerHTML=`$${sum.toFixed(2)}&emsp;${right?'<span style="color:var(--accent)">Meets the conditions</span>':'<span style="color:var(--warm)">Does not equal $1.10</span>'}`;
+    $('crt-msg').textContent=right?'The ball costs $0.05 and the bat $1.05, for a total of $1.10. Reaching this answer requires first suppressing the $0.10 that comes to mind.':'If the ball cost $0.10, the bat would cost $1.10, for a total of $1.20. This answer comes quickly and feels certain, but it is wrong.';}
+  bs.forEach(b=>b.addEventListener('click',()=>pick(b.dataset.c)));
+})();
+</script>

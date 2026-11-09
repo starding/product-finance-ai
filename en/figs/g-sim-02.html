@@ -1,0 +1,59 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Civilization Simulator · Chapter 2: two people's year</p><p class="figsub">Each person harvests 12 portions a year. Drag the number of months between their harvests and switch lending on or off to see how much each can eat per month and how much is lost over the year.</p></div><button class="replay" type="button" data-replay="cs2">Replay</button></div>
+    <div class="cs-rules"><span class="on">Saving</span><span class="on">Seed</span><span class="on">Lending</span><span class="lock">Commitment · Ch. 3</span><span class="lock">Money · Ch. 4</span></div>
+    <div class="cs2" id="cs2" data-anim>
+      <svg viewBox="0 0 660 220" role="img" aria-label="Grain in the two granaries over time"><g id="cs2-ax"></g><path id="cs2-a" class="cs2-a"/><path id="cs2-b" class="cs2-b"/><path id="cs2-p" class="cs2-p"/></svg>
+      <div class="legend" id="cs2-lg"></div>
+      <div class="cs2-ctl">
+        <div class="sl"><label for="cs2-o">Gap between harvests <b id="cs2-ov"></b></label><input id="cs2-o" type="range" min="0" max="6" step="1" value="6"></div>
+        <div class="sl"><label for="cs2-d">Monthly loss <b id="cs2-dv"></b></label><input id="cs2-d" type="range" min="0" max="5" step="0.5" value="3"></div>
+      </div>
+      <div class="cs-sw"><label><input type="checkbox" id="cs2-lend" checked> Rule: lending</label></div>
+      <div class="cs2-out" id="cs2-out"></div>
+      <p class="cs2-msg" id="cs2-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model: both have the same harvest and each eats the same amount every month, calculated in the steady state of a yearly cycle. With lending, whoever has grain in the granary feeds both first, and the other repays after his harvest. With equal harvests and a symmetric gap, each is lender to the other, the interest cancels out, and the interest rate does not affect the result.</figcaption>
+</figure>
+<style>
+.cs2 svg{width:100%;height:auto;display:block}
+.cs2-a{fill:none;stroke:var(--accent);stroke-width:2.2}
+.cs2-b{fill:none;stroke:var(--warm);stroke-width:2.2}
+.cs2-p{fill:var(--faint);fill-opacity:.16;stroke:none}
+.cs2-ctl{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px}
+.cs2-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cs2-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs2-out span{display:block;font-size:11.5px;color:var(--faint)} .cs2-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.cs2-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs2-ctl{grid-template-columns:1fr;gap:4px}.cs2-out{grid-template-columns:1fr}.cs2 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs2'+id),X0=40,X1=630,YT=12,YB=186,x=t=>X0+t/12*(X1-X0),y=v=>YB-Math.min(v,24)/24*(YB-YT);
+  // 稳定状态：从第 0 个月开始循环多年，取最后一年的库存；harv 为各自收获的月份
+  function cycle(harv,c,d,pool){const k=1-d,n=harv.length;let s=Array(n).fill(0),ok=true,rec=[],lost=0;
+    for(let yr=0;yr<30;yr++){for(let m=0;m<12;m++){harv.forEach((h,i)=>{if(h===m)s[i]+=12;});
+      if(yr===29)rec.push(s.slice());
+      if(pool){let need=c*n,tot=s.reduce((a,b)=>a+b,0);if(tot<need-1e-9){if(yr>2)ok=false;s=s.map(()=>0);}else{ // 先用仓里粮食多的一方供两人吃
+          const ord=s.map((v,i)=>[v,i]).sort((a,b)=>b[0]-a[0]);for(const [,i] of ord){const u=Math.min(s[i],need);s[i]-=u;need-=u;}}}
+      else s=s.map(v=>{if(v<c-1e-9){if(yr>2)ok=false;return 0;}return v-c;});
+      const l=s.reduce((a,b)=>a+b,0)*d;if(yr===29)lost+=l;s=s.map(v=>v*k);}}
+    rec.push(s.slice());return {ok,rec,lost};}
+  function best(harv,d,pool){let lo=0,hi=1.2;for(let i=0;i<40;i++){const m=(lo+hi)/2;if(cycle(harv,m,d,pool).ok)lo=m;else hi=m;}return lo;}
+  $('-lg').innerHTML='<span><i style="background:var(--accent)"></i>My granary</span><span><i style="background:var(--warm)"></i>His granary</span><span><i style="background:var(--faint);opacity:.4"></i>Both granaries</span>';
+  $('-ax').innerHTML=[0,6,12,18,24].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+
+    Array.from({length:13},(_,i)=>`<text x="${x(i)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${i===0?'My harvest':i}</text>`).join('');
+  function draw(){const o=+$('-o').value,d=+$('-d').value/100,pool=$('-lend').checked,harv=[0,o];
+    const c=best(harv,d,pool),r=cycle(harv,c,d,pool),self=best([0],d,false);
+    const pa=r.rec.map((s,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(s[0]).toFixed(1)).join(''),pb=r.rec.map((s,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(s[1]).toFixed(1)).join('');
+    const pp='M'+x(0)+','+YB+r.rec.map((s,t)=>'L'+x(t).toFixed(1)+','+y(s[0]+s[1]).toFixed(1)).join('')+'L'+x(12)+','+YB+'Z';
+    $('-a').setAttribute('d',pa);$('-b').setAttribute('d',pb);$('-p').setAttribute('d',pp);
+    $('-ov').textContent=o+(o===1?' month':' months');$('-dv').textContent=(d*100).toFixed(1)+'%';
+    $('-out').innerHTML=[['Each can eat per month',c.toFixed(2)+' portions'],['Lost by both over the year',r.lost.toFixed(1)+' portions'],['Extra eaten compared with storing alone',(c>self+1e-6?'+'+((c/self-1)*100).toFixed(0)+'%':'0%')]].map(([a,b])=>`<div><span>${a}</span><b>${b}</b></div>`).join('');
+    $('-msg').textContent=!pool?`Without lending, each person's grain must stay in the granary for a full year; together the two lose ${r.lost.toFixed(1)} portions a year.`:d===0?'With no losses, lending makes no difference: the benefit of lending comes from losing less.':o===0?'Both harvest in the same month and run short at exactly the same time, so lending cannot help. Lending depends precisely on shortages falling at different times.':`With harvests ${o} month${o===1?'':'s'} apart, lending shortens the time grain stays in the granary, and each eats ${((c/self-1)*100).toFixed(0)}% more per month. The benefit is greatest with a six-month gap.`;}
+  ['-o','-d','-lend'].forEach(k=>$(k).addEventListener('input',draw));
+  $('').addEventListener('anim-in',()=>{let v=0;$('-o').value=0;draw();const id=setInterval(()=>{v++;$('-o').value=v;draw();if(v>=6)clearInterval(id);},500);});
+  draw();
+})();
+</script>

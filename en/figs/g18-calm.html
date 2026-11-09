@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">A smarter lock</p><p class="figsub">The same household faces two events: after a storm, ship shares fall sharply and he wants to sell them all; later, someone in the family falls ill and he urgently needs grain. Switch between three locks and see how each event turns out.</p></div><button class="replay" type="button" data-replay="cl18">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Lock">
+      <button type="button" data-cl18="none" aria-pressed="true">No lock</button>
+      <button type="button" data-cl18="hard" aria-pressed="false">A store you cannot draw from</button>
+      <button type="button" data-cl18="smart" aria-pressed="false">Scribe: show the agreement, confirm a day later, let emergencies through</button>
+    </div>
+    <div class="cl18" id="cl18" data-anim>
+      <div class="cl18-g" id="cl18-g"></div>
+      <p class="cl18-msg" id="cl18-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: selling immediately after a sharp fall misses the subsequent recovery on average; "a store you cannot draw from" cannot be drawn from in an emergency either. The scribe tells the two events apart on the basis of the agreement the principal wrote in advance, which states what counts as an emergency.</figcaption>
+</figure>
+<style>
+.cl18-g{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cl18-c{background:var(--quote);border-radius:10px;padding:10px 12px;font-size:13.5px;line-height:1.6;border-left:3px solid var(--faint);transition:border-color .3s}
+.cl18-c.ok{border-left-color:var(--accent)} .cl18-c.bad{border-left-color:var(--warm)}
+.cl18-c b{display:block;font-size:14.5px;margin-bottom:2px}
+.cl18-c em{font-style:normal;font-size:12px;color:var(--faint)}
+.cl18-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.cl18-g{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cl18'+id);
+  const S={none:[['bad','Sold at the bottom','After the storm he sold everything on impulse and missed the recovery that followed.'],['ok','Got the grain','He could draw on it whenever he needed.'],'No lock: easy in an emergency, and just as easy on impulse.'],
+    hard:[['ok','Could not sell','The grain was in a store he could not draw from; the impulse passed and the ship shares were kept.'],['bad','Could not draw even in an emergency','Someone in the family fell ill, but he had to wait a year to draw the grain.'],'A store you cannot draw from: it blocks the impulse, and the emergency too. Locked too tight.'],
+    smart:[['ok','Waited a day and did not sell','The scribe set out the original agreement and where this fall sits in history, and asked him to confirm a day later; the next day he changed his mind.'],['ok','Got the grain the same day','Illness is an emergency under the agreement, so the scribe let it through at once.'],'The scribe\'s lock: following the agreement written in advance, it adds resistance to impulses and lets emergencies through.']};
+  function set(k){document.querySelectorAll('[data-cl18]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.cl18===k)));const v=S[k];
+    $('-g').innerHTML=[['After the storm, wants to sell everything',v[0]],['Someone ill, urgently needs grain',v[1]]].map(([t,[c,b,p]])=>`<div class="cl18-c ${c}"><em>${t}</em><b>${b}</b>${p}</div>`).join('');$('-msg').textContent=v[2];}
+  document.querySelectorAll('[data-cl18]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.cl18)));
+  $('').addEventListener('anim-in',()=>{['none','hard','smart'].forEach((k,i)=>setTimeout(()=>set(k),300+i*2400));});
+  set('none');
+})();
+</script>

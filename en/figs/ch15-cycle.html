@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Ongoing jobs: what does "no news" mean?</p><p class="figsub">A monitoring job that checks once a week, running for 16 weeks. Switch the display: notify only when something changes, or account for the state of every cycle.</p></div><button class="replay" type="button" data-replay="cy">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Display mode">
+      <button type="button" data-cy="alert" aria-pressed="true">Notify only on change</button>
+      <button type="button" data-cy="all" aria-pressed="false">Account for every cycle</button>
+    </div>
+    <div class="cy" id="cy" data-anim>
+      <div class="cy-row" id="cy-row"></div>
+      <div class="legend" id="cy-lg"></div>
+      <p class="cy-msg" id="cy-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative sequence. A missed change cannot be noticed by the user at the time and can only be found later through review; it is marked directly here for the sake of explanation.</figcaption>
+</figure>
+<style>
+.cy-row{display:grid;grid-template-columns:repeat(16,1fr);gap:4px;margin:6px 0 10px}
+.cy-c{display:flex;flex-direction:column;align-items:center;gap:4px;opacity:0;transform:translateY(6px);transition:opacity .3s,transform .3s;transition-delay:calc(var(--i)*.07s)}
+.cy.in .cy-c{opacity:1;transform:none}
+.cy-c i{width:100%;aspect-ratio:1;max-width:30px;border-radius:7px;background:var(--quote);border:1.5px solid var(--line);transition:background .3s,border-color .3s}
+.cy-c em{font-style:normal;font-size:10px;color:var(--faint)}
+.cy-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const K={chg:['Changed, user notified','var(--accent)'],ok:['Normal, no change','var(--accent-soft)'],blk:['Check blocked','var(--gold)'],miss:['Missed change','var(--warm)'],wait:['Awaiting user confirmation','var(--blue)']};
+  const seq=['ok','ok','chg','ok','blk','blk','ok','ok','miss','ok','chg','wait','wait','ok','ok','ok'];
+  const row=document.getElementById('cy-row');
+  row.innerHTML=seq.map((s,i)=>`<div class="cy-c" style="--i:${i}"><i></i><em>${i+1}</em></div>`).join('');
+  const cs=[...row.querySelectorAll('i')];
+  function set(m){document.querySelectorAll('[data-cy]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.cy===m)));
+    cs.forEach((c,i)=>{const s=seq[i],show=m==='all'||s==='chg';c.style.background=show?K[s][1]:'var(--quote)';c.style.borderColor=show?K[s][1]:'var(--line)';});
+    document.getElementById('cy-lg').innerHTML=(m==='all'?Object.values(K):[K.chg,['No news','var(--quote)']]).map(([n,c])=>`<span><i style="background:${c};border:1px solid var(--line)"></i>${n}</span>`).join('');
+    document.getElementById('cy-msg').textContent=m==='all'?'When every cycle is accounted for, the user can see that the checks in weeks 5 and 6 were not completed and that in weeks 12 and 13 an action was waiting for their confirmation; the missed change in week 9 also leaves a trail for later review.':'The user receives only 2 notifications; the other 14 weeks are all "no news". Mixed among them are blocked checks, a missed change and a pending confirmation, yet they look exactly the same as everything being fine.';}
+  document.querySelectorAll('[data-cy]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.cy)));
+  document.getElementById('cy').addEventListener('anim-in',()=>{set('alert');setTimeout(()=>set('all'),2800);});
+  set('alert');
+})();
+</script>

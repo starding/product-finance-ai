@@ -1,0 +1,38 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Sparing people the need to get there first</p><p class="figsub">A rumour spreads and 60% of people want to withdraw first. Switch between defences to see whether the granary holds, then see how the granary’s appetite for risk changes once deposits are protected.</p></div><button class="replay" type="button" data-replay="gd">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Defences">
+      <button type="button" data-gd="none" aria-pressed="true">No defence</button>
+      <button type="button" data-gd="ins" aria-pressed="false">Deposit insurance</button>
+      <button type="button" data-gd="lolr" aria-pressed="false">Lender of last resort</button>
+    </div>
+    <div class="gd" id="gd" data-anim>
+      <div class="gd-b"><span>Withdrawals demanded</span><div><i id="gd-d" style="background:var(--warm)"></i></div><b id="gd-dv"></b></div>
+      <div class="gd-b"><span>Most the granary can pay</span><div><i id="gd-c" style="background:var(--accent)"></i></div><b id="gd-cv"></b></div>
+      <div class="gd-b"><span>Granary’s risk-taking</span><div><i id="gd-r" style="background:var(--gold)"></i></div><b id="gd-rv"></b></div>
+      <div class="cs-sw"><label><input type="checkbox" id="gd-k"> Also require the granary to hold enough grain of its own (capital requirement)</label></div>
+      <p class="gd-msg" id="gd-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: with no defence, the granary can pay at most 60% of deposits; the lender of last resort lends to the granary against the orchards as collateral and at a high rate, so that it can meet all withdrawals; risk-taking is shown in relative terms.</figcaption>
+</figure>
+<style>
+.gd-b{display:grid;grid-template-columns:10.5em 1fr 4em;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.gd-b div{height:16px;background:var(--quote);border-radius:4px;overflow:hidden}
+.gd-b i{display:block;height:100%;transition:width .4s}
+.gd-b b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.gd-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);let m='none';
+  function draw(){const k=$('gd-k').checked,d=m==='ins'?.1:.1+.9*.6,c=m==='lolr'?1:.6,risk=m==='ins'?(k?.45:.85):(k?.35:.4);
+    $('gd-d').style.width=d*100+'%';$('gd-c').style.width=c*100+'%';$('gd-r').style.width=risk*100+'%';
+    $('gd-dv').textContent=Math.round(d*100)+'%';$('gd-cv').textContent=Math.round(c*100)+'%';$('gd-rv').textContent=risk>.6?'High':risk>.4?'Medium':'Low';
+    $('gd-msg').textContent=m==='none'?'No defence: 60% of people rush to withdraw, the granary cannot pay, and it falls.':m==='ins'?(k?'With deposits protected, those with no emergency no longer rush, and no run occurs; the capital requirement gives the granary something of its own to lose, and its risk-taking is held down.':'With deposits protected, those with no emergency no longer rush, and no run occurs. But depositors no longer care whom the granary lends to, and its risk-taking rises: this is the moral hazard that insurance brings.'):'The lender of last resort lends to the granary against the orchards; the granary meets every withdrawal, people see they can get their grain, and the panic subsides. The high rate keeps the granary from relying on this fallback in normal times.';}
+  document.querySelectorAll('[data-gd]').forEach(b=>b.addEventListener('click',()=>{m=b.dataset.gd;document.querySelectorAll('[data-gd]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  $('gd-k').addEventListener('input',draw);
+  $('gd').addEventListener('anim-in',()=>{['none','ins','lolr'].forEach((k,i)=>setTimeout(()=>{m=k;document.querySelectorAll('[data-gd]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.gd===k)));draw();},300+i*2400));});
+  draw();
+})();
+</script>

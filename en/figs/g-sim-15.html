@@ -1,0 +1,49 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Civilization Simulator · Chapter 15: guaranteed scribes</p><p class="figsub">Forty households hand their ship shares to scribes for management, and the scribes are deployed by ten operators. Switch three rules on or off separately and adjust the share of unreliable operators, then watch how many households are willing to delegate over twenty years and how much of the loss from mistakes goes uncompensated.</p></div><button class="replay" type="button" data-replay="cs15">Replay</button></div>
+    <div class="cs-rules"><span class="on">Regulation &amp; custody</span><span class="on">Parameter: price of cognitive labour</span><span class="on">Personal agent</span><span class="on">Guaranteeing agents</span><span class="lock">Analysts for all · Ch. 16</span></div>
+    <div class="cs15" id="cs15" data-anim>
+      <svg viewBox="0 0 660 210" role="img" aria-label="Share of households willing to delegate"><g id="cs15-ax"></g><path id="cs15-p" class="cs15-p"/></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Households willing to delegate</span></div>
+      <div class="cs-sw"><label><input type="checkbox" id="cs15-l"> Rule: operators liable and insured</label><label><input type="checkbox" id="cs15-r"> Rule: unalterable records kept by a third party</label><label><input type="checkbox" id="cs15-c"> Rule: authority limits and confirmation</label></div>
+      <div class="sl"><label for="cs15-q">Unreliable operators <b id="cs15-qv"></b></label><input id="cs15-q" type="range" min="0" max="60" step="10" value="30"></div>
+      <button type="button" class="replay" id="cs15-re">Another run of years</button>
+      <div class="cs15-out" id="cs15-out"></div>
+      <p class="cs15-msg" id="cs15-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model: a scribe does 20 things a year for each household. Each task done by a reliable operator's scribe has a 2.5% probability of a mistake, and by an unreliable operator's scribe 5%; when operators are liable they check more closely, and the probability of a mistake is halved. Each mistake costs 1.5% of the household's property, or at most 0.2% when there are authority limits. Without checkable records, principals find only 30% of mistakes; with records, they find 95%. Of the mistakes found, all are compensated when operators are liable and insured; otherwise reliable operators, to protect their names, compensate only part (20% without records, half with records), and unreliable operators compensate nothing. At first 80% of households are willing to delegate; whenever there are uncompensated losses, that share falls, and it recovers slowly in calm years.</figcaption>
+</figure>
+<style>
+.cs15 svg{width:100%;height:auto;display:block}
+.cs15-p{fill:none;stroke:var(--accent);stroke-width:2.6}
+.cs15-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cs15-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs15-out span{display:block;font-size:11.5px;color:var(--faint)} .cs15-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.cs15-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs15-out{grid-template-columns:1fr}.cs15 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs15'+id),Y=20,N=40,OP=10;let seed=1515;
+  const X0=44,X1=628,YT=10,YB=176,x=t=>X0+t/Y*(X1-X0),y=v=>YB-v*(YB-YT);
+  function sim(q,lia,log,cap){let s=seed;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};
+    const nB=Math.round(q*OP);let P=.8;const Ps=[P];let unc=0,tot=0,det=0,errs=0,uy=0;
+    for(let t=0;t<Y;t++){const users=Math.round(P*N);let uncY=0;uy+=users;
+      for(let i=0;i<users;i++){const bad=(i%OP)<nB,e=(bad?.05:.025)*(lia?.5:1);
+        for(let a=0;a<20;a++){if(r()<e){errs++;const L=cap?.002:.015;tot+=L;const d=r()<(log?.95:.3);if(d)det++;
+          const comp=d?(lia?1:(bad?0:(log?.5:.2))):0;uncY+=L*(1-comp);unc+=L*(1-comp);}}}
+      P=Math.max(.05,Math.min(.95,P+.06*(.9-P)-12*(users?uncY/users:0)));Ps.push(P);}
+    return {Ps,tot:uy?tot/uy:0,unc:uy?unc/uy:0,det:errs?det/errs:0};}
+  function draw(){const q=+$('-q').value/100,l=$('-l').checked,rc=$('-r').checked,c=$('-c').checked,S=sim(q,l,rc,c);$('-qv').textContent=Math.round(q*100)+'%';
+    $('-ax').innerHTML=[0,.25,.5,.75,1].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text>`).join('')+[0,5,10,15,20].map(t=>`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">Year ${t}</text>`).join('');
+    $('-p').setAttribute('d',S.Ps.map((v,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(v).toFixed(1)).join(''));
+    const end=Math.round(S.Ps[Y]*100),pc=v=>(v*100).toFixed(2)+'%';
+    $('-out').innerHTML=[['Households willing to delegate in year 20',end+'%'],['Loss from mistakes (share of property per year)',pc(S.tot)],['Of which uncompensated',pc(S.unc)]].map(([a,v])=>`<div><span>${a}</span><b>${v}</b></div>`).join('');
+    const n=[l,rc,c].filter(Boolean).length;
+    $('-msg').textContent=n===0?`All three rules off: when scribes make mistakes, principals mostly fail to notice, and even when they do, often no one pays. Households willing to delegate fall to ${end}%.`:n===3?`All three on: operators pay for mistakes and so check more closely, records mean almost every mistake is found, and authority limits keep the loss from each mistake small. Households willing to delegate rise to ${end}%.`:`${l?'Operators are liable, so there are fewer mistakes, and every mistake found is compensated':'No one is liable, so even mistakes that are found often go uncompensated'}; ${rc?'there are records, so almost every mistake can be found':'there are no records, so most mistakes go unnoticed and liability cannot take hold'}; ${c?'there are authority limits, so each mistake causes only a small loss':'there are no authority limits, so a single mistake can cause a sizeable loss'}. Households willing to delegate: ${end}%.`;}
+  ['-l','-r','-c','-q'].forEach(k=>$(k).addEventListener('input',draw));$('-re').addEventListener('click',()=>{seed=(seed*48271)%2147483647;draw();});
+  $('').addEventListener('anim-in',()=>{[[0,0,0],[1,0,0],[1,1,0],[1,1,1]].forEach(([a,b,d],i)=>setTimeout(()=>{$('-l').checked=!!a;$('-r').checked=!!b;$('-c').checked=!!d;draw();},300+i*2200));});
+  draw();
+})();
+</script>

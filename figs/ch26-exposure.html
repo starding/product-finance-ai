@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">截止时刻上的损失</p><p class="figsub">一个账户在 30 天里有四项不可逆敞口。拖动“今天”，并切换有没有持续代理在照看，看每一项的状态。</p></div><button class="replay" type="button" data-replay="ex">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="是否有代理"><button type="button" data-ex="0" aria-pressed="false">没有人照看</button><button type="button" data-ex="1" aria-pressed="true">持续代理按时提醒</button></div>
+    <div class="ex" id="ex" data-anim>
+      <svg viewBox="0 0 640 120" role="img" aria-label="敞口的截止时刻"><g id="ex-g"></g></svg>
+      <div class="sl"><label for="ex-d">今天 <b id="ex-dv"></b></label><input id="ex-d" type="range" min="1" max="30" step="1" value="10"></div>
+      <div class="ex-list" id="ex-list"></div>
+    </div>
+  </div>
+  <figcaption>示意账户与日期。代理提前三天与一天提醒，并说明可选的处理方式；改变持仓的一步由本人确认。维持保证金要求见美国金融业监管局第 4210 条规则；各地的期权行权、供股与杠杆产品收回规则不同。</figcaption>
+</figure>
+<style>
+.ex svg{width:100%;height:auto;display:block}
+.ex-list{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:8px}
+.ex-i{border-radius:8px;padding:8px 10px;background:var(--quote);border-left:3px solid var(--line);font-size:12.5px;line-height:1.6;transition:border-color .3s,background .3s}
+.ex-i b{display:block;font-size:13.5px}
+.ex-i.w{border-left-color:var(--gold)} .ex-i.ok{border-left-color:var(--accent);background:var(--accent-soft)} .ex-i.bad{border-left-color:var(--warm);background:var(--warm-soft)}
+@media (max-width:640px){.ex-list{grid-template-columns:1fr}.ex svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const E=[[8,'期权到期','实值期权需决定行权或平仓','未处理：按规则被自动行权或作废，时间价值归零'],[15,'维持保证金不足','补充保证金或减仓','期限内未补：被强制平仓，价格由券商决定'],[21,'供股认购截止','决定是否认购或出售权利','错过：只能接受默认结果，持股被摊薄'],[26,'杠杆产品接近收回价','决定是否提前平仓','触及收回价：产品提前终止，剩余价值可能很低']];
+  const X0=30,X1=620,x=d=>X0+(d-1)/29*(X1-X0);let ag=1;
+  const $=id=>document.getElementById(id),sl=$('ex-d');
+  function r(){const t=+sl.value;$('ex-dv').textContent='第 '+t+' 天';
+    let g=`<line x1="${X0}" y1="60" x2="${X1}" y2="60" class="s-faint"/>`+[1,10,20,30].map(d=>`<text x="${x(d)}" y="80" text-anchor="middle" font-size="10" class="t-faint">${d}</text>`).join('');
+    E.forEach(([d,n],i)=>{g+=`<line x1="${x(d)}" y1="44" x2="${x(d)}" y2="66" stroke="var(--warm)" stroke-width="2"/><text x="${x(d)}" y="${36-(i%2)*14}" text-anchor="middle" font-size="11" class="t-ink">${n}</text>`;if(ag){[3,1].forEach(k=>g+=`<circle cx="${x(d-k)}" cy="60" r="4" fill="var(--gold)"/>`);}});
+    g+=`<line x1="${x(t)}" y1="20" x2="${x(t)}" y2="100" stroke="var(--ink)" stroke-dasharray="3 3"/><text x="${x(t)}" y="112" text-anchor="middle" font-size="11" class="t-ink">今天</text>`;
+    $('ex-g').innerHTML=g;
+    $('ex-list').innerHTML=E.map(([d,n,act,miss])=>{const left=d-t;let c,s;
+      if(left<0){c=ag?'ok':'bad';s=ag?'已提前提醒，本人已确认处理':miss;}else if(left<=3){c=ag?'w':'';s=ag?`还剩 ${left} 天：已提醒，选项是“${act}”，等待本人确认`:`还剩 ${left} 天，没有人提醒`;}else{c='';s=`还剩 ${left} 天`;}
+      return `<div class="ex-i ${c}"><b>${n}</b>${s}</div>`;}).join('');}
+  document.querySelectorAll('[data-ex]').forEach(b=>b.addEventListener('click',()=>{ag=+b.dataset.ex;document.querySelectorAll('[data-ex]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));r();}));
+  sl.addEventListener('input',r);
+  $('ex').addEventListener('anim-in',()=>{let t=1;sl.value=1;r();const id=setInterval(()=>{t++;sl.value=t;r();if(t>=30)clearInterval(id);},160);});
+  r();
+})();
+</script>

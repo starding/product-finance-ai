@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">费用年年累积</p><p class="figsub">两笔同样的 100 份，都得到船队每年 6% 的平均收益，只是费用不同。拖动两者的费用与持有的年数，看最后差多少。</p></div><button class="replay" type="button" data-replay="ps">重播</button></div>
+    <div class="ps" id="ps" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="两种费用下的家产增长"><g id="ps-ax"></g><path id="ps-a" class="ps-a"/><path id="ps-b" class="ps-b"/></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>只按份额持有全部</span><span><i style="background:var(--warm)"></i>主动挑选</span></div>
+      <div class="ps-sl">
+        <div class="sl"><label for="ps-f1">只按份额持有的费用 <b id="ps-f1v"></b></label><input id="ps-f1" type="range" min="0" max="1" step="0.05" value="0.1"></div>
+        <div class="sl"><label for="ps-f2">主动挑选的费用 <b id="ps-f2v"></b></label><input id="ps-f2" type="range" min="0.5" max="3" step="0.1" value="1.5"></div>
+        <div class="sl"><label for="ps-t">持有的年数 <b id="ps-tv"></b></label><input id="ps-t" type="range" min="5" max="40" step="1" value="30"></div>
+      </div>
+      <p class="ps-msg" id="ps-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：假设主动挑选在扣除费用之前与平均收益相同；夏普（1991）的算术说明，这对主动者作为一个整体成立。</figcaption>
+</figure>
+<style>
+.ps svg{width:100%;height:auto;display:block}
+.ps-a{fill:none;stroke:var(--accent);stroke-width:2.5}
+.ps-b{fill:none;stroke:var(--warm);stroke-width:2.5}
+.ps-sl{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.ps-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.ps-sl{grid-template-columns:1fr;gap:4px}.ps svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),X0=46,X1=630,YT=12,YB=178;
+  function draw(){const f1=+$('ps-f1').value/100,f2=+$('ps-f2').value/100,T=+$('ps-t').value,A=t=>100*Math.pow(1.06-f1,t),B=t=>100*Math.pow(1.06-f2,t),M=A(T)*1.08,x=t=>X0+t/T*(X1-X0),y=v=>YB-v/M*(YB-YT);
+    $('ps-ax').innerHTML=[0,.25,.5,.75,1].map(k=>{const v=Math.round(M*k/50)*50;return `<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`;}).join('')+[0,.25,.5,.75,1].map(k=>`<text x="${x(T*k)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${Math.round(T*k)} 年</text>`).join('');
+    let pa='',pb='';for(let t=0;t<=T;t+=T/100){pa+=(t?'L':'M')+x(t).toFixed(1)+','+y(A(t)).toFixed(1);pb+=(t?'L':'M')+x(t).toFixed(1)+','+y(B(t)).toFixed(1);}$('ps-a').setAttribute('d',pa);$('ps-b').setAttribute('d',pb);
+    $('ps-f1v').textContent=(f1*100).toFixed(2)+'%';$('ps-f2v').textContent=(f2*100).toFixed(1)+'%';$('ps-tv').textContent=T+' 年';
+    const a=A(T),b=B(T);$('ps-msg').textContent=`${T} 年后，只按份额持有的 100 份变成 ${Math.round(a)} 份，主动挑选的变成 ${Math.round(b)} 份，少了 ${Math.round((1-b/a)*100)}%。每年只差 ${((f2-f1)*100).toFixed(1)} 个百分点，累积下来就是这么大的差别。`;}
+  ['ps-f1','ps-f2','ps-t'].forEach(k=>$(k).addEventListener('input',draw));
+  $('ps').addEventListener('anim-in',()=>{let v=5;$('ps-t').value=5;draw();const id=setInterval(()=>{v+=1;$('ps-t').value=v;draw();if(v>=40)clearInterval(id);},80);});
+  draw();
+})();
+</script>

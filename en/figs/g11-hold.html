@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Reported figures and real assets</p><p class="figsub">The manager reports a return of 8% every year, though the fleet actually earns only 6%, and he quietly keeps a portion for himself. Drag the share he takes each year to see how the reported figures and the real assets diverge, and how long new money from principals can keep it going.</p></div><button class="replay" type="button" data-replay="hd">Replay</button></div>
+    <div class="hd" id="hd" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="Reported assets and real assets"><g id="hd-ax"></g><path id="hd-g" class="hd-g"/><path id="hd-r" class="hd-r"/><path id="hd-a" class="hd-a"/><g id="hd-x"></g></svg>
+      <div class="legend"><span><i style="background:var(--faint)"></i>Assets the manager reports</span><span><i style="background:var(--accent)"></i>Real assets</span><span><i style="background:var(--warm-soft)"></i>Gap</span></div>
+      <div class="sl"><label for="hd-s">Taken each year <b id="hd-sv"></b></label><input id="hd-s" type="range" min="0" max="10" step="1" value="6"></div>
+      <div class="cs-sw"><label><input type="checkbox" id="hd-c"> An independent custodian reports directly to principals</label></div>
+      <p class="hd-msg" id="hd-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: 100 portions are entrusted at the start, and 3 portions of new money flow in each year after that; principals withdraw 6% a year based on the reported figures. When the real assets are not enough to pay withdrawals, the fraud collapses.</figcaption>
+</figure>
+<style>
+.hd svg{width:100%;height:auto;display:block}
+.hd-r{fill:none;stroke:var(--faint);stroke-width:2;stroke-dasharray:5 4}
+.hd-a{fill:none;stroke:var(--accent);stroke-width:2.6}
+.hd-g{fill:var(--warm-soft);stroke:none}
+.hd-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.hd svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),T=20,X0=46,X1=630,YT=12,YB=178,x=t=>X0+t/T*(X1-X0);
+  function run(s){let R=100,A=100;const r=[R],a=[A];let crash=-1;for(let t=1;t<=T;t++){R=R*1.08+3;const w=R*.06;R-=w;A=A*(1.06-s)+3-w;if(A<0&&crash<0)crash=t;r.push(R);a.push(Math.max(A,0));}return {r,a,crash};}
+  function draw(){const s=+$('hd-s').value/100,c=$('hd-c').checked,S=run(s),M=Math.max(...S.r)*1.05,y=v=>YB-v/M*(YB-YT);
+    $('hd-ax').innerHTML=[0,.5,1].map(k=>{const v=Math.round(M*k/50)*50;return `<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`;}).join('')+[0,5,10,15,20].map(t=>`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">Year ${t}</text>`).join('');
+    const end=S.crash>0?S.crash:T,rr=c?S.a:S.r;
+    $('hd-r').setAttribute('d',rr.slice(0,end+1).map((v,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(v).toFixed(1)).join(''));
+    $('hd-a').setAttribute('d',S.a.slice(0,end+1).map((v,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(v).toFixed(1)).join(''));
+    $('hd-g').setAttribute('d',c?'':'M'+S.r.slice(0,end+1).map((v,t)=>x(t)+','+y(v)).join('L')+'L'+S.a.slice(0,end+1).map((v,t)=>x(t)+','+y(v)).reverse().join('L')+'Z');
+    $('hd-x').innerHTML=S.crash>0&&!c?`<line x1="${x(S.crash)}" x2="${x(S.crash)}" y1="${YT}" y2="${YB}" stroke="var(--warm)" stroke-width="2"/><text x="${x(S.crash)-4}" y="${YT+12}" text-anchor="end" font-size="11" class="t-warm">Collapse</text>`:'';
+    $('hd-sv').textContent=Math.round(s*100)+'%';
+    $('hd-msg').textContent=c?(s>0?'The independent custodian reports the real assets directly, so the gap is in front of principals from the first year, and the theft has nowhere to hide.':'With nothing taken, the real assets match the reports.'):s===0?'Even with nothing taken, the reported 8% is still above the actual 6%, and the gap slowly builds up.':S.crash>0?`Taking ${Math.round(s*100)}% a year, the manager keeps going on new principals' money until year ${S.crash}, when the real assets cannot pay the withdrawals and the fraud collapses. In every year before that, principals saw handsome figures.`:`Taking ${Math.round(s*100)}% a year, the gap grows wider over twenty years, yet new principals' money keeps covering it up.`;}
+  ['hd-s','hd-c'].forEach(k=>$(k).addEventListener('input',draw));
+  $('hd').addEventListener('anim-in',()=>{let v=0;$('hd-s').value=0;$('hd-c').checked=false;draw();const id=setInterval(()=>{v++;$('hd-s').value=v;draw();if(v>=8)clearInterval(id);},350);});
+  draw();
+})();
+</script>

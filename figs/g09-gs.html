@@ -1,0 +1,33 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">打听消息的人会多到哪里为止</p><p class="figsub">打听消息的人越多，价格越早反映消息，每个人能赚到的就越少。拖动打听一次消息的成本，看市场会停在多少人打听、价格提前反映了多少消息。</p></div><button class="replay" type="button" data-replay="gs9">重播</button></div>
+    <div class="gs9" id="gs9" data-anim>
+      <svg viewBox="0 0 640 220" role="img" aria-label="知情者比例与每人的所得"><g id="gs9-ax"></g><path id="gs9-c" class="gs9-c"/><line id="gs9-l" class="gs9-l"/><circle id="gs9-p" r="6" fill="var(--ink)"/></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>每位知情者从消息中赚到的</span><span><i style="background:var(--warm)"></i>打听一次消息的成本</span></div>
+      <div class="sl"><label for="gs9-k">打听的成本 <b id="gs9-kv"></b></label><input id="gs9-k" type="range" min="1" max="40" step="1" value="10"></div>
+      <p class="gs9-msg" id="gs9-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：知情者占比为 f 时，价格提前反映的消息比例为 f ÷（f ＋ 0.15），每位知情者赚到的 ＝ 1.5 ×（1 − 提前反映的比例）÷ f。两条线相交的地方，打听消息恰好不赚不亏，市场停在这里（格罗斯曼与斯蒂格利茨，1980）。</figcaption>
+</figure>
+<style>
+.gs9 svg{width:100%;height:auto;display:block}
+.gs9-c{fill:none;stroke:var(--accent);stroke-width:2.5}
+.gs9-l{stroke:var(--warm);stroke-width:2;stroke-dasharray:5 4}
+.gs9-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.gs9 svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),X0=46,X1=630,YT=12,YB=186,x=f=>X0+f*(X1-X0),y=v=>YB-Math.min(v,4)/4*(YB-YT);
+  const s=f=>f/(f+.15),G=f=>1.5*(1-s(f))/f;
+  $('gs9-ax').innerHTML=[0,1,2,3,4].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+[0,.25,.5,.75,1].map(f=>`<text x="${x(f)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${f*100}%</text>`).join('')+`<text x="${X1}" y="${YB-6}" text-anchor="end" font-size="11" class="t-muted">打听消息的人所占的比例</text>`;
+  let d='';for(let f=.02;f<=1;f+=.01)d+=(f===.02?'M':'L')+x(f).toFixed(1)+','+y(G(f)).toFixed(1);$('gs9-c').setAttribute('d',d);
+  function draw(){const c=+$('gs9-k').value/10;let lo=.001,hi=1;for(let i=0;i<50;i++){const m=(lo+hi)/2;if(G(m)>c)lo=m;else hi=m;}const f=G(1)>c?1:lo;
+    $('gs9-l').setAttribute('x1',X0);$('gs9-l').setAttribute('x2',X1);$('gs9-l').setAttribute('y1',y(c));$('gs9-l').setAttribute('y2',y(c));$('gs9-p').setAttribute('cx',x(f));$('gs9-p').setAttribute('cy',y(Math.min(c,4)));$('gs9-kv').textContent=c.toFixed(1)+' 份';
+    $('gs9-msg').textContent=`打听一次要花 ${c.toFixed(1)} 份时，市场停在约 ${Math.round(f*100)}% 的人打听消息，价格提前反映了约 ${Math.round(s(f)*100)}% 的消息。成本越低，打听的人越多，价格越接近完全反映信息，但永远不会完全反映：否则就没有人愿意花这笔成本了。`;}
+  $('gs9-k').addEventListener('input',draw);
+  $('gs9').addEventListener('anim-in',()=>{let v=40;$('gs9-k').value=v;draw();const id=setInterval(()=>{v-=2;$('gs9-k').value=Math.max(v,1);draw();if(v<=1)clearInterval(id);},150);});
+  draw();
+})();
+</script>

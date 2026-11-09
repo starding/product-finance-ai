@@ -1,0 +1,41 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">按任务写出承诺</p>
+    <p class="figsub">选择一类任务，看产品应当承诺什么、用什么指标衡量、怎样检查。</p>
+    <div class="seg-btns" role="group" aria-label="任务">
+      <button type="button" data-tk="0" aria-pressed="true">查一个数据</button>
+      <button type="button" data-tk="1" aria-pressed="false">研究一家公司</button>
+      <button type="button" data-tk="2" aria-pressed="false">持续跟踪</button>
+      <button type="button" data-tk="3" aria-pressed="false">按目标管理组合</button>
+    </div>
+    <div class="tk" id="tk" data-anim>
+      <div class="tk-c" style="--c:var(--accent)"><em>承诺</em><p id="tk-p"></p></div>
+      <div class="tk-c" style="--c:var(--blue)"><em>衡量指标</em><p id="tk-m"></p></div>
+      <div class="tk-c" style="--c:var(--gold)"><em>怎样检查</em><p id="tk-v"></p></div>
+      <div class="tk-c no" style="--c:var(--warm)"><em>不承诺</em><p id="tk-n"></p></div>
+    </div>
+  </div>
+  <figcaption>示意。指标与检查方式应当在任务开始前写明，并让用户随时可以查看。</figcaption>
+</figure>
+<style>
+.tk{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.tk-c{background:var(--quote);border-radius:10px;padding:10px 12px;border-left:3px solid var(--c);opacity:0;transform:translateY(6px);transition:opacity .35s,transform .35s}
+.tk-c.on{opacity:1;transform:none}
+.tk-c em{font-style:normal;font-size:11.5px;color:var(--faint)}
+.tk-c p{margin:4px 0 0;font-size:13.5px;line-height:1.65}
+@media (max-width:640px){.tk{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const T=[['数字准确、及时，注明来源与截止时间','与权威来源一致的比例；数据延迟','随机抽取答案与来源对照；每个数字可点开出处','数字之外的判断'],
+    ['依据可以追溯，结论说明在什么条件下会被推翻','引用可核对的比例；是否列出关键假设与反面证据','逐条点开引用；检查结论是否随假设变化而调整','结论一定正确，或股价一定按结论变动'],
+    ['每个周期完成约定范围内的检查，区分“没有变化”“检查受阻”与“等待确认”','周期完成率；漏报率；误报率','查看每个周期的检查记录；定期混入已知事件检验是否漏报','发现所有会影响价格的事件'],
+    ['始终遵守约定的目标与约束，偏离时请示，以合理成本执行','约束遵守率；配置偏离；交易成本；用户的资金加权收益','每月对照约定检查持仓与交易记录；第三方托管对账','跑赢某个指数，或每年取得某个收益']];
+  const cs=[...document.querySelectorAll('.tk-c')],ids=['tk-p','tk-m','tk-v','tk-n'];
+  function set(i){document.querySelectorAll('[data-tk]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.tk===i)));
+    cs.forEach(c=>c.classList.remove('on'));ids.forEach((id,j)=>document.getElementById(id).textContent=T[i][j]);cs.forEach((c,j)=>setTimeout(()=>c.classList.add('on'),60+j*120));}
+  document.querySelectorAll('[data-tk]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.tk)));
+  document.getElementById('tk').addEventListener('anim-in',()=>{[0,1,2,3].forEach(i=>setTimeout(()=>set(i),i*2000));});
+  set(0);
+})();
+</script>

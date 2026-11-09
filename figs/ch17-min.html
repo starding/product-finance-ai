@@ -1,0 +1,42 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">三个面不一致时，以最低的一面为准</p>
+    <p class="figsub">分别调节能力、意愿与行为三个面，看计划可以执行的风险档位，以及产品应当怎样回应。</p>
+    <div class="mn" id="mn" data-anim>
+      <div class="mn-s" id="mn-s"></div>
+      <div class="mn-out"><span>计划可以执行的风险档位</span><div class="mn-lv" id="mn-lv"></div></div>
+      <p class="mn-msg" id="mn-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意。五档从低到高。意愿高于能力时的约束，即适当性规则的出发点。</figcaption>
+</figure>
+<style>
+.mn-s{display:grid;gap:6px}
+.mn-s .sl label b{font-variant-numeric:tabular-nums}
+.mn-out{margin-top:10px;background:var(--quote);border-radius:10px;padding:10px 12px}
+.mn-out>span{font-size:12px;color:var(--faint)}
+.mn-lv{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-top:6px}
+.mn-lv i{font-style:normal;text-align:center;font-size:12px;padding:6px 0;border-radius:6px;background:var(--surface);color:var(--faint);border:1.5px solid var(--line);transition:all .3s}
+.mn-lv i.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.mn-msg{font-size:14px;margin:10px 0 0;min-height:5.1em}
+</style>
+<script>
+(function(){
+  const N=[['ab','能力',2],['wi','意愿',4],['be','行为',3]],L=['','很低','较低','中等','较高','很高'];
+  const box=document.getElementById('mn-s');
+  box.innerHTML=N.map(([k,n,v])=>`<div class="sl"><label for="mn-${k}">${n} <b id="mn-${k}v"></b></label><input id="mn-${k}" type="range" min="1" max="5" step="1" value="${v}"></div>`).join('');
+  document.getElementById('mn-lv').innerHTML=L.slice(1).map(l=>`<i>${l}</i>`).join('');
+  const lv=[...document.querySelectorAll('#mn-lv i')];
+  function r(){const v=N.map(([k])=>+document.getElementById('mn-'+k).value);N.forEach(([k],i)=>document.getElementById('mn-'+k+'v').textContent=L[v[i]]);
+    const m=Math.min(...v);lv.forEach((e,i)=>e.classList.toggle('on',i+1===m));
+    const [a,w,b]=v,t=[];
+    if(a===m)t.push(w>a?'意愿高于能力：即使用户本人愿意，也不按意愿配置，并说明原因。':'能力是最低的一面：配置以不影响生活与目标为限。');
+    if(w===m&&w<a)t.push('意愿低于能力：可以解释承担更多风险的长期好处，但不强迫；超出意愿的计划很可能在下跌中被放弃。');
+    if(b===m&&b<Math.min(a,w))t.push('行为最低：过去的下跌中实际承受得更少，以行为记录为准，并在下一次下跌前提前沟通。');
+    if(a===w&&w===b)t.push('三个面一致：计划可以按这一档执行，并在下跌中复核。');
+    document.getElementById('mn-msg').textContent=t.join('');}
+  N.forEach(([k])=>document.getElementById('mn-'+k).addEventListener('input',r));
+  document.getElementById('mn').addEventListener('anim-in',()=>{const S=[[2,4,3],[5,2,4],[5,5,2],[3,3,3]];S.forEach((s,j)=>setTimeout(()=>{N.forEach(([k],i)=>document.getElementById('mn-'+k).value=s[i]);r();},j*1800));});
+  r();
+})();
+</script>

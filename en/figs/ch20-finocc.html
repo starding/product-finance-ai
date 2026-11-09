@@ -1,0 +1,41 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Finance and insurance: work composition and ceiling of 26 occupations (author's estimate)</p><p class="figsub">On the left, working time broken down by kind of task; on the right, the ceiling on the amplification factor for the whole job under the Agent tier. Switch the sort order to see what the height of the ceiling is related to.</p></div><button class="replay" type="button" data-replay="fo">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Sort">
+      <button type="button" data-fos="g" aria-pressed="true">By sub-sector</button>
+      <button type="button" data-fos="c" aria-pressed="false">By ceiling</button>
+    </div>
+    <div class="legend" id="fo-lg"></div>
+    <div class="fo" id="fo" data-anim></div>
+    <p class="fo-msg">Review, recording and analysis occupations have ceilings of about 3 to 3.7×; occupations that directly decide the disposal of assets or face clients, such as fund managers, financial advisors, actuaries and underwriters, have only 1.6 to 1.9×.</p>
+  </div>
+  <figcaption>Author's estimate: tasks of 26 finance and insurance occupations in O*NET 31.0 are weighted by (importance − 1) × frequency; Financial and Investment Analysts and Financial Risk Specialists have no task ratings, so their tasks are weighted equally. Occupation names are the official O*NET titles. For methods and data, see <a href="estimates.html">Appendix: Methods and data behind the author's estimates</a>.</figcaption>
+</figure>
+<style>
+.fo{display:grid;gap:2px;margin-top:8px}
+.fo-h{font-size:12px;color:var(--faint);margin:8px 0 2px}
+.fo-r{display:grid;grid-template-columns:14em 1fr 64px;gap:10px;align-items:center;font-size:12.5px}
+.fo-bar{display:flex;height:12px;border-radius:3px;overflow:hidden;background:var(--quote)}
+.fo-bar i{display:block;height:100%;transform-origin:left;transform:scaleX(0);transition:transform .6s}
+.fo.in .fo-bar i{transform:none}
+.fo-c{position:relative;height:12px}
+.fo-c i{position:absolute;left:0;top:0;height:100%;border-radius:3px;background:var(--accent);transition:width .7s}
+.fo-c span{position:absolute;right:0;top:-2px;font-size:11.5px;font-variant-numeric:tabular-nums;background:var(--card);padding-left:3px}
+.fo-msg{font-size:14px;margin:10px 0 0}
+@media (max-width:640px){.fo-r{grid-template-columns:9em 1fr 52px;font-size:11px}}
+</style>
+<script>
+(function(){
+  const D=/*DATA:fin*/[["Banking and credit","Loan Officers",0.5288,{"2":0.321,"4d":0.493,"5":0.133,"1":0.053}],["Banking and credit","Credit Analysts",0.7323,{"4d":0.838,"2":0.12,"5":0.042}],["Banking and credit","Credit Counselors",0.5499,{"4d":0.496,"2":0.463,"5":0.041}],["Banking and credit","Loan Interviewers and Clerks",0.651,{"2":0.252,"4d":0.605,"5":0.144}],["Banking and credit","Credit Authorizers, Checkers, and Clerks",0.6652,{"4d":0.721,"2":0.167,"3":0.065,"5":0.047}],["Banking and credit","Tellers",0.6908,{"4d":0.591,"5":0.263,"2":0.139,"3":0.007}],["Banking and credit","Bill and Account Collectors",0.5488,{"4d":0.291,"2":0.383,"5":0.306,"3":0.02}],["Securities and asset management","Investment Fund Managers",0.4716,{"5":0.278,"4d":0.4,"2":0.205,"4s":0.05,"1":0.066}],["Securities and asset management","Financial and Investment Analysts",0.5635,{"2":0.346,"4d":0.577,"5":0.038,"1":0.038}],["Securities and asset management","Financial Quantitative Analysts",0.6769,{"4d":0.774,"2":0.226}],["Securities and asset management","Financial Risk Specialists",0.6304,{"4d":0.75,"2":0.217,"1":0.033}],["Securities and asset management","Personal Financial Advisors",0.4428,{"2":0.668,"4d":0.285,"5":0.047}],["Securities and asset management","Securities, Commodities, and Financial Services Sales Agents",0.5812,{"5":0.135,"4d":0.504,"2":0.361}],["Securities and asset management","Brokerage Clerks",0.6569,{"2":0.245,"4d":0.693,"3":0.061}],["Insurance","Actuaries",0.3844,{"4d":0.228,"5":0.397,"2":0.303,"1":0.073}],["Insurance","Insurance Underwriters",0.449,{"4d":0.465,"5":0.364,"2":0.171}],["Insurance","Insurance Sales Agents",0.5294,{"2":0.469,"4d":0.349,"5":0.059,"1":0.081,"4s":0.043}],["Insurance","Claims Adjusters, Examiners, and Investigators",0.5004,{"4d":0.429,"4s":0.137,"5":0.077,"2":0.357}],["Insurance","Insurance Appraisers, Auto Damage",0.5624,{"4d":0.785,"4s":0.164,"2":0.051}],["Insurance","Insurance Claims and Policy Processing Clerks",0.646,{"4d":0.626,"3":0.059,"2":0.214,"5":0.101}],["Functions common to all sub-sectors","Financial Managers",0.5319,{"2":0.312,"4d":0.555,"5":0.133}],["Functions common to all sub-sectors","Compliance Officers",0.4505,{"2":0.31,"4d":0.286,"5":0.324,"4s":0.078,"1":0.003}],["Functions common to all sub-sectors","Fraud Examiners, Investigators and Analysts",0.4919,{"4d":0.454,"2":0.193,"4s":0.223,"5":0.045,"1":0.064,"3":0.021}],["Functions common to all sub-sectors","Accountants and Auditors",0.6406,{"4d":0.68,"5":0.088,"4s":0.028,"2":0.204}],["Functions common to all sub-sectors","Customer Service Representatives",0.6383,{"2":0.565,"4d":0.327,"5":0.108}],["Functions common to all sub-sectors","Software Developers",0.5571,{"4d":0.562,"2":0.438}]]/*END*/;
+  const G=[['4d','Information · digitally available','var(--accent)'],['4s','Information · needs on-site perception','var(--accent-soft)'],['2','Others and relationships','var(--warm)'],['5','Rights and obligations','var(--blue)'],['1','Own judgement and decisions','#8a5a9e'],['3','Things and environment','var(--gray-mark)']];
+  document.getElementById('fo-lg').innerHTML=G.map(([k,n,c])=>`<span><i style="background:${c}"></i>${n}</span>`).join('');
+  const box=document.getElementById('fo'),cap=p=>1/(1-p),x=v=>(v-1)/3*100;
+  function row(d){const tot=Object.values(d[3]).reduce((a,b)=>a+b,0),c=cap(d[2]);
+    return `<div class="fo-r"><span>${d[1]}</span><div class="fo-bar">${G.map(([k,,col])=>`<i style="width:${(d[3][k]||0)/tot*100}%;background:${col}"></i>`).join('')}</div><div class="fo-c"><i style="width:${x(c)*.62}%"></i><span>${c.toFixed(1)}×</span></div></div>`;}
+  function draw(s){document.querySelectorAll('[data-fos]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.fos===s)));
+    if(s==='c'){box.innerHTML=D.slice().sort((a,b)=>b[2]-a[2]).map(row).join('');return;}
+    const gs=[...new Set(D.map(d=>d[0]))];box.innerHTML=gs.map(g=>`<div class="fo-h">${g}</div>`+D.filter(d=>d[0]===g).sort((a,b)=>b[2]-a[2]).map(row).join('')).join('');}
+  document.querySelectorAll('[data-fos]').forEach(b=>b.addEventListener('click',()=>draw(b.dataset.fos)));
+  draw('g');
+})();
+</script>

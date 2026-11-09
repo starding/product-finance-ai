@@ -1,0 +1,53 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Six mechanisms that make promises credible</p><p class="figsub">Each mechanism acts at a different point along the chain of a promise. Tap one for an explanation.</p></div><button class="replay" type="button" data-replay="tr">Replay</button></div>
+    <div class="tr" id="tr" data-anim>
+      <div class="tr-reg tr-b" style="--i:4" data-t="Imposes legal and economic consequences on those who break promises, so that keeping them becomes the better choice."><b>Regulation and enforcement</b><span>Covers the whole chain</span></div>
+      <div class="tr-chain">
+        <div class="tr-node"><b>Promising party</b><span>Issuers, banks</span>
+          <div class="tr-b" style="--i:0" data-t="The promising party discloses its operations and financial condition, which an independent auditor verifies."><b>Disclosure and audit</b></div></div>
+        <div class="tr-link"><div class="tr-b" style="--i:1" data-t="Specialist firms assess the promising party centrally, so individual investors need not each verify it."><b>Ratings and research</b></div><i></i></div>
+        <div class="tr-node"><b>Intermediaries</b><span>Brokers, funds, custodian banks</span>
+          <div class="tr-b" style="--i:2" data-t="Client assets are held separately from the intermediary's own assets, so the intermediary's failure does not touch client assets."><b>Custody and segregation</b></div></div>
+        <div class="tr-link"><i></i></div>
+        <div class="tr-node"><b>Users</b><span>Depositors, investors</span></div>
+      </div>
+      <div class="tr-net tr-b" style="--i:3" data-t="Backs specific promises up to a limit, for example deposit insurance and investor compensation funds."><b>Deposit insurance and investor protection</b><span>The safety net underneath</span></div>
+      <div class="tr-time tr-b" style="--i:5" data-t="A long-lived business that defaults loses all its future business, so it has a stronger incentive to keep its promises."><b>Reputation</b><span>Built up over time: keeping promises today so as to stay in business tomorrow</span><i></i></div>
+    </div>
+    <p class="tr-msg" id="tr-msg" aria-live="polite">Tap any mechanism.</p>
+  </div>
+</figure>
+<style>
+.tr{display:grid;gap:10px}
+.tr-b{cursor:pointer;opacity:0;transform:translateY(6px);transition:opacity .4s,transform .4s,box-shadow .2s;transition-delay:calc(var(--i)*.35s)}
+.tr.in .tr-b{opacity:1;transform:none}
+.tr-b.sel{box-shadow:0 0 0 2px var(--accent)}
+.tr-reg{border:1.5px solid var(--gold);background:rgba(160,120,24,.1);border-radius:10px;padding:8px 12px;display:flex;justify-content:space-between;font-size:13px}
+.tr-reg span,.tr-net span,.tr-time span{color:var(--faint);font-size:12px}
+.tr-chain{display:grid;grid-template-columns:1fr 90px 1fr 40px 1fr;align-items:stretch;gap:0}
+.tr-node{border:1.5px solid var(--line);background:var(--surface);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:2px;font-size:13px}
+.tr-node>b{font-size:15px}
+.tr-node>span{font-size:12px;color:var(--faint)}
+.tr-node .tr-b{margin-top:8px;background:var(--accent-soft);border-radius:8px;padding:6px 8px;font-size:12px}
+.tr-link{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px;position:relative}
+.tr-link i{display:block;width:100%;height:2px;background:var(--faint)}
+.tr-link .tr-b{background:var(--accent-soft);border-radius:8px;padding:4px 6px;font-size:12px;text-align:center}
+.tr-net{border:1.5px dashed var(--accent);border-radius:10px;padding:8px 12px;display:flex;justify-content:space-between;font-size:13px;background:var(--accent-soft)}
+.tr-time{position:relative;border-radius:10px;padding:8px 12px;font-size:13px;background:var(--quote);display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.tr-time i{position:absolute;left:12px;right:12px;bottom:4px;height:2px;background:linear-gradient(90deg,var(--line),var(--warm));transform-origin:left;transform:scaleX(0);transition:transform 1.4s ease 2s}
+.tr.in .tr-time i{transform:none}
+.tr-msg{font-size:14px;margin:12px 0 0;min-height:1.7em}
+@media (max-width:640px){
+  .tr-chain{grid-template-columns:1fr;gap:6px}
+  .tr-link{flex-direction:row}
+  .tr-link i{width:2px;height:16px}
+  .tr-reg,.tr-net{flex-direction:column}
+}
+</style>
+<script>
+(function(){
+  const msg=document.getElementById('tr-msg');
+  document.querySelectorAll('#tr .tr-b').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();document.querySelectorAll('#tr .tr-b').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');msg.innerHTML='<b>'+b.querySelector('b').textContent+'</b>: '+b.dataset.t;}));
+})();
+</script>

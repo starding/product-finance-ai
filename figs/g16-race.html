@@ -1,0 +1,32 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">抢先一刻：转手的钱不变，花掉的越来越多</p><p class="figsub">船靠岸的消息一小时后就会公开，早知道的人能在这一小时里从晚知道的人手里赚到 10 份。拖动参与抢先的人家，看全村花在抢先上的资源，与这件事对全村带来的价值。</p></div><button class="replay" type="button" data-replay="rc16">重播</button></div>
+    <div class="rc16" id="rc16" data-anim>
+      <div class="rc16-bars" id="rc16-b"></div>
+      <div class="sl"><label for="rc16-n">参与抢先的人家 <b id="rc16-nv"></b></label><input id="rc16-n" type="range" min="1" max="12" step="1" value="3"></div>
+      <p class="rc16-msg" id="rc16-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：每次消息共有 10 份可以从晚知道的人那里转手；参与抢先的人家每户为更快的书记员与更近的位置花费的资源，按竞相出价直到预期收益为零来设定，合计趋近于 10 份（赫什莱弗，1971 的思路）。</figcaption>
+</figure>
+<style>
+.rc16-bars{display:grid;gap:10px;margin:4px 0 8px}
+.rc16-r{display:grid;grid-template-columns:9.5em 1fr 4.5em;gap:10px;align-items:center;font-size:12.5px}
+.rc16-r div{height:20px;background:var(--quote);border-radius:5px;overflow:hidden}
+.rc16-r i{display:block;height:100%;transition:width .5s}
+.rc16-r b{text-align:right;font-variant-numeric:tabular-nums}
+.rc16-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.rc16-r{grid-template-columns:1fr 4.5em}.rc16-r span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('rc16'+id),P=10;
+  function draw(){const n=+$('-n').value,spent=P*(1-1/n)+(n>1?0:0),each=n>1?spent/n:0;$('-nv').textContent=n+' 户';
+    const B=[['转手的钱',P,'var(--blue)'],['花在抢先上的资源',spent,'var(--warm)'],['对全村创造的价值',0,'var(--accent)'],['抢先者合计净得',P-spent,'var(--faint)']];
+    $('-b').innerHTML=B.map(([k,v,c])=>`<div class="rc16-r"><span>${k}</span><div><i style="width:${v/P*100}%;background:${c}"></i></div><b>${v.toFixed(1)} 份</b></div>`).join('');
+    $('-msg').textContent=n===1?'只有一户抢先，它不必多花多少就能早知道，从晚知道的人那里赚走 10 份。这 10 份没有让船多运一份货。':`${n} 户竞相抢先，每户花 ${each.toFixed(1)} 份去争取那 10 份，合计花掉 ${spent.toFixed(1)} 份。转手的钱一份没多，对全村的价值仍是零，花掉的资源却越来越多。`;}
+  $('-n').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{let v=1;$('-n').value=1;draw();const id=setInterval(()=>{v+=1;$('-n').value=v;draw();if(v>=12)clearInterval(id);},350);});
+  draw();
+})();
+</script>

@@ -1,0 +1,51 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">一百只股票里，谁创造了财富</p>
+    <p class="figsub">按 1926—2016 年美国上市股票的整体情况示意：每个点代表 1% 的股票。随机挑几只集中持有，看能否挑中少数大赢家。</p>
+    <div class="sk4" id="sk4" data-anim>
+      <div class="sk4-grid" id="sk4-g"></div>
+      <div class="legend"><span><i style="background:var(--gray-mark)"></i>上市期间收益不如国库券（约 57%）</span><span><i style="background:var(--accent-soft);border:1px solid var(--accent)"></i>跑赢国库券，但对净财富贡献很小</span><span><i style="background:var(--gold)"></i>创造了全部净财富（约 4%）</span></div>
+      <div class="sk4-ctrl">
+        <label>每次挑选 <select id="sk4-n"><option>1</option><option selected>5</option><option>10</option><option>30</option></select> 只</label>
+        <button type="button" class="replay" id="sk4-one">随机挑一次</button>
+        <button type="button" class="replay" id="sk4-many">模拟 1,000 次</button>
+      </div>
+      <p class="sk4-msg" id="sk4-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意依据 Bessembinder（2018）：1926—2016 年，超过一半的美国上市股票在上市期间的收益不如一个月期国库券，股市创造的全部净财富来自约 4% 的股票。图中比例为取整后的示意，“挑中”只表示组合里含有至少一只大赢家。</figcaption>
+</figure>
+<style>
+.sk4-grid{display:grid;grid-template-columns:repeat(20,1fr);gap:4px}
+.sk4-grid i{aspect-ratio:1;border-radius:50%;background:var(--gray-mark);opacity:0;transform:scale(.5);transition:opacity .3s,transform .3s,box-shadow .2s;transition-delay:calc(var(--k)*6ms)}
+.sk4.in .sk4-grid i{opacity:.75;transform:none}
+.sk4-grid i.mid{background:var(--accent-soft);box-shadow:inset 0 0 0 1px var(--accent)}
+.sk4-grid i.top{background:var(--gold);opacity:1}
+.sk4-grid i.pick{box-shadow:0 0 0 3px var(--ink)!important;opacity:1}
+.sk4-ctrl{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px;font-size:13px}
+.sk4-ctrl select{font:inherit;font-size:13px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink);padding:2px 6px}
+.sk4-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.sk4-grid{grid-template-columns:repeat(10,1fr)}}
+</style>
+<script>
+(function(){
+  const kind=[]; for(let i=0;i<100;i++)kind.push(i<57?'low':i<96?'mid':'top');
+  // 打乱位置，避免大赢家集中在一角
+  let seed=9; const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
+  for(let i=99;i>0;i--){const j=Math.floor(rnd()*(i+1));[kind[i],kind[j]]=[kind[j],kind[i]];}
+  const g=document.getElementById('sk4-g');
+  g.innerHTML=kind.map((k,i)=>`<i class="${k==='low'?'':k}" style="--k:${i}"></i>`).join('');
+  const cells=[...g.children], nEl=document.getElementById('sk4-n'), msg=document.getElementById('sk4-msg');
+  const draw=n=>{const idx=[...Array(100).keys()];for(let i=0;i<n;i++){const j=i+Math.floor(Math.random()*(100-i));[idx[i],idx[j]]=[idx[j],idx[i]];}return idx.slice(0,n);};
+  document.getElementById('sk4-one').addEventListener('click',()=>{
+    const n=+nEl.value, pick=draw(n); cells.forEach(c=>c.classList.remove('pick')); pick.forEach(i=>cells[i].classList.add('pick'));
+    const hit=pick.filter(i=>kind[i]==='top').length, low=pick.filter(i=>kind[i]==='low').length;
+    msg.textContent=hit?`挑中了 ${hit} 只大赢家。`:`没有挑中任何一只大赢家；${n} 只里有 ${low} 只连国库券都跑不赢。`;
+  });
+  document.getElementById('sk4-many').addEventListener('click',()=>{
+    const n=+nEl.value; let miss=0; for(let t=0;t<1000;t++){if(!draw(n).some(i=>kind[i]==='top'))miss++;}
+    cells.forEach(c=>c.classList.remove('pick'));
+    msg.textContent=`每次挑 ${n} 只，1,000 次里有 ${miss} 次一只大赢家都没挑中（约 ${Math.round(miss/10)}%）。持有得越分散，越不容易错过它们；持有整个市场，则一定不会错过。`;
+  });
+})();
+</script>

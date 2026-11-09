@@ -1,0 +1,45 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">How the fee model changes what gets recommended</p>
+    <p class="figsub">The same adviser and the same client. Switch the adviser's fee model to see what he leans toward recommending and where the client ends up after 20 years.</p>
+    <div class="seg-btns" role="group" aria-label="Fee model">
+      <button type="button" data-cf="com" aria-pressed="true">Sales commission</button>
+      <button type="button" data-cf="fee" aria-pressed="false">Fixed share of client assets</button>
+    </div>
+    <div class="cf" id="cf" data-anim>
+      <div class="cf-mix" id="cf-mix"></div>
+      <div class="cf-out">
+        <div><span>Total annual portfolio cost</span><b id="cf-c"></b></div>
+        <div><span>Trades per year</span><b id="cf-t"></b></div>
+        <div><span>1 million after 20 years (illustrative)</span><b id="cf-v"></b></div>
+      </div>
+      <p class="cf-msg" id="cf-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative figures: all product types are assumed to earn the same 6% a year before costs, so the differences come only from fees and trading costs. Empirically, Bergstresser, Chalmers and Tufano (2009) found that broker-sold funds performed worse after fees; the mystery-shopper study by Mullainathan, Noeth and Schoar (2012) found that advisers tended to recommend higher-fee active products.</figcaption>
+</figure>
+<style>
+.cf-mix{display:flex;height:40px;border-radius:8px;overflow:hidden;margin-bottom:6px}
+.cf-mix i{display:flex;align-items:center;justify-content:center;font-style:normal;font-size:12px;color:#fff;transition:width .6s ease;white-space:nowrap;overflow:hidden}
+.cf-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.cf-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.cf-out span{display:block;font-size:12px;color:var(--faint)}
+.cf-out b{font-size:19px;font-variant-numeric:tabular-nums}
+.cf-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cf-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const S={com:{mix:[['High-commission active funds',55,'var(--warm)'],['Structured products',25,'var(--gold)'],['Index funds',20,'var(--accent)']],cost:2.1,tr:8,m:'Under commissions, the more and the pricier the products sold, the more the adviser earns: the portfolio leans toward high-fee products, and trading is more frequent.'},
+           fee:{mix:[['High-commission active funds',15,'var(--warm)'],['Structured products',5,'var(--gold)'],['Index funds',80,'var(--accent)']],cost:0.6,tr:1,m:'Under a fixed share of assets, the adviser\'s income grows with the client\'s assets: recommendations lean toward low-cost portfolios with little trading. A conflict of interest remains (for example, an incentive to get the client to hand over more assets), but it points in a different direction.'}};
+  const mix=document.getElementById('cf-mix');
+  function set(k){document.querySelectorAll('[data-cf]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.cf===k)));const s=S[k];
+    mix.innerHTML=s.mix.map(([n,w,c])=>`<i style="background:${c};width:0" data-w="${w}">${w>=20?n+' '+w+'%':''}</i>`).join('');
+    setTimeout(()=>mix.querySelectorAll('i').forEach(i=>i.style.width=i.dataset.w+'%'),40);
+    document.getElementById('cf-c').textContent=s.cost.toFixed(1)+'%';document.getElementById('cf-t').textContent=s.tr;
+    document.getElementById('cf-v').textContent=(Math.round(100*Math.pow(1+0.06-s.cost/100,20))/100).toFixed(2)+' million';document.getElementById('cf-msg').textContent=s.m;}
+  document.querySelectorAll('[data-cf]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.cf)));
+  document.getElementById('cf').addEventListener('anim-in',()=>{set('com');setTimeout(()=>set('fee'),2600);});
+  set('com');
+})();
+</script>

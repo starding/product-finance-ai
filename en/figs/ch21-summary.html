@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: reliability through process design</p><p class="figsub">Four design requirements, each corresponding to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="ch21summary">Replay</button></div>
+    <div class="ch21summary" id="ch21summary" data-anim><div class="ch21summary-c" style="--i:0"><em>All three sources are needed</em><b>Give the agent context, and use tools to calculate and look up figures</b><p>Numbers come from data sources and calculation, with source and cut-off time noted; they are not supplied by the model from memory.</p></div><div class="ch21summary-c" style="--i:1"><em>Errors accumulate over steps</em><b>Shorten every stretch that runs unchecked</b><p>Break long tasks into segments that can be verified, checked automatically or by the user at the end of each.</p></div><div class="ch21summary-c warn" style="--i:2"><em>The capability boundary is uneven</em><b>State the scope of application, and step down outside it</b><p>Say plainly which tasks the agent is known to handle poorly, and hand them to a person or switch to more conservative handling.</p></div><div class="ch21summary-c warn" style="--i:3"><em>When unsure, it guesses</em><b>Reward saying "I don't know"</b><p>With no data, say there is no data, and mark uncertain points separately; penalize wrong answers in evaluation.</p></div></div>
+  </div>
+</figure>
+<style>
+.ch21summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch21summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch21summary-c.warn{border-left-color:var(--warm)}
+.ch21summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch21summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch21summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch21summary.in .ch21summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch21summary{grid-template-columns:1fr}}
+</style>

@@ -1,0 +1,32 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Replaying past decisions</p><p class="figsub">Eight recorded decisions, with their inputs, the clauses relied on and the model version saved. First replay with the original version to check that they can be reproduced; then replay with a new version to see where it would decide differently.</p></div></div>
+    <div class="by-btn"><button type="button" class="replay" id="rp-1">Replay with original version</button><button type="button" class="replay" id="rp-2">Replay with new version</button></div>
+    <div class="rp" id="rp" data-anim></div>
+    <p class="rp-msg" id="rp-msg" aria-live="polite">Choose a replay.</p>
+  </div>
+  <figcaption>Illustrative. Reproducibility requires making data and code available; see Peng (2011). For an agent, the data timestamps, clauses and model version of the time must also be kept.</figcaption>
+</figure>
+<style>
+.by-btn{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+.rp{display:grid;gap:4px}
+.rp-r{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) minmax(0,1fr);gap:8px;align-items:center;font-size:12.5px;background:var(--quote);border-radius:7px;padding:6px 10px}
+.rp-r.h{background:none;font-size:11.5px;color:var(--faint)}
+.rp-r i{font-style:normal;border-radius:5px;padding:2px 6px;opacity:0;transition:opacity .3s;transition-delay:calc(var(--i)*.15s)}
+.rp.go .rp-r i{opacity:1}
+.rp-r i.same{background:var(--accent-soft);color:var(--accent)} .rp-r i.diff{background:var(--warm-soft);color:var(--warm)}
+.rp-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.rp-r{grid-template-columns:1fr 1fr}.rp-r span:first-child{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const D=[['Expiry reminder: option in the money','Remind and ask','Remind and ask'],['Rebalancing: 6% drift','Execute per plan','Execute per plan'],['News: peer company under investigation','Record, no alert','Alert, explain the link'],['Rights issue: three days before deadline','Remind and ask','Remind and ask'],['Data source down','Mark as blocked','Mark as blocked'],['Single holding rises to 31%','Ask to reduce','Ask to reduce'],['Dividend received','Reinvest as agreed','Reinvest as agreed'],['Volatility up, no constraint triggered','No action','Suggest reducing position']];
+  const box=document.getElementById('rp');
+  function show(v){box.classList.remove('go');box.innerHTML=`<div class="rp-r h"><span>Recorded event</span><span>Decision at the time</span><span>Replay result</span></div>`+D.map(([e,a,b],i)=>{const r=v===1?a:b,s=r===a;return `<div class="rp-r"><span>${e}</span><span>${a}</span><i class="${s?'same':'diff'}" style="--i:${i}">${r}${s?'':' (different)'}</i></div>`;}).join('');
+    void box.offsetWidth;box.classList.add('go');
+    document.getElementById('rp-msg').textContent=v===1?'Replayed with the original version and the inputs of the time, all eight decisions are reproduced: the record is complete, and past decisions can be reconstructed and checked.':'The new version decides differently in two places: one more alert, and one more suggestion to reduce a position. Before the version is changed, the principal should be told of these changes.';}
+  document.getElementById('rp-1').addEventListener('click',()=>show(1));document.getElementById('rp-2').addEventListener('click',()=>show(2));
+  box.addEventListener('anim-in',()=>{show(1);setTimeout(()=>show(2),3000);});
+  show(1);
+})();
+</script>

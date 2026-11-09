@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：如果人人都有分析师</p><p class="figsub">四条结论，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="g16summary">重播</button></div>
+    <div class="g16summary" id="g16summary" data-anim><div class="g16summary-c" style="--i:0"><em>重跑：格罗斯曼—斯蒂格利茨</em><b>读报告不再是优势</b><p>分析几乎免费，知情的人大幅增加，价格反映了绝大部分公开信息。</p></div><div class="g16summary-c" style="--i:1"><em>私人价值与社会价值</em><b>抢先只转手，不创造</b><p>早一刻知道能赚到别人的钱，竞相抢先却只消耗资源。</p></div><div class="g16summary-c warn" style="--i:2"><em>注意力</em><b>稀缺的是看信息的时间</b><p>信息越多，排序的权力越大；被读的一方也学会了为书记员写作。</p></div><div class="g16summary-c warn" style="--i:3"><em>新的不对称</em><b>优势转到独占的数据</b><p>主动管理的算术不变；整体之内的输赢取决于谁有不公开的数据、谁更快。</p></div></div>
+  </div>
+</figure>
+<style>
+.g16summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g16summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g16summary-c.warn{border-left-color:var(--warm)}
+.g16summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g16summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g16summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g16summary.in .g16summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g16summary{grid-template-columns:1fr}}
+</style>

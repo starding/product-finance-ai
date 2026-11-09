@@ -1,0 +1,28 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">He decides on paper; who decides in fact?</p><p class="figsub">Each year the scribe puts 10 important proposals to him, 2 of which in fact go against his wishes. Drag the time he spends each year understanding the situation, and see how many he catches and who holds the real decision.</p></div><button class="replay" type="button" data-replay="au21">Replay</button></div>
+    <div class="au21" id="au21" data-anim>
+      <div class="au21-g" id="au21-g"></div>
+      <div class="sl"><label for="au21-h">Time he spends understanding the situation <b id="au21-hv"></b></label><input id="au21-h" type="range" min="0" max="60" step="2" value="4"></div>
+      <p class="au21-msg" id="au21-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the probability that he catches a proposal that goes against his wishes is time ÷ (time + 10 hours); proposals he does not catch, he approves all the same (the distinction between formal and real authority drawn by Aghion and Tirole, 1997).</figcaption>
+</figure>
+<style>
+.au21-g{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;margin:6px 0 10px}
+.au21-g i{aspect-ratio:1;border-radius:8px;background:var(--accent-soft);display:grid;place-items:center;font-style:normal;font-size:12px;transition:background .3s}
+.au21-g i.bad{background:var(--warm)} .au21-g i.caught{background:var(--quote);outline:2px solid var(--warm);outline-offset:-2px;color:var(--warm)}
+.au21-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('au21'+id);
+  function draw(){const h=+$('-h').value,p=h/(h+10),caught=Math.round(2*p*10)/10;$('-hv').textContent=h+' hours';
+    $('-g').innerHTML=Array.from({length:10},(_,i)=>{if(i<2){const c=i<Math.round(caught);return `<i class="${c?'caught':'bad'}">${c?'No':'Yes'}</i>`;}return `<i>Yes</i>`;}).join('');
+    $('-msg').textContent=h===0?'He never spends time understanding the situation and approves all ten proposals: the formal right to decide is his, but the real decision rests entirely with the scribe.':`Spending ${h} hours a year on understanding the situation, he catches on average ${caught.toFixed(1)} of the proposals that go against his wishes. ${h<10?'He spends too little time, so most of the real decision rests with the scribe.':'The more information he holds, the more of the real decision returns to him; the price is his time.'}`;}
+  $('-h').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{let v=0;$('-h').value=0;draw();const id=setInterval(()=>{v+=2;$('-h').value=v;draw();if(v>=40)clearInterval(id);},120);});
+  draw();
+})();
+</script>

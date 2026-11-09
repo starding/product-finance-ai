@@ -1,0 +1,21 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：信息产品能提供什么</p><p class="figsub">四条设计要求，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="s03">重播</button></div>
+    <div class="s03" id="s03" data-anim>
+      <div class="s03-c" style="--i:0"><em>公开信息以分钟计进入价格</em><b>不以“比市场先知道”为卖点</b><p>推送公开新闻时，价格多半已经反映；速度竞赛属于专业机构，不属于个人投资者。</p></div>
+      <div class="s03-c" style="--i:1"><em>价格只告诉结果，不告诉原因</em><b>把新闻与用户自身联系起来</b><p>说明一条信息与用户持仓、目标与约定的关系，比抢先报道更有价值。</p></div>
+      <div class="s03-c warn" style="--i:2"><em>强式有效不成立</em><b>守住未公开信息的边界</b><p>AI 不得获取、推断或传播未公开的重大信息；数据来源与使用范围要可追溯。</p></div>
+      <div class="s03-c" style="--i:3"><em>效率有代价，噪声难免</em><b>帮助用户不做“噪声交易者”</b><p>对追逐消息的频繁交易给出成本与证据，让用户的交易建立在自己的目标上。</p></div>
+    </div>
+  </div>
+</figure>
+<style>
+.s03{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.s03-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.s03-c.warn{border-left-color:var(--warm)}
+.s03-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.s03-c b{display:block;font-size:15px;margin:2px 0 4px}
+.s03-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.s03.in .s03-c{opacity:1;transform:none}
+@media (max-width:640px){.s03{grid-template-columns:1fr}}
+</style>

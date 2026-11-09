@@ -1,0 +1,40 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">Suitability: matching product risk to the client's tolerance</p>
+    <p class="figsub">Choose the client's risk tolerance grade and investment experience to see which products may be recommended.</p>
+    <div class="su" id="su" data-anim>
+      <div class="su-ctrl">
+        <div class="sl"><label for="su-r">Risk tolerance grade <b id="su-rv"></b></label><input id="su-r" type="range" min="1" max="5" step="1" value="3"></div>
+        <label class="su-chk"><input type="checkbox" id="su-x" checked> Has traded complex products</label>
+      </div>
+      <div class="su-list" id="su-list"></div>
+      <p class="su-msg" id="su-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative grading, not the specific rules of any institution. Suitability requirements in different jurisdictions are set out in FINRA Rule 2111, the SEC's Regulation Best Interest (2019), the EU's Markets in Financial Instruments Directive II and the Code of Conduct of Hong Kong's Securities and Futures Commission; complex products usually also require an assessment of the client's knowledge and experience.</figcaption>
+</figure>
+<style>
+.su-ctrl{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center}
+.su-chk{font-size:14px;display:flex;gap:6px;align-items:center;white-space:nowrap}
+.su-chk input{accent-color:var(--accent);width:16px;height:16px}
+.su-list{display:grid;gap:6px}
+.su-p{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;border:1.5px solid var(--line);border-radius:8px;padding:8px 12px;transition:all .3s}
+.su-p em{font-style:normal;font-size:12px;color:var(--faint);font-variant-numeric:tabular-nums}
+.su-p b{font-size:14px}
+.su-p span{font-size:12px}
+.su-p.ok{border-color:var(--accent);background:var(--accent-soft)} .su-p.ok span{color:var(--accent)}
+.su-p.no{opacity:.55} .su-p.no span{color:var(--warm)}
+.su-msg{font-size:14px;margin:10px 0 0;min-height:1.7em}
+@media (max-width:640px){.su-ctrl{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const P=[[1,'Bank deposits and money market funds',0],[2,'Bond funds',0],[3,'Stock index funds',0],[4,'Individual stocks',0],[4,'More complex products such as convertible bonds',1],[5,'Leveraged products and options',1]];
+  const L=['','conservative','cautious','balanced','growth','aggressive'];
+  const r=document.getElementById('su-r'),xp=document.getElementById('su-x'),list=document.getElementById('su-list');
+  function render(){const R=+r.value,X=xp.checked;document.getElementById('su-rv').textContent='Grade '+R+' ('+L[R]+')';
+    let ok=0;list.innerHTML=P.map(([lv,n,cx])=>{const a=lv<=R&&(!cx||X);if(a)ok++;const why=lv>R?'Risk above tolerance grade':(!X&&cx)?'No complex-product experience':'May be recommended';return `<div class="su-p ${a?'ok':'no'}"><em>Risk ${lv}</em><b>${n}</b><span>${why}</span></div>`;}).join('');
+    document.getElementById('su-msg').textContent=`${ok} product types may be recommended. The basis for a recommendation is the client's situation, not the product's sales target.`;}
+  r.addEventListener('input',render);xp.addEventListener('change',render);render();
+})();
+</script>

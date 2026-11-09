@@ -1,0 +1,38 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">为书记员写的报告</p><p class="figsub">同一位船主、同一季的亏损，写成两份报告。书记员按报告里的负面字眼打分。切换两种写法，看字眼与分数怎样变化，事实是否变化。</p></div><button class="replay" type="button" data-replay="mc16">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="写法">
+      <button type="button" data-mc16="h" aria-pressed="true">写给人读</button>
+      <button type="button" data-mc16="m" aria-pressed="false">写给书记员读</button>
+    </div>
+    <div class="mc16" id="mc16" data-anim>
+      <div class="mc16-doc" id="mc16-d"></div>
+      <div class="mc16-out" id="mc16-out"></div>
+      <p class="mc16-msg" id="mc16-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：两份报告的文字为虚构；书记员的打分＝100 －负面字眼数 × 15。曹、蒋、杨与张（2023）发现，机器读者越多的美国上市公司，越会避开情感分析词典中的负面词汇。</figcaption>
+</figure>
+<style>
+.mc16-doc{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:14px;line-height:1.9}
+.mc16-doc mark{background:var(--warm-soft);color:var(--warm);border-radius:3px;padding:0 2px}
+.mc16-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.mc16-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.mc16-out span{display:block;font-size:11.5px;color:var(--faint)} .mc16-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.mc16-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.mc16-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('mc16'+id);
+  const D={h:'本季船队<mark>亏损</mark> 12 份。两艘船在风暴中<mark>受损</mark>，其中一艘<mark>沉没</mark>，修理费用高于预期。下季的航线面临<mark>风险</mark>，收成可能继续<mark>下滑</mark>。',
+           m:'本季船队收益为 −12 份。两艘船在风暴中需要修理，其中一艘未能返航，修理费用高于预期。下季的航线存在不确定性，收成有待恢复。'};
+  function set(k){document.querySelectorAll('[data-mc16]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mc16===k)));$('-d').innerHTML=D[k];
+    const n=(D[k].match(/<mark>/g)||[]).length;
+    $('-out').innerHTML=[['负面字眼',n+' 个'],['书记员的打分',(100-n*15)+' 分'],['本季的亏损','12 份']].map(([a,v])=>`<div><span>${a}</span><b>${v}</b></div>`).join('');
+    $('-msg').textContent=k==='h'?'写给人读：亏损、受损、沉没、风险、下滑，五个负面字眼，书记员打 25 分。':'写给书记员读：同样亏了 12 份、沉了一艘船，换了说法，书记员数不到负面字眼，打 100 分。读的一方变了，写的一方也跟着变；读的一方又要学会识破新的写法。';}
+  document.querySelectorAll('[data-mc16]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.mc16)));
+  $('').addEventListener('anim-in',()=>{set('h');setTimeout(()=>set('m'),2400);});
+  set('h');
+})();
+</script>

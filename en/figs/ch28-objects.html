@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">State kept in conversations, or stored as objects</p><p class="figsub">Over four weeks the principal and the agent have four conversations, and in the fourth week the model is changed. Switch how state is kept and see what remains by the fourth conversation.</p></div><button class="replay" type="button" data-replay="ob2">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="How state is kept"><button type="button" data-ob2="s" aria-pressed="true">Only in conversations</button><button type="button" data-ob2="o" aria-pressed="false">Stored as long-lived objects</button></div>
+    <div class="ob2" id="ob2" data-anim>
+      <div class="ob2-wk" id="ob2-wk"></div>
+      <div class="ob2-list" id="ob2-list"></div>
+    </div>
+    <p class="ob2-msg" id="ob2-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>Illustrative.</figcaption>
+</figure>
+<style>
+.ob2-wk{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px}
+.ob2-wk div{background:var(--quote);border-radius:8px;padding:6px 8px;font-size:12px;line-height:1.5}
+.ob2-wk b{display:block;font-size:12.5px}
+.ob2-list{display:grid;gap:5px}
+.ob2-i{display:grid;grid-template-columns:minmax(0,1fr) 110px;gap:8px;align-items:center;font-size:12.5px;background:var(--quote);border-radius:7px;padding:6px 10px;opacity:0;transition:opacity .3s;transition-delay:calc(var(--i)*.12s)}
+.ob2-i.on{opacity:1}
+.ob2-i b{font-weight:400;font-size:11.5px;text-align:center;border-radius:5px;padding:2px 6px}
+.ob2-i b.y{background:var(--accent-soft);color:var(--accent)} .ob2-i b.n{background:var(--warm-soft);color:var(--warm)}
+.ob2-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.ob2-wk{grid-template-columns:1fr 1fr}}
+</style>
+<script>
+(function(){
+  const W=[['Week 1','Agree that no single holding exceeds 30%'],['Week 2','Confirm a monthly investment of 2,000 yuan'],['Week 3','Leave a to-do: decide by month-end whether to take up a rights issue'],['Week 4','The model version is changed; a new conversation begins']];
+  const F=[['Constraint: no single holding above 30%',0],['Plan: invest 2,000 yuan each month',0],['Decide by month-end on the rights issue',1],['Last judgment on a company, with its basis',0],['Record of performance over the past month',0]];
+  document.getElementById('ob2-wk').innerHTML=W.map(([a,b])=>`<div><b>${a}</b>${b}</div>`).join('');
+  const box=document.getElementById('ob2-list');
+  function set(k){document.querySelectorAll('[data-ob2]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.ob2===k)));
+    box.innerHTML=F.map(([n,d],i)=>{const y=k==='o';return `<div class="ob2-i" style="--i:${i}"><span>${n}</span><b class="${y?'y':'n'}">${y?'In an object; viewable and editable':'Scattered in old chats'}</b></div>`;}).join('');
+    setTimeout(()=>box.querySelectorAll('.ob2-i').forEach(e=>e.classList.add('on')),40);
+    document.getElementById('ob2-msg').textContent=k==='o'?'Constraints, plans, to-dos, judgments and records are all stored as long-lived objects: a new conversation and a new model can read them from the start, and the principal can view and edit them directly.':'When the fourth conversation begins, the agreements of the first three weeks remain in old conversations; the new model cannot see them, and the month-end deadline for the rights issue may be forgotten.';}
+  document.querySelectorAll('[data-ob2]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.ob2)));
+  box.addEventListener('anim-in',()=>{set('s');setTimeout(()=>set('o'),2600);});
+  set('s');
+})();
+</script>

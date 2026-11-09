@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">按成交次数收费的书记员</p><p class="figsub">同一位委托人，同样的一年行情。切换书记员的目标，再拖动推送的频率，看委托人一年买卖多少次、为此付出多少。</p></div><button class="replay" type="button" data-replay="en18">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="目标">
+      <button type="button" data-en18="plan" aria-pressed="true">按委托人的计划</button>
+      <button type="button" data-en18="trade" aria-pressed="false">按成交次数收费</button>
+    </div>
+    <div class="en18" id="en18" data-anim>
+      <div class="en18-bars" id="en18-b"></div>
+      <div class="sl"><label for="en18-p">每周推送的消息 <b id="en18-pv"></b></label><input id="en18-p" type="range" min="0" max="40" step="2" value="10"></div>
+      <p class="en18-msg" id="en18-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：按计划行事的书记员每月定投一次、每季调整一次，推送只用于提醒约定，不引起额外买卖；按成交次数收费的书记员在价格变动时推送，每条推送有 15% 的可能引起一次买卖，每次买卖的价差与费用为成交额的 0.3%，每次成交额约为持仓的十分之一。</figcaption>
+</figure>
+<style>
+.en18-bars{display:grid;gap:12px;margin:6px 0 10px}
+.en18-r{display:grid;grid-template-columns:8.5em 1fr 5.5em;gap:10px;align-items:center;font-size:12.5px}
+.en18-r div{height:22px;background:var(--quote);border-radius:5px;overflow:hidden}
+.en18-r i{display:block;height:100%;transition:width .4s}
+.en18-r b{text-align:right;font-variant-numeric:tabular-nums}
+.en18-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.en18-r{grid-template-columns:1fr 5.5em}.en18-r span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('en18'+id);let mode='plan';
+  function draw(){const p=+$('-p').value;$('-pv').textContent=p+' 条';const base=16,extra=mode==='trade'?Math.round(p*52*.15):0,n=base+extra,cost=n*.1*.3;
+    $('-b').innerHTML=[['一年买卖的次数',n,360,'var(--blue)',n+' 次'],['为买卖付出的成本',cost,12,'var(--warm)',cost.toFixed(1)+'% 持仓']].map(([k,v,m,c,t])=>`<div class="en18-r"><span>${k}</span><div><i style="width:${Math.min(100,v/m*100)}%;background:${c}"></i></div><b>${t}</b></div>`).join('');
+    $('-msg').textContent=mode==='plan'?`按委托人的计划：每月定投、每季调整，一年 16 次，付出约 ${cost.toFixed(1)}% 的持仓；推送再多，也只是提醒约定。`:`按成交次数收费：每周 ${p} 条推送，一年多出 ${extra} 次买卖，合计付出约 ${cost.toFixed(1)}% 的持仓。书记员越了解委托人，越知道什么时候推一下最有效。`;}
+  const bs=[...document.querySelectorAll('[data-en18]')];
+  function set(m){mode=m;bs.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.en18===m)));draw();}
+  bs.forEach(b=>b.addEventListener('click',()=>set(b.dataset.en18)));$('-p').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{set('plan');setTimeout(()=>{set('trade');let v=0;$('-p').value=0;draw();const id=setInterval(()=>{v+=2;$('-p').value=v;draw();if(v>=40)clearInterval(id);},120);},1800);});
+  draw();
+})();
+</script>

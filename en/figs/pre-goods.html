@@ -1,0 +1,53 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">When can quality be judged?</p><p class="figsub">The three kinds of goods differ in when the buyer can judge quality.</p></div><button class="replay" type="button" data-replay="goods-grid">Replay</button></div>
+    <div class="goods" id="goods-grid" data-anim>
+      <div class="g-head"></div><div class="g-head">Before purchase</div><div class="g-head">After use</div><div class="g-head">Years later</div>
+      <div class="g-sweep" aria-hidden="true"></div>
+
+      <div class="g-name"><b>Search goods</b><span>Computers, clothing</span></div>
+      <div class="g-cell" style="--d:.5s"><i class="lamp on"></i><span>Can be seen and compared</span></div>
+      <div class="g-cell"></div><div class="g-cell"></div>
+
+      <div class="g-name"><b>Experience goods</b><span>Restaurants, haircuts</span></div>
+      <div class="g-cell"><i class="lamp off"></i></div>
+      <div class="g-cell" style="--d:1.4s"><i class="lamp on"></i><span>Known only after use</span></div>
+      <div class="g-cell"></div>
+
+      <div class="g-name"><b>Credence goods</b><span>Car repairs, medical diagnoses</span></div>
+      <div class="g-cell"><i class="lamp off"></i></div>
+      <div class="g-cell"><i class="lamp off"></i></div>
+      <div class="g-cell" style="--d:2.3s"><i class="lamp dim">?</i><span>Hard to judge even after use</span></div>
+
+      <div class="g-name fin"><b>Financial products</b><span>Deposits, bonds, funds</span></div>
+      <div class="g-cell"><i class="lamp off"></i></div>
+      <div class="g-cell"><i class="lamp off"></i></div>
+      <div class="g-cell" style="--d:3s"><i class="lamp split"><em></em></i><span>Results arrive late and are mixed with luck</span></div>
+    </div>
+  </div>
+  <figcaption>The distinction between search goods and experience goods is from Nelson (1970); credence goods are from Darby and Karni (1973). The quality of a credence good is hard to judge even after use. The results of a financial product often appear only years later, and depend on both the product itself and luck, which are hard to separate.</figcaption>
+</figure>
+<style>
+.goods{position:relative;display:grid;grid-template-columns:150px repeat(3,1fr);row-gap:0;font-size:13px}
+.g-head{font-size:12px;color:var(--faint);text-align:center;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.g-name{padding:14px 0;border-bottom:1px solid var(--line);line-height:1.4}
+.g-name b{display:block;font-size:15px}
+.g-name span{font-size:12px;color:var(--faint)}
+.g-name.fin b{color:var(--warm)}
+.g-cell{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:10px 4px;border-bottom:1px solid var(--line);text-align:center;color:var(--muted);font-size:12px;line-height:1.4}
+.g-cell span{opacity:0;transform:translateY(4px);transition:opacity .4s,transform .4s;transition-delay:var(--d,0s)}
+.lamp{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;font-style:normal;font-size:12px;font-weight:700;border:1.5px solid var(--line);color:var(--faint);transition:background .4s,border-color .4s,box-shadow .4s;transition-delay:var(--d,0s)}
+.lamp.off{border-style:dashed}
+.goods.in .lamp.on{background:var(--accent);border-color:var(--accent);box-shadow:0 0 0 6px var(--accent-soft)}
+.goods.in .lamp.dim{background:var(--quote);border-color:var(--faint);color:var(--muted)}
+.lamp.split{position:relative;overflow:hidden}
+.lamp.split em{position:absolute;inset:0;background:linear-gradient(90deg,var(--warm) 50%,var(--gray-mark) 50%);opacity:0;transition:opacity .5s;transition-delay:var(--d,0s);animation:none}
+.goods.in .lamp.split{border-color:var(--warm)}
+.goods.in .lamp.split em{opacity:1;animation:jitter 1.6s ease-in-out 3.4s infinite}
+@keyframes jitter{0%,100%{background:linear-gradient(90deg,var(--warm) 50%,var(--gray-mark) 50%)}33%{background:linear-gradient(90deg,var(--warm) 25%,var(--gray-mark) 25%)}66%{background:linear-gradient(90deg,var(--warm) 72%,var(--gray-mark) 72%)}}
+.goods.in .g-cell span{opacity:1;transform:none}
+.g-sweep{position:absolute;top:28px;bottom:0;left:150px;width:2px;background:var(--accent);opacity:0;pointer-events:none}
+.goods.in .g-sweep{animation:sweep 3.2s ease-in-out forwards}
+@keyframes sweep{0%{opacity:.6;left:150px}90%{opacity:.6;left:calc(100% - 2px)}100%{opacity:0;left:calc(100% - 2px)}}
+@media (max-width:640px){.goods{grid-template-columns:96px repeat(3,1fr)}.g-name b{font-size:14px}@keyframes sweep{0%{opacity:.6;left:96px}90%{opacity:.6;left:calc(100% - 2px)}100%{opacity:0}}}
+</style>

@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">这一步留下的问题</p><p class="figsub">约定与授权让书记员能在他不在场时做事之后，仍未解决的四个问题。点选一个问题，看它隐含的假设。</p></div><button class="replay" type="button" data-replay="nx21">重播</button></div>
+    <div class="nx" id="nx21" data-anim>
+      <div class="nx-src"><b>他不在场的十年</b><span>约定与授权</span></div>
+      <div class="nx-list" id="nx21-l"></div>
+    </div>
+    <p class="nx-msg" id="nx21-msg" aria-live="polite"></p>
+  </div>
+</figure>
+<style>
+.nx{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:center}
+.nx-src{background:var(--ink);color:var(--bg);border-radius:10px;padding:14px 10px;text-align:center}
+.nx-src b{display:block;font-size:16px} .nx-src span{font-size:12px;opacity:.75}
+.nx-list{display:grid;gap:6px}
+.nx-i{font:inherit;text-align:left;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:9px 12px;color:var(--ink);opacity:0;transform:translateX(-8px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.3s)}
+.nx.in .nx-i{opacity:1;transform:none}
+.nx-i span{font-size:13.5px} .nx-i em{font-style:normal;font-size:11.5px;color:var(--faint);white-space:nowrap}
+.nx-i.sel{border-color:var(--accent)}
+.nx-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.nx{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const Q=[['他看不懂账','第 22 章','隐含的假设：有记录就够了。书记员做的每件事都有记录，可他一年只看几次，看得懂吗？'],
+    ['他无从核对','第 22 章','隐含的假设：书记员说守了约定，就是守了。他凭什么相信？'],
+    ['点头不等于同意','第 22 章','隐含的假设：他点了头就是确认了。不了解情况时点的头，算不算真正的确认？'],
+    ['代理会出错','第 23 章','隐含的假设：授权范围之内不会出错。授权范围之内的错误，后果由谁承担？']];
+  const l=document.getElementById('nx21-l'),msg=document.getElementById('nx21-msg');
+  l.innerHTML=Q.map((q,i)=>`<button type="button" class="nx-i" style="--i:${i}" data-i="${i}"><span>${q[0]}</span><em>→ ${q[1]}</em></button>`).join('');
+  const bs=[...l.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));msg.textContent=Q[i][2];}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('nx21').addEventListener('anim-in',()=>{[0,1,2,3].forEach((i,k)=>setTimeout(()=>set(i),1600+k*1800));});
+  set(0);
+})();
+</script>

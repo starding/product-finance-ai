@@ -1,0 +1,33 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Profit-motivated traders: where profits come from and how they affect the market</p><p class="figsub">Green means improves, orange means harms, grey means the effect is unclear.</p></div><button class="replay" type="button" data-replay="pf4">Replay</button></div>
+    <div class="pf4-wrap"><div class="pf4" id="pf4" data-anim>
+      <div class="h"></div><div class="h">Profits from</div><div class="h">Effect on price efficiency</div><div class="h">Effect on liquidity</div>
+      <div class="r" style="--i:0"><b>Informed traders</b><span>Value, news</span></div>
+      <div class="c" style="--i:0">Those who trade with them when price departs from value</div><div class="c good" style="--i:0">Improves: pushes price towards value</div><div class="c mid" style="--i:0">Unclear: market makers widen spreads for fear of them</div>
+      <div class="r" style="--i:1"><b>Dealers</b><span>Market making</span></div>
+      <div class="c" style="--i:1">Those in a hurry who will pay the spread</div><div class="c mid" style="--i:1">Neutral</div><div class="c good" style="--i:1">Improves: quotes bids and asks at all times</div>
+      <div class="r" style="--i:2"><b>Arbitrageurs</b><span>Across related assets</span></div>
+      <div class="c" style="--i:2">Traders who push related prices out of line</div><div class="c good" style="--i:2">Improves: keeps related prices consistent</div><div class="c good" style="--i:2">Improves: carries liquidity to another market</div>
+      <div class="r" style="--i:3"><b>Parasitic</b><span>Front-running, quote matching</span></div>
+      <div class="c" style="--i:3">Traders whose orders they anticipate</div><div class="c mid" style="--i:3">Brings no new information</div><div class="c bad" style="--i:3">Harms: raises the cost of large trades</div>
+      <div class="r" style="--i:4"><b>Manipulators</b><span>Rumours, fake orders</span></div>
+      <div class="c" style="--i:4">Traders they mislead</div><div class="c bad" style="--i:4">Harms: pushes price away from value</div><div class="c bad" style="--i:4">Harms: creates false liquidity</div>
+    </div></div>
+  </div>
+  <figcaption>The dimensions of comparison follow the comparison table in the Harris (1993) working paper; each judgment is based on the discussion in Harris (2003, 2015), as summarised by this book.</figcaption>
+</figure>
+<style>
+.pf4-wrap{overflow-x:auto}
+.pf4{display:grid;grid-template-columns:120px repeat(3,minmax(130px,1fr));gap:6px;min-width:540px;font-size:13px}
+.pf4 .h{font-size:12px;color:var(--faint);padding:0 4px 4px}
+.pf4 .r{display:flex;flex-direction:column;justify-content:center;line-height:1.3}
+.pf4 .r b{font-size:14px}
+.pf4 .r span{font-size:11px;color:var(--faint)}
+.pf4 .c{border-radius:8px;padding:8px 10px;background:var(--quote);line-height:1.5;opacity:0;transform:translateX(-6px);transition:opacity .4s,transform .4s;transition-delay:calc(var(--i)*.3s)}
+.pf4 .r{opacity:0;transition:opacity .4s;transition-delay:calc(var(--i)*.3s)}
+.pf4.in .c,.pf4.in .r{opacity:1;transform:none}
+.pf4 .c.good{background:var(--accent-soft);color:var(--ink)}
+.pf4 .c.bad{background:var(--warm-soft);color:var(--ink)}
+.pf4 .c.mid{background:var(--quote);color:var(--muted)}
+</style>

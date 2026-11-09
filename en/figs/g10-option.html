@@ -1,0 +1,36 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">A share of gains without losses encourages risk</p><p class="figsub">The manager takes 20% of each year's gains, while the principals bear the losses. Drag the amount of risk the manager chooses to see the expected fee he receives and the principals' expected take after the fee.</p></div><button class="replay" type="button" data-replay="op">Replay</button></div>
+    <div class="op" id="op" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="Risk and each side's expected take"><g id="op-ax"></g><path id="op-m" class="op-m"/><path id="op-i" class="op-i"/><line id="op-v" class="s-faint"/></svg>
+      <div class="legend"><span><i style="background:var(--warm)"></i>Manager's expected fee</span><span><i style="background:var(--accent)"></i>Principals' expected take after the fee</span></div>
+      <div class="sl"><label for="op-s">Risk (volatility of yearly returns) <b id="op-sv"></b></label><input id="op-s" type="range" min="0" max="50" step="1" value="10"></div>
+      <div class="cs-sw"><label><input type="checkbox" id="op-h"> High-water mark: no fee until losses are recovered</label></div>
+      <p class="op-msg" id="op-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: yearly returns follow a normal distribution with a mean of 5% and the chosen volatility; fee = 20% × the positive part of the return. The high-water mark is simplified to a one-year version in which the previous year's loss is deducted from the fee base; the conclusion points the same way.</figcaption>
+</figure>
+<style>
+.op svg{width:100%;height:auto;display:block}
+.op-m{fill:none;stroke:var(--warm);stroke-width:2.5}
+.op-i{fill:none;stroke:var(--accent);stroke-width:2.5}
+.op-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.op svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),X0=46,X1=630,YT=12,YB=178,x=s=>X0+s/.5*(X1-X0),y=v=>YB-(v+.01)/.07*(YB-YT);
+  const phi=z=>Math.exp(-z*z/2)/Math.sqrt(2*Math.PI),Phi=z=>{const t=1/(1+.2316419*Math.abs(z)),d=.3989423*Math.exp(-z*z/2),p=d*t*(.3193815+t*(-.3565638+t*(1.781478+t*(-1.821256+t*1.330274))));return z>0?1-p:p;};
+  const Epos=(m,s)=>s<1e-6?Math.max(m,0):m*Phi(m/s)+s*phi(m/s);
+  function fee(s,h){const m=.05;if(!h)return .2*Epos(m,s);return .2*Math.max(0,Epos(m,s)-.5*Math.max(0,s*phi(m/s)-m*(1-Phi(m/s))));}
+  $('op-ax').innerHTML=[0,.02,.04,.06].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${Math.round(v*100)}%</text>`).join('')+[0,.1,.2,.3,.4,.5].map(s=>`<text x="${x(s)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${Math.round(s*100)}%</text>`).join('');
+  function draw(){const h=$('op-h').checked;let pm='',pi='';for(let s=0;s<=.5;s+=.005){const f=fee(s,h);pm+=(s?'L':'M')+x(s).toFixed(1)+','+y(f).toFixed(1);pi+=(s?'L':'M')+x(s).toFixed(1)+','+y(.05-f).toFixed(1);}
+    $('op-m').setAttribute('d',pm);$('op-i').setAttribute('d',pi);const s=+$('op-s').value/100,f=fee(s,h);
+    $('op-v').setAttribute('x1',x(s));$('op-v').setAttribute('x2',x(s));$('op-v').setAttribute('y1',YT);$('op-v').setAttribute('y2',YB);$('op-sv').textContent=Math.round(s*100)+'%';
+    $('op-msg').textContent=`At ${Math.round(s*100)}% volatility, the manager expects ${(f*100).toFixed(2)}% and the principals expect ${((.05-f)*100).toFixed(2)}%. The average return is unchanged, yet the higher the volatility, the more the manager takes and the less the principals get: the manager has reason to bet on riskier ships.${h?' The high-water mark makes the manager recover losses first, so the payoff from taking risk shrinks.':''}`;}
+  ['op-s','op-h'].forEach(k=>$(k).addEventListener('input',draw));
+  $('op').addEventListener('anim-in',()=>{let v=0;$('op-s').value=0;draw();const id=setInterval(()=>{v+=2;$('op-s').value=v;draw();if(v>=50)clearInterval(id);},100);});
+  draw();
+})();
+</script>

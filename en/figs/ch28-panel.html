@@ -1,0 +1,36 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">What is waiting for me now</p><p class="figsub">The same information, presented two ways. Switch between searching through the chat history and seeing it at a glance on a task panel.</p></div><button class="replay" type="button" data-replay="pn">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Presentation"><button type="button" data-pn="c" aria-pressed="true">Chat history only</button><button type="button" data-pn="p" aria-pressed="false">Task panel</button></div>
+    <div class="pn" id="pn" data-anim></div>
+    <p class="pn-msg" id="pn-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>Illustrative interface. The difficulty of judging a system's state is called the "gulf of evaluation"; see Norman (1988).</figcaption>
+</figure>
+<style>
+.pn{background:var(--quote);border-radius:10px;padding:10px;min-height:250px}
+.pn-m{font-size:12.5px;line-height:1.6;border-radius:8px;padding:6px 10px;margin:4px 0;max-width:86%;background:var(--surface)}
+.pn-m.u{margin-left:auto;background:var(--accent-soft)}
+.pn-m.k{outline:2px solid var(--warm)}
+.pn-s{margin-bottom:8px}
+.pn-s>b{font-size:12px;color:var(--faint);display:block;margin-bottom:4px}
+.pn-r{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;font-size:12.5px;background:var(--surface);border-radius:7px;padding:6px 10px;margin-bottom:4px;border-left:3px solid var(--c)}
+.pn-r em{font-style:normal;font-size:11.5px;color:var(--faint)}
+.pn-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const C=[['a','This week\'s announcements for your three holdings have been compiled.'],['u','Fine, thanks.'],['a','Reminder: the option you hold expires on 25 October and is currently in the money. Please confirm how to handle it.',1],['a','Today\'s market summary: …'],['u','Take a look at that company\'s financial report for me.'],['a','Here is the analysis of the financial report: …'],['a','The market data source is temporarily down; today\'s tracking check was not completed.',1],['a','The rebalancing plan is ready and will be executed tomorrow at 10:00. Reply if you want to cancel it.',1],['a','Today\'s market summary: …']];
+  const box=document.getElementById('pn');
+  function set(k){document.querySelectorAll('[data-pn]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.pn===k)));
+    if(k==='c'){box.innerHTML=C.map(([w,t,key])=>`<div class="pn-m ${w==='u'?'u':''}${key?' k':''}">${t}</div>`).join('');
+      document.getElementById('pn-msg').textContent='Three items that need attention (outlined in red) are scattered among nine messages, between market summaries and ordinary replies. The principal has to go through them one by one to learn what is waiting.';}
+    else{box.innerHTML=`<div class="pn-s"><b>Waiting for your confirmation</b><div class="pn-r" style="--c:var(--warm)"><span>Option expiry (in the money)</span><em>Due 25 October</em></div><div class="pn-r" style="--c:var(--gold)"><span>Rebalancing plan: executes tomorrow at 10:00, can be cancelled</span><em>18 hours left</em></div></div>`+
+      `<div class="pn-s"><b>Checks blocked</b><div class="pn-r" style="--c:var(--warm)"><span>Today's tracking check not completed: market data source down</span><em>Will rerun on recovery</em></div></div>`+
+      `<div class="pn-s"><b>Under way</b><div class="pn-r" style="--c:var(--accent)"><span>Holdings tracking</span><em>Next run: today 16:30</em></div><div class="pn-r" style="--c:var(--accent)"><span>Daily market summary</span><em>Next run: tomorrow 09:00</em></div></div>`;
+      document.getElementById('pn-msg').textContent='The task panel groups items under "Waiting for your confirmation", "Checks blocked" and "Under way", and shows the deadlines: on opening it, the principal sees what they need to do.';}}
+  document.querySelectorAll('[data-pn]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.pn)));
+  box.addEventListener('anim-in',()=>{set('c');setTimeout(()=>set('p'),3000);});
+  set('c');
+})();
+</script>

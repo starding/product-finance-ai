@@ -1,0 +1,49 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Belief updates with evidence</p><p class="figsub">The trustee is in fact reliable. Choose the prior and the type of evidence, observe the record of fulfilment step by step, and see how quickly the belief crosses the threshold needed for discretionary management; then try a serious failure and a model version update.</p></div><button class="replay" type="button" id="by-reset">Start over</button></div>
+    <div class="by-c">
+      <div class="seg-btns" role="group" aria-label="Prior"><button type="button" data-pr="0.7" aria-pressed="false">Regulated institution with custody</button><button type="button" data-pr="0.3" aria-pressed="true">New trustee</button></div>
+      <div class="seg-btns" role="group" aria-label="Evidence"><button type="button" data-ev="r" aria-pressed="true">Annual returns only</button><button type="button" data-ev="p" aria-pressed="false">Process records</button></div>
+    </div>
+    <div class="by" id="by" data-anim>
+      <svg viewBox="0 0 640 220" role="img" aria-label="Belief as the number of observations grows"><g id="by-ax"></g><path id="by-p" class="by-l"/><g id="by-mk"></g><circle id="by-d" r="6" fill="var(--ink)"/></svg>
+      <div class="by-btn"><button type="button" class="replay" id="by-10">Observe 10 more</button><button type="button" class="replay" id="by-f">A serious failure</button><button type="button" class="replay" id="by-v">Model version update</button></div>
+      <p class="by-msg" id="by-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model with two hypotheses, reliable and unreliable. Annual returns: a reliable trustee has a good year 55% of the time, an unreliable one 50%. Process records (fees, constraints, an account of each period): a reliable trustee keeps to the agreement in 97% of periods, an unreliable one 70%. Serious failure: 0.2% for a reliable trustee, 20% for an unreliable one. Old records are discounted at each step, keeping 90%; at a model version update, the belief falls halfway back to the prior. The approach follows Diamond (1989) and Jøsang and Ismail (2002).</figcaption>
+</figure>
+<style>
+.by-c{display:flex;flex-wrap:wrap;gap:4px 14px}
+.by svg{width:100%;height:auto;display:block}
+.by-l{fill:none;stroke:var(--accent);stroke-width:2.5}
+.by-btn{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.by-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.by svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const X0=50,X1=620,YT=14,YB=190,TH=.85,MAX=80,y=p=>YB-p*(YB-YT);
+  const $=id=>document.getElementById(id);let prior=.3,ev='r',H=[],mk=[],seed=7;
+  const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
+  const lo=p=>Math.log(p/(1-p)),ex=l=>1/(1+Math.exp(-l));
+  const x=i=>X0+i/MAX*(X1-X0);
+  function reset(){H=[prior];mk=[];seed=7;draw('');}
+  function step(){const L0=lo(prior),L=L0+(lo(H[H.length-1])-L0)*.9;let d;if(ev==='r'){const g=rnd()<.55;d=g?Math.log(.55/.5):Math.log(.45/.5);}else{const g=rnd()<.97;d=g?Math.log(.97/.7):Math.log(.03/.3);}H.push(ex(L+d));}
+  function draw(msg){$('by-ax').innerHTML=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`+[0,.5,1].map(v=>`<text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text>`).join('')+
+      `<line x1="${X0}" x2="${X1}" y1="${y(TH)}" y2="${y(TH)}" stroke="var(--warm)" stroke-dasharray="4 4"/><text x="${X1}" y="${y(TH)-5}" text-anchor="end" font-size="11" class="t-warm">Threshold for discretionary management</text>`+[0,20,40,60,80].map(i=>`<text x="${x(i)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${i} obs.</text>`).join('');
+    const n=Math.min(H.length,MAX+1);$('by-p').setAttribute('d',H.slice(0,n).map((p,i)=>(i?'L':'M')+x(i).toFixed(1)+','+y(p).toFixed(1)).join(''));
+    $('by-mk').innerHTML=mk.filter(([i])=>i<=MAX).map(([i,t])=>`<line x1="${x(i)}" x2="${x(i)}" y1="${YT}" y2="${YB}" stroke="${t==='f'?'var(--warm)':'var(--blue)'}" stroke-dasharray="2 3"/><text x="${x(i)+3}" y="${YT+10}" font-size="11" fill="${t==='f'?'var(--warm)':'var(--blue)'}">${t==='f'?'Serious failure':'Version update'}</text>`).join('');
+    const p=H[n-1];$('by-d').setAttribute('cx',x(n-1));$('by-d').setAttribute('cy',y(p));
+    $('by-msg').textContent=msg||`After ${n-1} observations, the belief is ${(p*100).toFixed(0)}%. `+(ev==='r'?'Annual returns have very little diagnostic power, so the belief barely moves: even a good trustee needs many years to prove itself.':'Process records have high diagnostic power, so the belief quickly crosses the threshold.');}
+  function more(k){for(let i=0;i<k&&H.length<=MAX;i++)step();draw();}
+  $('by-10').addEventListener('click',()=>more(10));
+  $('by-f').addEventListener('click',()=>{if(H.length>MAX)return;const L=lo(H[H.length-1]);H.push(ex(L+Math.log(.002/.2)));mk.push([H.length-1,'f']);const p=H[H.length-1];draw(`A serious failure has a likelihood ratio of about 1 to 100: the belief falls from ${(H[H.length-2]*100).toFixed(0)}% to ${(p*100).toFixed(0)}%. Most of the belief built up by many good records is lost at once.`);});
+  $('by-v').addEventListener('click',()=>{if(H.length>MAX)return;const L=lo(H[H.length-1]),L0=lo(prior);H.push(ex(L0+(L-L0)*.5));mk.push([H.length-1,'v']);draw(`After a model version update, the past record applies only in part: the belief falls back to ${(H[H.length-1]*100).toFixed(0)}% and must be rebuilt with new evidence.`);});
+  document.querySelectorAll('[data-pr]').forEach(b=>b.addEventListener('click',()=>{prior=+b.dataset.pr;document.querySelectorAll('[data-pr]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));reset();}));
+  document.querySelectorAll('[data-ev]').forEach(b=>b.addEventListener('click',()=>{ev=b.dataset.ev;document.querySelectorAll('[data-ev]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));reset();}));
+  $('by-reset').addEventListener('click',reset);
+  $('by').addEventListener('anim-in',()=>{reset();let k=0;const id=setInterval(()=>{more(2);k+=2;if(k>=40)clearInterval(id);},120);});
+  reset();more(40);
+})();
+</script>

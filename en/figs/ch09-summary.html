@@ -1,0 +1,21 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: designing products around trading motives</p><p class="figsub">Four design requirements, each tied to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="s04">Replay</button></div>
+    <div class="s04" id="s04" data-anim>
+      <div class="s04-c" style="--i:0"><em>Motive gives winning and losing their meaning</em><b>First find out why the user trades</b><p>Whether for retirement, currency exchange, hedging or entertainment decides what help is useful; motive is used only to serve the user, never to label them.</p></div>
+      <div class="s04-c" style="--i:1"><em>What utilitarian traders pay is a cost</em><b>Lower costs for utilitarian traders</b><p>Trades that are not urgent can be filled patiently; show the spread and fees before an order is placed, and calculate the cost actually paid in the review afterwards.</p></div>
+      <div class="s04-c warn" style="--i:2"><em>Futile traders' losses buy nothing</em><b>Do not encourage trading without an edge</b><p>Do not use number of trades or turnover as product metrics; do not use leaderboards or streak rewards to stimulate trading; mark news with its time and the price change since it was published.</p></div>
+      <div class="s04-c warn" style="--i:3"><em>Parasitic trading and manipulation harm others</em><b>Do not make parasitic trading or manipulation easier</b><p>Refuse to help spread rumours, place fake orders and the like, and keep records.</p></div>
+    </div>
+  </div>
+</figure>
+<style>
+.s04{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.s04-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.s04-c.warn{border-left-color:var(--warm)}
+.s04-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.s04-c b{display:block;font-size:15px;margin:2px 0 4px}
+.s04-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.s04.in .s04-c{opacity:1;transform:none}
+@media (max-width:640px){.s04{grid-template-columns:1fr}}
+</style>

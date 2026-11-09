@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Commit now, increase out of future pay rises</p><p class="figsub">An employee currently saves 3.5% of pay and gets a 3.5% pay rise each year. Compare two approaches: raising saving to 10% right now; or committing now to save a few more percentage points automatically at each future pay rise. The upper panel shows the savings rate; the lower panel shows monthly take-home pay.</p></div><button class="replay" type="button" data-replay="sm12">Replay</button></div>
+    <div class="sm12" id="sm12" data-anim>
+      <svg viewBox="0 0 660 300" role="img" aria-label="Savings rate and take-home pay"><g id="sm12-g"></g></svg>
+      <div class="legend"><span><i style="background:var(--faint)"></i>No change</span><span><i style="background:var(--warm)"></i>Raise to 10% now</span><span><i style="background:var(--accent)"></i>Save more at each pay rise</span></div>
+      <div class="sl"><label for="sm12-s">Extra saved at each pay rise <b id="sm12-sv"></b></label><input id="sm12-s" type="range" min="1" max="5" step="0.5" value="3"></div>
+      <p class="sm12-msg" id="sm12-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: pay starts at 100 and rises 3.5% at the start of each year; the savings rate is capped at 15%. Thaler and Benartzi (2004) report that at a company that actually introduced this plan, participants' average savings rate rose from 3.5% to 13.6% within 40 months; a research review by the US Department of Labor found that the study did not randomly assign participants, so the causal evidence is limited.</figcaption>
+</figure>
+<style>
+.sm12 svg{width:100%;height:auto;display:block}
+.sm12-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.sm12 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('sm12'+id),Y=5,X0=50,X1=628,x=t=>X0+t/Y*(X1-X0);
+  const A={t:26,b:130},B={t:170,b:280};
+  function paths(st){const R={keep:[],now:[],smart:[]},H={keep:[],now:[],smart:[]};let sm=.035;
+    for(let t=0;t<=Y;t++){const S=100*Math.pow(1.035,t);if(t>0)sm=Math.min(.15,sm+st);
+      const rs={keep:.035,now:.10,smart:sm};for(const k in rs){R[k].push(rs[k]);H[k].push(S*(1-rs[k]));}}return {R,H};}
+  function draw(){const st=+$('-s').value/100,{R,H}=paths(st);$('-sv').textContent=(st*100).toFixed(1)+' percentage points';
+    const yr=v=>A.b-v/.16*(A.b-A.t),hmin=85,hmax=120,yh=v=>B.b-(v-hmin)/(hmax-hmin)*(B.b-B.t);
+    let h=[0,.05,.1,.15].map(v=>`<line x1="${X0}" x2="${X1}" y1="${yr(v)}" y2="${yr(v)}" class="s-line"/><text x="${X0-6}" y="${yr(v)+4}" text-anchor="end" font-size="11" class="t-faint">${Math.round(v*100)}%</text>`).join('')
+      +[90,100,110,120].map(v=>`<line x1="${X0}" x2="${X1}" y1="${yh(v)}" y2="${yh(v)}" class="s-line"/><text x="${X0-6}" y="${yh(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')
+      +[0,1,2,3,4,5].map(t=>`<text x="${x(t)}" y="${B.b+16}" text-anchor="middle" font-size="11" class="t-faint">Year ${t}</text>`).join('')
+      +`<text x="${X0}" y="12" font-size="11" class="t-faint">Savings rate</text><text x="${X0}" y="${B.t-4}" font-size="11" class="t-faint">Take-home pay</text>`;
+    const C={keep:'var(--faint)',now:'var(--warm)',smart:'var(--accent)'};
+    for(const k of ['keep','now','smart']){h+=`<path d="${R[k].map((v,t)=>(t?'L':'M')+x(t)+','+yr(v)).join('')}" fill="none" stroke="${C[k]}" stroke-width="${k==='smart'?3:2}"/><path d="${H[k].map((v,t)=>(t?'L':'M')+x(t)+','+yh(v)).join('')}" fill="none" stroke="${C[k]}" stroke-width="${k==='smart'?3:2}"/>`;}
+    $('-g').innerHTML=h;const minChg=Math.min(...H.smart.slice(1).map((v,t)=>v/H.smart[t]-1));
+    $('-msg').textContent=`Raising saving to 10% now cuts take-home pay this year from ${H.keep[0].toFixed(1)} to ${H.now[0].toFixed(1)}, a drop of ${((1-H.now[0]/H.keep[0])*100).toFixed(1)}%. Saving ${(st*100).toFixed(1)} percentage points more at each pay rise reaches ${(R.smart[Y]*100).toFixed(1)}% by year 5; `+(minChg>=0?'take-home pay never falls from one year to the next; it only rises more slowly.':`but in some years take-home pay is ${(-minChg*100).toFixed(1)}% lower than the year before, because the extra saving is larger than the pay rise.`);}
+  $('-s').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{let v=1;$('-s').value=1;draw();const id=setInterval(()=>{v+=.5;$('-s').value=v;draw();if(v>=3)clearInterval(id);},700);});
+  draw();
+})();
+</script>

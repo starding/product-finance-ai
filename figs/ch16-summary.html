@@ -1,0 +1,17 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：为有限理性的人设计</p><p class="figsub">五条设计要求，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="ch16summary">重播</button></div>
+    <div class="ch16summary" id="ch16summary" data-anim><div class="ch16summary-c" style="--i:0"><em>注意力有限</em><b>把与目标相关的信息放到前面</b><p>费用、集中程度、距离目标的差距要和涨跌幅一样显眼；不以排行榜和推送争夺注意力。</p></div><div class="ch16summary-c" style="--i:1"><em>参照点决定得失</em><b>提供以目标为参照的视角</b><p>在买入价之外，展示组合相对于计划与目标的位置；卖出时说明各种卖法对组合与税负的影响。</p></div><div class="ch16summary-c warn" style="--i:2"><em>频繁评估放大损失感</em><b>让评估的频率与任务的期限相匹配</b><p>长期任务默认展示与期限相符的区间，不把每日涨跌放在最显眼的位置。</p></div><div class="ch16summary-c warn" style="--i:3"><em>默认值不是中性的</em><b>让默认选项站在用户一边</b><p>默认值、确认步骤与呈现方式都要服务于用户的任务；不用游戏化的设计诱导交易。</p></div><div class="ch16summary-c wide" style="--i:4"><em>现状也是一种稳态</em><b>先尊重，再邀请</b><p>照常执行用户的习惯，用他自己的交易记录说明结果，再问要不要试一试另一种方法；只承诺改进过程，不承诺结果。</p></div></div>
+  </div>
+</figure>
+<style>
+.ch16summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch16summary-c.wide{grid-column:1/-1}
+.ch16summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch16summary-c.warn{border-left-color:var(--warm)}
+.ch16summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch16summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch16summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch16summary.in .ch16summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch16summary{grid-template-columns:1fr}}
+</style>

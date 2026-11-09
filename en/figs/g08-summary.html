@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: markets</p><p class="figsub">Four conclusions, each tied to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="g08summary">Replay</button></div>
+    <div class="g08summary" id="g08summary" data-anim><div class="g08summary-c" style="--i:0"><em>Concentration</em><b>The more people, the easier the match</b><p>Trading gathers in a few central places, and the quality of execution depends on the buyers and sellers there.</p></div><div class="g08summary-c" style="--i:1"><em>Auctions</em><b>Pooled quotes find the price with the most trades</b><p>Each person need only state their own price, and a call auction finds the price that maximises the gains.</p></div><div class="g08summary-c warn" style="--i:2"><em>Market making and the spread</em><b>The spread is the price of immediacy</b><p>The market maker bears inventory risk; the more frequent the trading and the steadier the price, the narrower the spread.</p></div><div class="g08summary-c warn" style="--i:3"><em>Liquidity</em><b>Hard-to-sell assets must offer higher returns</b><p>Liquidity shows up as waiting, the spread and discounts; searching and bargaining are labour, and their cost shapes the form of brokerage.</p></div></div>
+  </div>
+</figure>
+<style>
+.g08summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g08summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g08summary-c.warn{border-left-color:var(--warm)}
+.g08summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g08summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g08summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g08summary.in .g08summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g08summary{grid-template-columns:1fr}}
+</style>

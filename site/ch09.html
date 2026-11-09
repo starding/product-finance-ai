@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>市场里的交易者</title>
+<meta name="description" content="《产品×金融×AI：AI 时代的金融产品》第 9 章：按交易动机区分效用型、盈利型与徒劳型交易者，交易在扣除成本前是零和游戏">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="ch09">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="全书目录">
+<div class="side-head"><a class="sidetitle" href="index.html">产品×金融×AI<small>AI 时代的金融产品</small></a></div>
+<div class="side-view" role="group" aria-label="阅读方式"><a href="preface.html" class="on" aria-current="true">分解式</a><a href="g-preface.html">生成式</a></div>
+<a class="side-about" href="index.html#about">关于本书</a>
+<a class="" href="preface.html"><span class="n">序</span>为什么金融产品在 AI 时代需要重新学</a>
+<a class="side-part" href="part1.html"><span class="pn">第一部分</span>市场：收益与风险从何而来</a>
+<a class="" href="ch01.html"><span class="n">1</span>金融产品卖的是什么</a>
+<a class="" href="ch02.html"><span class="n">2</span>利率与期限</a>
+<a class="" href="ch03.html"><span class="n">3</span>风险长什么样</a>
+<a class="" href="ch04.html"><span class="n">4</span>分散：哪些风险有补偿</a>
+<a class="" href="ch05.html"><span class="n">5</span>复利与波动拖累</a>
+<a class="" href="ch06.html"><span class="n">6</span>因子：风险补偿可以分解</a>
+<a class="" href="ch07.html"><span class="n">7</span>价格为什么难以预测</a>
+<a class="" href="ch08.html"><span class="n">8</span>信息如何进入价格</a>
+<a class=" cur" href="ch09.html" aria-current="page"><span class="n">9</span>市场里的交易者</a>
+<a class="" href="ch10.html"><span class="n">10</span>流动性与买卖价差</a>
+<a class="" href="ch11.html"><span class="n">11</span>订单、规则与市场结构</a>
+<a class="" href="ch12.html"><span class="n">12</span>主动管理的算术</a>
+<a class="" href="ch13.html"><span class="n">13</span>承诺如何被兑现</a>
+<a class="" href="ch14.html"><span class="n">14</span>监管为何存在</a>
+<a class="side-part" href="part2.html"><span class="pn">第二部分</span>用户：人要什么、能承受什么</a>
+<a class="" href="ch15.html"><span class="n">15</span>用户要完成的任务</a>
+<a class="" href="ch16.html"><span class="n">16</span>用户如何做决定</a>
+<a class="" href="ch17.html"><span class="n">17</span>用户能承受什么</a>
+<a class="" href="ch18.html"><span class="n">18</span>用户如何判断与信任</a>
+<a class="side-part" href="part3.html"><span class="pn">第三部分</span>AI：代理能替人做多少</a>
+<a class="" href="ch19.html"><span class="n">19</span>放大倍数：理论与实测</a>
+<a class="" href="ch20.html"><span class="n">20</span>哪些事务能交给 AI</a>
+<a class="" href="ch21.html"><span class="n">21</span>能力从哪里来、在哪里失效</a>
+<a class="" href="ch22.html"><span class="n">22</span>可验证性：核对的成本</a>
+<a class="" href="ch23.html"><span class="n">23</span>金融场景的特殊约束</a>
+<a class="side-part" href="part4.html"><span class="pn">第四部分</span>设计：在三组约束下设计金融产品</a>
+<a class="" href="ch24.html"><span class="n">24</span>承诺什么</a>
+<a class="" href="ch25.html"><span class="n">25</span>委托参数：交代的目标与约束</a>
+<a class="" href="ch26.html"><span class="n">26</span>授权与不可逆敞口</a>
+<a class="" href="ch27.html"><span class="n">27</span>责任与利益冲突</a>
+<a class="" href="ch28.html"><span class="n">28</span>能力装配与过程可见</a>
+<a class="" href="ch29.html"><span class="n">29</span>保障强度</a>
+<a class="" href="ch30.html"><span class="n">30</span>信任如何建立</a>
+<a class="" href="ch31.html"><span class="n">31</span>设计原则</a>
+<a class="side-app" href="estimates.html"><span class="n">附录</span>作者估算的方法与数据</a>
+<a class="side-app" href="method.html"><span class="n">附录</span>本书的写法</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="展开目录" title="目录"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">产品×金融×AI：AI 时代的金融产品</a><span>第一部分 · 第三篇　信息优势：零和的部分</span><a class="langlink" href="en/ch09.html" hreflang="en">English</a></header>
+
+<div class="chapno">第 9 章</div><h1>市场里的交易者<small>谁在交易，为了什么，谁赚谁亏</small></h1>
+<div class="eqstrip" aria-label="本章在回报等式中的位置"><span class="lbl">实际回报 ＝</span><a class="" href="ch02.html">时间补偿</a><a class="" href="ch03.html">＋风险补偿</a><span class="cur">＋信息优势</span><a class="" href="ch10.html">－交易成本</a><span class="">＋运气</span><span class="keep"><a href="ch13.html">前提：承诺得到兑现</a></span></div>
+<blockquote><p>信息优势是零和的：一方多得，必有另一方少得。那么谁多得、谁少得？按“为什么交易”区分，交易者有三类：为交易以外的好处而交易的效用型，为交易利润而交易的盈利型，以及自以为能赚钱、平均却赚不到的徒劳型。扣除成本之前，盈利型赚到的钱来自另外两类人：效用型的亏损换来了实际的好处，徒劳型的亏损则没有任何回报。</p></blockquote>
+<h2 id="sec-1">一、为什么人们交易</h2>
+<p>哈里斯在《交易与交易所：市场微观结构》（2003）中提出，理解一个市场，先要理解其中的人为什么交易。他按交易动机把交易者分为三类：</p>
+<ul><li><strong>效用型</strong>：为交易利润以外的好处而交易，例如把今天的钱留到将来、规避风险、换取所需的资产，或者只是以交易为乐。</li><li><strong>盈利型</strong>：为交易本身的利润而交易，包括掌握信息的知情交易者、预判他人订单的寄生型交易者，以及提供流动性的交易商与套利者。</li><li><strong>徒劳型</strong>：自以为能赚钱，平均而言却赚不到，例如拿到的信息早已反映在价格里。</li></ul>
+<p>哈里斯在 2015 年为 CFA 协会研究基金会撰写的专著中调整了这一分类，不再单列徒劳型。本章以 2015 年版为主干，徒劳型及其细分沿用早期版本（1993 年的工作论文与 2003 年的专著），因为它最能解释个人投资者的处境。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">按交易动机划分的交易者</p><p class="figsub">点按任一类，查看他们为什么交易、从谁那里获利或输给谁。</p></div><button class="replay" type="button" data-replay="tx">重播</button></div>
+    <div class="tx" id="tx" data-anim>
+      <div class="tx-col u" style="--i:0"><h5>效用型<span>为交易以外的好处</span></h5>
+        <button data-k="inv">投资者与借款人</button><button data-k="exc">资产交换者</button><button data-k="hed">对冲者</button><button data-k="app">学徒交易者</button><button data-k="fun">以交易为乐者</button></div>
+      <div class="tx-col p" style="--i:1"><h5>盈利型<span>为交易本身的利润</span></h5>
+        <div class="tx-sub">投机者 · 知情交易者</div><button data-k="val">价值交易者</button><button data-k="new">新闻交易者</button>
+        <div class="tx-sub">投机者 · 寄生型</div><button data-k="par">抢先、跟价与情绪导向的交易者</button>
+        <div class="tx-sub">投机者 · 操纵者</div><button data-k="man" class="bad">市场操纵者</button>
+        <div class="tx-sub">流动性供给者</div><button data-k="dea">交易商</button><button data-k="arb">套利者</button></div>
+      <div class="tx-col f" style="--i:2"><h5>徒劳型<span>自以为能赚钱，平均赚不到</span><em>依据 1993 年工作论文</em></h5>
+        <button data-k="ine">低效交易者</button>
+        <div class="tx-sub">低效交易者中的一类</div><button data-k="pse">伪知情交易者</button></div>
+    </div>
+    <div class="tx-d" id="tx-d" aria-live="polite">点按任一类交易者。</div>
+  </div>
+  <figcaption>效用型与盈利型的主要类别依据 Harris（2015）。市场操纵者依据 Harris（1993），在该文中与寄生型并列，同属盈利型。徒劳型及其细分依据 Harris（1993）：徒劳型分为低效交易者与受害交易者（本图未列后者），伪知情交易者属于低效交易者；2015 年版不再单列徒劳型。学徒交易者在 1993 年论文中列为效用型。</figcaption>
+</figure>
+<style>
+.tx{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tx-col{border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:6px;opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.tx.in .tx-col{opacity:1;transform:none}
+.tx-col.u{background:rgba(47,95,158,.1)} .tx-col.p{background:var(--accent-soft)} .tx-col.f{background:var(--warm-soft)}
+.tx-col h5{margin:0 0 4px;font-size:16px}
+.tx-col h5 span{display:block;font-size:12px;font-weight:400;color:var(--muted)}
+.tx-col h5 em{font-style:normal;font-size:11px;font-weight:400;color:var(--faint)}
+.tx-sub{font-size:11px;color:var(--faint);margin-top:4px}
+.tx button{font:inherit;font-size:13px;text-align:left;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:6px 9px;cursor:pointer}
+.tx button:hover{border-color:var(--ink)}
+.tx button.sel{border-color:var(--ink);box-shadow:0 0 0 2px var(--line)}
+.tx button.bad{border-style:dashed;color:var(--warm)}
+.tx-d{margin-top:12px;font-size:14px;line-height:1.7;min-height:5.2em;background:var(--quote);border-radius:10px;padding:10px 14px}
+.tx-d dl{display:grid;grid-template-columns:76px 1fr;gap:2px 10px;margin:4px 0 0}
+.tx-d dt{font-size:12px;color:var(--faint);padding-top:3px}
+.tx-d dd{margin:0}
+@media (max-width:640px){.tx{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const D={
+    inv:['投资者与借款人','把今天的钱留到将来，或把将来的收入提前使用。','交易成本是跨期配置的代价；平均略输给盈利型。','为养老定期买入指数基金；为用钱卖出持仓。'],
+    exc:['资产交换者','需要换成另一种资产：换汇、变现、调仓。','为即时成交付出价差。','出国前换汇；赎回基金支付学费。'],
+    hed:['对冲者','降低已有的风险暴露。','平均付出一点代价，换来结果的确定性。','出口企业卖出远期外汇锁定收入。'],
+    app:['学徒交易者','为学会交易而交易。','学费交给更有经验的对手；学成者转为赢家，学不成者通常退出。','用小额资金练习交易。'],
+    fun:['以交易为乐者','交易本身带来乐趣。','为娱乐付费，但常常低估付出了多少。','偏好低价、高波动的“彩票型”股票。'],
+    val:['价值交易者','估计资产的真实价值，在价格偏离时买卖。','从价格偏离价值时与之交易的人那里获利；推动价格更有效。','研究财报后买入被低估的公司。'],
+    new:['新闻交易者','抢在价格完全反映新闻之前交易。','从反应更慢的人那里获利；速度决定成败。','公告发布后数秒内下单的机构。'],
+    par:['寄生型交易者','预判别人的订单，抢在其前面交易，或跟随大单。','从被预判者的交易成本中获利；不提供新信息，损害流动性。','察觉大额买单后抢先买入，再高价卖给它。'],
+    man:['市场操纵者','散布传言、虚假报单、囤积挤压等。','从被误导的交易者那里获利；为各国法律所禁止。','先买入，再散布利好传言后卖出。'],
+    dea:['交易商','同时报出买价与卖价，等待别人来成交。','从急于成交的人那里赚取买卖价差；提供流动性。','交易所的做市商。'],
+    arb:['套利者','在相关资产之间的价差偏离时同时买卖。','从造成价差的交易者那里获利；把流动性从一个市场传到另一个市场。','在两个交易所同时买入低价、卖出高价的同一资产。'],
+    pse:['伪知情交易者','低效交易者中的一类：以为掌握了有价值的信息，其实已反映在价格里或没有预测力。','输给真正知情的人与交易商，并承担交易成本。','看到推送新闻后追涨买入。'],
+    ine:['低效交易者','交易方式不当，付出不必要的成本。','把多付的价差与冲击成本留给交易商与寄生型交易者。','在流动性很差时用市价单大额成交。']
+  };
+  const d=document.getElementById('tx-d'), bs=[...document.querySelectorAll('#tx button')];
+  bs.forEach(b=>b.addEventListener('click',()=>{bs.forEach(x=>x.classList.toggle('sel',x===b));const v=D[b.dataset.k];
+    d.innerHTML=`<b>${v[0]}</b><dl><dt>为什么交易</dt><dd>${v[1]}</dd><dt>输赢</dt><dd>${v[2]}</dd><dt>例子</dt><dd>${v[3]}</dd></dl>`;}));
+})();
+</script>
+
+<h2 id="sec-2">二、交易是零和游戏</h2>
+<p>如果把所有投资者当作一个整体，他们合起来就持有整个市场，整体收益只能等于市场收益。交易只是在投资者之间重新分配这份收益：一方通过交易多得到的，必然是另一方少得到的。扣除交易成本之后，交易者整体的收益低于市场，零和就变成了负和。弗伦奇在 2008 年估计，1980 年至 2006 年间，美国投资者每年为主动投资支付的费用、交易成本与价差，平均约占股票市值的 0.67%。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">交易只重新分配市场收益</p><p class="figsub">假设三类交易者合起来持有整个市场，市场一年共创造 100 份收益。看交易如何改变各自分到的份额。</p></div><button class="replay" type="button" data-replay="zs">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="阶段">
+      <button type="button" data-zs="0" aria-pressed="true">只持有，不交易</button>
+      <button type="button" data-zs="1" aria-pressed="false">交易之后，扣除成本前</button>
+      <button type="button" data-zs="2" aria-pressed="false">扣除成本后</button>
+    </div>
+    <div class="zs" id="zs" data-anim>
+      <div class="zs-row" data-g="u"><span>效用型</span><div class="zs-t"><i></i></div><b></b></div>
+      <div class="zs-row" data-g="p"><span>盈利型</span><div class="zs-t"><i></i></div><b></b></div>
+      <div class="zs-row" data-g="f"><span>徒劳型</span><div class="zs-t"><i></i></div><b></b></div>
+      <div class="zs-row" data-g="c"><span>交易成本</span><div class="zs-t"><i></i></div><b></b></div>
+      <div class="zs-sum"><span>交易者合计</span><b id="zs-sum"></b></div>
+      <p class="zs-msg" id="zs-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意数字。真实规模可参考 French（2008）：1980—2006 年，美国投资者每年为主动投资支付的费用、交易成本与价差约占股票市值的 0.67%。</figcaption>
+</figure>
+<style>
+.zs-row{display:grid;grid-template-columns:72px 1fr 96px;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.zs-row b{text-align:right;white-space:nowrap;font-size:15px;font-variant-numeric:tabular-nums}
+.zs-t{height:22px;background:var(--quote);border-radius:6px;overflow:hidden}
+.zs-t i{display:block;height:100%;width:0;border-radius:6px;transition:width .8s ease}
+.zs-row[data-g="u"] i{background:var(--blue)} .zs-row[data-g="p"] i{background:var(--accent)} .zs-row[data-g="f"] i{background:var(--warm)} .zs-row[data-g="c"] i{background:var(--gray-mark)}
+.zs-row b.up{color:var(--accent)} .zs-row b.dn{color:var(--warm)}
+.zs-sum{display:flex;justify-content:space-between;border-top:1px solid var(--line);margin-top:10px;padding-top:8px;font-size:14px}
+.zs-sum b{font-size:18px;font-variant-numeric:tabular-nums}
+.zs-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const S=[
+    {u:50,p:30,f:20,c:0,m:'不交易时，每类交易者按持有的比例分到市场收益：合计 100。'},
+    {u:47,p:37,f:16,c:0,m:'交易之后，盈利型多得 7 份，正好是效用型少得的 3 份与徒劳型少得的 4 份之和。合计仍是 100：交易只是重新分配。'},
+    {u:46,p:35.5,f:15,c:3.5,m:'扣除交易成本后，三类交易者合计只剩 96.5，少掉的 3.5 份流向经纪商、交易所与做市商。零和变成了负和。'}
+  ];
+  const rows=[...document.querySelectorAll('#zs .zs-row')], base={u:50,p:30,f:20,c:0};
+  const btns=[...document.querySelectorAll('[data-zs]')];
+  function set(k){
+    btns.forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.zs===k)));
+    const s=S[k];
+    rows.forEach(r=>{const g=r.dataset.g,v=s[g];r.querySelector('i').style.width=(v/60*100)+'%';
+      const b=r.querySelector('b');const dv=g==='c'?0:v-base[g];b.textContent=v+(g!=='c'&&k>0&&dv!==0?(dv>0?'（+':'（')+dv+'）':'');b.className=g==='c'?'':dv>0?'up':dv<0?'dn':'';});
+    document.getElementById('zs-sum').textContent=(s.u+s.p+s.f);
+    document.getElementById('zs-msg').textContent=s.m;
+  }
+  btns.forEach(b=>b.addEventListener('click',()=>set(+b.dataset.zs)));
+  document.getElementById('zs').addEventListener('anim-in',()=>{set(0);setTimeout(()=>set(1),1800);setTimeout(()=>set(2),4200);});
+  set(0);
+})();
+</script>
+
+<p>在这场游戏中，赢家是盈利型交易者里有真实优势的那一部分；输家是效用型与徒劳型交易者。交易成本则由所有人共同承担，流向经纪商、交易所与做市商。</p>
+<h2 id="sec-3">三、效用型为什么愿意“输”</h2>
+<p>效用型交易者在交易上平均是输的，但这并不意味着他们的交易是错误的。一家出口企业三个月后将收到一笔美元货款，为了锁定换算成本币的金额，它今天卖出远期美元。平均而言，这样做会付出一点代价，但企业换来了确定性：无论汇率如何波动，利润都不会因此大起大落。</p>
+<figure>
+  <div class="card">
+    <p class="figtitle">对冲：平均少一点，换来确定性</p>
+    <p class="figsub">一家出口企业三个月后收到 100 万美元货款。模拟 400 种可能的汇率走势，看折合人民币的收入分布。</p>
+    <div class="seg-btns" role="group" aria-label="是否对冲">
+      <button type="button" data-hg="0" aria-pressed="true">不对冲</button>
+      <button type="button" data-hg="1" aria-pressed="false">今天卖出远期美元</button>
+    </div>
+    <div class="hg" id="hg" data-anim>
+      <svg viewBox="0 0 640 200" role="img" aria-label="折合人民币收入的分布">
+        <g id="hg-axis"></g>
+        <g id="hg-dots"></g>
+        <line id="hg-mean" class="hg-mean" y1="20" y2="160"/>
+      </svg>
+      <div class="hg-out">
+        <div><span>平均收入</span><b id="hg-m"></b></div>
+        <div><span>最差 5% 的情形</span><b id="hg-w"></b></div>
+        <div><span>最好与最差相差</span><b id="hg-r"></b></div>
+      </div>
+    </div>
+  </div>
+  <figcaption>示例参数：即期汇率 7.10，三个月汇率波动约 3%；远期价格比预期的未来即期汇率低 0.02，代表对冲的成本（包括交易商赚取的价差）。不对应任何真实报价。</figcaption>
+</figure>
+<style>
+.hg svg{width:100%;height:auto;display:block}
+.hg-dot{fill:var(--blue);opacity:.55;transition:cx .8s ease,cy .8s ease}
+.hg-mean{stroke:var(--ink);stroke-width:2}
+.hg-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.hg-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.hg-out span{display:block;font-size:12px;color:var(--faint)}
+.hg-out b{font-size:19px;font-variant-numeric:tabular-nums}
+@media (max-width:640px){.hg-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const N=400, S0=7.10, VOL=0.03, F=S0-0.02, X0=40, X1=620, L=650, H=770, x=v=>X0+(v-L)/(H-L)*(X1-X0);
+  let seed=3; const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
+  const g=()=>{let u=0,v=0;while(!u)u=rnd();v=rnd();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);};
+  const rates=Array.from({length:N},()=>S0*Math.exp(VOL*g()-VOL*VOL/2));
+  let a=`<line x1="${X0}" y1="160" x2="${X1}" y2="160" class="s-faint"/>`;
+  [660,680,700,720,740,760].forEach(v=>a+=`<text x="${x(v)}" y="178" text-anchor="middle" font-size="11" class="t-faint">${v}</text>`);
+  a+=`<text x="${X1}" y="196" text-anchor="end" font-size="11" class="t-faint">折合人民币收入（万元）</text>`;
+  document.getElementById('hg-axis').innerHTML=a;
+  // 抖动排列：按收入分箱后上下堆叠
+  const dots=document.getElementById('hg-dots');
+  dots.innerHTML=rates.map(()=>'<circle class="hg-dot" r="3"/>').join('');
+  const cs=[...dots.children];
+  function place(vals){
+    const bins={};vals.forEach((v,i)=>{const b=Math.round(x(v)/7);bins[b]=(bins[b]||0)+1;const k=bins[b];cs[i].setAttribute('cx',(b*7).toFixed(1));cs[i].setAttribute('cy',(156-((k-1)%22)*6.4-Math.floor((k-1)/22)*1.5).toFixed(1));});
+  }
+  function set(h){
+    document.querySelectorAll('[data-hg]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.hg===h)));
+    const vals=rates.map(r=>100*(h?F:r));
+    place(vals);
+    const m=vals.reduce((s,v)=>s+v,0)/N, srt=vals.slice().sort((p,q)=>p-q);
+    const ml=document.getElementById('hg-mean');ml.setAttribute('x1',x(m));ml.setAttribute('x2',x(m));
+    document.getElementById('hg-m').textContent=m.toFixed(1)+' 万';
+    document.getElementById('hg-w').textContent=srt[Math.floor(N*0.05)].toFixed(1)+' 万';
+    document.getElementById('hg-r').textContent=(srt[N-1]-srt[0]).toFixed(1)+' 万';
+  }
+  document.querySelectorAll('[data-hg]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.hg)));
+  document.getElementById('hg').addEventListener('anim-in',()=>{set(0);setTimeout(()=>set(1),2200);});
+  set(0);
+})();
+</script>
+
+<p>这与买保险的道理相同：保险的预期赔付低于保费，人们仍然愿意买，因为他们买的是对坏结果的保护。投资者为了把钱留到将来而买入、为了用钱而卖出，同样是为了交易以外的目的；他们付出的交易成本，是获得这些好处的价格。</p>
+<p>以交易为乐也属于效用型。多恩与森格穆勒在 2009 年发现，自称喜欢投资或赌博的投资者，换手率约为其他人的两倍；库马尔在 2009 年发现，个人投资者偏好股价低、波动大、偶尔暴涨的“彩票型”股票。他们付出的代价换来的是娱乐，问题在于很多人并不清楚自己付出了多少。</p>
+<h2 id="sec-4">四、盈利型：利润从哪里来</h2>
+<p>盈利型交易者的利润来源各不相同，对市场的作用也截然不同。哈里斯在 1993 年的工作论文中，从“从谁处获利、对价格效率的影响、对流动性的影响”几个方面比较了各类交易者，这是理解他们的最好方式。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">盈利型交易者：利润从哪里来，对市场有何影响</p><p class="figsub">绿色表示改善，橙色表示损害，灰色表示影响不明确。</p></div><button class="replay" type="button" data-replay="pf4">重播</button></div>
+    <div class="pf4-wrap"><div class="pf4" id="pf4" data-anim>
+      <div class="h"></div><div class="h">从谁那里获利</div><div class="h">对价格效率</div><div class="h">对流动性</div>
+      <div class="r" style="--i:0"><b>知情交易者</b><span>价值、新闻</span></div>
+      <div class="c" style="--i:0">价格偏离价值时与之交易的人</div><div class="c good" style="--i:0">改善：推动价格靠近价值</div><div class="c mid" style="--i:0">不确定：做市商会因担心他们而扩大价差</div>
+      <div class="r" style="--i:1"><b>交易商</b><span>做市</span></div>
+      <div class="c" style="--i:1">急于成交、愿付价差的人</div><div class="c mid" style="--i:1">中性</div><div class="c good" style="--i:1">改善：随时提供买卖报价</div>
+      <div class="r" style="--i:2"><b>套利者</b><span>相关资产之间</span></div>
+      <div class="c" style="--i:2">造成相关价格偏离的交易者</div><div class="c good" style="--i:2">改善：让相关价格保持一致</div><div class="c good" style="--i:2">改善：把流动性传到另一个市场</div>
+      <div class="r" style="--i:3"><b>寄生型</b><span>抢先、跟价</span></div>
+      <div class="c" style="--i:3">被预判了订单的交易者</div><div class="c mid" style="--i:3">不提供新信息</div><div class="c bad" style="--i:3">损害：抬高大额交易的成本</div>
+      <div class="r" style="--i:4"><b>市场操纵者</b><span>传言、虚假报单</span></div>
+      <div class="c" style="--i:4">被误导的交易者</div><div class="c bad" style="--i:4">损害：使价格偏离价值</div><div class="c bad" style="--i:4">损害：制造虚假的流动性</div>
+    </div></div>
+  </div>
+  <figcaption>比较维度参照 Harris（1993）工作论文中的比较表，各项判断依据 Harris（2003、2015）的论述，经本书归纳。</figcaption>
+</figure>
+<style>
+.pf4-wrap{overflow-x:auto}
+.pf4{display:grid;grid-template-columns:110px repeat(3,minmax(130px,1fr));gap:6px;min-width:520px;font-size:13px}
+.pf4 .h{font-size:12px;color:var(--faint);padding:0 4px 4px}
+.pf4 .r{display:flex;flex-direction:column;justify-content:center;line-height:1.3}
+.pf4 .r b{font-size:14px}
+.pf4 .r span{font-size:11px;color:var(--faint)}
+.pf4 .c{border-radius:8px;padding:8px 10px;background:var(--quote);line-height:1.5;opacity:0;transform:translateX(-6px);transition:opacity .4s,transform .4s;transition-delay:calc(var(--i)*.3s)}
+.pf4 .r{opacity:0;transition:opacity .4s;transition-delay:calc(var(--i)*.3s)}
+.pf4.in .c,.pf4.in .r{opacity:1;transform:none}
+.pf4 .c.good{background:var(--accent-soft);color:var(--ink)}
+.pf4 .c.bad{background:var(--warm-soft);color:var(--ink)}
+.pf4 .c.mid{background:var(--quote);color:var(--muted)}
+</style>
+
+<p>知情交易者推动价格向价值靠拢，使价格更有效。交易商与套利者向急于成交的人提供流动性，以买卖价差作为回报。寄生型交易者则不同：他们不提供信息，而是设法预判并抢在别人的大订单之前交易，从别人的交易成本中获利。市场操纵者则以散布传言、虚假报单等手法误导他人，这些行为是各国法律明确禁止的。</p>
+<h2 id="sec-5">五、徒劳型：自以为知情</h2>
+<p>徒劳型交易者最常见的处境是“伪知情”：他们以为自己掌握了有价值的信息，但这些信息要么早已反映在价格里，要么根本没有预测力。个人投资者的大量证据都指向这一类。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">交易越多，收益越少</p><p class="figsub">两项关于个人投资者的大样本研究。</p></div><button class="replay" type="button" data-replay="ft">重播</button></div>
+    <div class="ft" id="ft" data-anim>
+      <div class="ft-p">
+        <p class="ft-h">美国约 6.6 万个家庭账户，1991—1996 年，年均净收益</p>
+        <div class="ft-row" style="--i:0;--v:17.9"><span>同期市场</span><div class="ft-t"><i></i></div><b>17.9%</b></div>
+        <div class="ft-row" style="--i:1;--v:11.4"><span>交易最频繁的 20% 家庭</span><div class="ft-t"><i class="w"></i></div><b>11.4%</b></div>
+        <p class="ft-src">Barber 与 Odean（2000）</p>
+      </div>
+      <div class="ft-p">
+        <p class="ft-h">台湾日内交易者中，扣除费用后能够稳定获利的比例</p>
+        <div class="ft-dots" id="ft-dots" aria-label="一百人中不足一人"></div>
+        <p class="ft-src">每个点代表 1% 的日内交易者；橙色不足一个点。Barber、Lee、Liu 与 Odean（2014）</p>
+      </div>
+    </div>
+  </div>
+</figure>
+<style>
+.ft{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ft-p{background:var(--quote);border-radius:10px;padding:12px 14px}
+.ft-h{margin:0 0 10px;font-size:13px;font-weight:700;line-height:1.5}
+.ft-row{display:grid;grid-template-columns:96px 1fr 52px;gap:8px;align-items:center;font-size:12px;margin:8px 0}
+.ft-row b{text-align:right;font-size:15px;font-variant-numeric:tabular-nums}
+.ft-t{height:18px;background:var(--surface);border-radius:5px;overflow:hidden}
+.ft-t i{display:block;height:100%;width:0;background:var(--accent);border-radius:5px;transition:width .9s ease;transition-delay:calc(var(--i)*.5s)}
+.ft-t i.w{background:var(--warm)}
+.ft.in .ft-t i{width:calc(var(--v)/20*100%)}
+.ft-src{margin:8px 0 0;font-size:11px;color:var(--faint)}
+.ft-dots{display:grid;grid-template-columns:repeat(20,1fr);gap:3px}
+.ft-dots i{aspect-ratio:1;border-radius:50%;background:var(--gray-mark);opacity:0;transition:opacity .2s}
+.ft.in .ft-dots i{opacity:.6;transition-delay:calc(var(--k)*10ms)}
+.ft-dots i.w{background:linear-gradient(90deg,var(--warm) 70%,var(--gray-mark) 70%);opacity:1}
+.ft.in .ft-dots i.w{opacity:1}
+@media (max-width:640px){.ft{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  document.getElementById('ft-dots').innerHTML=Array.from({length:100},(_,k)=>`<i class="${k===0?'w':''}" style="--k:${k}"></i>`).join('');
+})();
+</script>
+
+<p>巴伯与奥迪恩在 2000 年研究了一家美国折扣经纪商约 6.6 万个家庭账户：1991 年至 1996 年，交易最频繁的 20% 家庭年均净收益为 11.4%，同期市场收益为 17.9%。巴伯等人在 2014 年研究台湾的日内交易者，发现扣除费用后能够稳定获利的不足 1%。巴伯与奥迪恩在 2008 年还发现，个人投资者的买入很大程度上受注意力驱动：上了新闻、成交异常放大、涨跌幅最大的股票，最容易被个人买入。</p>
+<p>徒劳型并非一成不变。塞鲁等人在 2010 年发现，个人投资者的交易表现会随经验改善，但改善的重要来源之一，是能力不足的人在认识到这一点之后减少交易乃至退出。</p>
+<h2 id="sec-6">六、对产品设计的含义</h2>
+<p>交易动机不同，产品应当提供的帮助也不同。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：按交易动机设计产品</p><p class="figsub">四条设计要求，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="s04">重播</button></div>
+    <div class="s04" id="s04" data-anim>
+      <div class="s04-c" style="--i:0"><em>动机决定输赢的意义</em><b>先弄清用户为什么交易</b><p>为养老、换汇、对冲还是娱乐，决定了什么样的帮助有用；动机只用于提供服务，不给用户贴标签。</p></div>
+      <div class="s04-c" style="--i:1"><em>效用型付出的是成本</em><b>为效用型降低成本</b><p>不急的交易可以耐心成交；下单前展示价差与费用，复盘时计算实际付出的成本。</p></div>
+      <div class="s04-c warn" style="--i:2"><em>徒劳型的亏损没有回报</em><b>不鼓励没有优势的交易</b><p>不以交易笔数、换手率作为产品指标；不用排行榜、连胜奖励刺激交易；新闻标注时间与发布后的价格变化。</p></div>
+      <div class="s04-c warn" style="--i:3"><em>寄生与操纵损害他人</em><b>不为寄生与操纵提供便利</b><p>拒绝帮助散布传言、虚假报单等行为，并留存记录。</p></div>
+    </div>
+  </div>
+</figure>
+<style>
+.s04{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.s04-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.s04-c.warn{border-left-color:var(--warm)}
+.s04-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.s04-c b{display:block;font-size:15px;margin:2px 0 4px}
+.s04-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.s04.in .s04-c{opacity:1;transform:none}
+@media (max-width:640px){.s04{grid-template-columns:1fr}}
+</style>
+
+<h2 id="sec-7">参考文献</h2>
+<ul class="refs"><li>Harris, L. (1993). The winners and losers of the zero-sum game: The origins of trading profits, price efficiency and market liquidity. Working paper, University of Southern California.</li><li>Harris, L. (2003). <i>Trading and exchanges: Market microstructure for practitioners</i>. Oxford University Press.</li><li>Harris, L. (2015). <i>Trading and electronic markets: What investment professionals need to know</i>. CFA Institute Research Foundation.</li><li>Barber, B. &amp; Odean, T. (2000). Trading is hazardous to your wealth: The common stock investment performance of individual investors. <i>Journal of Finance</i>, 55(2), 773–806.</li><li>French, K. (2008). Presidential address: The cost of active investing. <i>Journal of Finance</i>, 63(4), 1537–1573.</li><li>Barber, B. &amp; Odean, T. (2008). All that glitters: The effect of attention and news on the buying behavior of individual and institutional investors. <i>Review of Financial Studies</i>, 21(2), 785–818.</li><li>Kumar, A. (2009). Who gambles in the stock market? <i>Journal of Finance</i>, 64(4), 1889–1933.</li><li>Dorn, D. &amp; Sengmueller, P. (2009). Trading as entertainment? <i>Management Science</i>, 55(4), 591–603.</li><li>Seru, A., Shumway, T. &amp; Stoffman, N. (2010). Learning by trading. <i>Review of Financial Studies</i>, 23(2), 705–739.</li><li>Barber, B., Lee, Y.-T., Liu, Y.-J. &amp; Odean, T. (2014). The cross-section of speculator skill: Evidence from day trading. <i>Journal of Financial Markets</i>, 18, 1–24.</li></ul>
+<footer class="nav"><a href="ch08.html">← 第 8 章　信息如何进入价格</a><a href="ch10.html">第 10 章　流动性与买卖价差 →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

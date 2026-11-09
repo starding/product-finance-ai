@@ -1,0 +1,89 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">文明模拟器 · 第 1 章：一个人的一生</p><p class="figsub">20 岁开始耕种，60 岁后无力下地，活到 80 岁。选择一种吃法，调整损耗与留种，看一生每个月吃到多少。</p></div><button class="replay" type="button" data-replay="cs1">重播</button></div>
+    <div class="cs-rules"><span class="on">储蓄</span><span class="on">留种</span><span class="lock">借贷 · 第 2 章</span><span class="lock">承诺 · 第 3 章</span><span class="lock">保险 · 第 5 章</span></div>
+    <div class="seg-btns" role="group" aria-label="吃法">
+      <button type="button" data-cs="free" aria-pressed="false">想吃多少吃多少</button>
+      <button type="button" data-cs="year" aria-pressed="false">每年平均分配</button>
+      <button type="button" data-cs="life" aria-pressed="true">为一生打算</button>
+    </div>
+    <div class="cs" id="cs1" data-anim>
+      <svg viewBox="0 0 660 240" role="img" aria-label="一生每月的消费与仓里的粮食"><g id="cs1-ax"></g><path id="cs1-st" class="cs-st"/><path id="cs1-c" class="cs-c"/></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>每月吃到（左轴，份）</span><span><i style="background:var(--faint);opacity:.35"></i>仓里的粮食（右轴，份）</span><span><i style="background:var(--warm-soft)"></i>低于 0.6 份即挨饿</span></div>
+      <div class="cs-ctl">
+        <div class="sl"><label for="cs1-d">每月损耗 <b id="cs1-dv"></b></label><input id="cs1-d" type="range" min="0" max="3" step="0.1" value="1"></div>
+        <div class="sl"><label for="cs1-p">收成中留作种子 <b id="cs1-pv"></b></label><input id="cs1-p" type="range" min="0" max="40" step="1" value="10"></div>
+      </div>
+      <div class="cs-sw"><label><input type="checkbox" id="cs1-old" checked> 规则：60 岁后无力耕种</label><label><input type="checkbox" id="cs1-rot" checked> 规则：粮食会损耗</label></div>
+      <div class="cs-out" id="cs1-out"></div>
+      <p class="cs-msg" id="cs1-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意模型：每年秋天收获，基础收成 12 份，来年收成 ＝ 12 ＋ 4 × √（去年留的种子）；满足感按每月吃到份数的对数计算，汇总为“相当于一生每月稳定吃多少”（各月对数的平均再取指数，吃到不足 0.05 份的月份按 0.05 计）。“为一生打算”在每次收获时重新计算：此后每月的消费按（1 − 损耗）递减，这是有损耗时的最好安排，并保证仓里的粮食在 80 岁前不会吃空。</figcaption>
+</figure>
+<style>
+.cs svg{width:100%;height:auto;display:block}
+.cs-c{fill:none;stroke:var(--accent);stroke-width:2;stroke-linejoin:round}
+.cs-st{fill:var(--faint);fill-opacity:.18;stroke:none}
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-ctl{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+.cs-out{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.cs-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs-out span{display:block;font-size:11.5px;color:var(--faint)} .cs-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.cs-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs-ctl{grid-template-columns:1fr;gap:4px}.cs-out{grid-template-columns:repeat(2,1fr)}.cs svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs1'+id),A0=20,A1=80,RET=60,N=(A1-A0)*12;
+  const X0=40,X1=620,YT=12,YB=206,x=m=>X0+m/N*(X1-X0),yc=v=>YB-Math.min(v,3)/3*(YB-YT);
+  let pol='life';
+  // 模拟：返回每月消费与月初库存
+  function run(o,cfix){const d=o.rot?o.d:0,c=[],st=[];let s=0,seed=0,plan=0,planAt=0;
+    for(let m=0;m<N;m++){const age=A0+m/12,mo=m%12;
+      if(mo===0){const work=!(o.old&&age>=RET);
+        if(work){const H=12+4*Math.sqrt(seed);const nextWork=!(o.old&&age+1>=RET)&&age+1<A1;seed=nextWork?o.p*H:0;s+=H-seed;} else seed=0;
+        if(cfix===undefined){if(o.pol==='year')plan=s/12;if(o.pol==='life'){plan=solve(o,m,s,seed);planAt=m;}}}
+      const want=cfix!==undefined?cfix:o.pol==='free'?3:o.pol==='life'?plan*Math.pow(q(o),m-planAt):plan;const e=Math.max(0,Math.min(want,s));
+      st.push(s);c.push(e);s=(s-e)*(1-d);}
+    return [c,st];}
+  // 从第 m 个月起、手上有 s 份、已留种 seed：按最优路径逐月递减（每月乘以（1 − 损耗）），求可行的最大起点
+  const q=o=>1-(o.rot?o.d:0);
+  function feasible(o,m0,s0,seed0,c){const d=o.rot?o.d:0,k=q(o);let s=s0,seed=seed0;
+    for(let m=m0;m<N;m++){const age=A0+m/12;
+      if(m>m0&&m%12===0&&!(o.old&&age>=RET)){const H=12+4*Math.sqrt(seed);const nw=!(o.old&&age+1>=RET)&&age+1<A1;seed=nw?o.p*H:0;s+=H-seed;}
+      const cm=c*Math.pow(k,m-m0);if(s<cm-1e-9)return false;s=(s-cm)*(1-d);}
+    return true;}
+  function solve(o,m,s,seed){let lo=0,hi=40;for(let i=0;i<32;i++){const mid=(lo+hi)/2;if(feasible(o,m,s,seed,mid))lo=mid;else hi=mid;}return lo;}
+  function axes(smax){const ys=v=>YB-v/smax*(YB-YT);
+    let h=`<rect x="${X0}" y="${yc(.6)}" width="${X1-X0}" height="${YB-yc(.6)}" fill="var(--warm-soft)"/>`;
+    h+=[0,1,2,3].map(v=>`<line x1="${X0}" x2="${X1}" y1="${yc(v)}" y2="${yc(v)}" class="s-line"/><text x="${X0-6}" y="${yc(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('');
+    h+=[0,.5,1].map(f=>`<text x="${X1+6}" y="${ys(f*smax)+4}" font-size="11" class="t-faint">${Math.round(f*smax)}</text>`).join('');
+    h+=[20,30,40,50,60,70,80].map(a=>`<text x="${x((a-A0)*12)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${a} 岁</text>`).join('');
+    h+=`<line x1="${x((RET-A0)*12)}" x2="${x((RET-A0)*12)}" y1="${YT}" y2="${YB}" class="s-faint" stroke-dasharray="3 4"/>`;
+    return [h,ys];}
+  function draw(){const o={pol,d:+$('-d').value/100,p:+$('-p').value/100,old:$('-old').checked,rot:$('-rot').checked};
+    $('-dv').textContent=(o.d*100).toFixed(1)+'%';$('-pv').textContent=Math.round(o.p*100)+'%';
+    const [c,st]=run(o);const smax=Math.max(20,Math.ceil(Math.max(...st)/20)*20);const [ax,ys]=axes(smax);$('-ax').innerHTML=ax;
+    let pc='',ps=`M${x(0)},${YB}`;for(let m=0;m<N;m++){pc+=(m?'L':'M')+x(m).toFixed(1)+','+yc(c[m]).toFixed(1);ps+='L'+x(m).toFixed(1)+','+ys(st[m]).toFixed(1);}ps+=`L${x(N-1)},${YB}Z`;
+    $('-c').setAttribute('d',pc);$('-st').setAttribute('d',ps);
+    const U=Math.exp(c.reduce((a,v)=>a+Math.log(Math.max(v,.05)),0)/c.length),hungry=c.filter(v=>v<.6).length,oldc=c.slice((RET-A0)*12).reduce((a,v)=>a+v,0)/((A1-RET)*12),young=c.slice(0,(RET-A0)*12).reduce((a,v)=>a+v,0)/((RET-A0)*12);
+    $('-out').innerHTML=[['相当于一生每月稳定吃',U.toFixed(2)+' 份'],['挨饿的月数',hungry],['60 岁前平均每月吃',young.toFixed(2)+' 份'],['60 岁后平均每月吃',oldc.toFixed(2)+' 份']].map(([a,b])=>`<div><span>${a}</span><b>${b}</b></div>`).join('');
+    let msg='';
+    if(!o.old)msg='关掉“无力耕种”这条规则，一生都有收成，储蓄只需跨过一年。正是年老这一条，让储蓄要跨过几十年。';
+    else if(!o.rot)msg='关掉“损耗”这条规则，粮食可以无损地存几十年：为一生打算，就能让年老与年轻吃得一样多。现实中没有这样的仓库。';
+    else if(pol==='free')msg=`每年收获后先吃饱，几个月后仓里就空了：一生有 ${hungry} 个月挨饿，60 岁后几乎没有粮食。`;
+    else if(pol==='year')msg=`每年的收成平均分到十二个月，年轻时不挨饿；但没有为老年留下任何东西，60 岁后一共挨饿 ${hungry} 个月。`;
+    else msg=o.d<.001?`没有损耗时，为一生打算可以让年老与年轻吃得一样多。`:`为一生打算，年轻时多存一些。可是每月 ${(o.d*100).toFixed(1)}% 的损耗，存二十年只剩约 ${Math.round(Math.pow(1-o.d,240)*100)}%：存得越久越不划算，60 岁后平均每月只能吃 ${oldc.toFixed(2)} 份，${hungry} 个月挨饿。一个人能做到的，到这里为止。`;
+    $('-msg').textContent=msg;}
+  document.querySelectorAll('[data-cs]').forEach(b=>b.addEventListener('click',()=>{pol=b.dataset.cs;document.querySelectorAll('[data-cs]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  ['-d','-p','-old','-rot'].forEach(k=>$(k).addEventListener('input',draw));
+  $('').addEventListener('anim-in',()=>{['free','year','life'].forEach((k,i)=>setTimeout(()=>{pol=k;document.querySelectorAll('[data-cs]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.cs===k)));draw();},300+i*2600));});
+  draw();
+})();
+</script>

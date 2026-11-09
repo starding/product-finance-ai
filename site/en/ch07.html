@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why prices are hard to predict</title>
+<meta name="description" content="Chapter 7 of Product × Finance × AI: Financial Products in the Age of AI. Whatever can be predicted gets traded away, and the price changes that remain are close to random">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="ch07">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="Contents">
+<div class="side-head"><a class="sidetitle" href="index.html">Product × Finance × AI<small>Financial Products in the Age of AI</small></a></div>
+<div class="side-view" role="group" aria-label="Way of reading"><a href="preface.html" class="on" aria-current="true">Decomposition</a><a href="g-preface.html">Derivation</a></div>
+<a class="side-about" href="index.html#about">About this book</a>
+<a class="" href="preface.html"><span class="n">Preface</span>Why financial products must be relearned in the age of AI</a>
+<a class="side-part" href="part1.html"><span class="pn">Part One</span>Markets: where returns and risks come from</a>
+<a class="" href="ch01.html"><span class="n">1</span>What financial products sell</a>
+<a class="" href="ch02.html"><span class="n">2</span>Interest rates and maturity</a>
+<a class="" href="ch03.html"><span class="n">3</span>What risk looks like</a>
+<a class="" href="ch04.html"><span class="n">4</span>Diversification</a>
+<a class="" href="ch05.html"><span class="n">5</span>Compounding and volatility drag</a>
+<a class="" href="ch06.html"><span class="n">6</span>Factors</a>
+<a class=" cur" href="ch07.html" aria-current="page"><span class="n">7</span>Why prices are hard to predict</a>
+<a class="" href="ch08.html"><span class="n">8</span>How information gets into prices</a>
+<a class="" href="ch09.html"><span class="n">9</span>Traders in the market</a>
+<a class="" href="ch10.html"><span class="n">10</span>Liquidity and the bid-ask spread</a>
+<a class="" href="ch11.html"><span class="n">11</span>Orders, rules and market structure</a>
+<a class="" href="ch12.html"><span class="n">12</span>The arithmetic of active management</a>
+<a class="" href="ch13.html"><span class="n">13</span>How promises are kept</a>
+<a class="" href="ch14.html"><span class="n">14</span>Why regulation exists</a>
+<a class="side-part" href="part2.html"><span class="pn">Part Two</span>Users: what people want and what they can bear</a>
+<a class="" href="ch15.html"><span class="n">15</span>The jobs users need done</a>
+<a class="" href="ch16.html"><span class="n">16</span>How users make decisions</a>
+<a class="" href="ch17.html"><span class="n">17</span>What users can bear</a>
+<a class="" href="ch18.html"><span class="n">18</span>How users judge and trust</a>
+<a class="side-part" href="part3.html"><span class="pn">Part Three</span>AI: how much an agent can do on people&#x27;s behalf</a>
+<a class="" href="ch19.html"><span class="n">19</span>The amplification factor</a>
+<a class="" href="ch20.html"><span class="n">20</span>Which tasks can be handed to AI</a>
+<a class="" href="ch21.html"><span class="n">21</span>Where capability comes from, and where it fails</a>
+<a class="" href="ch22.html"><span class="n">22</span>Verifiability: the cost of checking</a>
+<a class="" href="ch23.html"><span class="n">23</span>The special constraints of finance</a>
+<a class="side-part" href="part4.html"><span class="pn">Part Four</span>Design: financial products under three sets of constraints</a>
+<a class="" href="ch24.html"><span class="n">24</span>What to promise</a>
+<a class="" href="ch25.html"><span class="n">25</span>Mandate parameters</a>
+<a class="" href="ch26.html"><span class="n">26</span>Authority and irreversible exposure</a>
+<a class="" href="ch27.html"><span class="n">27</span>Liability and conflicts of interest</a>
+<a class="" href="ch28.html"><span class="n">28</span>Capability assembly and process visibility</a>
+<a class="" href="ch29.html"><span class="n">29</span>Assurance level</a>
+<a class="" href="ch30.html"><span class="n">30</span>How trust is built</a>
+<a class="" href="ch31.html"><span class="n">31</span>Design principles</a>
+<a class="side-app" href="estimates.html"><span class="n">Appendix</span>Methods and data behind the author&#x27;s estimates</a>
+<a class="side-app" href="method.html"><span class="n">Appendix</span>How this book was written</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="Open contents" title="Contents"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">Product × Finance × AI: Financial Products in the Age of AI</a><span>Part One · Section Three  Information advantage: the zero-sum part</span><a class="langlink" href="../ch07.html" hreflang="zh-CN">中文</a></header>
+
+<div class="chapno">Chapter 7</div><h1>Why prices are hard to predict<small>The ceiling on information advantage</small></h1>
+<div class="eqstrip" aria-label="Where this chapter sits in the return equation"><span class="lbl">Realized return =</span><a class="" href="ch02.html">Time compensation</a><a class="" href="ch03.html">＋Risk compensation</a><span class="cur">＋Information advantage</span><a class="" href="ch10.html">－Trading costs</a><span class="">＋Luck</span><span class="keep"><a href="ch13.html">Premise: promises kept</a></span></div>
+<blockquote><p>The third term of the return equation is information advantage: only by knowing more than others can one earn more than others. The ceiling on this term is set first by prices themselves. Prices are hard to predict not because markets are chaotic, but precisely because participants are all trying to predict them: once a change becomes foreseeable, trading pulls it forward into today's price, and what is left for tomorrow is only new information that cannot be foreseen today. Excess returns from analysing public information are steadily eroded by competition.</p></blockquote>
+<h2 id="sec-1">1. Four charts: which one is real?</h2>
+<p>In 1959 Roberts of the University of Chicago ran a simple experiment: he generated "prices" week by week from random numbers and drew them as price charts. The resulting charts were almost indistinguishable from real stock price charts, and they even showed the various "patterns" that technical analysis talks about.</p>
+<figure>
+  <div class="card">
+    <p class="figtitle">Which one is a real stock price?</p>
+    <p class="figsub">Of the four price charts below, pick the one that looks as if it came from a real stock.</p>
+    <div class="gu" id="gu"></div>
+    <p class="gu-msg" id="gu-msg" aria-live="polite"></p>
+    <button type="button" class="replay" id="gu-new">New set</button>
+  </div>
+  <figcaption>Modelled on Roberts (1959), who simulated weekly changes; this figure uses daily ones. Each chart starts at 100, each day’s change is drawn independently at random with a standard deviation of about 1.2%, over 250 trading days.</figcaption>
+</figure>
+<style>
+.gu{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.gu button{font:inherit;text-align:left;background:var(--surface);border:1.5px solid var(--line);border-radius:10px;padding:10px;cursor:pointer;color:var(--ink)}
+.gu button:hover{border-color:var(--accent)}
+.gu button svg{width:100%;height:auto;display:block}
+.gu button span{font-size:12px;color:var(--faint)}
+.gu polyline{fill:none;stroke:var(--ink);stroke-width:1.4;stroke-linejoin:round}
+.gu.done button{cursor:default}
+.gu.done polyline{stroke:var(--warm)}
+.gu.done button.pick{border-color:var(--warm);box-shadow:0 0 0 3px var(--warm-soft)}
+.gu-tag{display:none;font-size:12px;color:var(--warm);font-weight:700}
+.gu.done .gu-tag{display:inline}
+.gu-msg{font-size:14px;margin:12px 0 8px;min-height:1.7em}
+</style>
+<script>
+(function(){
+  const box=document.getElementById('gu'), msg=document.getElementById('gu-msg');
+  const gauss=()=>{let u=0,v=0;while(!u)u=Math.random();v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);};
+  function make(){
+    box.classList.remove('done'); msg.textContent='';
+    box.innerHTML=['A','B','C','D'].map(n=>{
+      let p=100,pts=[p];for(let i=0;i<250;i++){p*=Math.exp(0.0002+0.012*gauss());pts.push(p);}
+      const mn=Math.min(...pts),mx=Math.max(...pts);
+      const d=pts.map((v,i)=>`${(i/250*300).toFixed(1)},${(8+(1-(v-mn)/(mx-mn))*104).toFixed(1)}`).join(' ');
+      return `<button type="button"><svg viewBox="0 0 300 120" aria-hidden="true"><polyline points="${d}"/></svg><span>Chart ${n}</span> <span class="gu-tag">Randomly generated</span></button>`;
+    }).join('');
+    box.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
+      if(box.classList.contains('done'))return;
+      b.classList.add('pick'); box.classList.add('done');
+      msg.textContent='All four charts were generated from random numbers; none comes from a real stock. Random series also produce trends, reversals and “patterns”.';
+    }));
+  }
+  document.getElementById('gu-new').addEventListener('click',make);
+  make();
+})();
+</script>
+
+<p>What the experiment shows is not that "stock prices are random numbers", but something else: from the look of a chart alone, a patterned series cannot be told apart from a purely random one. Formations that look like patterns appear in large numbers in random series as well.</p>
+<h2 id="sec-2">2. Whatever can be predicted gets traded away</h2>
+<p>In 1900 the French mathematician Bachelier proposed in his doctoral thesis, <i>Théorie de la spéculation</i>, that price movements could be regarded as random. In 1965 Samuelson explained why prices should behave this way. Suppose everyone knows for certain that a stock will rise 10% next week. No one is willing to sell today at the old price, while many people want to buy, so the price rises today until next week's rise no longer exists. Foreseeable changes are pulled forward to today by trading.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">A foreseeable rise happens early</p><p class="figsub">On day 2 news is released: on day 7 the company will receive a certain payment, and the share price will then rise 10%. Adjust the share of investors who trade on this news and see when the price rises.</p></div><button class="replay" type="button" data-replay="ar">Replay</button></div>
+    <div class="ar" id="ar" data-anim>
+      <svg viewBox="0 0 640 230" role="img" aria-label="Price adjustment path after the announcement">
+        <g id="ar-axis"></g>
+        <path id="ar-gap" class="ar-gap"/>
+        <path id="ar-path" class="ar-path"/>
+        <circle id="ar-dot" r="6" class="ar-dot"/>
+      </svg>
+      <div class="sl"><label for="ar-s">Share of investors trading on the news <b id="ar-sv"></b></label><input id="ar-s" type="range" min="0" max="100" step="5" value="0"></div>
+      <p class="ar-msg" id="ar-msg" aria-live="polite"></p>
+      <div class="legend"><span><i style="background:var(--warm-soft)"></i>Rise still foreseeable after the announcement (the part open to arbitrage)</span></div>
+    </div>
+  </div>
+  <figcaption>Illustrative. Each day, investors trading on the news push the price towards 110, by an amount proportional to their share. The higher the share, the sooner the foreseeable rise is absorbed, and the less of the “certain rise” is left for day 7.</figcaption>
+</figure>
+<style>
+.ar svg{width:100%;height:auto;display:block}
+.ar-gap{fill:var(--warm-soft)}
+.ar-path{fill:none;stroke:var(--accent);stroke-width:2.5;stroke-linejoin:round}
+.ar-dot{fill:var(--accent)}
+.ar-msg{font-size:14px;margin:4px 0 8px;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const X0=50,X1=620,Y0=196,Y1=20, x=d=>X0+d/10*(X1-X0), y=p=>Y0-(p-96)/(114-96)*(Y0-Y1);
+  let a=`<line x1="${X0}" y1="${Y0}" x2="${X1}" y2="${Y0}" class="s-faint"/>`;
+  for(let d=0;d<=10;d++)a+=`<text x="${x(d)}" y="${Y0+16}" text-anchor="middle" font-size="11" class="t-faint">Day ${d}</text>`;
+  [100,110].forEach(p=>a+=`<line x1="${X0}" y1="${y(p)}" x2="${X1}" y2="${y(p)}" class="s-line"/><text x="${X0-8}" y="${y(p)+4}" text-anchor="end" font-size="11" class="t-faint">${p}</text>`);
+  a+=`<line x1="${x(2)}" y1="${Y1}" x2="${x(2)}" y2="${Y0}" class="s-faint" stroke-dasharray="3 3"/><text x="${x(2)}" y="${Y1+2}" text-anchor="middle" font-size="11" class="t-muted">News released</text>`;
+  a+=`<line x1="${x(7)}" y1="${Y1+10}" x2="${x(7)}" y2="${Y0}" class="s-faint" stroke-dasharray="3 3"/><text x="${x(7)}" y="${Y1+8}" text-anchor="middle" font-size="11" class="t-muted">Payment received</text>`;
+  document.getElementById('ar-axis').innerHTML=a;
+  const sEl=document.getElementById('ar-s');
+  function series(s){
+    // daily closes: from the announcement day, the gap shrinks by s each day
+    const out=[[0,100],[1,100],[2,100]]; let p=100;
+    if(s>0){p=p+(110-p)*s;} out.push([2.0001,p]);
+    for(let d=3;d<=10;d++){ if(d<7){p=p+(110-p)*s;} else p=110; out.push([d,p]); }
+    return out;
+  }
+  function render(anim){
+    const s=+sEl.value/100;
+    document.getElementById('ar-sv').textContent=Math.round(s*100)+'%';
+    const pts=series(s);
+    const step=[];pts.forEach((pt,i)=>{if(i>0)step.push([pt[0],pts[i-1][1]]);step.push(pt);});
+    const d='M'+step.map(([t,p])=>`${x(t).toFixed(1)},${y(p).toFixed(1)}`).join('L');
+    const path=document.getElementById('ar-path');path.setAttribute('d',d);
+    const g='M'+step.filter(([t])=>t>=2).map(([t,p])=>`${x(Math.min(t,7)).toFixed(1)},${y(t>=7?110:p).toFixed(1)}`).join('L')+`L${x(7)},${y(110)}L${x(2)},${y(110)}Z`;
+    document.getElementById('ar-gap').setAttribute('d',g);
+    const after=pts.find(pt=>pt[0]>=2.0001)[1], pre7=pts.find(pt=>pt[0]===6)[1];
+    const dot=document.getElementById('ar-dot');dot.setAttribute('cx',x(2.0001));dot.setAttribute('cy',y(after));
+    if(anim){const L=path.getTotalLength();path.style.transition='none';path.style.strokeDasharray=L;path.style.strokeDashoffset=L;path.getBoundingClientRect();path.style.transition='stroke-dashoffset 1.6s ease';path.style.strokeDashoffset=0;}
+    else{path.style.strokeDasharray='none';}
+    document.getElementById('ar-msg').textContent=s===0
+      ?'No one trades on the news: the price stays at 100 and rises a certain 10% on day 7. The rise was foreseeable when the news came out, so buyers could profit without risk.'
+      :s>=1?'Everyone trades on the news: the price reaches 110 on the day of the announcement, and after that no foreseeable rise remains. Price changes left for tomorrow can only come from new news.'
+      :`The price rises to ${after.toFixed(1)} on the day of the announcement and closes at ${pre7.toFixed(1)} on day 6. The more people trade on the news, the faster the foreseeable rise disappears.`;
+  }
+  sEl.addEventListener('input',()=>render(false));
+  document.getElementById('ar').addEventListener('anim-in',()=>{sEl.value=0;render(true);let v=0;setTimeout(function step(){v+=10;sEl.value=v;render(false);if(v<100)setTimeout(step,260);},1900);});
+  render(false);
+})();
+</script>
+
+<p>This leads to a seemingly paradoxical conclusion: the harder participants try to predict prices, and the more able they are, the harder prices become to predict. The randomness of prices is not evidence of market failure but the result of competition. The price change left for tomorrow can only come from new information that appears tomorrow, and new information is by definition unforeseeable today.</p>
+<h2 id="sec-3">3. The evidence: today's move says almost nothing about tomorrow's</h2>
+<p>This inference can be tested: if the predictable part has already been traded away, today's price change should contain no information about tomorrow's. In 1953 the statistician Kendall analysed a British index of industrial share prices, together with the price series of cotton in New York and wheat in Chicago, and found that the correlation between price changes in adjacent weeks was close to zero. In 1965 Fama tested the daily returns of the 30 stocks in the Dow Jones Industrial Average and reached the same conclusion. In 1966 Fama and Blume tested a variety of filter rules of the "buy after a rise, sell after a fall" kind; after trading costs, none of them consistently beat buying and holding.</p>
+<figure>
+  <div class="card">
+    <p class="figtitle">Does today’s move tell you about tomorrow’s?</p>
+    <p class="figsub">Each dot is one day: the horizontal axis is that day’s change, the vertical axis the next day’s. If the cloud slopes up to the right, today could be used to predict tomorrow.</p>
+    <div class="seg-btns" role="group" aria-label="Scenario">
+      <button type="button" data-ac="0.02" aria-pressed="true">As in the evidence: correlation near zero</button>
+      <button type="button" data-ac="0.5" aria-pressed="false">If predictable: correlation 0.5</button>
+    </div>
+    <div class="ac" id="ac" data-anim>
+      <svg viewBox="0 0 400 300" role="img" aria-label="Scatter plot of same-day and next-day returns">
+        <g id="ac-axis"></g>
+        <g id="ac-pts"></g>
+        <line id="ac-fit" class="ac-fit"/>
+      </svg>
+      <div class="ac-side">
+        <div><span>Correlation</span><b id="ac-r"></b></div>
+        <div><span>Hit rate of guessing “up today, up tomorrow”</span><b id="ac-hit"></b></div>
+        <p id="ac-msg"></p>
+      </div>
+    </div>
+  </div>
+  <figcaption>Simulated data: 600 trading days, daily volatility 1.2%. Kendall (1953) and Fama (1965) found correlations between successive returns in real price series close to zero; Fama and Blume (1966) found that filter rules based on rises and falls did no better than buy-and-hold after costs.</figcaption>
+</figure>
+<style>
+.ac{display:grid;grid-template-columns:minmax(0,1.3fr) 1fr;gap:16px;align-items:center}
+.ac svg{width:100%;height:auto;display:block}
+.ac-pt{fill:var(--accent);opacity:.45;transition:cy .8s ease}
+.ac-fit{stroke:var(--warm);stroke-width:2.5;transition:all .8s ease}
+.ac-side>div{background:var(--quote);border-radius:8px;padding:8px 12px;margin-bottom:8px}
+.ac-side span{display:block;font-size:12px;color:var(--faint)}
+.ac-side b{font-size:22px;font-variant-numeric:tabular-nums}
+.ac-side p{font-size:13px;margin:0;color:var(--muted)}
+@media (max-width:640px){.ac{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const N=600, C=200, H=150, S=1.2, sc=v=>v/4*130;
+  let seed=11; const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
+  const g=()=>{let u=0,v=0;while(!u)u=rnd();v=rnd();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);};
+  const a=Array.from({length:N},g), b=Array.from({length:N},g);
+  let ax=`<line x1="${C-140}" y1="${H}" x2="${C+140}" y2="${H}" class="s-faint"/><line x1="${C}" y1="${H-140}" x2="${C}" y2="${H+140}" class="s-faint"/>`;
+  ax+=`<text x="${C+140}" y="${H+28}" text-anchor="end" font-size="11" class="t-faint">Today’s change</text><text x="${C+6}" y="${H-128}" font-size="11" class="t-faint">Next day’s change</text>`;
+  [-3,3].forEach(v=>{ax+=`<text x="${C+sc(v)}" y="${H+14}" text-anchor="middle" font-size="10" class="t-faint">${v>0?'+':''}${v}%</text><text x="${C-6}" y="${H-sc(v)+3}" text-anchor="end" font-size="10" class="t-faint">${v>0?'+':''}${v}%</text>`;});
+  document.getElementById('ac-axis').innerHTML=ax;
+  const pts=document.getElementById('ac-pts');
+  pts.innerHTML=a.map((v,i)=>`<circle class="ac-pt" r="2.4" cx="${(C+sc(Math.max(-4,Math.min(4,v*S)))).toFixed(1)}" cy="${H}"/>`).join('');
+  const circles=[...pts.children], btns=[...document.querySelectorAll('[data-ac]')];
+  function set(rho){
+    btns.forEach(x=>x.setAttribute('aria-pressed',String(+x.dataset.ac===rho)));
+    const t=a.map(v=>v*S), n=a.map((v,i)=>(rho*v+Math.sqrt(1-rho*rho)*b[i])*S);
+    circles.forEach((c,i)=>c.setAttribute('cy',(H-sc(Math.max(-4,Math.min(4,n[i])))).toFixed(1)));
+    const mt=t.reduce((s,v)=>s+v,0)/N, mn=n.reduce((s,v)=>s+v,0)/N;
+    let sxy=0,sxx=0,syy=0;for(let i=0;i<N;i++){sxy+=(t[i]-mt)*(n[i]-mn);sxx+=(t[i]-mt)**2;syy+=(n[i]-mn)**2;}
+    const r=sxy/Math.sqrt(sxx*syy), k=sxy/sxx;
+    const f=document.getElementById('ac-fit');f.setAttribute('x1',C-130);f.setAttribute('y1',H+sc(k*4));f.setAttribute('x2',C+130);f.setAttribute('y2',H-sc(k*4));
+    const hit=t.filter((v,i)=>Math.sign(v)===Math.sign(n[i])).length/N;
+    document.getElementById('ac-r').textContent=r.toFixed(2);
+    document.getElementById('ac-hit').textContent=(hit*100).toFixed(0)+'%';
+    document.getElementById('ac-msg').textContent=rho<0.1?'The cloud is round and the fitted line is almost flat. Guessing tomorrow from today is barely better than tossing a coin.':'The cloud slopes clearly up to the right. If the market really behaved like this, trading on today’s move would yield a steady profit, and such an opportunity would attract trading until it disappeared.';
+  }
+  btns.forEach(x=>x.addEventListener('click',()=>set(+x.dataset.ac)));
+  document.getElementById('ac').addEventListener('anim-in',()=>set(0.02));
+  set(0.02);
+})();
+</script>
+
+<h2 id="sec-4">4. Why people keep seeing patterns</h2>
+<p>With evidence this consistent, why do so many people still believe that price charts contain patterns? In 1971 Tversky and Kahneman pointed out that people expect even very short random sequences to show the regularities of the whole population, the so-called "law of small numbers". Research on the perception of randomness has further found that people picture randomness as frequent alternation between heads and tails, with few long runs. Real random sequences are not like that: they contain runs far longer than intuition suggests. In 100 coin tosses, the longest run of the same side is usually six or seven; on seeing such a run, people tend to assume there is a cause behind it.</p>
+<figure>
+  <div class="card">
+    <p class="figtitle">True randomness has longer runs than intuition expects</p>
+    <p class="figsub">Toss a coin 100 times: green is heads (up), grey is tails (down). The longest run of the same side is outlined in orange.</p>
+    <div class="sk" id="sk" data-anim>
+      <div class="sk-grid" id="sk-grid"></div>
+      <div class="sk-out">
+        <div><span>Longest run this time</span><b id="sk-max"></b></div>
+        <div><span>Sets tossed</span><b id="sk-n">0</b></div>
+        <div><span>Distribution of longest runs so far</span><div class="sk-hist" id="sk-hist"></div></div>
+      </div>
+      <div class="sk-ctrl"><button type="button" class="replay" id="sk-again">Toss 100 more</button><button type="button" class="replay" id="sk-many">Toss 50 sets</button></div>
+    </div>
+  </div>
+  <figcaption>In 100 independent tosses, the longest run of the same side is usually between 5 and 9, most often 6 or 7. “Random sequences” that people write themselves tend to alternate too often, see Bar-Hillel and Wagenaar (1991); the tendency to expect small samples to show the regularities of the whole population is what Tversky and Kahneman (1971) called the “law of small numbers”.</figcaption>
+</figure>
+<style>
+.sk-grid{display:grid;grid-template-columns:repeat(20,1fr);gap:3px}
+.sk-grid i{aspect-ratio:1;border-radius:3px;background:var(--line);transform:scale(.4);opacity:0;transition:transform .2s,opacity .2s,box-shadow .3s}
+.sk-grid i.h{background:var(--accent)} .sk-grid i.t{background:var(--gray-mark)}
+.sk-grid i.on{transform:none;opacity:1}
+.sk-grid i.run{box-shadow:0 0 0 2px var(--warm)}
+.sk-out{display:grid;grid-template-columns:1fr 1fr 2fr;gap:8px;margin-top:12px}
+.sk-out>div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.sk-out span{display:block;font-size:12px;color:var(--faint)}
+.sk-out b{font-size:22px;font-variant-numeric:tabular-nums}
+.sk-hist{display:flex;align-items:flex-end;gap:3px;height:44px;margin-top:4px}
+.sk-hist div{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;font-size:10px;color:var(--faint)}
+.sk-hist div i{display:block;width:100%;background:var(--warm);border-radius:2px 2px 0 0;transition:height .3s}
+.sk-ctrl{display:flex;gap:8px;margin-top:10px}
+@media (max-width:640px){.sk-grid{grid-template-columns:repeat(10,1fr)}.sk-out{grid-template-columns:1fr 1fr}.sk-out>div:last-child{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const grid=document.getElementById('sk-grid'), hist={}; let n=0, timer;
+  grid.innerHTML='<i></i>'.repeat(100);
+  const cells=[...grid.children];
+  const longest=a=>{let best=1,bs=0,cur=1,cs=0;for(let i=1;i<a.length;i++){if(a[i]===a[i-1]){cur++;}else{cur=1;cs=i;}if(cur>best){best=cur;bs=cs;}}return [best,bs];};
+  function drawHist(){
+    const keys=[3,4,5,6,7,8,9,10,11,12], mx=Math.max(1,...keys.map(k=>hist[k]||0));
+    document.getElementById('sk-hist').innerHTML=keys.map(k=>`<div><i style="height:${(hist[k]||0)/mx*30}px"></i>${k===12?'12+':k}</div>`).join('');
+  }
+  function flip(animate){
+    const a=Array.from({length:100},()=>Math.random()<0.5?1:0);
+    const [L,st]=longest(a); n++; const key=Math.min(12,Math.max(3,L)); hist[key]=(hist[key]||0)+1;
+    cells.forEach((c,i)=>{c.className=a[i]?'h':'t';if(!animate)c.classList.add('on');});
+    if(animate){cells.forEach((c,i)=>setTimeout(()=>c.classList.add('on'),i*14));}
+    setTimeout(()=>{for(let i=st;i<st+L;i++)cells[i].classList.add('run');},animate?1500:0);
+    document.getElementById('sk-max').textContent=L+'';
+    document.getElementById('sk-n').textContent=n;
+    drawHist();
+  }
+  document.getElementById('sk-again').addEventListener('click',()=>{clearInterval(timer);flip(true);});
+  document.getElementById('sk-many').addEventListener('click',()=>{clearInterval(timer);let k=0;timer=setInterval(()=>{flip(false);if(++k>=50)clearInterval(timer);},40);});
+  document.getElementById('sk').addEventListener('anim-in',()=>{if(n===0)flip(true);});
+  drawHist();
+})();
+</script>
+
+<p>This intuitive bias explains why chart patterns, short-term "winning and losing streaks" and backtests on small samples so easily lead people to believe they have found a pattern.</p>
+<h2 id="sec-5">5. The exception: predictability exists, but it is small, and it fades</h2>
+<p>A strict random walk does not hold exactly. In 1988 Lo and MacKinlay found small positive correlations in the weekly returns of US stock portfolios; in 1993 Jegadeesh and Titman found that stocks that had done well over the past 3 to 12 months went on outperforming poor performers for the following months, the phenomenon known as "momentum". Academics have since found more than a hundred such "anomalies".</p>
+<p>But this predictability often weakens quickly once it is discovered. In 2016 McLean and Pontiff examined 97 published return predictors: compared with the original papers' sample periods, returns were on average 26% lower outside the sample period and 58% lower after publication. Once predictability is made public, trading erodes it, which is exactly the mechanism described above at work. What remains is partly compensation for risk and partly so small that it is hard to profit from after trading costs.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Once discovered, predictability weakens</p><p class="figsub">Average returns of 97 published return predictors in three periods (original sample period = 100).</p></div><button class="replay" type="button" data-replay="dc">Replay</button></div>
+    <div class="dc" id="dc" data-anim>
+      <div class="dc-row" style="--i:0;--v:100"><span>Original sample period</span><div class="dc-t"><i></i></div><b>100</b></div>
+      <div class="dc-row" style="--i:1;--v:74"><span>Out of sample, before publication</span><div class="dc-t"><i></i></div><b>74</b></div>
+      <div class="dc-row" style="--i:2;--v:42"><span>After publication</span><div class="dc-t"><i></i></div><b>42</b></div>
+      <div class="dc-notes">
+        <p style="--i:3"><em>100 → 74</em>The fall out of sample: some “patterns” held only by chance in a particular sample, a bias produced by data mining.</p>
+        <p style="--i:4"><em>74 → 42</em>The further fall after publication: once investors know, they trade on it, and trading erodes the predictable part.</p>
+      </div>
+    </div>
+  </div>
+  <figcaption>Data from McLean and Pontiff (2016): compared with the original sample period, portfolio returns were on average 26% lower out of sample and 58% lower after publication. The authors treat the out-of-sample decline as an upper bound on statistical bias, and attribute the additional decline after publication to investors learning about the mispricing from the papers and trading on it.</figcaption>
+</figure>
+<style>
+.dc-row{display:grid;grid-template-columns:150px 1fr 40px;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.dc-row b{font-size:18px;font-variant-numeric:tabular-nums;text-align:right}
+.dc-t{height:24px;background:var(--quote);border-radius:6px;overflow:hidden}
+.dc-t i{display:block;height:100%;width:0;background:var(--accent);border-radius:6px;transition:width .8s ease;transition-delay:calc(var(--i)*.6s)}
+.dc-row:nth-child(3) .dc-t i{background:var(--warm)}
+.dc.in .dc-t i{width:calc(var(--v)*1%)}
+.dc-notes p{font-size:13px;color:var(--muted);margin:8px 0 0;opacity:0;transition:opacity .5s;transition-delay:calc(var(--i)*.6s)}
+.dc-notes em{font-style:normal;font-weight:700;color:var(--ink);margin-right:8px;font-variant-numeric:tabular-nums}
+.dc.in .dc-notes p{opacity:1}
+@media (max-width:640px){.dc-row{grid-template-columns:1fr 40px}.dc-row span{grid-column:1/-1}}
+</style>
+
+<h2 id="sec-6">6. Implications for product design</h2>
+<p>The difficulty of predicting prices determines what financial products should not promise.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: prices are hard to predict, so what products should not promise</p><p class="figsub">Three design requirements, each tied to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="ch07summary">Replay</button></div>
+    <div class="ch07summary" id="ch07summary" data-anim><div class="ch07summary-c" style="--i:0"><em>The predictable part gets traded away</em><b>Do not promise to predict direction</b><p>Treat claims of “consistently predicting rises and falls” with scepticism first, including claims that come from AI.</p></div><div class="ch07summary-c warn" style="--i:1"><em>People see patterns in randomness</em><b>Do not package winning or losing streaks as signals</b><p>Short-term chart patterns and streaks of rises or falls are mostly normal features of random sequences.</p></div><div class="ch07summary-c warn" style="--i:2"><em>Predictability weakens once discovered</em><b>Every pattern must pass an out-of-sample test</b><p>AI is very good at finding plausible-looking patterns in noise; backtests and patterns must be tested on data not used to build the model.</p></div></div>
+  </div>
+</figure>
+<style>
+.ch07summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch07summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch07summary-c.warn{border-left-color:var(--warm)}
+.ch07summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch07summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch07summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch07summary.in .ch07summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch07summary{grid-template-columns:1fr}}
+</style>
+
+<h2 id="sec-7">References</h2>
+<ul class="refs"><li>Bachelier, L. (1900). <i>Théorie de la spéculation</i>. Annales scientifiques de l'École Normale Supérieure, 17, 21–86.</li><li>Kendall, M. (1953). The analysis of economic time-series—Part I: Prices. <i>Journal of the Royal Statistical Society, Series A</i>, 116(1), 11–34.</li><li>Roberts, H. (1959). Stock-market "patterns" and financial analysis: Methodological suggestions. <i>Journal of Finance</i>, 14(1), 1–10.</li><li>Fama, E. (1965). The behavior of stock-market prices. <i>Journal of Business</i>, 38(1), 34–105.</li><li>Samuelson, P. (1965). Proof that properly anticipated prices fluctuate randomly. <i>Industrial Management Review</i>, 6(2), 41–49.</li><li>Fama, E. &amp; Blume, M. (1966). Filter rules and stock-market trading. <i>Journal of Business</i>, 39(1, Part 2), 226–241.</li><li>Tversky, A. &amp; Kahneman, D. (1971). Belief in the law of small numbers. <i>Psychological Bulletin</i>, 76(2), 105–110.</li><li>Bar-Hillel, M. &amp; Wagenaar, W. (1991). The perception of randomness. <i>Advances in Applied Mathematics</i>, 12(4), 428–454.</li><li>Lo, A. &amp; MacKinlay, A. C. (1988). Stock market prices do not follow random walks: Evidence from a simple specification test. <i>Review of Financial Studies</i>, 1(1), 41–66.</li><li>Jegadeesh, N. &amp; Titman, S. (1993). Returns to buying winners and selling losers: Implications for stock market efficiency. <i>Journal of Finance</i>, 48(1), 65–91.</li><li>McLean, R. D. &amp; Pontiff, J. (2016). Does academic research destroy stock return predictability? <i>Journal of Finance</i>, 71(1), 5–32.</li></ul>
+<footer class="nav"><a href="ch06.html">← Chapter 6: Factors</a><a href="ch08.html">Chapter 8: How information gets into prices →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

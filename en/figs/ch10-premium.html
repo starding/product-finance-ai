@@ -1,0 +1,47 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">Illiquid assets must offer higher returns as compensation</p>
+    <p class="figsub">Left: the spread and trading frequency determine the cost paid each year. Right: stocks with wider spreads earn higher average returns, and the increase gradually flattens.</p>
+    <div class="pm5" id="pm5" data-anim>
+      <div class="pm5-l">
+        <div class="sl"><label for="pm5-s">Bid-ask spread <b id="pm5-sv"></b></label><input id="pm5-s" type="range" min="1" max="200" step="1" value="20"></div>
+        <div class="sl"><label for="pm5-n">Round trips per year <b id="pm5-nv"></b></label><input id="pm5-n" type="range" min="1" max="50" step="1" value="4"></div>
+        <div class="pm5-out"><span>Annual cost of the spread</span><b id="pm5-c"></b><em id="pm5-e"></em></div>
+      </div>
+      <svg viewBox="0 0 300 220" role="img" aria-label="Illustrative relationship between spread and average return">
+        <line x1="40" y1="186" x2="290" y2="186" class="s-faint"/><line x1="40" y1="14" x2="40" y2="186" class="s-faint"/>
+        <text x="290" y="206" text-anchor="end" font-size="11" class="t-faint">Bid-ask spread</text>
+        <text x="44" y="14" font-size="11" class="t-faint">Average return</text>
+        <path id="pm5-curve" class="pm5-curve" d="M44,170 C110,110 180,72 286,56"/>
+        <g id="pm5-pts"></g>
+      </svg>
+    </div>
+  </div>
+  <figcaption>Left: illustrative arithmetic, in which each round trip pays one spread. Right: the illustrative shape of the Amihud and Mendelson (1986) finding: for portfolios grouped by spread, average return rises with the spread along a concave curve; the dots are not the paper's data.</figcaption>
+</figure>
+<style>
+.pm5{display:grid;grid-template-columns:1fr 300px;gap:18px;align-items:center}
+.pm5 svg{width:100%;height:auto;display:block}
+.pm5-curve{fill:none;stroke:var(--accent);stroke-width:2.5;stroke-dasharray:320;stroke-dashoffset:320;transition:stroke-dashoffset 1.4s ease}
+.pm5.in .pm5-curve{stroke-dashoffset:0}
+#pm5-pts circle{fill:var(--accent);opacity:0;transition:opacity .3s}
+.pm5.in #pm5-pts circle{opacity:.8;transition-delay:calc(1.2s + var(--k)*.15s)}
+.pm5-out{background:var(--quote);border-radius:8px;padding:10px 12px}
+.pm5-out span{display:block;font-size:12px;color:var(--faint)}
+.pm5-out b{font-size:26px;font-variant-numeric:tabular-nums;color:var(--warm)}
+.pm5-out em{display:block;font-style:normal;font-size:12px;color:var(--muted);margin-top:4px}
+@media (max-width:640px){.pm5{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const s=document.getElementById('pm5-s'), n=document.getElementById('pm5-n');
+  function r(){const sp=+s.value/100, k=+n.value, c=sp*k;
+    document.getElementById('pm5-sv').textContent=sp.toFixed(2)+'%';
+    document.getElementById('pm5-nv').textContent=String(k);
+    document.getElementById('pm5-c').textContent=c.toFixed(2)+'%';
+    document.getElementById('pm5-e').textContent=c<0.5?'Little effect on long-term holders':c<3?'Equal to part of the long-run return on stocks':'Enough to eat up most of the long-run return on stocks';}
+  s.addEventListener('input',r); n.addEventListener('input',r); r();
+  const P=[[60,154],[95,128],[130,106],[170,88],[215,74],[262,62]];
+  document.getElementById('pm5-pts').innerHTML=P.map(([x,y],k)=>`<circle cx="${x}" cy="${y+(k%2?6:-5)}" r="4" style="--k:${k}"/>`).join('');
+})();
+</script>

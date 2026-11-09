@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">A promise must pass three tests</p><p class="figsub">Ten common promises, checked one by one: can the market provide it, can the product deliver it, can the user verify it? Switch on the filter to see only those that pass all three.</p></div><button class="replay" type="button" data-replay="th3">Replay</button></div>
+    <label class="th3-chk"><input type="checkbox" id="th3-x"> Show only promises that pass all three</label>
+    <div class="th3" id="th3" data-anim>
+      <div class="th3-h"><span>Promise</span><span>Provide</span><span>Deliver</span><span>Verify</span></div>
+      <div id="th3-rows"></div>
+    </div>
+    <p class="th3-msg" id="th3-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>Illustrative judgments. "Verify" means the user or a third party can check within a reasonable time whether the promise has been kept.</figcaption>
+</figure>
+<style>
+.th3-chk{display:flex;gap:6px;align-items:center;font-size:14px;margin-bottom:8px}
+.th3-chk input{accent-color:var(--accent);width:16px;height:16px}
+.th3-h,.th3-r{display:grid;grid-template-columns:minmax(0,1fr) 54px 54px 54px;gap:8px;align-items:center}
+.th3-h{font-size:11.5px;color:var(--faint);padding:0 10px 4px}
+.th3-h span:not(:first-child),.th3-r i{text-align:center}
+.th3-r{background:var(--quote);border-radius:8px;padding:7px 10px;margin-bottom:4px;font-size:13px;transition:opacity .3s,max-height .3s;overflow:hidden;max-height:60px}
+.th3-r i{font-style:normal;font-size:14px;opacity:0;transform:scale(.6);transition:opacity .3s,transform .3s;transition-delay:calc(var(--d)*1ms)}
+.th3.in .th3-r i{opacity:1;transform:none}
+.th3-r i.y{color:var(--accent)} .th3-r i.n{color:var(--warm)}
+.th3-r.ok{background:var(--accent-soft)}
+.th3.f .th3-r:not(.ok){opacity:0;max-height:0;padding:0 10px;margin:0}
+.th3-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const P=[['Annual return of at least 15%',0,0,1],['Beat the market',0,0,1],['Predict rises and falls accurately',0,0,1],['Fees no more than 0.5% a year',1,1,1],['Rebalance regularly to the agreed weights',1,1,1],['Stay within the agreed risk and instrument limits',1,1,1],['Account for every cycle of an ongoing task',1,1,1],['Give the source and time of every figure',1,1,1],['Help the user make the best investment decisions',1,0,0],['Execute orders at reasonable cost',1,1,1]];
+  document.getElementById('th3-rows').innerHTML=P.map(([n,a,b,c],i)=>{const ok=a&&b&&c;return `<div class="th3-r${ok?' ok':''}"><span>${n}</span>${[a,b,c].map((v,j)=>`<i class="${v?'y':'n'}" style="--d:${i*120+j*60}">${v?'✓':'✗'}</i>`).join('')}</div>`;}).join('');
+  const box=document.getElementById('th3'),x=document.getElementById('th3-x');
+  function r(){box.classList.toggle('f',x.checked);document.getElementById('th3-msg').textContent=x.checked?'The six that remain are all within the product\'s own control; the market can provide them and users can check them. These are the promises that can be kept over the long run.':'Promises about returns and predictions look the most attractive, yet fail the very first test; "help the user make the best decisions" can be neither delivered nor verified.';}
+  x.addEventListener('change',r);
+  box.addEventListener('anim-in',()=>{x.checked=false;r();setTimeout(()=>{x.checked=true;r();},3200);});
+  r();
+})();
+</script>

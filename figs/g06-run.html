@@ -1,0 +1,35 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">挤兑：担心别人先取</p><p class="figsub">粮仓留下两成存粮，其余八成已借给种果园的人，提前收回只能折价一半。拖动没有急用、却因为担心而来取的人所占的比例，看粮仓能否撑住。</p></div><button class="replay" type="button" data-replay="rn">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="信念">
+      <button type="button" data-rn="0" aria-pressed="true">人人相信粮仓稳健</button>
+      <button type="button" data-rn="100" aria-pressed="false">人人担心别人先取</button>
+    </div>
+    <div class="rn" id="rn" data-anim>
+      <div class="rn-b"><span>被要求取回</span><div><i id="rn-d" style="background:var(--warm)"></i></div><b id="rn-dv"></b></div>
+      <div class="rn-b"><span>粮仓最多能付</span><div><i id="rn-c" style="background:var(--accent)"></i></div><b id="rn-cv"></b></div>
+      <div class="sl"><label for="rn-f">因担心而来取的人 <b id="rn-fv"></b></label><input id="rn-f" type="range" min="0" max="100" step="5" value="0"></div>
+      <p class="rn-msg" id="rn-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：每年本来就有一成存粮因急用被取走；粮仓最多能付的 ＝ 留下的两成 ＋ 八成贷款折价一半。百分比均相对于全部存粮。</figcaption>
+</figure>
+<style>
+.rn-b{display:grid;grid-template-columns:7em 1fr 4em;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.rn-b div{height:18px;background:var(--quote);border-radius:4px;overflow:hidden}
+.rn-b i{display:block;height:100%;transition:width .4s}
+.rn-b b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.rn-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),CAP=.2+.8*.5;
+  function draw(){const f=+$('rn-f').value/100,d=.1+.9*f;$('rn-d').style.width=d*100+'%';$('rn-c').style.width=CAP*100+'%';$('rn-dv').textContent=Math.round(d*100)+'%';$('rn-cv').textContent=Math.round(CAP*100)+'%';$('rn-fv').textContent=Math.round(f*100)+'%';
+    document.querySelectorAll('[data-rn]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.rn===Math.round(f*100))));
+    $('rn-msg').textContent=d<=.2?'来取的只有急用的人，留下的两成足以应付，果园照常生长。':d<=CAP?`来取的超过了留下的两成，粮仓只好提前收回一部分贷款，折价一半，砍掉了一些果树；但还撑得住。`:`超过 ${Math.round((CAP-.1)/.9*100)}% 的人因担心而来取，粮仓即使砍掉全部果树也付不出：粮仓倒下，没来得及取的人血本无归。同一个粮仓，人们相信它就稳健，担心它就倒下。`;}
+  document.querySelectorAll('[data-rn]').forEach(b=>b.addEventListener('click',()=>{$('rn-f').value=b.dataset.rn;draw();}));
+  $('rn-f').addEventListener('input',draw);
+  $('rn').addEventListener('anim-in',()=>{let v=0;$('rn-f').value=0;draw();const id=setInterval(()=>{v+=5;$('rn-f').value=v;draw();if(v>=80)clearInterval(id);},180);});
+  draw();
+})();
+</script>

@@ -1,0 +1,62 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">The cost of a maturity mismatch</p>
+    <p class="figsub">10,000 yuan in a three-year fixed deposit. Drag the time when the money is needed to see how much interest early withdrawal costs.</p>
+    <div class="mm" id="mm" data-anim>
+      <svg viewBox="0 0 640 96" role="img" aria-label="Deposit term and the time the money is needed">
+        <line x1="40" y1="44" x2="600" y2="44" class="s-faint"/>
+        <g id="mm-ticks"></g>
+        <rect id="mm-term" y="34" height="20" rx="10" class="mm-term"/>
+        <text id="mm-tl" y="26" font-size="12" text-anchor="middle" class="t-accent">Three-year term; 2% paid only at maturity</text>
+        <line id="mm-need" y1="32" y2="74" class="mm-need"/>
+        <text id="mm-nl" y="90" font-size="12" text-anchor="middle" class="t-warm">Money needed</text>
+      </svg>
+      <div class="sl"><label for="mm-t">When the money is needed <b id="mm-tv"></b></label><input id="mm-t" type="range" min="0.5" max="5" step="0.5" value="1.5"></div>
+      <div class="mm-bars">
+        <div class="mm-row"><span>With a matched term</span><div class="mm-track"><i id="mm-b1" class="ok"></i></div><b id="mm-v1"></b></div>
+        <div class="mm-row"><span>Actually received</span><div class="mm-track"><i id="mm-b2"></i></div><b id="mm-v2"></b></div>
+      </div>
+      <p class="mm-msg" id="mm-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative rates: the three-year fixed deposit pays 2% a year; early withdrawal earns the demand-deposit rate of 0.2% a year. "With a matched term" means choosing a deposit term that matches when the money is needed, earning 2%. Actual rules vary by bank. Selling a bond early does not forfeit interest, but the sale price depends on market interest rates at the time and may be below the purchase price.</figcaption>
+</figure>
+<style>
+.mm svg{width:100%;height:auto;display:block;margin-bottom:6px}
+.mm-term{fill:var(--accent-soft);stroke:var(--accent)}
+.mm-need{stroke:var(--warm);stroke-width:2;stroke-dasharray:4 3}
+.mm-bars{display:grid;gap:8px;margin:6px 0}
+.mm-row{display:grid;grid-template-columns:110px 1fr 80px;gap:10px;align-items:center;font-size:13px}
+.mm-row b{text-align:right;font-variant-numeric:tabular-nums}
+.mm-track{height:16px;background:var(--quote);border-radius:4px;overflow:hidden}
+.mm-track i{display:block;height:100%;background:var(--warm);transition:width .3s}
+.mm-track i.ok{background:var(--accent)}
+.mm-msg{font-size:14px;margin:8px 0 0;min-height:1.7em}
+</style>
+<script>
+(function(){
+  const X0=40,X1=600,T=5,x=t=>X0+t/T*(X1-X0), P=10000;
+  let tk='';for(let t=0;t<=5;t++)tk+=`<line x1="${x(t)}" y1="40" x2="${x(t)}" y2="48" class="s-faint"/><text x="${x(t)}" y="62" text-anchor="middle" font-size="11" class="t-faint">${t===0?'Today':'Year '+t}</text>`;
+  document.getElementById('mm-ticks').innerHTML=tk;
+  const term=document.getElementById('mm-term');term.setAttribute('x',x(0));term.setAttribute('width',x(3)-x(0));
+  document.getElementById('mm-tl').setAttribute('x',(x(0)+x(3))/2);
+  const s=document.getElementById('mm-t'), fmt=v=>Math.round(v).toLocaleString('en-US');
+  function render(){
+    const t=+s.value;
+    document.getElementById('mm-tv').textContent='in '+t+(t===1?' year':' years');
+    const nd=document.getElementById('mm-need');nd.setAttribute('x1',x(t));nd.setAttribute('x2',x(t));
+    document.getElementById('mm-nl').setAttribute('x',x(t));
+    const ideal=P*Math.pow(1.02,t);
+    const act=t<3?P*Math.pow(1.002,t):P*Math.pow(1.02,3)*Math.pow(1.002,t-3);
+    const max=P*Math.pow(1.02,5), lo=P*0.98, w=v=>((v-lo)/(max-lo)*100)+'%';
+    document.getElementById('mm-b1').style.width=w(ideal);document.getElementById('mm-b2').style.width=w(act);
+    document.getElementById('mm-v1').textContent=fmt(ideal)+' yuan';document.getElementById('mm-v2').textContent=fmt(act)+' yuan';
+    document.getElementById('mm-msg').textContent=t<3
+      ?`Money needed before maturity: the only option is early withdrawal at the demand-deposit rate, which yields ${fmt(ideal-act)} yuan less.`
+      :t===3?'The money is needed exactly at maturity: all the promised interest is received.'
+      :`After maturity the money sits idle in a demand deposit: ${fmt(ideal-act)} yuan less. A term that is too short also has a cost.`;
+  }
+  s.addEventListener('input',render); render();
+  document.getElementById('mm').addEventListener('anim-in',()=>{let v=0.5;const id=setInterval(()=>{v+=0.5;s.value=v;render();if(v>=4.5){clearInterval(id);setTimeout(()=>{s.value=1.5;render();},700);}},350);});
+})();
+</script>

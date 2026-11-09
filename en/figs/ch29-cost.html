@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">How much assurance is right</p>
+    <p class="figsub">The stronger the assurance, the smaller the expected loss from defects and the higher the cost of review and waiting. Choose a function's risk level and see where total cost is lowest (illustrative).</p>
+    <div class="seg-btns" role="group" aria-label="Risk level"><button type="button" data-cs2="1" aria-pressed="false">Low risk: market summary</button><button type="button" data-cs2="2" aria-pressed="true">Medium risk: rebalancing plan</button><button type="button" data-cs2="3" aria-pressed="false">High risk: automatic trading</button></div>
+    <div class="cs2" id="cs2" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="Level of assurance and cost"><g id="cs2-ax"></g><path id="cs2-l" class="cs2-p l"/><path id="cs2-c" class="cs2-p c"/><path id="cs2-t" class="cs2-p t"/><circle id="cs2-d" r="6" fill="var(--ink)"/></svg>
+      <div class="legend"><span><i style="background:var(--warm)"></i>Expected loss from defects</span><span><i style="background:var(--gold)"></i>Cost and delay of assurance</span><span><i style="background:var(--ink)"></i>Total cost</span></div>
+      <p class="cs2-msg" id="cs2-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative curves. On adjusting the rigour of a process to risk, see Boehm and Turner (2004). Axis labels, left to right: spot checks; evaluation set; stratified evaluation and review; running without effect and staged release; formal constraints and checks on everything.</figcaption>
+</figure>
+<style>
+.cs2 svg{width:100%;height:auto;display:block}
+.cs2-p{fill:none;stroke-width:2.5;transition:d .5s} .cs2-p.l{stroke:var(--warm)} .cs2-p.c{stroke:var(--gold)} .cs2-p.t{stroke:var(--ink);stroke-dasharray:6 4}
+.cs2-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs2 svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const X0=50,X1=620,YT=14,YB=176,x=a=>X0+a/10*(X1-X0),y=v=>YB-v/100*(YB-YT);
+  const R={1:12,2:40,3:180},L=(a,r)=>r*Math.exp(-a*.55),C=a=>4*a;
+  const N=['','Spot checks','','Eval set','','Stratified + review','','Shadow + staged','','Formal + full checks',''];
+  const $=id=>document.getElementById(id);
+  $('cs2-ax').innerHTML=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`+[1,3,5,7,9].map(a=>`<text x="${x(a)}" y="${YB+16}" text-anchor="middle" font-size="10.5" class="t-faint">${N[a]}</text>`).join('')+`<text x="${X0}" y="${YT}" font-size="11" class="t-faint">Cost</text>`;
+  function set(k){document.querySelectorAll('[data-cs2]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.cs2===k)));const r=R[k];
+    const P=f=>{let d='';for(let a=0;a<=10;a+=.1)d+=(a?'L':'M')+x(a).toFixed(1)+','+y(Math.min(100,f(a))).toFixed(1);return d;};
+    $('cs2-l').setAttribute('d',P(a=>L(a,r)));$('cs2-c').setAttribute('d',P(C));$('cs2-t').setAttribute('d',P(a=>L(a,r)+C(a)));
+    let best=0,bv=1e9;for(let a=0;a<=10;a+=.05){const v=L(a,r)+C(a);if(v<bv){bv=v;best=a;}}
+    $('cs2-d').setAttribute('cx',x(best));$('cs2-d').setAttribute('cy',y(Math.min(100,bv)));
+    $('cs2-msg').textContent=k==='1'?'Low-risk function: total cost is lowest near spot checks; adding more assurance only slows iteration.':k==='2'?'Medium-risk function: the optimum lies between an evaluation set and stratified evaluation.':'High-risk function: the expected loss is large, and the optimum moves to running without effect, staged release and even checks on everything. Apply one standard to every function, and one end is always wrong.';}
+  document.querySelectorAll('[data-cs2]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.cs2)));
+  $('cs2').addEventListener('anim-in',()=>{['1','2','3'].forEach((k,i)=>setTimeout(()=>set(k),i*2000));});
+  set('2');
+})();
+</script>

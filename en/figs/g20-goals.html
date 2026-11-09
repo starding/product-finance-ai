@@ -1,0 +1,33 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Three goals, three deadlines</p><p class="figsub">This villager's three goals laid out over his life. Pick a goal to see how much it needs, when, and what happens if it comes late or short.</p></div><button class="replay" type="button" data-replay="gl20">Replay</button></div>
+    <div class="gl20" id="gl20" data-anim>
+      <svg viewBox="0 0 660 150" role="img" aria-label="Timeline of the three goals"><g id="gl20-g"></g></svg>
+      <div class="gl20-d" id="gl20-d" aria-live="polite"></div>
+    </div>
+  </div>
+  <figcaption>Illustrative: amounts are measured in years of income.</figcaption>
+</figure>
+<style>
+.gl20 svg{width:100%;height:auto;display:block}
+.gl20 g.gl20-pt{cursor:pointer}
+.gl20-d{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.gl20-d div{background:var(--quote);border-radius:8px;padding:8px 10px;font-size:13.5px;line-height:1.55}
+.gl20-d span{display:block;font-size:11px;color:var(--faint)}
+@media (max-width:640px){.gl20-d{grid-template-columns:1fr}.gl20 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('gl20'+id),X0=40,X1=630,x=a=>X0+(a-30)/(85-30)*(X1-X0);
+  const G=[['Emergency',30,'Half a year\'s income','At any time','If he cannot produce it when someone falls ill or a harvest fails, he must borrow at high interest or sell cheaply.','var(--blue)'],['House',35,'A little over a year\'s income','In five years','Each year of delay means another year of rent; if it is short, the house must be smaller.','var(--warm)'],['Retirement',60,'About 70% of income each year, for the rest of his life','Starting in thirty years','If it is late, he must work a few more years; if it is short, his old age will be tighter.','var(--accent)']];
+  let sel=0;
+  function draw(){let h=`<line x1="${X0}" x2="${X1}" y1="80" y2="80" stroke="var(--line)" stroke-width="3"/>`+[30,40,50,60,70,80].map(a=>`<text x="${x(a)}" y="104" text-anchor="middle" font-size="11" class="t-faint">Age ${a}</text>`).join('');
+    h+=`<rect x="${x(60)}" y="74" width="${x(85)-x(60)}" height="12" rx="6" fill="var(--accent-soft)"/>`;
+    G.forEach((g,i)=>{const cx=x(g[1]);h+=`<g class="gl20-pt" data-i="${i}"><circle cx="${cx}" cy="80" r="${sel===i?11:8}" fill="${g[5]}"/><text x="${cx}" y="${i===1?50:40}" text-anchor="middle" font-size="13" font-weight="${sel===i?600:400}">${g[0]}</text></g>`;});
+    h+=`<text x="${x(30)}" y="128" font-size="11" class="t-faint">Now</text>`;
+    $('-g').innerHTML=h;$('-g').querySelectorAll('.gl20-pt').forEach(p=>p.addEventListener('click',()=>{sel=+p.dataset.i;draw();}));
+    const g=G[sel];$('-d').innerHTML=`<div><span>How much</span>${g[2]}</div><div><span>When</span>${g[3]}</div><div><span>If late or short</span>${g[4]}</div>`;}
+  $('').addEventListener('anim-in',()=>{[0,1,2].forEach((i,k)=>setTimeout(()=>{sel=i;draw();},400+k*1800));});
+  draw();
+})();
+</script>

@@ -1,0 +1,48 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">After fees, actual performance is worse than pure luck</p>
+    <p class="figsub">Grey is the distribution of t-statistics of fund excess returns if no manager had any skill; the orange line is the actual distribution after fees (illustrative). Switch to compare.</p>
+    <div class="seg-btns" role="group" aria-label="Display">
+      <button type="button" data-sk="luck" aria-pressed="true">Pure luck only</button>
+      <button type="button" data-sk="both" aria-pressed="false">Overlay actual performance</button>
+    </div>
+    <div class="sk12" id="sk12" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="Distribution of t-statistics of fund excess returns">
+        <g id="sk12-axis"></g><g id="sk12-bars"></g><path id="sk12-act" class="sk12-act"/>
+        <line id="sk12-th" class="sk12-th" y1="14" y2="176"/>
+      </svg>
+      <p class="sk12-msg" id="sk12-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative shape, based on the method and findings of Fama and French (2010): comparing actual funds' excess returns with a simulated "zero-skill" distribution, after fees the actual distribution as a whole lies to the left of the pure-luck distribution, showing that most funds have negative true excess returns after fees; the right tail shows nothing better than luck either, and managers who reliably cover their costs are very rare. The curve is not the paper's data.</figcaption>
+</figure>
+<style>
+.sk12 svg{width:100%;height:auto;display:block}
+#sk12-bars rect{fill:var(--gray-mark);opacity:.5}
+.sk12-act{fill:none;stroke:var(--warm);stroke-width:2.5;opacity:0;transition:opacity .5s}
+.sk12[data-m="both"] .sk12-act{opacity:1}
+.sk12-th{stroke:var(--ink);stroke-dasharray:3 3}
+.sk12-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const X0=40,X1=620,YB=176,lo=-4,hi=4,x=t=>X0+(t-lo)/(hi-lo)*(X1-X0);
+  const pdf=(t,m,s)=>Math.exp(-0.5*((t-m)/s)**2)/(s*Math.sqrt(2*Math.PI));
+  const y=v=>YB-v/0.42*150;
+  let a=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`;
+  [-3,-2,-1,0,1,2,3].forEach(t=>a+=`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${t}</text>`);
+  a+=`<text x="${X1}" y="${YB+30}" text-anchor="end" font-size="11" class="t-faint">t-statistic of excess return after fees</text><text x="${x(2)+4}" y="24" font-size="11" class="t-muted">t = 2</text>`;
+  document.getElementById('sk12-axis').innerHTML=a;
+  const th=document.getElementById('sk12-th');th.setAttribute('x1',x(2));th.setAttribute('x2',x(2));
+  let b='';const w=0.25;for(let t=lo;t<hi;t+=w){const v=pdf(t+w/2,0,1);b+=`<rect x="${x(t)+1}" y="${y(v)}" width="${x(t+w)-x(t)-2}" height="${YB-y(v)}"/>`;}
+  document.getElementById('sk12-bars').innerHTML=b;
+  let d='';for(let i=0;i<=160;i++){const t=lo+i*(hi-lo)/160;d+=(i?'L':'M')+x(t).toFixed(1)+','+y(pdf(t,-0.7,1.05)).toFixed(1);}
+  document.getElementById('sk12-act').setAttribute('d',d);
+  const sk=document.getElementById('sk12');
+  function set(m){sk.dataset.m=m;document.querySelectorAll('[data-sk]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.sk===m)));
+    document.getElementById('sk12-msg').textContent=m==='luck'?'Even with no skill at all, about 2.3% of funds will have a t-statistic above 2 and appear to "significantly outperform".':'The actual distribution as a whole lies to the left of the pure-luck distribution: after fees, most funds have negative true excess returns, and the share above 2 on the right is no larger than under pure luck, showing no skill beyond luck.';}
+  document.querySelectorAll('[data-sk]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.sk)));
+  sk.addEventListener('anim-in',()=>{set('luck');setTimeout(()=>set('both'),2200);});
+  set('luck');
+})();
+</script>

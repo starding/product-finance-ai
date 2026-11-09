@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: explain compound returns clearly</p><p class="figsub">Four design requirements, each tied to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="ch05summary">Replay</button></div>
+    <div class="ch05summary" id="ch05summary" data-anim><div class="ch05summary-c" style="--i:0"><em>Investors receive the compound return</em><b>Show the compound return, not just the average return</b><p>Express past performance as an annualized compound return; when the average and compound returns differ widely, explain why.</p></div><div class="ch05summary-c warn" style="--i:1"><em>Drawdown and recovery are asymmetric</em><b>Show the maximum drawdown together with the gain needed to recover</b><p>Let users know before they buy that a 50% drawdown needs the value to double to break even.</p></div><div class="ch05summary-c" style="--i:2"><em>Most people end up below the average</em><b>Describe long-term expectations with medians and ranges</b><p>Do not present long-term outcomes only through the average case; show the typical outcome and the poorer cases.</p></div><div class="ch05summary-c warn" style="--i:3"><em>Fixed leverage deviates unfavourably in choppy markets</em><b>Explain the daily rebalancing mechanism of leveraged products</b><p>Explain that results drift away from the “multiple” when held for more than a day, and that the direction of the deviation depends on the shape of the market path; it is not simply “decay”.</p></div></div>
+  </div>
+</figure>
+<style>
+.ch05summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch05summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch05summary-c.warn{border-left-color:var(--warm)}
+.ch05summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch05summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch05summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch05summary.in .ch05summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch05summary{grid-template-columns:1fr}}
+</style>

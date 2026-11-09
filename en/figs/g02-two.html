@@ -1,0 +1,48 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Lending out is storage without losses</p><p class="figsub">I harvest 12 portions in autumn; he harvests 12 portions in spring. Switch lending on or off and see the grain in both granaries and how much is lost over the year.</p></div><button class="replay" type="button" data-replay="tw2">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Lending">
+      <button type="button" data-tw2="0" aria-pressed="true">Each stores his own</button>
+      <button type="button" data-tw2="1" aria-pressed="false">Lend in autumn, repay in spring, and the reverse</button>
+    </div>
+    <div class="tw2" id="tw2" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="Monthly stock of both people"><g id="tw2-ax"></g><path id="tw2-a" class="tw2-a"/><path id="tw2-b" class="tw2-b"/><g id="tw2-l"></g></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>My granary (autumn harvest)</span><span><i style="background:var(--warm)"></i>His granary (spring harvest)</span></div>
+      <div class="sl"><label for="tw2-d">Monthly loss <b id="tw2-dv"></b></label><input id="tw2-d" type="range" min="0" max="5" step="0.5" value="3"></div>
+      <div class="tw2-out"><div><span>Lost by both over the year</span><b id="tw2-lost"></b></div><div><span>Each can eat per month</span><b id="tw2-c"></b></div></div>
+      <p class="tw2-msg" id="tw2-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: each person eats the same amount every month. With lending, the one who has just harvested feeds both for half a year, and the other repays after his own harvest, so grain stays in a granary for at most six months.</figcaption>
+</figure>
+<style>
+.tw2 svg{width:100%;height:auto;display:block}
+.tw2-a{fill:none;stroke:var(--accent);stroke-width:2.4}
+.tw2-b{fill:none;stroke:var(--warm);stroke-width:2.4}
+.tw2-out{display:flex;gap:24px;flex-wrap:wrap;margin-top:8px}
+.tw2-out div{display:flex;flex-direction:column} .tw2-out span{font-size:12px;color:var(--faint)} .tw2-out b{font-size:20px;font-variant-numeric:tabular-nums}
+.tw2-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.tw2 svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),X0=40,X1=630,YB=176,YT=12,x=t=>X0+t/12*(X1-X0),y=v=>YB-v/12*(YB-YT);
+  const MN=['Aut','','','Win','','','Spr','','','Sum','','',''];
+  $('tw2-ax').innerHTML=[0,4,8,12].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+
+    MN.map((m,i)=>`<text x="${x(i)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${m||''}</text>`).join('');
+  let lend=0;const sl=$('tw2-d');
+  function draw(){const d=+sl.value/100,k=1-d;let S12=0;for(let t=0;t<12;t++)S12+=Math.pow(k,-t);let S6=0;for(let t=0;t<6;t++)S6+=Math.pow(k,-t);
+    const c=lend?6/S6:12/S12,lost=24-24*c;
+    // 稳态库存：各自储藏时，每人收获后 12 个月吃完；借贷时，收获方供两人吃 6 个月
+    const st=(h)=>{const r=[];let s=0;for(let t=0;t<=24;t++){const tt=((t-h)%12+12)%12;if(tt===0&&t<24)s+=12;r.push(s);const out=lend?(tt<6?2*c:0):c;s=Math.max(0,(s-out)*k);}return r.slice(12,25);};
+    const A=st(0),B=st(6);
+    const path=r=>r.map((v,i)=>(i?'L':'M')+x(i).toFixed(1)+','+y(v).toFixed(1)).join('');
+    $('tw2-a').setAttribute('d',path(A));$('tw2-b').setAttribute('d',path(B));
+    $('tw2-dv').textContent=(d*100).toFixed(1)+'%';$('tw2-lost').textContent=lost.toFixed(1)+' portions';$('tw2-c').textContent=c.toFixed(2)+' portions';
+    $('tw2-msg').textContent=d===0?'With no losses, lending makes no difference.':lend?`Grain stays in a granary for at most six months; together the two lose only ${lost.toFixed(1)} portions a year, and each can eat ${c.toFixed(2)} portions a month.`:`Grain must stay in the granary for a whole year; together the two lose ${lost.toFixed(1)} portions a year, and each can eat only ${c.toFixed(2)} portions a month.`;}
+  document.querySelectorAll('[data-tw2]').forEach(b=>b.addEventListener('click',()=>{lend=+b.dataset.tw2;document.querySelectorAll('[data-tw2]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  sl.addEventListener('input',draw);
+  $('tw2').addEventListener('anim-in',()=>{lend=0;document.querySelectorAll('[data-tw2]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.tw2==='0')));draw();setTimeout(()=>{lend=1;document.querySelectorAll('[data-tw2]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.tw2==='1')));draw();},2400);});
+  draw();
+})();
+</script>

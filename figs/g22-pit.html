@@ -1,0 +1,34 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">事后看，与当时看</p><p class="figsub">风暴前三天，书记员按约定买入了一些船股。切换两种看法，评判这一步是否得当。</p></div><button class="replay" type="button" data-replay="pt22">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="看法">
+      <button type="button" data-pt22="after" aria-pressed="true">事后看：只知道结果</button>
+      <button type="button" data-pt22="then" aria-pressed="false">当时看：记录写下了当时知道什么</button>
+    </div>
+    <div class="pt22" id="pt22" data-anim>
+      <div class="pt22-d" id="pt22-d"></div>
+      <p class="pt22-msg" id="pt22-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：记录的内容为虚构的例子。</figcaption>
+</figure>
+<style>
+.pt22-d{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pt22-d div{border-radius:9px;padding:10px 12px;font-size:13.5px;line-height:1.65;background:var(--quote)}
+.pt22-d span{display:block;font-size:11.5px;color:var(--faint)}
+.pt22-d .v{font-size:15px;font-weight:600}
+.pt22-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.pt22-d{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('pt22'+id);
+  const S={after:[['看到的','3 月 1 日买入船股 0.2 年收入；3 月 4 日风暴来袭，这笔船股跌了三成。'],['评判','<span class="v" style="color:var(--warm)">愚蠢</span>“明明三天后就有风暴。”']],
+    then:[['记录写着（3 月 1 日）','养老账户的船股比例降到 72%，低于约定的 80%；按约定第三条调回。当时的消息：天气平稳，渔夫的预报未提风暴；当时估计的一年最大跌幅约 25%，在边界之内。'],['评判','<span class="v" style="color:var(--accent)">守约</span>依据当时的信息与约定，这一步是对的；结果不好，是因为遇上了谁也没料到的风暴。']]};
+  const M={after:'只知道结果，好的决定会因为坏运气被责怪。知道了结果的人，往往高估这一结果在事前的可能。',then:'记录写下了当时知道什么、依据哪一条，评判才能回到决定的那一刻。要追问的是约定该不该改，而不是书记员做错了什么。'};
+  function set(k){document.querySelectorAll('[data-pt22]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.pt22===k)));$('-d').innerHTML=S[k].map(([a,b])=>`<div><span>${a}</span>${b}</div>`).join('');$('-msg').textContent=M[k];}
+  document.querySelectorAll('[data-pt22]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.pt22)));
+  $('').addEventListener('anim-in',()=>{set('after');setTimeout(()=>set('then'),2600);});
+  set('after');
+})();
+</script>

@@ -1,0 +1,32 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The reachable share depends on what is built around the model</p><p class="figsub">A hundred cells stand for a hundred occupations. Switch between the two measures to see how many occupations have more than half their tasks affected by large models.</p></div><button class="replay" type="button" data-replay="rc13">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Measure">
+      <button type="button" data-rc13="0" aria-pressed="true">Large model with a simple interface only</button>
+      <button type="button" data-rc13="1" aria-pressed="false">Plus software built on large models</button>
+    </div>
+    <div class="rc13" id="rc13" data-anim>
+      <div class="rc13-g" id="rc13-g"></div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>More than half of tasks affected</span><span><i style="background:var(--quote);border:1px solid var(--line)"></i>Others</span></div>
+      <p class="rc13-msg" id="rc13-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Data: Eloundou, Manning, Mishkin and Rock (2024, <i>Science</i>): about 1.8% and more than 46%. Cells are rounded to the nearest percentage, so 1.8% is drawn as 2 cells. Being affected is not the same as being replaced.</figcaption>
+</figure>
+<style>
+.rc13-g{display:grid;grid-template-columns:repeat(20,1fr);gap:4px;max-width:480px}
+.rc13-g i{aspect-ratio:1;border-radius:3px;background:var(--quote);border:1px solid var(--line);transition:background .3s;transition-delay:calc(var(--i)*8ms)}
+.rc13-g i.on{background:var(--accent);border-color:var(--accent)}
+.rc13-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('rc13'+id),V=[2,46];
+  $('-g').innerHTML=Array.from({length:100},(_,i)=>`<i style="--i:${i}"></i>`).join('');const cs=[...$('-g').children];
+  function set(k){document.querySelectorAll('[data-rc13]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.rc13===k)));cs.forEach((c,i)=>c.classList.toggle('on',i<V[k]));
+    $('-msg').textContent=k?'Counting the software and tools built on large models, occupations with more than half their tasks affected rise to more than 46%: scribes need ledgers, spreadsheets and channels before they can truly take over the work.':'With a large model used only through a simple interface, occupations with more than half their tasks affected make up about 1.8%: being able to read and write is not yet the same as being able to take over a complete job.';}
+  document.querySelectorAll('[data-rc13]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.rc13)));
+  $('').addEventListener('anim-in',()=>{set(0);setTimeout(()=>set(1),2200);});
+  set(0);
+})();
+</script>

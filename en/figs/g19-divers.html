@@ -1,0 +1,30 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">What diversification removes, and what it cannot</p><p class="figsub">Each ship's shares fluctuate 35% a year, of which the part that moves with the whole village fleet corresponds to 16%. Drag the number of ships held and see how far the portfolio's fluctuation falls.</p></div><button class="replay" type="button" data-replay="dv19">Replay</button></div>
+    <div class="dv19" id="dv19" data-anim>
+      <svg viewBox="0 0 660 210" role="img" aria-label="Number of ships held and portfolio fluctuation"><g id="dv19-g"></g></svg>
+      <div class="sl"><label for="dv19-n">Ships held <b id="dv19-nv"></b></label><input id="dv19-n" type="range" min="1" max="100" step="1" value="1"></div>
+      <p class="dv19-msg" id="dv19-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: holding n ships in equal weights, portfolio fluctuation = √(16%² + (35%² − 16%²) ÷ n). The dashed line is the systematic risk that cannot be diversified away. Statman (1987) found a similar shape using actual stock data.</figcaption>
+</figure>
+<style>
+.dv19 svg{width:100%;height:auto;display:block}
+.dv19-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.dv19 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('dv19'+id),S=.35,M=.16,X0=50,X1=628,YT=12,YB=178,L=Math.log10(100),x=n=>X0+Math.log10(n)/L*(X1-X0),y=v=>YB-v/.4*(YB-YT),sd=n=>Math.sqrt(M*M+(S*S-M*M)/n);
+  function draw(){const n=+$('-n').value;$('-nv').textContent=String(n);
+    let h=[0,.1,.2,.3,.4].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text>`).join('')+[1,10,100].map(v=>`<text x="${x(v)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${v} ${v===1?'ship':'ships'}</text>`).join('');
+    let d='';for(let k=1;k<=100;k++)d+=(k>1?'L':'M')+x(k).toFixed(1)+','+y(sd(k)).toFixed(1);
+    h+=`<line x1="${X0}" x2="${X1}" y1="${y(M)}" y2="${y(M)}" stroke="var(--warm)" stroke-dasharray="5 4"/><text x="${X1}" y="${y(M)-6}" text-anchor="end" font-size="11" fill="var(--warm)">Systematic risk 16%: cannot be diversified away</text><path d="${d}" fill="none" stroke="var(--accent)" stroke-width="2.6"/><circle cx="${x(n)}" cy="${y(sd(n))}" r="7" fill="var(--accent)"/>`;
+    $('-g').innerHTML=h;
+    $('-msg').textContent=n===1?'Holding a single ship means bearing 35% fluctuation, most of it that ship\'s own luck.':`Holding ${n} ships, the portfolio's fluctuation falls to ${(sd(n)*100).toFixed(1)}%. The scribe can let a household hold every ship almost for free, but fluctuation can fall no lower than 16%: a storm that strikes the whole village cannot be diversified away.`;}
+  $('-n').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{let v=1;$('-n').value=1;draw();const id=setInterval(()=>{v=Math.min(100,Math.round(v*1.25+1));$('-n').value=v;draw();if(v>=100)clearInterval(id);},180);});
+  draw();
+})();
+</script>

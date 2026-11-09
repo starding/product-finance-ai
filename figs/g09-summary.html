@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：价格中的信息</p><p class="figsub">四条结论，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="g09summary">重播</button></div>
+    <div class="g09summary" id="g09summary" data-anim><div class="g09summary-c" style="--i:0"><em>汇集</em><b>价格汇集了分散的信息</b><p>每个人只知道一点，价格综合了所有人；许多人的误差相互抵消。</p></div><div class="g09summary-c" style="--i:1"><em>难以预测</em><b>能预料的已在价格里</b><p>价格的变化只来自新消息；一个规律一旦被利用，就会在利用中消失。</p></div><div class="g09summary-c warn" style="--i:2"><em>代价</em><b>知情者的存在让人人付出价差</b><p>做市商在知情者身上亏的，要从不知情者身上多收回来。</p></div><div class="g09summary-c warn" style="--i:3"><em>零和</em><b>信息优势扣除成本后整体为负</b><p>知情者赚的是频繁买卖者亏的；被动持有全部，不参与这场竞猜。</p></div></div>
+  </div>
+</figure>
+<style>
+.g09summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g09summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g09summary-c.warn{border-left-color:var(--warm)}
+.g09summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g09summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g09summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g09summary.in .g09summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g09summary{grid-template-columns:1fr}}
+</style>

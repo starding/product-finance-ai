@@ -1,0 +1,33 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">三件事，三个期限</p><p class="figsub">这位村民的三个目标排在他的一生上。点选一个目标，看它要多少、什么时候要，以及晚了或少了会怎样。</p></div><button class="replay" type="button" data-replay="gl20">重播</button></div>
+    <div class="gl20" id="gl20" data-anim>
+      <svg viewBox="0 0 660 150" role="img" aria-label="三个目标的时间轴"><g id="gl20-g"></g></svg>
+      <div class="gl20-d" id="gl20-d" aria-live="polite"></div>
+    </div>
+  </div>
+  <figcaption>示意：金额以“相当于几年的收入”计。</figcaption>
+</figure>
+<style>
+.gl20 svg{width:100%;height:auto;display:block}
+.gl20 g.gl20-pt{cursor:pointer}
+.gl20-d{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.gl20-d div{background:var(--quote);border-radius:8px;padding:8px 10px;font-size:13.5px;line-height:1.55}
+.gl20-d span{display:block;font-size:11px;color:var(--faint)}
+@media (max-width:640px){.gl20-d{grid-template-columns:1fr}.gl20 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('gl20'+id),X0=40,X1=630,x=a=>X0+(a-30)/(85-30)*(X1-X0);
+  const G=[['应急',30,'半年的收入','随时','家里有人生病或歉收时拿不出，只能借高利或贱卖。','var(--blue)'],['盖房',35,'一年多的收入','五年后','晚一年要多租一年房；少了只能盖小一些。','var(--warm)'],['养老',60,'每年约七成的收入，持续到终老','三十年后开始','晚了要多干几年；少了晚年的日子要紧一些。','var(--accent)']];
+  let sel=0;
+  function draw(){let h=`<line x1="${X0}" x2="${X1}" y1="80" y2="80" stroke="var(--line)" stroke-width="3"/>`+[30,40,50,60,70,80].map(a=>`<text x="${x(a)}" y="104" text-anchor="middle" font-size="11" class="t-faint">${a} 岁</text>`).join('');
+    h+=`<rect x="${x(60)}" y="74" width="${x(85)-x(60)}" height="12" rx="6" fill="var(--accent-soft)"/>`;
+    G.forEach((g,i)=>{const cx=x(g[1]);h+=`<g class="gl20-pt" data-i="${i}"><circle cx="${cx}" cy="80" r="${sel===i?11:8}" fill="${g[5]}"/><text x="${cx}" y="${i===1?50:40}" text-anchor="middle" font-size="13" font-weight="${sel===i?600:400}">${g[0]}</text></g>`;});
+    h+=`<text x="${x(30)}" y="128" font-size="11" class="t-faint">现在</text>`;
+    $('-g').innerHTML=h;$('-g').querySelectorAll('.gl20-pt').forEach(p=>p.addEventListener('click',()=>{sel=+p.dataset.i;draw();}));
+    const g=G[sel];$('-d').innerHTML=`<div><span>要多少</span>${g[2]}</div><div><span>什么时候要</span>${g[3]}</div><div><span>晚了或少了会怎样</span>${g[4]}</div>`;}
+  $('').addEventListener('anim-in',()=>{[0,1,2].forEach((i,k)=>setTimeout(()=>{sel=i;draw();},400+k*1800));});
+  draw();
+})();
+</script>

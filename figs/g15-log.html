@@ -1,0 +1,42 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">记录由谁保存</p><p class="figsub">一位书记员一个月替一户人家做了十二件事，其中两件违反了约定。切换三种情形，看委托人能发现什么。</p></div><button class="replay" type="button" data-replay="lg15">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="情形">
+      <button type="button" data-lg15="result" aria-pressed="true">只看月底的结果</button>
+      <button type="button" data-lg15="self" aria-pressed="false">书记员自己保存记录</button>
+      <button type="button" data-lg15="third" aria-pressed="false">第三方保存、不可修改</button>
+    </div>
+    <div class="lg15" id="lg15" data-anim>
+      <ol class="lg15-l" id="lg15-l"></ol>
+      <div class="lg15-res" id="lg15-r"></div>
+      <p class="lg15-msg" id="lg15-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：十二件事与两处违约为虚构的例子。“第三方保存”指记录写下之后交给与书记员无关的一方，任何一方都不能修改。</figcaption>
+</figure>
+<style>
+.lg15-l{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:3px;font-size:13px}
+.lg15-l li{display:grid;grid-template-columns:3.4em 1fr auto;gap:8px;padding:4px 8px;border-radius:6px;background:var(--quote);opacity:0;transform:translateX(-6px);transition:opacity .35s,transform .35s,background .3s;transition-delay:calc(var(--i)*.08s)}
+.lg15.in .lg15-l li{opacity:1;transform:none}
+.lg15-l li span{color:var(--faint)} .lg15-l li em{font-style:normal;font-size:12px}
+.lg15-l li.bad{background:var(--warm-soft)} .lg15-l li.bad em{color:var(--warm)}
+.lg15-l li.hid{color:var(--faint)} .lg15-l li.hid b{text-decoration:line-through}
+.lg15-l.blur li{filter:blur(3px)}
+.lg15-res{margin-top:10px;background:var(--quote);border-radius:8px;padding:9px 11px;font-size:13.5px}
+.lg15-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('lg15'+id);let mode='result';
+  const E=[['1 日','读完四艘船的报告',0],['3 日','按约定买入 2 份船股',0],['5 日','核对粮仓的存粮',0],['8 日','买入 6 份船股，超过约定的每月 3 份上限',1],['10 日','提醒委托人下月要交的税',0],['12 日','按约定卖出 1 份船股',0],['15 日','记账',0],['18 日','把一份船股卖给运营者自己名下的人家，价格低于集市价',1],['20 日','读完新的报告',0],['23 日','调整下月的计划',0],['26 日','记账',0],['30 日','生成月底报告',0]];
+  function draw(){const l=$('-l');l.classList.toggle('blur',mode==='result');
+    l.innerHTML=E.map(([d,t,b],i)=>{const hid=mode==='self'&&b;return `<li style="--i:${i}" class="${mode==='third'&&b?'bad':''}${hid?' hid':''}"><span>${d}</span><b>${hid?(i===3?'买入 3 份船股':'按集市价卖出 1 份船股'):t}</b><em>${mode==='third'&&b?'违反约定':''}</em></li>`;}).join('');
+    $('-r').textContent={result:'月底报告：本月船股市值下跌 2%。委托人只看到这一个数字，分不清是年景不好，还是书记员做错了什么。',self:'书记员自己保存的记录：每一件都在，看上去都符合约定。可是记录由它自己保存，两处违约已被改写。',third:'第三方保存的记录：十二件事逐一列出，另一位书记员几秒钟就比对出两处违约：8 日超出了买入上限，18 日把船股低价卖给了运营者关联的人家。'}[mode];
+    $('-msg').textContent={result:'只看结果，委托人无从判断，也就无从追究。',self:'记录由书记员自己保管，就像账目由经理自己保管：它可以把过错抹掉。',third:'记录写下之后交给与书记员无关的一方保存、不能修改，核对就从猜测变成了比对，追究责任才有了依据。'}[mode];}
+  const bs=[...document.querySelectorAll('[data-lg15]')];
+  function set(m){mode=m;bs.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lg15===m)));draw();}
+  bs.forEach(b=>b.addEventListener('click',()=>set(b.dataset.lg15)));
+  $('').addEventListener('anim-in',()=>{['result','self','third'].forEach((m,i)=>setTimeout(()=>set(m),300+i*2600));});
+  draw();
+})();
+</script>

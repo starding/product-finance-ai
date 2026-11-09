@@ -1,0 +1,34 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">三种错误，三种后果</p><p class="figsub">点选一种错误，看一个例子、它是谁的过错、后果由谁承担，以及记录怎样分辨它。</p></div><button class="replay" type="button" data-replay="ty23">重播</button></div>
+    <div class="ty23" id="ty23" data-anim>
+      <div class="ty23-g" id="ty23-g"></div>
+      <div class="ty23-d" id="ty23-d" aria-live="polite"></div>
+    </div>
+  </div>
+  <figcaption>示意：例子为虚构。</figcaption>
+</figure>
+<style>
+.ty23-g{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ty23-g button{font:inherit;cursor:pointer;text-align:left;border:1px solid transparent;border-radius:10px;padding:10px 12px;font-size:14px;color:var(--ink);background:var(--c);opacity:0;transform:translateY(6px);transition:opacity .35s,transform .35s,border-color .3s;transition-delay:calc(var(--i)*.2s)}
+.ty23.in .ty23-g button{opacity:1;transform:none}
+.ty23-g button.sel{border-color:var(--ink)}
+.ty23-g em{display:block;font-style:normal;font-size:11.5px;color:var(--faint)}
+.ty23-d{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.ty23-d div{background:var(--quote);border-radius:8px;padding:8px 10px;font-size:13px;line-height:1.55}
+.ty23-d span{display:block;font-size:11px;color:var(--faint)}
+@media (max-width:640px){.ty23-g{grid-template-columns:1fr}.ty23-d{grid-template-columns:1fr 1fr}}
+</style>
+<script>
+(function(){
+  const T=[['执行错误','书记员自己的过错','约定卖 2 份，它卖了 20 份；该存进盖房账户的，存进了养老账户。','书记员的过错','运营者全额赔付','记录显示执行的数额或去向与指令不符','var(--warm-soft)'],
+    ['越界','违约','在约定的边界之外多冒了风险，或者做了与他利益冲突的买卖。','违约','运营者赔付，并受约定中的处罚','记录显示这一步说不出约定的依据，或越过了边界','var(--warm-soft)'],
+    ['判断失误','约定本身承担的风险','完全按约定在风暴前调回了船股的比例，结果遇上了风暴。','谁也没有过错','他按约定自己承担','记录显示这一步有约定的依据，当时的信息也支持它','var(--accent-soft)']];
+  const g=document.getElementById('ty23-g'),d=document.getElementById('ty23-d');
+  g.innerHTML=T.map((t,i)=>`<button type="button" style="--i:${i};--c:${t[6]}"><em>${t[1]}</em>${t[0]}</button>`).join('');const bs=[...g.children];
+  function set(i){const t=T[i];bs.forEach((b,j)=>b.classList.toggle('sel',j===i));d.innerHTML=[['例子',t[2]],['是谁的过错',t[3]],['后果由谁承担',t[4]],['记录怎样分辨',t[5]]].map(([a,b])=>`<div><span>${a}</span>${b}</div>`).join('');}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('ty23').addEventListener('anim-in',()=>{[0,1,2].forEach((i,k)=>setTimeout(()=>set(i),1000+k*2000));});
+  set(0);
+})();
+</script>

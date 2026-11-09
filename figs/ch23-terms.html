@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">代理的价值落在回报的哪几项</p><p class="figsub">每一行是实际回报中的一项。条形是代理可能带来的改善（示意）。切换到“同类代理普及之后”，看哪些价值会被竞争消耗。</p></div><button class="replay" type="button" data-replay="tm2">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="时点">
+      <button type="button" data-tm2="a" aria-pressed="true">少数人使用时</button>
+      <button type="button" data-tm2="b" aria-pressed="false">同类代理普及之后</button>
+    </div>
+    <div class="tm2" id="tm2" data-anim></div>
+    <p class="tm2-msg" id="tm2-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>示意。“行为差距”指投资者实际得到的收益与所持产品收益之间的差距，主要来自追涨杀跌与择时。</figcaption>
+</figure>
+<style>
+.tm2{display:grid;gap:6px}
+.tm2-r{display:grid;grid-template-columns:30px 110px 1fr 1.6fr;gap:10px;align-items:center;font-size:13px;background:var(--quote);border-radius:8px;padding:7px 10px}
+.tm2-r em{font-style:normal;font-weight:700;color:var(--faint);text-align:center}
+.tm2-r b{font-size:13.5px}
+.tm2-t{height:14px;background:var(--surface);border-radius:7px;overflow:hidden}
+.tm2-t i{display:block;height:100%;width:0;border-radius:7px;transition:width .7s ease,background .3s}
+.tm2-r span{font-size:12px;color:var(--muted);line-height:1.5}
+.tm2-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.tm2-r{grid-template-columns:24px 1fr 1fr}.tm2-r span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const R=[['＋','时间补偿',0,0,'等待的补偿由市场给出，代理无法创造。'],['＋','风险补偿',45,45,'维持分散、按计划再平衡，不因波动放弃，让用户真正拿到风险补偿。'],
+    ['＋','信息优势',55,8,'分析变便宜后，同类分析迅速普及，超额收益被竞争消耗。'],['－','交易成本',40,40,'选择订单类型与时机、减少不必要的交易，节省的成本不依赖比别人更聪明。'],
+    ['＋','运气',0,0,'代理不能改变运气，只能帮用户分辨结果中有多少来自运气。'],['','行为差距',60,60,'减少追涨杀跌，缩小用户实际收益与产品收益之间的差距。']];
+  const box=document.getElementById('tm2');
+  box.innerHTML=R.map(([s,n,a,b,d])=>`<div class="tm2-r"><em>${s}</em><b>${n}</b><div class="tm2-t"><i></i></div><span>${d}</span></div>`).join('');
+  const is=[...box.querySelectorAll('.tm2-t i')];
+  function set(k){document.querySelectorAll('[data-tm2]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.tm2===k)));
+    is.forEach((e,i)=>{const v=k==='a'?R[i][2]:R[i][3];setTimeout(()=>e.style.width=v+'%',40);e.style.background=i===2?(k==='a'?'var(--blue)':'var(--warm)'):'var(--accent)';});
+    document.getElementById('tm2-msg').textContent=k==='a'?'少数人使用时，代理在信息上也能带来一些优势。':'同类代理普及之后，信息上的优势几乎消失；风险补偿、交易成本与行为差距上的改善依然存在，因为它们不取决于比别人预测得更准。';}
+  document.querySelectorAll('[data-tm2]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.tm2)));
+  box.addEventListener('anim-in',()=>{is.forEach(e=>e.style.width='0');set('a');setTimeout(()=>set('b'),2600);});
+  set('a');
+})();
+</script>

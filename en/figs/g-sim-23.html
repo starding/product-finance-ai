@@ -1,0 +1,36 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Civilization Simulator · Chapter 23: ten years behind the defences</p><p class="figsub">Over ten years the scribe makes two kinds of mistakes, execution errors and overstepping, and some of them occur in operations that cannot be undone. Turn three rules on or off and adjust how often mistakes occur, and see the losses caused over ten years, the part he absorbs himself, and what he pays for protection in confirmations and fees.</p></div><button class="replay" type="button" data-replay="cs23">Replay</button></div>
+    <div class="cs-rules"><span class="on">Product: what to promise</span><span class="on">Product: mandate and authority</span><span class="on">Product: process records</span><span class="on">Product: limits, confirmation and compensation</span><span class="lock">The path to trust · Ch. 24</span></div>
+    <div class="cs23" id="cs23" data-anim>
+      <div class="cs23-bars" id="cs23-b"></div>
+      <div class="cs-sw"><label><input type="checkbox" id="cs23-c"> Rule: per-step and per-day limits</label><label><input type="checkbox" id="cs23-f"> Rule: confirmation and delay for irreversible operations</label><label><input type="checkbox" id="cs23-p"> Rule: the operator compensates and insures</label></div>
+      <div class="sl"><label for="cs23-m">Frequency of mistakes <b id="cs23-mv"></b></label><input id="cs23-m" type="range" min="0.5" max="3" step="0.25" value="1"></div>
+      <p class="cs23-msg" id="cs23-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model: the figure shows expected values over ten years, with losses as a percentage of household wealth. At the baseline frequency, there are 2 execution errors a year; 98% of them lose about 0.2%, and the rest about 10%. Overstepping occurs 0.3 times a year, with an average loss of 2%. With limits, a single execution error loses no more than 2%, and losses from overstepping are halved. 20% of both kinds of mistake occur in operations that cannot be undone, and confirmation with delay stops 80% of these. When the operator compensates, all losses from execution errors and overstepping are paid, and the cost of compensation and insurance is added to his annual fees at 1.2 times. Misjudgements are market risk accepted by the agreement and are not shown.</figcaption>
+</figure>
+<style>
+.cs23-bars{display:grid;gap:10px;margin:4px 0 10px}
+.cs23-r{display:grid;grid-template-columns:11em 1fr 5.5em;gap:10px;align-items:center;font-size:12.5px}
+.cs23-r div{height:22px;background:var(--quote);border-radius:5px;overflow:hidden}
+.cs23-r i{display:block;height:100%;transition:width .4s}
+.cs23-r b{text-align:right;font-variant-numeric:tabular-nums}
+.cs23-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs23-r{grid-template-columns:1fr 5.5em}.cs23-r span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs23'+id);
+  function calc(cap,conf,pay,m){const ne=20*m,nv=3*m,le=cap?.98*.2+.02*2:.98*.2+.02*10,lv=cap?1:2,keep=conf?(1-.2*.8):1,loss=(ne*le+nv*lv)*keep;
+    return {loss,unpaid:pay?0:loss,fee:pay?loss/10*1.2:0,confirms:conf?4:0};}
+  function draw(){const c=$('-c').checked,f=$('-f').checked,p=$('-p').checked,m=+$('-m').value,S=calc(c,f,p,m),B=calc(0,0,0,m);$('-mv').textContent=m.toFixed(2)+'×';
+    $('-b').innerHTML=[['Ten-year loss from mistakes',S.loss,B.loss,'var(--warm)',S.loss.toFixed(1)+'%'],['Of which he absorbs',S.unpaid,B.loss,'var(--warm)',S.unpaid.toFixed(1)+'%'],['Extra fees per year',S.fee,3,'var(--blue)',S.fee.toFixed(2)+'%'],['Confirmations per year',S.confirms,10,'var(--gold)',S.confirms+' times']].map(([a,v,mx,col,t])=>`<div class="cs23-r"><span>${a}</span><div><i style="width:${Math.min(100,v/Math.max(mx,.01)*100)}%;background:${col}"></i></div><b>${t}</b></div>`).join('');
+    const n=[c,f,p].filter(Boolean).length;
+    $('-msg').textContent=n===0?`No defences at all: over ten years, mistakes cause a loss of about ${S.loss.toFixed(0)}%, all absorbed by him; most of it comes from a few large mistakes.`:n===3?`All three in place: limits cut off the large mistakes, confirmation and delay stop most irreversible mistakes, and the ten-year loss falls to about ${S.loss.toFixed(1)}%, all paid by the operator. The price is about ${S.fee.toFixed(2)}% a year in extra fees and 4 confirmations. Insurance costs a little more than the expected loss; in return, losses no longer fall on him alone, and he no longer faces a sudden large loss.`:`${c?'Limits cut off the large mistakes':'Without limits, a few large mistakes make up most of the loss'}; ${f?'confirmation and delay stop most irreversible mistakes':'no one stops the irreversible mistakes'}; ${p?'the operator pays for the losses':'he absorbs all the losses himself'}. The ten-year loss is about ${S.loss.toFixed(1)}%.`;}
+  ['-c','-f','-p','-m'].forEach(k=>$(k).addEventListener('input',draw));
+  $('').addEventListener('anim-in',()=>{[[0,0,0],[1,0,0],[1,1,0],[1,1,1]].forEach(([a,b,c],i)=>setTimeout(()=>{$('-c').checked=!!a;$('-f').checked=!!b;$('-p').checked=!!c;draw();},300+i*2200));});
+  draw();
+})();
+</script>

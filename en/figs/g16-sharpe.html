@@ -1,0 +1,31 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Selection got cheaper; the arithmetic did not change</p><p class="figsub">The average annual return on all ship shares is 6%. Those who passively hold everything pay only 0.1% in fees. Drag the cost of active selection and see the return of active selectors as a group after costs.</p></div><button class="replay" type="button" data-replay="sh16">Replay</button></div>
+    <div class="sh16" id="sh16" data-anim>
+      <div class="sh16-bars" id="sh16-b"></div>
+      <div class="sl"><label for="sh16-c">Cost of active selection <b id="sh16-cv"></b></label><input id="sh16-c" type="range" min="0.1" max="2" step="0.1" value="1.5"></div>
+      <p class="sh16-msg" id="sh16-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: by the arithmetic of Sharpe (1991), the return of active selectors as a group before costs equals the market average. The bars start at 5% so that the differences are visible.</figcaption>
+</figure>
+<style>
+.sh16-bars{display:grid;gap:12px;margin:6px 0 10px}
+.sh16-r{display:grid;grid-template-columns:12em 1fr 4em;gap:10px;align-items:center;font-size:12.5px}
+.sh16-r div{height:22px;background:var(--quote);border-radius:5px;overflow:hidden}
+.sh16-r i{display:block;height:100%;transition:width .4s}
+.sh16-r b{text-align:right;font-variant-numeric:tabular-nums}
+.sh16-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.sh16-r{grid-template-columns:1fr 4em}.sh16-r span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('sh16'+id),M=6,w=v=>Math.max(0,(v-5)/1.2*100);
+  function draw(){const c=+$('-c').value;$('-cv').textContent=c.toFixed(1)+'%';
+    $('-b').innerHTML=[['Average of all ship shares',M,'var(--faint)'],['Passive holders, after costs',M-.1,'var(--accent)'],['Active as a group, before costs',M,'var(--blue)'],['Active as a group, after costs',M-c,'var(--warm)']].map(([k,v,col])=>`<div class="sh16-r"><span>${k}</span><div><i style="width:${w(v)}%;background:${col}"></i></div><b>${v.toFixed(1)}%</b></div>`).join('');
+    $('-msg').textContent=c<=.1?'The cost of active selection has fallen as low as that of passive holding, so as groups the two earn the same after costs: active selectors as a whole do not get ahead; they merely stop falling behind.':`With active selection costing ${c.toFixed(1)}%, active selectors as a group fall behind by ${(c-.1).toFixed(1)} percentage points a year. The lower scribes push the cost, the smaller the shortfall, but it never turns into a lead.`;}
+  $('-c').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{let v=2;$('-c').value=2;draw();const id=setInterval(()=>{v-=.1;$('-c').value=v.toFixed(1);draw();if(v<=.15)clearInterval(id);},160);});
+  draw();
+})();
+</script>

@@ -1,0 +1,616 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The special constraints of finance</title>
+<meta name="description" content="Product × Finance × AI: Financial Products in the Age of AI, Chapter 23: the value of a financial agent should be measured against what users actually do; markets are close to efficient, so the value of prediction falls as it spreads; lasting value lies in cost, discipline and behaviour; trading errors are hard to undo, and similar agents act together">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="ch23">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="Contents">
+<div class="side-head"><a class="sidetitle" href="index.html">Product × Finance × AI<small>Financial Products in the Age of AI</small></a></div>
+<div class="side-view" role="group" aria-label="Way of reading"><a href="preface.html" class="on" aria-current="true">Decomposition</a><a href="g-preface.html">Derivation</a></div>
+<a class="side-about" href="index.html#about">About this book</a>
+<a class="" href="preface.html"><span class="n">Preface</span>Why financial products must be relearned in the age of AI</a>
+<a class="side-part" href="part1.html"><span class="pn">Part One</span>Markets: where returns and risks come from</a>
+<a class="" href="ch01.html"><span class="n">1</span>What financial products sell</a>
+<a class="" href="ch02.html"><span class="n">2</span>Interest rates and maturity</a>
+<a class="" href="ch03.html"><span class="n">3</span>What risk looks like</a>
+<a class="" href="ch04.html"><span class="n">4</span>Diversification</a>
+<a class="" href="ch05.html"><span class="n">5</span>Compounding and volatility drag</a>
+<a class="" href="ch06.html"><span class="n">6</span>Factors</a>
+<a class="" href="ch07.html"><span class="n">7</span>Why prices are hard to predict</a>
+<a class="" href="ch08.html"><span class="n">8</span>How information gets into prices</a>
+<a class="" href="ch09.html"><span class="n">9</span>Traders in the market</a>
+<a class="" href="ch10.html"><span class="n">10</span>Liquidity and the bid-ask spread</a>
+<a class="" href="ch11.html"><span class="n">11</span>Orders, rules and market structure</a>
+<a class="" href="ch12.html"><span class="n">12</span>The arithmetic of active management</a>
+<a class="" href="ch13.html"><span class="n">13</span>How promises are kept</a>
+<a class="" href="ch14.html"><span class="n">14</span>Why regulation exists</a>
+<a class="side-part" href="part2.html"><span class="pn">Part Two</span>Users: what people want and what they can bear</a>
+<a class="" href="ch15.html"><span class="n">15</span>The jobs users need done</a>
+<a class="" href="ch16.html"><span class="n">16</span>How users make decisions</a>
+<a class="" href="ch17.html"><span class="n">17</span>What users can bear</a>
+<a class="" href="ch18.html"><span class="n">18</span>How users judge and trust</a>
+<a class="side-part" href="part3.html"><span class="pn">Part Three</span>AI: how much an agent can do on people&#x27;s behalf</a>
+<a class="" href="ch19.html"><span class="n">19</span>The amplification factor</a>
+<a class="" href="ch20.html"><span class="n">20</span>Which tasks can be handed to AI</a>
+<a class="" href="ch21.html"><span class="n">21</span>Where capability comes from, and where it fails</a>
+<a class="" href="ch22.html"><span class="n">22</span>Verifiability: the cost of checking</a>
+<a class=" cur" href="ch23.html" aria-current="page"><span class="n">23</span>The special constraints of finance</a>
+<a class="side-part" href="part4.html"><span class="pn">Part Four</span>Design: financial products under three sets of constraints</a>
+<a class="" href="ch24.html"><span class="n">24</span>What to promise</a>
+<a class="" href="ch25.html"><span class="n">25</span>Mandate parameters</a>
+<a class="" href="ch26.html"><span class="n">26</span>Authority and irreversible exposure</a>
+<a class="" href="ch27.html"><span class="n">27</span>Liability and conflicts of interest</a>
+<a class="" href="ch28.html"><span class="n">28</span>Capability assembly and process visibility</a>
+<a class="" href="ch29.html"><span class="n">29</span>Assurance level</a>
+<a class="" href="ch30.html"><span class="n">30</span>How trust is built</a>
+<a class="" href="ch31.html"><span class="n">31</span>Design principles</a>
+<a class="side-app" href="estimates.html"><span class="n">Appendix</span>Methods and data behind the author&#x27;s estimates</a>
+<a class="side-app" href="method.html"><span class="n">Appendix</span>How this book was written</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="Open contents" title="Contents"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">Product × Finance × AI: Financial Products in the Age of AI</a><span>Part Three  AI: how much an agent can do for people</span><a class="langlink" href="../ch23.html" hreflang="zh-CN">中文</a></header>
+
+<div class="chapno">Chapter 23</div><h1>The special constraints of finance<small>Markets respond, and mistakes are hard to undo</small></h1>
+<blockquote><p>In most fields, the better an agent works, the more its principal gains. Finance differs in four ways. First, the baseline for comparison should be the actual behaviour of individual investors, not the standard workflow of professionals; many people do no research at all, so an agent changes the depth of their research rather than the time it takes. Second, the market responds: the more people use the same kind of analysis, the less that analysis earns, and any edge in prediction shrinks as it spreads. Third, trading errors are hard to undo; a single mistake can cause enormous losses within minutes. Fourth, many agents use similar methods to reach similar judgments, and may act in the same direction at the same moment. The lasting value of a financial agent therefore lies not in prediction but in lowering costs, maintaining discipline, reducing behavioural bias, and making possible what people could not otherwise do.</p></blockquote>
+<h2 id="sec-1">1. The baseline for comparison: what users actually do</h2>
+<p>Three kinds of delegation are common in finance: researching companies, placing trade orders and managing portfolios. Their amplification factors depend first of all on the baseline. Measured against the standard workflow of professionals, research and portfolio management both have high theoretical factors; measured against what individual investors actually do, the conclusion is entirely different. Laarits and Wurgler (2025) estimate that the median time an individual investor spends on research per trade is only about 6 minutes. A research agent mainly changes the depth of research, not the time spent. Placing an order takes only half a minute to begin with, so an agent can save little more than ten seconds. The value of a portfolio management agent is that people who would not otherwise allocate systematically can diversify and rebalance on a schedule.</p>
+<figure>
+  <div class="card">
+    <p class="figtitle">The baseline decides how much can be saved</p>
+    <p class="figsub">Three kinds of financial delegation. Switch the baseline: the standard workflow of professionals, or the actual behaviour of individual investors.</p>
+    <div class="seg-btns" role="group" aria-label="Baseline">
+      <button type="button" data-bl="norm" aria-pressed="true">Standard workflow</button>
+      <button type="button" data-bl="act" aria-pressed="false">What individuals actually do</button>
+    </div>
+    <div class="bl" id="bl" data-anim data-bl="norm">
+      <div class="bl-scale" id="bl-scale"></div>
+      <div id="bl-rows"></div>
+    </div>
+  </div>
+  <figcaption>Log scale, in minutes of the principal's time. The standard workflow and the time spent after delegation are theoretical values estimated by the author. The median time individual investors spend on research per trade is about 6 minutes; see Laarits and Wurgler (2025). After adopting a robo-adviser, investors did not log in or trade less; see D'Acunto, Prabhala and Rossi (2019).</figcaption>
+</figure>
+<style>
+.bl-scale{position:relative;height:18px;margin-left:120px;font-size:11px;color:var(--faint)}
+.bl-scale span{position:absolute;transform:translateX(-50%);white-space:nowrap}
+.bl-r{display:grid;grid-template-columns:110px 1fr;gap:10px;padding:12px 0;border-top:1px solid var(--line)}
+.bl-n b{display:block;font-size:14px}
+.bl-n span{font-size:11px;color:var(--faint);line-height:1.4;display:block}
+.bl-bars{position:relative}
+.bl-line{position:relative;height:16px;margin:3px 0}
+.bl-line i{position:absolute;top:0;height:100%;border-radius:8px;transition:left .6s ease,width .6s ease}
+.bl-line.base i{background:var(--gray-mark)}
+.bl-line.del i{background:var(--accent)}
+.bl-line em{position:absolute;top:0;font-style:normal;font-size:11px;color:var(--muted);white-space:nowrap;transition:left .6s ease;line-height:16px}
+.bl-out{font-size:13px;margin-top:6px;min-height:1.6em}
+.bl-out b{font-size:16px;font-variant-numeric:tabular-nums}
+.bl-out b.up{color:var(--accent)} .bl-out b.down{color:var(--warm)} .bl-out b.na{color:var(--gold)}
+@media (max-width:640px){.bl-r{grid-template-columns:1fr}.bl-scale{margin-left:0}}
+</style>
+<script>
+(function(){
+  const lo=0.1, hi=2000, X=v=>Math.log10(v/lo)/Math.log10(hi/lo)*100;
+  const sc=document.getElementById('bl-scale');
+  sc.innerHTML=[[0.1,'6 sec'],[1,'1 min'],[10,'10 min'],[60,'1 hour'],[480,'8 hours']].map(([v,l])=>`<span style="left:${X(v)}%">${l}</span>`).join('');
+  // Each row: name, description, baseline range (standard/actual), range after delegation, note under actual behaviour
+  const R=[
+    {n:'Company research',s:'Read reports, value, compare peers',norm:[480,1200],act:[6,6],del:[30,60],
+     out:{norm:'Theoretical factor <b class="up">8–40×</b>',act:'Checking the delegated work takes longer than the time spent before: <b class="down">below 1×</b>. The agent changes the depth of research, not the time it takes.'}},
+    {n:'Trade orders',s:'Enter and submit an order',norm:[0.5,0.5],act:[0.5,0.5],del:[0.2,0.5],
+     out:{norm:'Theoretical factor <b class="up">1–2.5×</b>: placing an order yourself takes only half a minute',act:'Same as the standard workflow: <b class="up">1–2.5×</b>; only ten-odd seconds can be saved'}},
+    {n:'Portfolio management',s:'Review and adjust each quarter',norm:[240,480],act:null,del:[15,30],
+     out:{norm:'Theoretical factor <b class="up">8–32×</b>',act:'Most individuals do no systematic allocation to begin with; after adoption they did not log in or trade less. The value is <b class="na">turning what could not be done into what can</b>, which time cannot measure.'}},
+  ];
+  const rows=document.getElementById('bl-rows');
+  rows.innerHTML=R.map((r,i)=>`<div class="bl-r"><div class="bl-n"><b>${r.n}</b><span>${r.s}</span></div><div class="bl-bars">
+    <div class="bl-line base"><i id="bl-b${i}"></i><em id="bl-be${i}"></em></div>
+    <div class="bl-line del"><i id="bl-d${i}"></i><em id="bl-de${i}">After delegation</em></div>
+    <div class="bl-out" id="bl-o${i}"></div></div></div>`).join('');
+  const bl=document.getElementById('bl'), btns=[...document.querySelectorAll('[data-bl]')].filter(b=>b.tagName==='BUTTON');
+  const place=(bar,lab,rg,text)=>{
+    if(!rg){bar.style.width='0';lab.style.left='0';lab.textContent=text;return;}
+    const a=X(rg[0]),b=X(rg[1]),w=Math.max(1.6,b-a);bar.style.left=a+'%';bar.style.width=w+'%';
+    lab.style.left=Math.min(78,a+w+1.5)+'%';lab.textContent=text;
+  };
+  function set(k){
+    bl.dataset.bl=k; btns.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.bl===k)));
+    R.forEach((r,i)=>{
+      const rg=k==='norm'?r.norm:r.act;
+      place(document.getElementById('bl-b'+i),document.getElementById('bl-be'+i),rg,k==='norm'?'Standard workflow':(rg?'Actual':'Not done before'));
+      place(document.getElementById('bl-d'+i),document.getElementById('bl-de'+i),r.del,'After delegation');
+      document.getElementById('bl-o'+i).innerHTML=r.out[k];
+    });
+  }
+  let t;
+  btns.forEach(b=>b.addEventListener('click',()=>{clearTimeout(t);set(b.dataset.bl);}));
+  bl.addEventListener('anim-in',()=>{set('norm');clearTimeout(t);t=setTimeout(()=>set('act'),3000);});
+  set('norm');
+})();
+</script>
+
+<h2 id="sec-2">2. The market responds: the returns to analysis fall as it spreads</h2>
+<p>In other fields, when a technology lets everyone work better, everyone benefits. Investment research is different. Grossman and Stiglitz (1980) showed that information earns a return only because acquiring it is costly: the more people use the same kind of analysis, the faster the same information enters prices and the smaller the excess return each person can earn, until it barely covers the cost of the analysis. Once AI drives down the cost of analysis, more people will use the same kind of analysis, and its excess return will fall accordingly. The fundamental law of active management gives the other side of the same conclusion (Grinold, 1989). The most direct effect of AI is to widen breadth cheaply, covering thousands of stocks at once and reassessing them every day. But breadth raises the information ratio only by its square root: ten times as many independent judgments raise the information ratio only about threefold. And the information coefficient itself falls as the same kind of analysis spreads, offsetting even that gain. In a market close to efficient, the benefit of an agent that predicts more accurately is limited, and it shrinks as such agents spread.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">When analysis becomes cheap, where do its returns go?</p><p class="figsub">The more investors use the same kind of analysis, the faster the same information enters prices and the smaller the excess return each user earns. People keep joining until the excess return only just covers the cost of analysis.</p></div><button class="replay" type="button" data-replay="gs">Replay</button></div>
+    <div class="gs" id="gs" data-anim>
+      <svg viewBox="0 0 640 250" role="img" aria-label="Share of users and excess return per user">
+        <g id="gs-axis"></g>
+        <path id="gs-curve" class="gs-curve"/>
+        <line id="gs-cost" class="gs-cost"/>
+        <text id="gs-ct" font-size="12" class="t-warm" text-anchor="start"></text>
+        <line id="gs-eqv" class="gs-eqv"/>
+        <circle id="gs-dot" r="6" class="gs-dot"/>
+        <text id="gs-et" font-size="12" class="t-ink" text-anchor="middle"></text>
+      </svg>
+      <div class="sl"><label for="gs-c">Cost of analysis (per year, as a share of assets) <b id="gs-cv"></b></label><input id="gs-c" type="range" min="0.2" max="3.5" step="0.1" value="3"><div class="hint">AI makes analysis cheaper: drag left</div></div>
+      <div class="gs-out">
+        <div><span>Investors using this analysis at equilibrium</span><b id="gs-s"></b></div>
+        <div><span>Excess return per user</span><b id="gs-r"></b></div>
+      </div>
+      <p class="gs-msg" id="gs-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model following the logic of Grossman and Stiglitz (1980): the total value of the information is 4% a year; the more users, the earlier the information enters prices, and the excess return per user falls proportionally; at equilibrium the excess return equals the cost of analysis. The numbers do not correspond to estimates for any market.</figcaption>
+</figure>
+<style>
+.gs svg{width:100%;height:auto;display:block}
+.gs-curve{fill:none;stroke:var(--accent);stroke-width:2.5}
+.gs-cost{stroke:var(--warm);stroke-width:2;stroke-dasharray:6 4}
+.gs-eqv{stroke:var(--ink);stroke-dasharray:3 3}
+.gs-dot{fill:var(--ink)}
+.gs-out{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0}
+.gs-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.gs-out span{display:block;font-size:12px;color:var(--faint)}
+.gs-out b{font-size:22px;font-variant-numeric:tabular-nums}
+.gs-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const E=4, X0=56, X1=620, Y0=210, Y1=20, x=s=>X0+s*(X1-X0), y=r=>Y0-r/E*(Y0-Y1);
+  let a=`<line x1="${X0}" y1="${Y0}" x2="${X1}" y2="${Y0}" class="s-faint"/><line x1="${X0}" y1="${Y1}" x2="${X0}" y2="${Y0}" class="s-faint"/>`;
+  [0,.25,.5,.75,1].forEach(s=>a+=`<text x="${x(s)}" y="${Y0+16}" text-anchor="middle" font-size="11" class="t-faint">${s*100}%</text>`);
+  [1,2,3,4].forEach(r=>a+=`<line x1="${X0}" y1="${y(r)}" x2="${X1}" y2="${y(r)}" class="s-line"/><text x="${X0-8}" y="${y(r)+4}" text-anchor="end" font-size="11" class="t-faint">${r}%</text>`);
+  a+=`<text x="${X1}" y="${Y0+32}" text-anchor="end" font-size="11" class="t-faint">Share of investors using the same analysis</text><text x="${X0}" y="${Y1-6}" font-size="11" class="t-faint">Excess return per user</text>`;
+  document.getElementById('gs-axis').innerHTML=a;
+  document.getElementById('gs-curve').setAttribute('d',`M${x(0)},${y(E)}L${x(1)},${y(0)}`);
+  const c=document.getElementById('gs-c');
+  const set=(id,o)=>{const e=document.getElementById(id);for(const k in o)e.setAttribute(k,o[k]);};
+  function render(){
+    const C=+c.value, s=1-C/E;
+    document.getElementById('gs-cv').textContent=C.toFixed(1)+'%';
+    set('gs-cost',{x1:X0,x2:X1,y1:y(C),y2:y(C)});
+    const ct=document.getElementById('gs-ct');ct.setAttribute('x',X0+8);ct.setAttribute('y',y(C)-6);ct.textContent='Cost of analysis '+C.toFixed(1)+'%';
+    set('gs-eqv',{x1:x(s),x2:x(s),y1:y(C),y2:Y0});
+    set('gs-dot',{cx:x(s),cy:y(C)});
+    const et=document.getElementById('gs-et');et.setAttribute('x',x(s));et.setAttribute('y',y(C)-12);et.textContent='Equilibrium';
+    document.getElementById('gs-s').textContent=Math.round(s*100)+'%';
+    document.getElementById('gs-r').textContent=C.toFixed(1)+'%';
+    document.getElementById('gs-msg').textContent=C>=2.5
+      ?'When analysis is expensive, only a few people do it; they earn a fairly high excess return, and prices absorb information slowly.'
+      :C>=1?'As the cost of analysis falls, more people join, prices reflect information faster, and the excess return each person earns falls with it.'
+      :'When analysis is almost free, nearly everyone uses the same kind of analysis, prices reflect information almost at once, and little excess return is left to earn from analysis.';
+  }
+  c.addEventListener('input',render); render();
+  document.getElementById('gs').addEventListener('anim-in',()=>{let v=3.5;c.value=v;render();const id=setInterval(()=>{v=Math.round((v-0.1)*10)/10;c.value=v;render();if(v<=0.8)clearInterval(id);},70);});
+})();
+</script>
+
+<h2 id="sec-3">3. Which terms of return an agent can affect</h2>
+<p>Return to the decomposition of realized return: time compensation, risk compensation, information advantage, trading costs and luck. An agent cannot create time compensation, nor can it change luck; whatever it contributes to information advantage is consumed by competition. What can last lies in three other places. In risk compensation, it helps users stay diversified, rebalance as planned and not give up in the face of volatility. In trading costs, it chooses suitable order types and timing, reducing spreads and market impact. And between the return users actually earn and the return of the product, it narrows the gap caused by buying high and selling low. None of this depends on predicting better than others, so it does not disappear when everyone uses the same agent.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Which terms of return an agent can affect</p><p class="figsub">Each row is one term of realized return. The bar is the improvement an agent might bring (illustrative). Switch to "After similar agents spread" to see which value competition consumes.</p></div><button class="replay" type="button" data-replay="tm2">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Point in time">
+      <button type="button" data-tm2="a" aria-pressed="true">Used by a few</button>
+      <button type="button" data-tm2="b" aria-pressed="false">After similar agents spread</button>
+    </div>
+    <div class="tm2" id="tm2" data-anim></div>
+    <p class="tm2-msg" id="tm2-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>Illustrative. "Behaviour gap" means the gap between the return investors actually earn and the return of the products they hold, which comes mainly from buying high, selling low and market timing.</figcaption>
+</figure>
+<style>
+.tm2{display:grid;gap:6px}
+.tm2-r{display:grid;grid-template-columns:30px 110px 1fr 1.6fr;gap:10px;align-items:center;font-size:13px;background:var(--quote);border-radius:8px;padding:7px 10px}
+.tm2-r em{font-style:normal;font-weight:700;color:var(--faint);text-align:center}
+.tm2-r b{font-size:13.5px}
+.tm2-t{height:14px;background:var(--surface);border-radius:7px;overflow:hidden}
+.tm2-t i{display:block;height:100%;width:0;border-radius:7px;transition:width .7s ease,background .3s}
+.tm2-r span{font-size:12px;color:var(--muted);line-height:1.5}
+.tm2-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.tm2-r{grid-template-columns:24px 1fr 1fr}.tm2-r span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const R=[['＋','Time compensation',0,0,'The reward for waiting is set by the market; an agent cannot create it.'],['＋','Risk compensation',45,45,'Staying diversified, rebalancing as planned and not giving up in volatility let users actually collect the risk compensation.'],
+    ['＋','Information advantage',55,8,'Once analysis is cheap, the same kind of analysis spreads quickly and competition consumes the excess return.'],['－','Trading costs',40,40,'Choosing order types and timing and avoiding needless trades saves costs that do not depend on being cleverer than others.'],
+    ['＋','Luck',0,0,'An agent cannot change luck; it can only help users tell how much of a result came from luck.'],['','Behaviour gap',60,60,'Less buying high and selling low narrows the gap between users\' actual return and the products\' return.']];
+  const box=document.getElementById('tm2');
+  box.innerHTML=R.map(([s,n,a,b,d])=>`<div class="tm2-r"><em>${s}</em><b>${n}</b><div class="tm2-t"><i></i></div><span>${d}</span></div>`).join('');
+  const is=[...box.querySelectorAll('.tm2-t i')];
+  function set(k){document.querySelectorAll('[data-tm2]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.tm2===k)));
+    is.forEach((e,i)=>{const v=k==='a'?R[i][2]:R[i][3];setTimeout(()=>e.style.width=v+'%',40);e.style.background=i===2?(k==='a'?'var(--blue)':'var(--warm)'):'var(--accent)';});
+    document.getElementById('tm2-msg').textContent=k==='a'?'When only a few people use it, an agent can also bring some advantage in information.':'Once similar agents spread, the advantage in information almost disappears; the improvements in risk compensation, trading costs and the behaviour gap remain, because they do not depend on predicting better than others.';}
+  document.querySelectorAll('[data-tm2]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.tm2)));
+  box.addEventListener('anim-in',()=>{is.forEach(e=>e.style.width='0');set('a');setTimeout(()=>set('b'),2600);});
+  set('a');
+})();
+</script>
+
+<h2 id="sec-4">4. From impossible to possible</h2>
+<p>For many individual investors, the greatest value of an agent is not doing things faster but making feasible what they would not otherwise do. D'Acunto, Prabhala and Rossi (2019) studied a robo-adviser launched by an Indian brokerage. Investors whose holdings had been concentrated and poorly diversified became markedly more diversified after adopting it, and their volatility fell. Investors who had already been fairly diversified ended up holding fewer stocks; their volatility fell slightly, but they traded more often. After adoption, behavioural biases such as the disposition effect and trend chasing also declined. The value of the agent was concentrated among those who had been doing worst; for those who had been doing better, it could also bring new problems.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The value is concentrated among those who were doing worst</p><p class="figsub">Changes in two groups of investors before and after adopting a robo-adviser. Switch between before and after to compare the number of stocks held and portfolio volatility (illustrative numbers).</p></div><button class="replay" type="button" data-replay="rb">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Point in time">
+      <button type="button" data-rb="pre" aria-pressed="true">Before adoption</button>
+      <button type="button" data-rb="post" aria-pressed="false">After adoption</button>
+    </div>
+    <div class="rb" id="rb" data-anim>
+      <div class="rb-g" id="rb-g"></div>
+      <p class="rb-msg" id="rb-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative numbers; the directions follow D'Acunto, Prabhala and Rossi (2019), a study of a robo-adviser at an Indian brokerage. Investors who had been poorly diversified became markedly more diversified after adoption, and their volatility fell; investors who had been fairly diversified ended up holding fewer stocks, their volatility fell slightly, and they traded more. The reduction in behavioural biases applied to all adopters.</figcaption>
+</figure>
+<style>
+.rb-g{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.rb-c{background:var(--quote);border-radius:10px;padding:10px 12px}
+.rb-c>b{font-size:14px;display:block;margin-bottom:6px}
+.rb-m{display:grid;grid-template-columns:90px 1fr 54px;gap:8px;align-items:center;font-size:12.5px;margin:6px 0}
+.rb-m span{color:var(--faint)}
+.rb-t{height:14px;background:var(--surface);border-radius:7px;overflow:hidden}
+.rb-t i{display:block;height:100%;border-radius:7px;transition:width .7s ease}
+.rb-m em{font-style:normal;text-align:right;font-variant-numeric:tabular-nums}
+.rb-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.rb-g{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const G=[['Poorly diversified before',[3,14],[32,22]],['Fairly diversified before',[15,13],[19,18]]];
+  const box=document.getElementById('rb-g');
+  box.innerHTML=G.map(([n],i)=>`<div class="rb-c"><b>${n}</b><div class="rb-m"><span>Stocks held</span><div class="rb-t"><i id="rb-s${i}" style="background:var(--accent)"></i></div><em id="rb-sv${i}"></em></div><div class="rb-m"><span>Annualized volatility</span><div class="rb-t"><i id="rb-v${i}" style="background:var(--warm)"></i></div><em id="rb-vv${i}"></em></div></div>`).join('');
+  function set(k){document.querySelectorAll('[data-rb]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.rb===k)));const j=k==='pre'?0:1;
+    G.forEach(([n,s,v],i)=>{document.getElementById('rb-s'+i).style.width=s[j]/20*100+'%';document.getElementById('rb-sv'+i).textContent=s[j]+'';document.getElementById('rb-v'+i).style.width=v[j]/40*100+'%';document.getElementById('rb-vv'+i).textContent=v[j]+'%';});
+    document.getElementById('rb-msg').textContent=k==='pre'?'Before adoption: one group holds only three or four stocks and its portfolios are very volatile; the other group is already fairly diversified.':'After adoption: the poorly diversified group holds many more stocks and its volatility falls markedly; the already diversified group ends up holding fewer stocks, its volatility falls only slightly, and it trades more often. The agent\'s value is letting those who could not do it do it.';}
+  document.querySelectorAll('[data-rb]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.rb)));
+  document.getElementById('rb').addEventListener('anim-in',()=>{set('pre');setTimeout(()=>set('post'),2200);});
+  set('pre');
+})();
+</script>
+
+<h2 id="sec-5">5. Trading errors are hard to undo</h2>
+<p>When an information task goes wrong, the error can usually be found and corrected, and the loss is limited. Trading is different: orders are filled within milliseconds, cannot be withdrawn once filled, and errors can be rapidly amplified by leverage and repeated execution. In August 2012, a deployment error in the trading system of a US market maker caused it to send millions of erroneous orders in about 45 minutes. It lost about $460 million and was subsequently acquired (U.S. Securities and Exchange Commission, 2013). Authority for financial agents must therefore be tiered: providing information and advice can be autonomous; changing holdings and moving funds require the person's own confirmation, together with per-transaction and cumulative limits and a switch that stops everything at once when something abnormal happens.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">45 minutes of erroneous orders</p><p class="figsub">A deployment error leaves a trading system sending erroneous orders without pause. Play the cumulative loss; then switch on "cumulative loss limit and stop switch" to see the consequences of the same error.</p></div><button class="replay" type="button" id="ir-run">Play</button></div>
+    <label class="ir-chk"><input type="checkbox" id="ir-x"> Cumulative loss limit and automatic stop switch in place</label>
+    <div class="ir" id="ir" data-anim>
+      <svg viewBox="0 0 640 220" role="img" aria-label="Cumulative loss over time"><g id="ir-ax"></g><path id="ir-p" class="ir-l"/><line id="ir-cap" class="ir-cap"/></svg>
+      <div class="ir-out"><div><span>Time elapsed</span><b id="ir-t"></b></div><div><span>Cumulative loss</span><b id="ir-v"></b></div></div>
+      <p class="ir-msg" id="ir-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Based on the U.S. Securities and Exchange Commission's 2013 order on an incident in August 2012 (Release No. 34-70694): millions of erroneous orders were sent in about 45 minutes, with a loss of about $460 million. The path of the loss over time is illustrative; the limit of $10 million is also illustrative.</figcaption>
+</figure>
+<style>
+.ir-chk{display:flex;gap:6px;align-items:center;font-size:14px;margin-bottom:6px}
+.ir-chk input{accent-color:var(--accent);width:16px;height:16px}
+.ir svg{width:100%;height:auto;display:block}
+.ir-l{fill:none;stroke:var(--warm);stroke-width:2.5}
+.ir-cap{stroke:var(--accent);stroke-dasharray:5 4;stroke-width:2}
+.ir-out{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.ir-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.ir-out span{display:block;font-size:12px;color:var(--faint)} .ir-out b{font-size:19px;font-variant-numeric:tabular-nums}
+.ir-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.ir svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const X0=60,X1=620,YT=14,YB=185,x=t=>X0+t/45*(X1-X0),y=v=>YB-v/480*(YB-YT),L=t=>460*Math.pow(t/45,1.15),CAP=10;
+  const $=id=>document.getElementById(id),cb=$('ir-x');let tm;
+  $('ir-ax').innerHTML=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`+[0,100,200,300,400].map(v=>`<text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+[0,15,30,45].map(t=>`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${t} min</text>`).join('')+`<text x="${X0}" y="${YT-2}" font-size="11" class="t-faint">Cumulative loss ($ million)</text>`;
+  function draw(T){const cap=cb.checked;let d='',last=0,stop=null;for(let t=0;t<=T;t+=.25){let v=L(t);if(cap&&v>=CAP){v=CAP;if(stop===null)stop=t;}d+=(t?'L':'M')+x(t).toFixed(1)+','+y(v).toFixed(1);last=v;}
+    $('ir-p').setAttribute('d',d);$('ir-cap').setAttribute('x1',X0);$('ir-cap').setAttribute('x2',X1);$('ir-cap').setAttribute('y1',y(CAP));$('ir-cap').setAttribute('y2',y(CAP));$('ir-cap').style.opacity=cap?1:0;
+    $('ir-t').textContent=T.toFixed(0)+' min';$('ir-v').textContent='$'+last.toFixed(0)+' million';
+    $('ir-msg').textContent=cap?(stop!==null?`Cumulative losses hit the limit at about minute ${stop.toFixed(0)}; the system automatically stops sending new orders, and the loss stays at about $10 million.`:'The limit has not been reached yet.'):(T>=45?'With no limit and no stop switch, erroneous orders continued for about 45 minutes, with a loss of about $460 million. Orders cannot be withdrawn once filled.':'');}
+  function run(){clearInterval(tm);let T=0;draw(0);tm=setInterval(()=>{T+=1;draw(T);if(T>=45)clearInterval(tm);},70);}
+  $('ir-run').addEventListener('click',run);cb.addEventListener('change',run);
+  $('ir').addEventListener('anim-in',()=>{cb.checked=false;run();setTimeout(()=>{cb.checked=true;run();},4500);});
+  draw(45);
+})();
+</script>
+
+<h2 id="sec-6">6. Many agents acting together</h2>
+<p>When many investors use similar models, similar data and similar rules, their trades will also be similar. Khandani and Lo (2011) analysed the "quant crisis" of August 2007: quantitative funds following similar strategies unwound their positions at the same time within a few days; their selling pushed prices down and forced still more funds to unwind. Kirilenko et al. (2017), studying the "flash crash" of May 2010, likewise showed that high-frequency traders passed positions back and forth among themselves during the fall, amplifying price swings. The spread of AI agents may amplify this sameness: each agent's rules may be reasonable, yet when all agents execute the same rule at the same time, the result can be bad for everyone.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Many agents using the same rule</p><p class="figsub">Fifty agents each manage a portfolio, and each has a rule to "cut the position when the fall exceeds a certain size". Drag how similar the rules are, then trigger a 3% fall, and see how many agents sell at the same time and how far the price falls in the end.</p></div><button class="replay" type="button" id="hd-run">Trigger fall</button></div>
+    <div class="hd" id="hd" data-anim>
+      <div class="hd-g" id="hd-g"></div>
+      <div class="sl"><label for="hd-s">Similarity of rules <b id="hd-sv"></b></label><input id="hd-s" type="range" min="0" max="100" step="10" value="30"></div>
+      <div class="hd-out"><div><span>Agents selling at once</span><b id="hd-n"></b></div><div><span>Total price fall</span><b id="hd-d"></b></div></div>
+      <p class="hd-msg" id="hd-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model: when rules are similar, the agents' selling thresholds cluster around 3%; each agent's sale pushes the price down a further 0.15%, which may trigger more agents to sell; beyond a certain level of similarity, cascading sales appear suddenly. For an actual case of similar strategies unwinding at once, see Khandani and Lo (2011); for the 2010 flash crash, see Kirilenko et al. (2017).</figcaption>
+</figure>
+<style>
+.hd-g{display:grid;grid-template-columns:repeat(25,1fr);gap:4px;margin-bottom:8px}
+.hd-g i{aspect-ratio:1;border-radius:50%;background:var(--accent-soft);border:1.5px solid var(--accent);transition:all .25s}
+.hd-g i.s{background:var(--warm);border-color:var(--warm)}
+.hd-out{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.hd-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.hd-out span{display:block;font-size:12px;color:var(--faint)} .hd-out b{font-size:19px;font-variant-numeric:tabular-nums}
+.hd-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const N=50,g=document.getElementById('hd-g');g.innerHTML='<i></i>'.repeat(N);const cs=[...g.children],sl=document.getElementById('hd-s');let tm;
+  const U=Array.from({length:N},(_,i)=>((i*37)%N)/N);
+  const th=h=>U.map(u=>{const spread=3+12*(1-h);return 3+ (u-.5)*2*spread*.5+spread*.5;});
+  function run(){clearInterval(tm);const h=+sl.value/100,T=th(h);document.getElementById('hd-sv').textContent=sl.value+'%';cs.forEach(c=>c.classList.remove('s'));
+    let drop=3,sold=new Set();const step=()=>{let nw=[];T.forEach((t,i)=>{if(!sold.has(i)&&t<=drop)nw.push(i);});if(!nw.length){clearInterval(tm);fin();return;}nw.forEach(i=>{sold.add(i);cs[i].classList.add('s');});drop+=nw.length*.15;up();};
+    const up=()=>{document.getElementById('hd-n').textContent=sold.size+'';document.getElementById('hd-d').textContent=drop.toFixed(1)+'%';};
+    const fin=()=>{document.getElementById('hd-msg').textContent=sold.size<=5?'When the rules all differ, only a few agents sell in a 3% fall, and the price soon steadies.':`When the rules are highly similar, ${sold.size} agents sell almost at once, and their sales trigger still more selling: a 3% fall is amplified to ${drop.toFixed(1)}%. Each agent's rule is reasonable, yet executing them all at once is bad for everyone.`;};
+    up();document.getElementById('hd-msg').textContent='';tm=setInterval(step,350);}
+  sl.addEventListener('input',run);document.getElementById('hd-run').addEventListener('click',run);
+  document.getElementById('hd').addEventListener('anim-in',()=>{sl.value=20;run();setTimeout(()=>{sl.value=90;run();},4200);});
+  document.getElementById('hd-sv').textContent=sl.value+'%';
+})();
+</script>
+
+<h2 id="sec-7">7. Implications for product design</h2>
+<p>The value of a financial agent is not sold on prediction; it lies in cost, discipline, behaviour and access. Execution needs tiered authority and limits, and must take into account the consequences of many agents acting at once.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: the value and limits of financial agents</p><p class="figsub">Four design requirements, each corresponding to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="ch23summary">Replay</button></div>
+    <div class="ch23summary" id="ch23summary" data-anim><div class="ch23summary-c" style="--i:0"><em>The baseline is actual behaviour</em><b>Measure value against what users did before</b><p>A research agent's value lies in depth; a portfolio agent's value lies in letting people who do no allocation do it, not in saving a few minutes.</p></div><div class="ch23summary-c" style="--i:1"><em>The value of prediction falls as it spreads</em><b>Do not sell on prediction</b><p>Place value in staying diversified, lowering costs and reducing behavioural bias, which do not disappear as similar agents spread.</p></div><div class="ch23summary-c warn" style="--i:2"><em>Trading errors are hard to undo</em><b>Tier authority; set limits and a stop switch</b><p>Information and advice can be autonomous; changing holdings and moving funds need the person's confirmation, with per-transaction and cumulative limits.</p></div><div class="ch23summary-c warn" style="--i:3"><em>Agents act together</em><b>Keep similar rules from firing at once</b><p>Stagger execution times, vary rule parameters, and when markets swing violently, flag the risk and slow execution down.</p></div></div>
+  </div>
+</figure>
+<style>
+.ch23summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch23summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch23summary-c.warn{border-left-color:var(--warm)}
+.ch23summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch23summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch23summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch23summary.in .ch23summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch23summary{grid-template-columns:1fr}}
+</style>
+
+<h2 id="sec-8">References</h2>
+<ul class="refs"><li>Laarits, T., &amp; Wurgler, J. (2025). The research behavior of individual investors. NBER Working Paper No. 33625.</li><li>Grinold, R. C. (1989). The fundamental law of active management. <i>Journal of Portfolio Management</i>, 15(3), 30–37.</li><li>Grossman, S. J., &amp; Stiglitz, J. E. (1980). On the impossibility of informationally efficient markets. <i>American Economic Review</i>, 70(3), 393–408.</li><li>D'Acunto, F., Prabhala, N., &amp; Rossi, A. G. (2019). The promises and pitfalls of robo-advising. <i>Review of Financial Studies</i>, 32(5), 1983–2020.</li><li>U.S. Securities and Exchange Commission (2013). In the Matter of Knight Capital Americas LLC. Release No. 34-70694.</li><li>Khandani, A. E., &amp; Lo, A. W. (2011). What happened to the quants in August 2007? Evidence from factors and transactions data. <i>Journal of Financial Markets</i>, 14(1), 1–46.</li><li>Kirilenko, A., Kyle, A. S., Samadi, M., &amp; Tuzun, T. (2017). The flash crash: High-frequency trading in an electronic market. <i>Journal of Finance</i>, 72(3), 967–998.</li></ul>
+<footer class="nav"><a href="ch22.html">← Chapter 22: Verifiability: the cost of checking</a><a href="part4.html">Part Four: Design: financial products under three sets of constraints →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">能力与意愿，取较低的一个</p><p class="figsub">横轴是承受风险的能力（收成稳不稳、期限长不长），纵轴是承受风险的意愿。拖动两个滑块，看书记员采用的风险等级。</p></div><button class="replay" type="button" data-replay="cp20">重播</button></div>
+    <div class="cp20" id="cp20" data-anim>
+      <svg viewBox="0 0 660 240" role="img" aria-label="能力与意愿"><g id="cp20-g"></g></svg>
+      <div class="cp20-ctl">
+        <div class="sl"><label for="cp20-a">能力 <b id="cp20-av"></b></label><input id="cp20-a" type="range" min="1" max="5" step="1" value="4"></div>
+        <div class="sl"><label for="cp20-w">意愿 <b id="cp20-wv"></b></label><input id="cp20-w" type="range" min="1" max="5" step="1" value="2"></div>
+      </div>
+      <p class="cp20-msg" id="cp20-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：两项各分五级，采用的风险等级为两者中较低的一个；格子中的数字为采用的等级。</figcaption>
+</figure>
+<style>
+.cp20 svg{width:100%;height:auto;display:block}
+.cp20-ctl{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.cp20-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cp20-ctl{grid-template-columns:1fr;gap:4px}.cp20 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cp20'+id),X0=150,Y0=12,C=80,R=40;
+  const L=['很低','较低','中等','较高','很高'];
+  function draw(){const a=+$('-a').value,w=+$('-w').value,e=Math.min(a,w);$('-av').textContent=L[a-1];$('-wv').textContent=L[w-1];
+    let h='';for(let i=1;i<=5;i++)for(let j=1;j<=5;j++){const v=Math.min(i,j),x=X0+(i-1)*C,y=Y0+(5-j)*R,on=i===a&&j===w;h+=`<rect x="${x}" y="${y}" width="${C-4}" height="${R-4}" rx="5" fill="var(--accent)" opacity="${.08+v*.13}" stroke="${on?'var(--ink)':'none'}" stroke-width="2.5"/><text x="${x+C/2-2}" y="${y+R/2+3}" text-anchor="middle" font-size="12">${v}</text>`;}
+    h+=`<text x="${X0+2.5*C}" y="${Y0+5*R+18}" text-anchor="middle" font-size="11" class="t-faint">能力 →</text><text x="${X0-10}" y="${Y0+2.5*R}" text-anchor="end" font-size="11" class="t-faint">意愿 ↑</text>`;
+    $('-g').innerHTML=h;
+    $('-msg').textContent=a>w?`能力${L[a-1]}而意愿${L[w-1]}：按能力他可以多承担，可他睡不着；书记员采用第 ${e} 级，并把多承担可能带来的补偿讲清楚，由他自己决定是否调高。`:a<w?`意愿${L[w-1]}而能力${L[a-1]}：他愿意冒险，可他的收成与期限扛不住；书记员只采用第 ${e} 级。`:`能力与意愿一致，采用第 ${e} 级。`;}
+  ['-a','-w'].forEach(k=>$(k).addEventListener('input',draw));
+  $('').addEventListener('anim-in',()=>{[[4,2],[2,5],[3,3]].forEach(([a,w],i)=>setTimeout(()=>{$('-a').value=a;$('-w').value=w;draw();},300+i*2000));});
+  draw();
+})();
+</script>

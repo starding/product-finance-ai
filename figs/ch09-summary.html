@@ -1,0 +1,21 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：按交易动机设计产品</p><p class="figsub">四条设计要求，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="s04">重播</button></div>
+    <div class="s04" id="s04" data-anim>
+      <div class="s04-c" style="--i:0"><em>动机决定输赢的意义</em><b>先弄清用户为什么交易</b><p>为养老、换汇、对冲还是娱乐，决定了什么样的帮助有用；动机只用于提供服务，不给用户贴标签。</p></div>
+      <div class="s04-c" style="--i:1"><em>效用型付出的是成本</em><b>为效用型降低成本</b><p>不急的交易可以耐心成交；下单前展示价差与费用，复盘时计算实际付出的成本。</p></div>
+      <div class="s04-c warn" style="--i:2"><em>徒劳型的亏损没有回报</em><b>不鼓励没有优势的交易</b><p>不以交易笔数、换手率作为产品指标；不用排行榜、连胜奖励刺激交易；新闻标注时间与发布后的价格变化。</p></div>
+      <div class="s04-c warn" style="--i:3"><em>寄生与操纵损害他人</em><b>不为寄生与操纵提供便利</b><p>拒绝帮助散布传言、虚假报单等行为，并留存记录。</p></div>
+    </div>
+  </div>
+</figure>
+<style>
+.s04{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.s04-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.s04-c.warn{border-left-color:var(--warm)}
+.s04-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.s04-c b{display:block;font-size:15px;margin:2px 0 4px}
+.s04-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.s04.in .s04-c{opacity:1;transform:none}
+@media (max-width:640px){.s04{grid-template-columns:1fr}}
+</style>

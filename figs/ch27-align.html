@@ -1,0 +1,38 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">在结构上对齐，而不只是披露</p><p class="figsub">逐项加入四种结构安排，看代理偏向平台利益的余地还剩多少（示意）。</p></div><button class="replay" type="button" data-replay="al2">重播</button></div>
+    <div class="al2-sl" id="al2-sl"></div>
+    <div class="al2" id="al2" data-anim>
+      <div class="al2-m"><span>代理偏向平台利益的余地</span><div class="al2-t"><i id="al2-bar"></i></div><b id="al2-v"></b></div>
+      <div class="al2-list" id="al2-list"></div>
+    </div>
+  </div>
+  <figcaption>示意。美国证券交易委员会 2023 年的规则草案（Release No. 34-97990，后于 2025 年撤回）要求识别并消除预测性数据分析中的利益冲突。</figcaption>
+</figure>
+<style>
+.al2-sl{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px;margin-bottom:8px}
+.al2-sl label{display:flex;gap:6px;align-items:center;font-size:13.5px;cursor:pointer}
+.al2-sl input{accent-color:var(--accent);width:16px;height:16px}
+.al2-m{display:grid;grid-template-columns:150px 1fr 50px;gap:10px;align-items:center;font-size:13px}
+.al2-m span{color:var(--muted)}
+.al2-t{height:18px;background:var(--quote);border-radius:9px;overflow:hidden}
+.al2-t i{display:block;height:100%;border-radius:9px;background:var(--warm);transition:width .6s ease}
+.al2-m b{text-align:right;font-variant-numeric:tabular-nums}
+.al2-list{display:grid;gap:5px;margin-top:10px}
+.al2-i{font-size:13px;line-height:1.6;background:var(--quote);border-radius:8px;padding:7px 10px;border-left:3px solid var(--line);transition:all .3s}
+.al2-i.on{border-left-color:var(--accent);background:var(--accent-soft)}
+.al2-i b{font-size:13.5px}
+@media (max-width:640px){.al2-sl{grid-template-columns:1fr}.al2-m{grid-template-columns:100px 1fr 40px}}
+</style>
+<script>
+(function(){
+  const S=[['收入不随交易与推荐变化',35,'固定订阅：代理多建议一次交易、多推荐一款产品，平台的收入都不变。'],['以用户的净价值与守约评价代理',30,'代理的评价指标不再包含交易量与使用时长，优化方向转向用户的结果。'],['建议时看不到产品带来的收入',15,'代理在作出建议时无法知道哪款产品给平台带来更多收入。'],['定期独立审计建议的偏向',12,'检查代理的建议是否系统性地偏向对平台有利的选项，并公开结果。']];
+  const box=document.getElementById('al2-sl');box.innerHTML=S.map(([n],i)=>`<label><input type="checkbox" data-al2="${i}"> ${n}</label>`).join('');
+  document.getElementById('al2-list').innerHTML=S.map(([n,,d])=>`<div class="al2-i"><b>${n}</b>：${d}</div>`).join('');
+  const cb=[...document.querySelectorAll('[data-al2]')],li=[...document.querySelectorAll('.al2-i')];
+  function r(){let v=100;cb.forEach((c,i)=>{if(c.checked)v-=S[i][1];li[i].classList.toggle('on',c.checked);});document.getElementById('al2-bar').style.width=v+'%';document.getElementById('al2-v').textContent=v;}
+  cb.forEach(c=>c.addEventListener('change',r));
+  document.getElementById('al2').addEventListener('anim-in',()=>{cb.forEach(c=>c.checked=false);r();cb.forEach((c,i)=>setTimeout(()=>{c.checked=true;r();},900*(i+1)));});
+  r();
+})();
+</script>

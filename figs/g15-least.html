@@ -1,0 +1,51 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">只给需要的权限</p><p class="figsub">先选书记员要做的事，再切换三种授权方式，看它被允许做什么，以及一次出错最坏会造成多大的损失。</p></div><button class="replay" type="button" data-replay="lp15">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="任务">
+      <button type="button" data-lp15t="book" aria-pressed="false">记账</button>
+      <button type="button" data-lp15t="dca" aria-pressed="true">每月定投</button>
+      <button type="button" data-lp15t="reb" aria-pressed="false">按计划调整</button>
+    </div>
+    <div class="seg-btns" role="group" aria-label="授权方式">
+      <button type="button" data-lp15m="all" aria-pressed="true">全部权限</button>
+      <button type="button" data-lp15m="least" aria-pressed="false">最小权限</button>
+      <button type="button" data-lp15m="conf" aria-pressed="false">最小权限＋不可挽回的操作需确认</button>
+    </div>
+    <div class="lp15" id="lp15" data-anim>
+      <div class="lp15-t" id="lp15-t"></div>
+      <div class="lp15-w"><span>一次出错最坏的损失</span><div><i id="lp15-wb"></i></div><b id="lp15-wv"></b></div>
+      <p class="lp15-msg" id="lp15-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：一户人家共有 100 份家产；每月定投的限额为 2 份，按计划调整每次最多 10 份。最坏损失按书记员在一次出错中能动用的最大数额计；需要确认的操作，书记员单独无法完成。</figcaption>
+</figure>
+<style>
+.lp15-t{display:grid;gap:4px;margin-top:6px}
+.lp15-r{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:6px 10px;border-radius:7px;background:var(--quote);font-size:13px}
+.lp15-r em{font-style:normal;font-size:12px;padding:1px 9px;border-radius:999px;transition:background .3s}
+.lp15-r em.y{background:var(--accent-soft);color:var(--accent)} .lp15-r em.n{background:var(--bg);color:var(--faint);border:1px solid var(--line)} .lp15-r em.c{background:var(--warm-soft);color:var(--warm)}
+.lp15-w{display:grid;grid-template-columns:8.5em 1fr 4.5em;gap:10px;align-items:center;margin-top:12px;font-size:12.5px}
+.lp15-w div{height:18px;background:var(--quote);border-radius:5px;overflow:hidden}
+.lp15-w i{display:block;height:100%;background:var(--warm);transition:width .6s}
+.lp15-w b{text-align:right;font-variant-numeric:tabular-nums}
+.lp15-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.lp15-w{grid-template-columns:1fr 4.5em}.lp15-w span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('lp15'+id);let task='dca',mode='all';
+  const A=[['查看账目与持仓',0,0],['限额之内买入',2,0],['卖出',10,0],['超过限额的大额买卖',100,0],['把粮食转出粮仓',100,1],['修改授权本身',100,1]];
+  const NEED={book:[0],dca:[0,1],reb:[0,1,2]};
+  function st(i){if(mode==='all')return 'y';if(!NEED[task].includes(i))return mode==='conf'&&A[i][2]?'c':'n';return 'y';}
+  function draw(){const S=A.map((_,i)=>st(i)),worst=Math.max(0,...A.map((a,i)=>S[i]==='y'?a[1]:0));
+    $('-t').innerHTML=A.map((a,i)=>`<div class="lp15-r"><span>${a[0]}</span><em class="${S[i]}">${{y:'允许',n:'不允许',c:'需委托人确认'}[S[i]]}</em></div>`).join('');
+    $('-wb').style.width=worst+'%';$('-wv').textContent=worst+' 份';
+    $('-msg').textContent=mode==='all'?'全部权限：无论做什么事，书记员都能动用全部家产，一次出错或一次被人利用，就可能让这户人家倾家荡产。':mode==='least'?`最小权限：只允许完成这件事必需的操作，一次出错最坏损失 ${worst} 份。别的操作它根本做不了，委托人想做时也要另行授权。`:`在最小权限之外，把转出粮食、修改授权这两项不可挽回的操作交给委托人亲自确认：书记员单独做不了，委托人也不必为每一件小事操心。`;}
+  const tb=[...document.querySelectorAll('[data-lp15t]')],mb=[...document.querySelectorAll('[data-lp15m]')];
+  function setT(t){task=t;tb.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lp15t===t)));draw();}
+  function setM(m){mode=m;mb.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lp15m===m)));draw();}
+  tb.forEach(b=>b.addEventListener('click',()=>setT(b.dataset.lp15t)));mb.forEach(b=>b.addEventListener('click',()=>setM(b.dataset.lp15m)));
+  $('').addEventListener('anim-in',()=>{['all','least','conf'].forEach((m,i)=>setTimeout(()=>setM(m),300+i*2200));});
+  draw();
+})();
+</script>

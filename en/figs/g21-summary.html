@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: the user is not present</p><p class="figsub">Four conclusions, each tied to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="g21summary">Replay</button></div>
+    <div class="g21summary" id="g21summary" data-anim><div class="g21summary-c" style="--i:0"><em>Incomplete contracts</em><b>Uncovered cases need an owner</b><p>Settle in advance who holds the residual right to decide: reversible matters are handled in the spirit of the agreement; irreversible ones wait for his return.</p></div><div class="g21summary-c" style="--i:1"><em>The agreement</em><b>Goals, boundaries, rules, exceptions and term</b><p>Most everyday matters need no request, and final control is kept.</p></div><div class="g21summary-c warn" style="--i:2"><em>Rerun: least privilege</em><b>Four levels by size and reversibility</b><p>Act on its own; act, then tell; confirm first; forbidden. The boundaries shift as trust grows.</p></div><div class="g21summary-c warn" style="--i:3"><em>Formal and real authority</em><b>Write "when to come back and ask" into the agreement</b><p>Quantitative, event and time triggers keep the real decision from passing away unnoticed.</p></div></div>
+  </div>
+</figure>
+<style>
+.g21summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g21summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g21summary-c.warn{border-left-color:var(--warm)}
+.g21summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g21summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g21summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g21summary.in .g21summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g21summary{grid-template-columns:1fr}}
+</style>

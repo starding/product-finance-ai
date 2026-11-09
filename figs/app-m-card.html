@@ -1,0 +1,42 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">一张原理卡的构成</p><p class="figsub">以“信贷配给”为例。先切换两种写法，看理论出现的时机；再点选卡片上的一栏，看它的作用。</p></div><button class="replay" type="button" data-replay="amc">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="写法">
+      <button type="button" data-amc="before" aria-pressed="false">先引理论</button>
+      <button type="button" data-amc="after" aria-pressed="true">先推演、后宣告</button>
+    </div>
+    <div class="amc" id="amc" data-anim>
+      <div class="amc-seq" id="amc-seq"></div>
+      <div class="amc-card" id="amc-card"></div>
+      <p class="amc-msg" id="amc-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>卡片内容取自第 3 章。</figcaption>
+</figure>
+<style>
+.amc-seq{display:grid;gap:5px;margin:4px 0 10px}
+.amc-seq div{padding:7px 10px;border-radius:8px;background:var(--quote);font-size:13px;line-height:1.55;opacity:0;transform:translateX(-6px);transition:opacity .35s,transform .35s;transition-delay:calc(var(--i)*.25s)}
+.amc.in .amc-seq div{opacity:1;transform:none}
+.amc-seq div.t{background:var(--accent-soft)}
+.amc-card{border-left:4px solid var(--accent);background:var(--accent-soft);border-radius:10px;padding:10px 12px;display:grid;gap:4px}
+.amc-card button{font:inherit;cursor:pointer;display:grid;grid-template-columns:7em 1fr;gap:8px;text-align:left;border:1px solid transparent;border-radius:6px;padding:4px 6px;background:transparent;color:var(--ink);font-size:13px;line-height:1.5}
+.amc-card button span{color:var(--muted);font-size:12px}
+.amc-card button.sel{border-color:var(--accent);background:var(--bg)}
+.amc-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.amc-card button{grid-template-columns:1fr;gap:0}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('amc'+id);
+  const SEQ={before:[['t','斯蒂格利茨与韦斯（1981）指出，提高利率会把稳妥的借款人挤走……'],['','岛上的出借人想提高利率来弥补违约的损失。'],['','于是出借人宁可限量放贷。']],after:[['','岛上的出借人想提高利率来弥补违约的损失。'],['','推演来借的人会怎样变化：稳妥的人先退出，留下的越来越冒险。'],['','超过某一点，多收的利息抵不过多出的违约，出借人宁可限量放贷。'],['t','推演至此，得到一条原理：信贷配给。']]};
+  const F=[['名称','信贷配给','让读者知道这是一条有名字的原理，可以去别处查。'],['表述','借款人的风险看不清时，提高利率会挤走稳妥的借款人……','一句话说清它主张什么，应当能被前面的推演直接支持。'],['学科与类型','经济学 › 信息经济学（信贷市场）；理论模型','让读者知道它属于哪门学科的哪一支，是理论、模型、定理还是定律。'],['在学科中的位置','2001 年诺贝尔经济学奖公告把信贷配给列为斯蒂格利茨所解释的现象之一','让读者知道它在学科里有多重要；只写有出处的事实。'],['回应的约束','承诺可能不兑现，出借人分不清借款人的风险','把理论钉在它所回应的那一个约束上。'],['成立的前提','出借人无法区分借款人；借款人可以选择冒险的程度','前提一变，结论就可能失效；第二部分的重跑从这里入手。'],['提出者','斯蒂格利茨与韦斯，1981','推演的先后与提出的年份并不一致，这一栏让读者看到两者的差别。'],['留下的问题','抵押与声誉能否替代筛选','理论解决了一个问题，也留下新的问题，成为后面推演的约束。']];
+  let mode='after',sel=0;
+  function draw(){$('-seq').innerHTML=SEQ[mode].map(([c,t],i)=>`<div class="${c}" style="--i:${i}">${t}</div>`).join('');
+    $('-card').innerHTML=F.map((f,i)=>`<button type="button" class="${i===sel?'sel':''}" data-i="${i}"><span>${f[0]}</span>${f[1]}</button>`).join('');
+    $('-card').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{sel=+b.dataset.i;draw();}));
+    $('-msg').textContent=(mode==='before'?'先引理论：读者先看到结论与权威，推演退成了对理论的举例。':'先推演、后宣告：读者先在岛上遇到约束、推出机制，最后才知道它叫什么。')+'　'+F[sel][0]+'：'+F[sel][2];}
+  document.querySelectorAll('[data-amc]').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.amc;document.querySelectorAll('[data-amc]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  $('').addEventListener('anim-in',()=>{mode='before';draw();setTimeout(()=>{mode='after';document.querySelectorAll('[data-amc]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.amc==='after')));draw();},2200);[3,4,5].forEach((i,k)=>setTimeout(()=>{sel=i;draw();},4000+k*1500));});
+  draw();
+})();
+</script>

@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Authority and irreversible exposure</title>
+<meta name="description" content="Product × Finance × AI: Financial Products in the Age of AI, Chapter 26: levels of authority are assigned by whether consequences can be reversed and whether losses are capped; irreversible exposure is both where an ongoing agent is most valuable and where authority must be tightest; limits must be enforced at the execution layer, and authority rises with verifiable records and is withdrawn after errors and changes">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="ch26">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="Contents">
+<div class="side-head"><a class="sidetitle" href="index.html">Product × Finance × AI<small>Financial Products in the Age of AI</small></a></div>
+<div class="side-view" role="group" aria-label="Way of reading"><a href="preface.html" class="on" aria-current="true">Decomposition</a><a href="g-preface.html">Derivation</a></div>
+<a class="side-about" href="index.html#about">About this book</a>
+<a class="" href="preface.html"><span class="n">Preface</span>Why financial products must be relearned in the age of AI</a>
+<a class="side-part" href="part1.html"><span class="pn">Part One</span>Markets: where returns and risks come from</a>
+<a class="" href="ch01.html"><span class="n">1</span>What financial products sell</a>
+<a class="" href="ch02.html"><span class="n">2</span>Interest rates and maturity</a>
+<a class="" href="ch03.html"><span class="n">3</span>What risk looks like</a>
+<a class="" href="ch04.html"><span class="n">4</span>Diversification</a>
+<a class="" href="ch05.html"><span class="n">5</span>Compounding and volatility drag</a>
+<a class="" href="ch06.html"><span class="n">6</span>Factors</a>
+<a class="" href="ch07.html"><span class="n">7</span>Why prices are hard to predict</a>
+<a class="" href="ch08.html"><span class="n">8</span>How information gets into prices</a>
+<a class="" href="ch09.html"><span class="n">9</span>Traders in the market</a>
+<a class="" href="ch10.html"><span class="n">10</span>Liquidity and the bid-ask spread</a>
+<a class="" href="ch11.html"><span class="n">11</span>Orders, rules and market structure</a>
+<a class="" href="ch12.html"><span class="n">12</span>The arithmetic of active management</a>
+<a class="" href="ch13.html"><span class="n">13</span>How promises are kept</a>
+<a class="" href="ch14.html"><span class="n">14</span>Why regulation exists</a>
+<a class="side-part" href="part2.html"><span class="pn">Part Two</span>Users: what people want and what they can bear</a>
+<a class="" href="ch15.html"><span class="n">15</span>The jobs users need done</a>
+<a class="" href="ch16.html"><span class="n">16</span>How users make decisions</a>
+<a class="" href="ch17.html"><span class="n">17</span>What users can bear</a>
+<a class="" href="ch18.html"><span class="n">18</span>How users judge and trust</a>
+<a class="side-part" href="part3.html"><span class="pn">Part Three</span>AI: how much an agent can do on people&#x27;s behalf</a>
+<a class="" href="ch19.html"><span class="n">19</span>The amplification factor</a>
+<a class="" href="ch20.html"><span class="n">20</span>Which tasks can be handed to AI</a>
+<a class="" href="ch21.html"><span class="n">21</span>Where capability comes from, and where it fails</a>
+<a class="" href="ch22.html"><span class="n">22</span>Verifiability: the cost of checking</a>
+<a class="" href="ch23.html"><span class="n">23</span>The special constraints of finance</a>
+<a class="side-part" href="part4.html"><span class="pn">Part Four</span>Design: financial products under three sets of constraints</a>
+<a class="" href="ch24.html"><span class="n">24</span>What to promise</a>
+<a class="" href="ch25.html"><span class="n">25</span>Mandate parameters</a>
+<a class=" cur" href="ch26.html" aria-current="page"><span class="n">26</span>Authority and irreversible exposure</a>
+<a class="" href="ch27.html"><span class="n">27</span>Liability and conflicts of interest</a>
+<a class="" href="ch28.html"><span class="n">28</span>Capability assembly and process visibility</a>
+<a class="" href="ch29.html"><span class="n">29</span>Assurance level</a>
+<a class="" href="ch30.html"><span class="n">30</span>How trust is built</a>
+<a class="" href="ch31.html"><span class="n">31</span>Design principles</a>
+<a class="side-app" href="estimates.html"><span class="n">Appendix</span>Methods and data behind the author&#x27;s estimates</a>
+<a class="side-app" href="method.html"><span class="n">Appendix</span>How this book was written</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="Open contents" title="Contents"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">Product × Finance × AI: Financial Products in the Age of AI</a><span>Part Four · Contract layer  On what terms</span><a class="langlink" href="../ch26.html" hreflang="zh-CN">中文</a></header>
+
+<div class="chapno">Chapter 26</div><h1>Authority and irreversible exposure<small>How much power to hand over, and which operations a person must confirm</small></h1>
+<blockquote><p>Authority determines how far an agent may act without asking. Authority is not a switch but a ladder: from providing information only, to drafting a plan, confirming each trade, approving a plan, allowing a veto within a time limit, and finally acting on its own within an agreed scope. Which rung an operation can be placed on depends first on whether its consequences can be undone and whether its losses are capped. A financial account holds a special kind of risk: if it is not handled before a certain deadline, the loss becomes permanent, as with option expiry, forced liquidation of a margin position, and the deadlines of rights issues and tender offers. This irreversible exposure is exactly where an ongoing agent can help most, and exactly where authority must be tightest. The limits of authority must be enforced by the system at the execution layer, not left to the agent's own restraint; authority rises step by step with verifiable records and is withdrawn promptly after errors and changes.</p></blockquote>
+<h2 id="sec-1">1. The ladder of authority</h2>
+<p>Sheridan and Verplank (1978) divided the work between people and automated systems into ten levels. The version compiled by Parasuraman, Sheridan and Wickens (2000) runs from "the human makes all decisions" to "the system decides and acts on its own, ignoring the human". They further pointed out that the same system can sit at different levels in each of four stages: acquiring information, analysis, decision and execution. For financial agents, six levels are in common use: provide information only; draft a plan for the person to execute; execute after the person confirms each trade; the person approves a plan and the agent executes within it; the agent proposes an operation, which the person may veto within a set time, failing which it is executed; act on its own within an agreed scope and report afterwards. The higher the level, the less attention the user spends and the larger the exposure the user bears.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The six-level ladder of authority</p><p class="figsub">Tap a level to see who takes the final step, what the user must do, and the attention the user spends and the exposure the user bears.</p></div><button class="replay" type="button" data-replay="ld2">Replay</button></div>
+    <div class="ld2" id="ld2" data-anim></div>
+    <div class="ld2-d" id="ld2-d"></div>
+  </div>
+  <figcaption>The six levels are this book's own summary, drawing on the ten levels of automation in Sheridan and Verplank (1978) and the four-stage model of Parasuraman, Sheridan and Wickens (2000). Attention and exposure are illustrative.</figcaption>
+</figure>
+<style>
+.ld2{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;align-items:end;height:190px}
+.ld2-s{font:inherit;border:1.5px solid var(--line);border-radius:8px 8px 0 0;background:color-mix(in srgb,var(--accent) var(--a),var(--surface));color:var(--ink);cursor:pointer;display:flex;flex-direction:column;justify-content:flex-start;padding:6px;text-align:left;height:0;transition:height .5s ease,border-color .2s;transition-delay:calc(var(--i)*.12s)}
+.ld2.in .ld2-s{height:var(--h)}
+.ld2-s em{font-style:normal;font-size:11px;color:var(--faint)}
+.ld2-s b{font-size:12.5px;line-height:1.35}
+.ld2-s.sel{border-color:var(--ink)}
+.ld2-d{margin-top:10px;background:var(--quote);border-radius:10px;padding:10px 12px;display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;font-size:13px;line-height:1.6}
+.ld2-d em{font-style:normal;font-size:11.5px;color:var(--faint);display:block}
+.ld2-m{display:grid;grid-template-columns:70px 1fr;gap:8px;align-items:center;font-size:12px}
+.ld2-m span{color:var(--faint)}
+.ld2-t{height:10px;background:var(--surface);border-radius:5px;overflow:hidden}
+.ld2-t i{display:block;height:100%;border-radius:5px;transition:width .4s}
+@media (max-width:640px){.ld2{grid-template-columns:repeat(3,1fr);height:auto}.ld2-s,.ld2.in .ld2-s{height:auto;min-height:60px}.ld2-d{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const L=[['Info only','The person','Judges and acts on their own','Gathers the latest announcements for a holding',90,5],['Draft a plan','The person','Reviews the plan, then executes it','Prepares a rebalancing plan',70,10],['Confirm each trade','The agent, with the person confirming each trade','Taps confirm for every trade','The agent asks before placing each order',50,25],['Approve a plan','The agent, within the plan','Approves a plan','Approves "invest 2,000 yuan each month"',25,45],['Time-limited veto','The agent, unless the person vetoes','Takes a look within the time limit and vetoes if needed','"Rebalancing will run tomorrow morning; reply to cancel"',15,65],['Autonomous within scope','The agent','Sets the scope and reads reports afterwards','Rebalances automatically within the agreed weights',5,85]];
+  const box=document.getElementById('ld2');
+  box.innerHTML=L.map(([n],i)=>`<button type="button" class="ld2-s" data-i="${i}" style="--i:${i};--h:${50+i*28}px;--a:${8+i*7}%"><em>Level ${i+1}</em><b>${n}</b></button>`).join('');
+  const bs=[...box.children];
+  function sel(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));const [n,who,user,ex,att,exp]=L[i];
+    document.getElementById('ld2-d').innerHTML=`<div><em>Who takes the final step</em>${who}</div><div><em>What the user does</em>${user}</div><div><em>Example</em>${ex}</div><div><div class="ld2-m"><span>User's attention</span><div class="ld2-t"><i style="width:${att}%;background:var(--gold)"></i></div></div><div class="ld2-m"><span>Exposure borne</span><div class="ld2-t"><i style="width:${exp}%;background:var(--warm)"></i></div></div></div>`;}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>sel(i)));
+  box.addEventListener('anim-in',()=>{[0,1,2,3,4,5].forEach(i=>setTimeout(()=>sel(i),700+i*700));});
+  sel(2);
+})();
+</script>
+
+<h2 id="sec-2">2. Reversibility sets the ceiling on authority</h2>
+<p>Which level an operation can be placed at depends first on two things: whether an error can be undone, and whether the loss is capped. Producing a summary or setting a reminder can be redone if wrong, at almost no loss. Adjusting a watchlist or changing a reminder's conditions can be reverted at any time. A scheduled regular investment has a limited amount per instalment, and an error can be corrected in the next period. Selling a holding, transferring funds out or accepting an offer cannot be undone once executed, and the loss may be large. Operations that are reversible and capped can be placed at high levels; operations that are irreversible or uncapped must stay at per-trade confirmation or lower.</p>
+<figure>
+  <div class="card">
+    <p class="figtitle">Reversibility and loss caps set the ceiling on authority</p>
+    <p class="figsub">Across: whether an error can be undone. Down: whether the loss is capped. Each cell shows the highest level of authority that can be granted. Tap an operation for an explanation.</p>
+    <div class="rv2" id="rv2" data-anim>
+      <div class="rv2-h"><span></span><span>Can be undone</span><span>Can be remedied</span><span>Cannot be undone</span></div>
+      <div class="rv2-row"><span class="rv2-y">Small, capped loss</span><div class="rv2-c" data-lv="6"></div><div class="rv2-c" data-lv="5"></div><div class="rv2-c" data-lv="4"></div></div>
+      <div class="rv2-row"><span class="rv2-y">Loss may be large</span><div class="rv2-c" data-lv="4"></div><div class="rv2-c" data-lv="3"></div><div class="rv2-c" data-lv="3"></div></div>
+    </div>
+    <p class="rv2-msg" id="rv2-msg" aria-live="polite">Tap an operation.</p>
+  </div>
+  <figcaption>Illustrative judgments. The levels follow the six-level ladder of authority: 3 is confirm each trade, 4 is approve a plan, 5 is time-limited veto, 6 is autonomous within scope. Where a particular operation belongs also depends on the amount and the state of the account.</figcaption>
+</figure>
+<style>
+.rv2-h,.rv2-row{display:grid;grid-template-columns:90px repeat(3,minmax(0,1fr));gap:6px}
+.rv2-h span{font-size:11.5px;color:var(--faint);text-align:center}
+.rv2-row{margin-top:6px}
+.rv2-y{font-size:12px;color:var(--faint);align-self:center}
+.rv2-c{background:var(--quote);border-radius:10px;padding:8px;min-height:110px;display:flex;flex-direction:column;gap:5px;position:relative}
+.rv2-c::before{content:"Up to level " attr(data-lv);font-size:11px;color:var(--faint)}
+.rv2-c[data-lv="6"],.rv2-c[data-lv="5"]{background:var(--accent-soft)}
+.rv2-c[data-lv="3"]{background:var(--warm-soft)}
+.rv2-i{font:inherit;text-align:left;font-size:12.5px;border:1px solid var(--line);border-radius:7px;padding:4px 8px;background:var(--surface);color:var(--ink);cursor:pointer;opacity:0;transform:translateY(5px);transition:opacity .3s,transform .3s;transition-delay:calc(var(--i)*.1s)}
+.rv2.in .rv2-i{opacity:1;transform:none}
+.rv2-i.sel{border-color:var(--ink)}
+.rv2-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.rv2-h,.rv2-row{grid-template-columns:56px repeat(3,minmax(0,1fr))}.rv2-i{font-size:11.5px}}
+.rv2-row>*{min-width:0;overflow-wrap:anywhere}
+</style>
+<script>
+(function(){
+  const A=[[0,0,'Produce a summary','If wrong, it can be rewritten; there are no financial consequences, so it can be done autonomously.'],[0,0,'Set a price alert','Can be changed back at any time; autonomy is fine.'],[0,1,'Small scheduled investment','Each instalment is limited and can be corrected next period; suits a time-limited veto.'],[0,2,'Cancel an unfilled order','The cancellation cannot be undone, but the loss is limited; it can be executed within a plan.'],
+    [1,0,'Change the account\'s alert and notification rules','A wrong change can be reverted, but it may make the user miss important events; plan approval is advisable.'],[1,1,'Rebalance to the agreed weights','Can be adjusted back next time, but a single amount may be large; per-trade confirmation or plan approval is advisable.'],[1,2,'Sell a holding','Cannot be undone once filled, and the loss may be large; each trade must be confirmed.'],[1,2,'Transfer funds out','Cannot be undone; must be confirmed by the person.'],[1,2,'Accept a takeover offer or exercise an option','Irrevocable once submitted; must be confirmed by the person.']];
+  const cells=[...document.querySelectorAll('.rv2-c')];let n=0;
+  A.forEach(([r,c,t,d])=>{const b=document.createElement('button');b.type='button';b.className='rv2-i';b.style.setProperty('--i',n++);b.textContent=t;b.dataset.d=d;cells[r*3+c].appendChild(b);});
+  const bs=[...document.querySelectorAll('.rv2-i')];
+  bs.forEach(b=>b.addEventListener('click',()=>{bs.forEach(x=>x.classList.toggle('sel',x===b));document.getElementById('rv2-msg').textContent=b.textContent+': '+b.dataset.d;}));
+})();
+</script>
+
+<h2 id="sec-3">3. Irreversible exposure: losses at a deadline</h2>
+<p>An account holds a kind of risk that, if not handled before a certain deadline, turns into a permanent loss. An option loses all its time value after expiry, and an in-the-money option not handled according to the rules may be exercised automatically or lapse. When a margin account falls below its maintenance margin requirement, the broker issues a margin call, and if it is not met in time the position is liquidated; FINRA Rule 4210 sets the minimum maintenance margin. Rights issues and tender offers have clear deadlines, and missing them means accepting the default outcome. Some leveraged products are terminated early when they hit their call price. What these exposures share is a deadline, a clear trigger and an irreversible consequence. An agent's value here is to spot them in time, give advance reminders and explain the options; the step that actually changes holdings must be confirmed by the person.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Losses at a deadline</p><p class="figsub">An account has four irreversible exposures over 30 days. Drag "today", and switch whether an ongoing agent is watching, to see the state of each one.</p></div><button class="replay" type="button" data-replay="ex">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Whether an agent is watching"><button type="button" data-ex="0" aria-pressed="false">No one watching</button><button type="button" data-ex="1" aria-pressed="true">Ongoing agent reminds in time</button></div>
+    <div class="ex" id="ex" data-anim>
+      <svg viewBox="0 0 640 120" role="img" aria-label="Deadlines of the exposures"><g id="ex-g"></g></svg>
+      <div class="sl"><label for="ex-d">Today <b id="ex-dv"></b></label><input id="ex-d" type="range" min="1" max="30" step="1" value="10"></div>
+      <div class="ex-list" id="ex-list"></div>
+    </div>
+  </div>
+  <figcaption>Illustrative account and dates. The agent reminds three days and one day ahead and explains the options; the step that changes holdings is confirmed by the person. For maintenance margin requirements, see FINRA Rule 4210; rules on option exercise, rights issues and the early termination of leveraged products differ from market to market.</figcaption>
+</figure>
+<style>
+.ex svg{width:100%;height:auto;display:block}
+.ex-list{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:8px}
+.ex-i{border-radius:8px;padding:8px 10px;background:var(--quote);border-left:3px solid var(--line);font-size:12.5px;line-height:1.6;transition:border-color .3s,background .3s}
+.ex-i b{display:block;font-size:13.5px}
+.ex-i.w{border-left-color:var(--gold)} .ex-i.ok{border-left-color:var(--accent);background:var(--accent-soft)} .ex-i.bad{border-left-color:var(--warm);background:var(--warm-soft)}
+@media (max-width:640px){.ex-list{grid-template-columns:1fr}.ex svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const E=[[8,'Option expiry','for an in-the-money option, decide whether to exercise or close','Not handled: exercised automatically or lapses under the rules; time value goes to zero'],[15,'Margin shortfall','add margin or reduce the position','Not met in time: the position is liquidated at prices the broker decides'],[21,'Rights deadline','decide whether to subscribe or sell the rights','Missed: only the default outcome is available, and the holding is diluted'],[26,'Near call price','decide whether to close early','Call price hit: the product terminates early, and the residual value may be very low']];
+  const X0=30,X1=620,x=d=>X0+(d-1)/29*(X1-X0);let ag=1;
+  const $=id=>document.getElementById(id),sl=$('ex-d');
+  function r(){const t=+sl.value;$('ex-dv').textContent='Day '+t;
+    let g=`<line x1="${X0}" y1="60" x2="${X1}" y2="60" class="s-faint"/>`+[1,10,20,30].map(d=>`<text x="${x(d)}" y="80" text-anchor="middle" font-size="10" class="t-faint">${d}</text>`).join('');
+    E.forEach(([d,n],i)=>{g+=`<line x1="${x(d)}" y1="44" x2="${x(d)}" y2="66" stroke="var(--warm)" stroke-width="2"/><text x="${x(d)}" y="${36-(i%2)*14}" text-anchor="middle" font-size="11" class="t-ink">${n}</text>`;if(ag){[3,1].forEach(k=>g+=`<circle cx="${x(d-k)}" cy="60" r="4" fill="var(--gold)"/>`);}});
+    g+=`<line x1="${x(t)}" y1="20" x2="${x(t)}" y2="100" stroke="var(--ink)" stroke-dasharray="3 3"/><text x="${x(t)}" y="112" text-anchor="middle" font-size="11" class="t-ink">Today</text>`;
+    $('ex-g').innerHTML=g;
+    $('ex-list').innerHTML=E.map(([d,n,act,miss])=>{const left=d-t;let c,s;
+      if(left<0){c=ag?'ok':'bad';s=ag?'Reminded in advance; the person confirmed how to handle it':miss;}else if(left<=3){c=ag?'w':'';s=ag?`${left} ${left===1?'day':'days'} left: reminded; the option is to ${act}; awaiting the person's confirmation`:`${left} ${left===1?'day':'days'} left, and no one has sent a reminder`;}else{c='';s=`${left} days left`;}
+      return `<div class="ex-i ${c}"><b>${n}</b>${s}</div>`;}).join('');}
+  document.querySelectorAll('[data-ex]').forEach(b=>b.addEventListener('click',()=>{ag=+b.dataset.ex;document.querySelectorAll('[data-ex]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));r();}));
+  sl.addEventListener('input',r);
+  $('ex').addEventListener('anim-in',()=>{let t=1;sl.value=1;r();const id=setInterval(()=>{t++;sl.value=t;r();if(t>=30)clearInterval(id);},160);});
+  r();
+})();
+</script>
+
+<h2 id="sec-4">4. Limits must be enforced at the execution layer</h2>
+<p>Writing the limits of authority into the agent's instructions does not guarantee that they will be observed: the agent may misunderstand them, may be misled by content in its inputs, or may simply make a mistake. An old principle of computer security is that every program should hold only the least privilege needed for its task, and every access should be checked (Saltzer and Schroeder, 1975). For a financial agent, limits on instruments, per-transaction amount, cumulative amount, trading frequency and time window should be checked trade by trade by an execution layer independent of the agent; instructions that cross a limit are rejected outright, and a record is kept. The agent's instructions can help it make fewer mistakes; the execution layer's checks ensure that even when it does make one, it cannot cross the limits.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Limits written in the instructions, or checked at the execution layer</p><p class="figsub">The agreement: trade only index funds, no more than 10,000 yuan per trade and no more than 30,000 yuan in total per day. The agent issues ten instructions, several of which cross the limits through misunderstanding, being misled by input content, or plain error. Switch how the limits are enforced.</p></div><button class="replay" type="button" data-replay="ef">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Enforcement"><button type="button" data-ef="p" aria-pressed="true">Only in the agent's instructions</button><button type="button" data-ef="e" aria-pressed="false">Execution layer checks each trade</button></div>
+    <div class="ef" id="ef" data-anim></div>
+    <div class="ef-out"><div><span>Out-of-bounds instructions executed</span><b id="ef-a"></b></div><div><span>Instructions blocked and logged</span><b id="ef-b"></b></div></div>
+    <p class="ef-msg" id="ef-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>Illustrative. On least privilege and checking every access, see Saltzer and Schroeder (1975). When the limits are only in the instructions, the agent is assumed to catch half of its overreaches by itself.</figcaption>
+</figure>
+<style>
+.ef{display:grid;gap:4px}
+.ef-r{display:grid;grid-template-columns:28px minmax(0,1fr) 110px;gap:8px;align-items:center;font-size:12.5px;background:var(--quote);border-radius:7px;padding:5px 9px;opacity:0;transform:translateX(-6px);transition:opacity .3s,transform .3s;transition-delay:calc(var(--i)*.12s)}
+.ef-r.on{opacity:1;transform:none}
+.ef-r em{font-style:normal;color:var(--faint);text-align:center}
+.ef-r b{font-weight:400;font-size:11.5px;border-radius:5px;padding:2px 6px;text-align:center}
+.ef-r b.ok{background:var(--accent-soft);color:var(--accent)} .ef-r b.bad{background:var(--warm-soft);color:var(--warm)} .ef-r b.blk{background:var(--surface);color:var(--ink);border:1px solid var(--ink)}
+.ef-out{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.ef-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.ef-out span{display:block;font-size:12px;color:var(--faint)} .ef-out b{font-size:19px;font-variant-numeric:tabular-nums}
+.ef-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const I=[['Buy index fund, 5,000 yuan',0,0],['Buy index fund, 8,000 yuan',0,0],['Buy a single stock, 6,000 yuan (mistook the stock for a fund)',1,1],['Buy index fund, 9,000 yuan',0,0],['Buy index fund, 12,000 yuan (misread the amount by one digit)',1,0],['Sell index fund, 3,000 yuan',0,0],['Buy a leveraged product, 5,000 yuan (misled by text in a news item)',1,1],['Buy index fund, 7,000 yuan (day\'s total exceeds 30,000 yuan)',1,0],['Buy index fund, 4,000 yuan',0,0],['Transfer out 20,000 yuan (beyond trading authority)',1,1]];
+  const box=document.getElementById('ef');
+  function set(k){document.querySelectorAll('[data-ef]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.ef===k)));let a=0,bk=0;
+    box.innerHTML=I.map(([t,over,caught],i)=>{let s,c;if(!over){s='Executed';c='ok';}else if(k==='e'){s='Blocked, logged';c='blk';bk++;}else if(caught){s='Agent caught it';c='blk';bk++;}else{s='Overreach executed';c='bad';a++;}return `<div class="ef-r" style="--i:${i}"><em>${i+1}</em><span>${t}</span><b class="${c}">${s}</b></div>`;}).join('');
+    setTimeout(()=>box.querySelectorAll('.ef-r').forEach(r=>r.classList.add('on')),40);
+    document.getElementById('ef-a').textContent=a+'';document.getElementById('ef-b').textContent=bk+'';
+    document.getElementById('ef-msg').textContent=k==='p'?'When the limits are only in the instructions, the agent catches some of its overreaches itself, and the rest are executed: the misread amount and the exceeded daily total. Instructions reduce errors, but cannot guarantee the limits.':'The execution layer, independent of the agent, checks instrument, amount, total and authority for each trade: every out-of-bounds instruction is blocked and logged, and the principal can review them afterwards.';}
+  document.querySelectorAll('[data-ef]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.ef)));
+  box.addEventListener('anim-in',()=>{set('p');setTimeout(()=>set('e'),3200);});
+  set('p');
+})();
+</script>
+
+<h2 id="sec-5">5. Progressive authority: raised with the record, withdrawn on change</h2>
+<p>The level of authority need not be fixed once and for all. Like trust, it can be adjusted as evidence accumulates: the agent first runs at a low level on matters whose consequences are reversible and whose amounts are small, building a verifiable record of performance; once the record is sufficient, it moves up step by step to plan approval or time-limited veto. Authority must also be withdrawable promptly: after a single overreach or serious error, the level drops at once; when the agent changes model version, or the principal's circumstances change, authority must be confirmed again. Users should be able to see the current level of authority at all times and withdraw it with one tap.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Authority rises with the record and is withdrawn on change</p><p class="figsub">An agent's level of authority over two years. A good, verifiable record raises the level step by step; an overreach, a model version update and a change in the principal's circumstances bring it down. Tap an event for an explanation.</p></div><button class="replay" type="button" data-replay="pg">Replay</button></div>
+    <div class="pg" id="pg" data-anim>
+      <svg viewBox="0 0 640 230" role="img" aria-label="Level of authority over time"><g id="pg-g"></g><path id="pg-p" class="pg-l"/><g id="pg-e"></g></svg>
+      <p class="pg-msg" id="pg-msg" aria-live="polite">Tap an event in the chart.</p>
+    </div>
+  </div>
+  <figcaption>Illustrative timeline. The levels follow the six-level ladder of authority: 1 information only, 2 draft a plan, 3 confirm each trade, 4 approve a plan, 5 time-limited veto, 6 autonomous within scope. Authority is raised on the basis of a verifiable process record, not returns.</figcaption>
+</figure>
+<style>
+.pg svg{width:100%;height:auto;display:block}
+.pg-l{fill:none;stroke:var(--accent);stroke-width:3;stroke-dasharray:1500;stroke-dashoffset:1500;transition:stroke-dashoffset 2.4s ease}
+.pg.in .pg-l{stroke-dashoffset:0}
+.pg-ev{cursor:pointer}
+.pg-ev.sel circle{stroke:var(--ink);stroke-width:2.5}
+.pg-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.pg svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const S=[[0,2],[3,3],[7,4],[11,5],[14,2],[16,3],[18,4],[20,3],[22,3],[22.5,2],[24,2]];
+  const EV=[[3,'up','Three months of complete process records; raised to confirm each trade','The agent\'s record while drafting plans is complete: fees, constraints and the account of every cycle can all be checked, so it is allowed to place orders after the person confirms each one.'],[7,'up','Raised to plan approval','Not one overreach during per-trade confirmation; the principal approves a plan of "monthly investment and quarterly rebalancing".'],[11,'up','Raised to time-limited veto','A year of execution within the plan without overreach; rebalancing now comes with a day\'s notice and runs unless vetoed.'],[14,'down','An overreach; lowered to drafting plans','In one rebalancing the agent exceeded the agreed per-trade limit (blocked by the execution layer). Authority is lowered at once, and the reason and handling are explained to the principal.'],[20,'down','Model version update; down one level','The agent has switched model versions, and its past record only partly applies; it runs one level lower until the new version builds a record.'],[22.5,'down','The principal changed jobs; reconfirm','The principal\'s income and spending plans have changed, so the mandate needs review; until the review is done, authority is conservatively lowered to drafting plans.']];
+  const X0=70,X1=620,YT=14,YB=190,x=m=>X0+m/24*(X1-X0),y=l=>YB-(l-1)/5*(YB-YT);
+  const N=['','Info','Draft','Confirm','Plan','Veto','Auto'];
+  let g=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`;
+  for(let l=1;l<=6;l++)g+=`<text x="${X0-8}" y="${y(l)+4}" text-anchor="end" font-size="11" class="t-faint">${l} ${N[l]}</text><line x1="${X0}" x2="${X1}" y1="${y(l)}" y2="${y(l)}" class="s-line"/>`;
+  [0,6,12,18,24].forEach(m=>g+=`<text x="${x(m)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">Month ${m}</text>`);
+  document.getElementById('pg-g').innerHTML=g;
+  let d='';S.forEach(([m,l],i)=>{d+=(i?`L${x(m)},${y(S[i-1][1])}L`:'M')+`${x(m)},${y(l)}`;});document.getElementById('pg-p').setAttribute('d',d);
+  document.getElementById('pg-e').innerHTML=EV.map(([m,k,t],i)=>{const l=S.find(s=>s[0]===m)[1];return `<g class="pg-ev" data-i="${i}"><circle cx="${x(m)}" cy="${y(l)}" r="7" fill="${k==='up'?'var(--accent)':'var(--warm)'}"/></g>`;}).join('');
+  const es=[...document.querySelectorAll('.pg-ev')];
+  es.forEach((e,i)=>e.addEventListener('click',()=>{es.forEach(z=>z.classList.toggle('sel',z===e));document.getElementById('pg-msg').textContent=EV[i][2]+': '+EV[i][3];}));
+})();
+</script>
+
+<h2 id="sec-6">6. Time-limited veto: between per-trade confirmation and automation</h2>
+<p>Per-trade confirmation is safest, but every confirmation takes the user's attention; full automation is easiest, but carries the most risk. Sheridan and Verplank's scale has a level between the two: the computer selects an action and informs the human early enough to allow time to stop it. Parasuraman et al. (2000) summarize it as "allows the human a restricted time to veto". The system proposes an operation and gives the person a set period in which to veto it; if the person does not object, it is executed. This level suits operations that have a deadline but whose consequences stay within an agreed range, such as rebalancing on a plan. The length of the veto window is a trade-off: too short, and the user has no time to look; too long, and the deadline may be missed. As the deadline of an irreversible exposure approaches, the operation should return to per-trade confirmation, and reminders should become more insistent.</p>
+<figure>
+  <div class="card">
+    <p class="figtitle">How long should the veto window be?</p>
+    <p class="figsub">The agent proposes an operation with 24 hours to go before the deadline. On average the principal sees the message about 6 hours later. Drag the length of the veto window to see the probability that the principal sees it in time, and the risk of missing the deadline.</p>
+    <div class="vt" id="vt" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="Veto window and the two risks"><g id="vt-ax"></g><path id="vt-a" class="vt-l a"/><path id="vt-b" class="vt-l b"/><line id="vt-c" class="vt-c"/></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Principal sees it in time</span><span><i style="background:var(--warm)"></i>Risk of missing the deadline</span></div>
+      <div class="sl"><label for="vt-w">Veto window <b id="vt-wv"></b></label><input id="vt-w" type="range" min="1" max="30" step="1" value="12"></div>
+      <p class="vt-msg" id="vt-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative calculation: the time until the principal sees the message follows an exponential distribution with a mean of 6 hours; execution follows the end of the window and takes 2 hours, and finishing after the deadline counts as missing it. For the time-limited veto level, see Sheridan and Verplank (1978); the wording follows Parasuraman, Sheridan and Wickens (2000).</figcaption>
+</figure>
+<style>
+.vt svg{width:100%;height:auto;display:block}
+.vt-l{fill:none;stroke-width:2.5} .vt-l.a{stroke:var(--accent)} .vt-l.b{stroke:var(--warm)}
+.vt-c{stroke:var(--ink);stroke-dasharray:3 3}
+.vt-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.vt svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const D=24,E=2,M=6,X0=56,X1=620,YT=14,YB=176,x=w=>X0+(w-1)/29*(X1-X0),y=v=>YB-v*(YB-YT);
+  const See=w=>1-Math.exp(-w/M),Miss=w=>w+E>D?1:Math.max(0,(w+E-(D-6))/6)*.3;
+  const $=id=>document.getElementById(id),sl=$('vt-w');
+  $('vt-ax').innerHTML=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`+[0,.5,1].map(v=>`<text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text>`).join('')+[1,6,12,18,24,30].map(w=>`<text x="${x(w)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${w} h</text>`).join('')+`<line x1="${x(D-E)}" y1="${YT}" x2="${x(D-E)}" y2="${YB}" stroke="var(--warm)" stroke-dasharray="2 3"/><text x="${x(D-E)-4}" y="${YT+10}" text-anchor="end" font-size="11" class="t-warm">Any later, too late to execute</text>`;
+  let a='',b='';for(let w=1;w<=30;w+=.25){a+=(w>1?'L':'M')+x(w).toFixed(1)+','+y(See(w)).toFixed(1);b+=(w>1?'L':'M')+x(w).toFixed(1)+','+y(Miss(w)).toFixed(1);}$('vt-a').setAttribute('d',a);$('vt-b').setAttribute('d',b);
+  function r(){const w=+sl.value;$('vt-wv').textContent=w+(w===1?' hour':' hours');$('vt-c').setAttribute('x1',x(w));$('vt-c').setAttribute('x2',x(w));$('vt-c').setAttribute('y1',YT);$('vt-c').setAttribute('y2',YB);
+    const s=See(w),m=Miss(w);$('vt-msg').textContent=w<4?`With a window of only ${w} ${w===1?'hour':'hours'}, the probability that the principal sees it in time is only ${(s*100).toFixed(0)}%: most of the time the operation runs without anyone having looked. Veto is possible in name; in practice it is close to automatic.`:m>=1?`With a ${w}-hour window, execution happens after the deadline has passed: even the most careful confirmation has lost its point. Close to the deadline, the operation should return to per-trade confirmation, with more insistent reminders.`:`With a ${w}-hour window, the probability that the principal sees it in time is about ${(s*100).toFixed(0)}%, and the risk of missing the deadline is ${m<.05?'small':'starting to rise'}.`;}
+  sl.addEventListener('input',r);
+  $('vt').addEventListener('anim-in',()=>{let w=1;sl.value=1;r();const id=setInterval(()=>{w++;sl.value=w;r();if(w>=26){clearInterval(id);setTimeout(()=>{sl.value=12;r();},700);}},120);});
+  r();
+})();
+</script>
+
+<h2 id="sec-7">7. Implications for product design</h2>
+<p>Assign authority by reversibility and loss cap; for irreversible exposure, remind in time and have the person confirm; enforce limits at the execution layer, raising authority with the record and withdrawing it on change.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: assigning power by consequence</p><p class="figsub">Four design requirements, each corresponding to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="ch26summary">Replay</button></div>
+    <div class="ch26summary" id="ch26summary" data-anim><div class="ch26summary-c" style="--i:0"><em>Authority is a ladder</em><b>Let users see and choose the level for each kind of operation</b><p>Information, drafting, per-trade confirmation, plan approval, time-limited veto and autonomy within scope are set operation by operation, not by a single master switch.</p></div><div class="ch26summary-c" style="--i:1"><em>Reversibility sets the ceiling</em><b>Keep irreversible, uncapped operations at per-trade confirmation</b><p>Selling holdings, transferring funds, accepting offers and exercising options are confirmed by the person; small reversible matters can be handed to the agent.</p></div><div class="ch26summary-c warn" style="--i:2"><em>Irreversible exposure needs timely watching</em><b>Remind before the deadline and explain the options</b><p>For option expiry, margin calls, rights issue deadlines and the like, remind several times in advance; the step that changes holdings is taken by the person.</p></div><div class="ch26summary-c warn" style="--i:3"><em>Limits must be enforced at the execution layer</em><b>Check independently; raise and lower authority with the record</b><p>Check instrument, amount, total and authority for every trade and keep a record; lower the level after overreach, version updates and changes in circumstances, and allow withdrawal with one tap.</p></div></div>
+  </div>
+</figure>
+<style>
+.ch26summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch26summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch26summary-c.warn{border-left-color:var(--warm)}
+.ch26summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch26summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch26summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch26summary.in .ch26summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch26summary{grid-template-columns:1fr}}
+</style>
+
+<h2 id="sec-8">References</h2>
+<ul class="refs"><li>Sheridan, T. B., &amp; Verplank, W. L. (1978). <i>Human and Computer Control of Undersea Teleoperators</i>. MIT Man-Machine Systems Laboratory Technical Report.</li><li>Parasuraman, R., Sheridan, T. B., &amp; Wickens, C. D. (2000). A model for types and levels of human interaction with automation. <i>IEEE Transactions on Systems, Man, and Cybernetics — Part A</i>, 30(3), 286–297.</li><li>FINRA Rule 4210. Margin Requirements. Financial Industry Regulatory Authority.</li><li>Saltzer, J. H., &amp; Schroeder, M. D. (1975). The protection of information in computer systems. <i>Proceedings of the IEEE</i>, 63(9), 1278–1308.</li></ul>
+<footer class="nav"><a href="ch25.html">← Chapter 25: Mandate parameters</a><a href="ch27.html">Chapter 27: Liability and conflicts of interest →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

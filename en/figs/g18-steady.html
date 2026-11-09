@@ -1,0 +1,56 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Between current practice and the ideal</p><p class="figsub">The principal's present, scattered way of investing is one steady state; the consistent method of a mature investor is another. Switch the scribe's approach and see where he stands after ten reviews, and what the scribe does at several moments.</p></div><button class="replay" type="button" data-replay="sd18">Replay</button></div>
+    <div class="sd18" id="sd18" data-anim>
+      <div class="seg-btns" role="group" aria-label="The scribe's approach">
+        <button type="button" data-sd18="follow" aria-pressed="false">Only go along</button>
+        <button type="button" data-sd18="mid" aria-pressed="true">Respect first, then invite</button>
+        <button type="button" data-sd18="push" aria-pressed="false">Only look to the ideal</button>
+      </div>
+      <svg viewBox="0 0 400 78" role="img" aria-label="The principal's position between current practice and the ideal"><g id="sd18-g"></g></svg>
+      <div class="sd18-ends"><div><b>Steady state of current practice: scattered method</b>Buys on hearsay, sells for another reason, reviews by yet another</div><div><b>Steady state of the ideal: consistent method</b>One method for finding, trading and reviewing</div></div>
+      <div class="sd18-m" id="sd18-m"></div>
+      <p class="sd18-msg" id="sd18-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the horizontal axis shows how far the principal's practice is from that of a mature investor; positions and the size of each move are for explanation only, not measured data. The middle path promises only to improve the quality of the process, not the results.</figcaption>
+</figure>
+<style>
+.sd18 svg{width:100%;height:auto;display:block;margin-top:6px}
+.sd18-ends{display:flex;justify-content:space-between;gap:16px;font-size:12px;color:var(--faint);line-height:1.5}
+.sd18-ends div:last-child{text-align:right}
+.sd18-ends b{display:block;font-weight:500;color:var(--muted);font-size:12.5px}
+.sd18-m{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
+.sd18-m div{background:var(--quote);border-radius:9px;padding:8px 10px;font-size:13px;line-height:1.55}
+.sd18-m span{display:block;font-size:11.5px;color:var(--faint)}
+.sd18-msg{font-size:14px;margin:10px 0 0;min-height:3.2em}
+@media (max-width:640px){.sd18-m{grid-template-columns:1fr 1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('sd18'+id),X0=14,X1=386,AY=62,x=v=>X0+v*(X1-X0);
+  const P={follow:[.1,.1,.1,.1,.1,.1,.1,.1,.1,.1,.1],mid:[.1,.16,.22,.28,.34,.4,.45,.5,.55,.6,.64],push:[.1,.28,-1,-1,-1,-1,-1,-1,-1,-1,-1]};
+  const M={follow:[['He wants to trade often','Gives him a faster ordering tool and passes no judgment.'],['After a storm','Sells as he asks, without mentioning his original intentions.'],['Review','Lists only gains and losses, not why each trade was made.'],['He does not want to change','Never meant to make him change.']],
+    mid:[['He wants to trade often','Carries out his orders as usual, while recording the reason and result of each trade.'],['After a storm','Sets out the intentions he wrote down himself and asks him to confirm a day later.'],['Review','Uses his own record to show that frequent trading did not bring better results, and asks whether he would like to try another method.'],['He does not want to change','Respects his decision and looks at the record again at the next review.']],
+    push:[['He wants to trade often','Refuses to carry out the orders and tells him this is wrong.'],['After a storm','Forbids selling and lectures him on holding for the long term.'],['Review','Points out, item by item, where he falls short of a mature investor.'],['He does not want to change','Keeps trying to persuade him, until he switches to another scribe.']]};
+  const T={follow:'Only going along: the scribe holds no view of its own and is not working for the number of trades; but his habits are accepted wholesale, the cost of frequent trading accumulates year after year, and his wish for better results is never answered.',
+    mid:'Respect first, then invite: his habits are carried out as usual, and reasons and results are recorded; at each review his own record shows the results, and he is asked whether he would like to try something else. He moves forward in small steps, and the decision always stays with him; what improves is the quality of the process, while results still depend on the run of years.',
+    push:'Only looking to the ideal: the scribe corrects him at every turn, and after the second review he finds another scribe. The direction was not wrong, but the scribe lost even the chance to help him.'};
+  let k='mid',tm=[],seq=[];
+  function axis(){return `<line x1="${X0}" x2="${X1}" y1="${AY}" y2="${AY}" class="s-line" stroke-width="2"/>`+
+    `<line x1="${x(.3)}" x2="${x(.7)}" y1="20" y2="20" stroke="var(--gold)" stroke-width="1.5" marker-end="url(#sd18-a)"/><text x="${x(.5)}" y="12" font-size="12" text-anchor="middle" fill="var(--gold)">Tension: his own wish for better results</text>`+
+    `<defs><marker id="sd18-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="var(--gold)"/></marker></defs>`;}
+  function draw(n){const p=P[k];let h=axis(),last=-1;
+    for(let i=0;i<=n;i++){const v=p[i];if(v<0)break;last=i;if(i<n&&p[i+1]>=0)h+=`<line x1="${x(v)}" x2="${x(p[i+1])}" y1="${AY}" y2="${AY}" stroke="var(--accent)" stroke-width="4" opacity=".35"/>`;}
+    const v=p[last],gone=n>last;
+    h+=`<circle cx="${x(v)}" cy="${AY}" r="8" fill="${k==='follow'?'var(--warm)':'var(--accent)'}" opacity="${gone?.25:1}"/>`;
+    h+=`<text x="${x(v)}" y="${AY-16}" font-size="12" text-anchor="middle" class="t-faint">${gone?'He found another scribe':'After review '+n}</text>`;
+    $('-g').innerHTML=h;}
+  function run(){tm.forEach(clearTimeout);tm=[];document.querySelectorAll('[data-sd18]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.sd18===k)));
+    $('-m').innerHTML=M[k].map(([a,b])=>`<div><span>${a}</span>${b}</div>`).join('');$('-msg').textContent=T[k];
+    for(let n=0;n<=10;n++)tm.push(setTimeout(()=>draw(n),n*260));}
+  document.querySelectorAll('[data-sd18]').forEach(b=>b.addEventListener('click',()=>{seq.forEach(clearTimeout);seq=[];k=b.dataset.sd18;run();}));
+  $('').addEventListener('anim-in',()=>{seq.forEach(clearTimeout);seq=[];['follow','push','mid'].forEach((s,i)=>seq.push(setTimeout(()=>{k=s;run();},300+i*3600)));});
+  draw(10);$('-m').innerHTML=M[k].map(([a,b])=>`<div><span>${a}</span>${b}</div>`).join('');$('-msg').textContent=T[k];
+})();
+</script>

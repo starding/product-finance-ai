@@ -1,0 +1,50 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">Where does a “market-beating” fund’s return come from?</p>
+    <p class="figsub">Over the past ten years a fund earned 9% a year above the risk-free rate, while the market earned 6% above it. Switch the explanation and see how much true excess return is left.</p>
+    <div class="seg-btns" role="group" aria-label="Explanation">
+      <button type="button" data-dc="one" aria-pressed="true">Market only</button>
+      <button type="button" data-dc="multi" aria-pressed="false">Multi-factor</button>
+      <button type="button" data-dc="fee" aria-pressed="false">After management fee</button>
+    </div>
+    <div class="dc6" id="dc6" data-anim>
+      <div class="dc6-bar" id="dc6-bar"></div>
+      <div class="dc6-scale"><span>0</span><span>3%</span><span>6%</span><span>9%</span></div>
+      <div class="dc6-leg" id="dc6-leg"></div>
+      <p class="dc6-msg" id="dc6-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative numbers: the fund’s exposures to the market, size, value and momentum factors are 1.0, 0.4, 0.5 and 0.2, and the factors’ annual returns over the period are 6%, 2%, 2.5% and 3%; the management fee is 1% a year.</figcaption>
+</figure>
+<style>
+.dc6-bar{display:flex;height:44px;border-radius:8px;overflow:hidden;background:var(--quote)}
+.dc6-bar i{display:flex;align-items:center;justify-content:center;font-style:normal;font-size:12px;color:#fff;transition:width .7s ease;white-space:nowrap;overflow:hidden}
+.dc6-scale{display:flex;justify-content:space-between;font-size:11px;color:var(--faint);margin:4px 0 8px}
+.dc6-leg{display:flex;flex-wrap:wrap;gap:10px;font-size:12.5px}
+.dc6-leg span{display:inline-flex;align-items:center;gap:6px}
+.dc6-leg b{display:inline-block;width:10px;height:10px;border-radius:2px}
+.dc6-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const C={mkt:'var(--gray-mark)',smb:'var(--blue)',hml:'var(--gold)',mom:'#7a5ea8',alpha:'var(--accent)',fee:'var(--warm)'};
+  const N={mkt:'Market 6.0%',smb:'Size 0.8%',hml:'Value 1.25%',mom:'Momentum 0.6%'};
+  const S={
+    one:{parts:[['mkt',6,'Market 6.0%'],['alpha',3,'Excess return 3.0%']],m:'Explained by the market alone: the fund earns an extra 3% a year, and the manager looks highly skilled.'},
+    multi:{parts:[['mkt',6,N.mkt],['smb',0.8,N.smb],['hml',1.25,N.hml],['mom',0.6,N.mom],['alpha',0.35,'Excess return 0.35%']],m:'Explained by multiple factors: of the extra 3%, 2.65% comes from holding more small-cap stocks, value stocks and recent strong performers, all of which can be replicated with low-cost factor products; the true excess return is only 0.35%.'},
+    fee:{parts:[['mkt',6,N.mkt],['smb',0.8,N.smb],['hml',1.25,N.hml],['mom',0.6,N.mom],['fee',0,'']],m:'After deducting the 1% annual management fee, the excess return becomes −0.65%. The investor paid the price of active management for factor exposure that could be replicated cheaply.'}
+  };
+  const bar=document.getElementById('dc6-bar'), leg=document.getElementById('dc6-leg');
+  function set(k){
+    document.querySelectorAll('[data-dc]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.dc===k)));
+    const s=S[k];
+    bar.innerHTML=s.parts.map(([c,v,t])=>`<i style="background:${C[c]};width:0" data-w="${v/9*100}">${v>=0.8?t:''}</i>`).join('');
+    setTimeout(()=>bar.querySelectorAll('i').forEach(i=>i.style.width=i.dataset.w+'%'),40);
+    leg.innerHTML=s.parts.filter(p=>p[2]).map(([c,v,t])=>`<span><b style="background:${C[c]}"></b>${t}</span>`).join('')+(k==='fee'?`<span><b style="background:${C.fee}"></b>Excess return after fees −0.65%</span>`:'');
+    document.getElementById('dc6-msg').textContent=s.m;
+  }
+  document.querySelectorAll('[data-dc]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.dc)));
+  document.getElementById('dc6').addEventListener('anim-in',()=>{set('one');setTimeout(()=>set('multi'),2400);setTimeout(()=>set('fee'),5200);});
+  set('one');
+})();
+</script>

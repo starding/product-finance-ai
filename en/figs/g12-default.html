@@ -1,0 +1,45 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Whatever the default, most people stay with it</p><p class="figsub">A hundred employees each have the contribution rate they would choose after thinking it through, about 8% on average. Six in ten never change the default. Choose different default rates to see the resulting distribution and how many save less than they themselves want.</p></div><button class="replay" type="button" data-replay="df12">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Default contribution rate">
+      <button type="button" data-df12="0" aria-pressed="false">No default (0%)</button>
+      <button type="button" data-df12="3" aria-pressed="true">Default 3%</button>
+      <button type="button" data-df12="8" aria-pressed="false">Default 8%</button>
+      <button type="button" data-df12="14" aria-pressed="false">Default 14%</button>
+    </div>
+    <div class="df12" id="df12" data-anim>
+      <svg viewBox="0 0 660 200" role="img" aria-label="Distribution of contribution rates"><g id="df12-g"></g></svg>
+      <div class="legend"><span><i style="background:var(--warm)"></i>Stayed at the default</span><span><i style="background:var(--accent)"></i>Chose for themselves</span></div>
+      <div class="df12-out" id="df12-out"></div>
+      <p class="df12-msg" id="df12-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: each person's desired rate lies between 2% and 14%; the six in ten who never change the default are chosen at random, unrelated to the rate they want. "Default 14%" is higher than most people want, to show that a default set too high also pulls people away from their own intentions.</figcaption>
+</figure>
+<style>
+.df12 svg{width:100%;height:auto;display:block}
+.df12-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.df12-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.df12-out span{display:block;font-size:11.5px;color:var(--faint)} .df12-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.df12-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.df12-out{grid-template-columns:1fr}.df12 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('df12'+id);let s=1202;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};
+  const W=Array.from({length:100},()=>Math.max(2,Math.min(14,Math.round(8+2.6*(r()+r()+r()-1.5)*2)))),stick=Array.from({length:100},()=>r()<.6);
+  let d=3;const X0=40,X1=650,YT=10,YB=168,bw=(X1-X0)/16;
+  function draw(){const v=W.map((w,i)=>stick[i]?d:w),cnt=Array.from({length:16},()=>[0,0]);v.forEach((x,i)=>cnt[x][stick[i]?0:1]++);
+    const mx=Math.max(20,...cnt.map(c=>c[0]+c[1])),y=n=>YB-n/mx*(YB-YT);
+    let h=[0,.5,1].map(k=>`<line x1="${X0}" x2="${X1}" y1="${y(mx*k)}" y2="${y(mx*k)}" class="s-line"/><text x="${X0-6}" y="${y(mx*k)+4}" text-anchor="end" font-size="11" class="t-faint">${Math.round(mx*k)}</text>`).join('');
+    cnt.forEach(([a,b],x)=>{const bx=X0+x*bw+3;h+=`<rect x="${bx}" y="${y(b)}" width="${bw-6}" height="${YB-y(b)}" fill="var(--accent)"/><rect x="${bx}" y="${y(a+b)}" width="${bw-6}" height="${YB-y(a)}" fill="var(--warm)"/>`;if(x%2===0)h+=`<text x="${bx+(bw-6)/2}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${x}%</text>`;});
+    $('-g').innerHTML=h;const avg=v.reduce((a,b)=>a+b,0)/100,low=v.filter((x,i)=>x<W[i]).length,off=v.filter((x,i)=>x!==W[i]).length;
+    $('-out').innerHTML=[['Average contribution rate',avg.toFixed(1)+'%'],['Saving less than they want',low+' people'],['Away from their own intention',off+' people']].map(([a,b])=>`<div><span>${a}</span><b>${b}</b></div>`).join('');
+    $('-msg').textContent=d===0?`No default means a default of saving nothing: the six in ten who never act save nothing at all, and the average is only ${avg.toFixed(1)}%.`:d===3?`A 3% default gets everyone saving, but most of those who stay at the default save less than they want, and the average is only ${avg.toFixed(1)}%.`:d===8?`With the default set near what most people would choose after thinking it through, the average is ${avg.toFixed(1)}%, and the fewest people save too little.`:`A 14% default is higher than most people want: the average saved is higher, but ${off} people are pulled away from their own intention, and some will find their current living too tight.`;}
+  const bs=[...document.querySelectorAll('[data-df12]')];
+  function set(x){d=x;bs.forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.df12===x)));draw();}
+  bs.forEach(b=>b.addEventListener('click',()=>set(+b.dataset.df12)));
+  $('').addEventListener('anim-in',()=>{[0,3,8,14].forEach((x,i)=>setTimeout(()=>set(x),300+i*2000));});
+  draw();
+})();
+</script>

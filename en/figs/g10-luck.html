@@ -1,0 +1,34 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">A few years cannot separate skill from luck</p><p class="figsub">A hundred managers have no skill at all; whatever they earn above the average each year is pure luck. Drag the number of years observed to see their average excess returns; then drag the size of true skill to see how many years it takes to tell it apart.</p></div><button class="replay" type="button" data-replay="lc">Replay</button></div>
+    <div class="lc" id="lc" data-anim>
+      <svg viewBox="0 0 640 170" role="img" aria-label="Average excess returns of a hundred managers"><g id="lc-ax"></g><g id="lc-d"></g></svg>
+      <div class="lc-sl">
+        <div class="sl"><label for="lc-t">Years observed <b id="lc-tv"></b></label><input id="lc-t" type="range" min="1" max="30" step="1" value="3"></div>
+        <div class="sl"><label for="lc-a">True skill adds per year <b id="lc-av"></b></label><input id="lc-a" type="range" min="0.5" max="4" step="0.5" value="2"></div>
+      </div>
+      <p class="lc-msg" id="lc-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: each manager's yearly excess return fluctuates randomly by about 8 percentage points. Each dot is a manager's average excess return over the observation period; the dark dots are the top ten. To detect, with about 95% confidence, true skill that adds a per year, the number of years needed is roughly (2 × 8 ÷ a)².</figcaption>
+</figure>
+<style>
+.lc svg{width:100%;height:auto;display:block}
+.lc-sl{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.lc-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.lc-sl{grid-template-columns:1fr;gap:4px}.lc svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);let s=1010;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};const g=()=>{let u=0;while(!u)u=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r());};
+  const Z=Array.from({length:100},()=>Array.from({length:30},()=>8*g())),X0=40,X1=630,YM=86,x=v=>X0+(v+12)/24*(X1-X0);
+  $('lc-ax').innerHTML=`<line x1="${X0}" x2="${X1}" y1="${YM+30}" y2="${YM+30}" class="s-faint"/>`+[-12,-8,-4,0,4,8,12].map(v=>`<text x="${x(v)}" y="${YM+46}" text-anchor="middle" font-size="11" class="t-faint">${v>0?'+':''}${v}%</text>`).join('')+`<line x1="${x(0)}" x2="${x(0)}" y1="14" y2="${YM+30}" class="s-faint" stroke-dasharray="3 4"/><text x="${X1}" y="${YM+62}" text-anchor="end" font-size="11" class="t-muted">Average yearly excess over the period</text>`;
+  function draw(){const T=+$('lc-t').value,a=+$('lc-a').value,M=Z.map(z=>z.slice(0,T).reduce((p,q)=>p+q,0)/T),ord=M.map((v,i)=>[v,i]).sort((p,q)=>q[0]-p[0]),top=new Set(ord.slice(0,10).map(o=>o[1]));
+    $('lc-d').innerHTML=M.map((v,i)=>`<circle cx="${x(Math.max(-12,Math.min(12,v))).toFixed(1)}" cy="${(YM+((i*37)%50)-25).toFixed(1)}" r="4" fill="${top.has(i)?'var(--ink)':'var(--accent)'}" fill-opacity="${top.has(i)?.9:.35}"/>`).join('');
+    $('lc-tv').textContent=T+(T===1?' year':' years');$('lc-av').textContent=a+(a===1?' point':' points');const need=Math.pow(2*8/a,2),t10=ord[9][0];
+    $('lc-msg').textContent=`Over ${T} ${T===1?'year':'years'}, the top ten all average at least +${t10.toFixed(1)}% a year in excess returns, yet theirs is pure luck. Reliably detecting true skill that adds ${a} percentage ${a===1?'point':'points'} a year takes about ${Math.round(need)} years${need>40?', longer than a manager\'s career':''}.`;}
+  ['lc-t','lc-a'].forEach(k=>$(k).addEventListener('input',draw));
+  $('lc').addEventListener('anim-in',()=>{let v=1;$('lc-t').value=1;draw();const id=setInterval(()=>{v++;$('lc-t').value=v;draw();if(v>=30)clearInterval(id);},150);});
+  draw();
+})();
+</script>

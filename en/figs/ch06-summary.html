@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: use factors to see where returns come from</p><p class="figsub">Four design requirements, each tied to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="ch06summary">Replay</button></div>
+    <div class="ch06summary" id="ch06summary" data-anim><div class="ch06summary-c" style="--i:0"><em>Returns can be broken into factor exposures</em><b>Show a portfolio’s sources of return factor by factor</b><p>Tell users how much of the return comes from market, size, value and other factors, and how much is true excess return.</p></div><div class="ch06summary-c" style="--i:1"><em>Factor exposure can be replicated cheaply</em><b>Fees should match the true excess return</b><p>Only the part that remains after the factors are removed is worth paying active management fees for.</p></div><div class="ch06summary-c warn" style="--i:2"><em>Enough trials always produce false positives</em><b>Raise the bar for “newly discovered patterns”</b><p>New factors produced by AI or backtests need an economic explanation, a higher statistical threshold and out-of-sample tests.</p></div><div class="ch06summary-c warn" style="--i:3"><em>Credible factors can also lag for a long time</em><b>Explain that factor strategies may underperform for years in a row</b><p>Show users the longest historical period of underperformance before they buy, so they are not forced to give up during a slump.</p></div></div>
+  </div>
+</figure>
+<style>
+.ch06summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch06summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch06summary-c.warn{border-left-color:var(--warm)}
+.ch06summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch06summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch06summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch06summary.in .ch06summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch06summary{grid-template-columns:1fr}}
+</style>

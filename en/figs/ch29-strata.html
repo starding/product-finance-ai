@@ -1,0 +1,36 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Overall accuracy hides the critical cases</p><p class="figsub">A thousand evaluation questions drawn in proportion to actual use. Switch between overall accuracy and accuracy by case; the bar for critical cases is 99%.</p></div><button class="replay" type="button" data-replay="st2">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="View"><button type="button" data-st2="all" aria-pressed="true">Overall</button><button type="button" data-st2="s" aria-pressed="false">Stratified by case</button></div>
+    <div class="st2" id="st2" data-anim></div>
+    <p class="st2-msg" id="st2-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>Illustrative numbers. On red teaming, the organized search for inputs that cause failure, see Ganguli and colleagues (2022).</figcaption>
+</figure>
+<style>
+.st2{display:grid;gap:5px}
+.st2-r{display:grid;grid-template-columns:minmax(0,1.2fr) 56px minmax(0,1.6fr) 54px;gap:10px;align-items:center;font-size:12.5px;background:var(--quote);border-radius:8px;padding:6px 10px}
+.st2-r span:nth-child(2){color:var(--faint);font-size:11.5px;text-align:right}
+.st2-t{position:relative;height:14px;background:var(--surface);border-radius:7px;overflow:hidden}
+.st2-t i{display:block;height:100%;width:0;border-radius:7px;transition:width .6s ease}
+.st2-t s{position:absolute;top:0;bottom:0;border-left:2px dashed var(--ink);left:99%}
+.st2-r b{text-align:right;font-variant-numeric:tabular-nums}
+.st2-r.key{border-left:3px solid var(--warm)}
+.st2-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.st2-r{grid-template-columns:1fr 54px}.st2-r span:nth-child(2){display:none}.st2-t{grid-column:1/-1;grid-row:2}}
+</style>
+<script>
+(function(){
+  const S=[['Routine questions',800,.97,0],['Reading financial reports',120,.93,0],['Day of expiry',30,.70,1],['Sharp market swings',30,.73,1],['Suspensions and restructurings',10,.50,1],['Missing data',10,.40,1]];
+  const tot=S.reduce((a,s)=>a+s[1],0),acc=S.reduce((a,s)=>a+s[1]*s[2],0)/tot;
+  const box=document.getElementById('st2');
+  function set(k){document.querySelectorAll('[data-st2]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.st2===k)));
+    const R=k==='all'?[['All cases',tot,acc,0]]:S;
+    box.innerHTML=R.map(([n,c,a,key])=>`<div class="st2-r${key?' key':''}"><span>${n}</span><span>n = ${c}</span><div class="st2-t"><i data-w="${a*100}" style="background:${a>=.95?'var(--accent)':a>=.8?'var(--gold)':'var(--warm)'}"></i>${key?'<s></s>':''}</div><b>${(a*100).toFixed(1)}%</b></div>`).join('');
+    setTimeout(()=>box.querySelectorAll('.st2-t i').forEach(i=>i.style.width=i.dataset.w+'%'),40);
+    document.getElementById('st2-msg').textContent=k==='all'?`Overall accuracy is ${(acc*100).toFixed(1)}%; it looks ready to launch.`:'Stratified by case, the four critical cases score only 40% to 70% accuracy, far below the 99% bar. They make up only 8% of the evaluation questions and are almost invisible in the overall figure.';}
+  document.querySelectorAll('[data-st2]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.st2)));
+  box.addEventListener('anim-in',()=>{set('all');setTimeout(()=>set('s'),2400);});
+  set('all');
+})();
+</script>

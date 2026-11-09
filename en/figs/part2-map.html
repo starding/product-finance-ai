@@ -1,0 +1,83 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">What determines the outcome a user actually gets</p><p class="figsub">Start from the outcome the task requires and switch scenarios to see how decision biases, capacity to bear risk, and trust each change the final outcome. The corresponding chapters are below.</p></div><button class="replay" type="button" data-replay="pm2">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Scenario">
+      <button type="button" data-p2="ok" aria-pressed="true">All in place</button>
+      <button type="button" data-p2="bias" aria-pressed="false">Decision biases</button>
+      <button type="button" data-p2="cap" aria-pressed="false">Beyond what can be borne</button>
+      <button type="button" data-p2="trust" aria-pressed="false">No trust</button>
+    </div>
+    <div class="pm2" id="pm2" data-anim>
+      <svg viewBox="0 0 640 200" role="img" aria-label="Decomposition from the outcome the task requires to the actual outcome">
+        <g id="pm2-g"></g>
+      </svg>
+      <p class="pm2-msg" id="pm2-msg" aria-live="polite"></p>
+    </div>
+    <div class="pm2-cols">
+      <div class="pm2-c" style="--c:var(--accent)"><b>Task</b><span>What is to be done, and what counts as done</span><a href="ch15.html"><em>15</em>The tasks users need to accomplish</a></div>
+      <div class="pm2-c" style="--c:var(--warm)"><b>Decisions</b><span>How decisions are made, and where the biases lie</span><a href="ch16.html"><em>16</em>How users make decisions</a></div>
+      <div class="pm2-c" style="--c:var(--blue)"><b>Capacity to bear</b><span>How large a loss and how much volatility can be borne</span><a href="ch17.html"><em>17</em>What users can bear</a></div>
+      <div class="pm2-c" style="--c:var(--gold)"><b>Trust</b><span>How beliefs update with evidence</span><a href="ch18.html"><em>18</em>How users judge and trust</a></div>
+    </div>
+  </div>
+  <figcaption>Illustrative numbers; they show only the direction in which each factor acts.</figcaption>
+</figure>
+<style>
+.pm2 svg{width:100%;height:auto;display:block}
+.pm2-b{transition:y .6s ease,height .6s ease}
+.pm2-msg{font-size:14px;margin:4px 0 0;min-height:3.4em}
+.pm2-cols{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.pm2-c{border-top:3px solid var(--c);background:var(--quote);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:4px}
+.pm2-c b{font-size:14px}
+.pm2-c>span:not(.todo){font-size:12px;color:var(--muted);line-height:1.5}
+.pm2-c a,.pm2-c .todo{font-size:12.5px;border-radius:7px;padding:5px 8px;text-decoration:none;line-height:1.35;margin-top:auto}
+.pm2-c a{background:var(--surface);border:1px solid var(--accent);color:var(--ink)}
+.pm2-c a:hover{background:var(--accent-soft)}
+.pm2-c .todo{background:var(--surface);color:var(--faint);border:1px solid var(--line)}
+.pm2-c em{font-style:normal;color:var(--faint);margin-right:6px}
+@media (max-width:640px){.pm2 svg text{font-size:15px}.pm2-cols{grid-template-columns:repeat(2,1fr)}}
+</style>
+<script>
+(function(){
+  const S={
+    ok:{bias:0,cap:false,trust:true,m:'The task is clear, decisions are largely free of bias, the plan is within what the user can bear, and the user trusts the promise: the actual outcome comes close to what the task requires.'},
+    bias:{bias:28,cap:false,trust:true,m:'Decision biases such as chasing rallies and selling in slumps, trading too often and concentrating too heavily eat up part of the outcome that could have been had. This loss can be reduced by design.'},
+    cap:{bias:0,cap:true,trust:true,m:'The plan demands bearing a drawdown beyond the user\'s capacity; the user abandons the plan during the decline, and the outcome stops halfway. Capacity to bear risk is a hard constraint.'},
+    trust:{bias:0,cap:false,trust:false,m:'The user does not believe the promise, the task never begins, and the outcome is zero. Trust is a gate, not a term that can be deducted bit by bit.'}};
+  const X=[50,200,350,500],W=90,YB=170,YT=24,h=v=>v/112*(YB-YT);
+  const g=document.getElementById('pm2-g');
+  const lab=['Task requires','Decision biases','Within capacity','Actual outcome'];
+  let base=`<line x1="30" y1="${YB}" x2="620" y2="${YB}" class="s-faint"/>`;
+  lab.forEach((l,i)=>base+=`<text x="${X[i]+W/2}" y="${YB+18}" text-anchor="middle" font-size="12" class="t-ink">${l}</text>`);
+  base+=`<rect id="b0" class="pm2-b" x="${X[0]}" width="${W}" rx="4" fill="var(--accent)"/>`+
+        `<rect id="b1" class="pm2-b" x="${X[1]}" width="${W}" rx="4" fill="var(--warm)"/>`+
+        `<rect id="b2x" class="pm2-b" x="${X[2]}" width="${W}" rx="4" fill="none" stroke="var(--warm)" stroke-width="1.5" stroke-dasharray="4 3"/>`+`<rect id="b2" class="pm2-b" x="${X[2]}" width="${W}" rx="4" fill="var(--blue)"/>`+`<text id="t2x" x="${X[2]+W/2}" text-anchor="middle" font-size="12" class="t-warm"></text>`+`<text id="t2" x="${X[2]+W/2}" text-anchor="middle" font-size="11" fill="var(--blue)"></text>`+
+        `<line id="cap" x1="${X[2]-10}" x2="${X[2]+W+10}" stroke="var(--blue)" stroke-width="2" stroke-dasharray="5 4"/>`+
+        `<rect id="b3" class="pm2-b" x="${X[3]}" width="${W}" rx="4" fill="var(--ink)"/>`+
+        `<text id="t1" x="${X[1]+W/2}" text-anchor="middle" font-size="12" class="t-warm"></text>`+
+        `<text id="t3" x="${X[3]+W/2}" text-anchor="middle" font-size="13" font-weight="700" class="t-ink"></text>`+
+        `<g id="gate" opacity="0"><rect x="${X[3]-6}" y="${YT}" width="${W+12}" height="${YB-YT}" rx="6" fill="none" stroke="var(--gold)" stroke-width="2" stroke-dasharray="6 4"/><text x="${X[3]+W/2}" y="${YB-60}" text-anchor="middle" font-size="12" fill="var(--gold)">Gate closed</text></g>`;
+  g.innerHTML=base;
+  const $=id=>document.getElementById(id);
+  const setR=(id,top,bot)=>{const r=$(id);r.style.y=(YB-h(top))+'px';r.style.height=Math.max(0,h(top)-h(bot))+'px';};
+  function set(k,anim){document.querySelectorAll('[data-p2]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.p2===k)));
+    const s=S[k];let v=100-s.bias;
+    if(anim){['b0','b1','b2','b2x','b3'].forEach(id=>setR(id,0,0));}
+    setTimeout(()=>{
+      setR('b0',100,0);
+      setR('b1',100,100-s.bias);$('t1').setAttribute('y',YB-h(100)-6);$('t1').textContent=s.bias?'－'+s.bias:'Near 0';
+      const capV=s.cap?45:110;setR('b2',Math.min(v,capV),0);
+      if(s.cap){setR('b2x',v,capV);$('t2x').setAttribute('y',YB-h((v+capV)/2)+4);$('t2x').textContent='Abandoned';}else{setR('b2x',0,0);$('t2x').textContent='';}
+      $('cap').setAttribute('y1',YB-h(capV));$('cap').setAttribute('y2',YB-h(capV));
+      $('t2').setAttribute('y',YB-h(capV)-5);$('t2').textContent='Capacity limit';
+      if(s.cap)v=Math.min(v,capV);
+      if(!s.trust)v=0;
+      setR('b3',v,0);$('t3').setAttribute('y',YB-h(v)-6);$('t3').textContent=v;
+      $('gate').setAttribute('opacity',s.trust?0:1);
+      $('pm2-msg').textContent=s.m;
+    },anim?40:0);}
+  document.querySelectorAll('[data-p2]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.p2,false)));
+  $('pm2').addEventListener('anim-in',()=>set('ok',true));
+  set('ok',false);
+})();
+</script>

@@ -1,0 +1,41 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">金融保险行业：26 个职业的工作构成与上限（作者估算）</p><p class="figsub">左侧是工作时间按事务类别的构成，右侧是 Agent 条件下整份工作的放大倍数上限。切换排序，看上限的高低与什么有关。</p></div><button class="replay" type="button" data-replay="fo">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="排序">
+      <button type="button" data-fos="g" aria-pressed="true">按子行业</button>
+      <button type="button" data-fos="c" aria-pressed="false">按上限</button>
+    </div>
+    <div class="legend" id="fo-lg"></div>
+    <div class="fo" id="fo" data-anim></div>
+    <p class="fo-msg">审核、记录与分析类职业上限约 3～3.7 倍；直接决定资产处分或面对客户的职业，如基金经理、理财顾问、精算师与核保员，只有 1.6～1.9 倍。</p>
+  </div>
+  <figcaption>作者估算：O*NET 31.0 中 26 个金融保险职业的任务按（重要度 − 1）× 频次加权；金融与投资分析师、金融风险专员没有任务评分，按任务等权计算。方法与数据见<a href="estimates.html">附录：作者估算的方法与数据</a>。</figcaption>
+</figure>
+<style>
+.fo{display:grid;gap:2px;margin-top:8px}
+.fo-h{font-size:12px;color:var(--faint);margin:8px 0 2px}
+.fo-r{display:grid;grid-template-columns:9em 1fr 92px;gap:10px;align-items:center;font-size:12.5px}
+.fo-bar{display:flex;height:12px;border-radius:3px;overflow:hidden;background:var(--quote)}
+.fo-bar i{display:block;height:100%;transform-origin:left;transform:scaleX(0);transition:transform .6s}
+.fo.in .fo-bar i{transform:none}
+.fo-c{position:relative;height:12px}
+.fo-c i{position:absolute;left:0;top:0;height:100%;border-radius:3px;background:var(--accent);transition:width .7s}
+.fo-c span{position:absolute;right:0;top:-2px;font-size:11.5px;font-variant-numeric:tabular-nums;background:var(--card);padding-left:3px}
+.fo-msg{font-size:14px;margin:10px 0 0}
+@media (max-width:640px){.fo-r{grid-template-columns:6.8em 1fr 70px;font-size:11.5px}}
+</style>
+<script>
+(function(){
+  const D=/*DATA:fin*/[["银行与信贷","贷款专员",0.5288,{"2":0.321,"4d":0.493,"5":0.133,"1":0.053}],["银行与信贷","信用分析师",0.7323,{"4d":0.838,"2":0.12,"5":0.042}],["银行与信贷","信贷咨询师",0.5499,{"4d":0.496,"2":0.463,"5":0.041}],["银行与信贷","贷款面谈与经办员",0.651,{"2":0.252,"4d":0.605,"5":0.144}],["银行与信贷","授信审核员",0.6652,{"4d":0.721,"2":0.167,"3":0.065,"5":0.047}],["银行与信贷","银行柜员",0.6908,{"4d":0.591,"5":0.263,"2":0.139,"3":0.007}],["银行与信贷","账款催收员",0.5488,{"4d":0.291,"2":0.383,"5":0.306,"3":0.02}],["证券与资产管理","投资基金经理",0.4716,{"5":0.278,"4d":0.4,"2":0.205,"4s":0.05,"1":0.066}],["证券与资产管理","金融与投资分析师",0.5635,{"2":0.346,"4d":0.577,"5":0.038,"1":0.038}],["证券与资产管理","金融量化分析师",0.6769,{"4d":0.774,"2":0.226}],["证券与资产管理","金融风险专员",0.6304,{"4d":0.75,"2":0.217,"1":0.033}],["证券与资产管理","个人理财顾问",0.4428,{"2":0.668,"4d":0.285,"5":0.047}],["证券与资产管理","经纪人",0.5812,{"5":0.135,"4d":0.504,"2":0.361}],["证券与资产管理","证券经纪业务文员",0.6569,{"2":0.245,"4d":0.693,"3":0.061}],["保险","精算师",0.3844,{"4d":0.228,"5":0.397,"2":0.303,"1":0.073}],["保险","核保员",0.449,{"4d":0.465,"5":0.364,"2":0.171}],["保险","保险销售代理",0.5294,{"2":0.469,"4d":0.349,"5":0.059,"1":0.081,"4s":0.043}],["保险","理赔调查员",0.5004,{"4d":0.429,"4s":0.137,"5":0.077,"2":0.357}],["保险","车险定损员",0.5624,{"4d":0.785,"4s":0.164,"2":0.051}],["保险","理赔与保单处理文员",0.646,{"4d":0.626,"3":0.059,"2":0.214,"5":0.101}],["各子行业共有的职能","财务经理",0.5319,{"2":0.312,"4d":0.555,"5":0.133}],["各子行业共有的职能","合规专员",0.4505,{"2":0.31,"4d":0.286,"5":0.324,"4s":0.078,"1":0.003}],["各子行业共有的职能","反欺诈调查与分析师",0.4919,{"4d":0.454,"2":0.193,"4s":0.223,"5":0.045,"1":0.064,"3":0.021}],["各子行业共有的职能","会计与审计",0.6406,{"4d":0.68,"5":0.088,"4s":0.028,"2":0.204}],["各子行业共有的职能","客户服务代表",0.6383,{"2":0.565,"4d":0.327,"5":0.108}],["各子行业共有的职能","软件开发人员",0.5571,{"4d":0.562,"2":0.438}]]/*END*/;
+  const G=[['4d','信息·数字可得','var(--accent)'],['4s','信息·须现场感知','var(--accent-soft)'],['2','他人身心与关系','var(--warm)'],['5','权利与义务','var(--blue)'],['1','本人判断与决定','#8a5a9e'],['3','物与环境','var(--gray-mark)']];
+  document.getElementById('fo-lg').innerHTML=G.map(([k,n,c])=>`<span><i style="background:${c}"></i>${n}</span>`).join('');
+  const box=document.getElementById('fo'),cap=p=>1/(1-p),x=v=>(v-1)/3*100;
+  function row(d){const tot=Object.values(d[3]).reduce((a,b)=>a+b,0),c=cap(d[2]);
+    return `<div class="fo-r"><span>${d[1]}</span><div class="fo-bar">${G.map(([k,,col])=>`<i style="width:${(d[3][k]||0)/tot*100}%;background:${col}"></i>`).join('')}</div><div class="fo-c"><i style="width:${x(c)*.62}%"></i><span>${c.toFixed(1)} 倍</span></div></div>`;}
+  function draw(s){document.querySelectorAll('[data-fos]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.fos===s)));
+    if(s==='c'){box.innerHTML=D.slice().sort((a,b)=>b[2]-a[2]).map(row).join('');return;}
+    const gs=[...new Set(D.map(d=>d[0]))];box.innerHTML=gs.map(g=>`<div class="fo-h">${g}</div>`+D.filter(d=>d[0]===g).sort((a,b)=>b[2]-a[2]).map(row).join('')).join('');}
+  document.querySelectorAll('[data-fos]').forEach(b=>b.addEventListener('click',()=>draw(b.dataset.fos)));
+  draw('g');
+})();
+</script>

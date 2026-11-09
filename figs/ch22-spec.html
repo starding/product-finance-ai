@@ -1,0 +1,42 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">说不清楚的代价在后面</p><p class="figsub">同一个需求：比较两只基金。切换交代方式，看来回几轮、总共花了多少时间。</p></div><button class="replay" type="button" data-replay="sp">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="交代方式">
+      <button type="button" data-sp="v" aria-pressed="true">只说“帮我看看”</button>
+      <button type="button" data-sp="c" aria-pressed="false">写明验收标准</button>
+    </div>
+    <div class="sp" id="sp" data-anim>
+      <div class="sp-req" id="sp-req"></div>
+      <div class="sp-rounds" id="sp-rounds"></div>
+      <div class="sp-tot"><span>委托人总共花的时间</span><b id="sp-tot"></b></div>
+    </div>
+  </div>
+  <figcaption>示意数字。需求错误越晚发现、修正代价越高，见 Boehm 与 Basili（2001）。</figcaption>
+</figure>
+<style>
+.sp-req{background:var(--quote);border-radius:8px;padding:10px 12px;font-size:13.5px;line-height:1.7;min-height:4.6em}
+.sp-req em{font-style:normal;font-size:11.5px;color:var(--faint);display:block}
+.sp-rounds{display:grid;gap:5px;margin:10px 0}
+.sp-r{display:grid;grid-template-columns:56px 1fr 64px;gap:10px;align-items:center;font-size:13px;opacity:0;transform:translateX(-8px);transition:opacity .35s,transform .35s;transition-delay:calc(var(--i)*.35s)}
+.sp-r.on{opacity:1;transform:none}
+.sp-r span{color:var(--faint);font-size:12px}
+.sp-r p{margin:0;border-radius:6px;padding:5px 9px;background:var(--surface);border:1px solid var(--line)}
+.sp-r.bad p{border-color:var(--warm);background:var(--warm-soft)}
+.sp-r.ok p{border-color:var(--accent);background:var(--accent-soft)}
+.sp-r b{text-align:right;font-variant-numeric:tabular-nums}
+.sp-tot{display:flex;align-items:baseline;gap:10px}
+.sp-tot span{font-size:12px;color:var(--faint)} .sp-tot b{font-size:24px;font-variant-numeric:tabular-nums}
+</style>
+<script>
+(function(){
+  const D={v:['“帮我看看这两只基金怎么样。”',[['第 1 轮','交回一份泛泛的介绍，不是想要的',8,'bad'],['第 2 轮','补充“比较费用”，交回的期限不对',8,'bad'],['第 3 轮','补充“近三年、含最大回撤”，口径与平台不一致',10,'bad'],['第 4 轮','统一口径后交回，逐项核对',12,'ok']]],
+    c:['“比较甲、乙两只基金：近三年的管理费、托管费与最大回撤，数据截至上月末，注明来源；以表格交回，每个数字可点开出处。”',[['说明','多花几分钟写清对象、期限、指标与格式',4,''],['第 1 轮','交回的表格符合要求，按清单逐项核对',6,'ok']]]};
+  const $=id=>document.getElementById(id);
+  function set(k){document.querySelectorAll('[data-sp]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.sp===k)));const [q,R]=D[k];
+    $('sp-req').innerHTML=`<em>交代的内容</em>${q}`;$('sp-rounds').innerHTML=R.map(([a,b,m,c],i)=>`<div class="sp-r ${c}" style="--i:${i}"><span>${a}</span><p>${b}</p><b>${m} 分钟</b></div>`).join('');
+    setTimeout(()=>document.querySelectorAll('.sp-r').forEach(e=>e.classList.add('on')),40);$('sp-tot').textContent=R.reduce((s,r)=>s+r[2],0)+' 分钟';}
+  document.querySelectorAll('[data-sp]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.sp)));
+  $('sp').addEventListener('anim-in',()=>{set('v');setTimeout(()=>set('c'),3200);});
+  set('v');
+})();
+</script>

@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Whoever pays compensation does the checking</p><p class="figsub">A scribe deployed by one operator works for forty households each year. Switch who bears the loss from mistakes, and see how much effort the operator is willing to spend checking the scribe, how many mistakes occur, and how much principals pay in extra fees and lose without compensation each year.</p></div><button class="replay" type="button" data-replay="vc15">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Who bears the loss">
+      <button type="button" data-vc15="self" aria-pressed="true">Principal bears it</button>
+      <button type="button" data-vc15="clerk" aria-pressed="false">Scribe is liable</button>
+      <button type="button" data-vc15="op" aria-pressed="false">Operator liable and insured</button>
+    </div>
+    <div class="vc15" id="vc15" data-anim>
+      <div class="vc15-bars" id="vc15-b"></div>
+      <p class="vc15-msg" id="vc15-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the scribe handles 50 matters a year for each household; each has a 2% × e^(−checking) probability of a mistake, and each mistake costs 1 portion on average. Each unit of checking costs the operator 10 portions, and the operator chooses the level of checking that minimizes "cost of checking + the amount it has to pay". When it insures, the premium equals the expected compensation and, together with the cost of checking, is built into the fees charged to households (following the idea in Sykes, 1984). Amounts are in portions.</figcaption>
+</figure>
+<style>
+.vc15-bars{display:grid;gap:10px}
+.vc15-r{display:grid;grid-template-columns:9em 1fr 5em;gap:10px;align-items:center;font-size:12.5px}
+.vc15-r div{height:20px;background:var(--quote);border-radius:5px;overflow:hidden}
+.vc15-r i{display:block;height:100%;transition:width .6s;border-radius:5px}
+.vc15-r b{text-align:right;font-variant-numeric:tabular-nums}
+.vc15-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.vc15-r{grid-template-columns:1fr 4.5em}.vc15-r span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('vc15'+id),N=40,A=50,L=1,C=10;let mode='self';
+  function calc(){const liable=mode==='op',k=liable?Math.max(0,Math.log(.02*N*A*L/C)):0,e=.02*Math.exp(-k),errs=N*A*e,loss=errs*L;
+    return {k,errs,fee:liable?(k*C+loss)/N:0,unc:liable?0:loss/N};}
+  function draw(){const S=calc(),B=[['Effort spent checking',S.k,3,'var(--accent)',S.k.toFixed(2)],['Mistakes per year',S.errs,45,'var(--warm)',S.errs.toFixed(0)],['Extra fees per household per year',S.fee,1.2,'var(--blue)',S.fee.toFixed(2)],['Uncompensated loss per household per year',S.unc,1.2,'var(--warm)',S.unc.toFixed(2)]];
+    $('-b').innerHTML=B.map(([n,v,m,c,t])=>`<div class="vc15-r"><span>${n}</span><div><i style="width:${Math.min(100,v/m*100)}%;background:${c}"></i></div><b>${t}</b></div>`).join('');
+    $('-msg').textContent={self:'Principal bears it: the operator pays nothing when mistakes occur, so it has no reason to spend extra effort checking. There are 40 mistakes a year, and each household absorbs a loss of 1 portion a year.',clerk:'Scribe is liable: it is ordered to pay compensation, but it owns nothing, so the outcome is exactly the same as when the principal bears the loss. Liability in name only achieves nothing.',op:`Operator liable and insured: the operator decides how much to check based on what it would have to pay, and mistakes fall to ${S.errs.toFixed(0)} a year. The cost of checking and the premium are built into fees: each household pays ${S.fee.toFixed(2)} portions more a year, and in return every loss is compensated. The guarantee is not free.`}[mode];}
+  const bs=[...document.querySelectorAll('[data-vc15]')];
+  function set(m){mode=m;bs.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.vc15===m)));draw();}
+  bs.forEach(b=>b.addEventListener('click',()=>set(b.dataset.vc15)));
+  $('').addEventListener('anim-in',()=>{['self','clerk','op'].forEach((m,i)=>setTimeout(()=>set(m),300+i*2200));});
+  draw();
+})();
+</script>

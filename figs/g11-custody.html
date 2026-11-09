@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">托管：资产不在经理手里</p><p class="figsub">切换有没有独立的保管人，看经理能走的几条歪路中，哪些被堵住了。</p></div><button class="replay" type="button" data-replay="cu">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="托管">
+      <button type="button" data-cu="0" aria-pressed="true">经理自己保管</button>
+      <button type="button" data-cu="1" aria-pressed="false">独立的保管人</button>
+    </div>
+    <div class="cu" id="cu" data-anim>
+      <div class="cu-flow" id="cu-flow"></div>
+      <div class="cu-ths" id="cu-ths"></div>
+    </div>
+  </div>
+  <figcaption>示意。独立托管不能保证经理判断正确，只能保证资产还在、数字真实。</figcaption>
+</figure>
+<style>
+.cu-flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:6px;align-items:center;margin-bottom:12px}
+.cu-n{background:var(--quote);border-radius:10px;padding:10px;text-align:center;font-size:13.5px}
+.cu-n b{display:block;font-size:14.5px} .cu-n span{font-size:11.5px;color:var(--muted)}
+.cu-n.hold{background:var(--accent-soft)}
+.cu-ar{font-size:11.5px;color:var(--muted);text-align:center;line-height:1.4}
+.cu-ths{display:grid;gap:6px}
+.cu-t{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;font-size:13.5px;background:var(--quote);border-radius:8px;padding:8px 12px;opacity:0;transform:translateX(-6px);transition:opacity .4s,transform .4s;transition-delay:calc(var(--i)*.2s)}
+.cu.in .cu-t{opacity:1;transform:none}
+.cu-t em{font-style:normal;font-size:12px;padding:2px 9px;border-radius:999px}
+.cu-t em.ok{background:var(--accent-soft);color:var(--accent)} .cu-t em.no{background:var(--warm-soft);color:var(--warm)}
+@media (max-width:640px){.cu-flow{grid-template-columns:1fr;}.cu-ar{transform:none}}
+</style>
+<script>
+(function(){
+  const T=[['把船股卖掉，粮食留给自己','拿不到船股，只能下指令'],['报告虚假的数字','保管人直接向委托人报告'],['用新委托的粮食支付老委托人','每户名下的船股由保管人逐户记账'],['买了亏本的船','仍可能发生：托管不保证判断正确']];
+  const box=document.getElementById('cu');
+  function set(k){document.querySelectorAll('[data-cu]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.cu===k)));
+    document.getElementById('cu-flow').innerHTML=k?`<div class="cu-n"><b>委托人</b><span>看保管人的报告</span></div><div class="cu-ar">← 直接报告<br>交出船股 →</div><div class="cu-n hold"><b>保管人</b><span>握着船股</span></div><div class="cu-ar">← 下指令</div><div class="cu-n"><b>经理</b><span>只做决定</span></div>`:`<div class="cu-n"><b>委托人</b><span>只听经理说</span></div><div class="cu-ar">← 经理报告<br>交出船股 →</div><div class="cu-n hold"><b>经理</b><span>握着船股，也做决定</span></div><div class="cu-ar"></div><div class="cu-n" style="opacity:.3"><b>保管人</b><span>没有</span></div>`;
+    document.getElementById('cu-ths').innerHTML=T.map(([a,b],i)=>`<div class="cu-t" style="--i:${i}"><span>${a}${k?'：'+b:''}</span><em class="${k&&i<3?'ok':'no'}">${k&&i<3?'堵住了':'可以做到'}</em></div>`).join('');box.classList.remove('in');void box.offsetWidth;box.classList.add('in');}
+  document.querySelectorAll('[data-cu]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.cu)));
+  box.addEventListener('anim-in',()=>{set(0);setTimeout(()=>set(1),2600);});
+  set(0);box.classList.remove('in');
+})();
+</script>

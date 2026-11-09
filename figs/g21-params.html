@@ -1,0 +1,36 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">一份约定的五个部分</p><p class="figsub">点选约定的一个部分，看这位村民的约定里写了什么，以及缺了它会怎样。</p></div><button class="replay" type="button" data-replay="pa21">重播</button></div>
+    <div class="pa21" id="pa21" data-anim>
+      <div class="pa21-t" id="pa21-t"></div>
+      <div class="pa21-d" id="pa21-d" aria-live="polite"></div>
+    </div>
+  </div>
+  <figcaption>示意：约定的内容为虚构的例子。</figcaption>
+</figure>
+<style>
+.pa21-t{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.pa21-t button{font:inherit;cursor:pointer;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:8px 6px;font-size:13px;color:var(--ink);opacity:0;transform:translateY(6px);transition:opacity .35s,transform .35s,border-color .3s;transition-delay:calc(var(--i)*.15s)}
+.pa21.in .pa21-t button{opacity:1;transform:none}
+.pa21-t button.sel{border-color:var(--accent);color:var(--accent)}
+.pa21-d{display:grid;grid-template-columns:1.3fr 1fr;gap:8px;margin-top:10px}
+.pa21-d div{border-radius:9px;padding:10px 12px;font-size:13.5px;line-height:1.65}
+.pa21-d div:first-child{background:var(--bg);border:1px solid var(--line)} .pa21-d div:last-child{background:var(--warm-soft)}
+.pa21-d span{display:block;font-size:11.5px;color:var(--faint)}
+@media (max-width:640px){.pa21-t{grid-template-columns:repeat(3,1fr)}.pa21-d{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const P=[['目标','应急账户留半年收入；盖房账户五年后达到 1.2 年收入；养老账户 60 岁时达到八年收入。','书记员不知道往哪里走，只能追求“收益高”，而这未必是他要的。'],
+    ['边界','盖房账户船股不超过 20%，养老账户不超过 100%；任一账户一年跌幅超过 15% 即停下来问他；费用每年不超过 0.3%；不买借钱放大的产品。','书记员不知道不能走到哪里，一次大的偏离就可能毁掉一个目标。'],
+    ['规则','每月发薪后存入 20%；每季度检查一次，偏离约定比例超过五个百分点就调回。','平时的每一件小事都要请示，他很快就不再回复。'],
+    ['例外','遇到约定未写明、且做了不能挽回的事，等他回来；他的收入、家庭或目标变化时，先暂停调整，回来问他。','写不到的情形里，书记员只能自作主张。'],
+    ['期限与撤回','约定一年复核一次；他可以随时撤回全部或部分授权，撤回之后书记员只能看账、不能下单。','约定一旦定下就收不回，他失去了最后的控制。']];
+  const t=document.getElementById('pa21-t'),d=document.getElementById('pa21-d');
+  t.innerHTML=P.map((p,i)=>`<button type="button" style="--i:${i}">${p[0]}</button>`).join('');const bs=[...t.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));d.innerHTML=`<div><span>他的约定里写着</span>${P[i][1]}</div><div><span>缺了它</span>${P[i][2]}</div>`;}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('pa21').addEventListener('anim-in',()=>{[0,1,2,3,4].forEach((i,k)=>setTimeout(()=>set(i),1200+k*1800));});
+  set(0);
+})();
+</script>

@@ -1,0 +1,62 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">What determines the amplification factor</p><p class="figsub">A task that takes 100 minutes to do yourself. Switch scenarios to see what makes up the effort the principal must still put in after handing it to an agent, and the resulting amplification factor. The corresponding chapters are below.</p></div><button class="replay" type="button" data-replay="pm3">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Scenario">
+      <button type="button" data-p3="ideal" aria-pressed="true">Ideal case</button>
+      <button type="button" data-p3="scope" aria-pressed="false">Narrow scope</button>
+      <button type="button" data-p3="check" aria-pressed="false">Costly checking</button>
+      <button type="button" data-p3="err" aria-pressed="false">Frequent errors</button>
+    </div>
+    <div class="pm3" id="pm3" data-anim>
+      <div class="pm3-row"><span>Doing it yourself</span><div class="pm3-t"><i style="width:100%;background:var(--faint)"></i></div><b>100 min</b></div>
+      <div class="pm3-row"><span>After handing over</span><div class="pm3-t" id="pm3-st"></div><b id="pm3-tot"></b></div>
+      <div class="legend"><span><i style="background:var(--blue)"></i>Portion not applicable</span><span><i style="background:var(--gold)"></i>Specifying and checking</span><span><i style="background:var(--warm)"></i>Rework after errors</span></div>
+      <div class="pm3-x"><span>Amplification factor</span><b id="pm3-x"></b></div>
+      <p class="pm3-msg" id="pm3-msg" aria-live="polite"></p>
+    </div>
+    <div class="pm3-cols">
+      <div class="pm3-c" style="--c:var(--ink)"><b>Overview</b><span>The gap between theory and measurement</span><a href="ch19.html"><em>19</em>Amplification factor: theory and measurement</a></div>
+      <div class="pm3-c" style="--c:var(--blue)"><b>Portion not applicable</b><span>Which tasks can be handed over</span><a href="ch20.html"><em>20</em>Which tasks can be handed to AI</a></div>
+      <div class="pm3-c" style="--c:var(--warm)"><b>Rework after errors</b><span>Where capability comes from and where it fails</span><a href="ch21.html"><em>21</em>Where capability comes from and where it fails</a></div>
+      <div class="pm3-c" style="--c:var(--gold)"><b>Specifying and checking</b><span>Whether results can be verified easily</span><a href="ch22.html"><em>22</em>Verifiability: the cost of checking</a></div>
+      <div class="pm3-c" style="--c:var(--accent)"><b>Constraint</b><span>Market efficiency and actual behaviour</span><a href="ch23.html"><em>23</em>Constraints specific to finance</a></div>
+    </div>
+  </div>
+  <figcaption>Illustrative numbers; they show only the direction in which each term acts.</figcaption>
+</figure>
+<style>
+.pm3-row{display:grid;grid-template-columns:96px 1fr 76px;gap:10px;align-items:center;font-size:13px;margin:6px 0}
+.pm3-row>span{color:var(--faint);font-size:12px}
+.pm3-row b{text-align:right;font-variant-numeric:tabular-nums}
+.pm3-t{display:flex;height:22px;background:var(--quote);border-radius:5px;overflow:hidden}
+.pm3-t i{display:block;height:100%;transition:width .6s ease}
+.pm3-x{display:flex;align-items:baseline;gap:10px;margin-top:8px}
+.pm3-x span{font-size:12px;color:var(--faint)} .pm3-x b{font-size:26px;font-variant-numeric:tabular-nums}
+.pm3-msg{font-size:14px;margin:4px 0 0;min-height:3.4em}
+.pm3-cols{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:10px}
+.pm3-c{border-top:3px solid var(--c);background:var(--quote);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:4px}
+.pm3-c b{font-size:13.5px}
+.pm3-c>span:not(.todo){font-size:12px;color:var(--muted);line-height:1.5}
+.pm3-c a,.pm3-c .todo{font-size:12.5px;border-radius:7px;padding:5px 8px;text-decoration:none;line-height:1.35;margin-top:auto}
+.pm3-c a{background:var(--surface);border:1px solid var(--accent);color:var(--ink)}
+.pm3-c a:hover{background:var(--accent-soft)}
+.pm3-c .todo{background:var(--surface);color:var(--faint);border:1px solid var(--line)}
+.pm3-c em{font-style:normal;color:var(--faint);margin-right:6px}
+@media (max-width:640px){.pm3-cols{grid-template-columns:repeat(2,1fr)}.pm3-row{grid-template-columns:76px 1fr 64px}}
+</style>
+<script>
+(function(){
+  const S={ideal:[0,8,0,'The agent can do the whole task; the principal only specifies it and spot-checks, with almost no rework. This is the theoretical upper limit, which can exceed tenfold.'],
+    scope:[70,6,0,'The agent can do only 30% of the task, and the remaining 70% must still be done by the principal. Even if the agent is fast and accurate, the amplification factor is held to about 1.3×: the applicable share sets the upper limit.'],
+    check:[0,40,0,'The result is hard to verify, and the principal spends 40 minutes checking it item by item: the amplification factor falls to 2.5×. The cost of checking often matters more than the speed of generation.'],
+    err:[0,10,45,'The agent makes frequent errors, and finding and fixing them takes another 45 minutes: the amplification factor falls to 1.8×. With a few more errors, handing the task over would cost more effort than doing it yourself.']};
+  const C=['var(--blue)','var(--gold)','var(--warm)'],st=document.getElementById('pm3-st');
+  st.innerHTML=C.map(c=>`<i style="background:${c};width:0"></i>`).join('');const is=[...st.children];
+  function set(k){document.querySelectorAll('[data-p3]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.p3===k)));
+    const v=S[k],tot=v[0]+v[1]+v[2];setTimeout(()=>is.forEach((e,i)=>e.style.width=v[i]+'%'),40);
+    document.getElementById('pm3-tot').textContent=tot+' min';document.getElementById('pm3-x').textContent=(100/tot).toFixed(1)+'×';document.getElementById('pm3-msg').textContent=v[3];}
+  document.querySelectorAll('[data-p3]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.p3)));
+  document.getElementById('pm3').addEventListener('anim-in',()=>{['ideal','scope','check','err','ideal'].forEach((k,i)=>setTimeout(()=>set(k),i*2200));});
+  set('ideal');
+})();
+</script>

@@ -1,0 +1,33 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">三部分与三个词</p><p class="figsub">点选一个词，看三部分的推演各自为它做了什么。</p></div><button class="replay" type="button" data-replay="er">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="词">
+      <button type="button" data-er="0" aria-pressed="true">可得</button>
+      <button type="button" data-er="1" aria-pressed="false">可信</button>
+      <button type="button" data-er="2" aria-pressed="false">便宜</button>
+    </div>
+    <div class="er" id="er" data-anim><div class="er-g" id="er-g"></div><p class="er-msg" id="er-msg" aria-live="polite"></p></div>
+  </div>
+</figure>
+<style>
+.er-g{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.er-c{background:var(--quote);border-radius:10px;padding:10px 12px;font-size:13.5px;line-height:1.6;border-top:4px solid var(--c);opacity:0;transform:translateY(6px);transition:opacity .4s,transform .4s;transition-delay:calc(var(--i)*.2s)}
+.er.in .er-c{opacity:1;transform:none}
+.er-c em{display:block;font-style:normal;font-size:11.5px;color:var(--faint)}
+.er-c b{display:block;font-size:12px;margin-top:4px;color:var(--c)}
+.er-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.er-g{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const W=[[['第一部分','储蓄、借贷、货币、保险、银行、股份与市场，让原本换不到的人换到了对未来的索取权。','长出了制度'],['第二部分','研究与比较几乎免费，委托的门槛下降，专属的安排不再只属于大户；核对与担责决定了门槛的下限。','放松'],['第三部分','从一个人的目标出发，三本账让每个目标都有自己的安排。','落到产品']],
+    [['第一部分','承诺、托管、披露、适当性与监管，让索取权在将来兑现。','长出了制度'],['第二部分','代理赔不起、可以换名字、彼此相像、在关键时刻在场：担保、记录与防线的要求反而收紧。','收紧'],['第三部分','五个部分中有四个在回答它：约定与授权、可核对的记录、上限确认与赔付、信任的建立路径。','落到产品']],
+    [['第一部分','分散、指数与默认选项，让换取的成本降下来。','长出了制度'],['第二部分','认知劳动几乎免费，费用、失误与执行的成本大幅下降；时间、系统风险与不可逆不变。','放松，但有下限'],['第三部分','承诺费用的上限，并把节省下来的成本交还给用户。','落到产品']]];
+  const M=['可得：第二部分让它向前跨了一大步，第三部分把它落到每一个人的目标上。','可信：在认知劳动几乎免费的世界里，它是最稀缺的一样，产品的大部分都在回答它。','便宜：会随认知劳动的价格自然到来，但时间、系统风险与不可逆的损失给它设了下限。'];
+  const C=['var(--accent)','var(--warm)','var(--blue)'],g=document.getElementById('er-g'),m=document.getElementById('er-msg'),bs=[...document.querySelectorAll('[data-er]')];
+  function set(k){bs.forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.er===k)));g.innerHTML=W[k].map(([p,t,tag],i)=>`<div class="er-c" style="--i:${i};--c:${C[k]}"><em>${p}</em>${t}<b>${tag}</b></div>`).join('');m.textContent=M[k];}
+  bs.forEach(b=>b.addEventListener('click',()=>set(+b.dataset.er)));
+  document.getElementById('er').addEventListener('anim-in',()=>{[0,1,2].forEach((k,i)=>setTimeout(()=>set(k),300+i*2600));});
+  set(0);
+})();
+</script>

@@ -1,0 +1,38 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The more information, the scarcer attention</p><p class="figsub">Each day a scribe writes a number of alerts and analyses for a household, and the principal can read only 8 a day. Drag the number of items written each day, then switch whose interest the scribe ranks by, and see what the principal sees.</p></div><button class="replay" type="button" data-replay="at16">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Ranking">
+      <button type="button" data-at16="p" aria-pressed="true">Rank by the principal's goals</button>
+      <button type="button" data-at16="s" aria-pressed="false">Rank by seller payments</button>
+    </div>
+    <div class="at16" id="at16" data-anim>
+      <div class="at16-g" id="at16-g"></div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Important and relevant to the principal's plan</span><span><i style="background:var(--warm)"></i>Paid promotion by sellers</span><span><i style="background:var(--quote);border:1px solid var(--line)"></i>Other</span><span><i style="outline:2px solid var(--ink);outline-offset:-2px;background:transparent"></i>The 8 items the principal sees</span></div>
+      <div class="sl"><label for="at16-n">Items written per day <b id="at16-nv"></b></label><input id="at16-n" type="range" min="8" max="80" step="4" value="40"></div>
+      <p class="at16-msg" id="at16-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: about one in ten items written is important and relevant to the principal's plan, about two in ten are paid promotions by sellers, and the rest are general news; each day the principal reads only the top 8 items (the scarcity of attention described by Simon, 1971).</figcaption>
+</figure>
+<style>
+.at16-g{display:grid;grid-template-columns:repeat(20,1fr);gap:3px;max-width:520px}
+.at16-g i{aspect-ratio:1;border-radius:3px;background:var(--quote);border:1px solid var(--line);transition:background .3s}
+.at16-g i.k{background:var(--accent);border-color:var(--accent)} .at16-g i.a{background:var(--warm);border-color:var(--warm)} .at16-g i.seen{outline:2px solid var(--ink);outline-offset:1px}
+.at16-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('at16'+id);let mode='p';
+  const T=Array.from({length:80},(_,i)=>i%10===3?'k':(i%5===1?'a':'o'));
+  function draw(){const n=+$('-n').value;$('-nv').textContent=n+'';const items=T.slice(0,n);
+    const order=items.map((t,i)=>i).sort((a,b)=>{const r=t=>mode==='p'?{k:0,o:1,a:2}[t]:{a:0,o:1,k:2}[t];return r(items[a])-r(items[b])||a-b;}),seen=new Set(order.slice(0,8));
+    $('-g').innerHTML=items.map((t,i)=>`<i class="${t==='o'?'':t}${seen.has(i)?' seen':''}"></i>`).join('');
+    const k=items.filter(t=>t==='k').length,ks=[...seen].filter(i=>items[i]==='k').length;
+    $('-msg').textContent=`The scribe writes ${n} items a day and the principal reads only 8, or ${Math.round(800/n)}%. `+(mode==='p'?`Ranked by the principal's goals, ${ks} of the ${k} important items are seen.`:`Ranked by seller payments, the 8 items seen are almost all promotions, and only ${ks} of the ${k} important items are seen. The more is written, the greater the power to rank.`);}
+  const bs=[...document.querySelectorAll('[data-at16]')];
+  function set(m){mode=m;bs.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.at16===m)));draw();}
+  bs.forEach(b=>b.addEventListener('click',()=>set(b.dataset.at16)));$('-n').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{set('p');let v=8;$('-n').value=8;draw();const id=setInterval(()=>{v+=4;$('-n').value=v;draw();if(v>=80){clearInterval(id);setTimeout(()=>set('s'),1200);}},120);});
+  draw();
+})();
+</script>

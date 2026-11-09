@@ -1,0 +1,45 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">收费方式改变了推荐什么</p>
+    <p class="figsub">同一位顾问、同一位客户。切换顾问的收费方式，看他更倾向于推荐什么，以及客户 20 年后的结果。</p>
+    <div class="seg-btns" role="group" aria-label="收费方式">
+      <button type="button" data-cf="com" aria-pressed="true">按销售佣金</button>
+      <button type="button" data-cf="fee" aria-pressed="false">按客户资产收固定比例</button>
+    </div>
+    <div class="cf" id="cf" data-anim>
+      <div class="cf-mix" id="cf-mix"></div>
+      <div class="cf-out">
+        <div><span>组合每年的总费用</span><b id="cf-c"></b></div>
+        <div><span>每年交易次数</span><b id="cf-t"></b></div>
+        <div><span>20 年后 100 万变为（示意）</span><b id="cf-v"></b></div>
+      </div>
+      <p class="cf-msg" id="cf-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意数字：假设各类产品扣费前的年收益相同（6%），差别只来自费用与交易成本。实证中，Bergstresser、Chalmers 与 Tufano（2009）发现经纪人销售的基金扣费后业绩更差；Mullainathan、Noeth 与 Schoar（2012）的神秘客户研究发现顾问倾向推荐费用更高的主动产品。</figcaption>
+</figure>
+<style>
+.cf-mix{display:flex;height:40px;border-radius:8px;overflow:hidden;margin-bottom:6px}
+.cf-mix i{display:flex;align-items:center;justify-content:center;font-style:normal;font-size:12px;color:#fff;transition:width .6s ease;white-space:nowrap;overflow:hidden}
+.cf-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.cf-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.cf-out span{display:block;font-size:12px;color:var(--faint)}
+.cf-out b{font-size:19px;font-variant-numeric:tabular-nums}
+.cf-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cf-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const S={com:{mix:[['高佣金的主动基金',55,'var(--warm)'],['结构化产品',25,'var(--gold)'],['指数基金',20,'var(--accent)']],cost:2.1,tr:8,m:'按佣金收费时，卖得越多、越贵，顾问收入越高：组合偏向高费用产品，交易也更频繁。'},
+           fee:{mix:[['高佣金的主动基金',15,'var(--warm)'],['结构化产品',5,'var(--gold)'],['指数基金',80,'var(--accent)']],cost:0.6,tr:1,m:'按资产收固定比例时，顾问收入随客户资产增长：推荐偏向低成本、少交易的组合。利益冲突仍存在（例如鼓励客户把更多资产交给他），但方向不同。'}};
+  const mix=document.getElementById('cf-mix');
+  function set(k){document.querySelectorAll('[data-cf]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.cf===k)));const s=S[k];
+    mix.innerHTML=s.mix.map(([n,w,c])=>`<i style="background:${c};width:0" data-w="${w}">${w>=20?n+' '+w+'%':''}</i>`).join('');
+    setTimeout(()=>mix.querySelectorAll('i').forEach(i=>i.style.width=i.dataset.w+'%'),40);
+    document.getElementById('cf-c').textContent=s.cost.toFixed(1)+'%';document.getElementById('cf-t').textContent=s.tr+' 次';
+    document.getElementById('cf-v').textContent=Math.round(100*Math.pow(1+0.06-s.cost/100,20))+' 万';document.getElementById('cf-msg').textContent=s.m;}
+  document.querySelectorAll('[data-cf]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.cf)));
+  document.getElementById('cf').addEventListener('anim-in',()=>{set('com');setTimeout(()=>set('fee'),2600);});
+  set('com');
+})();
+</script>

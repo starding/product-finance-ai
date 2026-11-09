@@ -1,0 +1,17 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：代理人能否矫正人的偏差</p><p class="figsub">五条结论，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="g18summary">重播</button></div>
+    <div class="g18summary" id="g18summary" data-anim><div class="g18summary-c" style="--i:0"><em>重跑：选择架构</em><b>每户一份专属的默认</b><p>默认不再只对准平均的人，惯性把每户留在更接近本意的地方。</p></div><div class="g18summary-c" style="--i:1"><em>重跑：准双曲贴现</em><b>更聪明的锁</b><p>对冲动增加阻力，对急用放行，依据是委托人事先写下的约定。</p></div><div class="g18summary-c warn" style="--i:2"><em>利用偏差</em><b>同一种能力，相反的方向</b><p>按交易次数行事的书记员，最懂得在冲动时推动成交。</p></div><div class="g18summary-c warn" style="--i:3"><em>误用与弃用</em><b>信任要与可靠程度相符</b><p>太信就不核对，见错一次又不再用；亲自确认并负责能减少两种偏差。</p></div><div class="g18summary-c wide" style="--i:4"><em>现状与理想</em><b>先尊重，再邀请</b><p>零散的做法也是一种稳态；用他自己的记录说明结果，再问要不要试一试，只承诺过程的质量。</p></div></div>
+  </div>
+</figure>
+<style>
+.g18summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g18summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g18summary-c.warn{border-left-color:var(--warm)}
+.g18summary-c.wide{grid-column:1/-1}
+.g18summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g18summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g18summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g18summary.in .g18summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g18summary{grid-template-columns:1fr}}
+</style>

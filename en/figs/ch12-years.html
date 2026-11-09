@@ -1,0 +1,35 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">How many years before it is not just luck</p>
+    <p class="figsub">Adjust how much the manager beats the benchmark each year and the tracking error (volatility relative to the benchmark) to see how many years of performance are needed to confirm skill statistically.</p>
+    <div class="yr" id="yr" data-anim>
+      <div class="yr-ctrl">
+        <div class="sl"><label for="yr-a">Annual outperformance <b id="yr-av"></b></label><input id="yr-a" type="range" min="0.5" max="5" step="0.5" value="2"></div>
+        <div class="sl"><label for="yr-t">Tracking error <b id="yr-tv"></b></label><input id="yr-t" type="range" min="2" max="12" step="1" value="6"></div>
+      </div>
+      <div class="yr-big"><span>Years of performance needed (t-statistic of 2)</span><b id="yr-n"></b></div>
+      <div class="yr-line" id="yr-line"></div>
+      <div class="yr-ref"><span>0</span><span>10 yrs</span><span>20 yrs</span><span>30 yrs</span><span>40 yrs</span><span>50+ yrs</span></div>
+    </div>
+  </div>
+  <figcaption>Calculated as t-statistic = average annual excess return ÷ tracking error × √years, so years required = (2 × tracking error ÷ average annual excess return)². Assumes excess returns are independent from year to year and stable.</figcaption>
+</figure>
+<style>
+.yr-ctrl{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.yr-big{background:var(--quote);border-radius:8px;padding:10px 14px;display:flex;justify-content:space-between;align-items:baseline}
+.yr-big span{font-size:13px;color:var(--muted)}
+.yr-big b{font-size:30px;font-variant-numeric:tabular-nums;color:var(--warm)}
+.yr-line{height:14px;border-radius:7px;background:linear-gradient(90deg,var(--accent),var(--warm));margin-top:12px;transform-origin:left;transition:transform .4s ease}
+.yr-ref{display:flex;justify-content:space-between;font-size:11px;color:var(--faint);margin-top:4px}
+@media (max-width:640px){.yr-ctrl{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const a=document.getElementById('yr-a'),t=document.getElementById('yr-t');
+  function r(){const A=+a.value,T=+t.value,n=Math.pow(2*T/A,2);
+    document.getElementById('yr-av').textContent=A+'%';document.getElementById('yr-tv').textContent=T+'%';
+    document.getElementById('yr-n').textContent=n>200?'More than 200 years':Math.round(n)+' years';
+    document.getElementById('yr-line').style.transform=`scaleX(${Math.min(1,n/50)})`;}
+  [a,t].forEach(e=>e.addEventListener('input',r)); r();
+})();
+</script>

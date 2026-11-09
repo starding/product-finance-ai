@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: make time compensation clear</p><p class="figsub">Three design requirements, each corresponding to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="ch02summary">Replay</button></div>
+    <div class="ch02summary" id="ch02summary" data-anim><div class="ch02summary-c" style="--i:0"><em>Waiting deserves compensation</em><b>State the horizon a return refers to</b><p>The same rate of return means something entirely different over a one-month holding and a three-year holding; annualized returns and holding-period returns should be stated separately.</p></div><div class="ch02summary-c" style="--i:1"><em>Nominal is not real</em><b>Explain what "capital protected" protects</b><p>Distinguish protecting the nominal amount from protecting purchasing power; for long-term products, also show results after inflation.</p></div><div class="ch02summary-c warn" style="--i:2"><em>Maturity mismatch has a cost</em><b>Ask when the money is needed before recommending a term</b><p>Show the rules and costs of early withdrawal or selling before maturity, so the user knows them before buying.</p></div></div>
+  </div>
+</figure>
+<style>
+.ch02summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch02summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch02summary-c.warn{border-left-color:var(--warm)}
+.ch02summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch02summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch02summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch02summary.in .ch02summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch02summary{grid-template-columns:1fr}}
+</style>

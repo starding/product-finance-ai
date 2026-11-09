@@ -1,0 +1,28 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Only costly signals are credible</p><p class="figsub">Two kinds of operator: reliable, and intending to cheat. Drag the cost of a signal and see whether each kind is willing to pay it, and whether the signal can tell them apart.</p></div><button class="replay" type="button" data-replay="sg24">Replay</button></div>
+    <div class="sg24" id="sg24" data-anim>
+      <div class="sg24-g" id="sg24-g"></div>
+      <div class="sl"><label for="sg24-c">Cost of the signal (deposit, insurance, licence and audit) <b id="sg24-cv"></b></label><input id="sg24-c" type="range" min="0" max="20" step="1" value="0"></div>
+      <p class="sg24-msg" id="sg24-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: a reliable operator runs its business for the long term and, once trusted, gains 15 more portions over ten years. An operator intending to cheat wants only one big haul and then to leave; once trusted, it can cheat its way to 8 portions, but if things go wrong it loses everything it spent on the deposit and insurance. Each pays the cost of the signal only when what it gains exceeds what it pays (following Spence, 1973).</figcaption>
+</figure>
+<style>
+.sg24-g{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sg24-c{border-radius:10px;padding:12px;background:var(--quote);font-size:13.5px;line-height:1.6;border-left:4px solid var(--c);transition:border-color .3s}
+.sg24-c b{display:block;font-size:15px}
+.sg24-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('sg24'+id);
+  function draw(){const c=+$('-c').value,good=15>c,bad=8>c;$('-cv').textContent=c+(c===1?' portion':' portions');
+    $('-g').innerHTML=[['Reliable operator',good,15],['Operator intending to cheat',bad,8]].map(([n,y,g])=>`<div class="sg24-c" style="--c:${y?'var(--accent)':'var(--faint)'}"><b>${n}</b>${y?'Pays the cost and sends the signal':'Does not pay and sends no signal'} (gains ${g} portions, pays ${c})</div>`).join('');
+    $('-msg').textContent=c===0?'The signal costs nothing, so both kinds of operator will say "we are trustworthy": the signal proves nothing.':good&&bad?`At a cost of ${c}, both kinds of operator can afford it, and the signal still cannot tell them apart.`:good?`At a cost of ${c}: the reliable operator can afford it and finds it worth paying, while for the one intending to cheat it does not pay. The signal tells the two apart.`:'The cost is so high that even the reliable operator will not pay: no one in the market sends the signal.';}
+  $('-c').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{let v=0;$('-c').value=0;draw();const id=setInterval(()=>{v+=1;$('-c').value=v;draw();if(v>=12)clearInterval(id);},220);});
+  draw();
+})();
+</script>

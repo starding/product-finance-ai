@@ -1,0 +1,35 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Suitability: sell to those who can bear it</p><p class="figsub">Ten households can each bear a different level of loss, and three kinds of ship shares differ in risk and commission. Switch the basis on which the seller recommends to see how many households end up with ship shares beyond what they can bear.</p></div><button class="replay" type="button" data-replay="su">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Basis for recommendation">
+      <button type="button" data-su="fee" aria-pressed="true">Recommend by commission</button>
+      <button type="button" data-su="fit" aria-pressed="false">Recommend by suitability</button>
+    </div>
+    <div class="su" id="su" data-anim></div>
+    <div class="legend"><span><i style="background:var(--accent)"></i>Safe ship shares: 1% commission</span><span><i style="background:var(--gold)"></i>Medium risk: 2% commission</span><span><i style="background:var(--warm)"></i>High risk: 4% commission</span></div>
+    <p class="su-msg" id="su-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>Illustrative: each household's capacity to bear loss is low, medium or high; buying ship shares riskier than that capacity counts as unsuitable.</figcaption>
+</figure>
+<style>
+.su{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.su-h{background:var(--quote);border-radius:9px;padding:8px;font-size:12px;text-align:center;border:2px solid transparent;transition:border-color .3s;opacity:0;transform:translateY(5px);transition:opacity .35s,transform .35s,border-color .3s;transition-delay:calc(var(--i)*.07s)}
+.su.in .su-h{opacity:1;transform:none}
+.su-h b{display:block;font-size:12.5px} .su-h i{display:block;height:10px;border-radius:3px;margin-top:6px}
+.su-h.bad{border-color:var(--warm)}
+.su-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.su{grid-template-columns:repeat(2,1fr)}}
+</style>
+<script>
+(function(){
+  const T=[0,0,0,1,1,1,1,2,2,0],L=['low','medium','high'],C=['var(--accent)','var(--gold)','var(--warm)'],box=document.getElementById('su');
+  function set(m){document.querySelectorAll('[data-su]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.su===m)));
+    const P=T.map((t,i)=>m==='fee'?(i%3===0?1:2):t);let bad=0,com=0;
+    box.innerHTML=T.map((t,i)=>{const p=P[i],x=p>t;if(x)bad++;com+=[1,2,4][p];return `<div class="su-h${x?' bad':''}" style="--i:${i}"><b>Household ${i+1}</b>Can bear: ${L[t]}<i style="background:${C[p]}"></i></div>`;}).join('');
+    box.classList.remove('in');void box.offsetWidth;box.classList.add('in');
+    document.getElementById('su-msg').textContent=m==='fee'?`Recommending by commission, the seller collects more in commission (${com}% in total), but ${bad} households end up with ship shares beyond what they can bear, and the households least able to bear a loss are hurt most.`:`Recommending by suitability, every household gets ship shares that match what it can bear, and none is unsuitable; the seller's commission is somewhat lower (${com}% in total).`;}
+  document.querySelectorAll('[data-su]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.su)));
+  box.addEventListener('anim-in',()=>{set('fee');setTimeout(()=>set('fit'),2600);});
+  set('fee');box.classList.remove('in');
+})();
+</script>

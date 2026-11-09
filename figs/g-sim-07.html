@@ -1,0 +1,60 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">文明模拟器 · 第 7 章：村里的船队</p><p class="figsub">二十户人家每年拿出一部分家产投资造船。选择独自造船、几户合造一艘，或者每户在所有船上都占一小份，打开或关掉有限责任，看二十年里各户的家产。</p></div><button class="replay" type="button" data-replay="cs7">重播</button></div>
+    <div class="cs-rules"><span class="on">借贷</span><span class="on">承诺</span><span class="on">货币</span><span class="on">保险</span><span class="on">银行</span><span class="on">股份</span><span class="lock">市场 · 第 8 章</span></div>
+    <div class="seg-btns" role="group" aria-label="出资方式">
+      <button type="button" data-cs7="alone" aria-pressed="false">独自造船</button>
+      <button type="button" data-cs7="group" aria-pressed="false">几户合造一艘</button>
+      <button type="button" data-cs7="all" aria-pressed="true">每户在所有船上占一小份</button>
+    </div>
+    <div class="cs7" id="cs7" data-anim>
+      <svg viewBox="0 0 660 220" role="img" aria-label="二十户人家二十年的家产"><g id="cs7-ax"></g><g id="cs7-l"></g></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>各户的家产</span><span><i style="background:var(--ink)"></i>全村平均</span><span><i style="background:var(--warm)"></i>破产的户</span></div>
+      <div class="cs-sw"><label><input type="checkbox" id="cs7-lim" checked> 规则：有限责任</label></div>
+      <div class="cs7-ctl">
+        <div class="sl"><label for="cs7-k">每年拿出家产的 <b id="cs7-kv"></b></label><input id="cs7-k" type="range" min="10" max="90" step="10" value="50"></div>
+        <button type="button" class="replay" id="cs7-re">换一组年景</button>
+      </div>
+      <div class="cs7-out" id="cs7-out"></div>
+      <p class="cs7-msg" id="cs7-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意模型：各户起初的家产在 10～30 份之间，每年种地另得 4 份。造一艘船要 100 份，一年一个来回，七成回来、价值为成本的 1.6 倍，三成沉没、一无所有，并留下 15 份未付的债务。无限责任时，沉船的债务由出资人按份额以家产偿还。合造一艘时，每五户凑一艘；家产低于 1 份即算破产，此后只能种地。纵轴为对数刻度。</figcaption>
+</figure>
+<style>
+.cs7 svg{width:100%;height:auto;display:block}
+.cs7-ctl{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:end;margin-top:8px}
+.cs7-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cs7-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs7-out span{display:block;font-size:11.5px;color:var(--faint)} .cs7-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.cs7-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs7-ctl{grid-template-columns:1fr}.cs7-out{grid-template-columns:1fr}.cs7 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs7'+id),N=20,Y=20,COST=100,UP=1.6,PS=.7,DEBT=15,FARM=4;let mode='all',seed=707;
+  const X0=44,X1=650,YT=10,YB=186,x=t=>X0+t/Y*(X1-X0),ly=v=>YB-(Math.log10(Math.max(v,.5))-Math.log10(.5))/(Math.log10(2000)-Math.log10(.5))*(YB-YT);
+  function rng(){let s=seed;return ()=>{s=(s*16807)%2147483647;return s/2147483647;};}
+  function sim(k,lim){const r=rng(),W=Array.from({length:N},(_,i)=>10+i*20/(N-1)),P=[W.slice()],broke=Array(N).fill(false);let ships=0;
+    for(let t=0;t<Y;t++){const inv=W.map((w,i)=>broke[i]?0:w*k);let ret=Array(N).fill(0);
+      if(mode==='alone'){for(let i=0;i<N;i++){if(inv[i]>=COST){const n=Math.floor(inv[i]/COST);ships+=n;let g=0;for(let j=0;j<n;j++){if(r()<PS)g+=COST*UP;else if(!lim)g-=DEBT;}ret[i]=g-n*COST;}}}
+      else if(mode==='group'){const idx=[...Array(N).keys()].filter(i=>!broke[i]);for(let s=0;s+5<=idx.length;s+=5){const g=idx.slice(s,s+5),tot=g.reduce((a,i)=>a+inv[i],0);if(tot<COST)continue;const n=Math.floor(tot/COST);ships+=n;let val=0,deb=0;for(let j=0;j<n;j++){if(r()<PS)val+=COST*UP;else deb+=lim?0:DEBT;}const used=n*COST;g.forEach(i=>{const sh=inv[i]/tot;ret[i]=sh*(val-deb)-sh*used;});}}
+      else{const tot=inv.reduce((a,b)=>a+b,0),n=Math.floor(tot/COST);ships+=n;let val=0,deb=0;for(let j=0;j<n;j++){if(r()<PS)val+=COST*UP;else deb+=lim?0:DEBT;}const used=n*COST;for(let i=0;i<N;i++){if(tot>0){const sh=inv[i]/tot;ret[i]=sh*(val-deb)-sh*used;}}}
+      for(let i=0;i<N;i++){W[i]=Math.max(0,W[i]+ret[i])+FARM;if(W[i]-FARM<1&&ret[i]<0)broke[i]=true;}
+      P.push(W.slice());}
+    return {P,broke,ships};}
+  function draw(){const k=+$('-k').value/100,lim=$('-lim').checked,S=sim(k,lim);$('-kv').textContent=Math.round(k*100)+'%';
+    $('-ax').innerHTML=[1,10,100,1000].map(v=>`<line x1="${X0}" x2="${X1}" y1="${ly(v)}" y2="${ly(v)}" class="s-line"/><text x="${X0-6}" y="${ly(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+[0,5,10,15,20].map(t=>`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">第 ${t} 年</text>`).join('');
+    const avg=S.P.map(w=>w.reduce((a,b)=>a+b,0)/N);
+    $('-l').innerHTML=[...Array(N).keys()].map(i=>`<path d="${S.P.map((w,t)=>(t?'L':'M')+x(t).toFixed(1)+','+ly(w[i]).toFixed(1)).join('')}" fill="none" stroke="${S.broke[i]?'var(--warm)':'var(--accent)'}" stroke-width="1.1" opacity=".55"/>`).join('')+`<path d="${avg.map((v,t)=>(t?'L':'M')+x(t).toFixed(1)+','+ly(v).toFixed(1)).join('')}" fill="none" stroke="var(--ink)" stroke-width="2.4"/>`;
+    const nb=S.broke.filter(Boolean).length,end=S.P[Y],farm=20+FARM*Y;
+    $('-out').innerHTML=[['二十年里造的船',S.ships+' 艘'],['第 20 年的平均家产',Math.round(avg[Y])+' 份'],['破产的户数',nb+' 户']].map(([a,b])=>`<div><span>${a}</span><b>${b}</b></div>`).join('');
+    $('-msg').textContent=mode==='alone'?(S.ships?`只有家产够多的户才造得起船，一次沉没就损失大半。`:`没有一户出得起一艘船的钱，二十年里一艘船也没造成，全村只靠种地，平均家产约 ${Math.round(avg[Y])} 份。`):
+      mode==='group'?`五户合造一艘，每户的成败系于一艘船：一次沉没就损失投入的全部，${nb?nb+' 户破产，':''}各户的家产越拉越开。${lim?'':'无限责任让沉船的债务也落在出资人身上。'}`:
+      `每户在所有船上都占一小份，各艘船的成败相互抵消，各户的家产几乎同步增长，第 20 年平均约 ${Math.round(avg[Y])} 份${nb?'，仍有 '+nb+' 户破产':'，没有一户破产'}。${lim?'':'关掉有限责任，沉船的债务按份额摊到每户，增长慢了一些。'}`;}
+  document.querySelectorAll('[data-cs7]').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.cs7;document.querySelectorAll('[data-cs7]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  ['-k','-lim'].forEach(k=>$(k).addEventListener('input',draw));$('-re').addEventListener('click',()=>{seed=(seed*48271)%2147483647;draw();});
+  $('').addEventListener('anim-in',()=>{['alone','group','all'].forEach((k,i)=>setTimeout(()=>{mode=k;document.querySelectorAll('[data-cs7]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.cs7===k)));draw();},300+i*2600));});
+  draw();
+})();
+</script>

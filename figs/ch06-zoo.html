@@ -1,0 +1,64 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">试的因子够多，总有一些靠运气“显著”</p>
+    <p class="figsub">假设研究者检验了 300 个候选因子，其中只有 10 个是真的，其余 290 个毫无作用。调节检验门槛，看通过检验的有多少是真的。</p>
+    <div class="zo" id="zo" data-anim>
+      <svg viewBox="0 0 640 200" role="img" aria-label="300 个候选因子的检验统计量分布">
+        <g id="zo-axis"></g><g id="zo-dots"></g>
+        <line id="zo-th" class="zo-th" y1="14" y2="166"/>
+        <text id="zo-tt" font-size="12" class="t-warm"></text>
+      </svg>
+      <div class="sl"><label for="zo-t">检验门槛（t 值） <b id="zo-tv"></b></label><input id="zo-t" type="range" min="1.5" max="4" step="0.1" value="2"><div class="hint">常用门槛为 2；哈维、刘与朱（2016）建议至少 3</div></div>
+      <div class="zo-out">
+        <div><span>通过检验的因子</span><b id="zo-n"></b></div>
+        <div><span>其中毫无作用、靠运气通过的</span><b id="zo-f"></b></div>
+        <div><span>被错过的真因子</span><b id="zo-m"></b></div>
+      </div>
+      <button type="button" class="replay" id="zo-re">换一组模拟</button>
+    </div>
+  </div>
+  <figcaption>示意模拟：无作用的因子，t 值的绝对值按标准正态分布抽取；真因子的 t 值均值为 3.5。每个点是一个候选因子，灰色为无作用的，绿色为真的。思路参照 Harvey、Liu 与 Zhu（2016）。</figcaption>
+</figure>
+<style>
+.zo svg{width:100%;height:auto;display:block}
+.zo-d.n{fill:var(--gray-mark);opacity:.6} .zo-d.t{fill:var(--accent)}
+.zo-d.pass{stroke:var(--ink);stroke-width:1.5;opacity:1}
+.zo-th{stroke:var(--warm);stroke-width:2;stroke-dasharray:5 4}
+.zo-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px}
+.zo-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.zo-out span{display:block;font-size:12px;color:var(--faint)}
+.zo-out b{font-size:20px;font-variant-numeric:tabular-nums}
+#zo-f{color:var(--warm)}
+@media (max-width:640px){.zo-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const X0=40,X1=620,YB=166,x=t=>X0+(t+3.5)/(9)*(X1-X0);
+  const g=()=>{let u=0,v=0;while(!u)u=Math.random();v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);};
+  let a=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`;
+  [-3,-2,-1,0,1,2,3,4,5].forEach(t=>a+=`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${t}</text>`);
+  a+=`<text x="${X1}" y="${YB+30}" text-anchor="end" font-size="11" class="t-faint">检验统计量 t</text>`;
+  document.getElementById('zo-axis').innerHTML=a;
+  let T=[];
+  function sample(){T=Array.from({length:290},()=>({t:Math.abs(g()),real:false})).concat(Array.from({length:10},()=>({t:3.5+g(),real:true})));
+    // 按 0.25 宽度分箱堆叠
+    const bins={};T.forEach(f=>{const b=Math.round(f.t/0.25);bins[b]=(bins[b]||0)+1;f.k=bins[b];f.b=b;});
+    const mx=Math.max(...Object.values(bins)), sp=Math.min(7.2,148/mx), r=Math.max(1.6,Math.min(3.6,sp*0.48));
+    document.getElementById('zo-dots').innerHTML=T.map(f=>`<circle class="zo-d ${f.real?'t':'n'}" r="${r.toFixed(1)}" cx="${x(f.b*0.25).toFixed(1)}" cy="${(YB-4-(f.k-1)*sp).toFixed(1)}"/>`).join('');
+    render();}
+  const th=document.getElementById('zo-t');
+  function render(){
+    const c=+th.value, cs=[...document.querySelectorAll('#zo-dots circle')];
+    cs.forEach((el,i)=>el.classList.toggle('pass',T[i].t>c));
+    const pass=T.filter(f=>f.t>c), f=pass.filter(p=>!p.real).length, m=T.filter(p=>p.real&&p.t<=c).length;
+    document.getElementById('zo-tv').textContent=c.toFixed(1);
+    document.getElementById('zo-n').textContent=pass.length;document.getElementById('zo-f').textContent=f;document.getElementById('zo-m').textContent=m;
+    const l=document.getElementById('zo-th');l.setAttribute('x1',x(c));l.setAttribute('x2',x(c));
+    const tt=document.getElementById('zo-tt');tt.setAttribute('x',x(c)+6);tt.setAttribute('y',26);tt.textContent='门槛 '+c.toFixed(1);
+  }
+  th.addEventListener('input',render);
+  document.getElementById('zo-re').addEventListener('click',sample);
+  document.getElementById('zo').addEventListener('anim-in',()=>{let v=1.5;th.value=v;render();const id=setInterval(()=>{v=Math.round((v+0.1)*10)/10;th.value=v;render();if(v>=3){clearInterval(id);}},150);});
+  sample();
+})();
+</script>

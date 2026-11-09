@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Losses at a deadline</p><p class="figsub">An account has four irreversible exposures over 30 days. Drag "today", and switch whether an ongoing agent is watching, to see the state of each one.</p></div><button class="replay" type="button" data-replay="ex">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Whether an agent is watching"><button type="button" data-ex="0" aria-pressed="false">No one watching</button><button type="button" data-ex="1" aria-pressed="true">Ongoing agent reminds in time</button></div>
+    <div class="ex" id="ex" data-anim>
+      <svg viewBox="0 0 640 120" role="img" aria-label="Deadlines of the exposures"><g id="ex-g"></g></svg>
+      <div class="sl"><label for="ex-d">Today <b id="ex-dv"></b></label><input id="ex-d" type="range" min="1" max="30" step="1" value="10"></div>
+      <div class="ex-list" id="ex-list"></div>
+    </div>
+  </div>
+  <figcaption>Illustrative account and dates. The agent reminds three days and one day ahead and explains the options; the step that changes holdings is confirmed by the person. For maintenance margin requirements, see FINRA Rule 4210; rules on option exercise, rights issues and the early termination of leveraged products differ from market to market.</figcaption>
+</figure>
+<style>
+.ex svg{width:100%;height:auto;display:block}
+.ex-list{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:8px}
+.ex-i{border-radius:8px;padding:8px 10px;background:var(--quote);border-left:3px solid var(--line);font-size:12.5px;line-height:1.6;transition:border-color .3s,background .3s}
+.ex-i b{display:block;font-size:13.5px}
+.ex-i.w{border-left-color:var(--gold)} .ex-i.ok{border-left-color:var(--accent);background:var(--accent-soft)} .ex-i.bad{border-left-color:var(--warm);background:var(--warm-soft)}
+@media (max-width:640px){.ex-list{grid-template-columns:1fr}.ex svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const E=[[8,'Option expiry','for an in-the-money option, decide whether to exercise or close','Not handled: exercised automatically or lapses under the rules; time value goes to zero'],[15,'Margin shortfall','add margin or reduce the position','Not met in time: the position is liquidated at prices the broker decides'],[21,'Rights deadline','decide whether to subscribe or sell the rights','Missed: only the default outcome is available, and the holding is diluted'],[26,'Near call price','decide whether to close early','Call price hit: the product terminates early, and the residual value may be very low']];
+  const X0=30,X1=620,x=d=>X0+(d-1)/29*(X1-X0);let ag=1;
+  const $=id=>document.getElementById(id),sl=$('ex-d');
+  function r(){const t=+sl.value;$('ex-dv').textContent='Day '+t;
+    let g=`<line x1="${X0}" y1="60" x2="${X1}" y2="60" class="s-faint"/>`+[1,10,20,30].map(d=>`<text x="${x(d)}" y="80" text-anchor="middle" font-size="10" class="t-faint">${d}</text>`).join('');
+    E.forEach(([d,n],i)=>{g+=`<line x1="${x(d)}" y1="44" x2="${x(d)}" y2="66" stroke="var(--warm)" stroke-width="2"/><text x="${x(d)}" y="${36-(i%2)*14}" text-anchor="middle" font-size="11" class="t-ink">${n}</text>`;if(ag){[3,1].forEach(k=>g+=`<circle cx="${x(d-k)}" cy="60" r="4" fill="var(--gold)"/>`);}});
+    g+=`<line x1="${x(t)}" y1="20" x2="${x(t)}" y2="100" stroke="var(--ink)" stroke-dasharray="3 3"/><text x="${x(t)}" y="112" text-anchor="middle" font-size="11" class="t-ink">Today</text>`;
+    $('ex-g').innerHTML=g;
+    $('ex-list').innerHTML=E.map(([d,n,act,miss])=>{const left=d-t;let c,s;
+      if(left<0){c=ag?'ok':'bad';s=ag?'Reminded in advance; the person confirmed how to handle it':miss;}else if(left<=3){c=ag?'w':'';s=ag?`${left} ${left===1?'day':'days'} left: reminded; the option is to ${act}; awaiting the person's confirmation`:`${left} ${left===1?'day':'days'} left, and no one has sent a reminder`;}else{c='';s=`${left} days left`;}
+      return `<div class="ex-i ${c}"><b>${n}</b>${s}</div>`;}).join('');}
+  document.querySelectorAll('[data-ex]').forEach(b=>b.addEventListener('click',()=>{ag=+b.dataset.ex;document.querySelectorAll('[data-ex]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));r();}));
+  sl.addEventListener('input',r);
+  $('ex').addEventListener('anim-in',()=>{let t=1;sl.value=1;r();const id=setInterval(()=>{t++;sl.value=t;r();if(t>=30)clearInterval(id);},160);});
+  r();
+})();
+</script>

@@ -1,0 +1,40 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">适当性：产品风险与客户承受能力的匹配</p>
+    <p class="figsub">选择客户的风险承受等级与投资经验，看哪些产品可以推荐。</p>
+    <div class="su" id="su" data-anim>
+      <div class="su-ctrl">
+        <div class="sl"><label for="su-r">风险承受等级 <b id="su-rv"></b></label><input id="su-r" type="range" min="1" max="5" step="1" value="3"></div>
+        <label class="su-chk"><input type="checkbox" id="su-x" checked> 具备复杂产品的交易经验</label>
+      </div>
+      <div class="su-list" id="su-list"></div>
+      <p class="su-msg" id="su-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意分级，不对应任何机构的具体规则。各地的适当性要求见美国金融业监管局第 2111 条规则、美国证券交易委员会《最佳利益规则》（2019）、欧盟《金融工具市场指令（第二版）》与香港证监会操守准则；复杂产品通常还要求了解客户的知识与经验。</figcaption>
+</figure>
+<style>
+.su-ctrl{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center}
+.su-chk{font-size:14px;display:flex;gap:6px;align-items:center;white-space:nowrap}
+.su-chk input{accent-color:var(--accent);width:16px;height:16px}
+.su-list{display:grid;gap:6px}
+.su-p{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;border:1.5px solid var(--line);border-radius:8px;padding:8px 12px;transition:all .3s}
+.su-p em{font-style:normal;font-size:12px;color:var(--faint);font-variant-numeric:tabular-nums}
+.su-p b{font-size:14px}
+.su-p span{font-size:12px}
+.su-p.ok{border-color:var(--accent);background:var(--accent-soft)} .su-p.ok span{color:var(--accent)}
+.su-p.no{opacity:.55} .su-p.no span{color:var(--warm)}
+.su-msg{font-size:14px;margin:10px 0 0;min-height:1.7em}
+@media (max-width:640px){.su-ctrl{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const P=[[1,'银行存款与货币基金',0],[2,'债券基金',0],[3,'股票指数基金',0],[4,'个股',0],[4,'可转换债券等结构较复杂的产品',1],[5,'杠杆产品与期权',1]];
+  const L=['','保守','稳健','平衡','成长','进取'];
+  const r=document.getElementById('su-r'),xp=document.getElementById('su-x'),list=document.getElementById('su-list');
+  function render(){const R=+r.value,X=xp.checked;document.getElementById('su-rv').textContent=R+' 级（'+L[R]+'）';
+    let ok=0;list.innerHTML=P.map(([lv,n,cx])=>{const a=lv<=R&&(!cx||X);if(a)ok++;const why=lv>R?'风险高于承受等级':(!X&&cx)?'缺少复杂产品经验':'可以推荐';return `<div class="su-p ${a?'ok':'no'}"><em>风险 ${lv}</em><b>${n}</b><span>${why}</span></div>`;}).join('');
+    document.getElementById('su-msg').textContent=`共 ${ok} 类产品可以推荐。推荐的依据是客户的情况，而不是产品的销售目标。`;}
+  r.addEventListener('input',render);xp.addEventListener('change',render);render();
+})();
+</script>

@@ -1,0 +1,36 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Limits written in the instructions, or checked at the execution layer</p><p class="figsub">The agreement: trade only index funds, no more than 10,000 yuan per trade and no more than 30,000 yuan in total per day. The agent issues ten instructions, several of which cross the limits through misunderstanding, being misled by input content, or plain error. Switch how the limits are enforced.</p></div><button class="replay" type="button" data-replay="ef">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Enforcement"><button type="button" data-ef="p" aria-pressed="true">Only in the agent's instructions</button><button type="button" data-ef="e" aria-pressed="false">Execution layer checks each trade</button></div>
+    <div class="ef" id="ef" data-anim></div>
+    <div class="ef-out"><div><span>Out-of-bounds instructions executed</span><b id="ef-a"></b></div><div><span>Instructions blocked and logged</span><b id="ef-b"></b></div></div>
+    <p class="ef-msg" id="ef-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>Illustrative. On least privilege and checking every access, see Saltzer and Schroeder (1975). When the limits are only in the instructions, the agent is assumed to catch half of its overreaches by itself.</figcaption>
+</figure>
+<style>
+.ef{display:grid;gap:4px}
+.ef-r{display:grid;grid-template-columns:28px minmax(0,1fr) 110px;gap:8px;align-items:center;font-size:12.5px;background:var(--quote);border-radius:7px;padding:5px 9px;opacity:0;transform:translateX(-6px);transition:opacity .3s,transform .3s;transition-delay:calc(var(--i)*.12s)}
+.ef-r.on{opacity:1;transform:none}
+.ef-r em{font-style:normal;color:var(--faint);text-align:center}
+.ef-r b{font-weight:400;font-size:11.5px;border-radius:5px;padding:2px 6px;text-align:center}
+.ef-r b.ok{background:var(--accent-soft);color:var(--accent)} .ef-r b.bad{background:var(--warm-soft);color:var(--warm)} .ef-r b.blk{background:var(--surface);color:var(--ink);border:1px solid var(--ink)}
+.ef-out{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.ef-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.ef-out span{display:block;font-size:12px;color:var(--faint)} .ef-out b{font-size:19px;font-variant-numeric:tabular-nums}
+.ef-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const I=[['Buy index fund, 5,000 yuan',0,0],['Buy index fund, 8,000 yuan',0,0],['Buy a single stock, 6,000 yuan (mistook the stock for a fund)',1,1],['Buy index fund, 9,000 yuan',0,0],['Buy index fund, 12,000 yuan (misread the amount by one digit)',1,0],['Sell index fund, 3,000 yuan',0,0],['Buy a leveraged product, 5,000 yuan (misled by text in a news item)',1,1],['Buy index fund, 7,000 yuan (day\'s total exceeds 30,000 yuan)',1,0],['Buy index fund, 4,000 yuan',0,0],['Transfer out 20,000 yuan (beyond trading authority)',1,1]];
+  const box=document.getElementById('ef');
+  function set(k){document.querySelectorAll('[data-ef]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.ef===k)));let a=0,bk=0;
+    box.innerHTML=I.map(([t,over,caught],i)=>{let s,c;if(!over){s='Executed';c='ok';}else if(k==='e'){s='Blocked, logged';c='blk';bk++;}else if(caught){s='Agent caught it';c='blk';bk++;}else{s='Overreach executed';c='bad';a++;}return `<div class="ef-r" style="--i:${i}"><em>${i+1}</em><span>${t}</span><b class="${c}">${s}</b></div>`;}).join('');
+    setTimeout(()=>box.querySelectorAll('.ef-r').forEach(r=>r.classList.add('on')),40);
+    document.getElementById('ef-a').textContent=a+'';document.getElementById('ef-b').textContent=bk+'';
+    document.getElementById('ef-msg').textContent=k==='p'?'When the limits are only in the instructions, the agent catches some of its overreaches itself, and the rest are executed: the misread amount and the exceeded daily total. Instructions reduce errors, but cannot guarantee the limits.':'The execution layer, independent of the agent, checks instrument, amount, total and authority for each trade: every out-of-bounds instruction is blocked and logged, and the principal can review them afterwards.';}
+  document.querySelectorAll('[data-ef]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.ef)));
+  box.addEventListener('anim-in',()=>{set('p');setTimeout(()=>set('e'),3200);});
+  set('p');
+})();
+</script>

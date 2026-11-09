@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：股份</p><p class="figsub">四条结论，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="g07summary">重播</button></div>
+    <div class="g07summary" id="g07summary" data-anim><div class="g07summary-c" style="--i:0"><em>股份</em><b>按份额分享成败</b><p>成败悬殊的冒险不适合借贷，适合由许多人共同出资、共担损失。</p></div><div class="g07summary-c" style="--i:1"><em>分散</em><b>把一份钱分到许多艘船上</b><p>平均所得不变，波动大幅降低；单押一艘，承担的是本可避免的风险。</p></div><div class="g07summary-c warn" style="--i:2"><em>有限责任</em><b>最多亏掉投进去的</b><p>出资人不必关心别人的家产，份额可以转让；一部分风险转给了债权人。</p></div><div class="g07summary-c warn" style="--i:3"><em>债与股</em><b>同一份收益的两种分法</b><p>先还债，剩下的归股东；分法不改变船本身值多少。</p></div></div>
+  </div>
+</figure>
+<style>
+.g07summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g07summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g07summary-c.warn{border-left-color:var(--warm)}
+.g07summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g07summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g07summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g07summary.in .g07summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g07summary{grid-template-columns:1fr}}
+</style>

@@ -1,0 +1,70 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">More informed traders, wider spreads; more trades, more accurate prices</p><p class="figsub">The stock's true value is either 110 or 90, and the market maker does not know which. Informed traders trade only when it favours them; uninformed traders buy and sell at random.</p></div><button class="replay" type="button" id="gm-run">Simulate a new set of trades</button></div>
+    <div class="gm" id="gm" data-anim>
+      <div class="sl"><label for="gm-mu">Share of informed traders <b id="gm-mv"></b></label><input id="gm-mu" type="range" min="0" max="60" step="5" value="20"></div>
+      <div class="gm-q"><span>First quote</span><b id="gm-bid" class="bid"></b><i id="gm-gap"></i><b id="gm-ask" class="ask"></b><em id="gm-sp"></em></div>
+      <svg viewBox="0 0 640 220" role="img" aria-label="Bid and ask after each trade">
+        <g id="gm-axis"></g>
+        <path id="gm-band" class="gm-band"/>
+        <path id="gm-a" class="gm-l ask"/><path id="gm-b" class="gm-l bid"/>
+        <g id="gm-tr"></g>
+      </svg>
+      <p class="gm-msg" id="gm-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Simulated with the Glosten and Milgrom (1985) model. The ask equals the expected value given that the next order is a buy, and the bid likewise; after each trade, the market maker updates its estimate of the true value accordingly. The horizontal axis counts trades; the dots at the bottom are individual trades, green for buy orders and orange for sell orders.</figcaption>
+</figure>
+<style>
+.gm svg{width:100%;height:auto;display:block}
+.gm-q{display:flex;align-items:center;gap:8px;margin:6px 0 10px;font-size:13px}
+.gm-q>span{color:var(--faint)}
+.gm-q b{font-size:20px;font-variant-numeric:tabular-nums}
+.gm-q b.bid{color:var(--accent)} .gm-q b.ask{color:var(--warm)}
+.gm-q i{display:block;height:6px;background:var(--line);border-radius:3px;transition:width .3s}
+.gm-q em{font-style:normal;color:var(--muted)}
+.gm-band{fill:var(--quote)}
+.gm-l{fill:none;stroke-width:2}
+.gm-l.ask{stroke:var(--warm)} .gm-l.bid{stroke:var(--accent)}
+#gm-tr circle.b{fill:var(--accent)} #gm-tr circle.s{fill:var(--warm)}
+.gm-msg{font-size:14px;margin:6px 0 0;min-height:1.7em}
+</style>
+<script>
+(function(){
+  const N=40,H=110,L=90,X0=50,X1=620,YT=14,YB=180,x=t=>X0+t/N*(X1-X0), y=v=>YB-(v-88)/(112-88)*(YB-YT);
+  let a='';[90,100,110].forEach(v=>a+=`<line x1="${X0}" y1="${y(v)}" x2="${X1}" y2="${y(v)}" class="s-line"/><text x="${X0-8}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`);
+  [0,10,20,30,40].forEach(t=>a+=`<text x="${x(t)}" y="214" text-anchor="middle" font-size="11" class="t-faint">${t}</text>`);
+  document.getElementById('gm-axis').innerHTML=a;
+  const mu=document.getElementById('gm-mu');
+  function quotes(p,m){const bh=m+(1-m)/2,bl=(1-m)/2,sh=(1-m)/2,sl=m+(1-m)/2;
+    const pa=p*bh/(p*bh+(1-p)*bl), pb=p*sh/(p*sh+(1-p)*sl);return [L+(H-L)*pa, L+(H-L)*pb];}
+  function first(){const m=+mu.value/100;const [ask,bid]=quotes(0.5,m);
+    document.getElementById('gm-mv').textContent=mu.value+'%';
+    document.getElementById('gm-ask').textContent=ask.toFixed(1);document.getElementById('gm-bid').textContent=bid.toFixed(1);
+    document.getElementById('gm-gap').style.width=Math.max(4,(ask-bid)*8)+'px';
+    document.getElementById('gm-sp').textContent='Spread '+(ask-bid).toFixed(1);}
+  let timer;
+  function run(){
+    clearInterval(timer); first();
+    const m=+mu.value/100, V=Math.random()<0.5?H:L; let p=0.5; const A=[],B=[],TR=[];
+    let t=0;
+    const draw=()=>{const P=arr=>'M'+arr.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`).join('L');
+      if(!A.length)return; document.getElementById('gm-a').setAttribute('d',P(A));document.getElementById('gm-b').setAttribute('d',P(B));
+      document.getElementById('gm-band').setAttribute('d',P(A)+'L'+B.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`).reverse().join('L')+'Z');
+      document.getElementById('gm-tr').innerHTML=TR.map((b,i)=>`<circle class="${b?'b':'s'}" cx="${x(i+0.5)}" cy="196" r="3.2"/>`).join('');};
+    timer=setInterval(()=>{
+      const [ask,bid]=quotes(p,m); A.push(ask); B.push(bid);
+      const informed=Math.random()<m, buy=informed?(V===H):Math.random()<0.5; TR.push(buy);
+      const bh=m+(1-m)/2,bl=(1-m)/2; p=buy? p*bh/(p*bh+(1-p)*bl) : p*(1-bh)/(p*(1-bh)+(1-p)*(1-bl));
+      t++; draw();
+      if(t>=N){clearInterval(timer);
+        document.getElementById('gm-msg').textContent=m===0?'With no informed traders, the order flow carries no information, quotes do not move and the spread is zero (ignoring other costs).':`The true value this time is ${V}. After ${N} trades, quotes have moved to around ${((A[A.length-1]+B[B.length-1])/2).toFixed(1)} and the spread has narrowed to ${(A[A.length-1]-B[B.length-1]).toFixed(1)}: information has entered the price through the order flow.`;}
+    },90);
+    document.getElementById('gm-msg').textContent='';
+  }
+  mu.addEventListener('input',run);
+  document.getElementById('gm-run').addEventListener('click',run);
+  document.getElementById('gm').addEventListener('anim-in',run);
+  first();
+})();
+</script>

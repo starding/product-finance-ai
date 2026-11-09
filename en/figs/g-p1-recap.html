@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Summary of Part One</p><p class="figsub">The twelve institutions seen from three angles: the conclusion of each, what it means for products, and what happens when the cost of having others think and act for us collapses.</p></div><button class="replay" type="button" data-replay="pr1">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Angle">
+      <button type="button" data-pr1="0" aria-pressed="true">Conclusions</button>
+      <button type="button" data-pr1="1" aria-pressed="false">For products</button>
+      <button type="button" data-pr1="2" aria-pressed="false">When agency costs fall</button>
+    </div>
+    <div class="pr1" id="pr1" data-anim><div class="pr1-g" id="pr1-g"></div>
+      <div class="legend" id="pr1-lg" hidden><span><i style="background:var(--warm-soft)"></i>Affected; to be derived again</span><span><i style="background:var(--quote);border:1px solid var(--line)"></i>Weakly affected or not changed by this</span></div>
+    </div>
+  </div>
+  <figcaption>The degrees of impact under "When agency costs fall" are judgements, not estimates.</figcaption>
+</figure>
+<style>
+.pr1-g{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pr1-c{background:var(--quote);border-radius:9px;padding:9px 11px;font-size:13px;line-height:1.55;color:var(--muted);opacity:0;transform:translateY(6px);transition:opacity .35s,transform .35s,background .3s;transition-delay:calc(var(--i)*.06s)}
+.pr1.in .pr1-c{opacity:1;transform:none}
+.pr1-c b{display:block;font-size:13.5px;color:var(--ink);margin-bottom:2px}
+.pr1-c.hit{background:var(--warm-soft)}
+.pr1 .legend{margin-top:10px}
+@media (max-width:640px){.pr1-g{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const N=['Saving and seed','Lending and interest','Commitment','Money','Insurance','Bank','Shares','Market','Information in prices','Delegation','Regulation & custody','Defaults'];
+  const T=[[ 'Consumption is smoothed over time; keeping seed is the earliest investment.','Two people whose shortages fall at different times both gain from lending; interest is the price of waiting.','Lending happens only when promises are credible; reputation and collateral each have limits.','Money solves the double coincidence of wants and also lets generations exchange with one another.','Individual risks can be shared; risks common to the whole village cannot be diversified away.','Maturity transformation creates liquidity and also brings bank runs.','Shares make large projects feasible; limited liability lets strangers dare to invest.','Liquidity has a price; the bid-ask spread is the cost of finding a counterparty.','Prices gather everyone\'s information; information advantages are used up in competition.','Delegation saves time and also brings agency costs; the cheapest delegation is the hardest to beat.','Custody, disclosure and suitability make delegation credible; rules have costs of their own.','People have biases and inertia; good defaults help them stick to their own plans.'],
+    ['Savings products: when the money is needed is the first parameter.','Deposits and loans: the interest rate is the price of time.','Credit records and collateral: credible records lower the cost of borrowing.','Payments and accounts: the infrastructure of exchange.','Insurance and diversified portfolios: share what can be shared, and explain what cannot be diversified away.','Deposits and reserves: money available at any time needs someone to stand behind it.','Stocks and bonds: residual returns and fixed claims.','Exchanges and brokers: lower the cost of finding a counterparty.','Index funds: do not compete with prices.','Funds and advisers: state clearly what the principal pays and what the principal gets.','Custody, disclosure and suitability: build credibility into the product itself.','Regular investing and defaults: the standard is the return the user actually receives.'],
+    [['When the money is needed is the first parameter handed to an agent.',0],['The cost of matching borrowers and lenders falls; the effect is weak.',0],['The easier and more credible records become, the stronger reputation is; verification and guarantees must be derived again.',1],['Payments can be carried out by an agent.',0],['Risk can be estimated, priced and shared; the part that cannot be diversified away does not disappear.',0],['Maturity and liquidity do not disappear; the faster information and transfers move, the faster runs happen.',0],['Not rerun itself; the separation of ownership and control is where delegation begins.',0],['The costs of search and bargaining fall, and agents become market participants.',1],['The cheaper research is and the more people do it, the smaller the information advantage.',1],['The costs of research, monitoring and fees fall, and the boundary of delegation moves.',1],['Who holds custody of an agent that can place orders, who checks it, and who is responsible when it errs.',1],['Whether agents can correct biases, and whether they will exploit them.',1]]];
+  const g=document.getElementById('pr1-g'),lg=document.getElementById('pr1-lg'),bs=[...document.querySelectorAll('[data-pr1]')];
+  function set(k){bs.forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.pr1===k)));lg.hidden=k!==2;
+    g.innerHTML=N.map((n,i)=>{const v=T[k][i],txt=k===2?v[0]:v,hit=k===2&&v[1];return `<div class="pr1-c${hit?' hit':''}" style="--i:${i}"><b>${i+1}  ${n}</b>${txt}</div>`;}).join('');}
+  bs.forEach(b=>b.addEventListener('click',()=>set(+b.dataset.pr1)));
+  document.getElementById('pr1').addEventListener('anim-in',()=>{[0,1,2].forEach((k,i)=>setTimeout(()=>set(k),300+i*2600));});
+  set(0);
+})();
+</script>

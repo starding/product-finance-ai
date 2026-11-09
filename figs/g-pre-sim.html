@@ -1,0 +1,41 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">文明模拟器：每一章解锁一条规则</p><p class="figsub">点选一条规则，看它解决什么问题，以及关掉它之后世界退回什么样子。灰色的规则在后面的章节解锁。</p></div><button class="replay" type="button" data-replay="gs">重播</button></div>
+    <div class="gs" id="gs" data-anim></div>
+    <p class="gs-msg" id="gs-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>已写成的章节可以点开；模拟器中的数字均为示意。</figcaption>
+</figure>
+<style>
+.gs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.gs-r{font:inherit;text-align:left;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--faint);border-radius:9px;padding:8px 10px;display:flex;flex-direction:column;gap:1px;opacity:0;transform:scale(.96);transition:opacity .35s,transform .35s,background .3s,border-color .3s;transition-delay:calc(var(--i)*.07s)}
+.gs.in .gs-r{opacity:1;transform:none}
+.gs-r em{font-style:normal;font-size:10.5px} .gs-r b{font-size:13.5px;font-weight:500}
+.gs-r.open{color:var(--ink);border-color:var(--accent);background:var(--accent-soft)}
+.gs-r.sel{box-shadow:0 0 0 2px var(--ink)}
+.gs-msg{font-size:14px;margin:12px 0 0;min-height:4.8em;line-height:1.7}
+@media (max-width:640px){.gs{grid-template-columns:repeat(2,1fr)}}
+</style>
+<script>
+(function(){
+  const R=[['储蓄与留种','一个人把今天的粮食留到明天，或播作种子。','没有它，收获之后几个月吃饱，其余月份挨饿。',1],
+    ['借贷','缺粮的时间不同的两个人互相借用，并约定利息。','没有它，每个人只能靠会损耗的储藏度过缺粮的月份。',1],
+    ['承诺','声誉、抵押与合同，让借出的东西收得回来。','没有它，没有人愿意借出，借贷无法发生。',1],
+    ['货币','一种人人都接受的东西作为交换的媒介、记账单位与价值储藏。','没有它，交换要等到双方恰好需要对方的东西，最年轻的一代也无从养老。',1],
+    ['保险','许多人凑在一起，分担各自可能遇到的坏收成。','没有它，一次荒年就能让一户人家破产。',1],
+    ['银行','把许多人随时要取的存款，转成少数人长期要用的贷款。','没有它，存的钱只能闲置，长期项目借不到钱。',1],
+    ['股份','许多人共同出资、共担风险，按份额分享剩余的收益。','没有它，造一艘船这样的大项目无人承担。',1],
+    ['市场','证券可以随时卖给别人，价格由买卖双方决定。','没有它，买下的股份只能持有到底。',1],
+    ['价格中的信息','价格汇集了所有人的信息，很难被持续预测。','没有它，信息更多的人可以稳赚不赔。',1],
+    ['委托','把钱交给有时间、有专长的人打理。','没有它，每个人都要自己研究、自己操作。',1],
+    ['监管与托管','披露、托管与适当性，约束受托人与卖方。','没有它，受托人可以挪用资产，卖方可以隐瞒风险。',1],
+    ['默认选项','用事先的安排弥补人的决策偏差。','没有它，计划好的储蓄常常半途而废。',1]];
+  const box=document.getElementById('gs'),msg=document.getElementById('gs-msg');
+  box.innerHTML=R.map((r,i)=>`<button type="button" class="gs-r${r[3]?' open':''}" data-i="${i}" style="--i:${i}"><em>第 ${i+1} 章${r[3]?'':' · 尚未解锁'}</em><b>${r[0]}</b></button>`).join('');
+  const bs=[...box.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));const r=R[i];msg.innerHTML=`<b>${r[0]}</b>：${r[1]}${r[2]}${r[3]?` <a href="g-${String(i+1).padStart(2,'0')}.html">打开第 ${i+1} 章的模拟器 →</a>`:''}`;}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  box.addEventListener('anim-in',()=>{[0,1,4,9].forEach((i,k)=>setTimeout(()=>set(i),900+k*2000));});
+  set(0);
+})();
+</script>

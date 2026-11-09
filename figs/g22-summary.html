@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：用户看不见过程</p><p class="figsub">四条结论，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="g22summary">重播</button></div>
+    <div class="g22summary" id="g22summary" data-anim><div class="g22summary-c" style="--i:0"><em>解开效应</em><b>可核对的记录让沉默成为坏消息</b><p>记录由第三方保存、不可修改，守约的代理愿意被看见。</p></div><div class="g22summary-c" style="--i:1"><em>有成本的核查</em><b>结果不好或触发时细查，平时抽查</b><p>大部分核对由代理替用户完成，用户只看结论与异常。</p></div><div class="g22summary-c warn" style="--i:2"><em>重跑：注意力</em><b>一句话、关键节点、全部记录</b><p>每一层都能追溯到下一层，摘要不能藏起坏消息。</p></div><div class="g22summary-c warn" style="--i:3"><em>当时与依据</em><b>写下当时知道什么、依据哪一条</b><p>免得事后诸葛；说不出依据的那一步，正是该追问的。</p></div></div>
+  </div>
+</figure>
+<style>
+.g22summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g22summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g22summary-c.warn{border-left-color:var(--warm)}
+.g22summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g22summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g22summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g22summary.in .g22summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g22summary{grid-template-columns:1fr}}
+</style>

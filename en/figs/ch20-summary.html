@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: first find the parts that can be handed over</p><p class="figsub">Six design requirements, each tied to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="ch20summary">Replay</button></div>
+    <div class="ch20summary" id="ch20summary" data-anim><div class="ch20summary-c" style="--i:0"><em>The scale handed over</em><b>Ongoing responsibilities need their own organization</b><p>Tiered interruptions, a verifiable past and a foreseeable future; a single query needs no long-term relationship.</p></div><div class="ch20summary-c" style="--i:1"><em>Where the result lands</em><b>Start with information and rights-and-obligations tasks</b><p>An agent can directly change the results of these two kinds of task; for tasks involving the body and the physical world, it only assists.</p></div><div class="ch20summary-c" style="--i:2"><em>The applicable share sets the ceiling</em><b>Widen what the agent can take on completely</b><p>Filling in, one by one, the steps of a task the agent cannot do raises the overall factor more than further speeding up production.</p></div><div class="ch20summary-c" style="--i:3"><em>Conditions determine the reachable share</em><b>Supply data, tools and access</b><p>Account and execution data are context, trading channels are tools, and licences and custody are access; ongoing monitoring is where investors spend the most effort and what an agent can best take over.</p></div><div class="ch20summary-c warn" style="--i:4"><em>Able to does not mean allowed to</em><b>Leave authorization, confirmation and acknowledgement to the person</b><p>The agent prepares and executes; how much to invest, whether to place an order and whether the risks are understood are decided by the person, with a record kept.</p></div><div class="ch20summary-c warn" style="--i:5"><em>Explaining has a fixed cost</em><b>Take on recurring tasks first</b><p>Let goals and constraints explained once serve for a long time; ongoing tracking tasks are the most worth handing over.</p></div></div>
+  </div>
+</figure>
+<style>
+.ch20summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch20summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.25s)}
+.ch20summary-c.warn{border-left-color:var(--warm)}
+.ch20summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch20summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch20summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch20summary.in .ch20summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch20summary{grid-template-columns:1fr}}
+</style>

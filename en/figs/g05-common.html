@@ -1,0 +1,32 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Risk that cannot be diversified away</p><p class="figsub">Each household's harvest swings have two parts: its own luck and the conditions shared by the whole village. Drag the weight of village-wide conditions and see how far the swings each household bears can fall as households are added.</p></div><button class="replay" type="button" data-replay="cm">Replay</button></div>
+    <div class="cm" id="cm" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="Number of households and the swings each household bears"><g id="cm-ax"></g><path id="cm-c" class="cm-c"/><line id="cm-f" class="cm-f"/><text id="cm-ft" font-size="12" class="t-warm"></text></svg>
+      <div class="sl"><label for="cm-r">Weight of village-wide conditions <b id="cm-rv"></b></label><input id="cm-r" type="range" min="0" max="100" step="5" value="30"></div>
+      <p class="cm-msg" id="cm-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the horizontal axis is the number of households. The weight is the share of each household's harvest variance due to village-wide conditions. After sharing, the swings each household bears = original swings × √(weight + (1 − weight) ÷ number of households); with infinitely many households they fall to original swings × √weight.</figcaption>
+</figure>
+<style>
+.cm svg{width:100%;height:auto;display:block}
+.cm-c{fill:none;stroke:var(--accent);stroke-width:2.5}
+.cm-f{stroke:var(--warm);stroke-width:1.6;stroke-dasharray:5 4}
+.cm-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.cm svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),X0=50,X1=630,YT=12,YB=180,lx=n=>X0+Math.log(n)/Math.log(100)*(X1-X0),y=v=>YB-v*(YB-YT);
+  $('cm-ax').innerHTML=[0,.25,.5,.75,1].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text>`).join('')+[1,2,5,10,20,50,100].map(n=>`<text x="${lx(n)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${n}</text>`).join('');
+  function draw(){const r=+$('cm-r').value/100;let d='';for(let n=1;n<=100;n*=1.05)d+=(n===1?'M':'L')+lx(n).toFixed(1)+','+y(Math.sqrt(r+(1-r)/n)).toFixed(1);$('cm-c').setAttribute('d',d);
+    const f=Math.sqrt(r);['x1','x2'].forEach((k,i)=>$('cm-f').setAttribute(k,i?X1:X0));$('cm-f').setAttribute('y1',y(f));$('cm-f').setAttribute('y2',y(f));
+    $('cm-ft').setAttribute('x',X1-4);$('cm-ft').setAttribute('y',y(f)-6);$('cm-ft').setAttribute('text-anchor','end');$('cm-ft').textContent=`Cannot be diversified: ${Math.round(f*100)}%`;
+    $('cm-rv').textContent=Math.round(r*100)+'%';
+    $('cm-msg').textContent=r===0?'When households\' risks are unrelated, the more households there are, the closer the swings each one bears come to zero.':r===1?'When all risk comes from village-wide conditions, no number of households can share away any of the swings.':`When village-wide conditions account for ${Math.round(r*100)}%, however many households there are, each still bears ${Math.round(f*100)}% of its original swings: this part can only be borne by those willing to bear it, who must be compensated for doing so.`;}
+  $('cm-r').addEventListener('input',draw);
+  $('cm').addEventListener('anim-in',()=>{let v=0;$('cm-r').value=0;draw();const id=setInterval(()=>{v+=5;$('cm-r').value=v;draw();if(v>=60)clearInterval(id);},200);});
+  draw();
+})();
+</script>

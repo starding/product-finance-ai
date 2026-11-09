@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">From occupational tasks to industry ceilings: five steps</p><p class="figsub">Select a step to see what it does and which data it uses.</p></div><button class="replay" type="button" data-replay="pp">Replay</button></div>
+    <div class="pp" id="pp" data-anim>
+      <button type="button" class="pp-s" data-pp="0" style="--i:0"><em>1</em><b>Weight tasks</b><span>About 19,000 tasks</span></button>
+      <button type="button" class="pp-s" data-pp="1" style="--i:1"><em>2</em><b>Assign to activities</b><span>332 intermediate work activities</span></button>
+      <button type="button" class="pp-s" data-pp="2" style="--i:2"><em>3</em><b>Double coding</b><span>Domain, three-tier proportions, two trust dimensions</span></button>
+      <button type="button" class="pp-s" data-pp="3" style="--i:3"><em>4</em><b>Aggregate by occupation</b><span>899 occupations → 9 major groups</span></button>
+      <button type="button" class="pp-s" data-pp="4" style="--i:4"><em>5</em><b>Weight by industry</b><span>20 industry sections</span></button>
+    </div>
+    <p class="pp-msg" id="pp-msg" aria-live="polite"></p>
+  </div>
+</figure>
+<style>
+.pp{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;position:relative}
+.pp-s{font:inherit;text-align:left;cursor:pointer;background:var(--quote);border:1px solid transparent;border-radius:10px;padding:10px;color:var(--ink);display:flex;flex-direction:column;gap:2px;position:relative;opacity:0;transform:translateY(8px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.2s)}
+.pp.in .pp-s{opacity:1;transform:none}
+.pp-s:not(:last-child)::after{content:"→";position:absolute;right:-14px;top:50%;transform:translateY(-50%);color:var(--faint);font-size:13px}
+.pp-s em{font-style:normal;font-size:11px;color:var(--faint)} .pp-s b{font-size:14px} .pp-s span{font-size:11.5px;color:var(--muted);line-height:1.45}
+.pp-s.sel{border-color:var(--accent);background:var(--accent-soft)}
+.pp-msg{font-size:14px;margin:12px 0 0;min-height:4.8em;line-height:1.7}
+@media (max-width:640px){.pp{grid-template-columns:1fr;gap:8px}.pp-s:not(:last-child)::after{content:"↓";right:12px}}
+</style>
+<script>
+(function(){
+  const M=['O*NET 31.0 rates each occupation\'s tasks for importance (1 to 5) and frequency (7 categories, from once a year or less to several times an hour). Each task\'s weight is (importance − 1) × the weighted average of the frequency categories, used as an approximation of its share of the occupation\'s working time.',
+    'Each task maps to one or more detailed work activities (DWAs), and its weight is split equally among them; the detailed activities are then grouped into 332 intermediate work activities (IWAs). Intermediate work activities are units common across occupations, such as "analyse business or financial data" and "execute financial transactions".',
+    'Two coders, using the same written rules, independently judge each intermediate work activity: which domain it belongs to (with information split into digitally obtainable and requiring on-site perception); the share of time that could be handed to an agent under each of three tiers, Chat, Agent and Embodied Agent; and the consequences of default and the verifiability of results, each on grades 1 to 4. Where domains differ, each counts for half; proportions and grades are averaged.',
+    'Each occupation\'s reachable share p = the sum over activities of time share × reachable proportion. Occupations are approximately matched to the 9 ISCO-08 major groups by Standard Occupational Classification major group, job zone and occupation title, and averaged within each major group.',
+    'Each industry section is weighted by employment in each ISCO major group across the 27 EU countries in 2024 (Eurostat lfsa_eisn2). Ceiling on the amplification factor for a whole job = 1 ÷ (1 − p); when the reachable part is sped up s times, the whole is 1 ÷ [(1 − p) + p ÷ s].'];
+  const msg=document.getElementById('pp-msg');
+  function set(k){document.querySelectorAll('[data-pp]').forEach(b=>b.classList.toggle('sel',+b.dataset.pp===k));msg.textContent=M[k];}
+  document.querySelectorAll('[data-pp]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.pp)));
+  document.getElementById('pp').addEventListener('anim-in',()=>{[0,1,2,3,4].forEach((k,i)=>setTimeout(()=>set(k),300+i*2000));});
+  set(0);
+})();
+</script>

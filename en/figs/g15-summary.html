@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: who guarantees an agent's promises</p><p class="figsub">Four conclusions, each corresponding to one mechanism in the chapter.</p></div><button class="replay" type="button" data-replay="g15summary">Replay</button></div>
+    <div class="g15summary" id="g15summary" data-anim><div class="g15summary-c" style="--i:0"><em>Judgment-proof</em><b>Those who cannot pay will not be very careful</b><p>A scribe has no property, so punishing it is pointless, and it will not insure of its own accord.</p></div><div class="g15summary-c" style="--i:1"><em>Reputation and vicarious liability</em><b>Guaranteed by the people behind it</b><p>Names can be changed at will, so reputation must attach to the operator; compensation is borne by the operator, who can afford to pay and is in a position to control the scribe.</p></div><div class="g15summary-c warn" style="--i:2"><em>Records</em><b>Kept by a third party, unalterable</b><p>With a record of every transaction, checking changes from guesswork into comparison, and responsibility can be assigned.</p></div><div class="g15summary-c warn" style="--i:3"><em>Least privilege</em><b>Grant only the authority needed</b><p>Authority is graded by size and by whether an action can be undone, and the assets stay with an independent custodian.</p></div></div>
+  </div>
+</figure>
+<style>
+.g15summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g15summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g15summary-c.warn{border-left-color:var(--warm)}
+.g15summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g15summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g15summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g15summary.in .g15summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g15summary{grid-template-columns:1fr}}
+</style>

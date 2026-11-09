@@ -1,0 +1,41 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The more trading, the lower the return</p><p class="figsub">Two large-sample studies of individual investors.</p></div><button class="replay" type="button" data-replay="ft">Replay</button></div>
+    <div class="ft" id="ft" data-anim>
+      <div class="ft-p">
+        <p class="ft-h">About 66,000 US household accounts, 1991–1996: average annual net return</p>
+        <div class="ft-row" style="--i:0;--v:17.9"><span>Market, same period</span><div class="ft-t"><i></i></div><b>17.9%</b></div>
+        <div class="ft-row" style="--i:1;--v:11.4"><span>20% of households trading most</span><div class="ft-t"><i class="w"></i></div><b>11.4%</b></div>
+        <p class="ft-src">Barber and Odean (2000)</p>
+      </div>
+      <div class="ft-p">
+        <p class="ft-h">Share of day traders in Taiwan who earn consistent profits after fees</p>
+        <div class="ft-dots" id="ft-dots" aria-label="Fewer than one in a hundred"></div>
+        <p class="ft-src">Each dot is 1% of day traders; the orange part is less than one dot. Barber, Lee, Liu and Odean (2014)</p>
+      </div>
+    </div>
+  </div>
+</figure>
+<style>
+.ft{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ft-p{background:var(--quote);border-radius:10px;padding:12px 14px}
+.ft-h{margin:0 0 10px;font-size:13px;font-weight:700;line-height:1.5}
+.ft-row{display:grid;grid-template-columns:118px 1fr 52px;gap:8px;align-items:center;font-size:12px;margin:8px 0}
+.ft-row b{text-align:right;font-size:15px;font-variant-numeric:tabular-nums}
+.ft-t{height:18px;background:var(--surface);border-radius:5px;overflow:hidden}
+.ft-t i{display:block;height:100%;width:0;background:var(--accent);border-radius:5px;transition:width .9s ease;transition-delay:calc(var(--i)*.5s)}
+.ft-t i.w{background:var(--warm)}
+.ft.in .ft-t i{width:calc(var(--v)/20*100%)}
+.ft-src{margin:8px 0 0;font-size:11px;color:var(--faint)}
+.ft-dots{display:grid;grid-template-columns:repeat(20,1fr);gap:3px}
+.ft-dots i{aspect-ratio:1;border-radius:50%;background:var(--gray-mark);opacity:0;transition:opacity .2s}
+.ft.in .ft-dots i{opacity:.6;transition-delay:calc(var(--k)*10ms)}
+.ft-dots i.w{background:linear-gradient(90deg,var(--warm) 70%,var(--gray-mark) 70%);opacity:1}
+.ft.in .ft-dots i.w{opacity:1}
+@media (max-width:640px){.ft{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  document.getElementById('ft-dots').innerHTML=Array.from({length:100},(_,k)=>`<i class="${k===0?'w':''}" style="--k:${k}"></i>`).join('');
+})();
+</script>

@@ -1,0 +1,56 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">现状与理想之间</p><p class="figsub">用户眼下零散的做法是一种稳态，成熟投资者前后一致的做法是另一种。切换产品的做法，看十次复盘之后用户在哪里，以及产品在几个时刻各怎样做。</p></div><button class="replay" type="button" data-replay="sd16">重播</button></div>
+    <div class="sd16" id="sd16" data-anim>
+      <div class="seg-btns" role="group" aria-label="产品的做法">
+        <button type="button" data-sd16="follow" aria-pressed="false">只顺着现状</button>
+        <button type="button" data-sd16="mid" aria-pressed="true">先尊重，再邀请</button>
+        <button type="button" data-sd16="push" aria-pressed="false">只看向理想</button>
+      </div>
+      <svg viewBox="0 0 400 78" role="img" aria-label="用户在现状与理想之间的位置"><g id="sd16-g"></g></svg>
+      <div class="sd16-ends"><div><b>现状的稳态：方法零散</b>听来的消息买入，换个理由卖出，复盘再换一套</div><div><b>理想的稳态：方法前后一致</b>发现、交易、复盘用同一套方法</div></div>
+      <div class="sd16-m" id="sd16-m"></div>
+      <p class="sd16-msg" id="sd16-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：横轴是用户的做法离成熟投资者有多远，位置与移动的幅度只为说明，不是实测数据。中间的路径只承诺改进过程的质量，不承诺结果。</figcaption>
+</figure>
+<style>
+.sd16 svg{width:100%;height:auto;display:block;margin-top:6px}
+.sd16-ends{display:flex;justify-content:space-between;gap:16px;font-size:12px;color:var(--faint);line-height:1.5}
+.sd16-ends div:last-child{text-align:right}
+.sd16-ends b{display:block;font-weight:500;color:var(--muted);font-size:12.5px}
+.sd16-m{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
+.sd16-m div{background:var(--quote);border-radius:9px;padding:8px 10px;font-size:13px;line-height:1.55}
+.sd16-m span{display:block;font-size:11.5px;color:var(--faint)}
+.sd16-msg{font-size:14px;margin:10px 0 0;min-height:3.2em}
+@media (max-width:640px){.sd16-m{grid-template-columns:1fr 1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('sd16'+id),X0=14,X1=386,AY=62,x=v=>X0+v*(X1-X0);
+  const P={follow:[.1,.1,.1,.1,.1,.1,.1,.1,.1,.1,.1],mid:[.1,.16,.22,.28,.34,.4,.45,.5,.55,.6,.64],push:[.1,.28,-1,-1,-1,-1,-1,-1,-1,-1,-1]};
+  const M={follow:[['用户想频繁交易','提供更快的下单工具，不加评判。'],['大跌之后','照用户的意思卖出，不提当初的计划。'],['复盘','只列出盈亏，不说每一笔为什么买卖。'],['用户不想改','本来就不打算让用户改。']],
+    mid:[['用户想频繁交易','照常执行，同时记下每一笔交易的理由与结果。'],['大跌之后','展示用户自己写下的计划，请他隔一天再确认。'],['复盘','用用户自己的交易记录说明：频繁交易没有带来更好的结果；问他要不要试一试另一种方法。'],['用户不想改','尊重用户的决定，下次复盘再看记录。']],
+    push:[['用户想频繁交易','反复弹窗劝阻，告诉用户这样做不对。'],['大跌之后','劝阻卖出，讲一遍长期持有的道理。'],['复盘','逐条指出用户哪里不像成熟的投资者。'],['用户不想改','继续说服，直到用户离开这个产品。']]};
+  const T={follow:'只顺着现状：产品不预设任何看法，也不为成交次数着想；可用户的习惯被照单全收，频繁交易的代价年年累积，他想要更好结果的愿望从未被回应。',
+    mid:'先尊重，再邀请：习惯照常执行，理由与结果都记下来；每次复盘用用户自己的记录说明结果，再问他要不要试一试。用户一小步一小步地向前移，决定始终在他手里；改进的是过程的质量，结果仍取决于市场。',
+    push:'只看向理想：产品处处纠正，第二次复盘时，用户离开了这个产品。方向没有错，可产品连帮他的机会也失去了。'};
+  let k='mid',tm=[],seq=[];
+  function axis(){return `<line x1="${X0}" x2="${X1}" y1="${AY}" y2="${AY}" class="s-line" stroke-width="2"/>`+
+    `<line x1="${x(.3)}" x2="${x(.7)}" y1="20" y2="20" stroke="var(--gold)" stroke-width="1.5" marker-end="url(#sd16-a)"/><text x="${x(.5)}" y="12" font-size="12" text-anchor="middle" fill="var(--gold)">张力：他自己想要更好的结果</text>`+
+    `<defs><marker id="sd16-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="var(--gold)"/></marker></defs>`;}
+  function draw(n){const p=P[k];let h=axis(),last=-1;
+    for(let i=0;i<=n;i++){const v=p[i];if(v<0)break;last=i;if(i<n&&p[i+1]>=0)h+=`<line x1="${x(v)}" x2="${x(p[i+1])}" y1="${AY}" y2="${AY}" stroke="var(--accent)" stroke-width="4" opacity=".35"/>`;}
+    const v=p[last],gone=n>last;
+    h+=`<circle cx="${x(v)}" cy="${AY}" r="8" fill="${k==='follow'?'var(--warm)':'var(--accent)'}" opacity="${gone?.25:1}"/>`;
+    h+=`<text x="${x(v)}" y="${AY-16}" font-size="12" text-anchor="middle" class="t-faint">${gone?'用户离开了这个产品':'第 '+n+' 次复盘后'}</text>`;
+    $('-g').innerHTML=h;}
+  function run(){tm.forEach(clearTimeout);tm=[];document.querySelectorAll('[data-sd16]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.sd16===k)));
+    $('-m').innerHTML=M[k].map(([a,b])=>`<div><span>${a}</span>${b}</div>`).join('');$('-msg').textContent=T[k];
+    for(let n=0;n<=10;n++)tm.push(setTimeout(()=>draw(n),n*260));}
+  document.querySelectorAll('[data-sd16]').forEach(b=>b.addEventListener('click',()=>{seq.forEach(clearTimeout);seq=[];k=b.dataset.sd16;run();}));
+  $('').addEventListener('anim-in',()=>{seq.forEach(clearTimeout);seq=[];['follow','push','mid'].forEach((s,i)=>seq.push(setTimeout(()=>{k=s;run();},300+i*3600)));});
+  draw(10);$('-m').innerHTML=M[k].map(([a,b])=>`<div><span>${a}</span>${b}</div>`).join('');$('-msg').textContent=T[k];
+})();
+</script>

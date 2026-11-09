@@ -1,0 +1,33 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">免赔额：让投保人仍有防范的动力</p><p class="figsub">遭灾时损失 10 份。拖动投保人自己承担的比例，看他防治虫害的力度、遭灾的概率与保费怎样变化。</p></div><button class="replay" type="button" data-replay="mh">重播</button></div>
+    <div class="mh" id="mh" data-anim>
+      <div class="mh-b"><span>防治虫害的力度</span><div><i id="mh-e" style="background:var(--accent)"></i></div><b id="mh-ev"></b></div>
+      <div class="mh-b"><span>遭灾的概率</span><div><i id="mh-p" style="background:var(--warm)"></i></div><b id="mh-pv"></b></div>
+      <div class="mh-b"><span>每年的保费</span><div><i id="mh-q" style="background:var(--gold)"></i></div><b id="mh-qv"></b></div>
+      <div class="mh-b"><span>灾年自己承担</span><div><i id="mh-s" style="background:var(--faint)"></i></div><b id="mh-sv"></b></div>
+      <div class="sl"><label for="mh-k">自己承担的比例 <b id="mh-kv"></b></label><input id="mh-k" type="range" min="0" max="100" step="5" value="0"></div>
+      <p class="mh-msg" id="mh-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：防治越用力，遭灾的概率越低；投保人只为自己承担的那部分损失而防治，防治的力度与自己承担的比例成正比。保费按预期赔付计算。</figcaption>
+</figure>
+<style>
+.mh-b{display:grid;grid-template-columns:8em 1fr 4.5em;gap:10px;align-items:center;font-size:13px;margin:7px 0}
+.mh-b div{height:14px;background:var(--quote);border-radius:4px;overflow:hidden}
+.mh-b i{display:block;height:100%;transition:width .3s}
+.mh-b b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.mh-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  function draw(){const k=+$('mh-k').value/100,e=k,p=.3-.2*e,q=p*(1-k)*10,s=10*k;
+    $('mh-e').style.width=e*100+'%';$('mh-p').style.width=p/.3*100+'%';$('mh-q').style.width=q/3*100+'%';$('mh-s').style.width=s/10*100+'%';
+    $('mh-ev').textContent=Math.round(e*100)+'%';$('mh-pv').textContent=Math.round(p*100)+'%';$('mh-qv').textContent=q.toFixed(2)+' 份';$('mh-sv').textContent=s.toFixed(1)+' 份';$('mh-kv').textContent=Math.round(k*100)+'%';
+    $('mh-msg').textContent=k===0?'损失全部由公仓赔付，投保人没有任何防治的动力，遭灾的概率最高，保费也最贵。':k===1?'损失全部自己承担，防治最用力，但这已经等于没有保险。':`自己承担 ${Math.round(k*100)}% 的损失，投保人仍会防治，遭灾的概率降到 ${Math.round(p*100)}%，保费降到 ${q.toFixed(2)} 份；代价是灾年自己要承担 ${s.toFixed(1)} 份。免赔额就是在保障与防范之间取舍。`;}
+  $('mh-k').addEventListener('input',draw);
+  $('mh').addEventListener('anim-in',()=>{let v=0;$('mh-k').value=0;draw();const id=setInterval(()=>{v+=5;$('mh-k').value=v;draw();if(v>=40)clearInterval(id);},180);});
+  draw();
+})();
+</script>

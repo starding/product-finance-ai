@@ -1,0 +1,40 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">从四个命题到一个推论</p><p class="figsub">本书金融部分的立场，以及它对 AI 金融产品的含义。</p></div><button class="replay" type="button" data-replay="stance">重播</button></div>
+    <div class="stance" id="stance" data-anim>
+      <div class="st-card" style="--i:0"><em>巴舍利耶 1900</em><b>价格难以预测</b><span>可以预测的部分会被交易掉</span></div>
+      <div class="st-arrow" style="--i:0"></div>
+      <div class="st-card" style="--i:1"><em>格罗斯曼与斯蒂格利茨 1980</em><b>效率有代价</b><span>知情交易者因承担成本而获得补偿</span></div>
+      <div class="st-arrow" style="--i:1"></div>
+      <div class="st-card" style="--i:2"><em>法玛与弗伦奇 1993</em><b>收益来自承担风险</b><span>长期收益可分解为少数因子的补偿</span></div>
+      <div class="st-arrow" style="--i:2"></div>
+      <div class="st-card" style="--i:3"><em>夏普 1991</em><b>主动交易整体负和</b><span>扣除成本后跑不赢市场</span></div>
+      <div class="st-result">
+        <p>推论：AI 在金融产品中的价值</p>
+        <div class="st-tags"><span style="--j:0">降低成本</span><span style="--j:1">保证执行</span><span style="--j:2">维持纪律</span><span style="--j:3">保持分散</span><span style="--j:4">矫正行为</span><span style="--j:5">做不到变做得到</span></div>
+        <p class="st-not">而不在于预测价格、挑出赢家</p>
+      </div>
+    </div>
+  </div>
+</figure>
+<style>
+.stance{display:grid;grid-template-columns:1fr 18px 1fr 18px 1fr 18px 1fr;gap:6px;align-items:stretch}
+.st-card{background:var(--quote);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:4px;opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.45s)}
+.st-card em{font-style:normal;font-size:11px;color:var(--faint)}
+.st-card b{font-size:15px;line-height:1.4}
+.st-card span{font-size:12px;color:var(--muted);line-height:1.5}
+.st-arrow{align-self:center;height:2px;background:var(--faint);position:relative;opacity:0;transition:opacity .3s;transition-delay:calc(var(--i)*.45s + .3s)}
+.st-arrow::after{content:"";position:absolute;right:-1px;top:-4px;border-left:6px solid var(--faint);border-top:5px solid transparent;border-bottom:5px solid transparent}
+.st-result{grid-column:1/-1;margin-top:14px;border:1.5px solid var(--accent);border-radius:12px;padding:14px 16px;opacity:0;transition:opacity .5s;transition-delay:2s}
+.st-result p{margin:0;font-size:14px;font-weight:700;color:var(--accent)}
+.st-result .st-not{font-weight:400;color:var(--faint);font-size:13px;margin-top:8px}
+.st-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.st-tags span{font-size:13px;background:var(--accent-soft);color:var(--ink);padding:4px 10px;border-radius:999px;opacity:0;transform:scale(.9);transition:opacity .3s,transform .3s;transition-delay:calc(2.3s + var(--j)*.15s)}
+.stance.in .st-card,.stance.in .st-tags span{opacity:1;transform:none}
+.stance.in .st-arrow,.stance.in .st-result{opacity:1}
+@media (max-width:640px){
+  .stance{grid-template-columns:1fr}
+  .st-arrow{width:2px;height:14px;justify-self:center}
+  .st-arrow::after{right:-4px;top:auto;bottom:-2px;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid var(--faint);border-bottom:none}
+}
+</style>

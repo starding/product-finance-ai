@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：让核对变得便宜而可靠</p><p class="figsub">六条设计要求，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="ch22summary">重播</button></div>
+    <div class="ch22summary" id="ch22summary" data-anim><div class="ch22summary-c" style="--i:0"><em>核对给倍数设了上限</em><b>从核对比生成便宜的任务做起</b><p>优先承接可以用测试、重算与原文对照来核对的任务。</p></div><div class="ch22summary-c" style="--i:1"><em>不核对的倍数是虚的</em><b>不以省掉核对来抬高倍数</b><p>结果难以核验时，要么把核对算进投入，要么把未经核对的风险讲清楚。</p></div><div class="ch22summary-c" style="--i:2"><em>敢不敢交</em><b>按后果与可验证性安排授权的先后</b><p>先放手可当场核验的事，交易执行逐笔确认，建议与全权管理依靠约定与过程记录。</p></div><div class="ch22summary-c" style="--i:3"><em>说不清楚代价在后面</em><b>事先写清验收标准</b><p>把对象、期限、指标与格式写成清单，交回时按清单逐项验收。</p></div><div class="ch22summary-c warn" style="--i:4"><em>思考过程难以核对</em><b>以关键行动与证据为展示单位</b><p>每个数字与结论都可以点开出处，核对者只看与结论有关的几处。</p></div><div class="ch22summary-c warn" style="--i:5"><em>核对会松懈</em><b>按风险分级核对，并检查核对本身</b><p>涉及资金与持仓的结果逐项确认，其余抽查；定期混入考题，记录核对结果。</p></div></div>
+  </div>
+</figure>
+<style>
+.ch22summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch22summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.25s)}
+.ch22summary-c.warn{border-left-color:var(--warm)}
+.ch22summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch22summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch22summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch22summary.in .ch22summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch22summary{grid-template-columns:1fr}}
+</style>

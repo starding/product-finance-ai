@@ -1,0 +1,34 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">After a mistake: back to zero, or one step back?</p><p class="figsub">A reliable scribe makes an execution error in year 4, which is compensated and fixed. In year 7 it shifts the proportions back as the agreement says and then meets a storm, which is a misjudgement. Switch between two ways of treating mistakes, and see the authority level over ten years and how much it gets done for him.</p></div><button class="replay" type="button" data-replay="as24">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Approach">
+      <button type="button" data-as24="zero" aria-pressed="true">Any mistake resets to zero</button>
+      <button type="button" data-as24="kind" aria-pressed="false">Adjust by kind of mistake</button>
+    </div>
+    <div class="as24" id="as24" data-anim>
+      <svg viewBox="0 0 660 170" role="img" aria-label="Authority level"><g id="as24-g"></g></svg>
+      <p class="as24-msg" id="as24-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: authority has four levels (L1 to L4 on the vertical axis), rising one level for each year the agreement is kept. Under "Adjust by kind of mistake", an execution error that has been compensated and fixed steps back one level, a misjudgement does not step back, and only overstepping and concealment lead to authority being withdrawn. What it gets done for him in one year at each level counts as 1, 2, 4 and 7 respectively.</figcaption>
+</figure>
+<style>
+.as24 svg{width:100%;height:auto;display:block}
+.as24-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.as24 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('as24'+id),V=[1,2,4,7],X0=50,X1=628,YB=140,YT=12,bw=(X1-X0)/10,y=l=>YB-(l+1)/4*(YB-YT);
+  function path(m){const L=[];let lv=0;for(let t=0;t<10;t++){L.push(lv);if(t===3){lv=m==='zero'?0:Math.max(0,lv-1);continue;}if(t===6){lv=m==='zero'?0:Math.min(3,lv+1);continue;}lv=Math.min(3,lv+1);}return L;}
+  function set(m){document.querySelectorAll('[data-as24]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.as24===m)));const L=path(m),tot=L.reduce((a,l)=>a+V[l],0),o=path(m==='zero'?'kind':'zero').reduce((a,l)=>a+V[l],0);
+    let h=['1','2','3','4'].map((n,i)=>`<text x="${X0-6}" y="${y(i)+14}" text-anchor="end" font-size="11" class="t-faint">L${n}</text>`).join('');
+    L.forEach((l,t)=>{h+=`<rect x="${X0+t*bw+4}" y="${y(l)}" width="${bw-8}" height="${YB-y(l)}" fill="var(--accent)" opacity="${.35+l*.2}"/><text x="${X0+t*bw+bw/2}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${t+1}</text>`;});
+    h+=`<text x="${X0+3*bw+bw/2}" y="${YT+8}" text-anchor="middle" font-size="11" fill="var(--warm)">Execution error</text><text x="${X0+6*bw+bw/2}" y="${YT+8}" text-anchor="middle" font-size="11" fill="var(--blue)">Misjudgement</text>`;
+    $('-g').innerHTML=h;
+    $('-msg').textContent=m==='zero'?`Any mistake resets to zero: both mistakes send authority back to Level 1, and over ten years what it gets done for him totals ${tot}. Each time, he also falls back on his own, worse judgement.`:`Adjust by kind of mistake: the execution error, compensated and fixed, steps back only one level; the misjudgement does not step back. Over ten years what it gets done for him totals ${tot}, ${Math.round((tot/o-1)*100)}% more than the ${o} under resetting to zero.`;}
+  document.querySelectorAll('[data-as24]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.as24)));
+  $('').addEventListener('anim-in',()=>{set('zero');setTimeout(()=>set('kind'),2400);});
+  set('zero');
+})();
+</script>

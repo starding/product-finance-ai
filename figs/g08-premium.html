@@ -1,0 +1,36 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">流动性有价格</p><p class="figsub">两艘前景相同的船，份额的价差不同。拖动价差与持有人每年买卖的次数，看难卖的那一艘要多提供多少回报，买的人才愿意持有。</p></div><button class="replay" type="button" data-replay="pm8">重播</button></div>
+    <div class="pm8" id="pm8" data-anim>
+      <div class="pm8-b"><span>容易卖的船</span><div><i id="pm8-a" style="background:var(--accent)"></i></div><b id="pm8-av"></b></div>
+      <div class="pm8-b"><span>难卖的船</span><div><i id="pm8-c" style="background:var(--warm)"></i></div><b id="pm8-cv"></b></div>
+      <div class="pm8-sl">
+        <div class="sl"><label for="pm8-s">难卖的船的价差 <b id="pm8-sv"></b></label><input id="pm8-s" type="range" min="0" max="10" step="0.5" value="2"></div>
+        <div class="sl"><label for="pm8-t">持有人每年买卖 <b id="pm8-tv"></b></label><input id="pm8-t" type="range" min="0" max="20" step="1" value="3"></div>
+      </div>
+      <p class="pm8-msg" id="pm8-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：容易卖的船价差按 0.2% 计，两艘船扣除交易成本后的回报相同时成立；每年要求多出的回报约等于 价差 × 每年买卖的次数。阿米胡德与门德尔森（1986）还指出，持有期越长的人越适合持有难卖的资产。</figcaption>
+</figure>
+<style>
+.pm8-b{display:grid;grid-template-columns:6.5em 1fr 4.5em;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.pm8-b div{height:18px;background:var(--quote);border-radius:4px;overflow:hidden}
+.pm8-b i{display:block;height:100%;transition:width .3s}
+.pm8-b b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.pm8-sl{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.pm8-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.pm8-sl{grid-template-columns:1fr;gap:4px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),tv=[.1,.2,.5,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,18,20],base=5;
+  function draw(){const s=+$('pm8-s').value/100,t=tv[+$('pm8-t').value],ra=base+.002*t*100,rc=base+s*t*100;
+    $('pm8-a').style.width=Math.min(100,ra/30*100)+'%';$('pm8-c').style.width=Math.min(100,rc/30*100)+'%';$('pm8-av').textContent=ra.toFixed(1)+'%';$('pm8-cv').textContent=rc.toFixed(1)+'%';
+    $('pm8-sv').textContent=(s*100).toFixed(1)+'%';$('pm8-tv').textContent=(t<1?t.toFixed(1):t)+' 次';
+    $('pm8-msg').textContent=`价差 ${(s*100).toFixed(1)}%、每年买卖 ${t<1?t.toFixed(1):t} 次时，难卖的船每年要多提供约 ${(rc-ra).toFixed(1)} 个百分点的回报。${t<=1?'持有人很少交易，流动性差几乎不构成成本：长期持有的人可以把流动性“卖”掉，换取这部分补偿。':'持有人交易越频繁，流动性差的代价越大。'}`;}
+  ['pm8-s','pm8-t'].forEach(k=>$(k).addEventListener('input',draw));
+  $('pm8').addEventListener('anim-in',()=>{let v=0;$('pm8-t').value=v;draw();const id=setInterval(()=>{v++;$('pm8-t').value=v;draw();if(v>=8){clearInterval(id);setTimeout(()=>{$('pm8-t').value=3;draw();},600);}},250);});
+  draw();
+})();
+</script>

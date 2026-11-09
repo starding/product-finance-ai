@@ -1,0 +1,38 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">What this step leaves open</p><p class="figsub">Five questions left for a product to answer. Pick a question to see the constraint behind it.</p></div><button class="replay" type="button" data-replay="nx19">Replay</button></div>
+    <div class="nx" id="nx19" data-anim>
+      <div class="nx-src"><b>Part Two</b><span>After the parameter changes</span></div>
+      <div class="nx-list" id="nx19-l"></div>
+    </div>
+    <p class="nx-msg" id="nx19-msg" aria-live="polite"></p>
+  </div>
+</figure>
+<style>
+.nx{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:center}
+.nx-src{background:var(--ink);color:var(--bg);border-radius:10px;padding:14px 10px;text-align:center}
+.nx-src b{display:block;font-size:16px} .nx-src span{font-size:12px;opacity:.75}
+.nx-list{display:grid;gap:6px}
+.nx-i{font:inherit;text-align:left;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:9px 12px;color:var(--ink);opacity:0;transform:translateX(-8px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.3s)}
+.nx.in .nx-i{opacity:1;transform:none}
+.nx-i span{font-size:13.5px} .nx-i em{font-style:normal;font-size:11.5px;color:var(--faint);white-space:nowrap}
+.nx-i.sel{border-color:var(--accent)}
+.nx-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.nx{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const Q=[['What to promise','Chapter 20','Constraint: a household has its own goals, time horizon and capacity to bear risk. An agent can promise improvements in fees, mistakes and execution; it cannot promise that time and risk will disappear.'],
+    ['The user is not present','Chapter 21','Constraint: ongoing delegation needs an agreement made in advance. Only when it is agreed which parameters apply and how far authority extends does the agent know what to do while the user is away.'],
+    ['The user cannot see the process','Chapter 22','Constraint: asymmetric information. The process must leave records the user can understand and check.'],
+    ['Agents make mistakes','Chapter 23','Constraint: some consequences are irreversible. Limits, confirmation and compensation must be set in advance.'],
+    ['Trust takes time','Chapter 24','Constraint: users have no prior experience of a new agent. Trust must start with small matters and be built step by step on a record of promises kept.']];
+  const l=document.getElementById('nx19-l'),msg=document.getElementById('nx19-msg');
+  l.innerHTML=Q.map((q,i)=>`<button type="button" class="nx-i" style="--i:${i}" data-i="${i}"><span>${q[0]}</span><em>→ ${q[1]}</em></button>`).join('');
+  const bs=[...l.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));msg.textContent=Q[i][2];}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('nx19').addEventListener('anim-in',()=>{[0,1,2,3,4].forEach((i,k)=>setTimeout(()=>set(i),1600+k*1800));});
+  set(0);
+})();
+</script>

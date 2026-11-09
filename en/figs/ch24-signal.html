@@ -1,0 +1,34 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">Judged by returns, the better product often looks worse</p>
+    <p class="figsub">Product A really is better than B: 1 percentage point more each year (illustrative). Drag the evaluation period and compare, under two ways of judging, the probability that A is correctly judged better.</p>
+    <div class="sg" id="sg" data-anim>
+      <svg viewBox="0 0 640 200" role="img" aria-label="Evaluation period and probability of a correct judgment"><g id="sg-ax"></g><path id="sg-a" class="sg-l a"/><path id="sg-b" class="sg-l b"/><circle id="sg-d1" r="6" fill="var(--warm)"/><circle id="sg-d2" r="6" fill="var(--accent)"/></svg>
+      <div class="legend"><span><i style="background:var(--warm)"></i>Compared by returns</span><span><i style="background:var(--accent)"></i>Compared by process measures</span></div>
+      <div class="sl"><label for="sg-t">Evaluation period <b id="sg-tv"></b></label><input id="sg-t" type="range" min="1" max="30" step="1" value="1"></div>
+      <p class="sg-msg" id="sg-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative calculation: the annualized volatility of the difference between the two products' returns is taken as 10%, and the probability of a correct judgment = Φ(1% × √period ÷ 10%). Process measures (fees, allocation drift, accounting for each cycle) can be checked monthly with little noise; their accuracy is taken as 98%. An agreement should rest on the signals that best reflect effort; see Holmström (1979).</figcaption>
+</figure>
+<style>
+.sg svg{width:100%;height:auto;display:block}
+.sg-l{fill:none;stroke-width:2.5} .sg-l.a{stroke:var(--warm)} .sg-l.b{stroke:var(--accent)}
+.sg-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.sg svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const Phi=z=>{const t=1/(1+.2316419*Math.abs(z)),d=.3989423*Math.exp(-z*z/2),p=d*t*(.3193815+t*(-.3565638+t*(1.781478+t*(-1.821256+t*1.330274))));return z>0?1-p:p;};
+  const A=T=>Phi(.01*Math.sqrt(T)/.10),B=()=>.98;
+  const X0=56,X1=620,YT=14,YB=170,x=T=>X0+(T-1)/29*(X1-X0),y=v=>YB-(v-.4)/.6*(YB-YT);
+  const $=id=>document.getElementById(id),sl=$('sg-t');
+  $('sg-ax').innerHTML=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`+[.5,.75,1].map(v=>`<text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text><line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/>`).join('')+[1,10,20,30].map(T=>`<text x="${x(T)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${T} yr</text>`).join('')+`<text x="${X1}" y="${y(.5)-5}" text-anchor="end" font-size="11" class="t-faint">Same as a coin toss</text>`;
+  let a='',b='';for(let T=1;T<=30;T+=.25){a+=(T>1?'L':'M')+x(T).toFixed(1)+','+y(A(T)).toFixed(1);b+=(T>1?'L':'M')+x(T).toFixed(1)+','+y(B()).toFixed(1);}$('sg-a').setAttribute('d',a);$('sg-b').setAttribute('d',b);
+  function r(){const T=+sl.value;$('sg-tv').textContent=T+(T===1?' year':' years');$('sg-d1').setAttribute('cx',x(T));$('sg-d1').setAttribute('cy',y(A(T)));$('sg-d2').setAttribute('cx',x(T));$('sg-d2').setAttribute('cy',y(B()));
+    $('sg-msg').textContent=`Compared on ${T} ${T===1?'year':'years'} of returns, the better product wins with a probability of only ${(A(T)*100).toFixed(0)}%; compared on process measures that can be checked monthly, the two can be told apart almost every time. ${T<=3?'Short-term returns are close to a coin toss: promising returns means promising luck.':'Even stretched to decades, comparing returns is far less reliable than process measures.'}`;}
+  sl.addEventListener('input',r);
+  $('sg').addEventListener('anim-in',()=>{let T=1;sl.value=1;r();const id=setInterval(()=>{T++;sl.value=T;r();if(T>=30){clearInterval(id);setTimeout(()=>{sl.value=1;r();},700);}},90);});
+  r();
+})();
+</script>

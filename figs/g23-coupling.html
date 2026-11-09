@@ -1,0 +1,33 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">快而紧，错误来不及拦</p><p class="figsub">一个出错的书记员每秒发出 100 笔错误的委托。拖动发现错误所需的时间，再打开两种放慢的办法，看被发出的错误委托有多少。</p></div><button class="replay" type="button" data-replay="cp23">重播</button></div>
+    <div class="cp23" id="cp23" data-anim>
+      <div class="cp23-bars" id="cp23-b"></div>
+      <div class="sl"><label for="cp23-t">发现错误所需的时间 <b id="cp23-tv"></b></label><input id="cp23-t" type="range" min="1" max="60" step="1" value="45"></div>
+      <div class="cs-sw"><label><input type="checkbox" id="cp23-l"> 每日总量上限：累计超过 500 笔即自动停止</label><label><input type="checkbox" id="cp23-k"> 异常自动停止：一分钟内的委托数超过平时的十倍即停</label></div>
+      <p class="cp23-msg" id="cp23-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：每笔错误委托平均造成 0.01 份的损失。2012 年美国一家做市商的事故中，错误持续了约 45 分钟（美国证券交易委员会，2013）；本图的时间单位为分钟。</figcaption>
+</figure>
+<style>
+.cp23-bars{display:grid;gap:12px;margin:6px 0 10px}
+.cp23-r{display:grid;grid-template-columns:8em 1fr 6em;gap:10px;align-items:center;font-size:12.5px}
+.cp23-r div{height:22px;background:var(--quote);border-radius:5px;overflow:hidden}
+.cp23-r i{display:block;height:100%;transition:width .4s}
+.cp23-r b{text-align:right;font-variant-numeric:tabular-nums}
+.cp23-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cp23-r{grid-template-columns:1fr 6em}.cp23-r span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cp23'+id),RATE=100*60;
+  function draw(){const t=+$('-t').value,lim=$('-l').checked,ks=$('-k').checked;$('-tv').textContent=t+' 分钟';
+    let n=RATE*t;if(ks)n=Math.min(n,RATE*1);if(lim)n=Math.min(n,500);const loss=n*.01,mx=RATE*60;
+    $('-b').innerHTML=[['发出的错误委托',n,mx,'var(--warm)',Math.round(n).toLocaleString()+' 笔'],['造成的损失',loss,mx*.01,'var(--warm)',Math.round(loss).toLocaleString()+' 份']].map(([a,v,m,c,s])=>`<div class="cp23-r"><span>${a}</span><div><i style="width:${Math.max(.3,v/m*100)}%;background:${c}"></i></div><b>${s}</b></div>`).join('');
+    $('-msg').textContent=!lim&&!ks?`要 ${t} 分钟才发现，错误已经发出 ${Math.round(n).toLocaleString()} 笔。书记员动得太快，人来不及看。`:`${ks?'异常自动停止在一分钟之内就截住了它':''}${ks&&lim?'；':''}${lim?'每日总量上限把错误委托封在 500 笔以内':''}。损失 ${Math.round(loss)} 份，与发现得早晚几乎无关。`;}
+  ['-t','-l','-k'].forEach(k=>$(k).addEventListener('input',draw));
+  $('').addEventListener('anim-in',()=>{$('-l').checked=false;$('-k').checked=false;let v=1;$('-t').value=1;draw();const id=setInterval(()=>{v+=2;$('-t').value=v;draw();if(v>=45){clearInterval(id);setTimeout(()=>{$('-k').checked=true;draw();},900);setTimeout(()=>{$('-l').checked=true;draw();},1900);}},80);});
+  draw();
+})();
+</script>

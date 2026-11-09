@@ -1,0 +1,32 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Being a moment first: the money that changes hands stays the same, the money spent keeps growing</p><p class="figsub">News that a ship has come into port becomes public an hour later, and whoever knows first can earn 10 portions from those who learn later during that hour. Drag the number of households racing to be first, and compare the resources the village spends on the race with the value it brings the village.</p></div><button class="replay" type="button" data-replay="rc16">Replay</button></div>
+    <div class="rc16" id="rc16" data-anim>
+      <div class="rc16-bars" id="rc16-b"></div>
+      <div class="sl"><label for="rc16-n">Households racing <b id="rc16-nv"></b></label><input id="rc16-n" type="range" min="1" max="12" step="1" value="3"></div>
+      <p class="rc16-msg" id="rc16-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: each piece of news lets 10 portions change hands from those who learn later. The resources each racing household spends on faster scribes and closer positions are set by competitive bidding until the expected gain is zero, so the total approaches 10 portions (following the idea in Hirshleifer, 1971). Amounts in the bars are in portions.</figcaption>
+</figure>
+<style>
+.rc16-bars{display:grid;gap:10px;margin:4px 0 8px}
+.rc16-r{display:grid;grid-template-columns:9.5em 1fr 4.5em;gap:10px;align-items:center;font-size:12.5px}
+.rc16-r div{height:20px;background:var(--quote);border-radius:5px;overflow:hidden}
+.rc16-r i{display:block;height:100%;transition:width .5s}
+.rc16-r b{text-align:right;font-variant-numeric:tabular-nums}
+.rc16-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.rc16-r{grid-template-columns:1fr 4.5em}.rc16-r span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('rc16'+id),P=10;
+  function draw(){const n=+$('-n').value,spent=P*(1-1/n)+(n>1?0:0),each=n>1?spent/n:0;$('-nv').textContent=n+'';
+    const B=[['Money changing hands',P,'var(--blue)'],['Resources spent on the race',spent,'var(--warm)'],['Value created for the village',0,'var(--accent)'],['Racers\' combined net gain',P-spent,'var(--faint)']];
+    $('-b').innerHTML=B.map(([k,v,c])=>`<div class="rc16-r"><span>${k}</span><div><i style="width:${v/P*100}%;background:${c}"></i></div><b>${v.toFixed(1)}</b></div>`).join('');
+    $('-msg').textContent=n===1?'With only one household racing, it can know first without spending much extra and takes 10 portions from those who learn later. Those 10 portions do not make the ship carry one more portion of cargo.':`${n} households race to be first, each spending ${each.toFixed(1)} portions to compete for those 10 portions, ${spent.toFixed(1)} portions in total. The money changing hands has not grown by a single portion and the value to the village is still zero, yet the resources spent keep growing.`;}
+  $('-n').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{let v=1;$('-n').value=1;draw();const id=setInterval(()=>{v+=1;$('-n').value=v;draw();if(v>=12)clearInterval(id);},350);});
+  draw();
+})();
+</script>

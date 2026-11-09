@@ -1,0 +1,55 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">Choose a reading order by background</p>
+    <p class="figsub">Pick a background: solid circles are disciplines you already have, dashed circles are ones to fill in.</p>
+    <div class="seg-btns" role="group" aria-label="Reader background">
+      <button type="button" data-r="new" aria-pressed="true">New to the field</button>
+      <button type="button" data-r="fin" aria-pressed="false">Know finance</button>
+      <button type="button" data-r="prod" aria-pressed="false">Know product</button>
+      <button type="button" data-r="ai" aria-pressed="false">Know AI</button>
+    </div>
+    <div class="rd" id="rd" data-r="new">
+      <svg viewBox="0 0 420 300" role="img" aria-label="Where the three disciplines of finance, product and AI overlap">
+        <circle class="rc fin" cx="160" cy="115" r="92"/>
+        <circle class="rc prod" cx="260" cy="115" r="92"/>
+        <circle class="rc ai" cx="210" cy="200" r="92"/>
+        <text x="118" y="92" text-anchor="middle" font-size="15" font-weight="700" class="t-ink">Finance</text>
+        <text x="118" y="110" text-anchor="middle" font-size="11" class="t-faint">Part One · Markets</text>
+        <text x="302" y="92" text-anchor="middle" font-size="15" font-weight="700" class="t-ink">Product</text>
+        <text x="302" y="110" text-anchor="middle" font-size="11" class="t-faint">Part Two · Users</text>
+        <text x="210" y="255" text-anchor="middle" font-size="15" font-weight="700" class="t-ink">AI</text>
+        <text x="210" y="273" text-anchor="middle" font-size="11" class="t-faint">Part Three</text>
+        <text x="210" y="145" text-anchor="middle" font-size="13" font-weight="700" class="t-warm">Design</text>
+        <text x="210" y="161" text-anchor="middle" font-size="11" class="t-warm">Part Four</text>
+      </svg>
+      <ol class="rd-path" id="rd-path" aria-live="polite"></ol>
+    </div>
+  </div>
+</figure>
+<style>
+.rd{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:20px;align-items:center}
+.rd svg{width:100%;max-width:420px;height:auto;display:block}
+.rc{fill:transparent;stroke:var(--faint);stroke-width:1.6;stroke-dasharray:6 5;transition:fill .4s,stroke .4s}
+.rc.on{fill:var(--accent-soft);stroke:var(--accent);stroke-dasharray:none}
+.rd-path{list-style:none;padding:0;margin:0;font-size:14px}
+.rd-path li{display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line);opacity:0;transform:translateX(8px);animation:rdin .35s forwards;animation-delay:calc(var(--k)*.18s)}
+.rd-path li b{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--ink);color:var(--bg);font-size:12px;flex:none}
+.rd-path li.cross b{background:var(--warm)}
+@keyframes rdin{to{opacity:1;transform:none}}
+@media (max-width:640px){.rd{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const rd=document.getElementById('rd'), path=document.getElementById('rd-path');
+  const btns=[...rd.parentElement.querySelectorAll('[data-r]')].filter(b=>b.tagName==='BUTTON');
+  const P={1:'Part One  Markets: where returns and risks come from',2:'Part Two  Users: what people want and what they can bear',3:'Part Three  AI: how much an agent can do on people\'s behalf',4:'Part Four  Design: designing financial products under three sets of constraints'};
+  const R={new:{known:[],order:[1,2,3,4]},fin:{known:['fin'],order:[3,2,4]},prod:{known:['prod'],order:[1,3,4]},ai:{known:['ai'],order:[1,2,4]}};
+  function set(r){
+    rd.dataset.r=r; btns.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.r===r)));
+    rd.querySelectorAll('.rc').forEach(c=>c.classList.toggle('on',R[r].known.some(k=>c.classList.contains(k))));
+    path.innerHTML=R[r].order.map((p,k)=>`<li class="${p===4?'cross':''}" style="--k:${k}"><b>${k+1}</b>${P[p]}</li>`).join('');
+  }
+  btns.forEach(b=>b.addEventListener('click',()=>set(b.dataset.r)));
+  set('new');
+})();
+</script>

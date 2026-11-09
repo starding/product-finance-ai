@@ -1,0 +1,42 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">What a principle card is made of</p><p class="figsub">Using "Credit rationing" as the example. First switch between the two ways of writing to see when the theory appears; then select a field on the card to see what it does.</p></div><button class="replay" type="button" data-replay="amc">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Way of writing">
+      <button type="button" data-amc="before" aria-pressed="false">Theory first</button>
+      <button type="button" data-amc="after" aria-pressed="true">Derive first, then announce</button>
+    </div>
+    <div class="amc" id="amc" data-anim>
+      <div class="amc-seq" id="amc-seq"></div>
+      <div class="amc-card" id="amc-card"></div>
+      <p class="amc-msg" id="amc-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>The card's content is taken from Chapter 3.</figcaption>
+</figure>
+<style>
+.amc-seq{display:grid;gap:5px;margin:4px 0 10px}
+.amc-seq div{padding:7px 10px;border-radius:8px;background:var(--quote);font-size:13px;line-height:1.55;opacity:0;transform:translateX(-6px);transition:opacity .35s,transform .35s;transition-delay:calc(var(--i)*.25s)}
+.amc.in .amc-seq div{opacity:1;transform:none}
+.amc-seq div.t{background:var(--accent-soft)}
+.amc-card{border-left:4px solid var(--accent);background:var(--accent-soft);border-radius:10px;padding:10px 12px;display:grid;gap:4px}
+.amc-card button{font:inherit;cursor:pointer;display:grid;grid-template-columns:7em 1fr;gap:8px;text-align:left;border:1px solid transparent;border-radius:6px;padding:4px 6px;background:transparent;color:var(--ink);font-size:13px;line-height:1.5}
+.amc-card button span{color:var(--muted);font-size:12px}
+.amc-card button.sel{border-color:var(--accent);background:var(--bg)}
+.amc-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.amc-card button{grid-template-columns:1fr;gap:0}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('amc'+id);
+  const SEQ={before:[['t','Stiglitz and Weiss (1981) showed that raising the interest rate drives out safe borrowers…'],['','A lender on the island wants to raise the interest rate to make up for losses from default.'],['','So the lender would rather limit how much it lends.']],after:[['','A lender on the island wants to raise the interest rate to make up for losses from default.'],['','Work out how the borrowers who come change: the safe ones leave first, and those who remain take more and more risk.'],['','Beyond a certain point, the extra interest no longer covers the extra defaults, and the lender would rather limit how much it lends.'],['t','Derived so far: a principle. Credit rationing.']]};
+  const F=[['Name','Credit rationing','Tells the reader that this is a principle with a name, which can be looked up elsewhere.'],['Statement','When borrowers\' risk cannot be seen clearly, raising the interest rate drives out safe borrowers…','States in one sentence what it claims; the derivation before it should support this directly.'],['Discipline and type','Economics › Information economics (credit markets); Theoretical model','Tells the reader which branch of which discipline it belongs to, and whether it is a theory, a model, a theorem or a law.'],['Standing in the field','The 2001 Nobel Prize in economics announcement lists credit rationing among the phenomena Stiglitz explained','Tells the reader how much weight it carries in the field; only facts with a source are recorded.'],['Constraint it answers','Promises may not be kept, and lenders cannot tell how risky borrowers are','Pins the theory to the one constraint it answers.'],['Premises','Lenders cannot distinguish between borrowers; borrowers can choose how much risk to take','If a premise changes, the conclusion may fail; the reruns in Part Two start here.'],['Proposed by','Stiglitz and Weiss, 1981','The order of derivation differs from the order in which theories were proposed; this field lets the reader see the difference.'],['Open question','Can collateral and reputation replace screening?','A theory solves one problem and leaves new ones, which become constraints for the derivation that follows.']];
+  let mode='after',sel=0;
+  function draw(){$('-seq').innerHTML=SEQ[mode].map(([c,t],i)=>`<div class="${c}" style="--i:${i}">${t}</div>`).join('');
+    $('-card').innerHTML=F.map((f,i)=>`<button type="button" class="${i===sel?'sel':''}" data-i="${i}"><span>${f[0]}</span>${f[1]}</button>`).join('');
+    $('-card').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{sel=+b.dataset.i;draw();}));
+    $('-msg').textContent=(mode==='before'?'Theory first: the reader sees the conclusion and the authority first, and the derivation is reduced to an illustration of the theory.':'Derive first, then announce: the reader first meets the constraint on the island and works out the mechanism, and only at the end learns what it is called.')+' '+F[sel][0]+': '+F[sel][2];}
+  document.querySelectorAll('[data-amc]').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.amc;document.querySelectorAll('[data-amc]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  $('').addEventListener('anim-in',()=>{mode='before';draw();setTimeout(()=>{mode='after';document.querySelectorAll('[data-amc]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.amc==='after')));draw();},2200);[3,4,5].forEach((i,k)=>setTimeout(()=>{sel=i;draw();},4000+k*1500));});
+  draw();
+})();
+</script>

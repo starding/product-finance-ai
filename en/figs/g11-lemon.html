@@ -1,0 +1,30 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">When good cannot be told from bad, the good leave</p><p class="figsub">A reliable manager creates 10 portions of value a year for principals; an unreliable one only 4. Principals cannot tell them apart and will pay only the average; reliable managers change trade if they earn less than 8 portions. Drag the initial share of unreliable managers to see who is left after a few rounds.</p></div><button class="replay" type="button" data-replay="lm11">Replay</button></div>
+    <div class="lm11" id="lm11" data-anim></div>
+    <div class="sl"><label for="lm11-b">Unreliable managers at the start <b id="lm11-bv"></b></label><input id="lm11-b" type="range" min="0" max="60" step="5" value="35"></div>
+    <p class="lm11-msg" id="lm11-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>Illustrative: principals pay the average value of the managers who remain; in each round, if the pay is below 8 portions, half the reliable managers leave (a simplification of Akerlof, 1970).</figcaption>
+</figure>
+<style>
+.lm11{display:grid;gap:6px}
+.lm11-r{display:grid;grid-template-columns:4.2em 1fr 6em;gap:10px;align-items:center;font-size:12.5px}
+.lm11-r div{display:flex;flex-wrap:wrap;gap:3px}
+.lm11-r i{width:12px;height:12px;border-radius:3px}
+.lm11-r b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.lm11-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  function draw(){const b0=+$('lm11-b').value/100;let G=Math.round(20*(1-b0)),B=20-G;const rows=[];
+    for(let k=0;k<6;k++){const pay=G+B?(10*G+4*B)/(G+B):0;rows.push([G,B,pay]);if(pay<8)G=Math.floor(G/2);}
+    $('lm11').innerHTML=rows.map(([g,b,p],k)=>`<div class="lm11-r"><span>Round ${k+1}</span><div>${'<i style="background:var(--accent)"></i>'.repeat(g)}${'<i style="background:var(--warm)"></i>'.repeat(b)}</div><b>Pay ${p.toFixed(1)}</b></div>`).join('');
+    $('lm11-bv').textContent=Math.round(b0*100)+'%';const last=rows[5];
+    $('lm11-msg').textContent=rows[0][2]>=8?'There are few unreliable managers, the average pay is still at least 8 portions, and reliable managers are willing to stay.':`With ${Math.round(b0*100)}% unreliable at the start, the average pay is only ${rows[0][2].toFixed(1)} portions, and reliable managers begin to leave; those who remain get worse and worse, and the pay lower and lower. After six rounds only ${last[0]} reliable ${last[0]===1?'manager is':'managers are'} left.`;}
+  $('lm11-b').addEventListener('input',draw);
+  $('lm11').addEventListener('anim-in',()=>{let v=0;$('lm11-b').value=0;draw();const id=setInterval(()=>{v+=5;$('lm11-b').value=v;draw();if(v>=50)clearInterval(id);},250);});
+  draw();
+})();
+</script>

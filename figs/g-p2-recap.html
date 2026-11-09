@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">第二部分小结：放松、收紧、转移与不变</p><p class="figsub">认知劳动的价格骤降之后，第一部分的约束分成四类。点选一类，查看其中的约束与对应的章。</p></div><button class="replay" type="button" data-replay="pr2">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="类别">
+      <button type="button" data-pr2="0" aria-pressed="true">放松</button>
+      <button type="button" data-pr2="1" aria-pressed="false">收紧</button>
+      <button type="button" data-pr2="2" aria-pressed="false">转移</button>
+      <button type="button" data-pr2="3" aria-pressed="false">不变</button>
+    </div>
+    <div class="pr2" id="pr2" data-anim><div class="pr2-g" id="pr2-g"></div><p class="pr2-msg" id="pr2-msg" aria-live="polite"></p></div>
+  </div>
+</figure>
+<style>
+.pr2-g{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.pr2-c{background:var(--quote);border-radius:9px;padding:9px 11px;font-size:13px;line-height:1.55;color:var(--muted);border-left:3px solid var(--c);opacity:0;transform:translateY(6px);transition:opacity .35s,transform .35s;transition-delay:calc(var(--i)*.08s)}
+.pr2.in .pr2-c{opacity:1;transform:none}
+.pr2-c b{display:block;font-size:14px;color:var(--ink);margin-bottom:2px}
+.pr2-c em{font-style:normal;font-size:11.5px;color:var(--faint)}
+.pr2-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.pr2-g{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const K=[['var(--accent)','研究与比较几乎免费，委托的门槛下降，平时的执行更便宜；这一部分正是书记员擅长的认知劳动。',
+      [['研究与比较的成本','第 13、14、16 章','读报告、比船队几乎不花成本。'],['委托的门槛','第 14 章','专属的安排不再只属于大户，但核对与担责决定了下限。'],['监督的成本','第 14、15 章','委托人可以请自己的书记员逐笔核对。'],['执行与报价的成本','第 17 章','平静时价差大幅收窄。'],['专属的默认与承诺','第 18 章','默认可以按每户设定，锁可以既有效又不僵硬。']]],
+    ['var(--warm)','书记员没有家产、可以随意换名、彼此相像、在关键时刻在场，带来了新的约束。',
+      [['担保','第 15 章','代理赔不起，声誉附着不上，只能由运营者担责并投保。'],['核对与记录','第 15 章','记录要由第三方保存、不可修改，责任才落得下来。'],['注意力与排序','第 16 章','信息越多，排序的权力越大。'],['同向行为与流动性','第 17 章','相像的书记员同时行动，报价者在急时撤走。'],['对偏差的利用','第 18 章','同样的能力可以让人多买多卖。'],['信任的校准','第 18 章','人容易太信或不信。']]],
+    ['var(--blue)','优势没有消失，只是换了地方。',
+      [['信息优势','第 16 章','公开报告不再值钱，优势转到独占的数据与速度。'],['抢先的竞赛','第 16、17 章','读懂消息的速度趋同，竞赛转向谁离源头更近。']]],
+    ['var(--faint)','金融最初要处理的问题，一个也没有消失。',
+      [['时间','第 19 章','收入与需要到来的时刻不变，积累所需的年数不变。'],['系统风险','第 19 章','分散不掉的风险一分不少，承担它才有补偿。'],['不可逆','第 19 章','有些损失挽回不了，执行越快越要留余地。'],['主动管理的算术','第 16 章','扣除成本之前，主动者整体只能得到平均。']]]];
+  const g=document.getElementById('pr2-g'),m=document.getElementById('pr2-msg'),bs=[...document.querySelectorAll('[data-pr2]')];
+  function set(k){bs.forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.pr2===k)));const [c,msg,L]=K[k];
+    g.innerHTML=L.map(([n,ch,d],i)=>`<div class="pr2-c" style="--i:${i};--c:${c}"><em>${ch}</em><b>${n}</b>${d}</div>`).join('');m.textContent=msg;}
+  bs.forEach(b=>b.addEventListener('click',()=>set(+b.dataset.pr2)));
+  document.getElementById('pr2').addEventListener('anim-in',()=>{[0,1,2,3].forEach((k,i)=>setTimeout(()=>set(k),300+i*2400));});
+  set(0);
+})();
+</script>

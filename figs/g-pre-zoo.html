@@ -1,0 +1,34 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">一张清单，还是一条链</p><p class="figsub">同样十二种金融安排，切换排列方式：按清单排，只能逐个记住；按出现的先后排，每一种都在回应一个约束。</p></div><button class="replay" type="button" data-replay="gz">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="排列">
+      <button type="button" data-gz="list" aria-pressed="true">产品清单</button>
+      <button type="button" data-gz="chain" aria-pressed="false">按出现的先后</button>
+    </div>
+    <div class="gz" id="gz" data-anim></div>
+  </div>
+  <figcaption>顺序是推演中的逻辑先后，不是历史年代；方框右上角为对应的章。</figcaption>
+</figure>
+<style>
+.gz{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.gz-c{position:relative;background:var(--quote);border-radius:10px;padding:10px 12px;opacity:0;transform:translateY(6px);transition:opacity .4s,transform .4s;transition-delay:calc(var(--i)*.06s)}
+.gz.in .gz-c{opacity:1;transform:none}
+.gz-c b{display:block;font-size:14px}
+.gz-c span{display:block;font-size:12px;color:var(--muted);line-height:1.5;margin-top:3px}
+.gz-c em{position:absolute;top:8px;right:10px;font-style:normal;font-size:11px;color:var(--faint)}
+.gz.chain .gz-c{border-left:3px solid var(--accent)}
+@media (max-width:640px){.gz{grid-template-columns:repeat(2,1fr)}}
+</style>
+<script>
+(function(){
+  const P=[['储蓄','收入与消费不在同一时间'],['存款与贷款','你今天缺、我明天缺'],['抵押与担保','借了可能不还'],['账户与支付','物物交换需要双重巧合'],['保险','未来的收成好坏不定'],['随时可取的存款','存的人要随时取，借的人要长期用'],['股票与债券','一个人承担不了大项目的风险'],['交易所与经纪','证券要能找到买方'],['指数基金','价格难以预测'],['基金与投资顾问','普通人没有时间也没有专长'],['托管与信息披露','受托人可能不尽责'],['定投与默认选项','制度齐备，人仍会犯错']];
+  const SH=[8,2,10,0,6,11,3,9,1,5,7,4];
+  const box=document.getElementById('gz');let mode='list';
+  function draw(){const idx=mode==='list'?SH:P.map((_,i)=>i);box.classList.toggle('chain',mode==='chain');
+    box.innerHTML=idx.map((i,k)=>`<div class="gz-c" style="--i:${k}"><b>${P[i][0]}</b>${mode==='chain'?`<span>约束：${P[i][1]}</span><em>${i+1}</em>`:''}</div>`).join('');
+    box.classList.remove('in');void box.offsetWidth;box.classList.add('in');}
+  document.querySelectorAll('[data-gz]').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.gz;document.querySelectorAll('[data-gz]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  box.addEventListener('anim-in',()=>{mode='list';document.querySelectorAll('[data-gz]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.gz==='list')));draw();setTimeout(()=>{mode='chain';document.querySelectorAll('[data-gz]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.gz==='chain')));draw();},1800);});
+  draw();box.classList.remove('in');
+})();
+</script>

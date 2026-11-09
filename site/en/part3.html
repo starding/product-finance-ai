@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How much an agent can do on people's behalf</title>
+<meta name="description" content="Introduction to Part Three of Product × Finance × AI: Financial Products in the Age of AI. A decomposition of the amplification factor shows how much effort AI agents can save people, and where the shortfall comes from">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="part3">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="Contents">
+<div class="side-head"><a class="sidetitle" href="index.html">Product × Finance × AI<small>Financial Products in the Age of AI</small></a></div>
+<div class="side-view" role="group" aria-label="Way of reading"><a href="preface.html" class="on" aria-current="true">Decomposition</a><a href="g-preface.html">Derivation</a></div>
+<a class="side-about" href="index.html#about">About this book</a>
+<a class="" href="preface.html"><span class="n">Preface</span>Why financial products must be relearned in the age of AI</a>
+<a class="side-part" href="part1.html"><span class="pn">Part One</span>Markets: where returns and risks come from</a>
+<a class="" href="ch01.html"><span class="n">1</span>What financial products sell</a>
+<a class="" href="ch02.html"><span class="n">2</span>Interest rates and maturity</a>
+<a class="" href="ch03.html"><span class="n">3</span>What risk looks like</a>
+<a class="" href="ch04.html"><span class="n">4</span>Diversification</a>
+<a class="" href="ch05.html"><span class="n">5</span>Compounding and volatility drag</a>
+<a class="" href="ch06.html"><span class="n">6</span>Factors</a>
+<a class="" href="ch07.html"><span class="n">7</span>Why prices are hard to predict</a>
+<a class="" href="ch08.html"><span class="n">8</span>How information gets into prices</a>
+<a class="" href="ch09.html"><span class="n">9</span>Traders in the market</a>
+<a class="" href="ch10.html"><span class="n">10</span>Liquidity and the bid-ask spread</a>
+<a class="" href="ch11.html"><span class="n">11</span>Orders, rules and market structure</a>
+<a class="" href="ch12.html"><span class="n">12</span>The arithmetic of active management</a>
+<a class="" href="ch13.html"><span class="n">13</span>How promises are kept</a>
+<a class="" href="ch14.html"><span class="n">14</span>Why regulation exists</a>
+<a class="side-part" href="part2.html"><span class="pn">Part Two</span>Users: what people want and what they can bear</a>
+<a class="" href="ch15.html"><span class="n">15</span>The jobs users need done</a>
+<a class="" href="ch16.html"><span class="n">16</span>How users make decisions</a>
+<a class="" href="ch17.html"><span class="n">17</span>What users can bear</a>
+<a class="" href="ch18.html"><span class="n">18</span>How users judge and trust</a>
+<a class="side-part cur" href="part3.html" aria-current="page"><span class="pn">Part Three</span>AI: how much an agent can do on people&#x27;s behalf</a>
+<a class="" href="ch19.html"><span class="n">19</span>The amplification factor</a>
+<a class="" href="ch20.html"><span class="n">20</span>Which tasks can be handed to AI</a>
+<a class="" href="ch21.html"><span class="n">21</span>Where capability comes from, and where it fails</a>
+<a class="" href="ch22.html"><span class="n">22</span>Verifiability: the cost of checking</a>
+<a class="" href="ch23.html"><span class="n">23</span>The special constraints of finance</a>
+<a class="side-part" href="part4.html"><span class="pn">Part Four</span>Design: financial products under three sets of constraints</a>
+<a class="" href="ch24.html"><span class="n">24</span>What to promise</a>
+<a class="" href="ch25.html"><span class="n">25</span>Mandate parameters</a>
+<a class="" href="ch26.html"><span class="n">26</span>Authority and irreversible exposure</a>
+<a class="" href="ch27.html"><span class="n">27</span>Liability and conflicts of interest</a>
+<a class="" href="ch28.html"><span class="n">28</span>Capability assembly and process visibility</a>
+<a class="" href="ch29.html"><span class="n">29</span>Assurance level</a>
+<a class="" href="ch30.html"><span class="n">30</span>How trust is built</a>
+<a class="" href="ch31.html"><span class="n">31</span>Design principles</a>
+<a class="side-app" href="estimates.html"><span class="n">Appendix</span>Methods and data behind the author&#x27;s estimates</a>
+<a class="side-app" href="method.html"><span class="n">Appendix</span>How this book was written</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="Open contents" title="Contents"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">Product × Finance × AI: Financial Products in the Age of AI</a><span>Part Three</span><a class="langlink" href="../part3.html" hreflang="zh-CN">中文</a></header>
+
+<div class="partno">Part Three</div><h1>How much an agent can do on people's behalf<small>The third set of constraints: the nature of AI</small></h1>
+<blockquote><p>The first two parts showed what the market can offer, and what users want and can bear. AI agents change something else: how much a person must put in personally to accomplish a task. The yardstick is the amplification factor: the ratio of the effort the principal would need to do the task alone to the effort the principal must still put in after handing it to an agent. The latter has three parts: the portion the agent cannot do and the principal must still do; the effort of specifying the task and checking the result; and the rework after the agent makes mistakes. In finance one more constraint applies: markets are close to efficient, so more accurate prediction by an agent brings limited benefit. Part Three takes this decomposition apart term by term.</p></blockquote>
+<h2 id="sec-1">One decomposition</h2>
+<div class="formula"><span>Amplification factor ＝ effort to do it yourself ÷ (portion not applicable ＋ specifying and checking ＋ rework after errors)</span><span class="bar"></span><span class="den">Constraint: financial markets are close to efficient; the benchmark is the user's actual behaviour</span></div>
+<p>The three terms in the denominator differ in nature. The portion not applicable depends on the task itself and sets the upper limit of the amplification factor. Specifying and checking depends on whether the result can be verified easily. Rework depends on how reliable the agent is. How fast the agent generates output does not appear in the denominator.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">What determines the amplification factor</p><p class="figsub">A task that takes 100 minutes to do yourself. Switch scenarios to see what makes up the effort the principal must still put in after handing it to an agent, and the resulting amplification factor. The corresponding chapters are below.</p></div><button class="replay" type="button" data-replay="pm3">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Scenario">
+      <button type="button" data-p3="ideal" aria-pressed="true">Ideal case</button>
+      <button type="button" data-p3="scope" aria-pressed="false">Narrow scope</button>
+      <button type="button" data-p3="check" aria-pressed="false">Costly checking</button>
+      <button type="button" data-p3="err" aria-pressed="false">Frequent errors</button>
+    </div>
+    <div class="pm3" id="pm3" data-anim>
+      <div class="pm3-row"><span>Doing it yourself</span><div class="pm3-t"><i style="width:100%;background:var(--faint)"></i></div><b>100 min</b></div>
+      <div class="pm3-row"><span>After handing over</span><div class="pm3-t" id="pm3-st"></div><b id="pm3-tot"></b></div>
+      <div class="legend"><span><i style="background:var(--blue)"></i>Portion not applicable</span><span><i style="background:var(--gold)"></i>Specifying and checking</span><span><i style="background:var(--warm)"></i>Rework after errors</span></div>
+      <div class="pm3-x"><span>Amplification factor</span><b id="pm3-x"></b></div>
+      <p class="pm3-msg" id="pm3-msg" aria-live="polite"></p>
+    </div>
+    <div class="pm3-cols">
+      <div class="pm3-c" style="--c:var(--ink)"><b>Overview</b><span>The gap between theory and measurement</span><a href="ch19.html"><em>19</em>Amplification factor: theory and measurement</a></div>
+      <div class="pm3-c" style="--c:var(--blue)"><b>Portion not applicable</b><span>Which tasks can be handed over</span><a href="ch20.html"><em>20</em>Which tasks can be handed to AI</a></div>
+      <div class="pm3-c" style="--c:var(--warm)"><b>Rework after errors</b><span>Where capability comes from and where it fails</span><a href="ch21.html"><em>21</em>Where capability comes from and where it fails</a></div>
+      <div class="pm3-c" style="--c:var(--gold)"><b>Specifying and checking</b><span>Whether results can be verified easily</span><a href="ch22.html"><em>22</em>Verifiability: the cost of checking</a></div>
+      <div class="pm3-c" style="--c:var(--accent)"><b>Constraint</b><span>Market efficiency and actual behaviour</span><a href="ch23.html"><em>23</em>Constraints specific to finance</a></div>
+    </div>
+  </div>
+  <figcaption>Illustrative numbers; they show only the direction in which each term acts.</figcaption>
+</figure>
+<style>
+.pm3-row{display:grid;grid-template-columns:96px 1fr 76px;gap:10px;align-items:center;font-size:13px;margin:6px 0}
+.pm3-row>span{color:var(--faint);font-size:12px}
+.pm3-row b{text-align:right;font-variant-numeric:tabular-nums}
+.pm3-t{display:flex;height:22px;background:var(--quote);border-radius:5px;overflow:hidden}
+.pm3-t i{display:block;height:100%;transition:width .6s ease}
+.pm3-x{display:flex;align-items:baseline;gap:10px;margin-top:8px}
+.pm3-x span{font-size:12px;color:var(--faint)} .pm3-x b{font-size:26px;font-variant-numeric:tabular-nums}
+.pm3-msg{font-size:14px;margin:4px 0 0;min-height:3.4em}
+.pm3-cols{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:10px}
+.pm3-c{border-top:3px solid var(--c);background:var(--quote);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:4px}
+.pm3-c b{font-size:13.5px}
+.pm3-c>span:not(.todo){font-size:12px;color:var(--muted);line-height:1.5}
+.pm3-c a,.pm3-c .todo{font-size:12.5px;border-radius:7px;padding:5px 8px;text-decoration:none;line-height:1.35;margin-top:auto}
+.pm3-c a{background:var(--surface);border:1px solid var(--accent);color:var(--ink)}
+.pm3-c a:hover{background:var(--accent-soft)}
+.pm3-c .todo{background:var(--surface);color:var(--faint);border:1px solid var(--line)}
+.pm3-c em{font-style:normal;color:var(--faint);margin-right:6px}
+@media (max-width:640px){.pm3-cols{grid-template-columns:repeat(2,1fr)}.pm3-row{grid-template-columns:76px 1fr 64px}}
+</style>
+<script>
+(function(){
+  const S={ideal:[0,8,0,'The agent can do the whole task; the principal only specifies it and spot-checks, with almost no rework. This is the theoretical upper limit, which can exceed tenfold.'],
+    scope:[70,6,0,'The agent can do only 30% of the task, and the remaining 70% must still be done by the principal. Even if the agent is fast and accurate, the amplification factor is held to about 1.3×: the applicable share sets the upper limit.'],
+    check:[0,40,0,'The result is hard to verify, and the principal spends 40 minutes checking it item by item: the amplification factor falls to 2.5×. The cost of checking often matters more than the speed of generation.'],
+    err:[0,10,45,'The agent makes frequent errors, and finding and fixing them takes another 45 minutes: the amplification factor falls to 1.8×. With a few more errors, handing the task over would cost more effort than doing it yourself.']};
+  const C=['var(--blue)','var(--gold)','var(--warm)'],st=document.getElementById('pm3-st');
+  st.innerHTML=C.map(c=>`<i style="background:${c};width:0"></i>`).join('');const is=[...st.children];
+  function set(k){document.querySelectorAll('[data-p3]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.p3===k)));
+    const v=S[k],tot=v[0]+v[1]+v[2];setTimeout(()=>is.forEach((e,i)=>e.style.width=v[i]+'%'),40);
+    document.getElementById('pm3-tot').textContent=tot+' min';document.getElementById('pm3-x').textContent=(100/tot).toFixed(1)+'×';document.getElementById('pm3-msg').textContent=v[3];}
+  document.querySelectorAll('[data-p3]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.p3)));
+  document.getElementById('pm3').addEventListener('anim-in',()=>{['ideal','scope','check','err','ideal'].forEach((k,i)=>setTimeout(()=>set(k),i*2200));});
+  set('ideal');
+})();
+</script>
+
+<h2 id="sec-2">Three questions</h2>
+<p>Whether a task can be handed to an agent depends on three questions, in order. First, is it worth doing: once handed over, how much effort does the principal save over a year, and does it make possible something that could not be done before? Second, can it be done: can the agent get the information and tools it needs, can it act on site, and has it obtained legal and institutional access? Third, does one dare hand it over: how severe are the consequences of an error, and can the result be judged right or wrong in good time? If an earlier question fails, the later ones need not be asked; the third question determines how much of the nominal value from the first can actually be realized.</p>
+<p>The three questions map one to one onto the decomposition above. Whether it is worth doing concerns the numerator and the overall factor; whether it can be done determines the size of the portion not applicable; whether one dares hand it over determines how much effort goes into specifying and checking, and how much rework follows errors.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Three questions: worth doing, able to do, dare to hand over</p><p class="figsub">Pick a task and answer the three questions in order. If an earlier question fails, the later ones need not be asked; the third determines how much of the nominal value from the first can be realized.</p></div><button class="replay" type="button" data-replay="q3">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Task">
+      <button type="button" data-q3="0" aria-pressed="true">Weekly news digest</button>
+      <button type="button" data-q3="1" aria-pressed="false">Occasional FX lookup</button>
+      <button type="button" data-q3="2" aria-pressed="false">Fixing a home pipe</button>
+      <button type="button" data-q3="3" aria-pressed="false">Placing planned orders</button>
+      <button type="button" data-q3="4" aria-pressed="false">Retirement allocation</button>
+    </div>
+    <div class="q3" id="q3" data-anim>
+      <div class="q3-c" style="--i:0"><em>Question 1</em><b>Is it worth doing?</b><span>How much is saved over a year, and does it make possible something that could not be done before?</span><small>Numerator and overall factor</small><p></p><a href="ch19.html">Chapter 19</a></div>
+      <div class="q3-c" style="--i:1"><em>Question 2</em><b>Can it be done?</b><span>Can the agent get the information and tools, can it act on site, does it have access?</span><small>Portion not applicable</small><p></p><a href="ch20.html">Chapters 20 and 21</a></div>
+      <div class="q3-c" style="--i:2"><em>Question 3</em><b>Dare one hand it over?</b><span>How severe are the consequences of an error, and can the result be judged right or wrong in good time?</span><small>Specifying and checking; rework after errors</small><p></p><a href="ch22.html">Chapters 22 and 23</a></div>
+    </div>
+    <p class="q3-msg" id="q3-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>All five tasks are examples. Labels such as "Numerator and overall factor" refer to the terms of the decomposition above.</figcaption>
+</figure>
+<style>
+.q3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.q3-c{position:relative;background:var(--quote);border-radius:10px;padding:12px 12px 10px;display:flex;flex-direction:column;gap:4px;border-top:3px solid var(--line);transition:border-color .4s,opacity .4s}
+.q3-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.q3-c b{font-size:15px}
+.q3-c>span{font-size:12.5px;color:var(--muted);line-height:1.55}
+.q3-c small{font-size:11.5px;color:var(--faint)}
+.q3-c p{margin:6px 0 0;font-size:13.5px;line-height:1.6;min-height:4.8em;opacity:0;transform:translateY(4px);transition:opacity .4s,transform .4s}
+.q3-c a{font-size:12px;margin-top:auto;color:var(--accent);text-decoration:none}
+.q3-c.ok{border-top-color:var(--accent)} .q3-c.ok p{opacity:1;transform:none}
+.q3-c.no{border-top-color:var(--warm)} .q3-c.no p{opacity:1;transform:none;color:var(--warm)}
+.q3-c.half{border-top-color:var(--gold)} .q3-c.half p{opacity:1;transform:none}
+.q3-c.off{opacity:.45}
+.q3-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.q3{grid-template-columns:1fr}.q3-c p{min-height:0}}
+</style>
+<script>
+(function(){
+  // Each task: result of the three questions (ok holds / half holds with conditions / no fails) with an explanation, then the conclusion
+  const E=[
+    [['ok','It recurs every week, dozens of times a year; handing it over saves considerable time.'],['ok','News and data are all available online, so the agent can get them.'],['ok','Errors can be spotted on the spot, and the consequences are minor.'],'All three questions hold: suitable to hand over fully, with spot checks only.'],
+    [['no','Once or twice a year; checking it yourself is quicker than explaining the task.'],null,null,'The first question already fails: the fixed cost of explaining the task exceeds the cost of doing it yourself, so there is no need to hand it over.'],
+    [['ok','Calling someone out takes time and money, so it is worth saving.'],['no','It requires hands-on work on site, which an agent without a body cannot do.'],null,'The second question fails: what is missing is the ability to act on site, so the agent can only provide a checklist.'],
+    [['ok','Little effort is involved, but executing on time and at the right price matters.'],['half','It needs a trading channel, account authorization and access through a licensed institution.'],['half','The consequences are serious and irreversible, but the order details can be checked one by one before they take effect.'],'It can be handed over, but each order is confirmed by the user before it takes effect.'],
+    [['ok','It affects long-term outcomes and is worth sustained effort.'],['ok','Holdings, goals and market data can all be connected.'],['half','Whether the result is right takes years to judge, so one can rely only on the prior agreement and the process record.'],'It can be handed over, but trust has to be built step by step through the agreement, the process record and aligned interests.']];
+  const box=document.getElementById('q3'),cs=[...box.querySelectorAll('.q3-c')],msg=document.getElementById('q3-msg');let cur=0,tm=[];
+  function set(k){cur=k;tm.forEach(clearTimeout);tm=[];document.querySelectorAll('[data-q3]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.q3===k)));
+    cs.forEach(c=>{c.className='q3-c';c.querySelector('p').textContent='';});msg.textContent='';
+    const e=E[k];let stop=false;
+    cs.forEach((c,i)=>tm.push(setTimeout(()=>{if(stop||!e[i]){c.classList.add('off');return;}c.classList.add(e[i][0]);c.querySelector('p').textContent=e[i][1];if(e[i][0]==='no')stop=true;},250+i*650)));
+    tm.push(setTimeout(()=>{msg.textContent=e[3];},250+3*650));}
+  document.querySelectorAll('[data-q3]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.q3)));
+  box.addEventListener('anim-in',()=>set(cur));
+  set(0);
+})();
+</script>
+
+<h2 id="sec-3">How to read this part</h2>
+<p>Part Three deals only with the nature of the agent itself: what it can do, how reliably it does it, and how its work is checked afterwards. Each chapter again starts from a concrete situation, cites published experiments and evaluations, and gives the date of each number: AI capabilities change quickly, and the scope of each conclusion is defined by its mechanism.</p>
+<h2 id="sec-4">Summary of Part Three</h2>
+<p>Once the amplification factor is taken apart, the conclusion fits in one sentence: what an agent saves people depends on how large a scope it can take on completely, how much rework its errors require, and how long checking takes, not on how fast it generates output; in finance, any advantage in prediction is used up by competition, the lasting value lies in cost, discipline, behaviour and accessibility, and errors in execution must be stopped by authority and limits.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Summary of Part Three: what each term of the decomposition yields</p><p class="figsub">Switch views: each term's conclusion, its implications for product design, and the constraints in finance.</p></div><button class="replay" type="button" data-replay="rc3">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="View">
+      <button type="button" data-rv3="c" aria-pressed="true">Conclusions</button>
+      <button type="button" data-rv3="p" aria-pressed="false">Implications for products</button>
+      <button type="button" data-rv3="a" aria-pressed="false">Constraints in finance</button>
+    </div>
+    <div class="rc3" id="rc3" data-anim></div>
+  </div>
+  <figcaption>Each row corresponds to one term of the decomposition; chapter numbers are shown beneath each term.</figcaption>
+</figure>
+<style>
+.rc3{display:grid;gap:6px}
+.rc3-r{display:grid;grid-template-columns:150px 1fr;gap:12px;align-items:center;padding:10px 12px;border-radius:10px;background:var(--quote);opacity:0;transform:translateY(6px);transition:opacity .4s,transform .4s;transition-delay:calc(var(--i)*.15s)}
+.rc3.in .rc3-r{opacity:1;transform:none}
+.rc3-r b{font-size:14px;display:block}
+.rc3-r em{font-style:normal;font-size:11px;color:var(--faint)}
+.rc3-r p{margin:0;font-size:13.5px;line-height:1.6}
+.rc3-r.keep{background:rgba(160,120,24,.1)}
+.rc3-r .sign{display:inline-block;min-width:18px;margin-right:4px;font-size:11px;color:var(--faint);font-weight:700}
+@media (max-width:640px){.rc3-r{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const R=[
+    ['','Overview','19',{c:'Measured by the principal\'s effort, observed amplification factors mostly sit around 1.0–1.2×, far below the theoretical range.',p:'Measure value by the principal\'s effort, not by how long the agent runs.',a:'In financial delegation the benchmark is the user\'s actual behaviour; many people do no research to begin with.'}],
+    ['Denominator','Portion not applicable','20',{c:'The share the agent can reach, is permitted to handle and is worth handing over sets the upper limit of the amplification factor.',p:'First widen the scope the agent can take on completely, and take on recurring tasks first.',a:'Information tasks have the highest applicable share; allocation and execution need the user\'s authorization and confirmation.'}],
+    ['Denominator','Rework after errors','21',{c:'Errors accumulate over steps, the boundary of capability is jagged, and when unsure an agent tends to guess.',p:'Shorten the stretches without checks, state the scope of application, and reward saying "I don\'t know".',a:'Financial figures must come from data sources and calculation, with source and time stated.'}],
+    ['Denominator','Specifying and checking','22',{c:'The time spent checking caps the amplification factor; tasks that are cheaper to check than to generate are the best to hand over.',p:'Write clear acceptance criteria, show key actions and evidence, and grade checking by risk.',a:'Investment judgements can hardly be checked in the short run; results involving money must be confirmed item by item.'}],
+    ['Constraint','Finance','23',{c:'Markets respond, so the value of prediction declines as it spreads; trading errors are hard to reverse, and similar agents act together.',p:'Value lies in cost, discipline, behaviour and accessibility; grade authority and set limits.',a:'Do not sell prediction; avoid identical rules triggering at the same time.'}]
+  ];
+  const box=document.getElementById('rc3');
+  function set(v){document.querySelectorAll('[data-rv3]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.rv3===v)));
+    box.innerHTML=R.map(([s,n,ch,t],i)=>`<div class="rc3-r${n==='Finance'?' keep':''}" style="--i:${i}"><div><b><span class="sign">${s}</span>${n}</b><em>Ch. ${ch}</em></div><p>${t[v]}</p></div>`).join('');
+    box.classList.remove('in');void box.offsetWidth;box.classList.add('in');}
+  document.querySelectorAll('[data-rv3]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.rv3)));
+  set('c'); box.classList.remove('in');
+})();
+</script>
+
+<p>These conclusions form the third set of constraints on designing financial products. With the three sets of constraints from markets, users and AI side by side, the final question can be answered: under these constraints, what should a financial product promise, how should it be agreed, how should it be implemented, and how should it earn trust?</p>
+<footer class="nav"><a href="ch18.html">← Chapter 18: How users judge and trust</a><a href="ch19.html">Chapter 19: The amplification factor →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

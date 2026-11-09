@@ -1,0 +1,33 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">一次航行的合伙，与持续存在的公司</p><p class="figsub">切换两种组织方式，看资本从出资到退出经历了什么。</p></div><button class="replay" type="button" data-replay="vc">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="组织方式">
+      <button type="button" data-vc="p" aria-pressed="true">一次航行的合伙</button>
+      <button type="button" data-vc="c" aria-pressed="false">持续存在的公司</button>
+    </div>
+    <div class="vc" id="vc" data-anim></div>
+    <p class="vc-msg" id="vc-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>荷兰东印度公司的形态在修补缺陷的过程中逐步形成，经营者的有限责任也是多年试错之后才确立的（赫尔德布洛姆、德扬与容克尔，2013）。</figcaption>
+</figure>
+<style>
+.vc{display:flex;gap:6px;flex-wrap:wrap}
+.vc-s{flex:1 1 110px;background:var(--quote);border-radius:9px;padding:10px;font-size:13px;line-height:1.5;opacity:0;transform:translateY(6px);transition:opacity .4s,transform .4s;transition-delay:calc(var(--i)*.3s)}
+.vc.in .vc-s{opacity:1;transform:none}
+.vc-s em{display:block;font-style:normal;font-size:11px;color:var(--faint)}
+.vc-s.end{background:var(--accent-soft)}
+.vc-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const T={p:[['出资','几户凑钱造一艘船'],['航行','船出海一次'],['清点','船回来，清点货物'],['解散','按份额分完，合伙结束']],
+    c:[['出资','许多人认购份额'],['留存','资本长期留在公司'],['经营','公司跨越多年、多次航行'],['退出','想退出的人把份额卖给别人']]};
+  const M={p:'一次航行的合伙，资本随航行结束而收回：做不了跨越多年的事业，出资人也必须等到船回来才能退出。',c:'持续存在的公司把资本长期留下，能做跨越多年的事业；出资人想退出时，把份额卖给别人即可，公司本身不受影响。这就需要一个买卖份额的地方。'};
+  const box=document.getElementById('vc'),msg=document.getElementById('vc-msg');
+  function set(k){document.querySelectorAll('[data-vc]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.vc===k)));
+    box.innerHTML=T[k].map(([a,b],i)=>`<div class="vc-s${i===3?' end':''}" style="--i:${i}"><em>${a}</em>${b}</div>`).join('');msg.textContent=M[k];box.classList.remove('in');void box.offsetWidth;box.classList.add('in');}
+  document.querySelectorAll('[data-vc]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.vc)));
+  box.addEventListener('anim-in',()=>{set('p');setTimeout(()=>set('c'),2600);});
+  set('p');box.classList.remove('in');
+})();
+</script>

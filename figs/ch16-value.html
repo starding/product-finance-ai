@@ -1,0 +1,43 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">前景理论的价值函数</p>
+    <p class="figsub">横轴是相对于参照点的得失，纵轴是感受到的价值。拖动结果，比较同样金额的收益与损失带来的感受。</p>
+    <div class="vf" id="vf" data-anim>
+      <svg viewBox="0 0 640 260" role="img" aria-label="价值函数">
+        <g id="vf-ax"></g><path id="vf-p" class="vf-l"/>
+        <line id="vf-h" class="vf-g"/><line id="vf-v" class="vf-g"/><circle id="vf-d" r="6" fill="var(--ink)"/>
+        <circle id="vf-m" r="5" fill="none" stroke="var(--faint)" stroke-width="1.5"/>
+      </svg>
+      <div class="sl"><label for="vf-s">相对于参照点的结果 <b id="vf-sv"></b></label><input id="vf-s" type="range" min="-1000" max="1000" step="50" value="-500"></div>
+      <p class="vf-msg" id="vf-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>参数取 Tversky 与 Kahneman（1992）的估计：收益与损失的敏感度递减系数为 0.88，损失厌恶系数为 2.25。空心圆为同等金额的相反结果。</figcaption>
+</figure>
+<style>
+.vf svg{width:100%;height:auto;display:block}
+.vf-l{fill:none;stroke:var(--accent);stroke-width:2.5;stroke-dasharray:1200;stroke-dashoffset:1200;transition:stroke-dashoffset 1.4s ease}
+.vf.in .vf-l{stroke-dashoffset:0}
+.vf-g{stroke:var(--faint);stroke-dasharray:3 3}
+.vf-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.vf svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const V=x=>x>=0?Math.pow(x,.88):-2.25*Math.pow(-x,.88), vmax=V(1000), vmin=V(-1000);
+  const X0=40,X1=620,YT=12,YB=248,cx=(X0+X1)/2,x=v=>cx+v/1000*(X1-cx),yr=(YB-YT)/(vmax-vmin),y=u=>YT+(vmax-u)*yr,y0=y(0);
+  const $=id=>document.getElementById(id);
+  let d='';for(let v=-1000;v<=1000;v+=10)d+=(v===-1000?'M':'L')+x(v).toFixed(1)+','+y(V(v)).toFixed(1);$('vf-p').setAttribute('d',d);
+  $('vf-ax').innerHTML=`<line x1="${X0}" y1="${y0}" x2="${X1}" y2="${y0}" class="s-faint"/><line x1="${cx}" y1="${YT}" x2="${cx}" y2="${YB}" class="s-faint"/>`+
+    `<text x="${X1}" y="${y0-6}" text-anchor="end" font-size="11" class="t-faint">收益 →</text><text x="${X0}" y="${y0-6}" font-size="11" class="t-faint">← 损失</text>`+
+    `<text x="${cx+6}" y="${YT+10}" font-size="11" class="t-faint">感受到的价值</text><text x="${cx+6}" y="${y0+14}" font-size="11" class="t-faint">参照点</text>`;
+  const sl=$('vf-s'),fm=u=>(u<0?'－':'＋')+Math.abs(u).toFixed(0);
+  function r(){const v=+sl.value,u=V(v);$('vf-sv').textContent=(v>0?'＋':v<0?'－':'')+Math.abs(v)+' 元';
+    $('vf-d').setAttribute('cx',x(v));$('vf-d').setAttribute('cy',y(u));$('vf-m').setAttribute('cx',x(-v));$('vf-m').setAttribute('cy',y(V(-v)));
+    const h=$('vf-h'),vv=$('vf-v');h.setAttribute('x1',cx);h.setAttribute('x2',x(v));h.setAttribute('y1',y(u));h.setAttribute('y2',y(u));vv.setAttribute('x1',x(v));vv.setAttribute('x2',x(v));vv.setAttribute('y1',y0);vv.setAttribute('y2',y(u));
+    $('vf-msg').textContent=v===0?'处在参照点上：没有得，也没有失。':v<0?`损失 ${-v} 元的感受约为 ${fm(u)}，而赚到同样金额的感受只有 ${fm(V(-v))}：损失的分量约为收益的 2.25 倍。`:`赚到 ${v} 元的感受约为 ${fm(u)}；亏掉同样金额，感受约为 ${fm(V(-v))}。`;}
+  sl.addEventListener('input',r);
+  $('vf').addEventListener('anim-in',()=>{let v=-1000;const id=setInterval(()=>{v+=100;sl.value=v;r();if(v>=1000){clearInterval(id);setTimeout(()=>{sl.value=-500;r();},700);}},130);});
+  r();
+})();
+</script>

@@ -1,0 +1,73 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">从分段交接到同时在场</p>
+    <p class="figsub">一笔投资经过的五个环节，以及每个环节需要哪几门学科。</p>
+    <div class="seg-btns" role="group" aria-label="切换">
+      <button type="button" data-dv="past" aria-pressed="true">过去：各管一段</button>
+      <button type="button" data-dv="now" aria-pressed="false">现在：代理人走完全程</button>
+    </div>
+    <div class="dv-scroll"><div class="dv" id="dv" data-anim data-dv="past">
+      <div></div><div class="dv-h">开户</div><div class="dv-h">行情</div><div class="dv-h">下单</div><div class="dv-h">持仓</div><div class="dv-h">对账</div>
+      <div class="dv-band"><span>代理人：读材料 → 作判断 → 下单 → 跟踪 → 汇报</span></div>
+
+      <div class="dv-r fin"><b>金融</b><span>投研与金融工程</span></div>
+      <div class="dv-c fin"><span>风险承受能力的依据</span></div>
+      <div class="dv-c fin own"><span>什么已反映在价格里</span></div>
+      <div class="dv-c fin"><span>执行成本与时机</span></div>
+      <div class="dv-c fin"><span>分散与风险暴露</span></div>
+      <div class="dv-c fin"><span>业绩归因</span></div>
+
+      <div class="dv-r prod"><b>产品</b><span>产品与设计</span></div>
+      <div class="dv-c prod"><span>引导用户说清目标</span></div>
+      <div class="dv-c prod"><span>如何呈现变化</span></div>
+      <div class="dv-c prod own"><span>确认与可撤回</span></div>
+      <div class="dv-c prod own"><span>持续汇报</span></div>
+      <div class="dv-c prod"><span>结果可核查</span></div>
+
+      <div class="dv-r comp"><b>合规</b><span>合规与运营</span></div>
+      <div class="dv-c comp own"><span>身份与适当性</span></div>
+      <div class="dv-c comp"><span>不构成个性化建议</span></div>
+      <div class="dv-c comp"><span>授权范围</span></div>
+      <div class="dv-c comp"><span>利益冲突披露</span></div>
+      <div class="dv-c comp own"><span>记录留存</span></div>
+    </div></div>
+    <p class="dv-msg" id="dv-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>示意。环节与分工因机构而异，图中只表示主要负责方。</figcaption>
+</figure>
+<style>
+.dv-scroll{overflow-x:auto}
+.dv{display:grid;grid-template-columns:96px repeat(5,minmax(84px,1fr));gap:6px;min-width:540px;position:relative;font-size:12px}
+.dv-h{text-align:center;color:var(--faint);padding-bottom:2px}
+.dv-band{grid-column:2/-1;height:26px;border-radius:13px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;transform-origin:left;transform:scaleX(0);opacity:0;transition:transform .7s ease,opacity .3s}
+.dv[data-dv="now"] .dv-band{transform:none;opacity:1}
+.dv-band span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 10px}
+.dv-r{display:flex;flex-direction:column;justify-content:center;line-height:1.3}
+.dv-r b{font-size:14px}
+.dv-r span{font-size:11px;color:var(--faint)}
+.dv-c{min-height:52px;border-radius:8px;border:1.5px dashed var(--line);display:flex;align-items:center;justify-content:center;text-align:center;padding:6px;line-height:1.4;color:var(--muted);transition:background .4s,border-color .4s,color .4s}
+.dv-c span{opacity:0;transition:opacity .4s}
+.dv-c.own{border-style:solid}
+.dv[data-dv="past"] .dv-c.own span{opacity:1}
+.dv[data-dv="past"] .dv-c.own.fin{background:var(--accent-soft);border-color:var(--accent)}
+.dv[data-dv="past"] .dv-c.own.prod{background:rgba(47,95,158,.14);border-color:var(--blue)}
+.dv[data-dv="past"] .dv-c.own.comp{background:rgba(160,120,24,.14);border-color:var(--gold)}
+.dv[data-dv="now"] .dv-c{border-style:solid;color:var(--ink)}
+.dv[data-dv="now"] .dv-c span{opacity:1}
+.dv[data-dv="now"] .dv-c.fin{background:var(--accent-soft);border-color:var(--accent)}
+.dv[data-dv="now"] .dv-c.prod{background:rgba(47,95,158,.14);border-color:var(--blue)}
+.dv[data-dv="now"] .dv-c.comp{background:rgba(160,120,24,.14);border-color:var(--gold)}
+.dv-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const dv=document.getElementById('dv'), btns=[...document.querySelectorAll('[data-dv]')].filter(b=>b.tagName==='BUTTON');
+  const MSG={past:'产品形态稳定时，每个环节由一类人主要负责，各方在边界上交接即可。',
+             now:'代理人替用户走完五个环节，每一步的判断都同时涉及金融、产品与合规。三门学科必须同时在场，而不是在边界上交接。'};
+  let t;
+  const set=m=>{dv.dataset.dv=m;btns.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.dv===m)));document.getElementById('dv-msg').textContent=MSG[m];};
+  btns.forEach(b=>b.addEventListener('click',()=>{clearTimeout(t);set(b.dataset.dv);}));
+  dv.addEventListener('anim-in',()=>{set('past');clearTimeout(t);t=setTimeout(()=>set('now'),2600);});
+  set('past');
+})();
+</script>

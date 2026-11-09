@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: the value and limits of financial agents</p><p class="figsub">Four design requirements, each corresponding to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="ch23summary">Replay</button></div>
+    <div class="ch23summary" id="ch23summary" data-anim><div class="ch23summary-c" style="--i:0"><em>The baseline is actual behaviour</em><b>Measure value against what users did before</b><p>A research agent's value lies in depth; a portfolio agent's value lies in letting people who do no allocation do it, not in saving a few minutes.</p></div><div class="ch23summary-c" style="--i:1"><em>The value of prediction falls as it spreads</em><b>Do not sell on prediction</b><p>Place value in staying diversified, lowering costs and reducing behavioural bias, which do not disappear as similar agents spread.</p></div><div class="ch23summary-c warn" style="--i:2"><em>Trading errors are hard to undo</em><b>Tier authority; set limits and a stop switch</b><p>Information and advice can be autonomous; changing holdings and moving funds need the person's confirmation, with per-transaction and cumulative limits.</p></div><div class="ch23summary-c warn" style="--i:3"><em>Agents act together</em><b>Keep similar rules from firing at once</b><p>Stagger execution times, vary rule parameters, and when markets swing violently, flag the risk and slow execution down.</p></div></div>
+  </div>
+</figure>
+<style>
+.ch23summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch23summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch23summary-c.warn{border-left-color:var(--warm)}
+.ch23summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch23summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch23summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch23summary.in .ch23summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch23summary{grid-template-columns:1fr}}
+</style>

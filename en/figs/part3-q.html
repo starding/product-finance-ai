@@ -1,0 +1,55 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Three questions: worth doing, able to do, dare to hand over</p><p class="figsub">Pick a task and answer the three questions in order. If an earlier question fails, the later ones need not be asked; the third determines how much of the nominal value from the first can be realized.</p></div><button class="replay" type="button" data-replay="q3">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Task">
+      <button type="button" data-q3="0" aria-pressed="true">Weekly news digest</button>
+      <button type="button" data-q3="1" aria-pressed="false">Occasional FX lookup</button>
+      <button type="button" data-q3="2" aria-pressed="false">Fixing a home pipe</button>
+      <button type="button" data-q3="3" aria-pressed="false">Placing planned orders</button>
+      <button type="button" data-q3="4" aria-pressed="false">Retirement allocation</button>
+    </div>
+    <div class="q3" id="q3" data-anim>
+      <div class="q3-c" style="--i:0"><em>Question 1</em><b>Is it worth doing?</b><span>How much is saved over a year, and does it make possible something that could not be done before?</span><small>Numerator and overall factor</small><p></p><a href="ch19.html">Chapter 19</a></div>
+      <div class="q3-c" style="--i:1"><em>Question 2</em><b>Can it be done?</b><span>Can the agent get the information and tools, can it act on site, does it have access?</span><small>Portion not applicable</small><p></p><a href="ch20.html">Chapters 20 and 21</a></div>
+      <div class="q3-c" style="--i:2"><em>Question 3</em><b>Dare one hand it over?</b><span>How severe are the consequences of an error, and can the result be judged right or wrong in good time?</span><small>Specifying and checking; rework after errors</small><p></p><a href="ch22.html">Chapters 22 and 23</a></div>
+    </div>
+    <p class="q3-msg" id="q3-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>All five tasks are examples. Labels such as "Numerator and overall factor" refer to the terms of the decomposition above.</figcaption>
+</figure>
+<style>
+.q3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.q3-c{position:relative;background:var(--quote);border-radius:10px;padding:12px 12px 10px;display:flex;flex-direction:column;gap:4px;border-top:3px solid var(--line);transition:border-color .4s,opacity .4s}
+.q3-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.q3-c b{font-size:15px}
+.q3-c>span{font-size:12.5px;color:var(--muted);line-height:1.55}
+.q3-c small{font-size:11.5px;color:var(--faint)}
+.q3-c p{margin:6px 0 0;font-size:13.5px;line-height:1.6;min-height:4.8em;opacity:0;transform:translateY(4px);transition:opacity .4s,transform .4s}
+.q3-c a{font-size:12px;margin-top:auto;color:var(--accent);text-decoration:none}
+.q3-c.ok{border-top-color:var(--accent)} .q3-c.ok p{opacity:1;transform:none}
+.q3-c.no{border-top-color:var(--warm)} .q3-c.no p{opacity:1;transform:none;color:var(--warm)}
+.q3-c.half{border-top-color:var(--gold)} .q3-c.half p{opacity:1;transform:none}
+.q3-c.off{opacity:.45}
+.q3-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.q3{grid-template-columns:1fr}.q3-c p{min-height:0}}
+</style>
+<script>
+(function(){
+  // Each task: result of the three questions (ok holds / half holds with conditions / no fails) with an explanation, then the conclusion
+  const E=[
+    [['ok','It recurs every week, dozens of times a year; handing it over saves considerable time.'],['ok','News and data are all available online, so the agent can get them.'],['ok','Errors can be spotted on the spot, and the consequences are minor.'],'All three questions hold: suitable to hand over fully, with spot checks only.'],
+    [['no','Once or twice a year; checking it yourself is quicker than explaining the task.'],null,null,'The first question already fails: the fixed cost of explaining the task exceeds the cost of doing it yourself, so there is no need to hand it over.'],
+    [['ok','Calling someone out takes time and money, so it is worth saving.'],['no','It requires hands-on work on site, which an agent without a body cannot do.'],null,'The second question fails: what is missing is the ability to act on site, so the agent can only provide a checklist.'],
+    [['ok','Little effort is involved, but executing on time and at the right price matters.'],['half','It needs a trading channel, account authorization and access through a licensed institution.'],['half','The consequences are serious and irreversible, but the order details can be checked one by one before they take effect.'],'It can be handed over, but each order is confirmed by the user before it takes effect.'],
+    [['ok','It affects long-term outcomes and is worth sustained effort.'],['ok','Holdings, goals and market data can all be connected.'],['half','Whether the result is right takes years to judge, so one can rely only on the prior agreement and the process record.'],'It can be handed over, but trust has to be built step by step through the agreement, the process record and aligned interests.']];
+  const box=document.getElementById('q3'),cs=[...box.querySelectorAll('.q3-c')],msg=document.getElementById('q3-msg');let cur=0,tm=[];
+  function set(k){cur=k;tm.forEach(clearTimeout);tm=[];document.querySelectorAll('[data-q3]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.q3===k)));
+    cs.forEach(c=>{c.className='q3-c';c.querySelector('p').textContent='';});msg.textContent='';
+    const e=E[k];let stop=false;
+    cs.forEach((c,i)=>tm.push(setTimeout(()=>{if(stop||!e[i]){c.classList.add('off');return;}c.classList.add(e[i][0]);c.querySelector('p').textContent=e[i][1];if(e[i][0]==='no')stop=true;},250+i*650)));
+    tm.push(setTimeout(()=>{msg.textContent=e[3];},250+3*650));}
+  document.querySelectorAll('[data-q3]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.q3)));
+  box.addEventListener('anim-in',()=>set(cur));
+  set(0);
+})();
+</script>

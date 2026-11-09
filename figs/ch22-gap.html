@@ -1,0 +1,40 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">核对比生成便宜的任务，最适合交出</p><p class="figsub">横轴是自己完成所需的时间，纵轴是核对一份现成结果所需的时间（均为对数刻度）。对角线以下，核对比生成便宜。点按一项查看说明。</p></div><button class="replay" type="button" data-replay="gp">重播</button></div>
+    <div class="gp" id="gp" data-anim>
+      <svg viewBox="0 0 640 300" role="img" aria-label="生成成本与核对成本"><g id="gp-ax"></g><g id="gp-pts"></g></svg>
+      <p class="gp-msg" id="gp-msg" aria-live="polite">点按一项。</p>
+    </div>
+  </div>
+  <figcaption>示意位置，表示相对关系。验证与求解的难度差见 Cook（1971）。</figcaption>
+</figure>
+<style>
+.gp svg{width:100%;height:auto;display:block}
+.gp-p{cursor:pointer;opacity:0;transition:opacity .4s;transition-delay:calc(var(--i)*.15s)}
+.gp.in .gp-p{opacity:1}
+.gp-p.sel circle{stroke:var(--ink);stroke-width:2.5}
+.gp-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.gp svg text{font-size:17px}}
+</style>
+<script>
+(function(){
+  const T=[['解一道数独',40,1,'找答案要反复尝试，检查只需逐行逐列看一遍：核对比生成便宜几十倍。'],
+    ['迁移一段代码（有测试）',240,10,'自动测试与编译在几分钟内给出结论，这是代理放大倍数最高的一类任务。'],
+    ['计算组合的年化收益',15,3,'用程序或另一种方法重算一遍即可核对，前提是数据来源明确。'],
+    ['查一个数据（附来源）',3,1,'点开来源对照即可；不附来源时，核对就要重新查一遍。'],
+    ['翻译一份公告',60,20,'通读核对仍要相当时间，但比重新翻译快得多。'],
+    ['写一份研究摘要',120,45,'要逐条核对事实与引用，还要判断取舍是否恰当。'],
+    ['判断研究结论是否成立',180,170,'核对几乎等于重做一遍研究：验证并不比生成便宜。'],
+    ['判断一项投资是否正确',120,600,'结果受运气影响，要很长时间才能揭晓；短期内几乎无法核对，比生成还贵。']];
+  const X0=70,X1=610,YT=22,YB=256,lo=Math.log10(.8),hi=Math.log10(800),x=v=>X0+(Math.log10(v)-lo)/(hi-lo)*(X1-X0),y=v=>YB-(Math.log10(v)-lo)/(hi-lo)*(YB-YT);
+  const $=id=>document.getElementById(id);
+  let a=`<path d="M${x(.8)},${y(.8)}L${x(800)},${y(800)}L${x(800)},${y(.8)}Z" fill="var(--accent-soft)" opacity=".6"/><line x1="${x(.8)}" y1="${y(.8)}" x2="${x(800)}" y2="${y(800)}" stroke="var(--faint)" stroke-dasharray="4 4"/>`+
+    `<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/><line x1="${X0}" y1="${YT}" x2="${X0}" y2="${YB}" class="s-faint"/>`;
+  [[1,'1 分钟'],[10,'10 分钟'],[60,'1 小时'],[600,'10 小时']].forEach(([v,l])=>{a+=`<text x="${x(v)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${l}</text><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${l}</text>`;});
+  a+=`<text x="${X1}" y="${YB+32}" text-anchor="end" font-size="11" class="t-faint">自己完成的时间 →</text><text x="${X0}" y="${YT-2}" font-size="11" class="t-faint">核对的时间</text>`;
+  $('gp-ax').innerHTML=a;
+  $('gp-pts').innerHTML=T.map(([n,g,c],i)=>{const r=c/g,col=r<.2?'var(--accent)':r<.6?'var(--gold)':'var(--warm)',left=g>=100;const up=i===3;return `<g class="gp-p" data-i="${i}" style="--i:${i}"><circle cx="${x(g)}" cy="${y(c)}" r="7" fill="${col}"/><text x="${up?x(g):x(g)+(left?-11:11)}" y="${up?y(c)-12:y(c)+4}" text-anchor="${up?'middle':left?'end':'start'}" font-size="12" class="t-ink">${n}</text></g>`;}).join('');
+  const ps=[...document.querySelectorAll('.gp-p')];
+  ps.forEach((p,i)=>p.addEventListener('click',()=>{ps.forEach(q=>q.classList.toggle('sel',q===p));$('gp-msg').textContent=T[i][0]+'：'+T[i][3];}));
+})();
+</script>

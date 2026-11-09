@@ -1,0 +1,43 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">按风险分配核对的力度</p><p class="figsub">代理交回 100 份结果，其中 10 份涉及资金或持仓（高风险），90 份是内部参考（低风险）。一个错误在高风险结果中造成的损失是低风险的 20 倍。切换核对方式。</p></div><button class="replay" type="button" data-replay="rk">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="核对方式">
+      <button type="button" data-rk="all" aria-pressed="false">全部核对</button>
+      <button type="button" data-rk="rand" aria-pressed="true">随机抽查两成</button>
+      <button type="button" data-rk="strat" aria-pressed="false">按风险分层</button>
+    </div>
+    <div class="rk" id="rk" data-anim>
+      <div class="rk-g" id="rk-g"></div>
+      <div class="legend"><span><i style="background:var(--warm)"></i>高风险</span><span><i style="background:var(--quote);border:1px solid var(--faint)"></i>低风险</span><span><i style="background:var(--ink)"></i>含错误</span><span><i style="border:2px solid var(--accent);background:none"></i>被核对</span></div>
+      <div class="rk-out"><div><span>核对的份数</span><b id="rk-n"></b></div><div><span>漏掉的错误造成的损失</span><b id="rk-l"></b></div></div>
+      <p class="rk-msg" id="rk-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意数字：高风险结果中有 2 份含错误，低风险结果中有 5 份含错误；被核对的错误都能被发现。分层抽样的思路见 Neyman（1934）。</figcaption>
+</figure>
+<style>
+.rk-g{display:grid;grid-template-columns:repeat(20,1fr);gap:3px}
+.rk-g i{aspect-ratio:1;border-radius:3px;background:var(--quote);border:2px solid transparent;position:relative;transition:border-color .3s}
+.rk-g i.h{background:var(--warm-soft)}
+.rk-g i.e::after{content:"";position:absolute;inset:30%;border-radius:50%;background:var(--ink)}
+.rk-g i.c{border-color:var(--accent)}
+.rk-out{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.rk-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.rk-out span{display:block;font-size:12px;color:var(--faint)} .rk-out b{font-size:19px;font-variant-numeric:tabular-nums}
+.rk-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const H=new Set([0,1,2,3,4,5,6,7,8,9]),E=new Set([2,7,23,41,58,66,90]);
+  const R=new Set([3,11,19,23,27,35,43,47,52,59,61,66,70,74,78,83,88,92,95,99]),ST=new Set([0,1,2,3,4,5,6,7,8,9,14,23,31,42,50,63,71,80,88,97]);
+  const g=document.getElementById('rk-g');g.innerHTML=Array.from({length:100},(_,i)=>`<i class="${H.has(i)?'h':''} ${E.has(i)?'e':''}"></i>`).join('');const cs=[...g.children];
+  const M={all:'全部核对：所有错误都被发现，但要核对 100 份，核对时间吃掉了大部分节省。',rand:'随机抽查两成：核对量少了，但抽查不分轻重，高风险结果中的错误很可能被漏掉，损失最大。',strat:'按风险分层：高风险的 10 份全部核对，低风险的抽查一成。核对量与随机抽查相同，漏掉的损失却小得多。'};
+  function set(k){document.querySelectorAll('[data-rk]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.rk===k)));
+    const S=k==='all'?null:k==='rand'?R:ST;let n=0,loss=0;
+    cs.forEach((c,i)=>{const on=!S||S.has(i);c.classList.toggle('c',on);if(on)n++;if(E.has(i)&&!on)loss+=H.has(i)?20:1;});
+    document.getElementById('rk-n').textContent=n+' 份';document.getElementById('rk-l').textContent=loss+' 单位';document.getElementById('rk-msg').textContent=M[k];}
+  document.querySelectorAll('[data-rk]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.rk)));
+  document.getElementById('rk').addEventListener('anim-in',()=>{['all','rand','strat'].forEach((k,i)=>setTimeout(()=>set(k),i*2200));});
+  set('rand');
+})();
+</script>

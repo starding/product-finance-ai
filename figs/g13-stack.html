@@ -1,0 +1,36 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">一次委托的成本，降的是哪几块</p><p class="figsub">把一次委托的成本拆成五块。拖动“认知劳动的价格”，研究、起草与执行几乎随之下降，核对只降一部分，担责不降。</p></div><button class="replay" type="button" data-replay="st13">重播</button></div>
+    <div class="st13" id="st13" data-anim>
+      <div class="st13-bars" id="st13-b"></div>
+      <div class="sl"><label for="st13-a">认知劳动的价格 <b id="st13-av"></b></label><input id="st13-a" type="range" min="0" max="100" step="5" value="100"></div>
+      <p class="st13-msg" id="st13-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：原来的成本为 100，五块分别占 30、20、15、20、15；研究、起草与执行全部是认知劳动，核对有一半是认知劳动，担责完全不是。</figcaption>
+</figure>
+<style>
+.st13-bars{display:grid;gap:10px;margin-bottom:6px}
+.st13-r{display:grid;grid-template-columns:4.5em 1fr 3.5em;gap:10px;align-items:center;font-size:12.5px}
+.st13-r>div{display:flex;height:26px;border-radius:6px;overflow:hidden;background:var(--quote)}
+.st13-r i{display:block;height:100%;transition:width .6s;font-style:normal;color:var(--bg);font-size:11px;line-height:26px;text-align:center;white-space:nowrap;overflow:hidden}
+.st13-r b{text-align:right;font-variant-numeric:tabular-nums}
+.st13-lg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--muted);margin:4px 0 8px}
+.st13-lg span{display:flex;gap:5px;align-items:center}.st13-lg i{width:11px;height:11px;border-radius:3px}
+.st13-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('st13'+id);
+  const B=[['研究',30,1,'#2f6f5e'],['起草与判断',20,1,'#4f8f7c'],['执行',15,1,'#7fb3a2'],['核对',20,.5,'#c98a4b'],['担责',15,0,'#a4552d']];
+  function draw(){const a=+$('-a').value/100;$('-av').textContent=Math.round(a*100)+'%';
+    const now=B.map(([n,v,c])=>v*(c*a+(1-c))),tot=now.reduce((x,y)=>x+y,0);
+    const row=(lab,vals,t)=>`<div class="st13-r"><span>${lab}</span><div>${vals.map((v,i)=>`<i style="width:${v}%;background:${B[i][3]}" title="${B[i][0]}">${v>=8?B[i][0]:''}</i>`).join('')}</div><b>${t.toFixed(0)}</b></div>`;
+    $('-b').innerHTML=row('原来',B.map(b=>b[1]),100)+row('现在',now,tot)+`<div class="st13-lg">${B.map(b=>`<span><i style="background:${b[3]}"></i>${b[0]}</span>`).join('')}</div>`;
+    const share=(now[3]+now[4])/tot;
+    $('-msg').textContent=a===1?'认知劳动的价格不变时，研究、起草与执行占了成本的六成多。':`认知劳动的价格降到 ${Math.round(a*100)}%，总成本从 100 降到 ${tot.toFixed(0)}；核对与担责占总成本的比例从 35% 升到 ${Math.round(share*100)}%。再便宜的书记员，也压不低这 ${Math.round(B[3][1]*.5+B[4][1])} 的下限。`;}
+  $('-a').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{let v=100;$('-a').value=100;draw();const id=setInterval(()=>{v-=5;$('-a').value=v;draw();if(v<=0)clearInterval(id);},120);});
+  draw();
+})();
+</script>

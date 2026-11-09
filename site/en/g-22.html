@@ -1,0 +1,621 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The user cannot see the process</title>
+<meta name="description" content="Product × Finance × AI: Derived from Zero, Chapter 22. The villager sees only results, not how the scribe reached them. Verifiable records make a scribe that keeps the agreement willing to disclose everything, so silence itself becomes bad news; verification is costly, so detailed checks are needed only when results are poor or a trigger fires, with spot checks in ordinary times; records should be layered, first one sentence, then the key points, and only then everything; records should state what was known at the time, to guard against hindsight; and every step should state which clause of the agreement it relies on">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="g-22">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="Contents">
+<div class="side-head"><a class="sidetitle" href="index.html">Product × Finance × AI<small>Financial Products in the Age of AI</small></a></div>
+<div class="side-view" role="group" aria-label="Way of reading"><a href="preface.html">Decomposition</a><a href="g-preface.html" class="on" aria-current="true">Derivation</a></div>
+<a class="side-about" href="index.html#about">About this book</a>
+<a class="" href="g-preface.html"><span class="n">Preface</span>The best way to understand financial products is to build them from zero</a>
+<a class="side-part" href="g-part1.html"><span class="pn">Part One</span>From 0 to 1: how a world without finance grows finance</a>
+<a class="" href="g-01.html"><span class="n">1</span>One person, one year&#x27;s harvest</a>
+<a class="" href="g-02.html"><span class="n">2</span>Two people, short of grain at different times</a>
+<a class="" href="g-03.html"><span class="n">3</span>What if a loan is not repaid</a>
+<a class="" href="g-04.html"><span class="n">4</span>Exchange among many</a>
+<a class="" href="g-05.html"><span class="n">5</span>Harvests good and bad</a>
+<a class="" href="g-06.html"><span class="n">6</span>Savers may need their grain at any time; borrowers need it for years</a>
+<a class="" href="g-07.html"><span class="n">7</span>No one household can pay for a ship</a>
+<a class="" href="g-08.html"><span class="n">8</span>Securities must be saleable</a>
+<a class="" href="g-09.html"><span class="n">9</span>Prices carry everyone&#x27;s information</a>
+<a class="" href="g-10.html"><span class="n">10</span>Ordinary people have neither the time nor the expertise</a>
+<a class="" href="g-11.html"><span class="n">11</span>Trustees may not do their duty</a>
+<a class="" href="g-12.html"><span class="n">12</span>The institutions are in place, and people still make mistakes</a>
+<a class="side-part" href="g-part2.html"><span class="pn">Part Two</span>Changing one parameter: when agency becomes almost free</a>
+<a class="" href="g-13.html"><span class="n">13</span>A new parameter: the cost of cognitive labour collapses</a>
+<a class="" href="g-14.html"><span class="n">14</span>Can everyone have a personal agent?</a>
+<a class="" href="g-15.html"><span class="n">15</span>Who guarantees an agent&#x27;s promises</a>
+<a class="" href="g-16.html"><span class="n">16</span>If everyone has an analyst</a>
+<a class="" href="g-17.html"><span class="n">17</span>Agents become the main market participants</a>
+<a class="" href="g-18.html"><span class="n">18</span>Can an agent correct human bias?</a>
+<a class="" href="g-19.html"><span class="n">19</span>What did not change</a>
+<a class="side-part" href="g-part3.html"><span class="pn">Part Three</span>Deriving a product in the new world</a>
+<a class="" href="g-20.html"><span class="n">20</span>One person and one sum of money</a>
+<a class="" href="g-21.html"><span class="n">21</span>The user is not present</a>
+<a class=" cur" href="g-22.html" aria-current="page"><span class="n">22</span>The user cannot see the process</a>
+<a class="" href="g-23.html"><span class="n">23</span>Agents make mistakes</a>
+<a class="" href="g-24.html"><span class="n">24</span>Trust takes time</a>
+<a class="side-app" href="g-epilogue.html"><span class="n">Epilogue</span>Back to the governing rule</a>
+<a class="side-app" href="method.html"><span class="n">Appendix</span>How this book was written</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="Open contents" title="Contents"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">Product × Finance × AI: Financial Products in the Age of AI</a><span>Part Three  Deriving a product</span><a class="langlink" href="../g-22.html" hreflang="zh-CN">中文</a></header>
+
+<div class="chapno">Chapter 22</div><h1>The user cannot see the process<small>Process records and verifiable evidence</small></h1>
+<blockquote><p>A year has passed. The villager opens the ledger and sees that the retirement account is up 10%. Is this the result of the scribe keeping to the agreement, or did it take risks outside the agreement and happen to win? Conversely, if the account were down 10%, would that be a bad run of years or a breach by the scribe? From results alone he cannot tell. For him to see the process, the records must be verifiable; otherwise they are only the scribe's own account. Verification takes time, so not every entry can be checked. Records must be layered so that he can understand them though he looks only a few times a year. They must state what was known at the time, so that decisions are not judged afterwards by their outcomes. And every step must state which clause of the agreement it relies on.</p></blockquote>
+<h2 id="sec-1">1. Results alone cannot tell good from bad</h2>
+<p>A 10% gain in a year may mean the scribe kept the agreement and the years were good; it may also mean it quietly put the house money into ship shares and happened to catch a good season for the fleet. A 10% loss may mean a storm, or it may mean a breach. The swings of good and bad years are far larger than the scribe's influence, so judged by results alone, good and bad scribes are almost indistinguishable over a year or two. A principal who cannot tell them apart can only extend trust at the average level: good scribes receive less trust than they deserve, and bad ones are overrated.</p>
+<p>There is one new constraint: the user cannot see the agent's process, and information is asymmetric.</p>
+<p><strong>Today's counterpart.</strong> A fund's one-year performance depends largely on that year's market; the same return may come from very different levels of risk.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Results alone cannot tell good from bad</p><p class="figsub">Four of twenty scribes breach the agreement by taking extra risk outside it. Each dot is one scribe's result. Drag the number of years observed and see whether results separate those who keep the agreement from those who breach it.</p></div><button class="replay" type="button" data-replay="bk22">Replay</button></div>
+    <div class="bk22" id="bk22" data-anim>
+      <svg viewBox="0 0 660 190" role="img" aria-label="Results of scribes who keep and who breach the agreement"><g id="bk22-g"></g></svg>
+      <div class="legend"><span><i style="background:var(--accent);border-radius:50%"></i>Scribe keeping the agreement</span><span><i style="background:var(--warm);border-radius:50%"></i>Scribe in breach</span></div>
+      <div class="sl"><label for="bk22-n">Years observed <b id="bk22-nv"></b></label><input id="bk22-n" type="range" min="1" max="20" step="1" value="1"></div>
+      <p class="bk22-msg" id="bk22-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: scribes who keep the agreement earn 5% a year on average, each with volatility of 10%; those in breach take more risk, with an average return of 6% and volatility of 22%; all of them also share the same run of years. The horizontal axis is the annualized return over the observation period.</figcaption>
+</figure>
+<style>
+.bk22 svg{width:100%;height:auto;display:block}
+.bk22-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.bk22 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('bk22'+id),N=20,X0=40,X1=628,x=v=>X0+(v+.3)/.6*(X1-X0);
+  let s=2201;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};const g=()=>{let u=0;while(!u)u=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r());};
+  const Y=20,M=Array.from({length:Y},()=>.12*g()),E=Array.from({length:N},()=>Array.from({length:Y},g));
+  function draw(){const n=+$('-n').value;$('-nv').textContent=n+(n===1?' year':' years');
+    const R=E.map((e,i)=>{const bad=i<4;let w=1;for(let t=0;t<n;t++)w*=1+(bad?.06:.05)+M[t]*(bad?1.3:1)+(bad?.22:.10)*e[t];return [Math.pow(Math.max(w,.01),1/n)-1,bad];});
+    let h=[-.2,-.1,0,.1,.2].map(v=>`<line x1="${x(v)}" x2="${x(v)}" y1="20" y2="150" class="s-line"/><text x="${x(v)}" y="168" text-anchor="middle" font-size="11" class="t-faint">${Math.round(v*100)}%</text>`).join('');
+    R.forEach(([v,b],i)=>{h+=`<circle cx="${x(Math.max(-.29,Math.min(.29,v)))}" cy="${b?60:110}" r="7" fill="${b?'var(--warm)':'var(--accent)'}" opacity=".8"/>`;});
+    h+=`<text x="${X0}" y="56" font-size="11" class="t-faint">Breach</text><text x="${X0}" y="106" font-size="11" class="t-faint">Kept</text>`;
+    $('-g').innerHTML=h;const gm=R.filter(r=>!r[1]).map(r=>r[0]),bm=R.filter(r=>r[1]).map(r=>r[0]),mx=Math.max(...gm),better=bm.filter(v=>v>mx).length,inside=bm.filter(v=>v>=Math.min(...gm)).length;
+    $('-msg').textContent=n<5?`Judging by ${n} ${n===1?'year':'years'} of results: ${inside} of the 4 scribes in breach do no worse than the weakest scribe who kept the agreement${better?`, and ${better} do better than every one of them`:''}. The principal cannot tell who kept the agreement and who breached it.`:`After ${n} years, the results of those in breach begin to spread out more, yet ${inside} still do no worse than the weakest scribe who kept the agreement. Telling them apart by results takes too long.`;}
+  $('-n').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{let v=1;$('-n').value=1;draw();const id=setInterval(()=>{v+=1;$('-n').value=v;draw();if(v>=20)clearInterval(id);},200);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-2">2. Verifiable records</h2>
+<p>Suppose each scribe can choose whether to make its records public, and public records are kept by a party unconnected with it and cannot be altered. Work through what happens. The scribes that keep the agreement most strictly will certainly disclose, because disclosure sets them apart. Among those that remain undisclosed, the better ones will also disclose; otherwise principals will lump them together with worse ones. Round after round, as long as public records can be verified and disclosure costs little, almost every scribe discloses, and not disclosing becomes bad news in itself.</p>
+<aside class="principle"><p class="pr-k">Derived so far: a principle</p><p class="pr-n">Unravelling in information disclosure</p><p class="pr-c"><span><em>Discipline</em>Economics › Information economics (voluntary disclosure)</span><span><em>Type</em>Theoretical model</span></p><p class="pr-s">When the seller's information can be verified and disclosure costs little, the highest-quality sellers disclose voluntarily to set themselves apart, the others follow one by one, and in the end almost everything is disclosed; buyers therefore read non-disclosure as bad news.</p><dl><div><dt>Standing in the field</dt><dd>Grossman and Milgrom each reached this result in 1981, and the two papers are often cited together as the foundation of voluntary disclosure theory; one of Milgrom's applications is that buyers will assume any product information a salesperson withholds is unfavourable to the product</dd></div><div><dt>Constraint it answers</dt><dd>The user cannot see the process, and the agent knows more than the user</dd></div><div><dt>Premises</dt><dd>Disclosed information can be verified; disclosure costs little; buyers know the seller holds the information</dd></div><div><dt>Proposed by</dt><dd>Grossman, 1981; Milgrom, 1981</dd></div><div><dt>Open question</dt><dd>Will real principals treat silence as bad news</dd></div></dl></aside>
+<p>Experiments support this reasoning only in part. In the experiments of Jin, Luca and Martin (2021), receivers of information were often not sceptical enough about non-disclosure, so senders did not always disclose; full disclosure emerged only gradually when receivers were told after each round what had been withheld. For verifiable records to work, the product must also help the user read "no record" as a signal.</p>
+<p><strong>Today's counterpart.</strong> Listed companies must publish audited financial reports at regular intervals; refusing or delaying disclosure in itself puts investors on alert.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Silence becomes bad news</p><p class="figsub">Ten scribes score from 1 to 10 on how well they keep the agreement, and each decides whether to make its verifiable records public. The principal treats every scribe that does not disclose as having their average score. Click "Next round" to see who discloses.</p></div><button class="replay" type="button" data-replay="ur22">Replay</button></div>
+    <div class="ur22" id="ur22" data-anim>
+      <div class="ur22-g" id="ur22-g"></div>
+      <div class="ur22-ctl"><button type="button" class="replay" id="ur22-n">Next round</button><button type="button" class="replay" id="ur22-r">Start over</button><label class="cs-sw"><input type="checkbox" id="ur22-s"> The principal is not sceptical enough of silence (treats it as a 7)</label></div>
+      <p class="ur22-msg" id="ur22-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: a scribe discloses when its own score exceeds the principal's estimate for those who do not disclose (the unravelling process of Grossman, 1981, and Milgrom, 1981). When the principal is "not sceptical enough", it always treats non-disclosers as a 7, matching the insufficient scepticism of receivers in the experiments of Jin, Luca and Martin (2021).</figcaption>
+</figure>
+<style>
+.ur22-g{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:6px;margin:6px 0}
+.ur22-g div{border-radius:8px;padding:8px 2px;text-align:center;font-size:13px;background:var(--quote);transition:background .4s,color .4s}
+.ur22-g div b{display:block;font-size:16px}
+.ur22-g div.d{background:var(--accent);color:var(--bg)}
+.ur22-ctl{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:6px}
+.ur22-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+.ur22-g>*{min-width:0;overflow-wrap:anywhere}
+@media (max-width:640px){.ur22-g{gap:3px}.ur22-g div{font-size:9.5px;padding:6px 1px}.ur22-g div b{font-size:14px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('ur22'+id);let D=new Set(),round=0;
+  const est=()=>{if($('-s').checked)return 7;const u=[...Array(10).keys()].map(i=>i+1).filter(v=>!D.has(v));return u.length?u.reduce((a,b)=>a+b,0)/u.length:0;};
+  function draw(){const e=est();$('-g').innerHTML=[...Array(10).keys()].map(i=>{const v=10-i;return `<div class="${D.has(v)?'d':''}"><b>${v}</b>${D.has(v)?'Open':'Silent'}</div>`;}).join('');
+    $('-msg').textContent=round===0?`At first nobody discloses, so the principal can only treat everyone as the average, ${e.toFixed(1)}.`:D.size>=9&&!$('-s').checked?`Round ${round}: every scribe except the worst has disclosed; the principal knows at a glance which one stayed silent. Silence has become bad news.`:`Round ${round}: ${D.size} have disclosed, and the principal's estimate for non-disclosers falls to ${e.toFixed(1)}. `+($('-s').checked?'The principal is not sceptical enough of silence, so scribes scoring below 7 have no reason to disclose, and the unravelling stops.':'Scribes scoring above this estimate will disclose in the next round too.');}
+  function step(){const e=est();for(let v=1;v<=10;v++)if(v>e)D.add(v);round++;draw();}
+  $('-n').addEventListener('click',step);$('-r').addEventListener('click',()=>{D=new Set();round=0;draw();});$('-s').addEventListener('input',()=>{D=new Set();round=0;draw();});
+  $('').addEventListener('anim-in',()=>{D=new Set();round=0;$('-s').checked=false;draw();[1,2,3,4,5].forEach((k,i)=>setTimeout(step,900+i*1100));});
+  draw();
+})();
+</script>
+
+<h2 id="sec-3">3. Verification has a cost</h2>
+<p>That records can be verified does not mean every entry must be. Checking several hundred actions a year one by one would take a great deal of his time, and the labour of another scribe as well. Work through where verification should be spent. When results meet the agreement and every indicator is within its boundaries, a detailed check yields little; when results are poor or a condition in the agreement has been triggered, a detailed check yields the most. Add unannounced random spot checks in ordinary times, and the scribe cannot predict which entry will be examined, so the temptation to breach the agreement shrinks.</p>
+<aside class="principle"><p class="pr-k">Derived so far: a principle</p><p class="pr-n">Costly state verification</p><p class="pr-c"><span><em>Discipline</em>Economics › Contract theory (financial contracting)</span><span><em>Type</em>Theoretical model</span></p><p class="pr-s">When it is costly for the principal to observe the outcome the agent reports, the optimal agreement verifies only when the reported outcome is poor; under certain conditions such an agreement takes the form of a standard debt contract: if the agreed repayment is made there is no verification, and only when it cannot be made is there verification and takeover.</p><dl><div><dt>Standing in the field</dt><dd>The paper derives the optimal contract when verification is costly; later literature uses it, together with Gale and Hellwig (1985), to show that debt contracts induce truthful reporting while minimizing verification costs</dd></div><div><dt>Constraint it answers</dt><dd>Verification is costly, and the principal cannot check every entry</dd></div><div><dt>Premises</dt><dd>The cost of verification can be estimated in advance; when the agent reports truthfully, the principal need not verify</dd></div><div><dt>Proposed by</dt><dd>Townsend, 1979</dd></div><div><dt>Open question</dt><dd>If verification happens only when results are poor, what about breaches hidden in good results</dd></div><div><dt>After the rerun</dt><dd>The scribe's records are almost free, and another scribe can carry out most of the verification for the principal, so the cost of verification falls sharply; verification can therefore be triggered not only by "poor results" but by "poor results, a triggered condition, or random selection"</dd></div></dl></aside>
+<p><strong>Today's counterpart.</strong> A financial audit does not examine every transaction. It sets priorities by risk and then tests samples; the International Standards on Auditing contain specific provisions on audit sampling.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Where to spend verification</p><p class="figsub">The scribe carries out 300 actions a year, 6 of them breaches. Most breaches occur where results are poor or a trigger fires, but some hide among good results. Switch among three ways of checking and compare the effort spent with the breaches found.</p></div><button class="replay" type="button" data-replay="ad22">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Verification method">
+      <button type="button" data-ad22="all" aria-pressed="true">Check every entry</button>
+      <button type="button" data-ad22="bad" aria-pressed="false">Check only poor results</button>
+      <button type="button" data-ad22="mix" aria-pressed="false">Detailed checks on poor results or triggers, plus 10% random spot checks</button>
+    </div>
+    <div class="ad22" id="ad22" data-anim>
+      <div class="ad22-bars" id="ad22-b"></div>
+      <p class="ad22-msg" id="ad22-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: of the 300 actions, 30 had poor results or set off a trigger, and 4 breaches hide among them; the other 270 hide 2 breaches. Each detailed check takes about 6 minutes. With random spot checks, the scribe does not know which action will be examined (Townsend's 1979 idea of verifying only when results are poor, plus random spot checks).</figcaption>
+</figure>
+<style>
+.ad22-bars{display:grid;gap:12px;margin:6px 0 10px}
+.ad22-r{display:grid;grid-template-columns:8em 1fr 5em;gap:10px;align-items:center;font-size:12.5px}
+.ad22-r div{height:22px;background:var(--quote);border-radius:5px;overflow:hidden}
+.ad22-r i{display:block;height:100%;transition:width .4s}
+.ad22-r b{text-align:right;font-variant-numeric:tabular-nums}
+.ad22-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.ad22-r{grid-template-columns:1fr 5em}.ad22-r span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('ad22'+id);
+  const M={all:[300,6,'Checking every entry: 300 checks a year, 30 hours, and all 6 breaches found. He does not have that much time in a year.'],bad:[30,4,'Checking only poor results: 30 checks a year, 3 hours, and 4 breaches found; the 2 hidden among good results slip through, and the scribe will learn to hide breaches in good results.'],mix:[57,4.2,'Detailed checks on poor results or triggers, plus 10% random spot checks: 57 checks a year, under 6 hours, and 4.2 breaches found on average. More importantly, the scribe does not know which action will be drawn, so the temptation to breach shrinks.']};
+  function set(k){document.querySelectorAll('[data-ad22]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.ad22===k)));const [n,f,msg]=M[k];
+    $('-b').innerHTML=[['Actions checked',n,300,'var(--blue)',String(n)],['Time spent',n*.1,30,'var(--gold)',(n*.1).toFixed(1)+' h'],['Breaches found',f,6,'var(--accent)',f+' / 6']].map(([a,v,m,c,t])=>`<div class="ad22-r"><span>${a}</span><div><i style="width:${v/m*100}%;background:${c}"></i></div><b>${t}</b></div>`).join('');$('-msg').textContent=msg;}
+  document.querySelectorAll('[data-ad22]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.ad22)));
+  $('').addEventListener('anim-in',()=>{['all','bad','mix'].forEach((k,i)=>setTimeout(()=>set(k),300+i*2400));});
+  set('all');
+})();
+</script>
+
+<h2 id="sec-4">4. Records he can understand: layering</h2>
+<p>The scribe carries out several hundred actions a year, each one recorded, but he looks only a few times a year for half an hour each time. Putting the full record in front of him is the same as giving him nothing. Work out how to arrange it so he can understand it. The top layer says in one sentence whether each account has moved closer to or further from its target over the period and whether any boundary has been crossed. The second layer lists a few key points: the decisions that were large, irreversible or set off a trigger. Only the bottom layer holds the complete entry-by-entry record, for him or whoever checks on his behalf to examine in depth. He can stop at any layer.</p>
+<aside class="principle"><p class="pr-k">Rerun: a principle re-examined</p><p class="pr-n">A wealth of information creates a poverty of attention</p><p class="pr-c"><span><em>Discipline</em>Management and economics › Organization and decision theory</span><span><em>Type</em>Theory</span></p><p class="pr-s">Information consumes the attention of its recipients; the richer the information, the scarcer the attention, so organizations and systems should be designed to economize on the recipient's attention rather than to supply more information.</p><dl><div><dt>Standing in the field</dt><dd>Simon made this point in a paper on designing organizations for an information-rich world; its phrase "a wealth of information creates a poverty of attention" is often regarded as the origin of the term "attention economy"; Simon received the 1978 Nobel Memorial Prize in Economic Sciences "for his pioneering research into the decision-making process within economic organizations"</dd></div><div><dt>Constraint it answers</dt><dd>There is more information than can be read, and time for reading it is limited</dd></div><div><dt>Premises</dt><dd>Recipients' attention is limited; processing information costs the recipient time</dd></div><div><dt>Proposed by</dt><dd>Simon, 1971</dd></div><div><dt>Open question</dt><dd>Who writes the summary for layered records, and could the summary hide bad news in a lower layer</dd></div><div><dt>After the rerun</dt><dd>In a product, records should be layered by attention: one sentence, key points, the full record; the summary must be traceable to every layer beneath it, or it is merely another one-sided account</dd></div></dl></aside>
+<p>Ben-Shahar and Schneider (2014) examined the effects of mandated disclosure systematically and concluded that it usually fails: most people skip the disclosures and lack the ability to analyse them, while legislators keep adding disclosure requirements. The amount disclosed is not in itself the answer.</p>
+<p><strong>Today's counterpart.</strong> In 2019 the US Securities and Exchange Commission required broker-dealers and investment advisers to give retail clients a relationship summary of no more than two pages, or no more than four pages for firms offering both kinds of service.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">A record in three layers</p><p class="figsub">One year's records arranged in three layers. Select a layer to view it; any sentence in the first layer can be traced to its basis in the layer below.</p></div><button class="replay" type="button" data-replay="ly22">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Layer">
+      <button type="button" data-ly22="0" aria-pressed="true">One sentence</button>
+      <button type="button" data-ly22="1" aria-pressed="false">Key points</button>
+      <button type="button" data-ly22="2" aria-pressed="false">Full record</button>
+    </div>
+    <div class="ly22" id="ly22" data-anim>
+      <div class="ly22-d" id="ly22-d"></div>
+      <p class="ly22-msg" id="ly22-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the record entries are invented examples; "Full record" shows only the first few entries of 312 in total.</figcaption>
+</figure>
+<style>
+.ly22-d{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--bg);font-size:13.5px;line-height:1.75;min-height:9.5em}
+.ly22-d p{margin:0 0 6px}
+.ly22-d .k{display:grid;grid-template-columns:4.5em 1fr;gap:8px;padding:4px 0;border-bottom:1px dashed var(--line)}
+.ly22-d .k span{color:var(--faint);font-size:12px}
+.ly22-d mark{background:var(--warm-soft);color:var(--warm);border-radius:3px;padding:0 3px}
+.ly22-d .row{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--muted)}
+.ly22-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('ly22'+id);
+  const L=[`<p><b>This year all three accounts stayed within the agreed boundaries.</b></p><p>The house account moved closer to its target, with the likelihood of reaching it rising from 61% to 70%; the retirement account moved somewhat further away, from 84% to 79%, because of a storm.</p><p><mark>1 matter</mark> awaits your confirmation: whether to move into the village's new tax-free retirement account.</p>`,
+    `<div class="k"><span>Mar 2</span>After a storm the retirement account fell 22%, more than 15%, so per the agreement the scribe stopped to ask you; after you confirmed, the ship-share proportion was brought back from 74% to 80% per clause 3 of the agreement.</div><div class="k"><span>Jun 15</span>You changed jobs and your income rose; per clause 4 of the agreement, adjustments were paused and you were asked to confirm a new deposit rate, which you set at 22%.</div><div class="k"><span>Sep 1</span>The fleet raised its fees; annual fees rose to 0.28%, still below the 0.3% ceiling.</div><div class="k"><span>Nov 20</span><mark>Awaiting confirmation</mark>: whether to move the retirement account into the new tax-free account.</div>`,
+    `<div class="row">01-05 09:12  Deposit 0.017  Basis: clause 3  At the time: house 19.6% ship shares</div><div class="row">01-05 09:12  Buy safe holdings 0.014  Basis: clause 3</div><div class="row">02-05 09:10  Deposit 0.017  Basis: clause 3</div><div class="row">03-02 15:40  Sell safe holdings 0.21, buy ship shares 0.21  Basis: clause 3, confirmed by you on Mar 2  At the time: retirement ship shares 74%, agreed 80%</div><div class="row">… 312 entries in all, kept by a third party, unalterable</div>`];
+  const M=['For someone who looks once a year, this layer is enough: how far from the targets, whether any boundary was crossed, and what needs his decision.','For someone who wants to know why, these key points: the decisions that were large, irreversible or set off a trigger.','For someone who wants to dig deeper or check on his behalf, the full record; every entry states its basis and the figures at the time.'];
+  function set(k){document.querySelectorAll('[data-ly22]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.ly22===k)));$('-d').innerHTML=L[k];$('-msg').textContent=M[k];}
+  document.querySelectorAll('[data-ly22]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.ly22)));
+  $('').addEventListener('anim-in',()=>{[0,1,2].forEach((k,i)=>setTimeout(()=>set(k),300+i*2600));});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-5">5. What was known at the time</h2>
+<p>Looking back after a storm, the scribe's purchase of ship shares three days before it seems foolish; yet three days before, nobody knew the storm was coming. Judge decisions by outcomes learned afterwards, and good decisions are blamed for bad luck while bad ones are praised for good luck. To judge fairly, the record cannot say only what was done; it must also say what was known at the time: which news had been seen, which clause of the agreement called for the action, and how large the risk was estimated to be then.</p>
+<p>Fischhoff's (1975) experiments found that people who know an outcome overestimate how likely it was beforehand, and are unaware of this influence.</p>
+<p><strong>Today's counterpart.</strong> Trade records usually capture the time of the order, the price and the market conditions at that moment, so that later review can reconstruct the situation at the instant the order was placed.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Seen afterwards, and seen at the time</p><p class="figsub">Three days before a storm, the scribe bought some ship shares as the agreement required. Switch between two ways of looking and judge whether the step was sound.</p></div><button class="replay" type="button" data-replay="pt22">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Way of looking">
+      <button type="button" data-pt22="after" aria-pressed="true">Afterwards: only the outcome is known</button>
+      <button type="button" data-pt22="then" aria-pressed="false">At the time: the record states what was known then</button>
+    </div>
+    <div class="pt22" id="pt22" data-anim>
+      <div class="pt22-d" id="pt22-d"></div>
+      <p class="pt22-msg" id="pt22-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the record entries are invented examples.</figcaption>
+</figure>
+<style>
+.pt22-d{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pt22-d div{border-radius:9px;padding:10px 12px;font-size:13.5px;line-height:1.65;background:var(--quote)}
+.pt22-d span{display:block;font-size:11.5px;color:var(--faint)}
+.pt22-d .v{font-size:15px;font-weight:600}
+.pt22-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.pt22-d{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('pt22'+id);
+  const S={after:[['What he sees','On Mar 1 the scribe bought ship shares worth 0.2 years of income; on Mar 4 a storm struck and those shares fell 30%.'],['Verdict','<span class="v" style="color:var(--warm)">Foolish</span>"The storm was only three days away."']],
+    then:[['The record says (Mar 1)','The retirement account\'s ship-share proportion had fallen to 72%, below the agreed 80%; brought back per clause 3 of the agreement. News at the time: the weather was calm and the fishermen\'s forecast did not mention a storm; the estimated maximum one-year loss was about 25%, within the boundaries.'],['Verdict','<span class="v" style="color:var(--accent)">Kept the agreement</span>On the information available then and the agreement, the step was right; the poor outcome came from a storm nobody foresaw.']]};
+  const M={after:'Knowing only the outcome, good decisions are blamed for bad luck. People who know an outcome tend to overestimate how likely it was beforehand.',then:'Only when the record states what was known at the time and which clause applied can the judgment go back to the moment of decision. The question to ask is whether the agreement should change, not what the scribe did wrong.'};
+  function set(k){document.querySelectorAll('[data-pt22]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.pt22===k)));$('-d').innerHTML=S[k].map(([a,b])=>`<div><span>${a}</span>${b}</div>`).join('');$('-msg').textContent=M[k];}
+  document.querySelectorAll('[data-pt22]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.pt22)));
+  $('').addEventListener('anim-in',()=>{set('after');setTimeout(()=>set('then'),2600);});
+  set('after');
+})();
+</script>
+
+<h2 id="sec-6">6. Why this was done</h2>
+<p>An entry reading "Sold 2 ship shares" tells him nothing about whether it was right. Written as "Sold 2 ship shares: the retirement account's ship-share proportion had risen to 86% (agreed 80%, a deviation of more than five percentage points); brought back per clause 3 of the agreement", it lets him see at a glance whether the step kept to the agreement. When every step states which clause it relies on and what the figures were at the time, the record turns from a running log into evidence that can be checked item by item. A step for which no basis can be given is precisely the one he should question.</p>
+<p><strong>Today's counterpart.</strong> The EU's General Data Protection Regulation provides that, for decisions based solely on automated processing, the data subject is entitled to meaningful information about the logic involved, as well as the significance and the envisaged consequences of such processing.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">A running log, or evidence</p><p class="figsub">The same four entries, written two ways. Switch between them and see whether he can tell at a glance if each step kept to the agreement.</p></div><button class="replay" type="button" data-replay="wy22">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Way of writing">
+      <button type="button" data-wy22="0" aria-pressed="true">Running log</button>
+      <button type="button" data-wy22="1" aria-pressed="false">With basis and figures at the time</button>
+    </div>
+    <div class="wy22" id="wy22" data-anim><div class="wy22-l" id="wy22-l"></div><p class="wy22-msg" id="wy22-msg" aria-live="polite"></p></div>
+  </div>
+  <figcaption>Illustrative: the record entries are invented examples.</figcaption>
+</figure>
+<style>
+.wy22-l{display:grid;gap:5px}
+.wy22-l div{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:8px 10px;border-radius:8px;background:var(--quote);font-size:13.5px;line-height:1.55}
+.wy22-l em{font-style:normal;font-size:12px;padding:1px 9px;border-radius:999px;white-space:nowrap}
+.wy22-l em.ok{background:var(--accent-soft);color:var(--accent)} .wy22-l em.q{background:var(--warm-soft);color:var(--warm)} .wy22-l em.u{background:var(--bg);color:var(--faint);border:1px solid var(--line)}
+.wy22-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('wy22'+id);
+  const R=[['Sold 2 ship shares','Sold 2 ship shares: the retirement account\'s ship-share proportion had risen to 86% (agreed 80%, a deviation of more than five percentage points); brought back per clause 3 of the agreement','ok'],['Deposited 0.017','Deposited 0.017: 20% deposited after pay, per clause 3 of the agreement','ok'],['Bought 1 share in a new fleet','Bought 1 share in a new fleet: basis… (no corresponding clause)','q'],['Sold safe holdings in the house account','Sold safe holdings in the house account: on Jun 15 you confirmed using part of the house money for medical care (confirmation record #41)','ok']];
+  function set(k){document.querySelectorAll('[data-wy22]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.wy22===k)));
+    $('-l').innerHTML=R.map(([a,b,c])=>`<div><span>${k?b:a}</span><em class="${k?c:'u'}">${k?(c==='ok'?'Kept':'No basis given'):'Unclear'}</em></div>`).join('');
+    $('-msg').textContent=k?'With the basis and the figures at the time written in, three of the four entries visibly keep to the agreement; the third gives no basis, and that is exactly the one he should question.':'A running log tells him only what was done; he cannot see which step kept to the agreement and which crossed a boundary.';}
+  document.querySelectorAll('[data-wy22]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.wy22)));
+  $('').addEventListener('anim-in',()=>{set(0);setTimeout(()=>set(1),2400);});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-7">7. A visible process: Civilization Simulator, version 22</h2>
+<p>The simulator unlocks "process records and verifiable evidence". Over ten years the scribe occasionally breaches the agreement: it crosses a boundary, takes risks outside the agreement, or makes trades that conflict with his interests. You can choose how records are kept: no records, a summary written by the scribe itself, or layered records kept by a third party and open to verification. Then choose how they are checked: never, every entry, or detailed checks when results are poor plus random spot checks. See, over the ten years, how many breaches are caught, how much of his time is spent, and whether he mistakes a good scribe for a bad one.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Civilization Simulator · Chapter 22: a visible process</p><p class="figsub">Over ten years the scribe occasionally breaches the agreement; there are also bad runs of years in which results are poor through no fault of its own. Choose how records are kept and how they are checked, set how much time he can spend on checking each year, and see the breaches found, the time he spends, and how often he wrongly blames a scribe that kept the agreement.</p></div><button class="replay" type="button" data-replay="cs22">Replay</button></div>
+    <div class="cs-rules"><span class="on">Product: what to promise</span><span class="on">Product: mandate and authority</span><span class="on">Product: process records and verifiable evidence</span><span class="lock">Limits, confirmation and compensation · Ch. 23</span></div>
+    <div class="cs22-sel"><span>Record</span><div class="seg-btns" role="group" aria-label="Record"><button type="button" data-cs22r="none" aria-pressed="false">No records</button><button type="button" data-cs22r="self" aria-pressed="false">Summary written by the scribe</button><button type="button" data-cs22r="third" aria-pressed="true">Layered records kept by a third party</button></div></div>
+    <div class="cs22-sel"><span>Check</span><div class="seg-btns" role="group" aria-label="Check"><button type="button" data-cs22c="none" aria-pressed="false">Never check</button><button type="button" data-cs22c="all" aria-pressed="false">Check every entry</button><button type="button" data-cs22c="smart" aria-pressed="true">Detailed checks on poor results or triggers + random spot checks</button></div></div>
+    <div class="cs22" id="cs22" data-anim>
+      <div class="sl"><label for="cs22-h">Time he can spend on checking each year <b id="cs22-hv"></b></label><input id="cs22-h" type="range" min="2" max="40" step="1" value="8"></div>
+      <div class="cs22-bars" id="cs22-b"></div>
+            <p class="cs22-msg" id="cs22-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model: the figure shows expected values over ten years. The scribe breaches the agreement 0.6 times a year on average, a third of these hidden among good results; there is a 30% chance each year of a bad run. Without records, a breach can be noticed only when results are poor (20%), and 30% of bad runs are mistaken for breaches. A summary written by the scribe leaves out breaches, so only 30% are found, and mistaken blame falls to 15%. Layered records kept by a third party state the information and basis at the time, so every breach that is checked is found and there is no mistaken blame. Checking every entry takes 30 hours a year and smart checking about 6 hours; when this exceeds his time, only a corresponding share can be checked. With random spot checks, the number of breaches halves.</figcaption>
+</figure>
+<style>
+.cs22-sel{display:grid;grid-template-columns:4em 1fr;gap:8px;align-items:center;font-size:12.5px;color:var(--muted)}
+.cs22-sel .seg-btns{margin:4px 0}
+.cs22-bars{display:grid;gap:10px;margin:8px 0}
+.cs22-r{display:grid;grid-template-columns:9.5em 1fr 5.5em;gap:10px;align-items:center;font-size:12.5px}
+.cs22-r div{height:22px;background:var(--quote);border-radius:5px;overflow:hidden}
+.cs22-r i{display:block;height:100%;transition:width .4s}
+.cs22-r b{text-align:right;font-variant-numeric:tabular-nums}
+.cs22-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs22-sel{grid-template-columns:1fr}.cs22-r{grid-template-columns:1fr 5.5em}.cs22-r span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs22'+id);let rec='third',chk='smart',seed=2222;
+  function sim(H){const need=chk==='all'?30:chk==='smart'?6:0,frac=need?Math.min(1,H/need):0,lam=chk==='smart'?.3:.6,viol=10*lam;
+    let det;if(rec==='none')det=(2/3)*.2;else if(rec==='self')det=chk==='none'?0:.3*frac;else det=chk==='none'?0:chk==='all'?frac:frac*((2/3)+(1/3)*.1);
+    const pw=rec==='none'?.3:rec==='self'?.15:0;return {viol,found:viol*det,wrong:3*pw,time:Math.min(H,need)};}
+  function draw(){const H=+$('-h').value,S=sim(H);$('-hv').textContent=H+' hours';
+    $('-b').innerHTML=[['Breaches found',S.found,6,'var(--accent)',S.found.toFixed(1)+' / '+S.viol.toFixed(0)],['Time spent per year',S.time,30,'var(--gold)',S.time.toFixed(0)+' h'],['Wrongly blamed',S.wrong,1,'var(--warm)',S.wrong.toFixed(1)]].map(([a,v,m,c,t])=>`<div class="cs22-r"><span>${a}</span><div><i style="width:${Math.min(100,v/m*100)}%;background:${c}"></i></div><b>${t}</b></div>`).join('');
+    $('-msg').textContent=rec==='none'?`No records: of an average ${S.viol.toFixed(0)} breaches over ten years, only ${S.found.toFixed(1)} are found, and on average ${S.wrong.toFixed(1)} bad runs are wrongly blamed on the scribe.`:rec==='self'?`The scribe's own summary leaves out breaches, so on average ${S.found.toFixed(1)} are found; he still wrongly blames the scribe ${S.wrong.toFixed(1)} times.`:chk==='none'?'Verifiable records exist, but they are never checked: records by themselves find no breaches.':chk==='all'?`Checking every entry takes 30 hours a year, but he has only ${H}, so he can check only part; over ten years he finds on average ${S.found.toFixed(1)} of ${S.viol.toFixed(0)} breaches.`:`Third-party records with smart checking: only ${S.time.toFixed(0)} hours a year; random spot checks cut breaches to an average of ${S.viol.toFixed(0)}, of which ${S.found.toFixed(1)} are found, and a scribe that keeps the agreement is no longer wrongly blamed.`;}
+  const rb=[...document.querySelectorAll('[data-cs22r]')],cb=[...document.querySelectorAll('[data-cs22c]')];
+  function setR(m){rec=m;rb.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.cs22r===m)));draw();}
+  function setC(m){chk=m;cb.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.cs22c===m)));draw();}
+  rb.forEach(b=>b.addEventListener('click',()=>setR(b.dataset.cs22r)));cb.forEach(b=>b.addEventListener('click',()=>setC(b.dataset.cs22c)));
+  $('-h').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{[['none','none'],['self','smart'],['third','all'],['third','smart']].forEach(([a,b],i)=>setTimeout(()=>{rec=a;chk=b;rb.forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.cs22r===a)));cb.forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.cs22c===b)));draw();},300+i*2200));});
+  draw();
+})();
+</script>
+
+<h2 id="sec-8">8. What this step leaves open</h2>
+<p>Once the process can be seen and verified, several problems remain:</p>
+<ol><li><strong>After a breach is found.</strong> If the scribe is found to have crossed a boundary, who bears the loss, and how is it compensated?</li><li><strong>Errors within the boundaries.</strong> If the scribe keeps the agreement fully but misjudges, whose consequences are they?</li><li><strong>Irreversible actions.</strong> Some mistakes cannot be undone however clearly they are recorded. How can they be stopped before they happen?</li><li><strong>A new scribe.</strong> A scribe that has just opened for business has no record. On what basis can he begin to trust it?</li></ol>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">What this step leaves open</p><p class="figsub">Four problems that remain once the process can be seen and verified. Select one to see the assumption it hides.</p></div><button class="replay" type="button" data-replay="nx22">Replay</button></div>
+    <div class="nx" id="nx22" data-anim>
+      <div class="nx-src"><b>A visible process</b><span>Verifiable layered records</span></div>
+      <div class="nx-list" id="nx22-l"></div>
+    </div>
+    <p class="nx-msg" id="nx22-msg" aria-live="polite"></p>
+  </div>
+</figure>
+<style>
+.nx{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:center}
+.nx-src{background:var(--ink);color:var(--bg);border-radius:10px;padding:14px 10px;text-align:center}
+.nx-src b{display:block;font-size:16px} .nx-src span{font-size:12px;opacity:.75}
+.nx-list{display:grid;gap:6px}
+.nx-i{font:inherit;text-align:left;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:9px 12px;color:var(--ink);opacity:0;transform:translateX(-8px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.3s)}
+.nx.in .nx-i{opacity:1;transform:none}
+.nx-i span{font-size:13.5px} .nx-i em{font-style:normal;font-size:11.5px;color:var(--faint);white-space:nowrap}
+.nx-i.sel{border-color:var(--accent)}
+.nx-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.nx{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const Q=[['After a breach is found','Chapter 23','Hidden assumption: finding it is enough. If the scribe crossed a boundary, who bears the loss, and how is it compensated?'],
+    ['Errors within the boundaries','Chapter 23','Hidden assumption: keeping the agreement means no losses. If the scribe keeps the agreement fully but misjudges, whose consequences are they?'],
+    ['Irreversible actions','Chapter 23','Hidden assumption: things can be corrected afterwards. Some mistakes cannot be undone, however clearly they are recorded.'],
+    ['A new scribe','Chapter 24','Hidden assumption: a record already exists. A scribe that has just opened for business has no record. On what basis can he begin to trust it?']];
+  const l=document.getElementById('nx22-l'),msg=document.getElementById('nx22-msg');
+  l.innerHTML=Q.map((q,i)=>`<button type="button" class="nx-i" style="--i:${i}" data-i="${i}"><span>${q[0]}</span><em>→ ${q[1]}</em></button>`).join('');
+  const bs=[...l.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));msg.textContent=Q[i][2];}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('nx22').addEventListener('anim-in',()=>{[0,1,2,3].forEach((i,k)=>setTimeout(()=>set(i),1600+k*1800));});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-9">9. Implications for products</h2>
+<p>For a wealth product built around an agent, the third part that has to grow is "process records and verifiable evidence". Three implications follow. First, records should be kept by a party unconnected with the agent, be unalterable, and be open to the user by default; verifiable records make agents that keep their agreements willing to be seen, and turn "no record" into a signal. Second, records should be layered by the user's attention: one sentence on how far each goal is and whether any boundary was crossed, then the key points, and only then everything; each layer must be traceable to the one below. Third, every step should state what was known at the time, which clause of the agreement it relies on, and what the figures were then; verification takes place in three situations, poor results, a triggered condition and random selection, with the agent doing most of the checking for the user, who looks only at conclusions and exceptions.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: the user cannot see the process</p><p class="figsub">Four conclusions, each tied to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="g22summary">Replay</button></div>
+    <div class="g22summary" id="g22summary" data-anim><div class="g22summary-c" style="--i:0"><em>Unravelling</em><b>Verifiable records make silence bad news</b><p>Records kept by a third party and unalterable make agents that keep their agreements willing to be seen.</p></div><div class="g22summary-c" style="--i:1"><em>Costly verification</em><b>Detailed checks on poor results or triggers, spot checks otherwise</b><p>The agent does most of the checking for the user, who looks only at conclusions and exceptions.</p></div><div class="g22summary-c warn" style="--i:2"><em>Rerun: attention</em><b>One sentence, key points, full record</b><p>Each layer is traceable to the one below, so a summary cannot hide bad news.</p></div><div class="g22summary-c warn" style="--i:3"><em>At the time, and on what basis</em><b>Record what was known then and which clause applied</b><p>This guards against hindsight; a step with no stated basis is exactly the one to question.</p></div></div>
+  </div>
+</figure>
+<style>
+.g22summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g22summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g22summary-c.warn{border-left-color:var(--warm)}
+.g22summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g22summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g22summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g22summary.in .g22summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g22summary{grid-template-columns:1fr}}
+</style>
+
+<h2 id="sec-10">References</h2>
+<ul class="refs"><li>Ben-Shahar, O., &amp; Schneider, C. E. (2014). <i>More Than You Wanted to Know: The Failure of Mandated Disclosure</i>. Princeton: Princeton University Press.</li><li>European Parliament and Council of the European Union (2016). Regulation (EU) 2016/679 (General Data Protection Regulation), Article 15(1)(h) and Article 22.</li><li>Fischhoff, B. (1975). Hindsight ≠ foresight: The effect of outcome knowledge on judgment under uncertainty. <i>Journal of Experimental Psychology: Human Perception and Performance</i>, 1(3), 288–299.</li><li>Gale, D., &amp; Hellwig, M. (1985). Incentive-compatible debt contracts: The one-period problem. <i>Review of Economic Studies</i>, 52(4), 647–663.</li><li>Grossman, S. J. (1981). The informational role of warranties and private disclosure about product quality. <i>Journal of Law and Economics</i>, 24(3), 461–483.</li><li>International Auditing and Assurance Standards Board. International Standard on Auditing 530: Audit Sampling.</li><li>Jin, G. Z., Luca, M., &amp; Martin, D. (2021). Is no news (perceived as) bad news? An experimental investigation of information disclosure. <i>American Economic Journal: Microeconomics</i>, 13(2), 141–173.</li><li>Milgrom, P. R. (1981). Good news and bad news: Representation theorems and applications. <i>Bell Journal of Economics</i>, 12(2), 380–391.</li><li>Nobel Prize Outreach. <i>The Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel 1978</i>. NobelPrize.org.</li><li>Simon, H. A. (1971). Designing organizations for an information-rich world. In M. Greenberger (Ed.), <i>Computers, Communications, and the Public Interest</i>. Baltimore: Johns Hopkins Press.</li><li>Townsend, R. M. (1979). Optimal contracts and competitive markets with costly state verification. <i>Journal of Economic Theory</i>, 21(2), 265–293.</li><li>U.S. Securities and Exchange Commission (2019). Form CRS relationship summary; amendments to Form ADV. Release No. 34-86032.</li></ul>
+<footer class="nav"><a href="g-21.html">← Chapter 21: The user is not present</a><a href="g-23.html">Chapter 23: Agents make mistakes →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

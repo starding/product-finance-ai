@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The circuit-breaker threshold</p><p class="figsub">In a market where half the scribes come from the same operator, the same large order sets off a plunge. Drag the circuit-breaker threshold and see when the breaker triggers and how large the biggest fall is.</p></div><button class="replay" type="button" data-replay="bk17">Replay</button></div>
+    <div class="bk17" id="bk17" data-anim>
+      <div class="bk17-bars" id="bk17-b"></div>
+      <div class="sl"><label for="bk17-t">Halt when one step falls by <b id="bk17-tv"></b></label><input id="bk17-t" type="range" min="1" max="12" step="1" value="4"></div>
+      <p class="bk17-msg" id="bk17-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the model is the same as in "A market of scribes", with half the scribes coming from the same operator; each halt lasts 3 steps. A threshold of 12 points is equivalent to having no circuit breaker.</figcaption>
+</figure>
+<style>
+.bk17-bars{display:grid;gap:12px;margin:4px 0 10px}
+.bk17-r{display:grid;grid-template-columns:7em 1fr 4.5em;gap:10px;align-items:center;font-size:12.5px}
+.bk17-r div{height:22px;background:var(--quote);border-radius:5px;overflow:hidden}
+.bk17-r i{display:block;height:100%;transition:width .4s}
+.bk17-r b{text-align:right;font-variant-numeric:tabular-nums}
+.bk17-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('bk17'+id),N=40,T=60,TH=.04;
+  function sim(th){let s=1717;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};const ns=20,ag=[];for(let i=0;i<N;i++)ag.push({th:i<ns?TH:TH*(1+r()*3),sold:false,mm:i%3===0});
+    let p=100,pause=0,paused=0;const P=[p];
+    for(let t=1;t<=T;t++){if(pause>0){pause--;paused++;p+=(100-p)*.2;P.push(p);continue;}
+      let sell=(t>=5&&t<15)?5:0;for(const a of ag){if(!a.sold&&(100-p)/100>=a.th){a.sold=true;sell+=1.5;}}
+      const prev=P[P.length-1],fall=P.length>1&&(P[P.length-2]-prev)>1.5,mm=ag.filter(a=>a.mm&&!a.sold).length,depth=2+(fall?mm*.25:mm);
+      p=Math.min(100,p-(sell-Math.max(0,100-p)*.12)/depth*2);if(th<12&&(prev-p)>th)pause=3;P.push(p);}
+    return {dd:100-Math.min(...P),paused};}
+  function draw(){const th=+$('-t').value,S=sim(th);$('-tv').textContent=th>=12?'no circuit breaker':th+' points';
+    $('-b').innerHTML=[['Largest fall',S.dd,50,'var(--warm)',S.dd.toFixed(1)+'%'],['Steps halted',S.paused,20,'var(--blue)',S.paused+'']].map(([k,v,m,c,t])=>`<div class="bk17-r"><span>${k}</span><div><i style="width:${Math.min(100,v/m*100)}%;background:${c}"></i></div><b>${t}</b></div>`).join('');
+    $('-msg').textContent=th>=12?`With no circuit breaker, the largest fall is ${S.dd.toFixed(1)}%.`:`Threshold ${th} points: the largest fall is ${S.dd.toFixed(1)}%, with ${S.paused} steps halted. If the threshold is too high, the breaker triggers only after prices have already fallen sharply; the lower the threshold, the earlier the spiral is broken. The cost is that those who want to sell cannot during the halt, and prices may jump when the halt ends.`;}
+  $('-t').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{let v=12;$('-t').value=12;draw();const id=setInterval(()=>{v-=1;$('-t').value=v;draw();if(v<=1)clearInterval(id);},300);});
+  draw();
+})();
+</script>

@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">How many questions before you can say the error rate is below 1%</p>
+    <p class="figsub">Drag the number of evaluation questions and the number of errors among them, and see the highest the true error rate could be at 95% confidence.</p>
+    <div class="sp2" id="sp2" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="Number of evaluation questions and the upper bound on the error rate"><g id="sp2-ax"></g><path id="sp2-p" class="sp2-l"/><circle id="sp2-d" r="6" fill="var(--ink)"/></svg>
+      <div class="sp2-sl">
+        <div class="sl"><label for="sp2-n">Questions <b id="sp2-nv"></b></label><input id="sp2-n" type="range" min="0" max="100" step="1" value="50"></div>
+        <div class="sl"><label for="sp2-k">Errors <b id="sp2-kv"></b></label><input id="sp2-k" type="range" min="0" max="5" step="1" value="0"></div>
+      </div>
+      <p class="sp2-msg" id="sp2-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>The 95% one-sided upper confidence limit is computed with the Poisson approximation. With 0 errors it is about 3 ÷ n, the "rule of three" (Hanley and Lippman-Hand, 1983). The horizontal axis is on a log scale.</figcaption>
+</figure>
+<style>
+.sp2 svg{width:100%;height:auto;display:block}
+.sp2-l{fill:none;stroke:var(--accent);stroke-width:2.5}
+.sp2-sl{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sp2-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.sp2-sl{grid-template-columns:1fr}.sp2 svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const LAM=[3.00,4.74,6.30,7.75,9.15,10.51],N=t=>Math.round(10*Math.pow(10,t/100*2.3)),U=(n,k)=>Math.min(1,LAM[k]/n);
+  const X0=60,X1=620,YT=14,YB=176,lx=n=>X0+Math.log10(n/10)/2.3*(X1-X0),ly=v=>YB-(Math.log10(v)+3)/3*(YB-YT);
+  const $=id=>document.getElementById(id),sn=$('sp2-n'),sk=$('sp2-k');
+  function axis(){let a=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`;[[1,'100%'],[.1,'10%'],[.01,'1%'],[.001,'0.1%']].forEach(([v,l])=>a+=`<text x="${X0-6}" y="${ly(v)+4}" text-anchor="end" font-size="11" class="t-faint">${l}</text><line x1="${X0}" x2="${X1}" y1="${ly(v)}" y2="${ly(v)}" class="s-line"/>`);
+    [10,30,100,300,1000,2000].forEach(n=>a+=`<text x="${lx(n)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${n}</text>`);
+    a+=`<line x1="${X0}" x2="${X1}" y1="${ly(.01)}" y2="${ly(.01)}" stroke="var(--warm)" stroke-dasharray="4 4"/><text x="${X1}" y="${ly(.01)-5}" text-anchor="end" font-size="11" class="t-warm">Target: error rate below 1%</text>`;$('sp2-ax').innerHTML=a;}
+  function r(){const n=N(+sn.value),k=+sk.value,u=U(n,k);$('sp2-nv').textContent=String(n);$('sp2-kv').textContent=String(k);
+    let d='';for(let t=0;t<=100;t++){const m=N(t);d+=(t?'L':'M')+lx(m).toFixed(1)+','+ly(U(m,k)).toFixed(1);}$('sp2-p').setAttribute('d',d);$('sp2-d').setAttribute('cx',lx(n));$('sp2-d').setAttribute('cy',ly(u));
+    const need=Math.ceil(LAM[k]/.01);
+    $('sp2-msg').textContent=`With ${k} error${k===1?'':'s'} in ${n} questions, the true error rate could be as high as ${(u*100).toFixed(u<.01?2:1)}%. ${u<=.01?'You can now say with confidence that the error rate is below 1%.':`To show it is below 1% with ${k} error${k===1?'':'s'}, you need at least about ${need} questions.`}`;}
+  sn.addEventListener('input',r);sk.addEventListener('input',r);
+  $('sp2').addEventListener('anim-in',()=>{sk.value=0;let t=0;sn.value=0;r();const id=setInterval(()=>{t+=4;sn.value=t;r();if(t>=100){clearInterval(id);setTimeout(()=>{sn.value=50;r();},600);}},90);});
+  axis();r();
+})();
+</script>

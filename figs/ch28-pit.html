@@ -1,0 +1,33 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">用当时的数据，还是用后来的数据复盘</p><p class="figsub">一家公司的季度盈利先公布初值，后来被大幅下修。代理在第二季度初值公布时决定继续持有。切换复盘使用的数据，看对这次决定的评价。</p></div><button class="replay" type="button" data-replay="pt2">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="复盘数据"><button type="button" data-pt2="now" aria-pressed="true">用修订后的数据</button><button type="button" data-pt2="pit" aria-pressed="false">用当时的数据</button></div>
+    <div class="pt2" id="pt2" data-anim>
+      <svg viewBox="0 0 640 200" role="img" aria-label="盈利的初值与修订值"><g id="pt2-g"></g></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>当时公布的初值</span><span><i style="background:var(--warm)"></i>后来的修订值</span></div>
+      <p class="pt2-msg" id="pt2-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意数据。用修订后的数据评估当时的决定会产生偏差，因此需要按时点保存数据，思路见 Croushore 与 Stark（2001）的实时数据集。</figcaption>
+</figure>
+<style>
+.pt2 svg{width:100%;height:auto;display:block}
+.pt2-b{transition:height .5s ease,y .5s ease,opacity .4s}
+.pt2-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.pt2 svg text{font-size:17px}}
+</style>
+<script>
+(function(){
+  const Q=['第一季度','第二季度','第三季度','第四季度'],P=[1.20,1.30,1.10,1.25],R=[1.15,0.80,1.05,1.20];
+  const X0=50,X1=620,YB=160,YT=14,w=(X1-X0)/4,h=v=>v/1.5*(YB-YT);
+  function set(k){document.querySelectorAll('[data-pt2]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.pt2===k)));
+    let g=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`;
+    Q.forEach((q,i)=>{const x=X0+i*w;g+=`<rect class="pt2-b" x="${x+w*.18}" width="${w*.28}" y="${YB-h(P[i])}" height="${h(P[i])}" rx="3" fill="var(--accent)" opacity="${k==='pit'||i!==1?1:.35}"/><rect class="pt2-b" x="${x+w*.52}" width="${w*.28}" y="${YB-h(R[i])}" height="${h(R[i])}" rx="3" fill="var(--warm)" opacity="${k==='now'||i!==1?1:.25}"/><text x="${x+w/2}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${q}</text>`;});
+    g+=`<line x1="${X0+w*1.5}" y1="${YT}" x2="${X0+w*1.5}" y2="${YB}" stroke="var(--ink)" stroke-dasharray="3 3"/><text x="${X0+w*1.5}" y="${YT+10}" text-anchor="middle" font-size="11" class="t-ink">决定：继续持有</text>`;
+    document.getElementById('pt2-g').innerHTML=g;
+    document.getElementById('pt2-msg').textContent=k==='now'?'用修订后的数据看，第二季度盈利只有 0.80，“继续持有”显得明显错误。但这个数字是两个季度之后才知道的，当时没有人能看到。':'用当时的数据看，第二季度公布的初值是 1.30，高于前一季度，继续持有是合理的。按时点记录，才能分清决定本身的质量与后来的信息。';}
+  document.querySelectorAll('[data-pt2]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.pt2)));
+  document.getElementById('pt2').addEventListener('anim-in',()=>{set('now');setTimeout(()=>set('pit'),2600);});
+  set('now');
+})();
+</script>

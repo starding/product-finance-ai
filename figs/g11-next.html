@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">这一步留下的问题</p><p class="figsub">有了规则之后仍未解决的四个问题。点选一个问题，看它隐含的假设。</p></div><button class="replay" type="button" data-replay="nx11">重播</button></div>
+    <div class="nx" id="nx11" data-anim>
+      <div class="nx-src"><b>立规矩的村子</b><span>托管、披露与适当性</span></div>
+      <div class="nx-list" id="nx11-l"></div>
+    </div>
+    <p class="nx-msg" id="nx11-msg" aria-live="polite"></p>
+  </div>
+</figure>
+<style>
+.nx{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:center}
+.nx-src{background:var(--ink);color:var(--bg);border-radius:10px;padding:14px 10px;text-align:center}
+.nx-src b{display:block;font-size:16px} .nx-src span{font-size:12px;opacity:.75}
+.nx-list{display:grid;gap:6px}
+.nx-i{font:inherit;text-align:left;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:9px 12px;color:var(--ink);opacity:0;transform:translateX(-8px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.3s)}
+.nx.in .nx-i{opacity:1;transform:none}
+.nx-i span{font-size:13.5px} .nx-i em{font-style:normal;font-size:11.5px;color:var(--faint);white-space:nowrap}
+.nx-i.sel{border-color:var(--accent)}
+.nx-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.nx{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const Q=[['人自己会犯错','第 12 章 默认选项','隐含的假设：产品可靠、信息公开，委托人就会做出好的决定。委托人仍会追涨杀跌、频繁赎回。'],
+    ['规则只能管住看得见的','第二部分','隐含的假设：披露的数字足以反映经理的判断与动机。规则看到的是过去，看不到此刻。'],
+    ['新的受托人','第二部分','隐含的假设：受托人是一个人。如果替人操作的是一个能直接下单的代理，它的行动由谁托管、谁来核对、出了错由谁负责？'],
+    ['监管者自身是否可信','第二部分','隐含的假设：监管者公正而称职。这份信任同样需要约束与问责。']];
+  const l=document.getElementById('nx11-l'),msg=document.getElementById('nx11-msg');
+  l.innerHTML=Q.map((q,i)=>`<button type="button" class="nx-i" style="--i:${i}" data-i="${i}"><span>${q[0]}</span><em>→ ${q[1]}</em></button>`).join('');
+  const bs=[...l.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));msg.textContent=Q[i][2];}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('nx11').addEventListener('anim-in',()=>{[0,1,2,3].forEach((i,k)=>setTimeout(()=>set(i),1600+k*1800));});
+  set(0);
+})();
+</script>

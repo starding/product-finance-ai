@@ -1,0 +1,40 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">第三部分小结：分解的每一项推出了什么</p><p class="figsub">切换视角：每一项的结论、对产品设计的含义，以及在金融场景中的约束。</p></div><button class="replay" type="button" data-replay="rc3">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="视角">
+      <button type="button" data-rv3="c" aria-pressed="true">结论</button>
+      <button type="button" data-rv3="p" aria-pressed="false">对产品的含义</button>
+      <button type="button" data-rv3="a" aria-pressed="false">金融场景中的约束</button>
+    </div>
+    <div class="rc3" id="rc3" data-anim></div>
+  </div>
+  <figcaption>每一行对应分解中的一项；括号内为章号。</figcaption>
+</figure>
+<style>
+.rc3{display:grid;gap:6px}
+.rc3-r{display:grid;grid-template-columns:150px 1fr;gap:12px;align-items:center;padding:10px 12px;border-radius:10px;background:var(--quote);opacity:0;transform:translateY(6px);transition:opacity .4s,transform .4s;transition-delay:calc(var(--i)*.15s)}
+.rc3.in .rc3-r{opacity:1;transform:none}
+.rc3-r b{font-size:14px;display:block}
+.rc3-r em{font-style:normal;font-size:11px;color:var(--faint)}
+.rc3-r p{margin:0;font-size:13.5px;line-height:1.6}
+.rc3-r.keep{background:rgba(160,120,24,.1)}
+.rc3-r .sign{display:inline-block;min-width:18px;margin-right:4px;font-size:11px;color:var(--faint);font-weight:700}
+@media (max-width:640px){.rc3-r{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const R=[
+    ['','总论','19',{c:'按委托人的投入衡量，实测放大倍数大多只在 1.0～1.2 倍上下，远低于理论区间。',p:'用委托人的投入衡量价值，而不是代理的运行时长。',a:'金融委托的基准是用户的实际行为，许多人本来就不做研究。'}],
+    ['分母','不适用的部分','20',{c:'代理能触及、允许代办、值得交出的比例，决定了放大倍数的上限。',p:'先扩大代理能完整承担的范围，优先承接反复发生的事务。',a:'信息类事务适用比例最高；配置与执行需要本人授权与确认。'}],
+    ['分母','出错后的返工','21',{c:'误差随步骤累积，能力边界参差不齐，没有把握时代理倾向于猜。',p:'缩短无人检查的段落，标明适用范围，奖励说“不知道”。',a:'金融数字必须来自数据源与计算，并注明来源与时点。'}],
+    ['分母','说明与核对','22',{c:'核对的时间给放大倍数设了上限；核对比生成便宜的任务最适合交出。',p:'写清验收标准，展示关键行动与证据，按风险分级核对。',a:'投资判断短期内几乎无法核对，涉及资金的结果必须逐项确认。'}],
+    ['约束','金融场景','23',{c:'市场会回应，预测的价值随普及递减；交易错误难以撤回，同质代理会一起行动。',p:'价值落在成本、纪律、行为与可及性；分级授权并设上限。',a:'不以预测为卖点；避免同质规则同时触发。'}]
+  ];
+  const box=document.getElementById('rc3');
+  function set(v){document.querySelectorAll('[data-rv3]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.rv3===v)));
+    box.innerHTML=R.map(([s,n,ch,t],i)=>`<div class="rc3-r${n==='金融场景'?' keep':''}" style="--i:${i}"><div><b><span class="sign">${s}</span>${n}</b><em>第 ${ch} 章</em></div><p>${t[v]}</p></div>`).join('');
+    box.classList.remove('in');void box.offsetWidth;box.classList.add('in');}
+  document.querySelectorAll('[data-rv3]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.rv3)));
+  set('c'); box.classList.remove('in');
+})();
+</script>

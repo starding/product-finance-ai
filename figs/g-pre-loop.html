@@ -1,0 +1,48 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">推演的一步：约束、机制与新的问题</p><p class="figsub">每一步先引入一个约束，再看长出什么机制；机制留下的新问题，成为下一步的约束。点“下一步”往前推演。</p></div><button class="replay" type="button" data-replay="gl">重播</button></div>
+    <div class="gl" id="gl" data-anim>
+      <div class="gl-row">
+        <div class="gl-c"><em>约束</em><b id="gl-k"></b></div>
+        <div class="gl-ar">→</div>
+        <div class="gl-c m"><em>机制</em><b id="gl-m"></b></div>
+        <div class="gl-ar">→</div>
+        <div class="gl-c q"><em>新的问题</em><b id="gl-q"></b></div>
+      </div>
+      <div class="gl-steps" id="gl-steps"></div>
+      <div class="gl-ctl"><button type="button" class="replay" id="gl-prev">上一步</button><button type="button" class="replay" id="gl-next">下一步</button></div>
+    </div>
+  </div>
+  <figcaption>前五步示例；完整的推演见第一部分各章。</figcaption>
+</figure>
+<style>
+.gl-row{display:grid;grid-template-columns:1fr 22px 1fr 22px 1fr;align-items:stretch;gap:4px}
+.gl-c{background:var(--quote);border-radius:10px;padding:10px 12px;min-height:84px;transition:opacity .3s}
+.gl-c em{display:block;font-style:normal;font-size:11px;color:var(--faint);margin-bottom:3px}
+.gl-c b{font-size:14px;font-weight:500;line-height:1.55}
+.gl-c.m{background:var(--accent-soft)} .gl-c.q{background:var(--warm-soft)}
+.gl-ar{align-self:center;text-align:center;color:var(--faint)}
+.gl.fade .gl-c{opacity:.2}
+.gl-steps{display:flex;gap:6px;margin:12px 0 0;flex-wrap:wrap}
+.gl-steps span{font-size:12px;padding:3px 9px;border-radius:999px;background:var(--quote);color:var(--muted);cursor:pointer}
+.gl-steps span.on{background:var(--ink);color:var(--bg)}
+.gl-ctl{display:flex;gap:8px;margin-top:10px}
+@media (max-width:640px){.gl-row{grid-template-columns:1fr}.gl-ar{transform:rotate(90deg)}}
+</style>
+<script>
+(function(){
+  const S=[['一个人：收入与消费不在同一时间','储蓄与储藏','储藏会损耗；年轻或生病时没有收入可存'],
+    ['两个人：你今天缺，我明天缺','借贷与利息','借了可能不还'],
+    ['承诺可能不兑现','抵押、声誉与合同','人一多，物物交换难以对上'],
+    ['交换需要双重巧合','货币与支付','未来的收成好坏不定'],
+    ['未来的状态不确定','保险与分散','存的人要随时取，借的人要长期用']];
+  const $=id=>document.getElementById(id),box=$('gl');let k=0;
+  $('gl-steps').innerHTML=S.map((s,i)=>`<span data-i="${i}">第 ${i+1} 步</span>`).join('');
+  function set(i){k=(i+S.length)%S.length;box.classList.add('fade');setTimeout(()=>{$('gl-k').textContent=S[k][0];$('gl-m').textContent=S[k][1];$('gl-q').textContent=S[k][2];box.classList.remove('fade');},200);
+    document.querySelectorAll('#gl-steps span').forEach(s=>s.classList.toggle('on',+s.dataset.i===k));}
+  $('gl-next').addEventListener('click',()=>set(k+1));$('gl-prev').addEventListener('click',()=>set(k-1));
+  document.querySelectorAll('#gl-steps span').forEach(s=>s.addEventListener('click',()=>set(+s.dataset.i)));
+  box.addEventListener('anim-in',()=>{set(0);[1,2,3,4].forEach((i,j)=>setTimeout(()=>set(i),1800*(j+1)));});
+  set(0);
+})();
+</script>

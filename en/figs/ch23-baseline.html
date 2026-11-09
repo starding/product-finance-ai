@@ -1,0 +1,72 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">The baseline decides how much can be saved</p>
+    <p class="figsub">Three kinds of financial delegation. Switch the baseline: the standard workflow of professionals, or the actual behaviour of individual investors.</p>
+    <div class="seg-btns" role="group" aria-label="Baseline">
+      <button type="button" data-bl="norm" aria-pressed="true">Standard workflow</button>
+      <button type="button" data-bl="act" aria-pressed="false">What individuals actually do</button>
+    </div>
+    <div class="bl" id="bl" data-anim data-bl="norm">
+      <div class="bl-scale" id="bl-scale"></div>
+      <div id="bl-rows"></div>
+    </div>
+  </div>
+  <figcaption>Log scale, in minutes of the principal's time. The standard workflow and the time spent after delegation are theoretical values estimated by the author. The median time individual investors spend on research per trade is about 6 minutes; see Laarits and Wurgler (2025). After adopting a robo-adviser, investors did not log in or trade less; see D'Acunto, Prabhala and Rossi (2019).</figcaption>
+</figure>
+<style>
+.bl-scale{position:relative;height:18px;margin-left:120px;font-size:11px;color:var(--faint)}
+.bl-scale span{position:absolute;transform:translateX(-50%);white-space:nowrap}
+.bl-r{display:grid;grid-template-columns:110px 1fr;gap:10px;padding:12px 0;border-top:1px solid var(--line)}
+.bl-n b{display:block;font-size:14px}
+.bl-n span{font-size:11px;color:var(--faint);line-height:1.4;display:block}
+.bl-bars{position:relative}
+.bl-line{position:relative;height:16px;margin:3px 0}
+.bl-line i{position:absolute;top:0;height:100%;border-radius:8px;transition:left .6s ease,width .6s ease}
+.bl-line.base i{background:var(--gray-mark)}
+.bl-line.del i{background:var(--accent)}
+.bl-line em{position:absolute;top:0;font-style:normal;font-size:11px;color:var(--muted);white-space:nowrap;transition:left .6s ease;line-height:16px}
+.bl-out{font-size:13px;margin-top:6px;min-height:1.6em}
+.bl-out b{font-size:16px;font-variant-numeric:tabular-nums}
+.bl-out b.up{color:var(--accent)} .bl-out b.down{color:var(--warm)} .bl-out b.na{color:var(--gold)}
+@media (max-width:640px){.bl-r{grid-template-columns:1fr}.bl-scale{margin-left:0}}
+</style>
+<script>
+(function(){
+  const lo=0.1, hi=2000, X=v=>Math.log10(v/lo)/Math.log10(hi/lo)*100;
+  const sc=document.getElementById('bl-scale');
+  sc.innerHTML=[[0.1,'6 sec'],[1,'1 min'],[10,'10 min'],[60,'1 hour'],[480,'8 hours']].map(([v,l])=>`<span style="left:${X(v)}%">${l}</span>`).join('');
+  // Each row: name, description, baseline range (standard/actual), range after delegation, note under actual behaviour
+  const R=[
+    {n:'Company research',s:'Read reports, value, compare peers',norm:[480,1200],act:[6,6],del:[30,60],
+     out:{norm:'Theoretical factor <b class="up">8–40×</b>',act:'Checking the delegated work takes longer than the time spent before: <b class="down">below 1×</b>. The agent changes the depth of research, not the time it takes.'}},
+    {n:'Trade orders',s:'Enter and submit an order',norm:[0.5,0.5],act:[0.5,0.5],del:[0.2,0.5],
+     out:{norm:'Theoretical factor <b class="up">1–2.5×</b>: placing an order yourself takes only half a minute',act:'Same as the standard workflow: <b class="up">1–2.5×</b>; only ten-odd seconds can be saved'}},
+    {n:'Portfolio management',s:'Review and adjust each quarter',norm:[240,480],act:null,del:[15,30],
+     out:{norm:'Theoretical factor <b class="up">8–32×</b>',act:'Most individuals do no systematic allocation to begin with; after adoption they did not log in or trade less. The value is <b class="na">turning what could not be done into what can</b>, which time cannot measure.'}},
+  ];
+  const rows=document.getElementById('bl-rows');
+  rows.innerHTML=R.map((r,i)=>`<div class="bl-r"><div class="bl-n"><b>${r.n}</b><span>${r.s}</span></div><div class="bl-bars">
+    <div class="bl-line base"><i id="bl-b${i}"></i><em id="bl-be${i}"></em></div>
+    <div class="bl-line del"><i id="bl-d${i}"></i><em id="bl-de${i}">After delegation</em></div>
+    <div class="bl-out" id="bl-o${i}"></div></div></div>`).join('');
+  const bl=document.getElementById('bl'), btns=[...document.querySelectorAll('[data-bl]')].filter(b=>b.tagName==='BUTTON');
+  const place=(bar,lab,rg,text)=>{
+    if(!rg){bar.style.width='0';lab.style.left='0';lab.textContent=text;return;}
+    const a=X(rg[0]),b=X(rg[1]),w=Math.max(1.6,b-a);bar.style.left=a+'%';bar.style.width=w+'%';
+    lab.style.left=Math.min(78,a+w+1.5)+'%';lab.textContent=text;
+  };
+  function set(k){
+    bl.dataset.bl=k; btns.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.bl===k)));
+    R.forEach((r,i)=>{
+      const rg=k==='norm'?r.norm:r.act;
+      place(document.getElementById('bl-b'+i),document.getElementById('bl-be'+i),rg,k==='norm'?'Standard workflow':(rg?'Actual':'Not done before'));
+      place(document.getElementById('bl-d'+i),document.getElementById('bl-de'+i),r.del,'After delegation');
+      document.getElementById('bl-o'+i).innerHTML=r.out[k];
+    });
+  }
+  let t;
+  btns.forEach(b=>b.addEventListener('click',()=>{clearTimeout(t);set(b.dataset.bl);}));
+  bl.addEventListener('anim-in',()=>{set('norm');clearTimeout(t);t=setTimeout(()=>set('act'),3000);});
+  set('norm');
+})();
+</script>

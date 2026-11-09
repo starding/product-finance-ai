@@ -1,0 +1,46 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">From one sentence to a mandate</p><p class="figsub">"Look after this 500,000 yuan for me." Each dot is one possible course of action. Write the mandate section by section and see how many courses remain.</p></div><button class="replay" type="button" data-replay="bf">Replay</button></div>
+    <div class="bf-sl" role="group" aria-label="Sections of the mandate">
+      <label><input type="checkbox" data-bf="0"> Goal and measure</label><label><input type="checkbox" data-bf="1"> Constraints</label><label><input type="checkbox" data-bf="2"> Handling exceptions</label><label><input type="checkbox" data-bf="3"> Term and review</label>
+    </div>
+    <div class="bf" id="bf" data-anim>
+      <div class="bf-dots" id="bf-dots"></div>
+      <div class="bf-doc" id="bf-doc"></div>
+    </div>
+    <p class="bf-msg" id="bf-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>Illustrative. The structure of the mandate follows the investment policy statement (Maginn et al., 2007; CFA Institute, 2010), with two additions: handling exceptions and review.</figcaption>
+</figure>
+<style>
+.bf-sl{display:flex;flex-wrap:wrap;gap:6px 14px;margin-bottom:8px}
+.bf-sl label{display:flex;gap:6px;align-items:center;font-size:13.5px;cursor:pointer}
+.bf-sl input{accent-color:var(--accent);width:16px;height:16px}
+.bf{display:grid;grid-template-columns:1fr 1.1fr;gap:12px;align-items:start}
+.bf-dots{display:grid;grid-template-columns:repeat(8,1fr);gap:5px}
+.bf-dots i{aspect-ratio:1;border-radius:50%;background:var(--accent);transition:opacity .4s,transform .4s}
+.bf-dots i.x{opacity:.12;transform:scale(.6)}
+.bf-doc{background:var(--quote);border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.7;min-height:200px}
+.bf-doc p{margin:0 0 6px;opacity:.25;transition:opacity .3s}
+.bf-doc p.on{opacity:1}
+.bf-doc em{font-style:normal;font-size:11.5px;color:var(--faint);display:block}
+.bf-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.bf{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const N=40,cut=[[0,40],[18,40],[34,40],[37,40]];
+  const D=[['Goal and measure','For a child\'s education in ten years; annualized return of at least inflation plus 3 percentage points, maximum drawdown no more than 20%'],['Constraints','Up to 50,000 yuan may be withdrawn each year; no leverage or derivatives; no tobacco companies'],['Handling exceptions','In situations the mandate does not cover, pause new trades and put forward a proposal for approval'],['Term and review','Review once a year; review at once if income, family or goals change']];
+  const g=document.getElementById('bf-dots');g.innerHTML='<i></i>'.repeat(N);const ds=[...g.children];
+  const order=Array.from({length:N},(_,i)=>(i*17)%N);
+  document.getElementById('bf-doc').innerHTML=D.map(([h,t],i)=>`<p data-i="${i}"><em>${h}</em>${t}</p>`).join('');
+  const ps=[...document.querySelectorAll('.bf-doc p')],cb=[...document.querySelectorAll('[data-bf]')];
+  function r(){const on=cb.map(c=>c.checked);let k=0;if(on[0])k=22;if(on[1])k=on[0]?34:14;if(on[2])k+=on[0]&&on[1]?3:0;const left=N-k;
+    order.forEach((d,j)=>ds[d].classList.toggle('x',j<k));ps.forEach((p,i)=>p.classList.toggle('on',on[i]));
+    const m=on.every(Boolean)?`${left} courses of action remain, and this mandate says what to do when the unexpected happens and when it must be reviewed: every step the agent takes has a basis that can be checked.`:left===N?'With only one sentence, buying a money market fund, holding a few growth stocks in concentration and using leverage can all count as "looking after it": all 40 courses of action are defensible.':`${left} courses of action remain.${!on[2]?' In situations not covered, the agent must still use its own judgment.':''}${!on[3]?' The mandate states no term, so it will keep being executed after circumstances change.':''}`;
+    document.getElementById('bf-msg').textContent=m;}
+  cb.forEach(c=>c.addEventListener('change',r));
+  document.getElementById('bf').addEventListener('anim-in',()=>{cb.forEach(c=>c.checked=false);r();cb.forEach((c,i)=>setTimeout(()=>{c.checked=true;r();},1200*(i+1)));});
+  r();
+})();
+</script>

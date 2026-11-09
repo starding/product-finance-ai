@@ -1,0 +1,38 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Five parts</p><p class="figsub">The five parts that grew from five constraints. Select a part to see the question it answers.</p></div><button class="replay" type="button" data-replay="nx24">Replay</button></div>
+    <div class="nx" id="nx24" data-anim>
+      <div class="nx-src"><b>Five parts</b><span>Together, one product</span></div>
+      <div class="nx-list" id="nx24-l"></div>
+    </div>
+    <p class="nx-msg" id="nx24-msg" aria-live="polite"></p>
+  </div>
+</figure>
+<style>
+.nx{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:center}
+.nx-src{background:var(--ink);color:var(--bg);border-radius:10px;padding:14px 10px;text-align:center}
+.nx-src b{display:block;font-size:16px} .nx-src span{font-size:12px;opacity:.75}
+.nx-list{display:grid;gap:6px}
+.nx-i{font:inherit;text-align:left;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:9px 12px;color:var(--ink);opacity:0;transform:translateX(-8px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.3s)}
+.nx.in .nx-i{opacity:1;transform:none}
+.nx-i span{font-size:13.5px} .nx-i em{font-style:normal;font-size:11.5px;color:var(--faint);white-space:nowrap}
+.nx-i.sel{border-color:var(--accent)}
+.nx-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.nx{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const Q=[['What to promise','Chapter 20','Answers: before asking why he should believe it will keep its word, state what it promises. It promises the process, not the result: allocation, execution, fees and risk boundaries can all be verified.'],
+    ['Mandate parameters and authority','Chapter 21','Answers: what it should do when he is not there. Goals, boundaries, rules, exceptions and term, with authority graded by size and by whether an action can be undone.'],
+    ['Process records and verifiable evidence','Chapter 22','Answers: how he knows what it did. Layered records kept by a third party, stating the information available at the time and the grounds for each action.'],
+    ['Limits, confirmation and compensation','Chapter 23','Answers: what happens when it makes a mistake. Layered defences, slowing down where things move fast, and compensation written in advance by kind of mistake.'],
+    ['The path to trust','Chapter 24','Answers: on what basis he begins to trust it. Borrow costly signals, start small, and adjust according to the kind of mistake.']];
+  const l=document.getElementById('nx24-l'),msg=document.getElementById('nx24-msg');
+  l.innerHTML=Q.map((q,i)=>`<button type="button" class="nx-i" style="--i:${i}" data-i="${i}"><span>${q[0]}</span><em>→ ${q[1]}</em></button>`).join('');
+  const bs=[...l.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));msg.textContent=Q[i][2];}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('nx24').addEventListener('anim-in',()=>{[0,1,2,3,4].forEach((i,k)=>setTimeout(()=>set(i),1600+k*1800));});
+  set(0);
+})();
+</script>

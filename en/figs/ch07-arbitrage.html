@@ -1,0 +1,64 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">A foreseeable rise happens early</p><p class="figsub">On day 2 news is released: on day 7 the company will receive a certain payment, and the share price will then rise 10%. Adjust the share of investors who trade on this news and see when the price rises.</p></div><button class="replay" type="button" data-replay="ar">Replay</button></div>
+    <div class="ar" id="ar" data-anim>
+      <svg viewBox="0 0 640 230" role="img" aria-label="Price adjustment path after the announcement">
+        <g id="ar-axis"></g>
+        <path id="ar-gap" class="ar-gap"/>
+        <path id="ar-path" class="ar-path"/>
+        <circle id="ar-dot" r="6" class="ar-dot"/>
+      </svg>
+      <div class="sl"><label for="ar-s">Share of investors trading on the news <b id="ar-sv"></b></label><input id="ar-s" type="range" min="0" max="100" step="5" value="0"></div>
+      <p class="ar-msg" id="ar-msg" aria-live="polite"></p>
+      <div class="legend"><span><i style="background:var(--warm-soft)"></i>Rise still foreseeable after the announcement (the part open to arbitrage)</span></div>
+    </div>
+  </div>
+  <figcaption>Illustrative. Each day, investors trading on the news push the price towards 110, by an amount proportional to their share. The higher the share, the sooner the foreseeable rise is absorbed, and the less of the “certain rise” is left for day 7.</figcaption>
+</figure>
+<style>
+.ar svg{width:100%;height:auto;display:block}
+.ar-gap{fill:var(--warm-soft)}
+.ar-path{fill:none;stroke:var(--accent);stroke-width:2.5;stroke-linejoin:round}
+.ar-dot{fill:var(--accent)}
+.ar-msg{font-size:14px;margin:4px 0 8px;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const X0=50,X1=620,Y0=196,Y1=20, x=d=>X0+d/10*(X1-X0), y=p=>Y0-(p-96)/(114-96)*(Y0-Y1);
+  let a=`<line x1="${X0}" y1="${Y0}" x2="${X1}" y2="${Y0}" class="s-faint"/>`;
+  for(let d=0;d<=10;d++)a+=`<text x="${x(d)}" y="${Y0+16}" text-anchor="middle" font-size="11" class="t-faint">Day ${d}</text>`;
+  [100,110].forEach(p=>a+=`<line x1="${X0}" y1="${y(p)}" x2="${X1}" y2="${y(p)}" class="s-line"/><text x="${X0-8}" y="${y(p)+4}" text-anchor="end" font-size="11" class="t-faint">${p}</text>`);
+  a+=`<line x1="${x(2)}" y1="${Y1}" x2="${x(2)}" y2="${Y0}" class="s-faint" stroke-dasharray="3 3"/><text x="${x(2)}" y="${Y1+2}" text-anchor="middle" font-size="11" class="t-muted">News released</text>`;
+  a+=`<line x1="${x(7)}" y1="${Y1+10}" x2="${x(7)}" y2="${Y0}" class="s-faint" stroke-dasharray="3 3"/><text x="${x(7)}" y="${Y1+8}" text-anchor="middle" font-size="11" class="t-muted">Payment received</text>`;
+  document.getElementById('ar-axis').innerHTML=a;
+  const sEl=document.getElementById('ar-s');
+  function series(s){
+    // daily closes: from the announcement day, the gap shrinks by s each day
+    const out=[[0,100],[1,100],[2,100]]; let p=100;
+    if(s>0){p=p+(110-p)*s;} out.push([2.0001,p]);
+    for(let d=3;d<=10;d++){ if(d<7){p=p+(110-p)*s;} else p=110; out.push([d,p]); }
+    return out;
+  }
+  function render(anim){
+    const s=+sEl.value/100;
+    document.getElementById('ar-sv').textContent=Math.round(s*100)+'%';
+    const pts=series(s);
+    const step=[];pts.forEach((pt,i)=>{if(i>0)step.push([pt[0],pts[i-1][1]]);step.push(pt);});
+    const d='M'+step.map(([t,p])=>`${x(t).toFixed(1)},${y(p).toFixed(1)}`).join('L');
+    const path=document.getElementById('ar-path');path.setAttribute('d',d);
+    const g='M'+step.filter(([t])=>t>=2).map(([t,p])=>`${x(Math.min(t,7)).toFixed(1)},${y(t>=7?110:p).toFixed(1)}`).join('L')+`L${x(7)},${y(110)}L${x(2)},${y(110)}Z`;
+    document.getElementById('ar-gap').setAttribute('d',g);
+    const after=pts.find(pt=>pt[0]>=2.0001)[1], pre7=pts.find(pt=>pt[0]===6)[1];
+    const dot=document.getElementById('ar-dot');dot.setAttribute('cx',x(2.0001));dot.setAttribute('cy',y(after));
+    if(anim){const L=path.getTotalLength();path.style.transition='none';path.style.strokeDasharray=L;path.style.strokeDashoffset=L;path.getBoundingClientRect();path.style.transition='stroke-dashoffset 1.6s ease';path.style.strokeDashoffset=0;}
+    else{path.style.strokeDasharray='none';}
+    document.getElementById('ar-msg').textContent=s===0
+      ?'No one trades on the news: the price stays at 100 and rises a certain 10% on day 7. The rise was foreseeable when the news came out, so buyers could profit without risk.'
+      :s>=1?'Everyone trades on the news: the price reaches 110 on the day of the announcement, and after that no foreseeable rise remains. Price changes left for tomorrow can only come from new news.'
+      :`The price rises to ${after.toFixed(1)} on the day of the announcement and closes at ${pre7.toFixed(1)} on day 6. The more people trade on the news, the faster the foreseeable rise disappears.`;
+  }
+  sEl.addEventListener('input',()=>render(false));
+  document.getElementById('ar').addEventListener('anim-in',()=>{sEl.value=0;render(true);let v=0;setTimeout(function step(){v+=10;sEl.value=v;render(false);if(v<100)setTimeout(step,260);},1900);});
+  render(false);
+})();
+</script>

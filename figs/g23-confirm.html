@@ -1,0 +1,35 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">确认要少而有分量</p><p class="figsub">一年里有 4 次不可挽回的操作，其中 1 次实际上是错的。切换两种确认方式，看他一年被要求确认几次、是否认真看了，以及那一次错误是否被拦住。</p></div><button class="replay" type="button" data-replay="cf23">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="方式">
+      <button type="button" data-cf23="all" aria-pressed="true">凡事确认，只有一个“同意”按钮</button>
+      <button type="button" data-cf23="key" aria-pressed="false">只确认不可挽回的，摆出后果，大额延迟一天</button>
+    </div>
+    <div class="cf23" id="cf23" data-anim>
+      <div class="cf23-bars" id="cf23-b"></div>
+      <p class="cf23-msg" id="cf23-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：他一年只能认真看大约 12 次确认；认真看时，摆出后果的确认有九成能让他发现错误，只有“同意”按钮的只有三成。延迟一天期间，书记员的异常检查还能再拦住一半没被他发现的错误（阿罗与费希尔、亨利所说的保留余地的价值）。</figcaption>
+</figure>
+<style>
+.cf23-bars{display:grid;gap:12px;margin:6px 0 10px}
+.cf23-r{display:grid;grid-template-columns:9em 1fr 5.5em;gap:10px;align-items:center;font-size:12.5px}
+.cf23-r div{height:22px;background:var(--quote);border-radius:5px;overflow:hidden}
+.cf23-r i{display:block;height:100%;transition:width .4s}
+.cf23-r b{text-align:right;font-variant-numeric:tabular-nums}
+.cf23-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cf23-r{grid-template-columns:1fr 5.5em}.cf23-r span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cf23'+id);
+  const S={all:{n:200,care:12/200,hit:.3,delay:0},key:{n:4,care:1,hit:.9,delay:.5}};
+  function set(k){document.querySelectorAll('[data-cf23]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.cf23===k)));const s=S[k],p=s.care*s.hit,stop=p+(1-p)*s.delay;
+    $('-b').innerHTML=[['一年被要求确认',s.n,200,'var(--blue)',s.n+' 次'],['认真看的比例',s.care,1,'var(--gold)',Math.round(s.care*100)+'%'],['那次错误被拦住的把握',stop,1,'var(--accent)',Math.round(stop*100)+'%']].map(([a,v,m,c,t])=>`<div class="cf23-r"><span>${a}</span><div><i style="width:${Math.max(.5,v/m*100)}%;background:${c}"></i></div><b>${t}</b></div>`).join('');
+    $('-msg').textContent=k==='all'?'凡事确认，一年 200 次，他只认真看了 6%；就算看了，一个“同意”按钮也很难让他发现错误：那一次错误几乎一定会通过。':'只确认 4 次不可挽回的操作，他每次都认真看；摆出后果让他有九成的把握发现错误，延迟一天又多了一道防线：那一次错误几乎一定会被拦住。';}
+  document.querySelectorAll('[data-cf23]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.cf23)));
+  $('').addEventListener('anim-in',()=>{set('all');setTimeout(()=>set('key'),2400);});
+  set('all');
+})();
+</script>

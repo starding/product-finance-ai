@@ -1,0 +1,34 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Capacity and willingness: take the lower</p><p class="figsub">The horizontal axis is capacity to bear risk (how steady the harvest is, how long the horizon); the vertical axis is willingness to bear risk. Drag the two sliders to see the risk level the scribe adopts.</p></div><button class="replay" type="button" data-replay="cp20">Replay</button></div>
+    <div class="cp20" id="cp20" data-anim>
+      <svg viewBox="0 0 660 240" role="img" aria-label="Capacity and willingness"><g id="cp20-g"></g></svg>
+      <div class="cp20-ctl">
+        <div class="sl"><label for="cp20-a">Capacity <b id="cp20-av"></b></label><input id="cp20-a" type="range" min="1" max="5" step="1" value="4"></div>
+        <div class="sl"><label for="cp20-w">Willingness <b id="cp20-wv"></b></label><input id="cp20-w" type="range" min="1" max="5" step="1" value="2"></div>
+      </div>
+      <p class="cp20-msg" id="cp20-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: each has five levels, and the risk level adopted is the lower of the two; the number in each cell is the level adopted.</figcaption>
+</figure>
+<style>
+.cp20 svg{width:100%;height:auto;display:block}
+.cp20-ctl{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.cp20-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cp20-ctl{grid-template-columns:1fr;gap:4px}.cp20 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cp20'+id),X0=150,Y0=12,C=80,R=40;
+  const L=['Very low','Low','Medium','High','Very high'],l=L.map(s=>s.toLowerCase());
+  function draw(){const a=+$('-a').value,w=+$('-w').value,e=Math.min(a,w);$('-av').textContent=L[a-1];$('-wv').textContent=L[w-1];
+    let h='';for(let i=1;i<=5;i++)for(let j=1;j<=5;j++){const v=Math.min(i,j),x=X0+(i-1)*C,y=Y0+(5-j)*R,on=i===a&&j===w;h+=`<rect x="${x}" y="${y}" width="${C-4}" height="${R-4}" rx="5" fill="var(--accent)" opacity="${.08+v*.13}" stroke="${on?'var(--ink)':'none'}" stroke-width="2.5"/><text x="${x+C/2-2}" y="${y+R/2+3}" text-anchor="middle" font-size="12">${v}</text>`;}
+    h+=`<text x="${X0+2.5*C}" y="${Y0+5*R+18}" text-anchor="middle" font-size="11" class="t-faint">Capacity →</text><text x="${X0-10}" y="${Y0+2.5*R}" text-anchor="end" font-size="11" class="t-faint">Willingness ↑</text>`;
+    $('-g').innerHTML=h;
+    $('-msg').textContent=a>w?`Capacity ${l[a-1]} but willingness ${l[w-1]}: his capacity would let him bear more, but he would lose sleep. The scribe adopts level ${e}, explains clearly what compensation bearing more might bring, and leaves it to him to decide whether to raise it.`:a<w?`Willingness ${l[w-1]} but capacity ${l[a-1]}: he is willing to take risks, but his harvest and horizon cannot bear them. The scribe adopts only level ${e}.`:`Capacity and willingness agree; level ${e} is adopted.`;}
+  ['-a','-w'].forEach(k=>$(k).addEventListener('input',draw));
+  $('').addEventListener('anim-in',()=>{[[4,2],[2,5],[3,3]].forEach(([a,w],i)=>setTimeout(()=>{$('-a').value=a;$('-w').value=w;draw();},300+i*2000));});
+  draw();
+})();
+</script>

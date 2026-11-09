@@ -1,0 +1,54 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Even a healthy bank can suffer a run</p><p class="figsub">The bank has lent out most of its 30 depositors' money and keeps only 30% in cash. Adjust the share of depositors who "worry that others will withdraw" to see whether the bank holds; then switch on deposit insurance.</p></div><button class="replay" type="button" id="rn-run">Run again</button></div>
+    <div class="rn" id="rn" data-anim>
+      <div class="rn-grid" id="rn-g"></div>
+      <div class="rn-bank"><span>Bank's cash on hand</span><div class="rn-t"><i id="rn-cash"></i></div><b id="rn-cv"></b></div>
+      <div class="rn-ctrl">
+        <div class="sl"><label for="rn-p">Depositors worried others will withdraw <b id="rn-pv"></b></label><input id="rn-p" type="range" min="0" max="100" step="10" value="40"></div>
+        <label class="rn-chk"><input type="checkbox" id="rn-i"> Deposit insurance</label>
+      </div>
+      <p class="rn-msg" id="rn-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Simplified from the reasoning of Diamond and Dybvig (1983): 10% of depositors genuinely need their money; worried depositors follow them in withdrawing, and the more people withdraw, the more worried the others become. Deposit insurance assures depositors that their deposits are safe, so withdrawing early is no longer the best choice.</figcaption>
+</figure>
+<style>
+.rn-grid{display:grid;grid-template-columns:repeat(15,1fr);gap:6px}
+.rn-grid i{aspect-ratio:1;border-radius:50%;background:var(--accent-soft);border:1.5px solid var(--accent);transition:all .35s}
+.rn-grid i.w{background:var(--warm);border-color:var(--warm)}
+.rn-grid i.lost{background:var(--line);border-color:var(--faint)}
+.rn-bank{display:grid;grid-template-columns:110px 1fr 60px;gap:10px;align-items:center;margin:12px 0;font-size:13px}
+.rn-t{height:16px;background:var(--quote);border-radius:4px;overflow:hidden}
+.rn-t i{display:block;height:100%;background:var(--accent);transition:width .35s}
+.rn-bank b{text-align:right;font-variant-numeric:tabular-nums}
+.rn-ctrl{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center}
+.rn-chk{font-size:14px;display:flex;gap:6px;align-items:center;white-space:nowrap}
+.rn-chk input{accent-color:var(--accent);width:16px;height:16px}
+.rn-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.rn-grid{grid-template-columns:repeat(10,1fr)}.rn-ctrl{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const N=30,R=0.3,g=document.getElementById('rn-g');g.innerHTML='<i></i>'.repeat(N);const cs=[...g.children];
+  const p=document.getElementById('rn-p'),ins=document.getElementById('rn-i');let timer;
+  function run(){clearInterval(timer);cs.forEach(c=>c.className='');document.getElementById('rn-pv').textContent=p.value+'%';
+    const worried=+p.value/100, insured=ins.checked; let w=0, cash=N*R;
+    const show=()=>{document.getElementById('rn-cash').style.width=Math.max(0,cash/(N*R)*100)+'%';document.getElementById('rn-cv').textContent=Math.max(0,cash).toFixed(0)+' units';};
+    show();
+    const need=Math.round(N*0.1);
+    let target=insured?need:Math.round(need+worried*N*0.5);
+    timer=setInterval(()=>{
+      if(w<target&&w<N){cs[w].classList.add('w');w++;cash-=1;
+        if(!insured&&w>=N*0.25)target=Math.min(N,target+2);
+        show();
+        if(cash<=0){clearInterval(timer);for(let i=w;i<N;i++)cs[i].classList.add('lost');document.getElementById('rn-msg').textContent=`Withdrawals exceeded the bank's cash on hand, and the bank was forced to close. The remaining ${N-w} depositors must wait for the assets to be liquidated and may suffer losses. The bank itself was healthy; the failure came entirely from panic.`;}
+      }else{clearInterval(timer);document.getElementById('rn-msg').textContent=insured?`With deposit insurance, only the ${need} depositors who genuinely need their money withdraw, and the bank copes easily. No one has a reason to rush to withdraw.`:`${w} depositors withdrew in all; the bank still had enough cash, and no run took place. But with only a few more worried depositors, the outcome would be entirely different.`;}
+    },160);
+    document.getElementById('rn-msg').textContent='';
+  }
+  p.addEventListener('input',run);ins.addEventListener('change',run);document.getElementById('rn-run').addEventListener('click',run);
+  document.getElementById('rn').addEventListener('anim-in',run);
+  document.getElementById('rn-pv').textContent=p.value+'%';
+})();
+</script>

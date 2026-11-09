@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：把时间补偿说清楚</p><p class="figsub">三条设计要求，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="ch02summary">重播</button></div>
+    <div class="ch02summary" id="ch02summary" data-anim><div class="ch02summary-c" style="--i:0"><em>等待需要补偿</em><b>标明回报对应的期限</b><p>同一个收益率，持有一个月与持有三年的含义完全不同；年化与持有期收益要分开写。</p></div><div class="ch02summary-c" style="--i:1"><em>名义不等于实际</em><b>说明“保本”保的是什么</b><p>区分保名义金额与保购买力；长期产品同时展示扣除通胀后的结果。</p></div><div class="ch02summary-c warn" style="--i:2"><em>期限错配有代价</em><b>先问用钱时间，再推荐期限</b><p>展示提前支取或中途卖出的规则与代价，让用户在购买前就知道。</p></div></div>
+  </div>
+</figure>
+<style>
+.ch02summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch02summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch02summary-c.warn{border-left-color:var(--warm)}
+.ch02summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch02summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch02summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch02summary.in .ch02summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch02summary{grid-template-columns:1fr}}
+</style>

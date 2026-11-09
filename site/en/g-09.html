@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prices carry everyone's information</title>
+<meta name="description" content="Product × Finance × AI: Derived from Zero, Chapter 9: whoever learns good news first buys ahead of everyone else, and the price moves. Prices therefore pool information scattered among many people, and for the same reason they are hard to predict. Market makers pay a cost for trading with the informed, gathering information is costly, and information advantage is zero-sum among traders; holding everything in proportion instead of joining the guessing game is a plain but powerful choice">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="g-09">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="Contents">
+<div class="side-head"><a class="sidetitle" href="index.html">Product × Finance × AI<small>Financial Products in the Age of AI</small></a></div>
+<div class="side-view" role="group" aria-label="Way of reading"><a href="preface.html">Decomposition</a><a href="g-preface.html" class="on" aria-current="true">Derivation</a></div>
+<a class="side-about" href="index.html#about">About this book</a>
+<a class="" href="g-preface.html"><span class="n">Preface</span>The best way to understand financial products is to build them from zero</a>
+<a class="side-part" href="g-part1.html"><span class="pn">Part One</span>From 0 to 1: how a world without finance grows finance</a>
+<a class="" href="g-01.html"><span class="n">1</span>One person, one year&#x27;s harvest</a>
+<a class="" href="g-02.html"><span class="n">2</span>Two people, short of grain at different times</a>
+<a class="" href="g-03.html"><span class="n">3</span>What if a loan is not repaid</a>
+<a class="" href="g-04.html"><span class="n">4</span>Exchange among many</a>
+<a class="" href="g-05.html"><span class="n">5</span>Harvests good and bad</a>
+<a class="" href="g-06.html"><span class="n">6</span>Savers may need their grain at any time; borrowers need it for years</a>
+<a class="" href="g-07.html"><span class="n">7</span>No one household can pay for a ship</a>
+<a class="" href="g-08.html"><span class="n">8</span>Securities must be saleable</a>
+<a class=" cur" href="g-09.html" aria-current="page"><span class="n">9</span>Prices carry everyone&#x27;s information</a>
+<a class="" href="g-10.html"><span class="n">10</span>Ordinary people have neither the time nor the expertise</a>
+<a class="" href="g-11.html"><span class="n">11</span>Trustees may not do their duty</a>
+<a class="" href="g-12.html"><span class="n">12</span>The institutions are in place, and people still make mistakes</a>
+<a class="side-part" href="g-part2.html"><span class="pn">Part Two</span>Changing one parameter: when agency becomes almost free</a>
+<a class="" href="g-13.html"><span class="n">13</span>A new parameter: the cost of cognitive labour collapses</a>
+<a class="" href="g-14.html"><span class="n">14</span>Can everyone have a personal agent?</a>
+<a class="" href="g-15.html"><span class="n">15</span>Who guarantees an agent&#x27;s promises</a>
+<a class="" href="g-16.html"><span class="n">16</span>If everyone has an analyst</a>
+<a class="" href="g-17.html"><span class="n">17</span>Agents become the main market participants</a>
+<a class="" href="g-18.html"><span class="n">18</span>Can an agent correct human bias?</a>
+<a class="" href="g-19.html"><span class="n">19</span>What did not change</a>
+<a class="side-part" href="g-part3.html"><span class="pn">Part Three</span>Deriving a product in the new world</a>
+<a class="" href="g-20.html"><span class="n">20</span>One person and one sum of money</a>
+<a class="" href="g-21.html"><span class="n">21</span>The user is not present</a>
+<a class="" href="g-22.html"><span class="n">22</span>The user cannot see the process</a>
+<a class="" href="g-23.html"><span class="n">23</span>Agents make mistakes</a>
+<a class="" href="g-24.html"><span class="n">24</span>Trust takes time</a>
+<a class="side-app" href="g-epilogue.html"><span class="n">Epilogue</span>Back to the governing rule</a>
+<a class="side-app" href="method.html"><span class="n">Appendix</span>How this book was written</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="Open contents" title="Contents"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">Product × Finance × AI: Financial Products in the Age of AI</a><span>Part One  From 0 to 1</span><a class="langlink" href="../g-09.html" hreflang="zh-CN">中文</a></header>
+
+<div class="chapno">Chapter 9</div><h1>Prices carry everyone's information<small>Information, prices and the zero-sum game</small></h1>
+<blockquote><p>Once the market square opened, someone spotted an opportunity. The man who lived on the hill always saw the ships coming home first, so he bought ship shares before the news spread and sold them once everyone else knew. When he bought, the price moved; others saw the price moving and guessed there might be good news. Prices thus pool information scattered among many people: each person knows only a little, but the price combines what all of them know. Because the price already reflects what people know, how it changes from here depends only on what nobody knows yet, and so it is hard to predict. Market makers pay a cost for trading with the informed, gathering information is costly, and the gains from information are zero-sum among traders.</p></blockquote>
+<h2 id="sec-1">1. The man on the hill sees the ships first</h2>
+<p>One family in the village lives on the hill, and whenever a ship returns from far away, he is always the first to see it. Before the news reaches the village gate, he hurries to the market square and buys ship shares: if the ship comes home safely, the shares will rise in value. The more he buys, the more the market maker sells, and the quote rises with it. By the time the ship docks and the whole village knows, the price has already risen all the way; he sells and pockets the difference.</p>
+<p><strong>Today's counterpart.</strong> Trading securities on material non-public information is defined as insider trading in most markets today and is prohibited by law. Getting ahead by analysing public information faster and more carefully, however, remains a way that many traders compete.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The man on the hill sees the ship first</p><p class="figsub">On day 2 the man on the hill sees the ship return safely, and the shares' value rises from 10 portions to 12; the news reaches the whole village only on day 8. Drag how hard he buys to see how much the price has risen before the news is public, and how much he earns.</p></div><button class="replay" type="button" data-replay="hl">Replay</button></div>
+    <div class="hl" id="hl" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="Value and price"><g id="hl-ax"></g><path id="hl-g" class="hl-g"/><path id="hl-v" class="hl-v"/><path id="hl-p" class="hl-p"/></svg>
+      <div class="legend"><span><i style="background:var(--faint)"></i>True value of the shares</span><span><i style="background:var(--accent)"></i>Price in the market square</span><span><i style="background:var(--gold);opacity:.5"></i>The difference he earns</span></div>
+      <div class="sl"><label for="hl-k">How hard he buys <b id="hl-kv"></b></label><input id="hl-k" type="range" min="0" max="100" step="10" value="40"></div>
+      <p class="hl-msg" id="hl-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: seeing steady buy orders, the market maker raises his quote, each day moving the price part of the way towards the true value; the share of the gap closed each day rises with how hard he buys.</figcaption>
+</figure>
+<style>
+.hl svg{width:100%;height:auto;display:block}
+.hl-v{fill:none;stroke:var(--faint);stroke-width:2;stroke-dasharray:5 4}
+.hl-p{fill:none;stroke:var(--accent);stroke-width:2.6}
+.hl-g{fill:var(--gold);fill-opacity:.25;stroke:none}
+.hl-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.hl svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),X0=46,X1=630,YT=12,YB=178,x=t=>X0+t/10*(X1-X0),y=v=>YB-(v-9)/4*(YB-YT);
+  $('hl-ax').innerHTML=[9,10,11,12,13].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+[0,2,4,6,8,10].map(t=>`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">Day ${t}</text>`).join('')+
+    `<text x="${x(2)}" y="${YT+10}" text-anchor="middle" font-size="11" class="t-warm">He sees the ship</text><text x="${x(8)}" y="${YT+10}" text-anchor="middle" font-size="11" class="t-muted">Everyone knows</text>`;
+  $('hl-v').setAttribute('d',`M${x(0)},${y(10)}L${x(2)},${y(10)}L${x(2)},${y(12)}L${x(10)},${y(12)}`);
+  function draw(){const k=+$('hl-k').value/100,P=[];let p=10;for(let t=0;t<=10;t++){if(t>2&&t<=8)p+=(12-p)*k*.45;if(t>8)p=12;P.push(p);}
+    $('hl-p').setAttribute('d',P.map((v,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(v).toFixed(1)).join(''));
+    let g=`M${x(2)},${y(12)}`;for(let t=2;t<=8;t++)g+=`L${x(t)},${y(P[t])}`;g+=`L${x(8)},${y(12)}Z`;$('hl-g').setAttribute('d',g);
+    const pre=(P[8]-10)/2,gain=k>0?(12-(P.slice(2,9).reduce((a,b)=>a+b,0)/7))*k*10:0;$('hl-kv').textContent=Math.round(k*100)+'%';
+    $('hl-msg').textContent=k===0?'He holds back: the price does not move before the news is public, then jumps to 12 portions on day 8.':`He buys ${k>.6?'aggressively':'at a steady pace'}, and before the news is public the price has already covered ${Math.round(pre*100)}% of the rise. The harder he buys, the faster the price rises and the smaller the difference left for him: his buying itself passes the news on to the price.`;}
+  $('hl-k').addEventListener('input',draw);
+  $('hl').addEventListener('anim-in',()=>{let v=0;$('hl-k').value=0;draw();const id=setInterval(()=>{v+=10;$('hl-k').value=v;draw();if(v>=100)clearInterval(id);},250);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-2">2. Prices pool scattered information</h2>
+<p>The man on the hill is only one example. Every villager knows something others do not: the fisherman knows the recent winds, the carpenter knows the state of the ships' repairs, the merchant knows the price of salt on other islands. No one knows everything, but each person buys or sells according to what they know, and the price pulls these scraps of information together. Someone who sees the price rise does not need to know whether the cause is the wind, the repairs or the salt price elsewhere; by adjusting their own buying and selling to the price, they are in effect using what others know. Hayek (1945) called this role of prices a mechanism for communicating information: people need not know why something has become scarce; seeing its price rise, they economise on it.</p>
+<p>A well-known example comes from Galton (1907). At a country fair, 787 people entered a contest to guess the weight of an ox after slaughter. Individual guesses were far apart, yet the median of all the guesses was within one per cent of the actual weight. The many individual errors cancelled each other out, and the pooled guess was more accurate than the great majority of the individual ones.</p>
+<p><strong>Today's counterpart.</strong> A company's share price combines the scattered information held separately by analysts, customers, suppliers and competitors.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Many guesses pooled are more accurate</p><p class="figsub">Each person guesses the weight of an ox from their own experience, and any one guess may be far off. Drag the number of people guessing to see how close the median of all guesses comes to the true weight.</p></div><button class="replay" type="button" data-replay="ws">Replay</button></div>
+    <div class="ws" id="ws" data-anim>
+      <svg viewBox="0 0 640 200" role="img" aria-label="Distribution of guesses"><g id="ws-ax"></g><g id="ws-b"></g><line id="ws-t" class="ws-t"/><line id="ws-m" class="ws-m"/></svg>
+      <div class="legend"><span><i style="background:var(--ink)"></i>True weight</span><span><i style="background:var(--accent)"></i>Median of all guesses</span></div>
+      <div class="sl"><label for="ws-n">Number of people guessing <b id="ws-nv"></b></label><input id="ws-n" type="range" min="0" max="100" step="1" value="0"></div>
+      <p class="ws-msg" id="ws-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: each guess equals the true weight plus a random error of about one tenth of the true weight; the numbers here are simulated, not Galton's (1907) original data. Of the 787 guesses Galton recorded, the median was within one per cent of the actual weight.</figcaption>
+</figure>
+<style>
+.ws svg{width:100%;height:auto;display:block}
+.ws-t{stroke:var(--ink);stroke-width:2}
+.ws-m{stroke:var(--accent);stroke-width:2.4;stroke-dasharray:5 3}
+.ws-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.ws svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),T=1200;let s=1907;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};const g=()=>{let u=0;while(!u)u=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r());};
+  const G=Array.from({length:800},()=>T+120*g()),X0=40,X1=630,YT=10,YB=170,lo=850,hi=1550,nb=35,bw=(X1-X0)/nb,x=v=>X0+(v-lo)/(hi-lo)*(X1-X0);
+  $('ws-ax').innerHTML=`<line x1="${X0}" x2="${X1}" y1="${YB}" y2="${YB}" class="s-faint"/>`+[900,1000,1100,1200,1300,1400,1500].map(v=>`<text x="${x(v)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${v}</text>`).join('')+`<text x="${X1}" y="${YB-6}" text-anchor="end" font-size="11" class="t-muted">Guessed weight (lb)</text>`;
+  ['ws-t'].forEach(k=>{$(k).setAttribute('x1',x(T));$(k).setAttribute('x2',x(T));$(k).setAttribute('y1',YT);$(k).setAttribute('y2',YB);});
+  const nOf=v=>Math.max(1,Math.round(Math.pow(800,v/100)));
+  function draw(){const n=nOf(+$('ws-n').value),S=G.slice(0,n).slice().sort((a,b)=>a-b),med=n%2?S[(n-1)/2]:(S[n/2-1]+S[n/2])/2,c=Array(nb).fill(0);
+    S.forEach(v=>{const i=Math.floor((v-lo)/(hi-lo)*nb);if(i>=0&&i<nb)c[i]++;});const mx=Math.max(...c,1);
+    $('ws-b').innerHTML=c.map((k,i)=>`<rect x="${X0+i*bw+1}" y="${YB-k/mx*(YB-YT-10)}" width="${bw-2}" height="${k/mx*(YB-YT-10)}" fill="var(--accent)" opacity=".35" rx="1"/>`).join('');
+    $('ws-m').setAttribute('x1',x(med));$('ws-m').setAttribute('x2',x(med));$('ws-m').setAttribute('y1',YT);$('ws-m').setAttribute('y2',YB);$('ws-nv').textContent=n+(n===1?' person':' people');
+    const err=Math.abs(med-T)/T*100,ind=S.reduce((a,v)=>a+Math.abs(v-T),0)/n/T*100;
+    $('ws-msg').textContent=n===1?`Only one person guesses, and he is off by ${err.toFixed(1)}%.`:`Among ${n} guesses, a single guess is off by ${ind.toFixed(1)}% on average, while the median is off by only ${err.toFixed(1)}%. The individual errors cancel out, and the pooled guess is more accurate than the great majority of individual ones.`;}
+  $('ws-n').addEventListener('input',draw);
+  $('ws').addEventListener('anim-in',()=>{let v=0;$('ws-n').value=0;draw();const id=setInterval(()=>{v+=4;$('ws-n').value=Math.min(v,100);draw();if(v>=100)clearInterval(id);},120);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-3">3. Why prices are hard to predict</h2>
+<p>If everyone knew the ship would return tomorrow, people would rush to buy today, the price would rise all the way today, and it would not rise again tomorrow for the same reason. Whatever can be foreseen is already reflected in today's price; tomorrow's change can come only from news that nobody has today, and whether that news will be good or bad cannot be known in advance. So in a market where people anticipate correctly, price changes cannot be predicted.</p>
+<p>Once a predictable pattern is discovered, it gets exploited, and the exploitation makes it disappear. Suppose the ships always return after the harvest festival and the shares always rise afterwards. People will then buy before the festival, the rise moves earlier, to before the festival, then earlier still, until the pattern no longer exists.</p>
+<aside class="principle"><p class="pr-k">Derived so far: a principle</p><p class="pr-n">Efficient market hypothesis</p><p class="pr-c"><span><em>Discipline</em>Finance › Asset pricing</span><span><em>Type</em>Hypothesis</span></p><p class="pr-s">Prices fully reflect available information; only new information moves them, and new information cannot be known in advance, so price changes cannot be predicted.</p><dl><div><dt>Standing in the field</dt><dd>The 2013 Nobel Memorial Prize in Economic Sciences went to Fama, Hansen and Shiller "for their empirical analysis of asset prices"; the announcement noted that Fama and his collaborators showed stock prices are extremely hard to predict in the short run and that new information is very quickly incorporated into prices</dd></div><div><dt>Constraint it answers</dt><dd>Each person knows only part of the information and trades on what they know</dd></div><div><dt>Premises</dt><dd>Someone trades on information as soon as it appears; trading and gathering information cost nothing; people broadly agree on what a piece of information means</dd></div><div><dt>Proposed by</dt><dd>Samuelson, 1965, proved that properly anticipated prices change unpredictably; Fama, 1970, called a market whose prices fully reflect available information an efficient market, and distinguished weak, semi-strong and strong forms by the scope of the information</dd></div><div><dt>Open question</dt><dd>If prices already reflect everything, who is still willing to pay to gather information?</dd></div></dl></aside>
+<p><strong>Today's counterpart.</strong> Positive comments about individual stocks on television are typically fully reflected in the price within about a minute (Busse and Green, 2002). McLean and Pontiff (2016) examined 97 stock-selection patterns found in academic research; after the papers were published, the returns of portfolios built on these patterns fell by an average of 58%.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">After a pattern is discovered</p><p class="figsub">The ships always return after the harvest festival, and the shares always rise afterwards. Drag how many people discover this pattern and buy early to see how the price path over the year changes.</p></div><button class="replay" type="button" data-replay="wk">Replay</button></div>
+    <div class="wk" id="wk" data-anim>
+      <svg viewBox="0 0 640 200" role="img" aria-label="Price over a year"><g id="wk-ax"></g><path id="wk-p" class="wk-p"/></svg>
+      <div class="sl"><label for="wk-n">People who buy early <b id="wk-nv"></b></label><input id="wk-n" type="range" min="0" max="100" step="5" value="0"></div>
+      <p class="wk-msg" id="wk-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the value rises by 2 portions in month 9 (after the harvest festival). The more people buy early, the earlier and more gradual the rise; when everyone knows, the rise is spread evenly across the year, and there is no longer a predictable jump after the festival.</figcaption>
+</figure>
+<style>
+.wk svg{width:100%;height:auto;display:block}
+.wk-p{fill:none;stroke:var(--accent);stroke-width:2.6}
+.wk-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.wk svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),X0=46,X1=630,YT=12,YB=170,x=m=>X0+m/12*(X1-X0),y=v=>YB-(v-9.5)/3*(YB-YT);
+  $('wk-ax').innerHTML=[10,11,12].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+[0,3,6,9,12].map(m=>`<text x="${x(m)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">Month ${m}</text>`).join('')+`<line x1="${x(9)}" x2="${x(9)}" y1="${YT}" y2="${YB}" class="s-faint" stroke-dasharray="3 4"/><text x="${x(9)+4}" y="${YT+10}" font-size="11" class="t-muted">Harvest festival</text>`;
+  function draw(){const a=+$('wk-n').value/100;let d='';for(let m=0;m<=12;m+=.1){const jump=(1-a)*(m>=9?2:0),drift=a*2*m/12;d+=(m?'L':'M')+x(m).toFixed(1)+','+y(10+jump+drift).toFixed(1);}
+    $('wk-p').setAttribute('d',d);$('wk-nv').textContent=Math.round(a*100)+'%';
+    $('wk-msg').textContent=a===0?'No one buys early: the price jumps by 2 portions after the festival, a pattern anyone could predict but no one exploits.':a===1?'Everyone buys early: the rise is spread across the whole year, and there is no longer a jump after the festival. The pattern disappears as it is exploited, and the remaining price changes come only from new news.':`${Math.round(a*100)}% of people buy early; the jump after the festival shrinks to ${(2*(1-a)).toFixed(1)} portions, and the rise moves to before the festival.`;}
+  $('wk-n').addEventListener('input',draw);
+  $('wk').addEventListener('anim-in',()=>{let v=0;$('wk-n').value=0;draw();const id=setInterval(()=>{v+=5;$('wk-n').value=v;draw();if(v>=100)clearInterval(id);},180);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-4">4. Market makers and the informed</h2>
+<p>A market maker quotes prices to buy and sell at any time, but does not know whether the person coming to trade already knows something. Trading with the uninformed, he earns the spread; trading with the informed, he is bound to lose, because the informed buy only when the price is too low and sell only when it is too high. To stay in business, the market maker must use the spread earned from the uninformed to cover his losses to the informed, so the more informed traders there are, the wider the spread. The uninformed therefore pay a little in every trade for the existence of the informed. Glosten and Milgrom (1985) described this mechanism in a model.</p>
+<p><strong>Today's counterpart.</strong> Bid-ask spreads on stocks often widen before major announcements, or when the market is full of rumours.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">More informed traders, wider spreads</p><p class="figsub">A ship share may be worth 8 portions or 12, with equal odds. The informed buy only when it is worth 12 and sell only when it is worth 8; the uninformed buy and sell at random. Drag the share of informed traders among those who come to trade to see the quotes at which the market maker breaks even.</p></div><button class="replay" type="button" data-replay="gm9">Replay</button></div>
+    <div class="gm9" id="gm9" data-anim>
+      <div class="gm9-q"><div><em>Bid</em><b id="gm9-b"></b></div><div class="gm9-mid"><i id="gm9-w"></i><span id="gm9-wv"></span></div><div><em>Ask</em><b id="gm9-a"></b></div></div>
+      <div class="sl"><label for="gm9-p">Share of informed traders <b id="gm9-pv"></b></label><input id="gm9-p" type="range" min="0" max="100" step="5" value="20"></div>
+      <p class="gm9-msg" id="gm9-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the market maker's ask equals the share's average value given that someone comes to buy, and the bid equals its average value given that someone comes to sell; spread = 4 × share of informed traders (a simplified case of Glosten and Milgrom, 1985).</figcaption>
+</figure>
+<style>
+.gm9-q{display:grid;grid-template-columns:1fr 1.4fr 1fr;gap:10px;align-items:center}
+.gm9-q>div:not(.gm9-mid){background:var(--quote);border-radius:10px;padding:10px 12px;text-align:center}
+.gm9-q em{display:block;font-style:normal;font-size:11.5px;color:var(--faint)} .gm9-q b{font-size:22px;font-variant-numeric:tabular-nums}
+.gm9-mid{position:relative;height:54px;text-align:center}
+.gm9-mid i{position:absolute;left:50%;top:8px;height:18px;transform:translateX(-50%);background:var(--warm-soft);border:1px solid var(--warm);border-radius:6px;transition:width .3s}
+.gm9-mid span{position:relative;top:32px;font-size:12px;color:var(--warm);font-variant-numeric:tabular-nums}
+.gm9-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  function draw(){const p=+$('gm9-p').value/100,ask=10+2*p,bid=10-2*p,s=ask-bid;$('gm9-a').textContent=ask.toFixed(1);$('gm9-b').textContent=bid.toFixed(1);$('gm9-w').style.width=Math.max(4,s/4*100)+'%';$('gm9-wv').textContent=`Spread ${s.toFixed(1)} portions`;$('gm9-pv').textContent=Math.round(p*100)+'%';
+    $('gm9-msg').textContent=p===0?'With no informed traders, the market maker need not fear losing and can buy and sell at 10 portions.':p===1?'Everyone who comes is informed, and the market maker loses whatever he quotes: the spread widens to a bid of 8 and an ask of 12, which amounts to no longer trading.':`Informed traders make up ${Math.round(p*100)}%: what the market maker loses to them must be made up by the extra spread charged to the uninformed. Each time an uninformed trader buys or sells, he pays ${(s/2).toFixed(1)} portions more on average.`;}
+  $('gm9-p').addEventListener('input',draw);
+  $('gm9').addEventListener('anim-in',()=>{let v=0;$('gm9-p').value=0;draw();const id=setInterval(()=>{v+=5;$('gm9-p').value=v;draw();if(v>=60)clearInterval(id);},200);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-5">5. Gathering information is costly</h2>
+<p>The man on the hill must keep watch every day, the fisherman must go to sea, and the merchant must travel between the islands: gathering information costs something. If prices already reflected all information, no one would be willing to pay that cost, because knowing would earn them nothing. But if no one gathered information, prices would reflect none. Neither extreme can hold, so prices cannot fully reflect all information. The market settles where the share of informed traders is just large enough that the benefit of gathering information equals its cost: prices reflect most of the information but leave a little room to compensate those who paid. When more people dig for news, prices carry more information, each person gains less from digging, and some stop; when fewer dig, prices carry less, and digging becomes worthwhile again.</p>
+<aside class="principle"><p class="pr-k">Derived so far: a principle</p><p class="pr-n">Grossman–Stiglitz paradox</p><p class="pr-c"><span><em>Discipline</em>Economics › Information economics (financial markets)</span><span><em>Type</em>Theoretical model</span></p><p class="pr-s">When gathering information is costly, prices cannot fully reflect all information; in equilibrium the share of informed traders is such that the benefit of gathering information just offsets its cost, and prices convey only part of what the informed know.</p><dl><div><dt>Standing in the field</dt><dd>The paper is titled "On the impossibility of informationally efficient markets", and the contradiction it exposed is commonly called the Grossman–Stiglitz paradox; Stiglitz shared the 2001 Nobel Memorial Prize in Economic Sciences with Akerlof and Spence for analyses of markets with asymmetric information</dd></div><div><dt>Constraint it answers</dt><dd>Gathering information is costly</dd></div><div><dt>Premises</dt><dd>Information can be obtained only at a cost; prices reveal part of the informed traders' information to the uninformed; prices also contain disturbances unrelated to information</dd></div><div><dt>Proposed by</dt><dd>Grossman and Stiglitz, 1980</dd></div><div><dt>Open question</dt><dd>When research becomes cheaper and more people do it, how does each person's gain from research change?</dd></div></dl></aside>
+<p><strong>Today's counterpart.</strong> Professional investment firms devote substantial resources to research; the cheaper research becomes and the more people do it, the less each of them gains from it.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">How many will dig for news</p><p class="figsub">The more people dig for news, the earlier the price reflects it and the less each of them can earn. Drag the cost of digging for news once to see where the market settles: how many people dig, and how much of the news the price reflects in advance.</p></div><button class="replay" type="button" data-replay="gs9">Replay</button></div>
+    <div class="gs9" id="gs9" data-anim>
+      <svg viewBox="0 0 640 220" role="img" aria-label="Share of informed traders and the gain per person"><g id="gs9-ax"></g><path id="gs9-c" class="gs9-c"/><line id="gs9-l" class="gs9-l"/><circle id="gs9-p" r="6" fill="var(--ink)"/></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>What each informed trader earns from the news</span><span><i style="background:var(--warm)"></i>Cost of digging for news once</span></div>
+      <div class="sl"><label for="gs9-k">Cost of digging <b id="gs9-kv"></b></label><input id="gs9-k" type="range" min="1" max="40" step="1" value="10"></div>
+      <p class="gs9-msg" id="gs9-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: when the informed make up a share f, the share of the news reflected in the price in advance is f ÷ (f + 0.15), and each informed trader earns 1.5 × (1 − share reflected in advance) ÷ f. Where the two lines cross, digging for news just breaks even, and the market settles there (Grossman and Stiglitz, 1980).</figcaption>
+</figure>
+<style>
+.gs9 svg{width:100%;height:auto;display:block}
+.gs9-c{fill:none;stroke:var(--accent);stroke-width:2.5}
+.gs9-l{stroke:var(--warm);stroke-width:2;stroke-dasharray:5 4}
+.gs9-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.gs9 svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),X0=46,X1=630,YT=12,YB=186,x=f=>X0+f*(X1-X0),y=v=>YB-Math.min(v,4)/4*(YB-YT);
+  const s=f=>f/(f+.15),G=f=>1.5*(1-s(f))/f;
+  $('gs9-ax').innerHTML=[0,1,2,3,4].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+[0,.25,.5,.75,1].map(f=>`<text x="${x(f)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${f*100}%</text>`).join('')+`<text x="${X1}" y="${YB-6}" text-anchor="end" font-size="11" class="t-muted">Share of people digging for news</text>`;
+  let d='';for(let f=.02;f<=1;f+=.01)d+=(f===.02?'M':'L')+x(f).toFixed(1)+','+y(G(f)).toFixed(1);$('gs9-c').setAttribute('d',d);
+  function draw(){const c=+$('gs9-k').value/10;let lo=.001,hi=1;for(let i=0;i<50;i++){const m=(lo+hi)/2;if(G(m)>c)lo=m;else hi=m;}const f=G(1)>c?1:lo;
+    $('gs9-l').setAttribute('x1',X0);$('gs9-l').setAttribute('x2',X1);$('gs9-l').setAttribute('y1',y(c));$('gs9-l').setAttribute('y2',y(c));$('gs9-p').setAttribute('cx',x(f));$('gs9-p').setAttribute('cy',y(Math.min(c,4)));$('gs9-kv').textContent=c.toFixed(1)+' portions';
+    $('gs9-msg').textContent=`When digging once costs ${c.toFixed(1)} portions, the market settles with about ${Math.round(f*100)}% of people digging for news, and the price reflects about ${Math.round(s(f)*100)}% of the news in advance. The lower the cost, the more people dig and the closer the price comes to reflecting the information fully, but it never reflects it fully: otherwise no one would be willing to pay the cost.`;}
+  $('gs9-k').addEventListener('input',draw);
+  $('gs9').addEventListener('anim-in',()=>{let v=40;$('gs9-k').value=v;draw();const id=setInterval(()=>{v-=2;$('gs9-k').value=Math.max(v,1);draw();if(v<=1)clearInterval(id);},150);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-6">6. Information advantage is zero-sum</h2>
+<p>What the informed trader earns is exactly what the people trading with him lose. Taking all traders together, before costs, whenever someone earns more, someone else earns less; after the costs of gathering information and trading, the group as a whole loses. By staying out of this guessing game and holding all the ship shares in proportion, one gets the average result of all the ships without paying these costs.</p>
+<p>This conclusion uses nothing but arithmetic. Every ship share in the village is held either by people who hold everything in proportion or by people who actively pick. The former get exactly the average of all ship shares. The two groups together must also get the average of all ship shares, so before costs the active pickers as a group can only get the average too. They pay extra for digging up news and for trading; after those costs, as a group they must fall behind.</p>
+<aside class="principle"><p class="pr-k">Derived so far: a principle</p><p class="pr-n">The arithmetic of active management</p><p class="pr-c"><span><em>Discipline</em>Finance › Investment management</span><span><em>Type</em>Theorem</span></p><p class="pr-s">Before costs, the average return of active managers as a group equals that of passive investors who hold everything; after costs, active managers as a group must fall behind.</p><dl><div><dt>Standing in the field</dt><dd>The paper is titled "The arithmetic of active management"; its author states that the two assertions hold for any time period and depend only on the laws of addition, subtraction, multiplication and division</dd></div><div><dt>Constraint it answers</dt><dd>Information advantage is zero-sum among traders</dd></div><div><dt>Premises</dt><dd>Passive investors hold all securities in proportion to their market shares; returns are averaged weighted by the money invested; active management costs more than passive holding</dd></div><div><dt>Proposed by</dt><dd>Sharpe, 1991</dd></div><div><dt>Open question</dt><dd>Among the active pickers, who wins and who loses; and if everyone held passively, who would set prices?</dd></div></dl></aside>
+<p><strong>Today's counterpart.</strong> Index funds hold all stocks in proportion to their market shares; they do no research and no picking, and their fees are very low. Their very existence is a response to the zero-sum nature of competition over information.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Information advantage is zero-sum</p><p class="figsub">Add up everyone's gains and losses for a year. Drag the share of uninformed people who trade frequently and the cost of each trade to see each group's gains and losses, and what remains once they are added together.</p></div><button class="replay" type="button" data-replay="zr">Replay</button></div>
+    <div class="zr" id="zr" data-anim></div>
+    <div class="zr-sl">
+      <div class="sl"><label for="zr-a">Uninformed who trade frequently <b id="zr-av"></b></label><input id="zr-a" type="range" min="0" max="100" step="10" value="50"></div>
+      <div class="sl"><label for="zr-c">Cost of digging and trading <b id="zr-cv"></b></label><input id="zr-c" type="range" min="0" max="10" step="1" value="4"></div>
+    </div>
+    <p class="zr-msg" id="zr-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>Illustrative: the informed earn 10 portions from the uninformed who trade frequently; passive holders, who do not trade, get only the fleet's average return and stay out of these gains and losses. Sharpe (1991): before costs, active investors as a group earn the same as passive ones; after costs, active investors as a group must fall behind.</figcaption>
+</figure>
+<style>
+.zr{display:grid;gap:6px}
+.zr-r{display:grid;grid-template-columns:9em 1fr 4.5em;gap:10px;align-items:center;font-size:13px}
+.zr-t{position:relative;height:16px;background:var(--quote);border-radius:4px}
+.zr-t::before{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;border-left:1px solid var(--faint)}
+.zr-t i{position:absolute;top:0;height:100%;border-radius:4px;transition:left .3s,width .3s}
+.zr-r b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.zr-r.tot{font-weight:600;border-top:1px solid var(--line);padding-top:6px}
+.zr-sl{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px}
+.zr-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.zr-sl{grid-template-columns:1fr;gap:4px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  function bar(v,M){const w=Math.min(50,Math.abs(v)/M*50);return `left:${v>=0?50:50-w}%;width:${w}%;background:${v>=0?'var(--accent)':'var(--warm)'}`;}
+  function draw(){const a=+$('zr-a').value/100,c=+$('zr-c').value,pool=10*a,inf=pool-c*.5,act=-pool-c*.5*a,pas=0,tot=inf+act+pas;
+    const R=[['Informed',inf],['Uninformed, trading often',act],['Passive holders',pas],['Total',tot]];
+    $('zr').innerHTML=R.map(([n,v],i)=>`<div class="zr-r${i===3?' tot':''}"><span>${n}</span><div class="zr-t"><i style="${bar(v,12)}"></i></div><b>${v>=0?'+':'−'}${Math.abs(v).toFixed(1)}</b></div>`).join('');
+    $('zr-av').textContent=Math.round(a*100)+'%';$('zr-cv').textContent=c+(c===1?' portion':' portions');
+    $('zr-msg').textContent=a===0?'No one trades with the informed: the news they dug up earns them nothing, and they have paid the cost for nothing.':c===0?'Ignoring costs, what the informed earn exactly equals what the uninformed frequent traders lose; the total is zero.':`What the informed earn is exactly what the uninformed frequent traders lose; after ${c} ${c===1?'portion':'portions'} of costs, the total is negative. Passive holders stay out of this guessing game and do not pay the cost.`;}
+  ['zr-a','zr-c'].forEach(k=>$(k).addEventListener('input',draw));
+  $('zr').addEventListener('anim-in',()=>{let v=0;$('zr-c').value=0;draw();const id=setInterval(()=>{v++;$('zr-c').value=v;draw();if(v>=8)clearInterval(id);},300);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-7">7. Informed and uninformed: Civilization Simulator, version 9</h2>
+<p>The simulator unlocks the rule "Information in prices". Each year a new piece of news about the fleet's prospects appears. Those who pay to dig for it learn it first; everyone else must wait until it becomes public. You can adjust the share of people who dig for news, the cost of digging, and how many of the uninformed still trade frequently, and see how much of the news the price reflects in advance, along with the cumulative gains and losses of three groups over twenty years.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Civilization Simulator · Chapter 9: informed and uninformed</p><p class="figsub">Each year a new piece of news about the fleet's prospects appears. Those who pay to dig for it learn it first; everyone else must wait until it is public. Adjust the three settings to see the cumulative gains and losses of three groups over twenty years.</p></div><button class="replay" type="button" data-replay="cs9">Replay</button></div>
+    <div class="cs-rules"><span class="on">Money</span><span class="on">Insurance</span><span class="on">Bank</span><span class="on">Shares</span><span class="on">Market</span><span class="on">Information in prices</span><span class="lock">Delegation · Ch. 10</span></div>
+    <div class="cs9" id="cs9" data-anim>
+      <svg viewBox="0 0 660 220" role="img" aria-label="Cumulative gains and losses per person in three groups"><g id="cs9-ax"></g><g id="cs9-l"></g></svg>
+      <div class="legend"><span><i style="background:var(--blue)"></i>People who dig for news</span><span><i style="background:var(--warm)"></i>Uninformed people who trade frequently</span><span><i style="background:var(--accent)"></i>Passive holders</span></div>
+      <div class="cs9-ctl">
+        <div class="sl"><label for="cs9-f">People who dig for news <b id="cs9-fv"></b></label><input id="cs9-f" type="range" min="0" max="80" step="5" value="15"></div>
+        <div class="sl"><label for="cs9-c">Cost of digging per person per year <b id="cs9-cv"></b></label><input id="cs9-c" type="range" min="0" max="3" step="0.1" value="0.8"></div>
+        <div class="sl"><label for="cs9-a">Uninformed who trade frequently <b id="cs9-av"></b></label><input id="cs9-a" type="range" min="0" max="100" step="10" value="50"></div>
+      </div>
+      <button type="button" class="replay" id="cs9-re">Another run of years</button>
+      <div class="cs9-out" id="cs9-out"></div>
+      <p class="cs9-msg" id="cs9-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model: forty households. The vertical axis shows each person's cumulative gain or loss, in portions, relative to getting only the fleet's average return. The more people dig for news, the more the price reflects it before it is public (a share of f ÷ (f + 0.15)); those who dig earn the part not yet reflected from the uninformed who trade frequently, and both groups also pay a cost of 0.05 portions per trade. Passive holders do not trade, and their gain or loss stays at zero.</figcaption>
+</figure>
+<style>
+.cs9 svg{width:100%;height:auto;display:block}
+.cs9-ctl{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:8px 0}
+.cs9-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cs9-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs9-out span{display:block;font-size:11.5px;color:var(--faint)} .cs9-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.cs9-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs9-ctl{grid-template-columns:1fr;gap:4px}.cs9-out{grid-template-columns:1fr}.cs9 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs9'+id),N=40,Y=20,TC=.05;let seed=909;
+  const X0=44,X1=650,YT=10,YB=186,x=t=>X0+t/Y*(X1-X0);
+  function sim(f,c,a){let s=seed;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};const g=()=>{let u=0;while(!u)u=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r());};
+    const nI=Math.round(f*N),nU=N-nI,nA=Math.round(a*nU),sh=nI?f/(f+.15):0;const cum={I:[0],A:[0],P:[0]};let I=0,A=0;
+    for(let t=0;t<Y;t++){const e=Math.abs(g())*2,vol=.3*nA,pool=nI&&nA?vol*e*(1-sh):0;
+      const gi=nI?pool/nI-c-TC:0,ga=nA?-pool/nA-TC:0;I+=gi;A+=ga;cum.I.push(I);cum.A.push(A);cum.P.push(0);}
+    return {cum,sh,nI,nA,nP:nU-nA};}
+  function draw(){const f=+$('-f').value/100,c=+$('-c').value,a=+$('-a').value/100,S=sim(f,c,a);
+    $('-fv').textContent=Math.round(f*100)+'%';$('-cv').textContent=c.toFixed(1)+' portions';$('-av').textContent=Math.round(a*100)+'%';
+    const all=[...S.cum.I,...S.cum.A],mx=Math.max(5,...all.map(Math.abs)),y=v=>(YT+YB)/2-v/mx*(YB-YT)/2;
+    $('-ax').innerHTML=[-mx,-mx/2,0,mx/2,mx].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="${v===0?'s-faint':'s-line'}"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v>0?'+':''}${Math.round(v)}</text>`).join('')+[0,5,10,15,20].map(t=>`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">Year ${t}</text>`).join('');
+    const line=(k,col)=>`<path d="${S.cum[k].map((v,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(v).toFixed(1)).join('')}" fill="none" stroke="${col}" stroke-width="2.4"/>`;
+    $('-l').innerHTML=(S.nI?line('I','var(--blue)'):'')+(S.nA?line('A','var(--warm)'):'')+line('P','var(--accent)');
+    const iY=S.nI?S.cum.I[Y]/Y:0,aY=S.nA?S.cum.A[Y]/Y:0;
+    $('-out').innerHTML=[['News reflected in price before it is public',Math.round(S.sh*100)+'%'],['Diggers, per person per year',S.nI?(iY>=0?'+':'−')+Math.abs(iY).toFixed(2)+' portions':'—'],['Frequent traders, per person per year',S.nA?'−'+Math.abs(aY).toFixed(2)+' portions':'—']].map(([k,v])=>`<div><span>${k}</span><b>${v}</b></div>`).join('');
+    $('-msg').textContent=!S.nI?'No one digs for news, so the price changes only when the news becomes public; frequent traders pay trading costs for nothing.':!S.nA?'No one trades with the diggers, so the news they dig up earns them nothing, and each year they pay the cost for nothing.':Math.abs(iY)<.15?`People who dig for news make up about ${Math.round(f*100)}%, and after costs they roughly break even: this is exactly where the number of diggers stops growing. The price has reflected ${Math.round(S.sh*100)}% of the news before it is public; the uninformed who trade frequently still lose about ${Math.abs(aY).toFixed(2)} portions per person per year, and passive holders are unaffected.`:iY>0?`Each person who digs for news earns about ${iY.toFixed(2)} portions more per year, and the money comes from the uninformed who trade frequently. As more people dig, the price reflects news faster, and this gain is thinned out until it disappears. Passive holders stay out and lose nothing.`:`Too many people dig: the price already reflects ${Math.round(S.sh*100)}% of the news, and what is left is not enough to cover the cost, so each digger loses about ${Math.abs(iY).toFixed(2)} portions per year. Some will quit, until digging just breaks even.`;}
+  ['-f','-c','-a'].forEach(k=>$(k).addEventListener('input',draw));$('-re').addEventListener('click',()=>{seed=(seed*48271)%2147483647;draw();});
+  $('').addEventListener('anim-in',()=>{const seq=[5,15,30,50,70];seq.forEach((v,i)=>setTimeout(()=>{$('-f').value=v;draw();},300+i*1200));});
+  draw();
+})();
+</script>
+
+<h2 id="sec-8">8. What this step leaves open</h2>
+<p>Prices pool information, and they also make information advantage costly and zero-sum. New questions follow:</p>
+<ol><li><strong>Ordinary people have neither the time nor the expertise.</strong> Should they dig for news and judge for themselves, or hand the job to people who specialise in it?</li><li><strong>People who dig for news and trade on others' behalf may not do their duty.</strong> Whether they are really acting for the principal is hard for the principal to know.</li><li><strong>Inside information and deception.</strong> Some trade on information others cannot possibly have; some deliberately spread false news. Rules and enforcement are needed.</li><li><strong>People make their own mistakes.</strong> Even knowing that passive holding is better, people still chase rising prices, sell into falls and trade too often.</li></ol>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">What this step leaves open</p><p class="figsub">Four questions still unresolved once prices pool information. Select a question to see the assumption it rests on.</p></div><button class="replay" type="button" data-replay="nx9">Replay</button></div>
+    <div class="nx" id="nx9" data-anim>
+      <div class="nx-src"><b>Informed and uninformed</b><span>Prices, spreads and the zero-sum game</span></div>
+      <div class="nx-list" id="nx9-l"></div>
+    </div>
+    <p class="nx-msg" id="nx9-msg" aria-live="polite"></p>
+  </div>
+</figure>
+<style>
+.nx{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:center}
+.nx-src{background:var(--ink);color:var(--bg);border-radius:10px;padding:14px 10px;text-align:center}
+.nx-src b{display:block;font-size:16px} .nx-src span{font-size:12px;opacity:.75}
+.nx-list{display:grid;gap:6px}
+.nx-i{font:inherit;text-align:left;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:9px 12px;color:var(--ink);opacity:0;transform:translateX(-8px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.3s)}
+.nx.in .nx-i{opacity:1;transform:none}
+.nx-i span{font-size:13.5px} .nx-i em{font-style:normal;font-size:11.5px;color:var(--faint);white-space:nowrap}
+.nx-i.sel{border-color:var(--accent)}
+.nx-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.nx{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const Q=[['Ordinary people have neither the time nor the expertise','Chapter 10: Delegation','Assumption: every household can decide for itself whether to dig for news or hold passively. Judging that itself takes time and expertise.'],
+    ['People who dig for news and trade for others may not do their duty','Chapter 10: Delegation','Assumption: the trustee acts in the principal\'s interest. The principal can hardly tell whether he is trying, or whether he keeps the gains for himself.'],
+    ['Inside information and deception','Chapter 11: Regulation & custody','Assumption: everyone follows the same rules. Some trade on information others cannot possibly have; some spread false news.'],
+    ['People make their own mistakes','Chapter 12: Defaults','Assumption: people who know passive holding is better will do it. People still chase rises, sell into falls and trade too often.']];
+  const l=document.getElementById('nx9-l'),msg=document.getElementById('nx9-msg');
+  l.innerHTML=Q.map((q,i)=>`<button type="button" class="nx-i" style="--i:${i}" data-i="${i}"><span>${q[0]}</span><em>→ ${q[1]}</em></button>`).join('');
+  const bs=[...l.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));msg.textContent=Q[i][2];}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('nx9').addEventListener('anim-in',()=>{[0,1,2,3].forEach((i,k)=>setTimeout(()=>set(i),1600+k*1800));});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-9">9. Implications for products</h2>
+<p>Market data, research, trading and index products are all tied to the mechanisms in this chapter. Three implications follow. First, predicting prices should not be the promise. Most information that is already public is already reflected in prices; if a product claims it can predict prices consistently, ask where its information comes from and why others do not have it. Second, competition over information is zero-sum and, after costs, negative for the group as a whole; lowering users' trading and research costs and helping them avoid unnecessary trades is value that can last. Third, the cheaper research becomes and the more people do it, the smaller the advantage research brings; this is especially worth remembering as analysis tools become widespread.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: information in prices</p><p class="figsub">Four conclusions, each corresponding to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="g09summary">Replay</button></div>
+    <div class="g09summary" id="g09summary" data-anim><div class="g09summary-c" style="--i:0"><em>Pooling</em><b>Prices pool scattered information</b><p>Each person knows only a little, but the price combines everyone; many people's errors cancel out.</p></div><div class="g09summary-c" style="--i:1"><em>Hard to predict</em><b>What can be foreseen is already in the price</b><p>Price changes come only from new news; once a pattern is exploited, the exploitation makes it disappear.</p></div><div class="g09summary-c warn" style="--i:2"><em>Cost</em><b>The informed make everyone pay a spread</b><p>What the market maker loses to the informed, he must recover from the uninformed.</p></div><div class="g09summary-c warn" style="--i:3"><em>Zero-sum</em><b>After costs, information advantage is negative overall</b><p>What the informed earn is what frequent traders lose; holding everything passively stays out of the guessing game.</p></div></div>
+  </div>
+</figure>
+<style>
+.g09summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g09summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g09summary-c.warn{border-left-color:var(--warm)}
+.g09summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g09summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g09summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g09summary.in .g09summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g09summary{grid-template-columns:1fr}}
+</style>
+
+<h2 id="sec-10">References</h2>
+<ul class="refs"><li>Busse, J. A., &amp; Green, T. C. (2002). Market efficiency in real time. <i>Journal of Financial Economics</i>, 65(3), 415–437.</li><li>McLean, R. D., &amp; Pontiff, J. (2016). Does academic research destroy stock return predictability? <i>Journal of Finance</i>, 71(1), 5–32.</li><li>Fama, E. F. (1970). Efficient capital markets: A review of theory and empirical work. <i>Journal of Finance</i>, 25(2), 383–417.</li><li>Galton, F. (1907). Vox populi. <i>Nature</i>, 75, 450–451.</li><li>Glosten, L. R., &amp; Milgrom, P. R. (1985). Bid, ask and transaction prices in a specialist market with heterogeneously informed traders. <i>Journal of Financial Economics</i>, 14(1), 71–100.</li><li>Grossman, S. J., &amp; Stiglitz, J. E. (1980). On the impossibility of informationally efficient markets. <i>American Economic Review</i>, 70(3), 393–408.</li><li>Hayek, F. A. (1945). The use of knowledge in society. <i>American Economic Review</i>, 35(4), 519–530.</li><li>Nobel Prize Outreach. <i>The Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel 2001</i>. NobelPrize.org.</li><li>Nobel Prize Outreach. <i>The Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel 2013</i>. NobelPrize.org.</li><li>Samuelson, P. A. (1965). Proof that properly anticipated prices fluctuate randomly. <i>Industrial Management Review</i>, 6(2), 41–49.</li><li>Sharpe, W. F. (1991). The arithmetic of active management. <i>Financial Analysts Journal</i>, 47(1), 7–9.</li></ul>
+<footer class="nav"><a href="g-08.html">← Chapter 8: Securities must be saleable</a><a href="g-10.html">Chapter 10: Ordinary people have neither the time nor the expertise →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">At the same price, who is filled first</p><p class="figsub">Four buy orders rest at 10.00 in order of arrival. A market sell order for 900 shares arrives. Switch the priority rule to see how the fills are allocated.</p></div><button class="replay" type="button" data-replay="pr">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Priority rule">
+      <button type="button" data-pr="time" aria-pressed="true">Time priority</button>
+      <button type="button" data-pr="pro" aria-pressed="false">Pro-rata allocation</button>
+    </div>
+    <div class="pr" id="pr" data-anim>
+      <div class="pr-in"><span>Market sell order, 900 shares</span><i></i></div>
+      <div id="pr-q"></div>
+      <p class="pr-msg" id="pr-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Price priority applies under both rules; the figure compares only the second rule at a single price. Pro-rata allocation is found in some futures markets, and in practice it is often combined with time priority.</figcaption>
+</figure>
+<style>
+.pr-in{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--warm);margin-bottom:10px}
+.pr-in i{flex:1;height:2px;background:linear-gradient(90deg,var(--warm),transparent)}
+.pr-row{display:grid;grid-template-columns:190px 1fr 130px;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.pr-row .t{height:22px;background:var(--quote);border-radius:5px;position:relative;overflow:hidden}
+.pr-row .t i{position:absolute;left:0;top:0;bottom:0;background:var(--accent-soft);border-radius:5px}
+.pr-row .t b{position:absolute;left:0;top:0;bottom:0;background:var(--warm);border-radius:5px;width:0;transition:width .7s ease;transition-delay:var(--d)}
+.pr-row em{font-style:normal;font-variant-numeric:tabular-nums;color:var(--muted);text-align:right}
+.pr-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const O=[['A',300,'1st to arrive'],['B',500,'2nd to arrive'],['C',200,'3rd to arrive'],['D',1000,'4th to arrive']], Q=900, MAX=1000, tot=O.reduce((s,o)=>s+o[1],0);
+  const q=document.getElementById('pr-q'), pr=document.getElementById('pr');
+  q.innerHTML=O.map(([n,s,t],i)=>`<div class="pr-row"><span><b>${n}</b> ${s} shares · ${t}</span><span class="t"><i style="width:${s/MAX*100}%"></i><b style="--d:${i*0.25}s"></b></span><em></em></div>`).join('');
+  const rows=[...q.children];
+  function fills(rule){if(rule==='pro')return O.map(o=>Math.round(Q*o[1]/tot));let r=Q;return O.map(o=>{const f=Math.min(r,o[1]);r-=f;return f;});}
+  function set(rule){
+    document.querySelectorAll('[data-pr]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.pr===rule)));
+    const f=fills(rule);
+    rows.forEach((r,i)=>{const b=r.querySelector('.t b');b.style.width='0';r.querySelector('em').textContent='';});
+    setTimeout(()=>rows.forEach((r,i)=>{r.querySelector('.t b').style.width=(f[i]/MAX*100)+'%';r.querySelector('em').textContent='Filled '+f[i]+' shares';}),40);
+    document.getElementById('pr-msg').textContent=rule==='time'?'First come, first served: A and B are filled in full, C gets 100 shares, and D, the last to arrive, gets nothing. Those who post early are rewarded, which encourages traders to supply liquidity early.':'Allocated by order size: every order is 45% filled. The larger the order, the larger the share, which encourages traders to post large orders but also tempts them to overstate their size.';
+  }
+  document.querySelectorAll('[data-pr]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.pr)));
+  pr.addEventListener('anim-in',()=>set(document.querySelector('[data-pr][aria-pressed="true"]').dataset.pr));
+  set('time');
+})();
+</script>

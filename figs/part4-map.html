@@ -1,0 +1,65 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">净价值的分解与第四部分的结构</p><p class="figsub">从一个只追求收益的产品出发，逐层加入设计，看结果、投入、风险与净价值怎样变化。下方是各层对应的章节。</p></div><button class="replay" type="button" data-replay="pm4">重播</button></div>
+    <div class="pm4-lv" role="group" aria-label="设计层次">
+      <label><input type="checkbox" data-l="v"> 价值层：只承诺能兑现、能核验的</label>
+      <label><input type="checkbox" data-l="c"> 契约层：约定目标、授权与责任</label>
+      <label><input type="checkbox" data-l="i"> 实现层：能力装配、过程可见与保障</label>
+      <label><input type="checkbox" data-l="t" checked> 信任：用户有理由相信</label>
+    </div>
+    <div class="pm4" id="pm4" data-anim>
+      <div class="pm4-row" data-k="r"><span>结果</span><div class="pm4-t"><i style="background:var(--accent)"></i></div><b></b></div>
+      <div class="pm4-row" data-k="e"><span>－ 用户的投入</span><div class="pm4-t"><i style="background:var(--gold)"></i></div><b></b></div>
+      <div class="pm4-row" data-k="k"><span>－ 用户承担的风险</span><div class="pm4-t"><i style="background:var(--warm)"></i></div><b></b></div>
+      <div class="pm4-row tot" data-k="n"><span>＝ 净价值</span><div class="pm4-t"><i style="background:var(--ink)"></i></div><b></b></div>
+      <p class="pm4-msg" id="pm4-msg" aria-live="polite"></p>
+    </div>
+    <div class="pm4-cols">
+      <div class="pm4-c" style="--c:var(--accent)"><b>价值层</b><span>承诺什么</span><a href="ch24.html"><em>24</em>承诺什么</a></div>
+      <div class="pm4-c" style="--c:var(--blue)"><b>契约层</b><span>按什么条件</span><a href="ch25.html"><em>25</em>委托参数</a><a href="ch26.html"><em>26</em>授权与不可逆敞口</a><a href="ch27.html"><em>27</em>责任与利益冲突</a></div>
+      <div class="pm4-c" style="--c:var(--gold)"><b>实现层</b><span>如何兑现</span><a href="ch28.html"><em>28</em>能力装配与过程可见</a><a href="ch29.html"><em>29</em>保障强度</a></div>
+      <div class="pm4-c" style="--c:var(--warm)"><b>信任</b><span>长期关系</span><a href="ch30.html"><em>30</em>信任如何建立</a><a href="ch31.html"><em>31</em>设计原则</a></div>
+    </div>
+  </div>
+  <figcaption>示意数字，只表示各层设计的作用方向。结果受市场约束，投入与风险受用户约束，能分担多少投入受 AI 约束。</figcaption>
+</figure>
+<style>
+.pm4-lv{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px;margin-bottom:10px}
+.pm4-lv label{display:flex;gap:6px;align-items:center;font-size:13.5px;cursor:pointer}
+.pm4-lv input{accent-color:var(--accent);width:16px;height:16px}
+.pm4-row{display:grid;grid-template-columns:120px 1fr 56px;gap:10px;align-items:center;font-size:13px;margin:6px 0}
+.pm4-row>span{color:var(--muted)}
+.pm4-row.tot>span{color:var(--ink);font-weight:700}
+.pm4-row b{text-align:right;font-variant-numeric:tabular-nums}
+.pm4-t{height:18px;background:var(--quote);border-radius:5px;overflow:hidden}
+.pm4-t i{display:block;height:100%;width:0;border-radius:5px;transition:width .6s ease}
+.pm4-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+.pm4-cols{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.pm4-c{border-top:3px solid var(--c);background:var(--quote);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:4px}
+.pm4-c b{font-size:13.5px}
+.pm4-c>span:not(.todo){font-size:12px;color:var(--muted)}
+.pm4-c a,.pm4-c .todo{font-size:12.5px;border-radius:7px;padding:5px 8px;text-decoration:none;line-height:1.35}
+.pm4-c a{background:var(--surface);border:1px solid var(--accent);color:var(--ink)}
+.pm4-c a:hover{background:var(--accent-soft)}
+.pm4-c .todo{background:var(--surface);color:var(--faint);border:1px solid var(--line)}
+.pm4-c em{font-style:normal;color:var(--faint);margin-right:6px}
+@media (max-width:640px){.pm4-lv{grid-template-columns:1fr}.pm4-cols{grid-template-columns:1fr 1fr}.pm4-row{grid-template-columns:96px 1fr 44px}}
+</style>
+<script>
+(function(){
+  const $=s=>document.querySelector(s),rows=[...document.querySelectorAll('.pm4-row')];
+  function r(){const on=k=>$(`[data-l="${k}"]`).checked;
+    let R=70,E=35,K=30;
+    if(on("v")){R=60;K-=15;}           // 不再承诺做不到的收益：账面结果下降，失望与追逐的风险下降
+    if(on('c')){K-=8;E-=5;}            // 目标、授权与责任约定清楚
+    if(on('i')){E-=18;R+=6;K-=4;}      // 代理分担投入、执行与纪律改善结果
+    let N=R-E-K;if(!on('t'))N=0;
+    const V={r:R,e:E,k:K,n:Math.max(N,0)};
+    rows.forEach(row=>{const k=row.dataset.k,v=V[k];setTimeout(()=>row.querySelector('i').style.width=v+'%',40);row.querySelector('b').textContent=k==='n'&&!on('t')?'0':v;});
+    const n=[on('v'),on('c'),on('i')].filter(Boolean).length;
+    $('#pm4-msg').textContent=!on('t')?'用户不信任这份承诺，再好的设计也不会被使用：净价值为零。':n===0?'只追求收益的产品：账面结果最高，但用户要花大量时间盯盘，还承担着不清楚的风险，净价值很小。':n===3?'三层设计都具备：账面结果不是最高的，但投入与风险大幅减少，净价值最高。':'每加入一层设计，投入或风险就减少一部分。';}
+  document.querySelectorAll('[data-l]').forEach(i=>i.addEventListener('change',r));
+  $('#pm4').addEventListener('anim-in',()=>{['v','c','i'].forEach(k=>$(`[data-l="${k}"]`).checked=false);$('[data-l="t"]').checked=true;r();['v','c','i'].forEach((k,j)=>setTimeout(()=>{$(`[data-l="${k}"]`).checked=true;r();},1500*(j+1)));});
+  r();
+})();
+</script>

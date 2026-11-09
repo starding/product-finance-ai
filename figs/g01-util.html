@@ -1,0 +1,48 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">边际效用递减：为什么平均分配更好</p><p class="figsub">把 12 份粮食分给两个半年。拖动滑块改变分配，看两个半年的满足感之和；满足感按吃到的粮食的对数计算。</p></div><button class="replay" type="button" data-replay="ut">重播</button></div>
+    <div class="ut" id="ut" data-anim>
+      <div class="ut-grid">
+        <svg viewBox="0 0 300 200" role="img" aria-label="满足感曲线"><g id="ut-ax"></g><path id="ut-c" class="ut-l"/><g id="ut-pts"></g></svg>
+        <div class="ut-r">
+          <div class="ut-bar"><span>上半年</span><div><i id="ut-a"></i></div><b id="ut-av"></b></div>
+          <div class="ut-bar"><span>下半年</span><div><i id="ut-b"></i></div><b id="ut-bv"></b></div>
+          <div class="ut-tot"><span>满足感合计</span><b id="ut-t"></b></div>
+        </div>
+      </div>
+      <div class="sl"><label for="ut-s">上半年吃 <b id="ut-sv"></b></label><input id="ut-s" type="range" min="1" max="11" step="1" value="10"></div>
+      <p class="ut-msg" id="ut-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：满足感 ＝ ln（吃到的份数），即伯努利（1738）所用的对数。任何一条增长递减的曲线都会得到同样的结论。</figcaption>
+</figure>
+<style>
+.ut-grid{display:grid;grid-template-columns:minmax(200px,44%) 1fr;gap:16px;align-items:center}
+.ut svg{width:100%;height:auto;display:block}
+.ut-l{fill:none;stroke:var(--accent);stroke-width:2.5}
+.ut-bar{display:grid;grid-template-columns:4em 1fr 3em;gap:8px;align-items:center;font-size:13px;margin:6px 0}
+.ut-bar div{height:14px;background:var(--quote);border-radius:4px;overflow:hidden}
+.ut-bar i{display:block;height:100%;background:var(--accent);transition:width .3s}
+.ut-bar b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.ut-tot{display:flex;align-items:baseline;gap:10px;margin-top:10px}
+.ut-tot span{font-size:12.5px;color:var(--faint)} .ut-tot b{font-size:24px;font-variant-numeric:tabular-nums}
+.ut-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.ut-grid{grid-template-columns:1fr}.ut svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),X0=34,X1=290,YB=176,YT=10,x=v=>X0+v/12*(X1-X0),y=v=>YB-v/2.6*(YB-YT),u=Math.log;
+  $('ut-ax').innerHTML=`<line x1="${X0}" x2="${X1}" y1="${YB}" y2="${YB}" class="s-faint"/>`+[0,3,6,9,12].map(v=>`<text x="${x(v)}" y="${YB+15}" text-anchor="middle" font-size="10.5" class="t-faint">${v}</text>`).join('')+
+    [0,1,2].map(v=>`<text x="${X0-5}" y="${y(v)+4}" text-anchor="end" font-size="10.5" class="t-faint">${v}</text>`).join('')+`<text x="${X1}" y="${YB-6}" text-anchor="end" font-size="10.5" class="t-muted">吃到的份数</text><text x="${X0+4}" y="${YT+8}" font-size="10.5" class="t-muted">满足感</text>`;
+  let d='';for(let v=1;v<=12.001;v+=.1)d+=(v?'L':'M')+x(v).toFixed(1)+','+y(u(v)).toFixed(1);$('ut-c').setAttribute('d',d);
+  const sl=$('ut-s');
+  function draw(){const a=+sl.value,b=12-a,t=u(a)+u(b);
+    $('ut-sv').textContent=a+' 份，下半年吃 '+b+' 份';$('ut-a').style.width=a/12*100+'%';$('ut-b').style.width=b/12*100+'%';
+    $('ut-av').textContent=u(a).toFixed(2);$('ut-bv').textContent=u(b).toFixed(2);$('ut-t').textContent=t.toFixed(2);
+    $('ut-pts').innerHTML=[[a,'上'],[b,'下']].map(([v,n])=>`<circle cx="${x(v)}" cy="${y(u(v))}" r="5" fill="var(--ink)"/><text x="${x(v)+7}" y="${y(u(v))+14}" font-size="11" class="t-ink">${n}</text>`).join('');
+    const best=2*u(6);$('ut-msg').textContent=a===6?`平均分配时合计 ${best.toFixed(2)}，是所有分法中最大的。`:`比平均分配少 ${(best-t).toFixed(2)}。从多的半年挪一份给少的半年：失去的满足是 ${(u(Math.max(a,b))-u(Math.max(a,b)-1)).toFixed(2)}，得到的是 ${(u(Math.min(a,b)+1)-u(Math.min(a,b))).toFixed(2)}。`;}
+  sl.addEventListener('input',draw);
+  $('ut').addEventListener('anim-in',()=>{let a=11;sl.value=a;draw();const id=setInterval(()=>{a--;sl.value=a;draw();if(a<=6)clearInterval(id);},450);});
+  draw();
+})();
+</script>

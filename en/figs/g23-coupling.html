@@ -1,0 +1,33 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Fast and tight: no time to stop the error</p><p class="figsub">A faulty scribe sends 100 erroneous orders per second. Drag the time it takes to discover the error, then turn on two ways of slowing down, and see how many erroneous orders go out.</p></div><button class="replay" type="button" data-replay="cp23">Replay</button></div>
+    <div class="cp23" id="cp23" data-anim>
+      <div class="cp23-bars" id="cp23-b"></div>
+      <div class="sl"><label for="cp23-t">Time to discover the error <b id="cp23-tv"></b></label><input id="cp23-t" type="range" min="1" max="60" step="1" value="45"></div>
+      <div class="cs-sw"><label><input type="checkbox" id="cp23-l"> Daily volume limit: stop automatically once the total exceeds 500 orders</label><label><input type="checkbox" id="cp23-k"> Automatic stop on anomalies: halt when orders in one minute exceed ten times the usual number</label></div>
+      <p class="cp23-msg" id="cp23-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: each erroneous order causes an average loss of 0.01 portions. In the 2012 incident at a U.S. market maker, the error lasted about 45 minutes (U.S. Securities and Exchange Commission, 2013); the time unit in this figure is minutes.</figcaption>
+</figure>
+<style>
+.cp23-bars{display:grid;gap:12px;margin:6px 0 10px}
+.cp23-r{display:grid;grid-template-columns:9.5em 1fr 7em;gap:10px;align-items:center;font-size:12.5px}
+.cp23-r div{height:22px;background:var(--quote);border-radius:5px;overflow:hidden}
+.cp23-r i{display:block;height:100%;transition:width .4s}
+.cp23-r b{text-align:right;font-variant-numeric:tabular-nums}
+.cp23-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cp23-r{grid-template-columns:1fr 7em}.cp23-r span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cp23'+id),RATE=100*60;
+  function draw(){const t=+$('-t').value,lim=$('-l').checked,ks=$('-k').checked;$('-tv').textContent=t+(t===1?' minute':' minutes');
+    let n=RATE*t;if(ks)n=Math.min(n,RATE*1);if(lim)n=Math.min(n,500);const loss=n*.01,mx=RATE*60;
+    $('-b').innerHTML=[['Erroneous orders sent',n,mx,'var(--warm)',Math.round(n).toLocaleString('en-US')+' orders'],['Loss caused',loss,mx*.01,'var(--warm)',Math.round(loss).toLocaleString('en-US')+' portions']].map(([a,v,m,c,s])=>`<div class="cp23-r"><span>${a}</span><div><i style="width:${Math.max(.3,v/m*100)}%;background:${c}"></i></div><b>${s}</b></div>`).join('');
+    $('-msg').textContent=!lim&&!ks?`It takes ${t} ${t===1?'minute':'minutes'} to notice, and ${Math.round(n).toLocaleString('en-US')} erroneous orders have already gone out. The scribe moves too fast for a person to keep up.`:`${ks?'The automatic stop on anomalies caught it within one minute':''}${ks&&lim?'; ':''}${lim?(ks?'the':'The')+' daily volume limit kept erroneous orders under 500':''}. The loss is ${Math.round(loss)} portions, almost regardless of how soon the error is discovered.`;}
+  ['-t','-l','-k'].forEach(k=>$(k).addEventListener('input',draw));
+  $('').addEventListener('anim-in',()=>{$('-l').checked=false;$('-k').checked=false;let v=1;$('-t').value=1;draw();const id=setInterval(()=>{v+=2;$('-t').value=v;draw();if(v>=45){clearInterval(id);setTimeout(()=>{$('-k').checked=true;draw();},900);setTimeout(()=>{$('-l').checked=true;draw();},1900);}},80);});
+  draw();
+})();
+</script>

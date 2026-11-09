@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：监管与托管</p><p class="figsub">四条结论，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="g11summary">重播</button></div>
+    <div class="g11summary" id="g11summary" data-anim><div class="g11summary-c" style="--i:0"><em>柠檬</em><b>看不清好坏，好的会退出</b><p>委托人只肯按平均付费，可靠的经理退出，留下的越来越差。</p></div><div class="g11summary-c" style="--i:1"><em>托管</em><b>资产不在经理手里</b><p>经理只能下指令，保管人直接向委托人报告：挪用与虚报无处藏身。</p></div><div class="g11summary-c warn" style="--i:2"><em>披露与适当性</em><b>看得见，也卖得对</b><p>披露让好的被认出来；适当性让卖方为买方着想，只推荐相称的产品。</p></div><div class="g11summary-c warn" style="--i:3"><em>规则的代价</em><b>监管也要有度、有约束</b><p>合规有成本，过严会挤走小的经理；监管者本身也需要问责。</p></div></div>
+  </div>
+</figure>
+<style>
+.g11summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g11summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g11summary-c.warn{border-left-color:var(--warm)}
+.g11summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g11summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g11summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g11summary.in .g11summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g11summary{grid-template-columns:1fr}}
+</style>

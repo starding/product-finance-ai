@@ -1,0 +1,74 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">代人监督为什么更便宜</p>
+    <p class="figsub">6 位储户的钱借给 8 家借款人。每一条线代表一次监督。</p>
+    <div class="seg-btns" role="group" aria-label="监督方式">
+      <button type="button" data-mo="0" aria-pressed="true">储户各自监督</button>
+      <button type="button" data-mo="1" aria-pressed="false">银行代为监督</button>
+      <button type="button" data-mo="2" aria-pressed="false">银行分散贷款</button>
+    </div>
+    <div class="mo" id="mo" data-anim>
+      <svg viewBox="0 0 640 276" role="img" aria-label="储户、银行与借款人之间的监督关系">
+        <g id="mo-lines"></g>
+        <g id="mo-nodes"></g>
+      </svg>
+      <div class="mo-count"><span>监督次数</span><b id="mo-n">48</b></div>
+      <p class="mo-msg" id="mo-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>按 Diamond（1984）的思路简化。银行分散贷款后，其违约风险足够低，储户无需再监督银行；监督银行的成本即“监督监督者”的成本。</figcaption>
+</figure>
+<style>
+.mo svg{width:100%;height:auto;display:block}
+.mo-l{stroke:var(--faint);stroke-width:1;opacity:.55;transition:opacity .5s}
+.mo-l.b{stroke:var(--accent);stroke-width:1.6;opacity:.9}
+.mo-l.s{stroke:var(--warm);stroke-width:1.4;stroke-dasharray:4 3;opacity:.9}
+.mo-l.hide{opacity:0}
+.mo-node circle{stroke-width:1.5}
+.mo-node.sv circle{fill:var(--warm-soft);stroke:var(--warm)}
+.mo-node.br circle{fill:var(--quote);stroke:var(--faint)}
+.mo-bank rect{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.5;transition:opacity .4s}
+.mo-bank{transition:opacity .4s}
+.mo-count{display:flex;align-items:baseline;gap:10px;margin-top:4px}
+.mo-count span{font-size:13px;color:var(--muted)}
+.mo-count b{font-size:32px;font-variant-numeric:tabular-nums;color:var(--accent)}
+.mo-msg{font-size:14px;margin:4px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const S=6,B=8, sx=70, bx=570, mx=320, sy=i=>30+i*(200/(S-1)), by=i=>20+i*(220/(B-1));
+  const lines=document.getElementById('mo-lines'), nodes=document.getElementById('mo-nodes');
+  let L='';
+  for(let i=0;i<S;i++)for(let j=0;j<B;j++)L+=`<line class="mo-l d" x1="${sx}" y1="${sy(i)}" x2="${bx}" y2="${by(j)}"/>`;
+  for(let j=0;j<B;j++)L+=`<line class="mo-l b" x1="${mx+40}" y1="130" x2="${bx}" y2="${by(j)}"/>`;
+  for(let i=0;i<S;i++)L+=`<line class="mo-l s" x1="${sx}" y1="${sy(i)}" x2="${mx-40}" y2="130"/>`;
+  lines.innerHTML=L;
+  let N='';
+  for(let i=0;i<S;i++)N+=`<g class="mo-node sv"><circle cx="${sx}" cy="${sy(i)}" r="10"/></g>`;
+  for(let j=0;j<B;j++)N+=`<g class="mo-node br"><circle cx="${bx}" cy="${by(j)}" r="10"/></g>`;
+  N+=`<text x="${sx}" y="272" text-anchor="middle" font-size="12" class="t-warm">储户</text><text x="${bx}" y="272" text-anchor="middle" font-size="12" class="t-muted">借款人</text>`;
+  N+=`<g class="mo-bank" id="mo-bank"><rect x="${mx-40}" y="108" width="80" height="44" rx="10"/><text x="${mx}" y="135" text-anchor="middle" font-size="14" font-weight="700" class="t-ink">银行</text></g>`;
+  nodes.innerHTML=N;
+  const btns=[...document.querySelectorAll('[data-mo]')], cnt=document.getElementById('mo-n'), msg=document.getElementById('mo-msg');
+  const M=[
+    {n:S*B,t:'每位储户都要监督每一家借款人：6 × 8 ＝ 48 次，大量重复。'},
+    {n:B+S,t:'银行集中监督借款人（8 次），储户只需监督银行（6 次），合计 14 次。但谁来监督银行？'},
+    {n:B,t:'银行把贷款分散到大量借款人，自身违约的可能足够低，储户不必再监督银行，只剩 8 次。'}
+  ];
+  let cur=0, timer;
+  function set(m){
+    cur=m; btns.forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.mo===m)));
+    lines.querySelectorAll('.d').forEach(l=>l.classList.toggle('hide',m!==0));
+    lines.querySelectorAll('.b').forEach(l=>l.classList.toggle('hide',m===0));
+    lines.querySelectorAll('.s').forEach(l=>l.classList.toggle('hide',m!==1));
+    document.getElementById('mo-bank').style.opacity=m===0?0:1;
+    const from=+cnt.textContent, to=M[m].n, t0=performance.now();
+    const step=now=>{const k=Math.min(1,(now-t0)/500);cnt.textContent=Math.round(from+(to-from)*k);if(k<1)requestAnimationFrame(step);};
+    requestAnimationFrame(step);
+    msg.textContent=M[m].t;
+  }
+  btns.forEach(b=>b.addEventListener('click',()=>{clearTimeout(timer);set(+b.dataset.mo);}));
+  document.getElementById('mo').addEventListener('anim-in',()=>{set(0);clearTimeout(timer);timer=setTimeout(()=>{set(1);timer=setTimeout(()=>set(2),2600);},2200);});
+  set(0);
+})();
+</script>

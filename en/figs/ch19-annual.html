@@ -1,0 +1,54 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">How much is saved over a year</p><p class="figsub">Adjust the time to do the task yourself once, how many times a year it occurs and the amplification factor, and see the time saved in a year. The curve is the share saved each time: beyond about 5×, it barely rises.</p></div><button class="replay" type="button" data-replay="yr">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Examples">
+      <button type="button" data-yr="0" aria-pressed="true">Weekly financial news digest</button>
+      <button type="button" data-yr="1" aria-pressed="false">Annual tax return</button>
+      <button type="button" data-yr="2" aria-pressed="false">Daily portfolio check</button>
+    </div>
+    <div class="yr" id="yr" data-anim>
+      <svg viewBox="0 0 640 200" role="img" aria-label="Amplification factor and the share saved each time"><g id="yr-ax"></g><path id="yr-p" class="yr-l"/><circle id="yr-d" r="6" fill="var(--ink)"/><text id="yr-dt" font-size="12" class="t-ink"></text></svg>
+      <div class="yr-sl">
+        <div class="sl"><label for="yr-t">Time to do it yourself <b id="yr-tv"></b></label><input id="yr-t" type="range" min="5" max="480" step="5"></div>
+        <div class="sl"><label for="yr-f">Times a year <b id="yr-fv"></b></label><input id="yr-f" type="range" min="0" max="100" step="1"></div>
+        <div class="sl"><label for="yr-s">Amplification factor <b id="yr-sv"></b></label><input id="yr-s" type="range" min="0" max="100" step="1"></div>
+      </div>
+      <div class="yr-out"><span>Saved in a year</span><b id="yr-h"></b><span id="yr-h2"></span></div>
+      <p class="yr-msg" id="yr-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Time saved in a year = time to do the task yourself once × (1 − 1 ÷ amplification factor) × occurrences per year; capability extension and better results are not shown. The times and frequencies of the three examples are illustrative. The daily portfolio check counts trading days.</figcaption>
+</figure>
+<style>
+.yr svg{width:100%;height:auto;display:block}
+.yr-l{fill:none;stroke:var(--accent);stroke-width:2.5}
+.yr-sl{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:6px}
+.yr-out{display:flex;align-items:baseline;gap:10px;margin-top:12px;flex-wrap:wrap}
+.yr-out span{font-size:12.5px;color:var(--faint)} .yr-out b{font-size:26px;font-variant-numeric:tabular-nums}
+.yr-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.yr-sl{grid-template-columns:1fr;gap:6px}.yr svg text{font-size:17px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),X0=56,X1=620,YT=12,YB=168;
+  const lx=s=>X0+Math.log(s)/Math.log(50)*(X1-X0),ly=v=>YB-v*(YB-YT);
+  const fOf=v=>Math.round(Math.pow(10,v/100*Math.log10(365))),sOf=v=>+Math.pow(50,v/100).toFixed(1);
+  const vOfF=f=>Math.round(Math.log10(f)/Math.log10(365)*100),vOfS=s=>Math.round(Math.log(s)/Math.log(50)*100);
+  $('yr-ax').innerHTML=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`+[0,.5,.8,.9,1].map(v=>`<text x="${X0-6}" y="${ly(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text><line x1="${X0}" x2="${X1}" y1="${ly(v)}" y2="${ly(v)}" class="s-line"/>`).join('')+
+    [1,2,5,10,20,50].map(s=>`<text x="${lx(s)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${s}×</text>`).join('')+
+    `<line x1="${lx(5)}" x2="${lx(5)}" y1="${YT}" y2="${YB}" class="s-faint" stroke-dasharray="3 4"/>`;
+  let d='';for(let s=1;s<=50;s*=1.03)d+=(s===1?'M':'L')+lx(s).toFixed(1)+','+ly(1-1/s).toFixed(1);$('yr-p').setAttribute('d',d);
+  const P=[[60,52,8],[240,1,3],[30,250,6]];const t=$('yr-t'),f=$('yr-f'),s=$('yr-s');
+  function draw(){const T=+t.value,F=fOf(+f.value),S=Math.max(1,sOf(+s.value)),k=1-1/S,h=T*k*F/60;
+    $('yr-tv').textContent=T>=60?(T/60).toFixed(T%60?1:0)+' h':T+' min';$('yr-fv').textContent=F+(F===1?' time':' times');$('yr-sv').textContent=S+'×';
+    $('yr-d').setAttribute('cx',lx(S));$('yr-d').setAttribute('cy',ly(k));const dt=$('yr-dt');dt.setAttribute('x',lx(S)+(S>20?-10:10));dt.setAttribute('y',ly(k)+(k>.9?18:-10));dt.setAttribute('text-anchor',S>20?'end':'start');dt.textContent=`Saves ${Math.round(k*100)}% each time`;
+    $('yr-h').textContent=h>=10?Math.round(h)+' hours':h.toFixed(1)+' hours';$('yr-h2').textContent=`about ${(h/8).toFixed(h/8<10?1:0)} eight-hour working days`;
+    const S2=Math.min(50,S*2),gain=T*((1-1/S2)-k)*F/60;
+    $('yr-msg').textContent=`Doubling the amplification factor again to ${S2.toFixed(1)}× saves only ${gain<1?(gain*60).toFixed(0)+' more minutes':gain.toFixed(1)+' more hours'} a year; doubling the number of occurrences or the time per occurrence doubles the time saved.`;}
+  function preset(i){document.querySelectorAll('[data-yr]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.yr===i)));t.value=P[i][0];f.value=vOfF(P[i][1]);s.value=vOfS(P[i][2]);draw();}
+  document.querySelectorAll('[data-yr]').forEach(b=>b.addEventListener('click',()=>preset(+b.dataset.yr)));
+  [t,f,s].forEach(e=>e.addEventListener('input',()=>{document.querySelectorAll('[data-yr]').forEach(b=>b.setAttribute('aria-pressed','false'));draw();}));
+  $('yr').addEventListener('anim-in',()=>{preset(0);let v=0;s.value=0;draw();const id=setInterval(()=>{v+=4;s.value=v;draw();if(v>=100){clearInterval(id);setTimeout(()=>preset(0),700);}},90);});
+  preset(0);
+})();
+</script>

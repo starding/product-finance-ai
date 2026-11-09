@@ -1,0 +1,28 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">One question, two answers</p><p class="figsub">Taking "why are a fund's assets held in custody at another institution?" as the example, switch between the two ways of reading.</p></div></div>
+    <div class="seg-btns" role="group" aria-label="Way of reading">
+      <button type="button" data-tw="d" aria-pressed="false">Decomposition, term by term</button>
+      <button type="button" data-tw="g" aria-pressed="true">Derivation from zero</button>
+    </div>
+    <div class="tw" id="tw" data-anim></div>
+  </div>
+</figure>
+<style>
+.tw{display:grid;gap:6px}
+.tw-s{display:grid;grid-template-columns:84px 1fr;gap:10px;align-items:start;background:var(--quote);border-radius:9px;padding:9px 12px;font-size:13.5px;line-height:1.6;opacity:0;transform:translateX(-6px);transition:opacity .4s,transform .4s;transition-delay:calc(var(--i)*.25s)}
+.tw.in .tw-s{opacity:1;transform:none}
+.tw-s em{font-style:normal;color:var(--faint);font-size:12px;padding-top:2px}
+.tw-s.end{background:var(--accent-soft)}
+</style>
+<script>
+(function(){
+  const T={d:[['Equation','Realized return ＝ time compensation ＋ risk compensation ＋ information advantage － trading costs ＋ luck'],['Premise','All these returns rest on the premise that promises are kept'],['Unpack','One condition for keeping the promise is that the manager cannot misappropriate investors\' assets'],['Conclusion','Custody is one item in the premise of delivery: to check a product, see whether this item is in place']],
+    g:[['Step 7','Many people pool their money and hand it to one person to run'],['Step 10','Ordinary people have neither the time nor the expertise, so they hand their money to a professional manager'],['New problem','The manager controls other people\'s money and could misappropriate it, while the investors cannot see'],['Mechanism','The assets are held at another institution; the manager can only give instructions and cannot move the assets directly'],['Conclusion','Custody grows out of delegation: as long as someone manages money for others, it is needed']]};
+  const box=document.getElementById('tw');
+  function set(k){document.querySelectorAll('[data-tw]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.tw===k)));
+    box.innerHTML=T[k].map(([a,b],i)=>`<div class="tw-s${i===T[k].length-1?' end':''}" style="--i:${i}"><em>${a}</em><span>${b}</span></div>`).join('');box.classList.remove('in');void box.offsetWidth;box.classList.add('in');}
+  document.querySelectorAll('[data-tw]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.tw)));
+  set('g');box.classList.remove('in');
+})();
+</script>

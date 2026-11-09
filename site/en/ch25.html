@@ -1,0 +1,568 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mandate parameters</title>
+<meta name="description" content="Product × Finance × AI: Financial Products in the Age of AI, Chapter 25: what is handed to an agent should be a mandate that states the goal and how it is measured, the constraints, what to do in exceptions, and when to review; measurable goals get gamed, and what cannot be written down needs default rules">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="ch25">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="Contents">
+<div class="side-head"><a class="sidetitle" href="index.html">Product × Finance × AI<small>Financial Products in the Age of AI</small></a></div>
+<div class="side-view" role="group" aria-label="Way of reading"><a href="preface.html" class="on" aria-current="true">Decomposition</a><a href="g-preface.html">Derivation</a></div>
+<a class="side-about" href="index.html#about">About this book</a>
+<a class="" href="preface.html"><span class="n">Preface</span>Why financial products must be relearned in the age of AI</a>
+<a class="side-part" href="part1.html"><span class="pn">Part One</span>Markets: where returns and risks come from</a>
+<a class="" href="ch01.html"><span class="n">1</span>What financial products sell</a>
+<a class="" href="ch02.html"><span class="n">2</span>Interest rates and maturity</a>
+<a class="" href="ch03.html"><span class="n">3</span>What risk looks like</a>
+<a class="" href="ch04.html"><span class="n">4</span>Diversification</a>
+<a class="" href="ch05.html"><span class="n">5</span>Compounding and volatility drag</a>
+<a class="" href="ch06.html"><span class="n">6</span>Factors</a>
+<a class="" href="ch07.html"><span class="n">7</span>Why prices are hard to predict</a>
+<a class="" href="ch08.html"><span class="n">8</span>How information gets into prices</a>
+<a class="" href="ch09.html"><span class="n">9</span>Traders in the market</a>
+<a class="" href="ch10.html"><span class="n">10</span>Liquidity and the bid-ask spread</a>
+<a class="" href="ch11.html"><span class="n">11</span>Orders, rules and market structure</a>
+<a class="" href="ch12.html"><span class="n">12</span>The arithmetic of active management</a>
+<a class="" href="ch13.html"><span class="n">13</span>How promises are kept</a>
+<a class="" href="ch14.html"><span class="n">14</span>Why regulation exists</a>
+<a class="side-part" href="part2.html"><span class="pn">Part Two</span>Users: what people want and what they can bear</a>
+<a class="" href="ch15.html"><span class="n">15</span>The jobs users need done</a>
+<a class="" href="ch16.html"><span class="n">16</span>How users make decisions</a>
+<a class="" href="ch17.html"><span class="n">17</span>What users can bear</a>
+<a class="" href="ch18.html"><span class="n">18</span>How users judge and trust</a>
+<a class="side-part" href="part3.html"><span class="pn">Part Three</span>AI: how much an agent can do on people&#x27;s behalf</a>
+<a class="" href="ch19.html"><span class="n">19</span>The amplification factor</a>
+<a class="" href="ch20.html"><span class="n">20</span>Which tasks can be handed to AI</a>
+<a class="" href="ch21.html"><span class="n">21</span>Where capability comes from, and where it fails</a>
+<a class="" href="ch22.html"><span class="n">22</span>Verifiability: the cost of checking</a>
+<a class="" href="ch23.html"><span class="n">23</span>The special constraints of finance</a>
+<a class="side-part" href="part4.html"><span class="pn">Part Four</span>Design: financial products under three sets of constraints</a>
+<a class="" href="ch24.html"><span class="n">24</span>What to promise</a>
+<a class=" cur" href="ch25.html" aria-current="page"><span class="n">25</span>Mandate parameters</a>
+<a class="" href="ch26.html"><span class="n">26</span>Authority and irreversible exposure</a>
+<a class="" href="ch27.html"><span class="n">27</span>Liability and conflicts of interest</a>
+<a class="" href="ch28.html"><span class="n">28</span>Capability assembly and process visibility</a>
+<a class="" href="ch29.html"><span class="n">29</span>Assurance level</a>
+<a class="" href="ch30.html"><span class="n">30</span>How trust is built</a>
+<a class="" href="ch31.html"><span class="n">31</span>Design principles</a>
+<a class="side-app" href="estimates.html"><span class="n">Appendix</span>Methods and data behind the author&#x27;s estimates</a>
+<a class="side-app" href="method.html"><span class="n">Appendix</span>How this book was written</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="Open contents" title="Contents"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">Product × Finance × AI: Financial Products in the Age of AI</a><span>Part Four · Contract layer  On what terms</span><a class="langlink" href="../ch25.html" hreflang="zh-CN">中文</a></header>
+
+<div class="chapno">Chapter 25</div><h1>Mandate parameters<small>The goals and constraints handed over</small></h1>
+<blockquote><p>"Look after this money for me" is not a mandate that can be executed: it can be read as dozens of entirely different courses of action. What is handed to an agent should be a mandate that states at least four things: what the goal is and how it is measured; what must not be done; what to do in situations the mandate does not cover; and when the mandate needs to be reviewed. The goal should be measurable, but measurable goals get gamed: if the only test is whether the benchmark is beaten, an agent may quietly take on risks no one can see. Nor can a mandate ever be complete; situations it does not cover need a default rule: act conservatively, and stop to ask.</p></blockquote>
+<h2 id="sec-1">1. One sentence is not enough</h2>
+<p>Professional asset management sets out the delegation relationship in an investment policy statement: the investor's return objective and risk objective, together with five kinds of constraint covering liquidity, time horizon, taxes, legal matters and personal preferences (Maginn et al., 2007; CFA Institute, 2010). The same holds when handing work to an AI agent. "Look after this money" could mean buying a money market fund, or holding a handful of growth stocks in concentration. Only when the goal, the constraints, the exceptions and the review are spelled out one by one do the feasible courses of action narrow to a few, and only then do the agent's choices have a basis on which they can be checked.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">From one sentence to a mandate</p><p class="figsub">"Look after this 500,000 yuan for me." Each dot is one possible course of action. Write the mandate section by section and see how many courses remain.</p></div><button class="replay" type="button" data-replay="bf">Replay</button></div>
+    <div class="bf-sl" role="group" aria-label="Sections of the mandate">
+      <label><input type="checkbox" data-bf="0"> Goal and measure</label><label><input type="checkbox" data-bf="1"> Constraints</label><label><input type="checkbox" data-bf="2"> Handling exceptions</label><label><input type="checkbox" data-bf="3"> Term and review</label>
+    </div>
+    <div class="bf" id="bf" data-anim>
+      <div class="bf-dots" id="bf-dots"></div>
+      <div class="bf-doc" id="bf-doc"></div>
+    </div>
+    <p class="bf-msg" id="bf-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>Illustrative. The structure of the mandate follows the investment policy statement (Maginn et al., 2007; CFA Institute, 2010), with two additions: handling exceptions and review.</figcaption>
+</figure>
+<style>
+.bf-sl{display:flex;flex-wrap:wrap;gap:6px 14px;margin-bottom:8px}
+.bf-sl label{display:flex;gap:6px;align-items:center;font-size:13.5px;cursor:pointer}
+.bf-sl input{accent-color:var(--accent);width:16px;height:16px}
+.bf{display:grid;grid-template-columns:1fr 1.1fr;gap:12px;align-items:start}
+.bf-dots{display:grid;grid-template-columns:repeat(8,1fr);gap:5px}
+.bf-dots i{aspect-ratio:1;border-radius:50%;background:var(--accent);transition:opacity .4s,transform .4s}
+.bf-dots i.x{opacity:.12;transform:scale(.6)}
+.bf-doc{background:var(--quote);border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.7;min-height:200px}
+.bf-doc p{margin:0 0 6px;opacity:.25;transition:opacity .3s}
+.bf-doc p.on{opacity:1}
+.bf-doc em{font-style:normal;font-size:11.5px;color:var(--faint);display:block}
+.bf-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.bf{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const N=40,cut=[[0,40],[18,40],[34,40],[37,40]];
+  const D=[['Goal and measure','For a child\'s education in ten years; annualized return of at least inflation plus 3 percentage points, maximum drawdown no more than 20%'],['Constraints','Up to 50,000 yuan may be withdrawn each year; no leverage or derivatives; no tobacco companies'],['Handling exceptions','In situations the mandate does not cover, pause new trades and put forward a proposal for approval'],['Term and review','Review once a year; review at once if income, family or goals change']];
+  const g=document.getElementById('bf-dots');g.innerHTML='<i></i>'.repeat(N);const ds=[...g.children];
+  const order=Array.from({length:N},(_,i)=>(i*17)%N);
+  document.getElementById('bf-doc').innerHTML=D.map(([h,t],i)=>`<p data-i="${i}"><em>${h}</em>${t}</p>`).join('');
+  const ps=[...document.querySelectorAll('.bf-doc p')],cb=[...document.querySelectorAll('[data-bf]')];
+  function r(){const on=cb.map(c=>c.checked);let k=0;if(on[0])k=22;if(on[1])k=on[0]?34:14;if(on[2])k+=on[0]&&on[1]?3:0;const left=N-k;
+    order.forEach((d,j)=>ds[d].classList.toggle('x',j<k));ps.forEach((p,i)=>p.classList.toggle('on',on[i]));
+    const m=on.every(Boolean)?`${left} courses of action remain, and this mandate says what to do when the unexpected happens and when it must be reviewed: every step the agent takes has a basis that can be checked.`:left===N?'With only one sentence, buying a money market fund, holding a few growth stocks in concentration and using leverage can all count as "looking after it": all 40 courses of action are defensible.':`${left} courses of action remain.${!on[2]?' In situations not covered, the agent must still use its own judgment.':''}${!on[3]?' The mandate states no term, so it will keep being executed after circumstances change.':''}`;
+    document.getElementById('bf-msg').textContent=m;}
+  cb.forEach(c=>c.addEventListener('change',r));
+  document.getElementById('bf').addEventListener('anim-in',()=>{cb.forEach(c=>c.checked=false);r();cb.forEach((c,i)=>setTimeout(()=>{c.checked=true;r();},1200*(i+1)));});
+  r();
+})();
+</script>
+
+<h2 id="sec-2">2. The goal: what is wanted and how it is measured</h2>
+<p>"Steady growth" is a wish, not a goal. It could mean a maximum drawdown of no more than 10%, or annualized volatility of no more than 8%, or never losing principal under any circumstances; the three measures lead to very different allocations. A goal must state both the return side and the risk side, and give the benchmark and the horizon for measuring it: over what period, compared with what, and by which measure success is judged. Once the measure is fixed, the agent's behaviour will optimize toward it.</p>
+<figure>
+  <div class="card">
+    <p class="figtitle">One wish, three ways to measure it</p>
+    <p class="figsub">The principal asks for "steady growth". Choose a measure and see the allocation the agent derives from it (illustrative).</p>
+    <div class="seg-btns" role="group" aria-label="Measure">
+      <button type="button" data-gl="dd" aria-pressed="true">Max drawdown ≤ 10%</button>
+      <button type="button" data-gl="vol" aria-pressed="false">Annualized volatility ≤ 8%</button>
+      <button type="button" data-gl="cap" aria-pressed="false">Never lose principal</button>
+    </div>
+    <div class="gl" id="gl" data-anim>
+      <div class="gl-bar" id="gl-bar"></div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Stocks</span><span><i style="background:var(--blue)"></i>Bonds</span><span><i style="background:var(--gold)"></i>Deposits and money market funds</span></div>
+      <div class="gl-out"><div><span>Expected long-run annual return (illustrative)</span><b id="gl-r"></b></div><div><span>Worst year in history (illustrative)</span><b id="gl-w"></b></div></div>
+      <p class="gl-msg" id="gl-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative numbers. The long-run returns and drawdowns of stocks and bonds show direction only and do not correspond to estimates for any market.</figcaption>
+</figure>
+<style>
+.gl-bar{display:flex;height:36px;border-radius:8px;overflow:hidden}
+.gl-bar i{display:flex;align-items:center;justify-content:center;font-style:normal;font-size:12px;color:#fff;transition:width .6s ease;white-space:nowrap;overflow:hidden}
+.gl-out{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.gl-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.gl-out span{display:block;font-size:12px;color:var(--faint)} .gl-out b{font-size:19px;font-variant-numeric:tabular-nums}
+.gl-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const S={dd:[[25,'var(--accent)'],[55,'var(--blue)'],[20,'var(--gold)'],4.1,'−9%','A drawdown limit constrains the worst stretch of decline: stocks can be only about a quarter, with the rest in bonds and cash.'],
+    vol:[[40,'var(--accent)'],[50,'var(--blue)'],[10,'var(--gold)'],5.0,'−16%','A volatility limit constrains the average swings: stocks can be a larger share, but the worst year may fall further than the principal expected.'],
+    cap:[[0,'var(--accent)'],[15,'var(--blue)'],[85,'var(--gold)'],2.2,'0%','Never losing principal rules out almost every risky asset: the principal is safe, but long-run returns may not keep pace with inflation.']};
+  const bar=document.getElementById('gl-bar');
+  function set(k){document.querySelectorAll('[data-gl]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.gl===k)));const s=S[k];
+    bar.innerHTML=[s[0],s[1],s[2]].map(([w,c])=>`<i style="background:${c};width:0" data-w="${w}">${w>=12?w+'%':''}</i>`).join('');
+    setTimeout(()=>bar.querySelectorAll('i').forEach(i=>i.style.width=i.dataset.w+'%'),40);
+    document.getElementById('gl-r').textContent=s[3].toFixed(1)+'%';document.getElementById('gl-w').textContent=s[4];document.getElementById('gl-msg').textContent=s[5];}
+  document.querySelectorAll('[data-gl]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.gl)));
+  document.getElementById('gl').addEventListener('anim-in',()=>{['dd','vol','cap','dd'].forEach((k,i)=>setTimeout(()=>set(k),i*2000));});
+  set('dd');
+})();
+</script>
+
+<h2 id="sec-3">3. Constraints: what must not be done</h2>
+<p>Constraints mark out the range within which the agent may choose. Liquidity constraints say when how much money will be needed. Time-horizon constraints say what the money is ultimately for and when. Tax constraints affect when to sell and in which account to hold. Legal and regulatory constraints set out the instruments that may be held and the ways they may be traded. Personal preferences include industries and companies the user does not want to hold. Each added constraint removes some feasible portfolios; the more clearly the constraints are written, the less likely the agent is to make a choice the user cannot accept after the fact.</p>
+<figure>
+  <div class="card">
+    <p class="figtitle">Each added constraint leaves fewer portfolios to choose from</p>
+    <p class="figsub">Each dot is a candidate portfolio; the horizontal axis is risk and the vertical axis expected return (illustrative). Tick the principal's constraints one by one and see which portfolios remain.</p>
+    <div class="cs-sl" id="cs-sl"></div>
+    <div class="cs" id="cs" data-anim>
+      <svg viewBox="0 0 640 230" role="img" aria-label="Candidate portfolios and constraints"><g id="cs-ax"></g><g id="cs-pts"></g></svg>
+      <p class="cs-msg" id="cs-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative. The five kinds of constraint follow the standard classification for investment policy statements (Maginn et al., 2007).</figcaption>
+</figure>
+<style>
+.cs-sl{display:flex;flex-wrap:wrap;gap:6px 14px;margin-bottom:6px}
+.cs-sl label{display:flex;gap:6px;align-items:center;font-size:13.5px;cursor:pointer}
+.cs-sl input{accent-color:var(--accent);width:16px;height:16px}
+.cs svg{width:100%;height:auto;display:block}
+.cs-p{transition:opacity .4s}
+.cs-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  let s=5;const rnd=()=>{s=(s*9301+49297)%233280;return s/233280;};
+  const P=Array.from({length:70},()=>{const r=2+rnd()*26,ret=1+r*.28+(rnd()-.5)*3;return {r,ret,cash:rnd()*40,turn:rnd(),deriv:rnd()<.18,sector:rnd()<.2};});
+  const C=[['Liquidity: at least 10% available at any time',p=>p.cash>=10],['Horizon: money needed in five years, volatility no more than 18%',p=>p.r<=18],['Tax: no frequent turnover',p=>p.turn<.7],['Legal and regulatory: no leverage or derivatives',p=>!p.deriv],['Personal preference: no tobacco companies',p=>!p.sector]];
+  const box=document.getElementById('cs-sl');box.innerHTML=C.map(([n],i)=>`<label><input type="checkbox" data-cs="${i}"> ${n}</label>`).join('');
+  const X0=50,X1=620,YT=14,YB=200,x=v=>X0+v/30*(X1-X0),y=v=>YB-v/11*(YB-YT);
+  document.getElementById('cs-ax').innerHTML=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/><line x1="${X0}" y1="${YT}" x2="${X0}" y2="${YB}" class="s-faint"/><text x="${X1}" y="${YB+16}" text-anchor="end" font-size="11" class="t-faint">Risk →</text><text x="${X0+6}" y="${YT+8}" font-size="11" class="t-faint">Expected return</text>`;
+  document.getElementById('cs-pts').innerHTML=P.map((p,i)=>`<circle class="cs-p" data-i="${i}" cx="${x(p.r)}" cy="${y(Math.max(.3,p.ret))}" r="5" fill="var(--accent)"/>`).join('');
+  const dots=[...document.querySelectorAll('.cs-p')],cb=[...document.querySelectorAll('[data-cs]')];
+  function r(){let n=0;P.forEach((p,i)=>{const ok=cb.every((c,j)=>!c.checked||C[j][1](p));dots[i].style.opacity=ok?1:.1;if(ok)n++;});
+    const k=cb.filter(c=>c.checked).length;document.getElementById('cs-msg').textContent=k===0?'With no constraints, all 70 candidate portfolios are open, and the agent might choose any of them.':`With ${k} ${k===1?'constraint':'constraints'} added, ${n} ${n===1?'portfolio remains':'portfolios remain'}.${k===5?' None of those left will make the principal discover afterwards that "this is not what I wanted".':''}`;}
+  cb.forEach(c=>c.addEventListener('change',r));
+  document.getElementById('cs').addEventListener('anim-in',()=>{cb.forEach(c=>c.checked=false);r();cb.forEach((c,i)=>setTimeout(()=>{c.checked=true;r();},900*(i+1)));});
+  r();
+})();
+</script>
+
+<h2 id="sec-4">4. Measurable goals get gamed</h2>
+<p>Goodhart (1975), discussing monetary policy, observed that once a statistical indicator is used as a target for control, it no longer reliably reflects what it was meant to measure. AI researchers call this phenomenon "reward hacking" (Amodei et al., 2016): a system finds a way to improve the indicator that defeats its designers' intent. Finance has a ready-made example. Lo (2001) constructed a hypothetical fund that continually sells out-of-the-money put options: in calm years its returns are steady and beat the market, but when the market falls sharply it loses most of its capital. If the mandate says only "beat the benchmark", such a strategy fully meets the requirement. A goal must be paired with risk constraints, and the constraints must cover tail risks that cannot be seen.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">If the only test is "beat the benchmark", which strategy wins?</p><p class="figsub">Strategy B keeps selling out-of-the-money put options: in normal times it earns a little every month, and in a crash it suffers heavy losses. Drag the time to see both curves; then switch on the tail-risk constraint.</p></div><button class="replay" type="button" data-replay="gm">Replay</button></div>
+    <label class="gm-chk"><input type="checkbox" id="gm-x"> Add to the mandate: no single month's loss may exceed 15% (including stress scenarios)</label>
+    <div class="gm" id="gm" data-anim>
+      <svg viewBox="0 0 640 220" role="img" aria-label="Cumulative net value of two strategies"><g id="gm-ax"></g><path id="gm-a" class="gm-l a"/><path id="gm-b" class="gm-l b"/><text id="gm-tag" font-size="12" class="t-warm"></text></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>A: hold the index</span><span><i style="background:var(--warm)"></i>B: keep selling put options</span></div>
+      <div class="sl"><label for="gm-t">Months elapsed <b id="gm-tv"></b></label><input id="gm-t" type="range" min="1" max="120" step="1" value="96"></div>
+      <p class="gm-msg" id="gm-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative paths, based on the hypothetical fund constructed by Lo (2001). On indicators that cease to be reliable once made targets, see Goodhart (1975); on AI systems gaming their metrics, see Amodei et al. (2016).</figcaption>
+</figure>
+<style>
+.gm-chk{display:flex;gap:6px;align-items:center;font-size:14px;margin-bottom:6px}
+.gm-chk input{accent-color:var(--accent);width:16px;height:16px}
+.gm svg{width:100%;height:auto;display:block}
+.gm-l{fill:none;stroke-width:2.5} .gm-l.a{stroke:var(--accent)} .gm-l.b{stroke:var(--warm);transition:opacity .3s}
+.gm-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.gm svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  let s=4;const rnd=()=>{s=(s*9301+49297)%233280;return s/233280;};
+  const A=[1],B=[1];for(let m=1;m<=120;m++){const z=(rnd()+rnd()+rnd()-1.5)*2;let ra=.008+.04*z;if(m===100)ra=-.22;if(m===101)ra=-.08;A.push(A[m-1]*(1+ra));B.push(B[m-1]*(1+(m===100?-.6:m===101?-.15:.011)));}
+  const X0=50,X1=620,YT=14,YB=190,mx=Math.max(...A,...B),x=m=>X0+m/120*(X1-X0),y=v=>YB-(v-.4)/(mx-.4)*(YB-YT);
+  const $=id=>document.getElementById(id),sl=$('gm-t'),cb=$('gm-x');
+  $('gm-ax').innerHTML=`<line x1="${X0}" y1="${y(1)}" x2="${X1}" y2="${y(1)}" class="s-faint" stroke-dasharray="3 3"/><line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`+[0,2,4,6,8,10].map(k=>`<text x="${x(k*12)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">Year ${k}</text>`).join('')+`<text x="${X0-6}" y="${y(1)+4}" text-anchor="end" font-size="11" class="t-faint">1.0</text>`;
+  const P=(S,T)=>S.slice(0,T+1).map((v,i)=>(i?'L':'M')+x(i).toFixed(1)+','+y(v).toFixed(1)).join('');
+  function r(){const T=+sl.value,on=cb.checked;$('gm-a').setAttribute('d',P(A,T));$('gm-b').setAttribute('d',P(B,T));$('gm-b').style.opacity=on?.15:1;$('gm-tv').textContent='Month '+T;
+    const tag=$('gm-tag');tag.setAttribute('x',x(Math.min(T,110))+6);tag.setAttribute('y',y(B[T])-8);tag.textContent=on?'Not allowed':'';
+    $('gm-msg').textContent=on?'Under a stress scenario, B could lose more than half in a single month, breaching the constraint: it was never among the permitted choices. A goal must be paired with a risk constraint that covers the tail.':T<100?`For the first ${T} months, B's net value stays above A's and its curve is smooth; it looks like the better choice. If the only test is "beat the benchmark", the agent will pick it.`:`In month 100 the market crashes and B loses 60% in one month: it gives back all the excess return of the previous eight-plus years and ends up behind A.`;}
+  sl.addEventListener('input',r);cb.addEventListener('change',r);
+  $('gm').addEventListener('anim-in',()=>{cb.checked=false;let T=1;sl.value=1;r();const id=setInterval(()=>{T+=2;sl.value=Math.min(T,120);r();if(T>=120){clearInterval(id);setTimeout(()=>{cb.checked=true;r();},900);}},50);});
+  r();
+})();
+</script>
+
+<h2 id="sec-5">5. What cannot be written down: default rules and asking</h2>
+<p>No mandate, however detailed, can foresee every situation. Grossman and Hart (1986) called this the incompleteness of contracts: since not every situation can be specified in advance, what matters is who decides in the situations not covered, and by what rule. For an agent, a reasonable default rule is this: when a situation falls outside the mandate, first take the conservative course, such as pausing new trades and holding the current position; then put the situation and the available options to the principal for decision. Acting entirely on the agent's own judgment, and silently stopping to wait, are both poor defaults.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Situations the mandate does not cover</p><p class="figsub">Eight things happen in a year, and the mandate does not cover three of them. Choose the default rule for what is not covered and see the results.</p></div><button class="replay" type="button" data-replay="gpp">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Default rule">
+      <button type="button" data-gpp="self" aria-pressed="false">Agent's own judgment</button>
+      <button type="button" data-gpp="stop" aria-pressed="false">Stop and wait, without explanation</button>
+      <button type="button" data-gpp="safe" aria-pressed="true">Act conservatively and ask</button>
+    </div>
+    <div class="gpp" id="gpp" data-anim></div>
+    <div class="gpp-out"><div><span>Actions beyond the mandate</span><b id="gpp-a"></b></div><div><span>Times the principal is disturbed</span><b id="gpp-b"></b></div><div><span>Matters delayed</span><b id="gpp-c"></b></div></div>
+    <p class="gpp-msg" id="gpp-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>Illustrative. On the incompleteness of contracts and residual rights of decision, see Grossman and Hart (1986).</figcaption>
+</figure>
+<style>
+.gpp{display:grid;gap:4px}
+.gpp-r{display:grid;grid-template-columns:minmax(0,1fr) 92px minmax(0,1fr);gap:8px;align-items:center;font-size:12.5px;background:var(--quote);border-radius:7px;padding:6px 9px;opacity:0;transform:translateY(4px);transition:opacity .3s,transform .3s;transition-delay:calc(var(--i)*.1s)}
+.gpp-r.on{opacity:1;transform:none}
+.gpp-r em{font-style:normal;font-size:11px;border-radius:5px;padding:2px 6px;text-align:center}
+.gpp-r em.c{background:var(--accent-soft);color:var(--accent)} .gpp-r em.u{background:var(--warm-soft);color:var(--warm)}
+.gpp-r span:last-child{color:var(--muted)}
+.gpp-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.gpp-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.gpp-out span{display:block;font-size:12px;color:var(--faint)} .gpp-out b{font-size:19px;font-variant-numeric:tabular-nums}
+.gpp-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.gpp-r{grid-template-columns:1fr 80px}.gpp-r span:last-child{grid-column:1/-1}.gpp-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const E=[['Quarterly rebalancing date',1,'Rebalance to the agreed weights','Rebalance to the agreed weights','Rebalance to the agreed weights'],['A holding announces a dividend',1,'Reinvest as agreed','Reinvest as agreed','Reinvest as agreed'],
+    ['A company held receives a takeover offer',0,'Accept the offer and sell on its own','Stop and wait without explanation; the offer deadline is missed','Take no action for now; set out the effects of accepting and declining, and ask'],['The market falls 7% in one day',1,'Take no extra action, as agreed','Take no extra action, as agreed','Take no extra action, as agreed'],
+    ['The market data feed is down for two days',0,'Keep trading on stale data','Stop and wait without giving a reason','Pause trading, explain what is blocked, and ask'],['Scheduled monthly investment',1,'Execute as agreed','Execute as agreed','Execute as agreed'],
+    ['The principal\'s account is asked for more identity documents',0,'Fill in and submit them on its own','Stop and wait without telling the person','Do not fill them in; remind the person to handle it'],['Annual review date',1,'Submit review materials','Submit review materials','Submit review materials']];
+  const box=document.getElementById('gpp');
+  const M={self:'Acting on its own judgment: of the three uncovered matters, two go beyond the mandate, and trading on stale data could cause losses directly.',stop:'Stopping without explanation whenever something is not covered: no overreach and no disturbance to the principal, but the takeover offer deadline is missed, the request for documents goes unhandled, and the principal does not know why trading stopped.',safe:'Acting conservatively and asking: no overreach; the principal is disturbed only for the three uncovered matters, each time with options attached.'};
+  function set(k){document.querySelectorAll('[data-gpp]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.gpp===k)));const j=k==='self'?2:k==='stop'?3:4;
+    box.innerHTML=E.map((e,i)=>`<div class="gpp-r" style="--i:${i}"><span>${e[0]}</span><em class="${e[1]?'c':'u'}">${e[1]?'Covered':'Not covered'}</em><span>${e[j]}</span></div>`).join('');
+    setTimeout(()=>box.querySelectorAll('.gpp-r').forEach(r=>r.classList.add('on')),40);
+    const v={self:[2,0,0],stop:[0,0,2],safe:[0,3,0]}[k];['a','b','c'].forEach((x,i)=>document.getElementById('gpp-'+x).textContent=v[i]+'');
+    document.getElementById('gpp-msg').textContent=M[k];}
+  document.querySelectorAll('[data-gpp]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.gpp)));
+  box.addEventListener('anim-in',()=>{['self','stop','safe'].forEach((k,i)=>setTimeout(()=>set(k),i*2600));});
+  set('safe');
+})();
+</script>
+
+<h2 id="sec-6">6. Mandates expire: term and review</h2>
+<p>A mandate is written at a particular moment, according to the circumstances of that moment. Changes in income or family, or a goal drawing near, can make the original goals and constraints no longer apply; large moves in the market can also carry the original allocation far from what was agreed. Professional practice usually reviews the investment policy statement once a year, and at once when a major event occurs. An agent can do this more finely: it can keep checking whether the premises of the mandate still hold, and when they change, remind the principal to review, rather than continuing to execute a mandate that has already expired.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Mandates expire</p><p class="figsub">Over ten years, several things happen that change the goals and constraints. Compare two ways of reviewing: once a year only, or also at once when an event occurs. Red segments show time during which the mandate no longer fits reality but is still being executed.</p></div><button class="replay" type="button" data-replay="rv">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Review method">
+      <button type="button" data-rv="y" aria-pressed="true">Annual review only</button>
+      <button type="button" data-rv="e" aria-pressed="false">Annual review, plus review at once when events occur</button>
+    </div>
+    <div class="rv" id="rv" data-anim>
+      <svg viewBox="0 0 640 150" role="img" aria-label="Timeline of mandate validity"><g id="rv-g"></g></svg>
+      <p class="rv-msg" id="rv-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative timeline. Investment policy statements are usually reviewed annually and when major changes occur (Maginn et al., 2007).</figcaption>
+</figure>
+<style>
+.rv svg{width:100%;height:auto;display:block}
+.rv-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.rv svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const EV=[[1.4,'New job, lower income'],[3.7,'Child born'],[6.2,'Buying a home'],[8.9,'Goal nears']];
+  const X0=30,X1=620,x=t=>X0+t/10*(X1-X0),Y=70;
+  function set(k){document.querySelectorAll('[data-rv]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.rv===k)));
+    let g=`<line x1="${X0}" y1="${Y}" x2="${X1}" y2="${Y}" stroke="var(--accent)" stroke-width="10" stroke-linecap="round" opacity=".35"/>`,stale=0;
+    for(let yr=0;yr<=10;yr++)g+=`<line x1="${x(yr)}" y1="${Y-12}" x2="${x(yr)}" y2="${Y+12}" class="s-faint"/><text x="${x(yr)}" y="${Y+28}" text-anchor="middle" font-size="10" class="t-faint">${yr}</text>`;
+    EV.forEach(([t,l],i)=>{const end=k==='y'?Math.ceil(t):t+.05;stale+=end-t;g+=`<rect x="${x(t)}" y="${Y-5}" width="${Math.max(2,x(end)-x(t))}" height="10" fill="var(--warm)" rx="2"><animate attributeName="width" from="0" to="${Math.max(2,x(end)-x(t))}" dur=".6s"/></rect><circle cx="${x(t)}" cy="${Y-22}" r="4" fill="var(--warm)"/><text x="${x(t)}" y="${Y-30-(i%2)*14}" text-anchor="middle" font-size="11" class="t-ink">${l}</text>`;});
+    g+=`<text x="${X1}" y="${Y+44}" text-anchor="end" font-size="11" class="t-faint">Year</text>`;
+    document.getElementById('rv-g').innerHTML=g;
+    document.getElementById('rv-msg').textContent=k==='y'?`With annual review only, after the four events the expired mandate is executed for about ${(stale*12).toFixed(0)} months in total.`:'With review at once when events occur, an expired mandate is hardly ever executed. An agent can keep checking whether the premises of the mandate still hold and remind the principal when they change.';}
+  document.querySelectorAll('[data-rv]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.rv)));
+  document.getElementById('rv').addEventListener('anim-in',()=>{set('y');setTimeout(()=>set('e'),2800);});
+  set('y');
+})();
+</script>
+
+<h2 id="sec-7">7. Implications for product design</h2>
+<p>Treat the mandate as an object in the product: it has goals, constraints, exception rules and a period of validity, and every step the agent takes can be traced to one of its clauses.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: turning instructions into a mandate</p><p class="figsub">Four design requirements, each corresponding to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="ch25summary">Replay</button></div>
+    <div class="ch25summary" id="ch25summary" data-anim><div class="ch25summary-c" style="--i:0"><em>One sentence is not enough</em><b>Make the mandate an object in the product</b><p>Goals, constraints, exception rules and period of validity are each visible and editable, and every step the agent takes can be traced to one of them.</p></div><div class="ch25summary-c" style="--i:1"><em>The measure shapes behaviour</em><b>State return, risk, benchmark and horizon in the goal</b><p>Translate wishes such as "steady" into measures that can be checked, and ask the principal to confirm them.</p></div><div class="ch25summary-c warn" style="--i:2"><em>Measurable goals get gamed</em><b>Pair the goal with risk constraints that cover the tail</b><p>Test strategies under stress scenarios, not just against the benchmark.</p></div><div class="ch25summary-c warn" style="--i:3"><em>Mandates are incomplete and expire</em><b>Default to acting conservatively and asking; review on events</b><p>In situations not covered, pause and put forward options; remind the principal to review when income, family or goals change.</p></div></div>
+  </div>
+</figure>
+<style>
+.ch25summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch25summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch25summary-c.warn{border-left-color:var(--warm)}
+.ch25summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch25summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch25summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch25summary.in .ch25summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch25summary{grid-template-columns:1fr}}
+</style>
+
+<h2 id="sec-8">References</h2>
+<ul class="refs"><li>Maginn, J. L., Tuttle, D. L., Pinto, J. E., &amp; McLeavey, D. W. (Eds.). (2007). <i>Managing Investment Portfolios: A Dynamic Process</i> (3rd ed.). John Wiley &amp; Sons / CFA Institute.</li><li>CFA Institute (2010). <i>Elements of an Investment Policy Statement for Individual Investors</i>. CFA Institute.</li><li>Goodhart, C. A. E. (1975). Problems of monetary management: The U.K. experience. <i>Papers in Monetary Economics</i>, Vol. 1. Reserve Bank of Australia.</li><li>Amodei, D., Olah, C., Steinhardt, J., Christiano, P., Schulman, J., &amp; Mané, D. (2016). Concrete problems in AI safety. arXiv:1606.06565.</li><li>Lo, A. W. (2001). Risk management for hedge funds: Introduction and overview. <i>Financial Analysts Journal</i>, 57(6), 16–33.</li><li>Grossman, S. J., &amp; Hart, O. D. (1986). The costs and benefits of ownership: A theory of vertical and lateral integration. <i>Journal of Political Economy</i>, 94(4), 691–719.</li></ul>
+<footer class="nav"><a href="ch24.html">← Chapter 24: What to promise</a><a href="ch26.html">Chapter 26: Authority and irreversible exposure →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

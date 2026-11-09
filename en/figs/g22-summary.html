@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: the user cannot see the process</p><p class="figsub">Four conclusions, each tied to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="g22summary">Replay</button></div>
+    <div class="g22summary" id="g22summary" data-anim><div class="g22summary-c" style="--i:0"><em>Unravelling</em><b>Verifiable records make silence bad news</b><p>Records kept by a third party and unalterable make agents that keep their agreements willing to be seen.</p></div><div class="g22summary-c" style="--i:1"><em>Costly verification</em><b>Detailed checks on poor results or triggers, spot checks otherwise</b><p>The agent does most of the checking for the user, who looks only at conclusions and exceptions.</p></div><div class="g22summary-c warn" style="--i:2"><em>Rerun: attention</em><b>One sentence, key points, full record</b><p>Each layer is traceable to the one below, so a summary cannot hide bad news.</p></div><div class="g22summary-c warn" style="--i:3"><em>At the time, and on what basis</em><b>Record what was known then and which clause applied</b><p>This guards against hindsight; a step with no stated basis is exactly the one to question.</p></div></div>
+  </div>
+</figure>
+<style>
+.g22summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g22summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g22summary-c.warn{border-left-color:var(--warm)}
+.g22summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g22summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g22summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g22summary.in .g22summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g22summary{grid-template-columns:1fr}}
+</style>

@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: bias, inertia and defaults</p><p class="figsub">Four conclusions, each tied to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="g12summary">Replay</button></div>
+    <div class="g12summary" id="g12summary" data-anim><div class="g12summary-c" style="--i:0"><em>Weighting the present</em><b>Plans and actions diverge</b><p>In spring the plan is to save half; in autumn less gets saved. Locking in beforehand is what keeps the plan.</p></div><div class="g12summary-c" style="--i:1"><em>Inertia</em><b>Doing nothing is also a choice</b><p>Whether people join and how much they save depend largely on what the default is.</p></div><div class="g12summary-c" style="--i:2"><em>Commitment and regular investment</em><b>Make the good arrangement the default</b><p>Commit now and increase out of future pay rises; buy on schedule rather than chasing last year's gains and losses.</p></div><div class="g12summary-c warn" style="--i:3"><em>The architecture of choice</em><b>Whom the default is set for</b><p>The same inertia can help people keep to their intentions, or become the seller's revenue.</p></div></div>
+  </div>
+</figure>
+<style>
+.g12summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g12summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g12summary-c.warn{border-left-color:var(--warm)}
+.g12summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g12summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g12summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g12summary.in .g12summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g12summary{grid-template-columns:1fr}}
+</style>

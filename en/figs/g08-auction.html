@@ -1,0 +1,35 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Call auction: the price at which the most trades take place</p><p class="figsub">Eight buyers each have a highest price they will pay, and eight sellers each a lowest price they will accept. Drag the trading price and see how many trades take place, and the combined gains buyers and sellers get from trade.</p></div><button class="replay" type="button" data-replay="au">Replay</button></div>
+    <div class="au" id="au" data-anim>
+      <svg viewBox="0 0 640 230" role="img" aria-label="Buyers’ bids and sellers’ asks"><g id="au-ax"></g><path id="au-d" class="au-d"/><path id="au-s" class="au-s"/><g id="au-g"></g><line id="au-p" class="au-pl"/></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Buyers’ bids, high to low</span><span><i style="background:var(--warm)"></i>Sellers’ asks, low to high</span><span><i style="background:var(--accent-soft)"></i>Gains from trade</span></div>
+      <div class="sl"><label for="au-x">Trading price <b id="au-xv"></b></label><input id="au-x" type="range" min="5" max="15" step="0.5" value="7"></div>
+      <p class="au-msg" id="au-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: at a given price, buyers bidding at least that much will buy and sellers asking no more than that will sell; the number of trades is the smaller of the two. Combined gains are the sum, over the trades made, of each buyer’s bid minus the seller’s ask.</figcaption>
+</figure>
+<style>
+.au svg{width:100%;height:auto;display:block}
+.au-d{fill:none;stroke:var(--accent);stroke-width:2.5}
+.au-s{fill:none;stroke:var(--warm);stroke-width:2.5}
+.au-pl{stroke:var(--ink);stroke-width:1.6;stroke-dasharray:5 4}
+.au-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.au svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),Bv=[14,13,12,11,10.5,9,8,6.5],Sv=[6,7,8,8.5,9.5,11,12.5,14],X0=46,X1=630,YT=12,YB=196,W=(X1-X0)/8,x=i=>X0+i*W,y=v=>YB-(v-5)/10*(YB-YT);
+  $('au-ax').innerHTML=[5,7.5,10,12.5,15].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+[1,2,3,4,5,6,7,8].map(i=>`<text x="${x(i)-W/2}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">Trade ${i}</text>`).join('');
+  const step=v=>v.map((p,i)=>`${i?'L':'M'}${x(i)},${y(p)}L${x(i+1)},${y(p)}`).join('');$('au-d').setAttribute('d',step(Bv));$('au-s').setAttribute('d',step(Sv));
+  function at(p){const d=Bv.filter(b=>b>=p).length,s=Sv.filter(c=>c<=p).length,q=Math.min(d,s);let g=0;for(let i=0;i<q;i++)g+=Bv[i]-Sv[i];return [q,g];}
+  let best=[0,0,0];for(let p=5;p<=15;p+=.5){const [q,g]=at(p);if(q>best[1]||(q===best[1]&&g>best[2]))best=[p,q,g];}
+  function draw(){const p=+$('au-x').value,[q,g]=at(p);$('au-p').setAttribute('x1',X0);$('au-p').setAttribute('x2',X1);$('au-p').setAttribute('y1',y(p));$('au-p').setAttribute('y2',y(p));
+    $('au-g').innerHTML=Array.from({length:q},(_,i)=>`<rect x="${x(i)+1}" y="${y(Bv[i])}" width="${W-2}" height="${y(Sv[i])-y(Bv[i])}" fill="var(--accent-soft)"/>`).join('');$('au-xv').textContent=p+' portions';
+    $('au-msg').textContent=`At ${p} portions: ${Bv.filter(b=>b>=p).length} willing to buy, ${Sv.filter(c=>c<=p).length} willing to sell, ${q} trade${q===1?'':'s'}, combined gains of ${g.toFixed(1)} portions. ${q===best[1]?'This is already the price range with the most trades.':`Move the price to about ${best[0]} portions and ${best[1]} trades can take place.`}`;}
+  $('au-x').addEventListener('input',draw);
+  $('au').addEventListener('anim-in',()=>{let v=5;$('au-x').value=5;draw();const id=setInterval(()=>{v+=.5;$('au-x').value=v;draw();if(v>=15){clearInterval(id);setTimeout(()=>{$('au-x').value=best[0];draw();},500);}},180);});
+  draw();
+})();
+</script>

@@ -1,0 +1,31 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Planning to save half every year, falling short every year</p><p class="figsub">When the plan is made in spring, this year seems as far away as the future, and a household intends to save half its harvest; at harvest time in autumn, the grain in front of it weighs more. Drag "weight on the present" to see the gap between plan and outcome over five years; tick "lock in beforehand" to see what happens if half is put in spring into a granary it cannot draw from.</p></div><button class="replay" type="button" data-replay="pb12">Replay</button></div>
+    <div class="pb12" id="pb12" data-anim>
+      <svg viewBox="0 0 660 200" role="img" aria-label="Share planned and share actually saved over five years"><g id="pb12-g"></g></svg>
+      <div class="legend"><span><i style="background:var(--quote);border:1px dashed var(--faint)"></i>Share planned in spring</span><span><i style="background:var(--accent)"></i>Share actually saved in autumn</span></div>
+      <div class="sl"><label for="pb12-b">Weight on the present <b id="pb12-bv"></b></label><input id="pb12-b" type="range" min="0" max="60" step="5" value="30"></div>
+      <div class="cs-sw"><label><input type="checkbox" id="pb12-l"> Lock in beforehand: in spring, put half into a granary that requires a year's notice to draw from</label></div>
+      <p class="pb12-msg" id="pb12-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: logarithmic utility, two periods, no interest or spoilage. With no extra weight on the present, half is saved; when present consumption is given extra weight (Laibson's 1997 quasi-hyperbolic discounting, with β the weight on the future relative to the present), the share actually saved in autumn is β/(1+β). Here "weight on the present" is 1−β.</figcaption>
+</figure>
+<style>
+.pb12 svg{width:100%;height:auto;display:block}
+.pb12-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.pb12 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('pb12'+id),X0=50,X1=650,YT=12,YB=170,y=v=>YB-v/.6*(YB-YT);
+  function draw(){const d=+$('-b').value/100,b=1-d,lock=$('-l').checked,act=lock?.5:b/(1+b);$('-bv').textContent=Math.round(d*100)+'%';
+    const w=(X1-X0)/5;let h=[0,.1,.2,.3,.4,.5,.6].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${Math.round(v*100)}%</text>`).join('');
+    for(let k=0;k<5;k++){const cx=X0+w*k+w/2;h+=`<rect x="${cx-34}" y="${y(.5)}" width="68" height="${YB-y(.5)}" fill="var(--quote)" stroke="var(--faint)" stroke-dasharray="4 3"/><rect class="pb12-a" x="${cx-24}" y="${y(act)}" width="48" height="${YB-y(act)}" fill="var(--accent)" style="transition-delay:${k*.12}s"/><text x="${cx}" y="${y(act)-6}" text-anchor="middle" font-size="12">${Math.round(act*100)}%</text><text x="${cx}" y="${YB+18}" text-anchor="middle" font-size="11" class="t-faint">Year ${k+1}</text>`;}
+    $('-g').innerHTML=h;
+    $('-msg').textContent=lock?'The grain was locked in the granary in spring, and in autumn it cannot be drawn out even if he wants to eat more: the plan is carried out. The cost is that it cannot be drawn out in an emergency either.':d===0?'With no extra weight on the present, the spring plan and the autumn action agree, and half is saved every year.':`Weight on the present ${Math.round(d*100)}%: each autumn only ${Math.round(act*100)}% is saved, ${Math.round((.5-act)*100)} percentage points short of the plan. Next spring he will again plan to save half, and again fall short.`;}
+  $('-b').addEventListener('input',draw);$('-l').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{$('-l').checked=false;let v=0;$('-b').value=0;draw();const id=setInterval(()=>{v+=5;$('-b').value=v;draw();if(v>=40){clearInterval(id);setTimeout(()=>{$('-l').checked=true;draw();},1400);}},220);});
+  draw();
+})();
+</script>

@@ -1,0 +1,44 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">一项任务调用了哪些能力</p><p class="figsub">选择一项任务，看它需要哪些通用能力与金融专有能力。再打开“缺少金融专有能力”，看结果会怎样。</p></div><button class="replay" type="button" data-replay="cp2">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="任务">
+      <button type="button" data-cp2="0" aria-pressed="true">研究一家公司</button><button type="button" data-cp2="1" aria-pressed="false">持续跟踪持仓</button><button type="button" data-cp2="2" aria-pressed="false">按目标再平衡</button><button type="button" data-cp2="3" aria-pressed="false">解释一次波动</button>
+    </div>
+    <label class="cp2-chk"><input type="checkbox" id="cp2-x"> 缺少金融专有能力</label>
+    <div class="cp2" id="cp2" data-anim>
+      <div class="cp2-col"><b>通用能力：能不能做成</b><div id="cp2-g"></div></div>
+      <div class="cp2-col"><b>金融专有能力：能不能做对</b><div id="cp2-f"></div></div>
+    </div>
+    <p class="cp2-msg" id="cp2-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>示意。两类能力的划分为本书的归纳。</figcaption>
+</figure>
+<style>
+.cp2-chk{display:flex;gap:6px;align-items:center;font-size:14px;margin-bottom:6px}
+.cp2-chk input{accent-color:var(--warm);width:16px;height:16px}
+.cp2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cp2-col{background:var(--quote);border-radius:10px;padding:10px}
+.cp2-col>b{font-size:13px;display:block;margin-bottom:6px}
+.cp2-col>div{display:flex;flex-wrap:wrap;gap:5px}
+.cp2-c{font-size:12px;border-radius:14px;padding:3px 10px;border:1px solid var(--line);background:var(--surface);color:var(--faint);transition:all .3s}
+.cp2-c.on{color:var(--ink);border-color:var(--accent);background:var(--accent-soft)}
+.cp2-c.f.on{border-color:var(--blue);background:rgba(47,95,158,.12)}
+.cp2-c.off{text-decoration:line-through;color:var(--warm);border-color:var(--warm);background:var(--warm-soft)}
+.cp2-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cp2{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const G=['理解要求','拆分步骤','检索资料','执行程序计算','按时运行','发送通知','请示与等待确认','保存与读取记录'],F=['带时点的行情与基本面数据','组合收益与风险计算','适当性与约束检查','交易接口与执行规则','合规表述检查','公司事件与公告数据'];
+  const T=[[[0,1,2,3,7],[0,4,5],'研究需要检索与计算，更需要准确的财务数据与公告；没有它们，分析可能建立在过时或编造的数字上。'],[[0,4,5,6,7],[0,5,1,4],'跟踪要按时运行、发送通知，并依赖公司事件数据；缺少事件数据，代理可能按时运行却漏报。'],[[0,1,3,6,7],[1,2,3,0],'再平衡需要组合计算、约束检查与交易接口；缺少约束检查，计算正确的方案也可能违反委托书。'],[[0,2,3],[0,5,4],'解释一次波动需要带时点的行情与当天的公告，并检查表述是否构成投资建议。']];
+  const g=document.getElementById('cp2-g'),f=document.getElementById('cp2-f'),x=document.getElementById('cp2-x');let k=0;
+  g.innerHTML=G.map(n=>`<span class="cp2-c">${n}</span>`).join('');f.innerHTML=F.map(n=>`<span class="cp2-c f">${n}</span>`).join('');
+  const gs=[...g.children],fs=[...f.children];
+  function r(){const [a,b,m]=T[k],off=x.checked;gs.forEach((e,i)=>e.className='cp2-c'+(a.includes(i)?' on':''));fs.forEach((e,i)=>e.className='cp2-c f'+(b.includes(i)?(off?' off':' on'):''));
+    document.getElementById('cp2-msg').textContent=off?'任务仍然能完成：代理照样拆分步骤、检索、计算并交付结果。但结果可能是错的，而且看起来同样确定。':m;}
+  document.querySelectorAll('[data-cp2]').forEach(b=>b.addEventListener('click',()=>{k=+b.dataset.cp2;document.querySelectorAll('[data-cp2]').forEach(z=>z.setAttribute('aria-pressed',String(z===b)));r();}));
+  x.addEventListener('change',r);
+  document.getElementById('cp2').addEventListener('anim-in',()=>{x.checked=false;[0,1,2,3].forEach(i=>setTimeout(()=>document.querySelector(`[data-cp2="${i}"]`).click(),i*1600));setTimeout(()=>{x.checked=true;r();},6800);});
+  r();
+})();
+</script>

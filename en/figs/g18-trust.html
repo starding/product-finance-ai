@@ -1,0 +1,41 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Too much trust and too little</p><p class="figsub">The scribe does 200 things a year for the principal. Drag its reliability and see what share the principal checks and how many errors slip through. Tick "Principal confirms and answers for key actions", then switch to "After seeing it err once".</p></div><button class="replay" type="button" data-replay="tr18">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Situation">
+      <button type="button" data-tr18="use" aria-pressed="true">After long use</button>
+      <button type="button" data-tr18="err" aria-pressed="false">After seeing it err once</button>
+    </div>
+    <div class="tr18" id="tr18" data-anim>
+      <div class="tr18-bars" id="tr18-b"></div>
+      <div class="sl"><label for="tr18-r">Scribe's reliability <b id="tr18-rv"></b></label><input id="tr18-r" type="range" min="80" max="99" step="1" value="95"></div>
+      <div class="cs-sw"><label><input type="checkbox" id="tr18-a"> Principal confirms and answers for key actions</label></div>
+      <p class="tr18-msg" id="tr18-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: after long use, the share the principal checks falls as the scribe's reliability rises (the more reliable, the less checking); when he confirms and answers for key actions himself, the share checked rises to at least 60%. When the principal does the same things himself, his error rate is 10%. "After seeing it err once", 70% of principals stop using the scribe and do everything themselves (misuse and disuse in the sense of Parasuraman and Riley, 1997; Skitka et al., 2000; Dietvorst et al., 2015).</figcaption>
+</figure>
+<style>
+.tr18-bars{display:grid;gap:12px;margin:6px 0 10px}
+.tr18-r{display:grid;grid-template-columns:9em 1fr 4.5em;gap:10px;align-items:center;font-size:12.5px}
+.tr18-r div{height:22px;background:var(--quote);border-radius:5px;overflow:hidden}
+.tr18-r i{display:block;height:100%;transition:width .4s}
+.tr18-r b{text-align:right;font-variant-numeric:tabular-nums}
+.tr18-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.tr18-r{grid-template-columns:1fr 4.5em}.tr18-r span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('tr18'+id),A=200,HE=.1;let mode='use';
+  function draw(){const rel=+$('-r').value/100,acc=$('-a').checked;$('-rv').textContent=Math.round(rel*100)+'%';
+    let chk=Math.max(.05,1-(rel-.8)/.19*.95);if(acc)chk=Math.max(chk,.6);
+    let errs;if(mode==='use')errs=A*(1-rel)*(1-chk);else errs=A*(.7*HE+.3*(1-rel)*(1-chk));
+    const best=A*(1-rel)*(1-Math.max(chk,.6));
+    $('-b').innerHTML=[['Share checked by principal',mode==='use'?chk:.3*chk,1,'var(--blue)',Math.round((mode==='use'?chk:.3*chk)*100)+'%'],['Errors missed',errs,20,'var(--warm)',errs.toFixed(1)]].map(([k,v,m,c,t])=>`<div class="tr18-r"><span>${k}</span><div><i style="width:${Math.min(100,v/m*100)}%;background:${c}"></i></div><b>${t}</b></div>`).join('');
+    $('-msg').textContent=mode==='use'?(acc?`Confirming and answering for key actions: even with the scribe ${Math.round(rel*100)}% reliable, the principal still checks at least 60%, and ${errs.toFixed(1)} errors a year slip through.`:`With the scribe ${Math.round(rel*100)}% reliable, the principal checks only ${Math.round(chk*100)}%, and ${errs.toFixed(1)} errors a year slip through. The more reliable it is, the less he checks: this is misuse.`):`After seeing it err once, 70% of principals go back to their own judgment, with an error rate of 10%, and the errors that slip through each year actually rise to ${errs.toFixed(1)}: this is disuse. Using the scribe according to its actual reliability, only about ${best.toFixed(1)} would slip through a year.`;}
+  const bs=[...document.querySelectorAll('[data-tr18]')];
+  function set(m){mode=m;bs.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.tr18===m)));draw();}
+  bs.forEach(b=>b.addEventListener('click',()=>set(b.dataset.tr18)));['-r','-a'].forEach(k=>$(k).addEventListener('input',draw));
+  $('').addEventListener('anim-in',()=>{set('use');$('-a').checked=false;let v=80;$('-r').value=80;draw();const id=setInterval(()=>{v+=1;$('-r').value=v;draw();if(v>=99){clearInterval(id);setTimeout(()=>{$('-a').checked=true;draw();},1000);setTimeout(()=>set('err'),2600);}},90);});
+  draw();
+})();
+</script>

@@ -1,0 +1,790 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>放大倍数</title>
+<meta name="description" content="《产品×金融×AI：AI 时代的金融产品》第 19 章：按委托人的投入衡量，AI 代理的实测放大倍数远低于理论区间，差距来自适用范围、核对成本与可靠性">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="ch19">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="全书目录">
+<div class="side-head"><a class="sidetitle" href="index.html">产品×金融×AI<small>AI 时代的金融产品</small></a></div>
+<div class="side-view" role="group" aria-label="阅读方式"><a href="preface.html" class="on" aria-current="true">分解式</a><a href="g-preface.html">生成式</a></div>
+<a class="side-about" href="index.html#about">关于本书</a>
+<a class="" href="preface.html"><span class="n">序</span>为什么金融产品在 AI 时代需要重新学</a>
+<a class="side-part" href="part1.html"><span class="pn">第一部分</span>市场：收益与风险从何而来</a>
+<a class="" href="ch01.html"><span class="n">1</span>金融产品卖的是什么</a>
+<a class="" href="ch02.html"><span class="n">2</span>利率与期限</a>
+<a class="" href="ch03.html"><span class="n">3</span>风险长什么样</a>
+<a class="" href="ch04.html"><span class="n">4</span>分散：哪些风险有补偿</a>
+<a class="" href="ch05.html"><span class="n">5</span>复利与波动拖累</a>
+<a class="" href="ch06.html"><span class="n">6</span>因子：风险补偿可以分解</a>
+<a class="" href="ch07.html"><span class="n">7</span>价格为什么难以预测</a>
+<a class="" href="ch08.html"><span class="n">8</span>信息如何进入价格</a>
+<a class="" href="ch09.html"><span class="n">9</span>市场里的交易者</a>
+<a class="" href="ch10.html"><span class="n">10</span>流动性与买卖价差</a>
+<a class="" href="ch11.html"><span class="n">11</span>订单、规则与市场结构</a>
+<a class="" href="ch12.html"><span class="n">12</span>主动管理的算术</a>
+<a class="" href="ch13.html"><span class="n">13</span>承诺如何被兑现</a>
+<a class="" href="ch14.html"><span class="n">14</span>监管为何存在</a>
+<a class="side-part" href="part2.html"><span class="pn">第二部分</span>用户：人要什么、能承受什么</a>
+<a class="" href="ch15.html"><span class="n">15</span>用户要完成的任务</a>
+<a class="" href="ch16.html"><span class="n">16</span>用户如何做决定</a>
+<a class="" href="ch17.html"><span class="n">17</span>用户能承受什么</a>
+<a class="" href="ch18.html"><span class="n">18</span>用户如何判断与信任</a>
+<a class="side-part" href="part3.html"><span class="pn">第三部分</span>AI：代理能替人做多少</a>
+<a class=" cur" href="ch19.html" aria-current="page"><span class="n">19</span>放大倍数：理论与实测</a>
+<a class="" href="ch20.html"><span class="n">20</span>哪些事务能交给 AI</a>
+<a class="" href="ch21.html"><span class="n">21</span>能力从哪里来、在哪里失效</a>
+<a class="" href="ch22.html"><span class="n">22</span>可验证性：核对的成本</a>
+<a class="" href="ch23.html"><span class="n">23</span>金融场景的特殊约束</a>
+<a class="side-part" href="part4.html"><span class="pn">第四部分</span>设计：在三组约束下设计金融产品</a>
+<a class="" href="ch24.html"><span class="n">24</span>承诺什么</a>
+<a class="" href="ch25.html"><span class="n">25</span>委托参数：交代的目标与约束</a>
+<a class="" href="ch26.html"><span class="n">26</span>授权与不可逆敞口</a>
+<a class="" href="ch27.html"><span class="n">27</span>责任与利益冲突</a>
+<a class="" href="ch28.html"><span class="n">28</span>能力装配与过程可见</a>
+<a class="" href="ch29.html"><span class="n">29</span>保障强度</a>
+<a class="" href="ch30.html"><span class="n">30</span>信任如何建立</a>
+<a class="" href="ch31.html"><span class="n">31</span>设计原则</a>
+<a class="side-app" href="estimates.html"><span class="n">附录</span>作者估算的方法与数据</a>
+<a class="side-app" href="method.html"><span class="n">附录</span>本书的写法</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="展开目录" title="目录"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">产品×金融×AI：AI 时代的金融产品</a><span>第三部分　AI：代理能替人做多少</span><a class="langlink" href="en/ch19.html" hreflang="en">English</a></header>
+
+<div class="chapno">第 19 章</div><h1>放大倍数<small>AI 代理究竟替人省下了多少</small></h1>
+<div class="stamp">资料截至 2026 年 10 月</div>
+<blockquote><p>Agent 一词的本义是代理人。把一件事交给 AI 代理，与雇人办事、请医生看病、把资金交给基金经理是同一种关系：交出去的是行动的权利，结果要在事后、在信息不对称之下才显现。衡量这种关系值不值，看的是委托人自己的时间。按这个口径计算，凡是做过严格随机对照的场景，实测放大倍数都只在 1.0～1.2 倍上下，远低于理论区间。差距不来自模型不够快，而来自三处：代理适用的范围有限，核对结果要花时间，出错之后还要返工。</p></blockquote>
+<h2 id="sec-1">一、Agent 的本义是代理人</h2>
+<p>Agent 一词的本义是代理人：替别人行事的一方。一方把事务交给另一方代为办理，并授予相应的权限，就形成委托—代理关系：交出事务的一方是委托人，代为办理的一方是代理人。罗斯（1973）把它作为一般的经济问题提出，詹森与麦克林（1976）用它分析股东与经理人的关系。</p>
+<p>委托—代理是人类协作最基本的形式之一。雇主与员工、病人与医生、当事人与律师、投资者与基金经理、选民与代表，都是代人办事。人类协作还有两种基本形式：一是交换，买卖一件已经存在的东西，交割即告结束，结果当场可以核验；二是共同生产，几个人一起完成一件事，难点在于衡量各自的贡献（阿尔奇安与德姆塞茨，1972）。委托—代理与二者的区别在于，交出去的是行动的权利，结果要在事后、在信息不对称之下才显现。用户把一件事交给 AI 代理，属于这一种：用户交出的不是一件现成的东西，而是一件要它替自己去做的事。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">人类协作的三种基本形式</p><p class="figsub">点选一种形式，看交出去的是什么、结果何时可以核验、难点在哪里。用户把一件事交给 AI 代理，属于第三种。</p></div><button class="replay" type="button" data-replay="fm">重播</button></div>
+    <div class="fm" id="fm" data-anim>
+      <button type="button" class="fm-c" data-fm="0" style="--i:0"><em>一</em><b>交换</b><span>买卖一件已经存在的东西</span></button>
+      <button type="button" class="fm-c" data-fm="1" style="--i:1"><em>二</em><b>共同生产</b><span>几个人一起完成一件事</span></button>
+      <button type="button" class="fm-c sel" data-fm="2" style="--i:2"><em>三</em><b>委托—代理</b><span>把一件事交给别人替自己去做</span></button>
+    </div>
+    <dl class="fm-d" id="fm-d" aria-live="polite"></dl>
+  </div>
+  <figcaption>共同生产的难点见 Alchian 与 Demsetz（1972）；委托—代理见 Ross（1973）、Jensen 与 Meckling（1976）。</figcaption>
+</figure>
+<style>
+.fm{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.fm-c{font:inherit;text-align:left;cursor:pointer;background:var(--quote);border:1px solid transparent;border-radius:10px;padding:10px 12px;color:var(--ink);display:flex;flex-direction:column;gap:2px;opacity:0;transform:translateY(8px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.25s)}
+.fm.in .fm-c{opacity:1;transform:none}
+.fm-c em{font-style:normal;font-size:11px;color:var(--faint)} .fm-c b{font-size:15px} .fm-c span{font-size:12.5px;color:var(--muted)}
+.fm-c.sel{border-color:var(--accent);background:var(--accent-soft)}
+.fm-d{display:grid;grid-template-columns:7.5em 1fr;gap:6px 14px;margin:14px 0 0;font-size:14px;line-height:1.6}
+.fm-d dt{color:var(--faint);font-size:12.5px;padding-top:2px} .fm-d dd{margin:0}
+@media (max-width:640px){.fm{grid-template-columns:1fr}.fm-d{grid-template-columns:1fr;gap:2px}.fm-d dd{margin-bottom:8px}}
+</style>
+<script>
+(function(){
+  const K=['交出去的是什么','结果何时可以核验','主要难点','例子'];
+  const D=[['一件已经存在的物品或权利','交割时当场可以核验','质量与真伪，交割即告结束','买菜、买一台电脑、买入一只基金份额'],
+    ['各自的劳动与投入','合作完成之后','难以衡量每个人各自的贡献，容易有人偷懒','合唱、搬运重物、团队开发一个软件'],
+    ['行动的权利：替自己去做一件事','事后，且常常在信息不对称之下才显现','看不清对方的能力与行为，双方的目标也不完全一致','雇主与员工、病人与医生、投资者与基金经理、用户与 AI 代理']];
+  const d=document.getElementById('fm-d');
+  function set(k){document.querySelectorAll('[data-fm]').forEach(b=>b.classList.toggle('sel',+b.dataset.fm===k));d.innerHTML=K.map((x,i)=>`<dt>${x}</dt><dd>${D[k][i]}</dd>`).join('');}
+  document.querySelectorAll('[data-fm]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.fm)));
+  document.getElementById('fm').addEventListener('anim-in',()=>{[0,1,2].forEach((k,i)=>setTimeout(()=>set(k),400+i*1500));});
+  set(2);
+})();
+</script>
+
+<h2 id="sec-2">二、委托—代理问题的结构</h2>
+<p>委托—代理问题有两个根源。一是信息不对称：委托人无法完整观测代理人的能力与行为。二是目标冲突：双方的目标与利益不完全一致。二者叠加，产生两类经典问题：交托之前看不清对方的能力，可能选错人，称为逆向选择；交托之后看不见对方的行为，对方可能不尽力或谋私，称为道德风险。委托人为此付出的代价称为代理成本，詹森与麦克林把它分为三部分：委托人的监督支出，代理人为取信于委托人而承担的保证支出，以及仍然无法消除的剩余损失。</p>
+<p>应对的办法可以归为三类。第一，提升可观测性，让委托人能核实代理人做了什么、依据是什么。第二，促成激励相容，使代理人出于自利的行为同时符合委托人的利益。第三，限定损失并明确责任，例如由系统强制执行的额度上限：它不缩小前两项差距，只限制损失的上限。AI 代理同样面对这两个根源：它的能力边界与实际依据，委托人很难直接看清；它按训练目标与提供方的规则行事，未必与委托人此刻的意图一致。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">委托—代理问题的结构</p><p class="figsub">两个根源产生两类问题，委托人为此付出代理成本。点选一类治理办法，看它针对的是哪一处。</p></div><button class="replay" type="button" data-replay="pa">重播</button></div>
+    <div class="pa" id="pa" data-anim>
+      <div class="pa-top">
+        <div class="pa-who"><b>委托人</b><span>交出事务与权限</span></div>
+        <div class="pa-mid">
+          <div class="pa-arrow r"><span>交出事务，授予权限</span></div>
+          <div class="pa-roots"><i class="pa-root" data-g="obs">信息不对称<small>看不清对方的能力与行为</small></i><i class="pa-root" data-g="inc">目标冲突<small>双方的利益不完全一致</small></i></div>
+          <div class="pa-arrow l"><span>履约与汇报</span></div>
+        </div>
+        <div class="pa-who"><b>代理人</b><span>替委托人行事</span></div>
+      </div>
+      <div class="pa-row">
+        <div class="pa-p" data-g="obs inc"><em>交托之前</em><b>逆向选择</b><span>看不清能力，可能选错人</span></div>
+        <div class="pa-p" data-g="obs inc"><em>交托之后</em><b>道德风险</b><span>看不见行为，对方可能不尽力或谋私</span></div>
+      </div>
+      <div class="pa-cost">
+        <span class="pa-lab">代理成本</span>
+        <i data-g="obs" style="--w:34%">监督支出<small>委托人核实对方做了什么</small></i>
+        <i data-g="inc" style="--w:26%">保证支出<small>代理人为取信而承担</small></i>
+        <i data-g="cap" style="--w:40%">剩余损失<small>仍然无法消除的部分</small></i>
+      </div>
+      <div class="seg-btns pa-gov" role="group" aria-label="治理办法">
+        <button type="button" data-pg="obs" aria-pressed="false">提升可观测性</button>
+        <button type="button" data-pg="inc" aria-pressed="false">促成激励相容</button>
+        <button type="button" data-pg="cap" aria-pressed="false">限定损失、明确责任</button>
+      </div>
+      <p class="pa-msg" id="pa-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>代理成本的三项划分见 Jensen 与 Meckling（1976）；三类治理办法为作者的归纳。成本条的长短只作示意。</figcaption>
+</figure>
+<style>
+.pa-top{display:grid;grid-template-columns:92px 1fr 92px;gap:10px;align-items:center}
+.pa-who{background:var(--ink);color:var(--bg);border-radius:10px;padding:12px 8px;text-align:center}
+.pa-who b{display:block;font-size:15px} .pa-who span{font-size:11px;opacity:.75}
+.pa-mid{display:flex;flex-direction:column;gap:8px}
+.pa-arrow{position:relative;height:18px;font-size:11.5px;color:var(--muted);text-align:center}
+.pa-arrow::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:1.5px solid var(--faint)}
+.pa-arrow span{position:relative;background:var(--card);padding:0 8px}
+.pa-arrow.r::after,.pa-arrow.l::after{content:"";position:absolute;top:calc(50% - 4px);border:4px solid transparent}
+.pa-arrow.r::after{right:-2px;border-left:7px solid var(--faint)} .pa-arrow.l::after{left:-2px;border-right:7px solid var(--faint)}
+.pa-roots{display:flex;gap:8px;justify-content:center}
+.pa-root{font-style:normal;font-size:13.5px;font-weight:600;background:var(--warm-soft);color:var(--warm);border-radius:8px;padding:6px 10px;text-align:center;transition:opacity .3s,box-shadow .3s}
+.pa-root small{display:block;font-weight:400;font-size:11px;color:var(--muted)}
+.pa-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.pa-p{background:var(--quote);border-radius:10px;padding:10px 12px;transition:opacity .3s,box-shadow .3s}
+.pa-p em{font-style:normal;font-size:11px;color:var(--faint)} .pa-p b{display:block;font-size:15px} .pa-p span{font-size:12.5px;color:var(--muted)}
+.pa-cost{display:flex;align-items:stretch;gap:3px;margin-top:14px;flex-wrap:wrap}
+.pa-lab{width:100%;font-size:12px;color:var(--faint);margin-bottom:2px}
+.pa-cost i{font-style:normal;flex:0 0 calc(var(--w) - 3px);background:var(--quote);border-left:3px solid var(--gold);border-radius:6px;padding:6px 8px;font-size:13px;font-weight:600;transform-origin:left;transform:scaleX(0);transition:transform .6s,opacity .3s,box-shadow .3s}
+.pa-cost i small{display:block;font-weight:400;font-size:11px;color:var(--muted)}
+.pa.in .pa-cost i{transform:none}
+.pa-gov{margin:14px 0 0}
+.pa.dim [data-g]{opacity:.3} .pa.dim [data-g].hit{opacity:1;box-shadow:0 0 0 2px var(--accent)}
+.pa-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.pa-top{grid-template-columns:64px 1fr 64px}.pa-roots{flex-direction:column}.pa-cost i{flex-basis:100%}}
+</style>
+<script>
+(function(){
+  const M={obs:'提升可观测性：让委托人能核实代理人做了什么、依据是什么。它缩小信息不对称，同时减轻逆向选择与道德风险，也降低监督支出。',
+    inc:'促成激励相容：让代理人出于自利的行为同时符合委托人的利益，例如按结果分成、利益冲突的披露与回避。它针对的是目标冲突。',
+    cap:'限定损失、明确责任：例如由系统强制执行的额度上限、出错后的赔付与追责。它不缩小前两项差距，只限制剩余损失的上限。'};
+  const box=document.getElementById('pa'),msg=document.getElementById('pa-msg');
+  function set(g){document.querySelectorAll('[data-pg]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.pg===g)));
+    box.classList.toggle('dim',!!g);box.querySelectorAll('[data-g]').forEach(e=>e.classList.toggle('hit',!!g&&e.dataset.g.split(' ').includes(g)));
+    msg.textContent=g?M[g]:'信息不对称与目标冲突叠加，产生逆向选择与道德风险；委托人为此付出的代价就是代理成本。';}
+  document.querySelectorAll('[data-pg]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.pg===box.dataset.cur?'':(box.dataset.cur=b.dataset.pg))));
+  box.addEventListener('anim-in',()=>{box.dataset.cur='';set('');['obs','inc','cap',''].forEach((g,i)=>setTimeout(()=>{box.dataset.cur=g;set(g);},1400+i*2600));});
+  set('');
+})();
+</script>
+
+<h2 id="sec-3">三、一个定义：省下的是谁的时间</h2>
+<p>请装修队翻新厨房，工人干活用了十天，但房主省下的并不是十天：房主仍要说明需求、中途验收、发现问题后协调返工。衡量请人代劳值不值，看的是房主自己的投入减少了多少，而不是工人干得多快。AI 代理也是如此。本章把<strong>放大倍数</strong>定义为：</p>
+<div class="formula"><span>委托人自己完成这件事的投入</span><span class="bar"></span><span class="den">交给代理后委托人仍需付出的投入</span></div>
+<p>分母包括说明任务、核对结果与出错返工三部分；代理本身运行多久，不计入分母。常见的宣传口径恰恰相反，比较的是人的工作时长与代理的运行时长。</p>
+<figure>
+  <div class="card">
+    <p class="figtitle">两种口径，相差五十倍</p>
+    <p class="figsub">同一份报告：自己写要 8 小时；交给代理，代理运行 2 分钟，委托人仍要说明、核对与返工。</p>
+    <div class="seg-btns" role="group" aria-label="口径">
+      <button type="button" data-cb="vendor" aria-pressed="true">厂商口径</button>
+      <button type="button" data-cb="principal" aria-pressed="false">委托人口径</button>
+    </div>
+    <div class="cb" id="cb" data-anim data-cb="vendor">
+      <div class="cb-row"><span>自己完成</span><div class="cb-track"><i class="cb-self" style="width:100%"><em>480 分钟</em></i></div></div>
+      <div class="cb-row"><span>交给代理</span><div class="cb-track">
+        <i class="cb-run" title="代理运行"></i>
+        <i class="cb-p brief" style="--w:3.125%"></i><i class="cb-p check" style="--w:12.5%"></i><i class="cb-p redo" style="--w:6.25%"></i>
+      </div></div>
+      <div class="legend"><span><i style="background:var(--ink)"></i>代理运行 2 分钟</span><span><i style="background:var(--blue)"></i>说明任务 15 分钟</span><span><i style="background:var(--accent)"></i>核对 60 分钟</span><span><i style="background:var(--warm)"></i>返工 30 分钟</span></div>
+      <div class="cb-res">
+        <div class="cb-eq"><span id="cb-f"></span><b id="cb-m"></b></div>
+        <p id="cb-msg"></p>
+      </div>
+    </div>
+  </div>
+  <figcaption>示意数字。厂商口径比较人的工作时长与代理的运行时长；本书的口径比较委托人自己完成的投入与交给代理后仍需付出的投入。</figcaption>
+</figure>
+<style>
+.cb-row{display:grid;grid-template-columns:76px 1fr;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.cb-track{height:28px;background:var(--quote);border-radius:6px;display:flex;overflow:hidden}
+.cb-track i{display:block;height:100%}
+.cb-self{background:var(--gray-mark);display:flex!important;align-items:center;padding-left:10px}
+.cb-self em{font-style:normal;color:#fff;font-size:12px}
+.cb-run{width:5px;background:var(--ink);flex:none}
+.cb-p{width:0;transition:width .7s ease,opacity .3s}
+.cb.in .cb-p{width:var(--w)}
+.cb-p.brief{background:var(--blue)} .cb-p.check{background:var(--accent);transition-delay:.2s} .cb-p.redo{background:var(--warm);transition-delay:.4s}
+.cb[data-cb="vendor"] .cb-p{opacity:.25}
+.cb[data-cb="vendor"] .cb-run{box-shadow:0 0 0 3px var(--warm-soft)}
+.cb-res{margin-top:14px;display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center}
+.cb-eq{display:flex;flex-direction:column;align-items:flex-start}
+.cb-eq span{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.cb-eq b{font-size:40px;line-height:1.1;font-variant-numeric:tabular-nums}
+.cb[data-cb="vendor"] .cb-eq b{color:var(--faint)}
+.cb[data-cb="principal"] .cb-eq b{color:var(--accent)}
+.cb-res p{margin:0;font-size:14px}
+@media (max-width:640px){.cb-res{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const cb=document.getElementById('cb'), btns=[...document.querySelectorAll('[data-cb]')].filter(b=>b.tagName==='BUTTON');
+  const M={vendor:{f:'480 ÷ 2',m:'240 倍',t:'只比较代理的运行时间，委托人花在说明、核对与返工上的 105 分钟没有计入。'},
+           principal:{f:'480 ÷（15 ＋ 60 ＋ 30）',m:'4.6 倍',t:'计入委托人的全部投入。决定倍数的是说明、核对与返工，而不是代理跑得多快。'}};
+  let t;
+  const set=k=>{cb.dataset.cb=k;btns.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.cb===k)));document.getElementById('cb-f').textContent=M[k].f;document.getElementById('cb-m').textContent=M[k].m;document.getElementById('cb-msg').textContent=M[k].t;};
+  btns.forEach(b=>b.addEventListener('click',()=>{clearTimeout(t);set(b.dataset.cb);}));
+  cb.addEventListener('anim-in',()=>{set('vendor');clearTimeout(t);t=setTimeout(()=>set('principal'),2600);});
+  set('vendor');
+})();
+</script>
+
+<h2 id="sec-4">四、值不值得做：一年下来省下多少</h2>
+<p>放大倍数只回答一次省下多少。一件事值不值得交出，还要看它一年发生几次，以及交出去之后能否做到原本做不到的事。把三者合在一起，就是一年的委托价值：</p>
+<p><strong>年度委托价值 ＝ 单次的机会成本 ×（1 − 1 ÷ 放大倍数）× 一年发生的次数 ＋ 能力扩展 ＋ 结果改善</strong></p>
+<p>第一项是省下的时间。放大倍数为 2 倍时，单次省下一半；5 倍时省下八成；50 倍时省下九成八。超过约 5 倍之后，倍数再提高，省下的比例几乎不变，节省主要由单次投入与发生次数决定。第二项是能力扩展：一般个人原本做不到、交出去之后可以做到的部分，例如持续查看大量信息，或者完成需要专门技能的分析。第三项是结果改善：做得比自己更好的部分。</p>
+<p>这个算法隐含一个前提：代理的产出与委托人自己完成的同样好。因此它是名义价值，能兑现多少，取决于结果能否被核对、出错的后果有多大。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">一年下来省下多少</p><p class="figsub">调整单次自己完成的用时、一年发生的次数与放大倍数，看一年省下的时间。曲线是单次能省下的比例：超过约 5 倍之后，它几乎不再上升。</p></div><button class="replay" type="button" data-replay="yr">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="示例">
+      <button type="button" data-yr="0" aria-pressed="true">每周整理财经新闻</button>
+      <button type="button" data-yr="1" aria-pressed="false">每年报一次税</button>
+      <button type="button" data-yr="2" aria-pressed="false">交易日查看持仓</button>
+    </div>
+    <div class="yr" id="yr" data-anim>
+      <svg viewBox="0 0 640 200" role="img" aria-label="放大倍数与单次节省比例"><g id="yr-ax"></g><path id="yr-p" class="yr-l"/><circle id="yr-d" r="6" fill="var(--ink)"/><text id="yr-dt" font-size="12" class="t-ink"></text></svg>
+      <div class="yr-sl">
+        <div class="sl"><label for="yr-t">单次自己完成 <b id="yr-tv"></b></label><input id="yr-t" type="range" min="5" max="480" step="5"></div>
+        <div class="sl"><label for="yr-f">一年发生 <b id="yr-fv"></b></label><input id="yr-f" type="range" min="0" max="100" step="1"></div>
+        <div class="sl"><label for="yr-s">放大倍数 <b id="yr-sv"></b></label><input id="yr-s" type="range" min="0" max="100" step="1"></div>
+      </div>
+      <div class="yr-out"><span>一年省下</span><b id="yr-h"></b><span id="yr-h2"></span></div>
+      <p class="yr-msg" id="yr-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>一年省下的时间 ＝ 单次自己完成的用时 ×（1 − 1 ÷ 放大倍数）× 年频次；能力扩展与结果改善不在此图中。三个示例的用时与次数为示意。</figcaption>
+</figure>
+<style>
+.yr svg{width:100%;height:auto;display:block}
+.yr-l{fill:none;stroke:var(--accent);stroke-width:2.5}
+.yr-sl{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:6px}
+.yr-out{display:flex;align-items:baseline;gap:10px;margin-top:12px;flex-wrap:wrap}
+.yr-out span{font-size:12.5px;color:var(--faint)} .yr-out b{font-size:26px;font-variant-numeric:tabular-nums}
+.yr-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.yr-sl{grid-template-columns:1fr;gap:6px}.yr svg text{font-size:17px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),X0=56,X1=620,YT=12,YB=168;
+  const lx=s=>X0+Math.log(s)/Math.log(50)*(X1-X0),ly=v=>YB-v*(YB-YT);
+  const fOf=v=>Math.round(Math.pow(10,v/100*Math.log10(365))),sOf=v=>+Math.pow(50,v/100).toFixed(1);
+  const vOfF=f=>Math.round(Math.log10(f)/Math.log10(365)*100),vOfS=s=>Math.round(Math.log(s)/Math.log(50)*100);
+  $('yr-ax').innerHTML=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`+[0,.5,.8,.9,1].map(v=>`<text x="${X0-6}" y="${ly(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text><line x1="${X0}" x2="${X1}" y1="${ly(v)}" y2="${ly(v)}" class="s-line"/>`).join('')+
+    [1,2,5,10,20,50].map(s=>`<text x="${lx(s)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${s} 倍</text>`).join('')+
+    `<line x1="${lx(5)}" x2="${lx(5)}" y1="${YT}" y2="${YB}" class="s-faint" stroke-dasharray="3 4"/>`;
+  let d='';for(let s=1;s<=50;s*=1.03)d+=(s===1?'M':'L')+lx(s).toFixed(1)+','+ly(1-1/s).toFixed(1);$('yr-p').setAttribute('d',d);
+  const P=[[60,52,8],[240,1,3],[30,250,6]];const t=$('yr-t'),f=$('yr-f'),s=$('yr-s');
+  function draw(){const T=+t.value,F=fOf(+f.value),S=Math.max(1,sOf(+s.value)),k=1-1/S,h=T*k*F/60;
+    $('yr-tv').textContent=T>=60?(T/60).toFixed(T%60?1:0)+' 小时':T+' 分钟';$('yr-fv').textContent=F+' 次';$('yr-sv').textContent=S+' 倍';
+    $('yr-d').setAttribute('cx',lx(S));$('yr-d').setAttribute('cy',ly(k));const dt=$('yr-dt');dt.setAttribute('x',lx(S)+(S>20?-10:10));dt.setAttribute('y',ly(k)+(k>.9?18:-10));dt.setAttribute('text-anchor',S>20?'end':'start');dt.textContent=`单次省下 ${Math.round(k*100)}%`;
+    $('yr-h').textContent=h>=10?Math.round(h)+' 小时':h.toFixed(1)+' 小时';$('yr-h2').textContent=`约合 ${(h/8).toFixed(h/8<10?1:0)} 个八小时工作日`;
+    const S2=Math.min(50,S*2),gain=T*((1-1/S2)-k)*F/60;
+    $('yr-msg').textContent=`放大倍数再翻一倍到 ${S2.toFixed(1)} 倍，一年只多省 ${gain<1?(gain*60).toFixed(0)+' 分钟':gain.toFixed(1)+' 小时'}；把次数或单次用时翻一倍，省下的时间就翻一倍。`;}
+  function preset(i){document.querySelectorAll('[data-yr]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.yr===i)));t.value=P[i][0];f.value=vOfF(P[i][1]);s.value=vOfS(P[i][2]);draw();}
+  document.querySelectorAll('[data-yr]').forEach(b=>b.addEventListener('click',()=>preset(+b.dataset.yr)));
+  [t,f,s].forEach(e=>e.addEventListener('input',()=>{document.querySelectorAll('[data-yr]').forEach(b=>b.setAttribute('aria-pressed','false'));draw();}));
+  $('yr').addEventListener('anim-in',()=>{preset(0);let v=0;s.value=0;draw();const id=setInterval(()=>{v+=4;s.value=v;draw();if(v>=100){clearInterval(id);setTimeout(()=>preset(0),700);}},90);});
+  preset(0);
+})();
+</script>
+
+<h2 id="sec-5">五、理论上能放大多少</h2>
+<p>先假设代理每次都能完整、正确地完成任务，委托人只需说明与核对。在这个理想条件下，可以逐类估算理论区间：自己完成的投入有一个范围，交给代理后的投入也有一个范围，两端配对就得到倍数的下限与上限。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">理论区间是怎么算出来的</p><p class="figsub">以一张中等规模的开发工单为例，假设代理从不出错，委托人只需说明与核对。</p></div><button class="replay" type="button" data-replay="th">重播</button></div>
+    <div class="th" id="th" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="自己完成与交给代理两种投入的区间，以及两端配对得到的倍数">
+        <g id="th-axis"></g>
+        <text x="16" y="62" font-size="13" font-weight="700" class="t-ink">自己完成</text>
+        <text x="16" y="78" font-size="11" class="t-faint">半天到三天</text>
+        <rect id="th-self" y="56" height="18" rx="9" class="th-self"/>
+        <text x="16" y="152" font-size="13" font-weight="700" class="t-ink">交给代理后</text>
+        <text x="16" y="168" font-size="11" class="t-faint">说明＋审阅＋确认</text>
+        <rect id="th-del" y="146" height="18" rx="9" class="th-del"/>
+        <line id="th-lo" class="th-pair lo"/>
+        <line id="th-hi" class="th-pair hi"/>
+        <g class="th-lab lo"><rect id="th-lob" width="132" height="24" rx="12"/><text id="th-lot" font-size="12" text-anchor="middle">下限 240 ÷ 120 ＝ 2 倍</text></g>
+        <g class="th-lab hi"><rect id="th-hib" width="140" height="24" rx="12"/><text id="th-hit" font-size="12" text-anchor="middle">上限 1440 ÷ 40 ＝ 36 倍</text></g>
+      </svg>
+    </div>
+  </div>
+  <figcaption>横轴为委托人投入的分钟数，对数刻度。下限由自己完成的最少投入配对交给代理后的最多投入，上限反之。其他委托类型的理论区间按同样方法估算。</figcaption>
+</figure>
+<style>
+.th svg{width:100%;height:auto;display:block}
+.th-self{fill:var(--gray-mark);opacity:.55}
+.th-del{fill:var(--accent);opacity:.45}
+.th-pair{stroke-width:1.6;stroke-dasharray:700;stroke-dashoffset:700;transition:stroke-dashoffset .9s ease}
+.th-pair.lo{stroke:var(--warm);transition-delay:.4s}
+.th-pair.hi{stroke:var(--accent);transition-delay:1.6s}
+.th.in .th-pair{stroke-dashoffset:0}
+.th-lab{opacity:0;transition:opacity .4s}
+.th-lab.lo{transition-delay:1.2s} .th-lab.hi{transition-delay:2.4s}
+.th.in .th-lab{opacity:1}
+.th-lab rect{fill:var(--surface);stroke-width:1.2}
+.th-lab.lo rect{stroke:var(--warm)} .th-lab.hi rect{stroke:var(--accent)}
+.th-lab text{fill:var(--ink)}
+</style>
+<script>
+(function(){
+  const X0=130,X1=620,lo=10,hi=3000,x=v=>X0+Math.log10(v/lo)/Math.log10(hi/lo)*(X1-X0);
+  let a=`<line x1="${X0}" y1="110" x2="${X1}" y2="110" class="s-line"/>`;
+  [[10,'10 分钟'],[30,'30 分钟'],[60,'1 小时'],[240,'4 小时'],[480,'8 小时'],[1440,'24 小时']].forEach(([v,l])=>a+=`<line x1="${x(v)}" y1="20" x2="${x(v)}" y2="190" class="s-line"/><text x="${x(v)}" y="204" text-anchor="middle" font-size="10.5" class="t-faint">${l}</text>`);
+  document.getElementById('th-axis').innerHTML=a;
+  const set=(id,attrs)=>{const e=document.getElementById(id);for(const k in attrs)e.setAttribute(k,attrs[k]);};
+  set('th-self',{x:x(240),width:x(1440)-x(240)});
+  set('th-del',{x:x(40),width:x(120)-x(40)});
+  set('th-lo',{x1:x(240),y1:74,x2:x(120),y2:146});
+  set('th-hi',{x1:x(1440),y1:74,x2:x(40),y2:146});
+  const lx=(x(240)+x(120))/2, hx=(x(1440)+x(40))/2;
+  set('th-lob',{x:lx-150,y:98}); set('th-lot',{x:lx-84,y:114});
+  set('th-hib',{x:hx+30,y:98}); set('th-hit',{x:hx+100,y:114});
+})();
+</script>
+
+<p>按同样方法估算，常见委托类型的理论区间大多在 2 倍到数十倍之间。这些数字是上限，前提是代理从不出错、委托人只作抽查。</p>
+<h2 id="sec-6">六、实测有多少</h2>
+<p>过去两年，编程、门诊病历、客户服务与安全告警四个领域出现了委托型的随机对照试验：把任务真正交给代理完成，再测量委托人或团队的总投入。除安全告警外，实测都只在 1.0～1.2 倍上下。人主导、AI 辅助的研究结果相近。按工作时间计，美国与丹麦的就业者调查显示，使用生成式 AI 的人自报节省的时间约占其工时的 3%～5%；计入不使用的人，美国全体就业者只节省了约 1.4% 的工时。</p>
+<figure class="gap" id="gapfig">
+  <div class="card">
+    <p class="figtitle">理论区间与公开实测</p>
+    <p class="figsub">对数刻度。点按任一行查看研究来源。</p>
+    <div id="gapsvg"></div>
+    <div class="gapnote" id="gapnote">点按任一行查看研究来源与口径。</div>
+  </div>
+  <figcaption>理论区间按“委托人自行完成的投入 ÷ 代理完整正确履行时委托人的投入”估算。实测中，实心点为委托型随机对照，空心点为人主导、AI 辅助的研究（作代理指标），菱形为厂商自报或模型自估（不计委托人核对）。</figcaption>
+</figure>
+<style>
+.gap svg{width:100%;height:auto;display:block}
+.gap .row{cursor:pointer}
+.gap .row:hover .rowbg,.gap .row.on .rowbg{fill:var(--quote)}
+.gapnote{min-height:64px;font-size:13px;line-height:1.7;color:var(--muted);border-top:1px solid var(--line);padding-top:12px;margin-top:8px}
+.gapnote b{color:var(--ink)}
+</style>
+<script>
+/* ---------- 理论区间与公开实测 ---------- */
+(function(){
+  // [名称, 理论下, 理论上, 实测下, 实测上, 类型 D委托型/A辅助型/V自报/N无, 说明]
+  const groups=[
+    ['通用委托',[
+      ['对外代办与跨网站事务',1.5,45,null,null,'N','未找到公开实测。耗时 1～2 小时的电脑操作长流程，严格完成率最高约 21%（OSWorld 2.0，2026）。'],
+      ['长期监测与提醒',2,30,3.07,6.53,'D','安全告警分诊随机对照，167 名外部安全分析师；属一次性告警队列，约 83% 增益来自自动关闭无害举报；作者与被测产品均属微软（Bono，2025）。'],
+      ['深度研究与信息综合',2.7,24,3.29,3.29,'A','阅读两份报告并写摘要的观察任务，每组 2～3 人、非随机，证据很弱（英国商业贸易部，2025）。'],
+      ['团队例行事务',2,24,1.14,1.2,'A','66 家企业 7,137 名知识工作者随机获得办公助手，每周邮件处理时间减少 12%～17%，会议时长无显著变化（Dillon 等，2025）。'],
+      ['办公成果生成',2,16,1.02,1.67,'A','三项随机对照或现场实验：文档完成时长约 1.02 倍；咨询顾问 1.12～1.34 倍；写作任务 1.67 倍（Dillon 等 2025；Dell\'Acqua 等 2023；Noy 与 Zhang 2023）。'],
+    ]],
+    ['专业领域委托',[
+      ['客户服务工单',4,100,1.03,1.2,'D','淘宝 647 名坐席、68 万次会话随机对照：全部会话 1.03 倍，代理适用的会话（占 5.8%）1.20 倍（Wang 等，2026）。'],
+      ['代码迁移与重构',2.5,60,2,14,'V','仅企业与厂商自报：Google 内部迁移 2～9 倍，Airbnb 测试文件迁移约 13 倍。结果可由编译与测试核验，差距最小。'],
+      ['功能开发与缺陷修复',2,36,1.04,1.22,'D','57 名开源开发者、800 余项任务随机对照，可自由使用编程代理，用时减少 4%～18%，即约 1.0～1.2 倍；研究方称为弱证据，可能是下限（METR，2026）。'],
+      ['合同审阅与法律研究',1.6,24,1.14,1.59,'A','127 名法学院高年级学生随机对照，五项任务用时减少 12%～37%（Schwarcz 等，2025）。'],
+      ['门诊病历生成',2.3,10.3,1.02,1.1,'D','14 个专科 238 名门诊医生随机对照，每份病历书写时间减少 1.7%～9.5%；工具并未用于每一次就诊（Lukac 等，2025）。'],
+    ]],
+    ['金融委托',[
+      ['公司与观点研究',8,40,3,6.7,'V','仅厂商与机构自报，口径多为“最多减少”或研究周期。个人投资者每笔交易研究时间中位数约 6 分钟，以实际行为为基准时倍数接近或低于 1。'],
+      ['组合管理与持续监测',8,32,null,null,'N','未找到时间节省的实测。智能投顾研究观察到采用后登录与交易并未减少，价值主要体现为配置从“做不到”变为“做得到”。'],
+      ['交易指令提交',1,2.5,null,null,'N','自行下单约半分钟，逐笔确认后节省十几秒；理论上限本身只有 2.5 倍。'],
+    ]],
+    ['参照',[
+      ['使用者的全部工时',null,null,1.03,1.06,'A','美国与丹麦就业者问卷：使用者自报节省其工时的 2.8%～5.4%；计入不使用的人，美国全体就业者约节省 1.4%（Bick 等 2025；Humlum 与 Vestergaard 2025）。'],
+      ['模型自估单项任务',null,null,5,20,'V','依据对话记录估计单项任务提速，不计委托人核对时间（Anthropic，2025～2026）。'],
+    ]],
+  ];
+  const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const host=document.getElementById('gapsvg'), note=document.getElementById('gapnote');
+  const fm=v=>v<2?String(+v.toFixed(2)):v<10?String(+v.toFixed(1)):String(Math.round(v));
+  const rng=(l,h)=>l===h?fm(l)+'×':fm(l)+'～'+fm(h)+'×';
+  function draw(){
+    const narrow=host.clientWidth<600;
+    const W=narrow?600:900, LW=narrow?170:230, RW=narrow?20:120, X0=LW, X1=W-RW;
+    const RH=narrow?40:34, GH=30, TOP=34;
+    const n=groups.reduce((s,g)=>s+g[1].length,0);
+    const H=TOP+groups.length*GH+n*RH+10;
+    const vmin=0.8,vmax=100, X=v=>X0+Math.log10(v/vmin)/Math.log10(vmax/vmin)*(X1-X0);
+    const ink=css('--ink'),muted=css('--muted'),faint=css('--faint'),line=css('--line'),acc=css('--accent'),warm=css('--warm'),gray=css('--gray-mark'),surf=css('--surface');
+    let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="各类委托的理论放大倍数区间与公开实测对照" font-family="Noto Sans SC, PingFang SC, sans-serif">`;
+    [1,3,10,30,100].forEach(v=>{s+=`<line x1="${X(v)}" y1="${TOP-8}" x2="${X(v)}" y2="${H-6}" stroke="${line}"/><text x="${X(v)}" y="${TOP-14}" text-anchor="middle" font-size="12" fill="${faint}">${v}×</text>`;});
+    let y=TOP, idx=0;
+    groups.forEach(([gt,rows])=>{
+      s+=`<text x="4" y="${y+20}" font-size="13" font-weight="700" fill="${muted}">${gt}</text>`; y+=GH;
+      rows.forEach(r=>{
+        const [name,tl,th,al,ah,k]=r, cy=y+RH/2;
+        s+=`<g class="row" data-i="${idx}" tabindex="0"><rect class="rowbg" x="0" y="${y}" width="${W}" height="${RH}" fill="transparent" rx="6"/>`;
+        s+=`<text x="12" y="${cy+5}" font-size="${narrow?13:14}" fill="${ink}">${name}</text>`;
+        if(tl!=null){s+=`<rect x="${X(tl)}" y="${cy-8}" width="${X(th)-X(tl)}" height="16" rx="8" fill="${acc}" opacity=".22"/>`;
+          if(!narrow) s+=`<text x="${X1+10}" y="${cy+5}" font-size="12" fill="${muted}">理论 ${rng(tl,th)}</text>`;}
+        if(k==='D'||k==='A'){
+          const x1=X(al),x2=X(ah);
+          if(tl!=null&&ah<tl) s+=`<line x1="${x2+7}" y1="${cy}" x2="${X(tl)-2}" y2="${cy}" stroke="${warm}" stroke-width="1.3" stroke-dasharray="2 3"/>`;
+          if(x2-x1>1) s+=`<line x1="${x1}" y1="${cy}" x2="${x2}" y2="${cy}" stroke="${warm}" stroke-width="${k==='D'?4:2}" stroke-linecap="round"/>`;
+          (x2-x1>1?[x1,x2]:[x1]).forEach(xv=>{s+= k==='D'?`<circle cx="${xv}" cy="${cy}" r="5.5" fill="${warm}"/>`:`<circle cx="${xv}" cy="${cy}" r="5" fill="${surf}" stroke="${warm}" stroke-width="2"/>`;});
+        } else if(k==='V'){
+          const x1=X(al),x2=X(ah);
+          s+=`<line x1="${x1}" y1="${cy}" x2="${x2}" y2="${cy}" stroke="${gray}" stroke-width="1.5" stroke-dasharray="4 3"/>`;
+          [x1,x2].forEach(xv=>{s+=`<path d="M${xv},${cy-5.5} L${xv+5.5},${cy} L${xv},${cy+5.5} L${xv-5.5},${cy} Z" fill="${surf}" stroke="${gray}" stroke-width="1.6"/>`;});
+        } else {
+          s+=`<text x="${X(th)+8}" y="${cy+4}" font-size="11.5" fill="${faint}">无公开实测</text>`;
+        }
+        s+=`</g>`; y+=RH; idx++;
+      });
+    });
+    s+='</svg>';
+    host.innerHTML=s;
+    const flat=groups.flatMap(g=>g[1]);
+    host.querySelectorAll('.row').forEach(g=>{
+      const show=()=>{host.querySelectorAll('.row').forEach(x=>x.classList.remove('on'));g.classList.add('on');
+        const r=flat[+g.dataset.i]; const kind={D:'委托型随机对照',A:'辅助型研究（代理指标）',V:'厂商自报或模型自估',N:'无公开实测'}[r[5]];
+        note.innerHTML=`<b>${r[0]}</b>　${r[1]!=null?'理论 '+rng(r[1],r[2])+'　':''}${r[3]!=null?'实测 '+rng(r[3],r[4])+'（'+kind+'）':kind}<br>${r[6]}`;};
+      g.addEventListener('click',show); g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();show();}});
+    });
+  }
+  draw();
+  let t; addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(draw,120);});
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change',draw);
+})();
+</script>
+
+<p>厂商自报与模型自估多在 3～20 倍，比实测高出数倍到一个数量级，原因正是口径不同：它们只比较代理的运行时长。唯一落在理论区间之内的安全告警分诊，任务单一、批量处理，约八成增益来自代理自动关闭明显无害的举报，而这类判断的对错很容易事后核验。</p>
+<h2 id="sec-7">七、差距从哪里来</h2>
+<p>交给代理之后，委托人的投入由三块构成：</p>
+<ol><li><strong>代理做不了的部分，仍由自己完成。</strong>淘宝客服中，代理适用的会话只占 5.8%；门诊录音病历工具只在约三成的就诊中被使用（卢卡奇等，2025，预印本数据）。</li><li><strong>核对成本。</strong>OpenAI 的 GDPval 测评中，专家审阅一份模型成果平均需要 109 分钟，约为自己完成用时的四分之一。仅此一项，放大倍数的上限就被压到约 3.7 倍。</li><li><strong>出错后的返工。</strong>主流法律检索工具在 17%～33% 的查询中给出了错误或缺乏依据的回答；最终被合并的代理代码提交中，约 45% 在合并前仍经过了人工追加修改（Watanabe 等，2025）。目前最强的模型能以八成把握完成的任务时长约为 1～3 小时，而一张开发工单往往需要半天到三天。</li></ol>
+<figure id="calcfig">
+  <div class="card">
+    <p class="figtitle">放大倍数拆解</p>
+    <p class="figsub">以“自己完成一件事”的投入为 100，调整三项因素，看委托人仍需付出多少。</p>
+    <div class="presets" role="group" aria-label="预设参数">
+      <button type="button" data-p="1,5,100">厂商演示</button>
+      <button type="button" data-p="1,27,100">专家逐项核对</button>
+      <button type="button" data-p="0.3,25,70">真实部署</button>
+      <button type="button" data-p="0.9,8,90">可程序化核验</button>
+    </div>
+    <div class="calc">
+      <div>
+        <div class="sl"><label for="a">适用比例 <b id="av"></b></label><input id="a" type="range" min="0" max="100" step="1"><div class="hint">工作中能交给代理的比例；其余仍由自己完成</div></div>
+        <div class="sl"><label for="c">核对成本 <b id="cv"></b></label><input id="c" type="range" min="1" max="60" step="1"><div class="hint">说明任务并核对成果所需时间，占自己完成用时的比例</div></div>
+        <div class="sl"><label for="p">一次成功率 <b id="pv"></b></label><input id="p" type="range" min="20" max="100" step="1"><div class="hint">代理一次做对的概率；做错时委托人需自己重做</div></div>
+      </div>
+      <div class="result" aria-live="polite">
+        <div class="lbl">放大倍数</div>
+        <div class="big" id="mult">—</div>
+        <div class="cmp" id="cmp"></div>
+      </div>
+    </div>
+    <div class="stack">
+      <div class="stackrow"><span>自己完成</span><div class="stackbar"><div class="seg self" style="width:100%"></div></div></div>
+      <div class="stackrow"><span>交给代理后</span><div class="stackbar" id="after"><div class="seg self" id="s1"></div><div class="seg check" id="s2"></div><div class="seg redo" id="s3"></div></div></div>
+      <div class="legend"><span><i style="background:var(--gray-mark)"></i>代理不适用、仍自己完成</span><span><i style="background:var(--accent)"></i>说明与核对</span><span><i style="background:var(--warm)"></i>出错后重做</span></div>
+    </div>
+  </div>
+  <figcaption>委托人投入 ＝（1 − 适用比例）＋ 适用比例 ×［核对成本 ＋（1 − 成功率）］，放大倍数为其倒数。为便于理解，模型假设出错后委托人从头重做，实际返工可能更少，也可能因发现错误较晚而更多。三组预设中，「厂商演示」与「专家逐项核对」对应正文引用的口径；「真实部署」参照正文研究取的示意值，并非单项研究的实测；「可程序化核验」示意代码迁移一类任务：结果可由编译与测试自动核对，核对成本低、适用范围广。</figcaption>
+</figure>
+<style>
+.calc{display:grid;grid-template-columns:1fr 200px;gap:24px;align-items:start}
+.result{text-align:center;border-left:1px solid var(--line);padding-left:20px}
+.result .big{font-size:56px;font-weight:700;line-height:1.1;color:var(--accent);font-variant-numeric:tabular-nums}
+.result .lbl{font-size:13px;color:var(--muted)}
+.result .cmp{font-size:12px;color:var(--faint);margin-top:10px;line-height:1.6}
+.stack{margin-top:8px}
+.stackrow{display:grid;grid-template-columns:88px 1fr;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.stackbar{height:22px;background:var(--quote);border-radius:4px;display:flex;overflow:hidden}
+.seg{height:100%;transition:width .35s ease}
+.seg.self{background:var(--gray-mark)} .seg.check{background:var(--accent)} .seg.redo{background:var(--warm)}
+@media (max-width:640px){.calc{grid-template-columns:1fr}.result{border-left:none;border-top:1px solid var(--line);padding:16px 0 0}}
+</style>
+<script>
+/* ---------- 放大倍数拆解 ---------- */
+(function(){
+  const a=document.getElementById('a'), c=document.getElementById('c'), p=document.getElementById('p');
+  const btns=[...document.querySelectorAll('.presets button')];
+  function render(){
+    const A=a.value/100, C=c.value/100, P=p.value/100;
+    const self=1-A, check=A*C, redo=A*(1-P);
+    const total=self+check+redo, m=1/total;
+    document.getElementById('av').textContent=a.value+'%';
+    document.getElementById('cv').textContent=c.value+'%';
+    document.getElementById('pv').textContent=p.value+'%';
+    document.getElementById('mult').textContent=(m>=10?m.toFixed(0):m.toFixed(2).replace(/0$/,''))+'×';
+    const w=v=>Math.min(100,v*100).toFixed(1)+'%';
+    document.getElementById('s1').style.width=w(self);
+    document.getElementById('s2').style.width=w(check);
+    document.getElementById('s3').style.width=w(redo);
+    document.getElementById('after').style.width=Math.min(100,total*100)+'%';
+    document.getElementById('cmp').textContent='委托人仍需付出原来的 '+Math.round(total*100)+'%';
+    const key=[A,c.value,p.value].join(',');
+    btns.forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.p===key)));
+  }
+  function set(s){const [A,C,P]=s.split(',');a.value=Math.round(A*100);c.value=C;p.value=P;render();}
+  btns.forEach(b=>b.addEventListener('click',()=>set(b.dataset.p)));
+  [a,c,p].forEach(el=>el.addEventListener('input',render));
+  set('0.3,25,70');
+})();
+
+</script>
+
+<p>拆解之后，结论很直接：提高代理的生成速度几乎不改变结果，真正决定倍数的是核对成本与可靠性。代码迁移是一个反例：结果可以用编译与自动测试核验，企业自报的 2～14 倍大体落在理论区间下半段。这正是代理成本中的<strong>监督支出</strong>：代理越难被监督，委托带来的节省就越少。</p>
+<h2 id="sec-8">八、对产品设计的含义</h2>
+<p>本章的每个机制，各自对应一条设计要求。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：设计代理产品的六条要求</p><p class="figsub">每一条对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="s17">重播</button></div>
+    <div class="s17" id="s17" data-anim>
+      <div class="s17-c" style="--i:0"><em>委托—代理</em><b>把代理成本当作设计对象</b><p>让委托人看得见做了什么、让代理的利益与委托人一致、用硬性上限限定损失。</p></div>
+      <div class="s17-c" style="--i:1"><em>口径</em><b>用委托人投入衡量价值</b><p>问委托人少花了多少时间、付出了多少核对，而不是代理多快完成。</p></div>
+      <div class="s17-c" style="--i:2"><em>年度价值</em><b>先找频繁发生、单次投入大的事</b><p>倍数超过约 5 倍之后，省下多少主要由单次投入与次数决定；能力扩展另计。</p></div>
+      <div class="s17-c" style="--i:3"><em>拆解</em><b>先降核对成本，再谈生成速度</b><p>给出依据与来源，标出关键假设，突出变化，能自动校验的自动校验。</p></div>
+      <div class="s17-c" style="--i:4"><em>可验证性</em><b>从结果可核验的任务做起</b><p>出错代价可控的先交给代理；难以核验、错误不可逆的保留人的确认。</p></div>
+      <div class="s17-c fin" style="--i:5"><em>适用范围</em><b>先扩大代理能完整承担的范围</b><p>代理只覆盖一小部分工作时，其余部分仍由委托人完成，整体倍数被压在低位。</p></div>
+    </div>
+  </div>
+</figure>
+<style>
+.s17{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.s17-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.25s)}
+.s17-c.fin{border-left-color:var(--warm)}
+.s17-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.s17-c b{display:block;font-size:15px;margin:2px 0 4px}
+.s17-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.s17.in .s17-c{opacity:1;transform:none}
+@media (max-width:640px){.s17{grid-template-columns:1fr}}
+</style>
+
+<h2 id="sec-9">口径与局限</h2>
+<ul class="notes"><li>理论区间是作者按“委托人自行完成的投入 ÷ 代理完整正确履行时委托人的投入”逐类估算的，核对分钟数尚无产品日志实测。</li><li>实测多为整段工作、会话时长或产出数量的变化，与理论值只能作方向性比较。用时下降 r 换算为 1/(1−r) 倍，产出增加 g 换算为 1+g 倍。</li><li>部分随机对照的作者来自被测产品所属公司（如微软的安全告警研究）。</li><li>资料截至 2026 年 10 月。AI 能力变化很快，本章的数字按时点记录，结论的适用范围以机制为准。</li></ul>
+<h2 id="sec-10">参考文献</h2>
+<ul class="refs"><li>Ross, S. A. (1973). The economic theory of agency: The principal's problem. <i>American Economic Review</i>, 63(2), 134–139.</li><li>Jensen, M. C., &amp; Meckling, W. H. (1976). Theory of the firm: Managerial behavior, agency costs and ownership structure. <i>Journal of Financial Economics</i>, 3(4), 305–360.</li><li>Alchian, A. A., &amp; Demsetz, H. (1972). Production, information costs, and economic organization. <i>American Economic Review</i>, 62(5), 777–795.</li><li>METR (2026). We are changing our developer productivity experiment design. https://metr.org/blog/2026-02-24-uplift-update/</li><li>Lukac, P. et al. (2025). Ambient AI scribes in clinical practice: A randomized trial. <i>NEJM AI</i>, 2(12). https://doi.org/10.1056/AIoa2501000（使用比例见同一研究的 medRxiv 预印本：两种工具分别用于 33.5% 与 29.5% 的就诊）</li><li>Wang, Y., Zhu, C., Feng, T., Lu, L. X., &amp; Jia, B. (2026). Agentic AI and human-in-the-loop interventions: Field experimental evidence from Alibaba's customer service operations. arXiv:2605.14830.</li><li>Bono, J. (2025). Randomized controlled trials for phishing triage agent. arXiv:2511.13860.</li><li>Dillon, E. et al. (2025). Shifting work patterns with generative AI. arXiv:2504.11436.</li><li>Dell'Acqua, F. et al. (2023). Navigating the jagged technological frontier. Harvard Business School Working Paper 24-013.</li><li>Noy, S. &amp; Zhang, W. (2023). Experimental evidence on the productivity effects of generative artificial intelligence. <i>Science</i>, 381(6654), 187–192.</li><li>Schwarcz, D., Manning, S., Barry, P., Cleveland, D. R., Prescott, J. J., &amp; Rich, B. (2025). AI-powered lawyering: AI reasoning models, retrieval augmented generation, and the future of legal practice. Working paper.</li><li>Patwardhan, T. et al. (2025). GDPval: Evaluating AI model performance on real-world economically valuable tasks. arXiv:2510.04374.</li><li>Magesh, V. et al. (2025). Hallucination-free? Assessing the reliability of leading AI legal research tools. <i>Journal of Empirical Legal Studies</i>.</li><li>Bick, A., Blandin, A. &amp; Deming, D. (2025). The impact of generative AI on work productivity. Federal Reserve Bank of St. Louis.</li><li>Humlum, A. &amp; Vestergaard, E. (2025). Large language models, small labor market effects. NBER Working Paper No. 33777 (May 2025 version; revised in 2026 as <i>Still waters, rapid currents: Early labor market transformation under generative AI</i>).</li><li>Nikolov, S. et al. (2025). How is Google using AI for internal code migrations? arXiv:2501.06972.</li><li>Watanabe, M., Li, H., Kashiwa, Y., Reid, B., Iida, H., &amp; Hassan, A. E. (2025). On the use of agentic coding: An empirical study of pull requests on GitHub. arXiv:2509.14745.</li><li>Yuan, M., Zhou, Z., Xiong, X., et al. (2026). OSWorld 2.0: Benchmarking computer use agents on long-horizon real-world tasks. arXiv:2606.29537.</li><li>Department for Business and Trade (2025). Evaluation of the M365 Copilot pilot in the Department for Business and Trade. https://assets.publishing.service.gov.uk/media/68adbe409e1cebdd2c96a19d/dbt-microsoft-365-copilot-evaluation.pdf</li><li>Airbnb Engineering (2025). Accelerating large-scale test migration with LLMs. https://airbnb.tech/?p=366</li><li>Anthropic (2025). Estimating AI productivity gains from Claude conversations. https://www.anthropic.com/research/estimating-productivity-gains</li></ul>
+<footer class="nav"><a href="part3.html">← 第三部分　AI：代理能替人做多少</a><a href="ch20.html">第 20 章　哪些事务能交给 AI →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

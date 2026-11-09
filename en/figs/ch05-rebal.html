@@ -1,0 +1,56 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">Rebalancing: the same mechanism in reverse</p>
+    <p class="figsub">Put 50 into each of two assets with the same long-run trend but alternating moves. Compare “buy and never adjust” with “reset to half and half every period”.</p>
+    <div class="seg-btns" role="group" aria-label="Market path">
+      <button type="button" data-rb="chop" aria-pressed="true">Choppy</button>
+      <button type="button" data-rb="trend" aria-pressed="false">One keeps rising</button>
+    </div>
+    <div class="rb" id="rb" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="Portfolio value under buy-and-hold and periodic rebalancing">
+        <g id="rb-axis"></g><path id="rb-bh" class="rb-l bh"/><path id="rb-re" class="rb-l re"/>
+      </svg>
+      <div class="legend"><span><i style="background:var(--faint)"></i>Buy and never adjust</span><span><i style="background:var(--accent)"></i>Rebalance every period (sell high, buy low)</span></div>
+      <p class="rb-msg" id="rb-msg" aria-live="polite"></p>
+      <div class="rb-cmp">
+        <div><b>Fixed leverage</b><span>Adds after rises, cuts after falls (buy high, sell low)</span><em class="w">Loses in choppy markets, gains in trends</em></div>
+        <div><b>Fixed proportions</b><span>Cuts after rises, adds after falls (sell high, buy low)</span><em>Gains in choppy markets, lags in trends</em></div>
+      </div>
+    </div>
+  </div>
+  <figcaption>Illustrative simulation, ignoring trading costs. In the choppy case, each period the two assets move 20% in opposite directions around a base of 2%, so each on its own barely rises over the long run; in the trend case, one rises 8% each period and the other stays flat. For the “diversification return” from rebalancing, see Booth and Fama (1992).</figcaption>
+</figure>
+<style>
+.rb svg{width:100%;height:auto;display:block}
+.rb-l{fill:none;stroke-width:2.5}
+.rb-l.bh{stroke:var(--faint);stroke-dasharray:5 4} .rb-l.re{stroke:var(--accent)}
+.rb-msg{font-size:14px;margin:8px 0;min-height:1.7em}
+.rb-cmp{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rb-cmp div{background:var(--quote);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;font-size:13px}
+.rb-cmp span{color:var(--muted)}
+.rb-cmp em{font-style:normal;color:var(--accent);font-weight:500}
+.rb-cmp em.w{color:var(--warm)}
+@media (max-width:640px){.rb-cmp{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const N=20,X0=50,X1=620,YT=14,YB=184,x=t=>X0+t/N*(X1-X0);
+  const S={chop:t=>[(t%2?-0.2:0.2)+0.02,(t%2?0.2:-0.2)+0.02],trend:t=>[0.08,0]};
+  let k='chop';
+  function render(){
+    document.querySelectorAll('[data-rb]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.rb===k)));
+    let a=50,b=50,re=100; const BH=[100],RE=[100];
+    for(let t=0;t<N;t++){const [ra,rb]=S[k](t);a*=1+ra;b*=1+rb;re*=1+(ra+rb)/2;BH.push(a+b);RE.push(re);}
+    const all=BH.concat(RE), lo=Math.min(...all)*0.95, hi=Math.max(...all)*1.05, y=v=>YB-(v-lo)/(hi-lo)*(YB-YT);
+    let ax=`<line x1="${X0}" y1="${y(100)}" x2="${X1}" y2="${y(100)}" class="s-line"/><text x="${X0-8}" y="${y(100)+4}" text-anchor="end" font-size="11" class="t-faint">100</text>`;
+    [0,5,10,15,20].forEach(t=>ax+=`<text x="${x(t)}" y="${YB+18}" text-anchor="middle" font-size="11" class="t-faint">Period ${t}</text>`);
+    document.getElementById('rb-axis').innerHTML=ax;
+    const P=arr=>'M'+arr.map((v,t)=>`${x(t).toFixed(1)},${y(v).toFixed(1)}`).join('L');
+    document.getElementById('rb-bh').setAttribute('d',P(BH));document.getElementById('rb-re').setAttribute('d',P(RE));
+    document.getElementById('rb-msg').textContent=k==='chop'?`After 20 periods: no adjustment ${BH[N].toFixed(0)}, rebalanced ${RE[N].toFixed(0)}. Each asset on its own barely moves, yet the rebalanced portfolio grows.`:`After 20 periods: no adjustment ${BH[N].toFixed(0)}, rebalanced ${RE[N].toFixed(0)}. Repeatedly selling the rising asset makes the rebalanced portfolio lag the unadjusted one.`;
+  }
+  document.querySelectorAll('[data-rb]').forEach(b=>b.addEventListener('click',()=>{k=b.dataset.rb;render();}));
+  document.getElementById('rb').addEventListener('anim-in',()=>{k='chop';render();setTimeout(()=>{k='trend';render();},2600);setTimeout(()=>{k='chop';render();},5200);});
+  render();
+})();
+</script>

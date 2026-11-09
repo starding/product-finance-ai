@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">冷启动的两条路径</p><p class="figsub">一个新的代理，用户的先验只有 30%。比较两种起步方式在一年里的变化：直接请用户交出全权，还是从赌注小的事务开始。</p></div><button class="replay" type="button" data-replay="cl2">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="路径"><button type="button" data-cl2="a" aria-pressed="false">一开始就请求全权</button><button type="button" data-cl2="b" aria-pressed="true">从小事开始</button></div>
+    <div class="cl2" id="cl2" data-anim>
+      <svg viewBox="0 0 640 230" role="img" aria-label="信念与各级门槛"><g id="cl2-ax"></g><path id="cl2-p" class="cl2-l"/><g id="cl2-mk"></g></svg>
+      <p class="cl2-msg" id="cl2-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意模型：用户只在信念越过某级门槛后才交出该级事务；每完成一个月的事务，产生若干条可核验的记录，赌注越大的事务记录越多、诊断力越高。虚线为各级门槛。</figcaption>
+</figure>
+<style>
+.cl2 svg{width:100%;height:auto;display:block}
+.cl2-l{fill:none;stroke:var(--accent);stroke-width:2.5}
+.cl2-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.cl2 svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const L=[['查数据与提醒',.25,.12],['起草方案',.5,.18],['逐笔确认',.65,.22],['方案批准',.85,.26]];
+  const X0=50,X1=560,YT=14,YB=200,x=m=>X0+m/12*(X1-X0),y=p=>YB-p*(YB-YT);
+  const lo=p=>Math.log(p/(1-p)),ex=l=>1/(1+Math.exp(-l));
+  const $=id=>document.getElementById(id);
+  let ax=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`+[0,.5,1].map(v=>`<text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text>`).join('')+[0,3,6,9,12].map(m=>`<text x="${x(m)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">第 ${m} 月</text>`).join('');
+  L.forEach(([n,t])=>ax+=`<line x1="${X0}" x2="${X1}" y1="${y(t)}" y2="${y(t)}" stroke="var(--warm)" stroke-dasharray="3 4" opacity=".6"/><text x="${X1+6}" y="${y(t)+4}" font-size="11" class="t-warm">${n}</text>`);
+  $('cl2-ax').innerHTML=ax;
+  function sim(k){let p=.3,pts=[[0,p]],unlocked=[];for(let m=1;m<=12;m++){let lvl=-1;L.forEach(([n,t],i)=>{if(p>=t)lvl=i;});
+      if(k==='a'){lvl=p>=L[3][1]?3:-1;}
+      if(lvl>=0){if(!unlocked.includes(lvl)){unlocked.push(lvl);}p=ex(lo(p)+L[lvl][2]*1.4);} pts.push([m,p]);}return [pts,unlocked];}
+  function set(k){document.querySelectorAll('[data-cl2]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.cl2===k)));const [pts]=sim(k);
+    $('cl2-p').setAttribute('d',pts.map(([m,p],i)=>(i?'L':'M')+x(m).toFixed(1)+','+y(p).toFixed(1)).join(''));
+    $('cl2-mk').innerHTML=pts.map(([m,p])=>`<circle cx="${x(m)}" cy="${y(p)}" r="3.5" fill="var(--accent)"/>`).join('');
+    const end=pts[12][1];
+    $('cl2-msg').textContent=k==='a'?'一开始就请求全权：用户的信念远低于门槛，什么也没有交出，于是也没有产生任何证据，一年后信念仍停在 30%。':`从小事开始：查数据与提醒的门槛低，用户愿意尝试；每个月的记录让信念逐级越过门槛，一年后约为 ${(end*100).toFixed(0)}%，已经可以交出方案批准级的事务。`;}
+  document.querySelectorAll('[data-cl2]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.cl2)));
+  $('cl2').addEventListener('anim-in',()=>{set('a');setTimeout(()=>set('b'),2400);});
+  set('b');
+})();
+</script>

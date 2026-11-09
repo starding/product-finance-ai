@@ -1,0 +1,30 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">More informed traders, wider spreads</p><p class="figsub">A ship share may be worth 8 portions or 12, with equal odds. The informed buy only when it is worth 12 and sell only when it is worth 8; the uninformed buy and sell at random. Drag the share of informed traders among those who come to trade to see the quotes at which the market maker breaks even.</p></div><button class="replay" type="button" data-replay="gm9">Replay</button></div>
+    <div class="gm9" id="gm9" data-anim>
+      <div class="gm9-q"><div><em>Bid</em><b id="gm9-b"></b></div><div class="gm9-mid"><i id="gm9-w"></i><span id="gm9-wv"></span></div><div><em>Ask</em><b id="gm9-a"></b></div></div>
+      <div class="sl"><label for="gm9-p">Share of informed traders <b id="gm9-pv"></b></label><input id="gm9-p" type="range" min="0" max="100" step="5" value="20"></div>
+      <p class="gm9-msg" id="gm9-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the market maker's ask equals the share's average value given that someone comes to buy, and the bid equals its average value given that someone comes to sell; spread = 4 × share of informed traders (a simplified case of Glosten and Milgrom, 1985).</figcaption>
+</figure>
+<style>
+.gm9-q{display:grid;grid-template-columns:1fr 1.4fr 1fr;gap:10px;align-items:center}
+.gm9-q>div:not(.gm9-mid){background:var(--quote);border-radius:10px;padding:10px 12px;text-align:center}
+.gm9-q em{display:block;font-style:normal;font-size:11.5px;color:var(--faint)} .gm9-q b{font-size:22px;font-variant-numeric:tabular-nums}
+.gm9-mid{position:relative;height:54px;text-align:center}
+.gm9-mid i{position:absolute;left:50%;top:8px;height:18px;transform:translateX(-50%);background:var(--warm-soft);border:1px solid var(--warm);border-radius:6px;transition:width .3s}
+.gm9-mid span{position:relative;top:32px;font-size:12px;color:var(--warm);font-variant-numeric:tabular-nums}
+.gm9-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  function draw(){const p=+$('gm9-p').value/100,ask=10+2*p,bid=10-2*p,s=ask-bid;$('gm9-a').textContent=ask.toFixed(1);$('gm9-b').textContent=bid.toFixed(1);$('gm9-w').style.width=Math.max(4,s/4*100)+'%';$('gm9-wv').textContent=`Spread ${s.toFixed(1)} portions`;$('gm9-pv').textContent=Math.round(p*100)+'%';
+    $('gm9-msg').textContent=p===0?'With no informed traders, the market maker need not fear losing and can buy and sell at 10 portions.':p===1?'Everyone who comes is informed, and the market maker loses whatever he quotes: the spread widens to a bid of 8 and an ask of 12, which amounts to no longer trading.':`Informed traders make up ${Math.round(p*100)}%: what the market maker loses to them must be made up by the extra spread charged to the uninformed. Each time an uninformed trader buys or sells, he pays ${(s/2).toFixed(1)} portions more on average.`;}
+  $('gm9-p').addEventListener('input',draw);
+  $('gm9').addEventListener('anim-in',()=>{let v=0;$('gm9-p').value=0;draw();const id=setInterval(()=>{v+=5;$('gm9-p').value=v;draw();if(v>=60)clearInterval(id);},200);});
+  draw();
+})();
+</script>

@@ -1,0 +1,38 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">放多少在船股上</p><p class="figsub">拖动三个滑块，看放在船股上的最优比例怎样变化。</p></div><button class="replay" type="button" data-replay="mt20">重播</button></div>
+    <div class="mt20" id="mt20" data-anim>
+      <div class="mt20-f" id="mt20-f"></div>
+      <div class="mt20-bar"><i id="mt20-i"></i><span id="mt20-v"></span></div>
+      <div class="mt20-ctl">
+        <div class="sl"><label for="mt20-p">船股多出的回报 <b id="mt20-pv"></b></label><input id="mt20-p" type="range" min="1" max="8" step="0.5" value="4"></div>
+        <div class="sl"><label for="mt20-s">船股的波动 <b id="mt20-sv"></b></label><input id="mt20-s" type="range" min="10" max="30" step="1" value="16"></div>
+        <div class="sl"><label for="mt20-g">厌恶起落的程度 <b id="mt20-gv"></b></label><input id="mt20-g" type="range" min="1" max="10" step="0.5" value="3"></div>
+      </div>
+      <p class="mt20-msg" id="mt20-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>比例 ＝ 多出的回报 ÷（厌恶系数 × 波动²），超过 100% 时意味着借钱买入，图中封顶为 100%（默顿，1969）。厌恶系数的取值为示意。</figcaption>
+</figure>
+<style>
+.mt20-f{font-size:15px;text-align:center;margin:4px 0 10px;font-variant-numeric:tabular-nums}
+.mt20-bar{position:relative;height:34px;background:var(--quote);border-radius:8px;overflow:hidden}
+.mt20-bar i{display:block;height:100%;background:var(--accent);transition:width .4s}
+.mt20-bar span{position:absolute;left:10px;top:7px;font-size:14px;color:var(--bg);font-weight:600}
+.mt20-ctl{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:8px}
+.mt20-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.mt20-ctl{grid-template-columns:1fr;gap:4px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('mt20'+id);
+  function draw(){const p=+$('-p').value/100,s=+$('-s').value/100,g=+$('-g').value,w=p/(g*s*s),c=Math.min(1,w);
+    $('-pv').textContent=(p*100).toFixed(1)+'%';$('-sv').textContent=Math.round(s*100)+'%';$('-gv').textContent=g.toFixed(1);
+    $('-f').textContent=`${(p*100).toFixed(1)}% ÷（${g.toFixed(1)} × ${(s*100).toFixed(0)}%²）＝ ${(w*100).toFixed(0)}%`;
+    $('-i').style.width=c*100+'%';$('-v').textContent=Math.round(c*100)+'%';$('-v').style.color=c<.12?'var(--ink)':'var(--bg)';$('-v').style.left=c<.12?`calc(${c*100}% + 8px)`:'10px';
+    $('-msg').textContent=w>1?'按公式要借钱买入；书记员不替普通人家借钱冒险，封顶为全部放在船股上。':`放 ${Math.round(c*100)}% 在船股上。比例只取决于这三样东西，与他有多少粮食、年纪多大无关；可这一结论有一个前提：他没有别的资产。`;}
+  ['-p','-s','-g'].forEach(k=>$(k).addEventListener('input',draw));
+  $('').addEventListener('anim-in',()=>{let v=1;$('-g').value=1;draw();const id=setInterval(()=>{v+=.5;$('-g').value=v;draw();if(v>=8)clearInterval(id);},200);});
+  draw();
+})();
+</script>

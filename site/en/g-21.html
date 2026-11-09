@@ -1,0 +1,609 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The user is not present</title>
+<meta name="description" content="Product × Finance × AI: Derived from Zero, Chapter 21. The scribe must keep acting for the villager while he is away. If it asks about everything, he is worn down; if it never asks, he loses control. The agreement cannot cover everything, so who decides the cases it does not cover must be settled in advance. The agreement should state goals, boundaries, rules, exceptions and term; authority should be graded by how large a matter is and whether it can be undone; the less he knows, the more of the real decision passes to the scribe; and when the scribe must come back and ask him also belongs in the agreement">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="g-21">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="Contents">
+<div class="side-head"><a class="sidetitle" href="index.html">Product × Finance × AI<small>Financial Products in the Age of AI</small></a></div>
+<div class="side-view" role="group" aria-label="Way of reading"><a href="preface.html">Decomposition</a><a href="g-preface.html" class="on" aria-current="true">Derivation</a></div>
+<a class="side-about" href="index.html#about">About this book</a>
+<a class="" href="g-preface.html"><span class="n">Preface</span>The best way to understand financial products is to build them from zero</a>
+<a class="side-part" href="g-part1.html"><span class="pn">Part One</span>From 0 to 1: how a world without finance grows finance</a>
+<a class="" href="g-01.html"><span class="n">1</span>One person, one year&#x27;s harvest</a>
+<a class="" href="g-02.html"><span class="n">2</span>Two people, short of grain at different times</a>
+<a class="" href="g-03.html"><span class="n">3</span>What if a loan is not repaid</a>
+<a class="" href="g-04.html"><span class="n">4</span>Exchange among many</a>
+<a class="" href="g-05.html"><span class="n">5</span>Harvests good and bad</a>
+<a class="" href="g-06.html"><span class="n">6</span>Savers may need their grain at any time; borrowers need it for years</a>
+<a class="" href="g-07.html"><span class="n">7</span>No one household can pay for a ship</a>
+<a class="" href="g-08.html"><span class="n">8</span>Securities must be saleable</a>
+<a class="" href="g-09.html"><span class="n">9</span>Prices carry everyone&#x27;s information</a>
+<a class="" href="g-10.html"><span class="n">10</span>Ordinary people have neither the time nor the expertise</a>
+<a class="" href="g-11.html"><span class="n">11</span>Trustees may not do their duty</a>
+<a class="" href="g-12.html"><span class="n">12</span>The institutions are in place, and people still make mistakes</a>
+<a class="side-part" href="g-part2.html"><span class="pn">Part Two</span>Changing one parameter: when agency becomes almost free</a>
+<a class="" href="g-13.html"><span class="n">13</span>A new parameter: the cost of cognitive labour collapses</a>
+<a class="" href="g-14.html"><span class="n">14</span>Can everyone have a personal agent?</a>
+<a class="" href="g-15.html"><span class="n">15</span>Who guarantees an agent&#x27;s promises</a>
+<a class="" href="g-16.html"><span class="n">16</span>If everyone has an analyst</a>
+<a class="" href="g-17.html"><span class="n">17</span>Agents become the main market participants</a>
+<a class="" href="g-18.html"><span class="n">18</span>Can an agent correct human bias?</a>
+<a class="" href="g-19.html"><span class="n">19</span>What did not change</a>
+<a class="side-part" href="g-part3.html"><span class="pn">Part Three</span>Deriving a product in the new world</a>
+<a class="" href="g-20.html"><span class="n">20</span>One person and one sum of money</a>
+<a class=" cur" href="g-21.html" aria-current="page"><span class="n">21</span>The user is not present</a>
+<a class="" href="g-22.html"><span class="n">22</span>The user cannot see the process</a>
+<a class="" href="g-23.html"><span class="n">23</span>Agents make mistakes</a>
+<a class="" href="g-24.html"><span class="n">24</span>Trust takes time</a>
+<a class="side-app" href="g-epilogue.html"><span class="n">Epilogue</span>Back to the governing rule</a>
+<a class="side-app" href="method.html"><span class="n">Appendix</span>How this book was written</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="Open contents" title="Contents"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">Product × Finance × AI: Financial Products in the Age of AI</a><span>Part Three  Deriving a product</span><a class="langlink" href="../g-21.html" hreflang="zh-CN">中文</a></header>
+
+<div class="chapno">Chapter 21</div><h1>The user is not present<small>Mandate parameters and authority</small></h1>
+<blockquote><p>Once the agreement was settled, the villager went back to his fields. He has only a few evenings a year to look at the accounts, yet the scribe has work to do every day: making deposits, adjusting holdings, deciding after a storm whether to sell, deciding when he falls ill whether to touch the house money. If it asks him about everything, he is worn down and the scribe is of no use; if it never asks, he loses control of his own property. The agreement cannot cover every case, and who decides the cases it leaves out must be made clear in advance. The agreement must also state goals, boundaries, rules, exceptions and term; authority must be graded by how large a matter is and whether it can be undone; and when the scribe must come back and ask him must be written in as well.</p></blockquote>
+<h2 id="sec-1">1. He cannot be present all the time</h2>
+<p>Every day the scribe may meet something that calls for a decision. If it asks him about each one, he will be interrupted more than a hundred times a year and will soon stop reading, stop answering, or nod without thinking. If it asks about none, every decision it makes for him rests only on its own judgment. Between the two lies a sensible position: small, routine matters are handled by the agreement, and the few important ones come back to him.</p>
+<p>There is one new constraint: the user cannot be present all the time, so continuing delegation depends on an agreement made in advance.</p>
+<p><strong>Today's counterpart.</strong> In a discretionary account, the client gives written authorization in advance, and the fiduciary decides purchases and sales on its own within the agreed scope. In a non-discretionary account, every trade requires the client's confirmation.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">How much to ask</p><p class="figsub">The scribe makes 200 decisions a year; 20 of them matter and depend on what he cares about. He can answer only 12 requests a year with real care; beyond that he nods without thinking. Drag the share of decisions referred to him and see how many bad decisions result.</p></div><button class="replay" type="button" data-replay="ak21">Replay</button></div>
+    <div class="ak21" id="ak21" data-anim>
+      <svg viewBox="0 0 660 200" role="img" aria-label="Share of decisions referred to him and bad decisions"><g id="ak21-g"></g></svg>
+      <div class="sl"><label for="ak21-e">Share referred to him <b id="ak21-ev"></b></label><input id="ak21-e" type="range" min="0" max="100" step="1" value="5"></div>
+      <p class="ak21-msg" id="ak21-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the scribe ranks matters by importance and refers the most important first; an important matter decided by the scribe alone goes against his wishes 40% of the time; the probability that he answers with care is 12 ÷ number of requests (capped at 1), and a careless answer is the same as leaving the decision to the scribe. Vertical axis: number of bad decisions per year.</figcaption>
+</figure>
+<style>
+.ak21 svg{width:100%;height:auto;display:block}
+.ak21-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.ak21 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('ak21'+id),D=200,I=20,C=12,X0=50,X1=628,YT=12,YB=170,x=e=>X0+e*(X1-X0),y=v=>YB-v/10*(YB-YT);
+  const bad=e=>{const n=Math.round(e*D),imp=Math.min(I,n),care=n?Math.min(1,C/n):1;return (I-imp)*.4+imp*(1-care)*.4;};
+  function draw(){const e=+$('-e').value/100,n=Math.round(e*D),b=bad(e);$('-ev').textContent=Math.round(e*100)+'% ('+n+' a year)';
+    let h=[0,2,4,6,8,10].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+[0,.25,.5,.75,1].map(v=>`<text x="${x(v)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${v*100}%</text>`).join('');
+    let d='';for(let k=0;k<=100;k++)d+=(k?'L':'M')+x(k/100).toFixed(1)+','+y(bad(k/100)).toFixed(1);
+    h+=`<path d="${d}" fill="none" stroke="var(--warm)" stroke-width="2.6"/><circle cx="${x(e)}" cy="${y(b)}" r="7" fill="var(--warm)"/>`;
+    $('-g').innerHTML=h;
+    $('-msg').textContent=n===0?'Never asking: all 20 important decisions are made by the scribe, and about 8 go against his wishes.':n<=C?`Asking ${n} times a year, he can answer every request with care; about ${b.toFixed(1)} of the remaining important decisions go against his wishes.`:`Asking ${n} times a year, he can look carefully at only ${C} of them and nods the rest through without thinking: bad decisions rise again to about ${b.toFixed(1)}. Asking too much is the same as not asking.`;}
+  $('-e').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{let v=0;$('-e').value=0;draw();const id=setInterval(()=>{v+=2;$('-e').value=v;draw();if(v>=60)clearInterval(id);},80);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-2">2. The agreement cannot be complete</h2>
+<p>However detailed the agreement, it cannot foresee everything: the fleet changes its route, the village adopts a new rule, a child is born into his family, or something happens that nobody expected. Someone has to decide the cases the agreement does not cover. Work through who should hold that decision. Give it to the scribe, and it can adapt to circumstances, but it may not know what he cares about. Keep it with him, and he knows what he cares about, but he may not be there in time. The decision can go to only one side first, so it must be settled in advance which uncovered cases the scribe handles in the spirit of the agreement and which must wait for his return.</p>
+<aside class="principle"><p class="pr-k">Derived so far: a principle</p><p class="pr-n">Incomplete contracts and residual control rights</p><p class="pr-c"><span><em>Discipline</em>Economics › Contract theory</span><span><em>Type</em>Theoretical model</span></p><p class="pr-s">A contract cannot specify every contingency in advance; who holds the right to decide in the cases the contract does not cover, that is, the residual control rights, affects both parties' investment beforehand and their behaviour afterwards, and is therefore an important arrangement in its own right.</p><dl><div><dt>Standing in the field</dt><dd>The paper defines ownership as residual control rights and uses this to analyse the boundaries of the firm; later literature names Grossman, Hart and Moore together as the founders of research on incomplete contracts; Hart and Holmström received the 2016 Nobel Memorial Prize in Economic Sciences "for their contributions to contract theory"</dd></div><div><dt>Constraint it answers</dt><dd>Continuing delegation requires an agreement in advance, and the agreement cannot be complete</dd></div><div><dt>Premises</dt><dd>Writing down every contingency is too costly; the residual right to decide can belong to only one party at a time</dd></div><div><dt>Proposed by</dt><dd>Grossman and Hart, 1986; Hart and Moore, 1990</dd></div><div><dt>Open question</dt><dd>On what basis should the residual right to decide go to the scribe or stay with the principal</dd></div></dl></aside>
+<p><strong>Today's counterpart.</strong> FINRA's rule on discretionary accounts requires that, before a fiduciary exercises discretion, the client has given prior written authorization and the firm has accepted the account in writing. Where the authority covers only the time and price of execution, it is generally valid only for that day.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Who decides the cases the agreement leaves out</p><p class="figsub">Eight things that might happen over ten years. The agreement states only goals, boundaries and everyday rules. Tick "State the residual right to decide" to see how the uncovered cases are handled.</p></div><button class="replay" type="button" data-replay="gp21">Replay</button></div>
+    <div class="gp21" id="gp21" data-anim>
+      <div class="gp21-g" id="gp21-g"></div>
+      <div class="cs-sw"><label><input type="checkbox" id="gp21-c"> State the residual right to decide: reversible matters are handled in the spirit of the agreement and reported; irreversible ones wait for his return</label></div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Covered by the agreement</span><span><i style="background:var(--blue)"></i>Not covered; the scribe acts in the spirit of the agreement and tells him</span><span><i style="background:var(--faint)"></i>Not covered; waits for his return</span><span><i style="background:var(--warm)"></i>Not covered; the scribe decides on its own</span></div>
+      <p class="gp21-msg" id="gp21-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the eight events are invented examples.</figcaption>
+</figure>
+<style>
+.gp21-g{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
+.gp21-c{border-radius:8px;padding:7px 10px;font-size:13px;line-height:1.5;background:var(--quote);border-left:4px solid var(--c);transition:border-color .3s}
+.gp21-c em{display:block;font-style:normal;font-size:11.5px;color:var(--faint)}
+.gp21-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.gp21-g{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('gp21'+id);
+  const E=[['Monthly deposit on schedule',1,1],['Ship shares drift 20% from the agreed proportion',1,1],['Retirement account down 30% after a storm',1,1],['The village introduces a new tax-free retirement account',0,1],['The usual fleet changes route and its fees rise',0,1],['A distant relative asks to borrow a large amount of grain',0,0],['The price of land for the house suddenly doubles',0,0],['He wants to withdraw the retirement money early',0,0]];
+  function draw(){const c=$('-c').checked;let n={w:0,a:0,u:0,s:0};
+    $('-g').innerHTML=E.map(([t,cov,rev])=>{let col,lab;if(cov){col='var(--accent)';lab='Covered by the agreement';n.w++;}else if(!c){col='var(--warm)';lab='The scribe decides on its own';n.s++;}else if(rev){col='var(--blue)';lab='Handled in the spirit of the agreement, and he is told';n.a++;}else{col='var(--faint)';lab='Waits for him to decide';n.u++;}return `<div class="gp21-c" style="--c:${col}"><em>${lab}</em>${t}</div>`;}).join('');
+    $('-msg').textContent=c?`With the residual right to decide stated: ${n.a} reversible matters are handled by the scribe in the spirit of the agreement and reported, and ${n.u} irreversible ones wait for his return. The uncovered cases are no fewer, but each now has an owner.`:`The agreement covers ${n.w}; for the ${n.s} it does not cover, the scribe can only decide on its own, including lending grain and withdrawing money, which cannot be taken back once done.`;}
+  $('-c').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{$('-c').checked=false;draw();setTimeout(()=>{$('-c').checked=true;draw();},2200);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-3">3. What the agreement should contain</h2>
+<p>That the agreement cannot be complete is no reason to leave it unwritten. Work out what the villager must write down at the least: what he wants to achieve (goals, namely the three accounts); what must not be crossed (boundaries: the share of ship shares in each account, the maximum loss, the fee ceiling, what may not be bought); how things are done in the ordinary course (rules: when to deposit, when to adjust, how far a deviation may go before holdings are brought back); when exceptions apply (which situations require stopping to ask him); and how long the agreement lasts and how it can be revoked. Goals and boundaries tell the scribe where to go and where it must not go; rules mean most everyday matters need no request; exceptions and term let him keep final control.</p>
+<p><strong>Today's counterpart.</strong> The elements of an investment policy statement that the CFA Institute sets out for individual investors include scope and purpose; governance (who drafts, implements and monitors the investment policy); return and risk objectives and constraints; and risk management and rebalancing.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The five parts of an agreement</p><p class="figsub">Select a part of the agreement to see what the villager's agreement says and what happens without it.</p></div><button class="replay" type="button" data-replay="pa21">Replay</button></div>
+    <div class="pa21" id="pa21" data-anim>
+      <div class="pa21-t" id="pa21-t"></div>
+      <div class="pa21-d" id="pa21-d" aria-live="polite"></div>
+    </div>
+  </div>
+  <figcaption>Illustrative: the contents of the agreement are invented examples.</figcaption>
+</figure>
+<style>
+.pa21-t{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.pa21-t button{font:inherit;cursor:pointer;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:8px 6px;font-size:13px;color:var(--ink);opacity:0;transform:translateY(6px);transition:opacity .35s,transform .35s,border-color .3s;transition-delay:calc(var(--i)*.15s)}
+.pa21.in .pa21-t button{opacity:1;transform:none}
+.pa21-t button.sel{border-color:var(--accent);color:var(--accent)}
+.pa21-d{display:grid;grid-template-columns:1.3fr 1fr;gap:8px;margin-top:10px}
+.pa21-d div{border-radius:9px;padding:10px 12px;font-size:13.5px;line-height:1.65}
+.pa21-d div:first-child{background:var(--bg);border:1px solid var(--line)} .pa21-d div:last-child{background:var(--warm-soft)}
+.pa21-d span{display:block;font-size:11.5px;color:var(--faint)}
+@media (max-width:640px){.pa21-t{grid-template-columns:repeat(3,1fr)}.pa21-d{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const P=[['Goals','Emergency account holds half a year of income; house account reaches 1.2 years of income in five years; retirement account reaches eight years of income at age 60.','The scribe does not know where to go and can only chase "high returns", which may not be what he wants.'],
+    ['Boundaries','Ship shares no more than 20% of the house account and up to 100% of the retirement account; if any account falls more than 15% in a year, stop and ask him; fees no more than 0.3% a year; no products leveraged with borrowed money.','The scribe does not know where it must not go, and one large deviation could wreck a goal.'],
+    ['Rules','Deposit 20% after each monthly pay; check once a quarter, and bring holdings back if they deviate from the agreed proportion by more than five percentage points.','Every small everyday matter needs a request, and he soon stops replying.'],
+    ['Exceptions','For a matter the agreement does not cover whose effects cannot be undone, wait for his return; when his income, family or goals change, pause adjustments and come back to ask him.','In cases the agreement does not cover, the scribe can only decide on its own.'],
+    ['Term and revocation','The agreement is reviewed once a year; he can revoke all or part of the authority at any time, after which the scribe may view the accounts but not place orders.','Once set, the agreement cannot be taken back, and he loses final control.']];
+  const t=document.getElementById('pa21-t'),d=document.getElementById('pa21-d');
+  t.innerHTML=P.map((p,i)=>`<button type="button" style="--i:${i}">${p[0]}</button>`).join('');const bs=[...t.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));d.innerHTML=`<div><span>His agreement says</span>${P[i][1]}</div><div><span>Without it</span>${P[i][2]}</div>`;}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('pa21').addEventListener('anim-in',()=>{[0,1,2,3,4].forEach((i,k)=>setTimeout(()=>set(i),1200+k*1800));});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-4">4. Grading authority</h2>
+<p>Not everything is worth asking him about, and not everything can go unasked. Sort matters by two questions: how large is this, and can a mistake be undone? Size can be measured by the amount involved as a share of the household's property; for example, no more than 2% counts as small, and once trust is established the threshold can be raised. Small and reversible matters, such as scheduled regular deposits or bringing holdings back to the agreed proportions, the scribe handles on its own and simply records afterwards. Large and reversible matters, such as a sizeable adjustment, it carries out and then promptly tells him about, and he can reverse them. Small and irreversible matters, such as selling a few ship shares to pay a small fee, it also carries out first within the scope of the agreement and promptly tells him about. Large and irreversible matters, such as moving grain out of the granary, drawing early on the house or retirement money, or changing the agreement itself, require his own confirmation in advance. Anything outside the agreement's boundaries, such as buying a product leveraged with borrowed money, is forbidden whatever its size. This gives four levels: act on its own; act, then tell; confirm first; and forbidden.</p>
+<aside class="principle"><p class="pr-k">Rerun: a principle re-examined</p><p class="pr-n">Principle of least privilege</p><p class="pr-c"><span><em>Discipline</em>Computer science › Information security</span><span><em>Type</em>Design principle</span></p><p class="pr-s">Every program and every user of a system should hold only the least privilege needed to do its work; the damage that one error or one abuse can cause is then confined within that privilege.</p><dl><div><dt>Standing in the field</dt><dd>One of eight design principles for information protection set out in the paper; according to Smith's (2012) review, most of these principles were adopted by the US Department of Defense's Trusted Computer System Evaluation Criteria</dd></div><div><dt>Constraint it answers</dt><dd>An agent may err or be misused, and compensation after the fact cannot undo everything</dd></div><div><dt>Premises</dt><dd>The privileges a task requires can be defined in advance; privileges can be subdivided and enforced by the system</dd></div><div><dt>Proposed by</dt><dd>Saltzer and Schroeder, 1975</dd></div><div><dt>Open question</dt><dd>Who sets the boundaries between levels, and how should they change as trust grows</dd></div><div><dt>After the rerun</dt><dd>In a product, privilege is not simply "allowed or not allowed". It is graded by the size of the matter and whether it can be undone into four levels, act on its own; act, then tell; confirm first; and forbidden, written into the agreement and enforced by the system</dd></div></dl></aside>
+<p><strong>Today's counterpart.</strong> SAE International's standard for levels of driving automation defines six levels, from 0 to 5, and specifies that the level depends on the features engaged at the time; the same vehicle can operate at different levels in different situations.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Grading by size and reversibility</p><p class="figsub">Two questions place every matter in one of four levels. Drag "Trust established" to see how the boundary of acting on its own moves; select a cell to see examples.</p></div><button class="replay" type="button" data-replay="lv21">Replay</button></div>
+    <div class="lv21" id="lv21" data-anim>
+      <div class="lv21-g" id="lv21-g"></div>
+      <div class="sl"><label for="lv21-t">Trust established <b id="lv21-tv"></b></label><input id="lv21-t" type="range" min="0" max="3" step="1" value="0"></div>
+      <p class="lv21-msg" id="lv21-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: "small" means no more than 2% of the household's property; as trust grows, the threshold for "small" is raised one step for each year the agreement is kept, to 5%, 10% and 25% in turn. Large and irreversible matters always require confirmation in advance, however high the trust.</figcaption>
+</figure>
+<style>
+.lv21-g{display:grid;grid-template-columns:5.5em 1fr 1fr;gap:6px;font-size:13px}
+.lv21-g .h{color:var(--faint);font-size:12px;align-self:end}
+.lv21-g button{font:inherit;cursor:pointer;text-align:left;border:1px solid transparent;border-radius:9px;padding:9px 10px;font-size:13px;line-height:1.5;color:var(--ink);background:var(--c);transition:background .4s,border-color .3s}
+.lv21-g button b{display:block;font-size:14px}
+.lv21-g button.sel{border-color:var(--ink)}
+.lv21-msg{font-size:14px;margin:10px 0 0;min-height:4.6em;background:var(--quote);border-radius:9px;padding:10px 12px}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('lv21'+id),T=['Just starting','One year kept','Two years kept','Three years kept'],TH=['2%','5%','10%','25%'];let sel=0;
+  const L={self:['Act on its own, record afterwards','var(--accent-soft)'],tell:['Act, then tell promptly','rgba(47,95,158,.14)'],conf:['Confirm first with him','var(--warm-soft)'],no:['Forbidden','var(--quote)']};
+  const C=[['Small','reversible','self','Scheduled regular deposits; bringing holdings back to the agreed proportions; buying within the limit.'],['Small','irreversible','tell','Selling a few ship shares within the agreed scope to pay a small fee.'],['Large','reversible','tell','A sizeable adjustment, such as bringing the retirement account\'s ship shares back to the agreed proportion after a storm.'],['Large','irreversible','conf','Moving grain out of the granary; changing the agreement itself; drawing early on the house or retirement money.']];
+  function draw(){const t=+$('-t').value;$('-tv').textContent=T[t]+' ("small" means no more than '+TH[t]+' of the property)';
+    const lv=i=>{let k=C[i][2];if(t>=1&&i===1)k='self';if(t>=2&&i===2)k='self';return k;};
+    $('-g').innerHTML=`<span></span><span class="h">Reversible</span><span class="h">Irreversible</span><span class="h">Small</span>${[0,1].map(i=>`<button type="button" data-i="${i}" class="${sel===i?'sel':''}" style="--c:${L[lv(i)][1]}"><b>${L[lv(i)][0]}</b></button>`).join('')}<span class="h">Large</span>${[2,3].map(i=>`<button type="button" data-i="${i}" class="${sel===i?'sel':''}" style="--c:${L[lv(i)][1]}"><b>${L[lv(i)][0]}</b></button>`).join('')}`;
+    $('-g').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{sel=+b.dataset.i;draw();}));
+    $('-msg').textContent=`${C[sel][0]} and ${C[sel][1]}: ${C[sel][3]} Current handling: "${L[lv(sel)][0]}".`+(t>0?' As trust grows, more matters are left to the scribe; but the bottom-right cell always requires his own confirmation.':'');}
+  $('-t').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{[[0,0],[0,3],[1,1],[2,2],[3,2]].forEach(([t,s],i)=>setTimeout(()=>{$('-t').value=t;sel=s;draw();},300+i*1800));});
+  draw();
+})();
+</script>
+
+<h2 id="sec-5">5. Letting go and keeping control</h2>
+<p>The agreement says "ask him about the big things", but he knows far less than the scribe: the scribe watches the fleet and the accounts every day, while he looks only a few times a year. When the scribe proposes a plan, he can usually only nod. The formal right to decide stays with him, but more and more of the real decision passes to the scribe. Letting go has benefits: the scribe will look for opportunities and deal with problems more actively. The cost is that he loses control. The less time he spends understanding the situation, the more pronounced the shift becomes.</p>
+<aside class="principle"><p class="pr-k">Derived so far: a principle</p><p class="pr-n">Formal and real authority</p><p class="pr-c"><span><em>Discipline</em>Economics › Organizational economics (contract theory)</span><span><em>Type</em>Theoretical model</span></p><p class="pr-s">The party holding the right to decide (formal authority) does not necessarily control the decision in practice (real authority); real authority depends on who holds the information. The more real authority the agent has, the stronger its incentive to take initiative, and the less control the principal keeps over decisions.</p><dl><div><dt>Standing in the field</dt><dd>The paper distinguishes formal from real authority, shows that real authority is determined by the information structure, which in turn depends on how formal authority is allocated, and analyses factors that raise a subordinate's real authority, such as overload, lenient rules, urgency of decisions, reputation and performance measurement</dd></div><div><dt>Constraint it answers</dt><dd>The principal cannot be present all the time and has less information than the agent</dd></div><div><dt>Premises</dt><dd>Acquiring information takes time and effort; the preferences of principal and agent are not fully aligned</dd></div><div><dt>Proposed by</dt><dd>Aghion and Tirole, 1997</dd></div><div><dt>Open question</dt><dd>How can one let go and still keep real control</dd></div></dl></aside>
+<p><strong>Today's counterpart.</strong> The choice between a discretionary and a non-discretionary account is, at bottom, a trade-off between initiative and control.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">He decides on paper; who decides in fact?</p><p class="figsub">Each year the scribe puts 10 important proposals to him, 2 of which in fact go against his wishes. Drag the time he spends each year understanding the situation, and see how many he catches and who holds the real decision.</p></div><button class="replay" type="button" data-replay="au21">Replay</button></div>
+    <div class="au21" id="au21" data-anim>
+      <div class="au21-g" id="au21-g"></div>
+      <div class="sl"><label for="au21-h">Time he spends understanding the situation <b id="au21-hv"></b></label><input id="au21-h" type="range" min="0" max="60" step="2" value="4"></div>
+      <p class="au21-msg" id="au21-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the probability that he catches a proposal that goes against his wishes is time ÷ (time + 10 hours); proposals he does not catch, he approves all the same (the distinction between formal and real authority drawn by Aghion and Tirole, 1997).</figcaption>
+</figure>
+<style>
+.au21-g{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;margin:6px 0 10px}
+.au21-g i{aspect-ratio:1;border-radius:8px;background:var(--accent-soft);display:grid;place-items:center;font-style:normal;font-size:12px;transition:background .3s}
+.au21-g i.bad{background:var(--warm)} .au21-g i.caught{background:var(--quote);outline:2px solid var(--warm);outline-offset:-2px;color:var(--warm)}
+.au21-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('au21'+id);
+  function draw(){const h=+$('-h').value,p=h/(h+10),caught=Math.round(2*p*10)/10;$('-hv').textContent=h+' hours';
+    $('-g').innerHTML=Array.from({length:10},(_,i)=>{if(i<2){const c=i<Math.round(caught);return `<i class="${c?'caught':'bad'}">${c?'No':'Yes'}</i>`;}return `<i>Yes</i>`;}).join('');
+    $('-msg').textContent=h===0?'He never spends time understanding the situation and approves all ten proposals: the formal right to decide is his, but the real decision rests entirely with the scribe.':`Spending ${h} hours a year on understanding the situation, he catches on average ${caught.toFixed(1)} of the proposals that go against his wishes. ${h<10?'He spends too little time, so most of the real decision rests with the scribe.':'The more information he holds, the more of the real decision returns to him; the price is his time.'}`;}
+  $('-h').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{let v=0;$('-h').value=0;draw();const id=setInterval(()=>{v+=2;$('-h').value=v;draw();if(v>=40)clearInterval(id);},120);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-6">6. When to come back and ask him</h2>
+<p>The key to letting go while keeping control is to write into the agreement when the scribe must come back and ask him, rather than leaving it wholly to the scribe's judgment. There can be three kinds of trigger. The first is quantitative: an account has fallen by more than the agreed amount, or has drifted too far from its target. The second is an event: he changes jobs, a child is born, someone falls ill. The third is time: a scheduled review once a year, even if nothing has happened. Once a trigger fires, the scribe must set out the situation, the options and its recommendation, and he decides.</p>
+<p><strong>Today's counterpart.</strong> Among the elements of an investment policy statement listed by the CFA Institute, the governance section requires stating how the investment policy is reviewed and updated.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">When to come back and ask him</p><p class="figsub">Eight events over ten years, laid out on a timeline. Tick the triggers written into the agreement and see which events make the scribe stop and ask him.</p></div><button class="replay" type="button" data-replay="tg21">Replay</button></div>
+    <div class="tg21" id="tg21" data-anim>
+      <svg viewBox="0 0 660 150" role="img" aria-label="Events over ten years"><g id="tg21-g"></g></svg>
+      <div class="cs-sw"><label><input type="checkbox" id="tg21-q" checked> Quantitative trigger: any account falls more than 15% in a year, or drifts 20% from its target</label><label><input type="checkbox" id="tg21-e"> Event trigger: a change of job, a new child, illness, a move</label><label><input type="checkbox" id="tg21-t"> Time trigger: a review once a year</label></div>
+      <p class="tg21-msg" id="tg21-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the eight events are invented examples. A "quiet drift" is a deviation that builds up over several years without any single large fall, for example when his income quietly declines and the agreed deposit rate gradually exceeds what he can afford.</figcaption>
+</figure>
+<style>
+.tg21 svg{width:100%;height:auto;display:block}
+.tg21-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.tg21 svg text{font-size:13px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('tg21'+id),X0=30,X1=630,x=t=>X0+t/10*(X1-X0);
+  const E=[[1.2,'Storm: retirement −22%','q'],[2.5,'New job','e'],[3.6,'Child born','e'],[4.4,'Quiet drift','t'],[5.5,'Storm: house −8%',''],[6.8,'Illness','e'],[7.7,'Income falls','t'],[9.1,'Storm: retirement −18%','q']];
+  function draw(){const on={q:$('-q').checked,e:$('-e').checked,t:$('-t').checked};let h=`<line x1="${X0}" x2="${X1}" y1="80" y2="80" stroke="var(--line)" stroke-width="3"/>`+[0,2,4,6,8,10].map(t=>`<text x="${x(t)}" y="104" text-anchor="middle" font-size="11" class="t-faint">Year ${t}</text>`).join('');
+    if(on.t)for(let t=1;t<=10;t++)h+=`<line x1="${x(t)}" x2="${x(t)}" y1="72" y2="88" stroke="var(--blue)" stroke-width="2"/>`;
+    let n=0,miss=[];E.forEach(([t,l,k],i)=>{const hit=k&&on[k];if(hit)n++;else if(k)miss.push(l);h+=`<circle cx="${x(t)}" cy="80" r="${hit?9:6}" fill="${hit?'var(--warm)':'var(--faint)'}"/><text x="${x(t)}" y="${i%2?56:40}" text-anchor="middle" font-size="11" fill="${hit?'var(--warm)':'var(--muted)'}">${l}</text>`;});
+    $('-g').innerHTML=h;
+    $('-msg').textContent=`${n} events make the scribe stop and ask him. `+(miss.length?`Important events that set off no trigger: ${miss.join(', ')}.`:'Everything that should be asked about sets off a trigger; the 8% fall in the house account stayed within the boundaries, so the scribe handled it by the rules without disturbing him.');}
+  ['-q','-e','-t'].forEach(k=>$(k).addEventListener('input',draw));
+  $('').addEventListener('anim-in',()=>{$('-q').checked=true;$('-e').checked=false;$('-t').checked=false;draw();setTimeout(()=>{$('-e').checked=true;draw();},1600);setTimeout(()=>{$('-t').checked=true;draw();},3200);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-7">7. Ten years in his absence: Civilization Simulator, version 21</h2>
+<p>The simulator unlocks "mandate parameters and authority". Over ten years the villager meets all kinds of events: storms, a change of job, a new child, illness, a new village rule. You can switch on or off the agreement's exception clauses, graded authority and scheduled reviews, and set how often he can respond to requests. Then see, over the ten years, which matters the scribe handled well on its own, which it should have asked about and did not, which it asked about to no effect, and how many times he was interrupted along the way.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Civilization Simulator · Chapter 21: ten years in his absence</p><p class="figsub">Over ten years the scribe handles about twenty routine matters a year and from time to time meets storms, changes in his family, new situations the agreement does not cover, and quiet drifts. Switch the three rules on or off, set how many requests he can answer with care each year, and see the results.</p></div><button class="replay" type="button" data-replay="cs21">Replay</button></div>
+    <div class="cs-rules"><span class="on">Product: what to promise</span><span class="on">Product: mandate and authority</span><span class="lock">Process records and verifiable evidence · Ch. 22</span></div>
+    <div class="cs21" id="cs21" data-anim>
+      <div class="cs21-bars" id="cs21-b"></div>
+      <div class="cs-sw"><label><input type="checkbox" id="cs21-g"> Rule: graded authority (small routine matters handled on its own, no longer referred one by one)</label><label><input type="checkbox" id="cs21-x"> Rule: exception and trigger clauses (family changes and uncovered irreversible matters: stop and ask him)</label><label><input type="checkbox" id="cs21-r"> Rule: scheduled annual review</label></div>
+      <div class="sl"><label for="cs21-f">Requests he can answer with care each year <b id="cs21-fv"></b></label><input id="cs21-f" type="range" min="2" max="30" step="1" value="12"></div>
+      <button type="button" class="replay" id="cs21-re">Another ten years</button>
+      <p class="cs21-msg" id="cs21-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model: about twenty routine matters a year; a 30% chance each year of a storm (a quantitative trigger, about which the scribe always asks); a 35% chance each year of a change in his family; a 30% chance each year of a new situation the agreement does not cover, half of them irreversible; a 20% chance each year of a quiet drift, which only a scheduled review can detect. Without graded authority, routine matters are also referred one by one; the probability that he answers with care is "requests he can answer with care per year ÷ requests per year" (capped at 1).</figcaption>
+</figure>
+<style>
+.cs21-bars{display:grid;gap:10px;margin:4px 0 10px}
+.cs21-r{display:grid;grid-template-columns:9.5em 1fr 4.5em;gap:10px;align-items:center;font-size:12.5px}
+.cs21-r div{height:22px;background:var(--quote);border-radius:5px;overflow:hidden}
+.cs21-r i{display:block;height:100%;transition:width .4s}
+.cs21-r b{text-align:right;font-variant-numeric:tabular-nums}
+.cs21-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs21-r{grid-template-columns:1fr 4.5em}.cs21-r span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs21'+id);let seed=2121;
+  function sim(grad,exc,rev,f){let s=seed;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};
+    let ok=0,miss=0,blind=0,asks=0,carefulAns=0;
+    for(let y=0;y<10;y++){const items=[];const nr=18+Math.floor(r()*5);for(let k=0;k<nr;k++)items.push('routine');
+      if(r()<.3)items.push('crash');if(r()<.35)items.push('life');if(r()<.3)items.push(r()<.5?'newIrr':'newRev');const drift=r()<.2;
+      const ask=items.filter(t=>t==='crash'||(!grad&&t==='routine')||(exc&&(t==='life'||t==='newIrr'))||(!grad&&t==='newRev'));
+      const n=ask.length+(rev?1:0)+(rev&&drift?0:0);asks+=n;const care=n?Math.min(1,f/n):1;
+      for(const t of items){const asked=ask.includes(t);
+        if(t==='routine'){if(!asked)ok++;else{ if(r()<care)ok++;else blind+=0;}}
+        else if(t==='newRev'){if(!asked)ok++;else ok++;}
+        else if(t==='crash'||t==='life'||t==='newIrr'){if(asked){if(r()<care)ok++;else blind++;}else miss++;}}
+      if(drift){if(rev){if(r()<care)ok++;else blind++;}else miss++;}}
+    return {ok,miss,blind,asks:asks/10};}
+  function draw(){const g=$('-g').checked,x=$('-x').checked,v=$('-r').checked,f=+$('-f').value,S=sim(g,x,v,f);$('-fv').textContent=f+' a year';
+    $('-b').innerHTML=[['Handled well',S.ok,230,'var(--accent)',String(S.ok)],['Should have asked, did not',S.miss,15,'var(--warm)',String(S.miss)],['Asked, but he nodded unread',S.blind,15,'var(--gold)',String(S.blind)],['Requests per year',S.asks,25,'var(--blue)',S.asks.toFixed(1)]].map(([k,val,m,c,t])=>`<div class="cs21-r"><span>${k}</span><div><i style="width:${Math.min(100,val/m*100)}%;background:${c}"></i></div><b>${t}</b></div>`).join('');
+    const n=[g,x,v].filter(Boolean).length;
+    $('-msg').textContent=!g?`No graded authority: even small routine matters are referred one by one. With ${S.asks.toFixed(0)} requests a year, he can look carefully at only ${f}, and ${S.blind} important matters pass on a nod he gave without reading.`:n===3?`All three rules in place: the scribe handles routine matters itself, stops to ask him about family changes and uncovered irreversible matters, and reviews once a year. About ${S.asks.toFixed(0)} requests a year, and only ${S.miss} matters that should have been asked about were not.`:`${x?'With exception and trigger clauses, family changes and irreversible new situations make the scribe stop and ask him':'Without exception and trigger clauses, the scribe must decide family changes and uncovered irreversible matters on its own'}; ${v?'with an annual review, quiet drifts are detected':'without a scheduled review, quiet drifts go unnoticed'}. Matters that should have been asked about but were not: ${S.miss}.`;}
+  ['-g','-x','-r','-f'].forEach(k=>$(k).addEventListener('input',draw));$('-re').addEventListener('click',()=>{seed=(seed*48271)%2147483647;draw();});
+  $('').addEventListener('anim-in',()=>{[[0,0,0],[1,0,0],[1,1,0],[1,1,1]].forEach(([a,b,c],i)=>setTimeout(()=>{$('-g').checked=!!a;$('-x').checked=!!b;$('-r').checked=!!c;draw();},300+i*2200));});
+  draw();
+})();
+</script>
+
+<h2 id="sec-8">8. What this step leaves open</h2>
+<p>The agreement and the grading of authority let the scribe act while he is away, but he still cannot see what it has done:</p>
+<ol><li><strong>He cannot read the accounts.</strong> Every action of the scribe is recorded, but he looks only a few times a year. Can he understand what he sees?</li><li><strong>He has no way to check.</strong> The scribe says it kept to the agreement. Why should he believe it?</li><li><strong>A nod is not consent.</strong> Does a nod given without understanding the situation count as genuine confirmation?</li><li><strong>Agents make mistakes.</strong> Who bears the consequences of an error made within the scope of authority?</li></ol>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">What this step leaves open</p><p class="figsub">Four problems that remain once the agreement and authority let the scribe act while he is away. Select one to see the assumption it hides.</p></div><button class="replay" type="button" data-replay="nx21">Replay</button></div>
+    <div class="nx" id="nx21" data-anim>
+      <div class="nx-src"><b>Ten years in his absence</b><span>Agreement and authority</span></div>
+      <div class="nx-list" id="nx21-l"></div>
+    </div>
+    <p class="nx-msg" id="nx21-msg" aria-live="polite"></p>
+  </div>
+</figure>
+<style>
+.nx{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:center}
+.nx-src{background:var(--ink);color:var(--bg);border-radius:10px;padding:14px 10px;text-align:center}
+.nx-src b{display:block;font-size:16px} .nx-src span{font-size:12px;opacity:.75}
+.nx-list{display:grid;gap:6px}
+.nx-i{font:inherit;text-align:left;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:9px 12px;color:var(--ink);opacity:0;transform:translateX(-8px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.3s)}
+.nx.in .nx-i{opacity:1;transform:none}
+.nx-i span{font-size:13.5px} .nx-i em{font-style:normal;font-size:11.5px;color:var(--faint);white-space:nowrap}
+.nx-i.sel{border-color:var(--accent)}
+.nx-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.nx{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const Q=[['He cannot read the accounts','Chapter 22','Hidden assumption: having records is enough. Every action of the scribe is recorded, but he looks only a few times a year. Can he understand what he sees?'],
+    ['He has no way to check','Chapter 22','Hidden assumption: if the scribe says it kept the agreement, it did. Why should he believe it?'],
+    ['A nod is not consent','Chapter 22','Hidden assumption: once he nods, he has confirmed. Does a nod given without understanding the situation count as genuine confirmation?'],
+    ['Agents make mistakes','Chapter 23','Hidden assumption: nothing goes wrong within the scope of authority. Who bears the consequences of an error made within that scope?']];
+  const l=document.getElementById('nx21-l'),msg=document.getElementById('nx21-msg');
+  l.innerHTML=Q.map((q,i)=>`<button type="button" class="nx-i" style="--i:${i}" data-i="${i}"><span>${q[0]}</span><em>→ ${q[1]}</em></button>`).join('');
+  const bs=[...l.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));msg.textContent=Q[i][2];}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('nx21').addEventListener('anim-in',()=>{[0,1,2,3].forEach((i,k)=>setTimeout(()=>set(i),1600+k*1800));});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-9">9. Implications for products</h2>
+<p>For a wealth product built around an agent, the second part that has to grow is "mandate parameters and authority". Three implications follow. First, make the agreement part of the product: goals, boundaries, rules, exceptions and term, written in words the user understands and enforced by the system, rather than a mere disclaimer. Second, grade authority by the size of a matter and whether it can be undone: small, reversible matters are handled on the agent's own and recorded afterwards; large, irreversible ones require confirmation in advance; and the boundaries between levels can be adjusted as trust grows. Third, write into the agreement when to come back and ask the user: quantitative, event and time triggers; once a trigger fires, set out the situation, options and recommendation and let the user decide, so that the real decision does not pass entirely to the agent without anyone noticing.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: the user is not present</p><p class="figsub">Four conclusions, each tied to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="g21summary">Replay</button></div>
+    <div class="g21summary" id="g21summary" data-anim><div class="g21summary-c" style="--i:0"><em>Incomplete contracts</em><b>Uncovered cases need an owner</b><p>Settle in advance who holds the residual right to decide: reversible matters are handled in the spirit of the agreement; irreversible ones wait for his return.</p></div><div class="g21summary-c" style="--i:1"><em>The agreement</em><b>Goals, boundaries, rules, exceptions and term</b><p>Most everyday matters need no request, and final control is kept.</p></div><div class="g21summary-c warn" style="--i:2"><em>Rerun: least privilege</em><b>Four levels by size and reversibility</b><p>Act on its own; act, then tell; confirm first; forbidden. The boundaries shift as trust grows.</p></div><div class="g21summary-c warn" style="--i:3"><em>Formal and real authority</em><b>Write "when to come back and ask" into the agreement</b><p>Quantitative, event and time triggers keep the real decision from passing away unnoticed.</p></div></div>
+  </div>
+</figure>
+<style>
+.g21summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g21summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g21summary-c.warn{border-left-color:var(--warm)}
+.g21summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g21summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g21summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g21summary.in .g21summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g21summary{grid-template-columns:1fr}}
+</style>
+
+<h2 id="sec-10">References</h2>
+<ul class="refs"><li>Aghion, P., &amp; Tirole, J. (1997). Formal and real authority in organizations. <i>Journal of Political Economy</i>, 105(1), 1–29.</li><li>CFA Institute (2010). <i>Elements of an Investment Policy Statement for Individual Investors</i>. Charlottesville: CFA Institute.</li><li>FINRA. Rule 3260: Discretionary Accounts. Financial Industry Regulatory Authority Rulebook.</li><li>Grossman, S. J., &amp; Hart, O. D. (1986). The costs and benefits of ownership: A theory of vertical and lateral integration. <i>Journal of Political Economy</i>, 94(4), 691–719.</li><li>Hart, O., &amp; Moore, J. (1990). Property rights and the nature of the firm. <i>Journal of Political Economy</i>, 98(6), 1119–1158.</li><li>Nobel Prize Outreach. <i>The Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel 2016</i>. NobelPrize.org.</li><li>SAE International (2021). <i>Taxonomy and Definitions for Terms Related to Driving Automation Systems for On-Road Motor Vehicles</i> (J3016_202104).</li><li>Smith, R. E. (2012). A contemporary look at Saltzer and Schroeder's 1975 design principles. <i>IEEE Security &amp; Privacy</i>, 10(6), 20–25.</li><li>Saltzer, J. H., &amp; Schroeder, M. D. (1975). The protection of information in computer systems. <i>Proceedings of the IEEE</i>, 63(9), 1278–1308.</li></ul>
+<footer class="nav"><a href="g-20.html">← Chapter 20: One person and one sum of money</a><a href="g-22.html">Chapter 22: The user cannot see the process →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

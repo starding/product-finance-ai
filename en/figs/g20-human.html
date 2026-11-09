@@ -1,0 +1,38 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Counting future harvests as wealth</p><p class="figsub">Drag his age to see the present value of his future harvests and his savings, and the share of savings that should go into ship shares; then switch whether his harvest rises and falls with the fleet.</p></div><button class="replay" type="button" data-replay="hc20">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Nature of the harvest">
+      <button type="button" data-hc20="bond" aria-pressed="true">Steady harvest, like a bond</button>
+      <button type="button" data-hc20="stock" aria-pressed="false">Works on the ships, harvest moves with the fleet</button>
+    </div>
+    <div class="hc20" id="hc20" data-anim>
+      <div class="hc20-bars" id="hc20-b"></div>
+      <div class="sl"><label for="hc20-a">Age <b id="hc20-av"></b></label><input id="hc20-a" type="range" min="25" max="65" step="1" value="30"></div>
+      <p class="hc20-msg" id="hc20-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: annual income is 1, he works until 65, and future income is discounted at 3%; from age 25 he saves 12% of income each year, growing at 5%. Present value and savings are in years of income. The Merton ratio is taken as 50%: of future income and savings combined, half in total bears the risk of ship shares. With a steady harvest, future income is treated as a risk-free asset; when it moves with the fleet, 60% of it is treated as bearing ship-share risk (following the reasoning of Bodie, Merton and Samuelson, 1992).</figcaption>
+</figure>
+<style>
+.hc20-bars{display:grid;gap:12px;margin:6px 0 10px}
+.hc20-r{display:grid;grid-template-columns:8em 1fr 5em;gap:10px;align-items:center;font-size:12.5px}
+.hc20-r div{height:22px;background:var(--quote);border-radius:5px;overflow:hidden}
+.hc20-r i{display:block;height:100%;transition:width .4s}
+.hc20-r b{text-align:right;font-variant-numeric:tabular-nums}
+.hc20-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.hc20-r{grid-template-columns:1fr 5em}.hc20-r span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('hc20'+id),M=.5;let mode='bond';
+  const H=a=>{let v=0;for(let t=1;t<=65-a;t++)v+=1/Math.pow(1.03,t);return v;},F=a=>{let w=.3;for(let t=25;t<a;t++)w=(w+.12)*1.05;return w;};
+  function draw(){const a=+$('-a').value,h=H(a),f=F(a),beta=mode==='bond'?0:.6,share=Math.max(0,Math.min(1,(M*(f+h)-beta*h)/f));$('-av').textContent=String(a);
+    $('-b').innerHTML=[['Present value of future harvests',h,25,'var(--blue)',h.toFixed(1)+' yrs'],['Savings',f,25,'var(--accent)',f.toFixed(1)+' yrs'],['Share of savings in ship shares',share,1,'var(--warm)',Math.round(share*100)+'%']].map(([k,v,m,c,t])=>`<div class="hc20-r"><span>${k}</span><div><i style="width:${Math.min(100,v/m*100)}%;background:${c}"></i></div><b>${t}</b></div>`).join('');
+    $('-msg').textContent=mode==='bond'?`Age ${a}: the present value of his future harvests is ${(h/f).toFixed(1)} times his savings, like a large, safe bond; ${Math.round(share*100)}% of his savings can go into ship shares. The older he gets, the fewer future harvests remain, and this share falls accordingly.`:`He works on the ships, so his future harvest itself rises and falls with the fleet and already bears a good deal of ship-share risk; only ${Math.round(share*100)}% of his savings should go into ship shares.`;}
+  const bs=[...document.querySelectorAll('[data-hc20]')];
+  function set(m){mode=m;bs.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.hc20===m)));draw();}
+  bs.forEach(b=>b.addEventListener('click',()=>set(b.dataset.hc20)));$('-a').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{set('bond');let v=25;$('-a').value=25;draw();const id=setInterval(()=>{v+=1;$('-a').value=v;draw();if(v>=65){clearInterval(id);setTimeout(()=>{$('-a').value=30;set('stock');},800);}},90);});
+  draw();
+})();
+</script>

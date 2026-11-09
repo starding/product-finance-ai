@@ -1,0 +1,42 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">Measuring willingness to take risk with a set of lotteries</p>
+    <p class="figsub">In each row, choose between the safe option A and the risky option B. Going down the rows, B's chance of the high prize rises step by step. Tap the row at which you switch to B.</p>
+    <div class="ht" id="ht" data-anim>
+      <div class="ht-tb" id="ht-tb"></div>
+      <label class="ht-chk"><input type="checkbox" id="ht-x"> Just lived through a sharp fall</label>
+      <p class="ht-msg" id="ht-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Options follow the design of Holt and Laury (2002), with amounts in dollars. A risk-neutral person switches to B at row 5; the later the switch, the more risk-averse the person. The effect of "a sharp fall" is illustrative; its direction follows Guiso, Sapienza and Zingales (2018).</figcaption>
+</figure>
+<style>
+.ht-tb{display:grid;gap:3px}
+.ht-r{font:inherit;display:grid;grid-template-columns:30px 1fr 1fr 100px;gap:8px;align-items:center;font-size:12.5px;border:1.5px solid transparent;border-radius:7px;padding:4px 8px;background:var(--quote);color:var(--ink);cursor:pointer;text-align:left}
+.ht-r em{font-style:normal;color:var(--faint)}
+.ht-r span{border-radius:5px;padding:2px 6px}
+.ht-r .on{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.ht-r .onb{background:var(--warm-soft);color:var(--warm);font-weight:600}
+.ht-r.sw{border-color:var(--ink)}
+.ht-r b{white-space:nowrap;font-weight:400;font-size:11.5px;color:var(--faint);text-align:right}
+.ht-chk{display:flex;gap:6px;align-items:center;font-size:14px;margin-top:10px}
+.ht-chk input{accent-color:var(--accent);width:16px;height:16px}
+.ht-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.ht-r{grid-template-columns:22px 1fr 1fr;font-size:11.5px}.ht-r b{display:none}}
+</style>
+<script>
+(function(){
+  const tb=document.getElementById('ht-tb'),x=document.getElementById('ht-x');let sw=5;
+  tb.innerHTML=Array.from({length:10},(_,i)=>{const p=(i+1)/10,ea=p*2+(1-p)*1.6,eb=p*3.85+(1-p)*.1;
+    return `<button type="button" class="ht-r" data-i="${i+1}"><em>${i+1}</em><span>A: ${i+1}/10 chance of 2.00, else 1.60</span><span>B: ${i+1}/10 chance of 3.85, else 0.10</span><b>EV gap ${(eb-ea>=0?'+':'−')+Math.abs(eb-ea).toFixed(2)}</b></button>`;}).join('');
+  const rs=[...tb.children];
+  function show(){const s=Math.min(11,sw+(x.checked?2:0));
+    rs.forEach((r,i)=>{const n=i+1,[a,b]=r.querySelectorAll('span');a.className=n<s?'on':'';b.className=n>=s?'onb':'';r.classList.toggle('sw',n===s);});
+    const t=s<=4?'risk-seeking':s===5?'close to risk-neutral':s<=7?'moderately risk-averse':'strongly risk-averse';
+    document.getElementById('ht-msg').textContent=(s>10?'A chosen in all ten rows: extremely risk-averse. ':`Switching to B from row ${s}: ${t}. `)+(x.checked?'After a sharp fall, the same person\'s switching point often moves down; measured willingness reflects the person\'s state at the time.':'From row 5 on, B\'s expected value already exceeds A\'s.');}
+  rs.forEach(r=>r.addEventListener('click',()=>{sw=+r.dataset.i-(x.checked?2:0);sw=Math.max(1,sw);show();}));
+  x.addEventListener('change',show);
+  document.getElementById('ht').addEventListener('anim-in',()=>{x.checked=false;sw=7;show();setTimeout(()=>{x.checked=true;show();},2200);setTimeout(()=>{x.checked=false;show();},4400);});
+  sw=7;show();
+})();
+</script>

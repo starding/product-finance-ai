@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: if everyone has an analyst</p><p class="figsub">Four conclusions, each corresponding to one mechanism in the chapter.</p></div><button class="replay" type="button" data-replay="g16summary">Replay</button></div>
+    <div class="g16summary" id="g16summary" data-anim><div class="g16summary-c" style="--i:0"><em>Rerun: Grossman–Stiglitz</em><b>Reading reports is no longer an advantage</b><p>Analysis is almost free, the number of informed people rises sharply, and prices reflect the great majority of public information.</p></div><div class="g16summary-c" style="--i:1"><em>Private and social value</em><b>Being first moves money; it creates nothing</b><p>Knowing a moment earlier can earn money from others, but racing to be first only consumes resources.</p></div><div class="g16summary-c warn" style="--i:2"><em>Attention</em><b>What is scarce is time to look at information</b><p>The more information there is, the greater the power to rank; those being read also learn to write for scribes.</p></div><div class="g16summary-c warn" style="--i:3"><em>New asymmetry</em><b>The advantage moves to exclusive data</b><p>The arithmetic of active management does not change; who wins and who loses within the group depends on who has non-public data and who is faster.</p></div></div>
+  </div>
+</figure>
+<style>
+.g16summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g16summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g16summary-c.warn{border-left-color:var(--warm)}
+.g16summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g16summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g16summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g16summary.in .g16summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g16summary{grid-template-columns:1fr}}
+</style>

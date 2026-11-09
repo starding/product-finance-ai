@@ -1,0 +1,33 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Deductibles: keeping the incentive to take precautions</p><p class="figsub">A disaster causes a loss of 10 portions. Drag the share of the loss the policyholder bears himself and see how his pest-control effort, the chance of disaster and the premium change.</p></div><button class="replay" type="button" data-replay="mh">Replay</button></div>
+    <div class="mh" id="mh" data-anim>
+      <div class="mh-b"><span>Pest-control effort</span><div><i id="mh-e" style="background:var(--accent)"></i></div><b id="mh-ev"></b></div>
+      <div class="mh-b"><span>Chance of disaster</span><div><i id="mh-p" style="background:var(--warm)"></i></div><b id="mh-pv"></b></div>
+      <div class="mh-b"><span>Annual premium</span><div><i id="mh-q" style="background:var(--gold)"></i></div><b id="mh-qv"></b></div>
+      <div class="mh-b"><span>Self-borne in a disaster year</span><div><i id="mh-s" style="background:var(--faint)"></i></div><b id="mh-sv"></b></div>
+      <div class="sl"><label for="mh-k">Share borne by the policyholder <b id="mh-kv"></b></label><input id="mh-k" type="range" min="0" max="100" step="5" value="0"></div>
+      <p class="mh-msg" id="mh-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the more effort put into pest control, the lower the chance of disaster; the policyholder controls pests only for the part of the loss he bears himself, so his effort is proportional to that share. The premium is set at the expected payout.</figcaption>
+</figure>
+<style>
+.mh-b{display:grid;grid-template-columns:9em 1fr 6.5em;gap:10px;align-items:center;font-size:13px;margin:7px 0}
+.mh-b div{height:14px;background:var(--quote);border-radius:4px;overflow:hidden}
+.mh-b i{display:block;height:100%;transition:width .3s}
+.mh-b b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.mh-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  function draw(){const k=+$('mh-k').value/100,e=k,p=.3-.2*e,q=p*(1-k)*10,s=10*k;
+    $('mh-e').style.width=e*100+'%';$('mh-p').style.width=p/.3*100+'%';$('mh-q').style.width=q/3*100+'%';$('mh-s').style.width=s/10*100+'%';
+    $('mh-ev').textContent=Math.round(e*100)+'%';$('mh-pv').textContent=Math.round(p*100)+'%';$('mh-qv').textContent=q.toFixed(2)+' portions';$('mh-sv').textContent=s.toFixed(1)+' portions';$('mh-kv').textContent=Math.round(k*100)+'%';
+    $('mh-msg').textContent=k===0?'The common store pays the whole loss, so the policyholder has no incentive at all to control pests; the chance of disaster is highest and the premium most expensive.':k===1?'The policyholder bears the whole loss and controls pests hardest, but this is the same as having no insurance.':`Bearing ${Math.round(k*100)}% of the loss himself, the policyholder still controls pests; the chance of disaster falls to ${Math.round(p*100)}% and the premium to ${q.toFixed(2)} portions. The cost is that in a disaster year he bears ${s.toFixed(1)} portions himself. A deductible is a trade-off between cover and precaution.`;}
+  $('mh-k').addEventListener('input',draw);
+  $('mh').addEventListener('anim-in',()=>{let v=0;$('mh-k').value=0;draw();const id=setInterval(()=>{v+=5;$('mh-k').value=v;draw();if(v>=40)clearInterval(id);},180);});
+  draw();
+})();
+</script>

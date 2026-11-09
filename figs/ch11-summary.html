@@ -1,0 +1,21 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：把交易规则讲清楚</p><p class="figsub">四条设计要求，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="s06">重播</button></div>
+    <div class="s06" id="s06" data-anim>
+      <div class="s06-c" style="--i:0"><em>订单类型是风险取舍</em><b>下单时说清“可能不成交”与“可能成交得很差”</b><p>尤其是止损单：说明触发后转为市价单，跳空时成交价可能远离设定价。</p></div>
+      <div class="s06-c" style="--i:1"><em>集合竞价与连续交易规则不同</em><b>按交易时段解释规则</b><p>开盘、收盘集合竞价期间订单如何撮合、能否撤单，应在下单界面就地说明。</p></div>
+      <div class="s06-c warn" style="--i:2"><em>熔断与涨跌停</em><b>提示“可能暂时无法交易”</b><p>临近限制价位或交易暂停时，明确告知订单状态与恢复方式，避免用户误以为系统故障。</p></div>
+      <div class="s06-c" style="--i:3"><em>订单可以送往不同场所</em><b>披露订单去向与利益冲突</b><p>说明订单被送往哪里、成交价与全市场最优价相比如何，以及是否存在订单流付费。</p></div>
+    </div>
+  </div>
+</figure>
+<style>
+.s06{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.s06-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.s06-c.warn{border-left-color:var(--warm)}
+.s06-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.s06-c b{display:block;font-size:15px;margin:2px 0 4px}
+.s06-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.s06.in .s06-c{opacity:1;transform:none}
+@media (max-width:640px){.s06{grid-template-columns:1fr}}
+</style>

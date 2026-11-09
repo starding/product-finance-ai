@@ -1,0 +1,67 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">同一家公司，两种承诺的形状</p><p class="figsub">公司欠债权人 100（单位：万元）。拖动公司到期时的价值，看它如何在债权人与股东之间分配。</p></div><button class="replay" type="button" data-replay="cl">重播</button></div>
+    <div class="cl" id="cl" data-anim>
+      <div class="cl-bar"><div class="cl-debt" id="cl-debt"><span id="cl-dl"></span></div><div class="cl-eq" id="cl-eq"><span id="cl-el"></span></div></div>
+      <div class="cl-scale"><span>0</span><span>50</span><span>100</span><span>150</span><span>200</span></div>
+      <div class="sl"><label for="cl-v">公司到期时的价值 <b id="cl-vv"></b></label><input id="cl-v" type="range" min="0" max="200" value="140"></div>
+      <svg viewBox="0 0 640 230" role="img" aria-label="债权人与股东的收益随公司价值变化">
+        <g id="cl-axes"></g>
+        <path id="cl-pd" class="cl-l debt"/>
+        <path id="cl-pe" class="cl-l eq"/>
+        <line id="cl-cur" class="cl-cur"/>
+        <circle id="cl-cd" r="6" class="cl-dot debt"/>
+        <circle id="cl-ce" r="6" class="cl-dot eq"/>
+      </svg>
+      <p class="cl-msg" id="cl-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>债权人持有固定索取权：公司价值超过 100 时只拿 100，不足 100 时拿走全部剩余。股东持有剩余索取权：公司价值不足 100 时一无所得，超过 100 的部分全部归股东。默顿（1974）据此把股权看作以公司价值为标的、以债务面值为行权价的看涨期权。</figcaption>
+</figure>
+<style>
+.cl-bar{display:flex;height:40px;border-radius:8px;overflow:hidden;background:var(--quote);font-size:12px}
+.cl-debt,.cl-eq{display:flex;align-items:center;justify-content:center;transition:width .15s;overflow:hidden;white-space:nowrap}
+.cl-debt{background:var(--accent);color:#fff}
+.cl-eq{background:var(--warm);color:#fff}
+.cl-scale{display:flex;justify-content:space-between;font-size:11px;color:var(--faint);margin:4px 0 14px}
+.cl svg{width:100%;height:auto;display:block}
+.cl-l{fill:none;stroke-width:2.5;stroke-linejoin:round}
+.cl-l.debt{stroke:var(--accent)} .cl-l.eq{stroke:var(--warm)}
+.cl-dot.debt{fill:var(--accent)} .cl-dot.eq{fill:var(--warm)}
+.cl-cur{stroke:var(--ink);stroke-dasharray:3 3}
+.cl-msg{font-size:14px;margin:6px 0 0;min-height:1.7em}
+</style>
+<script>
+(function(){
+  const D=100, X0=50, X1=620, Y0=196, Y1=20, x=v=>X0+v/200*(X1-X0), y=v=>Y0-v/100*(Y0-Y1);
+  let g=`<line x1="${X0}" y1="${Y0}" x2="${X1}" y2="${Y0}" class="s-faint"/><line x1="${X0}" y1="${Y1}" x2="${X0}" y2="${Y0}" class="s-faint"/>`;
+  [0,50,100,150,200].forEach(v=>g+=`<text x="${x(v)}" y="${Y0+16}" text-anchor="middle" font-size="11" class="t-faint">${v}</text>`);
+  [50,100].forEach(v=>g+=`<line x1="${X0}" y1="${y(v)}" x2="${X1}" y2="${y(v)}" class="s-line"/><text x="${X0-8}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`);
+  g+=`<text x="${X1}" y="${Y0+32}" text-anchor="end" font-size="11" class="t-faint">公司到期时的价值</text><text x="${X0}" y="${Y1-6}" font-size="11" class="t-faint">各方得到</text>`;
+  g+=`<text x="${x(165)}" y="${y(100)-8}" text-anchor="middle" font-size="12" class="t-accent">债权人</text><text x="${x(175)}" y="${y(75)+16}" text-anchor="middle" font-size="12" class="t-warm">股东</text>`;
+  document.getElementById('cl-axes').innerHTML=g;
+  document.getElementById('cl-pd').setAttribute('d',`M${x(0)},${y(0)}L${x(D)},${y(D)}L${x(200)},${y(D)}`);
+  document.getElementById('cl-pe').setAttribute('d',`M${x(0)},${y(0)}L${x(D)},${y(0)}L${x(200)},${y(100)}`);
+  const v=document.getElementById('cl-v');
+  function render(){
+    const V=+v.value, d=Math.min(V,D), e=Math.max(V-D,0);
+    document.getElementById('cl-vv').textContent=V+' 万元';
+    const de=document.getElementById('cl-debt'), ee=document.getElementById('cl-eq');
+    de.style.width=(d/200*100)+'%'; ee.style.width=(e/200*100)+'%';
+    document.getElementById('cl-dl').textContent=d>=18?'债权人 '+d:'';
+    document.getElementById('cl-el').textContent=e>=18?'股东 '+e:'';
+    const cur=document.getElementById('cl-cur');cur.setAttribute('x1',x(V));cur.setAttribute('x2',x(V));cur.setAttribute('y1',Y1);cur.setAttribute('y2',Y0);
+    const cd=document.getElementById('cl-cd'),ce=document.getElementById('cl-ce');
+    cd.setAttribute('cx',x(V));cd.setAttribute('cy',y(d));ce.setAttribute('cx',x(V));ce.setAttribute('cy',y(e));
+    document.getElementById('cl-msg').innerHTML=V>=D
+      ?`公司能够偿债：债权人拿回约定的 <b>${d}</b>，股东得到剩下的 <b>${e}</b>。公司越成功，股东得到越多，债权人始终是 100。`
+      :`公司无力足额偿债：债权人只能拿走全部剩余的 <b>${d}</b>，股东 <b>一无所得</b>。固定承诺在这里落空。`;
+  }
+  v.addEventListener('input',render); render();
+  document.getElementById('cl').addEventListener('anim-in',()=>{
+    const seq=[0,200,140]; let k=0, cur=+v.value;
+    const step=()=>{const t=seq[k]; if(cur===t){k++; if(k>=seq.length)return; return setTimeout(step,300);} cur+=cur<t?4:-4; if(Math.abs(cur-t)<4)cur=t; v.value=cur; render(); requestAnimationFrame(step);};
+    cur=100; step();
+  });
+})();
+</script>

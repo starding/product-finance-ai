@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：缩小理论与实际之间的距离</p><p class="figsub">四条设计要求，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="ch12summary">重播</button></div>
+    <div class="ch12summary" id="ch12summary" data-anim><div class="ch12summary-c" style="--i:0"><em>主动管理整体跑输</em><b>把低成本的分散组合作为默认</b><p>扣除费用后，多数主动基金的真实超额收益为负。主动产品要说明它相对低成本基准多收了多少费用，以及需要多高的超额收益才能覆盖。</p></div><div class="ch12summary-c warn" style="--i:1"><em>短期业绩主要是运气</em><b>不用短期排名推荐产品</b><p>业绩展示要给出足够长的期限、与基准的对比、信息比率，以及统计上能否与运气区分。</p></div><div class="ch12summary-c warn" style="--i:2"><em>投资者拿到的是自己的收益</em><b>同时展示用户自己的资金加权收益</b><p>让用户看到追涨杀跌让自己少拿了多少，而不只看产品的收益。</p></div><div class="ch12summary-c" style="--i:3"><em>能坚持比理论收益更重要</em><b>按用户能承受的回撤推荐方法</b><p>用用户真实的承受能力检验方案：一个会被中途放弃的方案，理论收益再高也没有意义。</p></div></div>
+  </div>
+</figure>
+<style>
+.ch12summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch12summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch12summary-c.warn{border-left-color:var(--warm)}
+.ch12summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch12summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch12summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch12summary.in .ch12summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch12summary{grid-template-columns:1fr}}
+</style>

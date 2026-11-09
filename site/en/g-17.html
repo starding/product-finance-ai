@@ -1,0 +1,629 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agents become the main market participants</title>
+<meta name="description" content="Product × Finance × AI: Derived from Zero, Chapter 17. Rerunning the step of markets. Scribes place orders directly and quote prices at any moment, finding a counterparty costs almost nothing, and spreads narrow. But scribes that resemble each other reach the same judgment at the same time and crowd through the same door; falling prices trigger selling, selling deepens the fall, and market-making scribes withdraw just when they are most needed. Markets need new designs: trading halts and circuit breakers, batch matching, and keeping participants diverse.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="g-17">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="Contents">
+<div class="side-head"><a class="sidetitle" href="index.html">Product × Finance × AI<small>Financial Products in the Age of AI</small></a></div>
+<div class="side-view" role="group" aria-label="Way of reading"><a href="preface.html">Decomposition</a><a href="g-preface.html" class="on" aria-current="true">Derivation</a></div>
+<a class="side-about" href="index.html#about">About this book</a>
+<a class="" href="g-preface.html"><span class="n">Preface</span>The best way to understand financial products is to build them from zero</a>
+<a class="side-part" href="g-part1.html"><span class="pn">Part One</span>From 0 to 1: how a world without finance grows finance</a>
+<a class="" href="g-01.html"><span class="n">1</span>One person, one year&#x27;s harvest</a>
+<a class="" href="g-02.html"><span class="n">2</span>Two people, short of grain at different times</a>
+<a class="" href="g-03.html"><span class="n">3</span>What if a loan is not repaid</a>
+<a class="" href="g-04.html"><span class="n">4</span>Exchange among many</a>
+<a class="" href="g-05.html"><span class="n">5</span>Harvests good and bad</a>
+<a class="" href="g-06.html"><span class="n">6</span>Savers may need their grain at any time; borrowers need it for years</a>
+<a class="" href="g-07.html"><span class="n">7</span>No one household can pay for a ship</a>
+<a class="" href="g-08.html"><span class="n">8</span>Securities must be saleable</a>
+<a class="" href="g-09.html"><span class="n">9</span>Prices carry everyone&#x27;s information</a>
+<a class="" href="g-10.html"><span class="n">10</span>Ordinary people have neither the time nor the expertise</a>
+<a class="" href="g-11.html"><span class="n">11</span>Trustees may not do their duty</a>
+<a class="" href="g-12.html"><span class="n">12</span>The institutions are in place, and people still make mistakes</a>
+<a class="side-part" href="g-part2.html"><span class="pn">Part Two</span>Changing one parameter: when agency becomes almost free</a>
+<a class="" href="g-13.html"><span class="n">13</span>A new parameter: the cost of cognitive labour collapses</a>
+<a class="" href="g-14.html"><span class="n">14</span>Can everyone have a personal agent?</a>
+<a class="" href="g-15.html"><span class="n">15</span>Who guarantees an agent&#x27;s promises</a>
+<a class="" href="g-16.html"><span class="n">16</span>If everyone has an analyst</a>
+<a class=" cur" href="g-17.html" aria-current="page"><span class="n">17</span>Agents become the main market participants</a>
+<a class="" href="g-18.html"><span class="n">18</span>Can an agent correct human bias?</a>
+<a class="" href="g-19.html"><span class="n">19</span>What did not change</a>
+<a class="side-part" href="g-part3.html"><span class="pn">Part Three</span>Deriving a product in the new world</a>
+<a class="" href="g-20.html"><span class="n">20</span>One person and one sum of money</a>
+<a class="" href="g-21.html"><span class="n">21</span>The user is not present</a>
+<a class="" href="g-22.html"><span class="n">22</span>The user cannot see the process</a>
+<a class="" href="g-23.html"><span class="n">23</span>Agents make mistakes</a>
+<a class="" href="g-24.html"><span class="n">24</span>Trust takes time</a>
+<a class="side-app" href="g-epilogue.html"><span class="n">Epilogue</span>Back to the governing rule</a>
+<a class="side-app" href="method.html"><span class="n">Appendix</span>How this book was written</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="Open contents" title="Contents"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">Product × Finance × AI: Financial Products in the Age of AI</a><span>Part Two  Changing one parameter</span><a class="langlink" href="../g-17.html" hreflang="zh-CN">中文</a></header>
+
+<div class="chapno">Chapter 17</div><h1>Agents become the main market participants<small>Execution costs, crowding and moving in the same direction</small></h1>
+<blockquote><p>More and more of the buying and selling in the market square is done by scribes. They find counterparties for their principals, split large orders, and quote buying and selling prices at any moment. Finding a counterparty costs almost nothing any more, so spreads narrow and ordinary households trade more cheaply. But the scribes come from a few operators, read the same reports and use the same methods, so they reach the same judgment at the same moment. A single fall triggers many scribes to sell at once, and the selling deepens the fall; the scribes that quote prices for others withdraw to protect themselves, precisely when they are most needed. Execution becomes cheaper, yet the market may become more fragile, and so it needs new designs.</p></blockquote>
+<h2 id="sec-1">1. Scribes place orders directly</h2>
+<p>Finding a counterparty willing to trade used to take time and require concessions on price. Now only one thing changes: more and more of those placing orders for principals and quoting prices in the market are scribes. They can watch many trades at once, quote at any moment, and split a large order into many small ones to sell gradually.</p>
+<p>Work through how the spread changes. The spread is the compensation that the party standing ready to trade charges for the time and risk of holding inventory. A scribe quotes at almost no cost and turns its inventory over quickly, so it holds inventory only briefly; many scribes are willing to quote, and they compete with one another, so the spread is pushed very narrow. On calm days, the cost for an ordinary household of buying or selling one ship share falls markedly.</p>
+<aside class="principle"><p class="pr-k">Rerun: a principle re-examined</p><p class="pr-n">The spread is the price of immediacy</p><p class="pr-c"><span><em>Discipline</em>Finance › Market microstructure</span><span><em>Type</em>Theory</span></p><p class="pr-s">Under competition, the bid-ask spread measures the cost of trading immediately without waiting; the party standing ready to trade is compensated through the spread for the time and risk of holding inventory.</p><dl><div><dt>Standing in the field</dt><dd>The paper is titled "The cost of transacting"; later market microstructure literature divides traders into suppliers and demanders of immediacy and attributes this distinction to the paper</dd></div><div><dt>Constraint it answers</dt><dd>Those in a hurry to sell cannot wait for a buyer to arrive</dd></div><div><dt>Premises</dt><dd>Someone is willing to quote buying and selling prices at any moment; market makers compete with one another; holding inventory carries a time cost and price risk</dd></div><div><dt>Proposed by</dt><dd>Demsetz, 1968</dd></div><div><dt>Open question</dt><dd>Will scribes that quote at any moment keep quoting when risk suddenly rises</dd></div><div><dt>After the rerun</dt><dd>The cost of quoting and holding inventory drops sharply, market-making scribes multiply, and ordinary spreads narrow greatly; but the premise that "someone is willing to quote at any moment" holds in calm times and may not hold when risk suddenly rises</dd></div></dl></aside>
+<p><strong>Today's counterpart.</strong> The U.S. Securities and Exchange Commission's 2010 concept release on market structure stated that estimates of high-frequency trading's share of stock market volume varied widely but were typically 50% or more.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Narrow in calm times, wide in a hurry</p><p class="figsub">Drag the number of scribes quoting prices in the market, and see how much someone in a hurry to sell one ship share must give up, in calm times and when risk suddenly rises.</p></div><button class="replay" type="button" data-replay="sp17">Replay</button></div>
+    <div class="sp17" id="sp17" data-anim>
+      <div class="sp17-bars" id="sp17-b"></div>
+      <div class="sl"><label for="sp17-n">Quoting scribes <b id="sp17-nv"></b></label><input id="sp17-n" type="range" min="1" max="20" step="1" value="1"></div>
+      <p class="sp17-msg" id="sp17-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: when only one household quotes, the spread is 10%. The more quoters there are, the more they compete, and the calm-time spread narrows as 10% ÷ (number of quoters to the power 1.2), to a minimum of 0.2%. When risk suddenly rises, 90% of scribes stop quoting, and the spread is calculated from the quoters that remain.</figcaption>
+</figure>
+<style>
+.sp17-bars{display:grid;gap:12px;margin:4px 0 10px}
+.sp17-r{display:grid;grid-template-columns:9em 1fr 4em;gap:10px;align-items:center;font-size:12.5px}
+.sp17-r div{height:22px;background:var(--quote);border-radius:5px;overflow:hidden}
+.sp17-r i{display:block;height:100%;transition:width .4s}
+.sp17-r b{text-align:right;font-variant-numeric:tabular-nums}
+.sp17-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('sp17'+id),sp=n=>Math.max(.2,10/Math.pow(Math.max(1,n),1.2));
+  function draw(){const n=+$('-n').value,calm=sp(n),left=Math.max(1,Math.round(n*.1)),st=sp(left);$('-nv').textContent=n+'';
+    $('-b').innerHTML=[['Calm days',calm,'var(--accent)'],['When risk jumps',st,'var(--warm)']].map(([k,v,c])=>`<div class="sp17-r"><span>${k}</span><div><i style="width:${v*10}%;background:${c}"></i></div><b>${v.toFixed(1)}%</b></div>`).join('');
+    $('-msg').textContent=n===1?'With only one household quoting, someone in a hurry to sell must give up a tenth.':`With ${n} scribes competing to quote, a seller in calm times need give up only ${calm.toFixed(1)}%; when risk suddenly rises, only ${left} are still quoting, and the spread goes back to ${st.toFixed(1)}%. A narrow spread in normal times does not guarantee a narrow one in a hurry.`;}
+  $('-n').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{let v=1;$('-n').value=1;draw();const id=setInterval(()=>{v+=1;$('-n').value=v;draw();if(v>=20)clearInterval(id);},150);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-2">2. Scribes that resemble each other</h2>
+<p>Many households' scribes come from a few operators. They read the same reports, score with the same methods, and even take each other's trades into account. In the past, each household in the market square had its own judgment: some expected prices to rise, others expected them to fall, and their trades offset one another. Now the same news leads many scribes to the same conclusion at the same time.</p>
+<p>Even when each scribe has a little information of its own, it may abandon it. Work it through: the first scribe buys on its own information. The second scribe's own information also points up, so it buys. The third scribe's own information points down, but seeing that the first two have both bought, it judges that others know more than it does, and buys as well. From this one on, every later scribe looks only at what those before it did, and its own information no longer enters the price. A long run of buying may rest on nothing more than the little information held by the first two, and a single new piece of news can reverse the whole run.</p>
+<aside class="principle"><p class="pr-k">Derived so far: a principle</p><p class="pr-n">Information cascades</p><p class="pr-c"><span><em>Discipline</em>Economics › Information economics (social learning)</span><span><em>Type</em>Theoretical model</span></p><p class="pr-s">When each person can see how those before them acted, there comes a point at which following predecessors is more reasonable than relying on one's own information, and later arrivals stop taking their own information into account; mass conformity may therefore rest on very little information and is easily overturned as a whole by a little new news.</p><dl><div><dt>Standing in the field</dt><dd>The paper uses "informational cascades" to explain the formation and fragility of fads, fashion and custom; together with Banerjee's "A simple model of herd behavior", published the same year, it is listed by surveys of the field as early work on informational herding</dd></div><div><dt>Constraint it answers</dt><dd>Each person holds only a little information and can see what others do</dd></div><div><dt>Premises</dt><dd>Actions can be observed but information itself cannot; people decide in sequence; each person's information is limited</dd></div><div><dt>Proposed by</dt><dd>Bikhchandani, Hirshleifer and Welch, 1992; Banerjee, 1992</dd></div><div><dt>Open question</dt><dd>Once a cascade has formed, how can the buried information get back into prices</dd></div><div><dt>After the rerun</dt><dd>Scribes from the same few operators do not merely observe one another's actions; they share the same information and methods; cascades form more easily, and households' judgments are no longer independent of one another</dd></div></dl></aside>
+<p><strong>Today's counterpart.</strong> A 2024 report by the Financial Stability Board noted that artificial intelligence may amplify correlations in markets: many institutions using similar models and data may react in the same way to the same shock.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Following those ahead</p><p class="figsub">A certain ship's prospects are in fact poor. Twenty scribes decide in turn whether to buy. Each has a clue of its own that is right 70% of the time, and each can see what the scribes before it did. Switch the source of the clues, try a few sets of clues, and see how judgments form.</p></div><button class="replay" type="button" data-replay="cc17">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Source of clues">
+      <button type="button" data-cc17="ind" aria-pressed="true">Each has its own clue</button>
+      <button type="button" data-cc17="same" aria-pressed="false">Clues from the same source</button>
+    </div>
+    <div class="cc17" id="cc17" data-anim>
+      <div class="cc17-row" id="cc17-r"></div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Do not buy (correct)</span><span><i style="background:var(--warm)"></i>Buy</span><span><i style="outline:2px solid var(--ink);outline-offset:-2px;background:transparent"></i>Drops its own clue and follows those ahead</span></div>
+      <button type="button" class="replay" id="cc17-re">Another set of clues</button>
+      <p class="cc17-msg" id="cc17-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: each scribe infers its predecessors' clues from their actions and adds its own clue to reach a judgment. When the inferred favourable and unfavourable clues differ by two or more, its own clue can no longer change the conclusion, so it follows those ahead (a simplification of Bikhchandani, Hirshleifer and Welch, 1992). With "the same source", every scribe receives the same clue.</figcaption>
+</figure>
+<style>
+.cc17-row{display:grid;grid-template-columns:repeat(20,1fr);gap:3px;margin:6px 0}
+.cc17-row i{aspect-ratio:1;border-radius:50%;opacity:0;transform:scale(.6);transition:opacity .25s,transform .25s;transition-delay:calc(var(--i)*.07s)}
+.cc17.in .cc17-row i{opacity:1;transform:none}
+.cc17-row i.b{background:var(--warm)} .cc17-row i.n{background:var(--accent)} .cc17-row i.f{outline:2px solid var(--ink);outline-offset:1px}
+.cc17-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cc17'+id);let mode='ind',seed=1701;
+  function run(){let s=seed;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};const one=r()<.7?-1:1;
+    let d=0;const A=[];for(let i=0;i<20;i++){const sig=mode==='same'?one:(r()<.7?-1:1);let act,fol=false;
+      if(d>=2){act=1;fol=true;}else if(d<=-2){act=-1;fol=true;}else{act=d+sig>0?1:d+sig<0?-1:sig;d+=act;}
+      A.push([act,fol]);}return A;}
+  function draw(){const A=run();$('-r').innerHTML=A.map(([a,f],i)=>`<i style="--i:${i}" class="${a>0?'b':'n'}${f?' f':''}"></i>`).join('');
+    const ok=A.filter(a=>a[0]<0).length,fi=A.findIndex(a=>a[1]);
+    $('-msg').textContent=mode==='same'?`All twenty scribes received the same clue. ${ok===20?'This time the clue was right, and none of them bought':'This time the clue was wrong, and all of them bought'}: their judgments are perfectly correlated, and twenty judgments are worth only one.`:fi<0?`With this set of clues no cascade formed, and ${ok} scribes judged correctly.`:`From scribe ${fi+1} on, every later scribe dropped its own clue and followed those ahead ${A[fi][0]>0?'in buying (wrongly)':'in not buying (rightly)'}; ${ok} scribes judged correctly. A long run of identical actions rests only on the first few clues.`;}
+  const bs=[...document.querySelectorAll('[data-cc17]')];
+  function set(m){mode=m;bs.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.cc17===m)));draw();}
+  bs.forEach(b=>b.addEventListener('click',()=>set(b.dataset.cc17)));$('-re').addEventListener('click',()=>{seed=(seed*48271)%2147483647;draw();});
+  $('').addEventListener('anim-in',()=>{set('ind');setTimeout(()=>{seed=(seed*48271)%2147483647;draw();},2200);setTimeout(()=>set('same'),4400);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-3">3. Crowding through the same door</h2>
+<p>Scribes that resemble each other also hold similar ship shares. In normal times this is no problem. But once one of them has to sell for some other reason, the price of the ship shares falls, the other scribes holding the same shares also lose money and cut their positions according to their own rules, and the price falls further. The door is only so wide, and everyone wants to get out at the same time.</p>
+<p>Khandani and Lo (2011) studied the collective losses of quantitative hedge funds in August 2007. Many funds used similar long-short equity strategies. The authors infer that the rapid unwinding of one or a few large portfolios pushed down the prices of similar positions, so that other funds holding similar positions suffered large losses at the same time.</p>
+<p><strong>Today's counterpart.</strong> The more similar the strategies and the more concentrated the holdings, the wider the damage spreads when one participant is forced to sell.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Crowding through the same door</p><p class="figsub">One of ten portfolios is forced to sell all its holdings. Drag how much the portfolios' holdings overlap, and see the losses of the other nine portfolios, and the second-round losses after they follow their rules for cutting positions and sell too.</p></div><button class="replay" type="button" data-replay="cw17">Replay</button></div>
+    <div class="cw17" id="cw17" data-anim>
+      <div class="cw17-g" id="cw17-g"></div>
+      <div class="legend"><span><i style="background:var(--warm)"></i>First-round loss</span><span><i style="background:var(--warm-soft);border:1px solid var(--warm)"></i>Second-round loss after following the selling</span></div>
+      <div class="sl"><label for="cw17-o">Overlap of holdings <b id="cw17-ov"></b></label><input id="cw17-o" type="range" min="0" max="100" step="10" value="20"></div>
+      <p class="cw17-msg" id="cw17-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the forced sale makes the ship shares it held fall 10%. Other portfolios' first-round loss = 10% × degree of overlap. Portfolios whose loss exceeds 3% sell half their holdings, and each portfolio that does so pushes the overlapping part down a further 1.5% (a simplification of the unwinding process described by Khandani and Lo, 2011). Columns are numbered portfolios 2 to 10.</figcaption>
+</figure>
+<style>
+.cw17-g{display:grid;grid-template-columns:repeat(9,1fr);gap:8px;align-items:end;height:150px;margin:6px 0 8px}
+.cw17-c{display:flex;flex-direction:column;justify-content:flex-start;height:100%;font-size:11px;color:var(--faint);text-align:center}
+.cw17-c div{width:70%;margin:0 auto;display:flex;flex-direction:column}
+.cw17-c i{display:block;transition:height .5s}
+.cw17-c i.a{background:var(--warm)} .cw17-c i.b{background:var(--warm-soft);border:1px solid var(--warm);border-top:none}
+.cw17-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cw17'+id);
+  function draw(){const o=+$('-o').value/100;$('-ov').textContent=Math.round(o*100)+'%';const r1=10*o,sellers=r1>3?9:0,r2=sellers*1.5*o,sc=4.5;
+    $('-g').innerHTML=Array.from({length:9},(_,i)=>`<div class="cw17-c"><span>No. ${i+2}</span><div><i class="a" style="height:${r1*sc}px"></i><i class="b" style="height:${r2*sc}px"></i></div></div>`).join('');
+    $('-msg').textContent=r1<=3?`Overlap ${Math.round(o*100)}%: the other portfolios each lose ${r1.toFixed(1)}%, no position cuts are triggered, and the shock stops there.`:`Overlap ${Math.round(o*100)}%: the other portfolios each lose ${r1.toFixed(1)}% in the first round, and all of them trigger position cuts. The nine portfolios sell together, the overlapping ship shares fall further, and each loses another ${r2.toFixed(1)}% in the second round. The narrower the door and the more people crowding it, the slower everyone gets out.`;}
+  $('-o').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{let v=0;$('-o').value=0;draw();const id=setInterval(()=>{v+=10;$('-o').value=v;draw();if(v>=80)clearInterval(id);},350);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-4">4. Falls that cause falls</h2>
+<p>Many scribes follow risk rules: cut the position when losses exceed a certain percentage; sell when margin runs short. Each rule is reasonable on its own, but together they form a loop. Prices fall, scribes lose money, and the rules require selling; selling pushes prices down, more scribes lose money, and more selling follows. Scribes that borrowed to buy ship shares are hit harder still: when prices fall, the lender demands more margin, and the scribe has to sell some more.</p>
+<aside class="principle"><p class="pr-k">Derived so far: a principle</p><p class="pr-n">Liquidity spirals</p><p class="pr-c"><span><em>Discipline</em>Finance › Asset pricing and market microstructure (liquidity)</span><span><em>Type</em>Theoretical model</span></p><p class="pr-s">When those who make markets and trade depend on borrowed funds, losses from falling prices and tightening margins force them to sell, and selling makes the market harder to trade in and prices lower; funding liquidity and market liquidity reinforce each other, and liquidity can suddenly dry up.</p><dl><div><dt>Standing in the field</dt><dd>The paper, titled "Market liquidity and funding liquidity", distinguishes a "margin spiral" caused by tightening margins from a "loss spiral" caused by losses on positions, and shows that when capital is ample the market is in a liquid equilibrium, but once capital falls far enough it can suddenly shift into a low-liquidity equilibrium</dd></div><div><dt>Constraint it answers</dt><dd>Selling requires finding a counterparty, and the parties willing to take the other side are constrained by funding</dd></div><div><dt>Premises</dt><dd>Traders depend on borrowed funds; margins vary with market volatility; traders hold similar positions</dd></div><div><dt>Proposed by</dt><dd>Brunnermeier and Pedersen, 2009</dd></div><div><dt>Open question</dt><dd>How can a spiral be broken before it forms</dd></div><div><dt>After the rerun</dt><dd>Scribes enforce risk rules to the letter and resemble one another, so more selling is triggered at the same moment and the spiral turns faster</dd></div></dl></aside>
+<p><strong>Today's counterpart.</strong> When prices fall sharply, margin calls and forced liquidations tend to cluster, which deepens the fall.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Falls that cause falls</p><p class="figsub">After an initial fall of 2%, scribes' losses, tightening margins and rules for cutting positions bring new selling. Drag how much buying is done with borrowed money, and see the additional fall in each round and the final total fall.</p></div><button class="replay" type="button" data-replay="sr17">Replay</button></div>
+    <div class="sr17" id="sr17" data-anim>
+      <div class="sr17-loop"><span>Prices fall</span><b>→</b><span>Scribes lose money</span><b>→</b><span>Margins tighten, rules require cuts</span><b>→</b><span>Selling</span><b>↺</b></div>
+      <svg viewBox="0 0 660 170" role="img" aria-label="Fall in each round"><g id="sr17-g"></g></svg>
+      <div class="sl"><label for="sr17-l">Buying with borrowed money (leverage) <b id="sr17-lv"></b></label><input id="sr17-l" type="range" min="1" max="6" step="0.5" value="2"></div>
+      <p class="sr17-msg" id="sr17-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the selling caused by each round's fall makes the next round fall by k times this round's fall, where k = 0.15 × leverage. When k is less than 1, the total fall is 2% ÷ (1 − k); when k is 1 or more, the spiral does not stop by itself, and the chart shows only the first ten rounds (a simplification of the liquidity spiral described by Brunnermeier and Pedersen, 2009).</figcaption>
+</figure>
+<style>
+.sr17-loop{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12.5px;margin:4px 0 8px}
+.sr17-loop span{background:var(--quote);border-radius:999px;padding:3px 10px} .sr17-loop b{color:var(--warm)}
+.sr17 svg{width:100%;height:auto;display:block}
+.sr17-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.sr17 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('sr17'+id),X0=50,X1=628,YT=10,YB=140;
+  function draw(){const L=+$('-l').value,k=.15*L,R=[];let d=2;for(let i=0;i<10;i++){R.push(d);d*=k;}const tot=R.reduce((a,b)=>a+b,0),mx=Math.max(2,...R),bw=(X1-X0)/10;$('-lv').textContent=L.toFixed(1)+'×';
+    let h=`<line x1="${X0}" x2="${X1}" y1="${YB}" y2="${YB}" class="s-line"/>`;
+    R.forEach((v,i)=>{const hh=v/mx*(YB-YT);h+=`<rect x="${X0+i*bw+6}" y="${YB-hh}" width="${bw-12}" height="${hh}" fill="${i?'var(--warm)':'var(--faint)'}"/><text x="${X0+i*bw+bw/2}" y="${YB-hh-4}" text-anchor="middle" font-size="11">${v<10?v.toFixed(1):Math.round(v)}%</text><text x="${X0+i*bw+bw/2}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">Round ${i+1}</text>`;});
+    $('-g').innerHTML=h;
+    $('-msg').textContent=k<1?`Leverage ${L.toFixed(1)}×: each round's fall sets off a further fall of ${Math.round(k*100)}% of it in the next round, and the initial 2% is eventually amplified to about ${(2/(1-k)).toFixed(1)}%.`:`Leverage ${L.toFixed(1)}×: each round's fall sets off a next round at least as large, so the spiral does not stop by itself; the first ten rounds already add up to a fall of ${Math.min(100,tot).toFixed(0)}%. Only an outside force (a halt, or buyers with funds) can break it.`;}
+  $('-l').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{let v=1;$('-l').value=1;draw();const id=setInterval(()=>{v+=.5;$('-l').value=v;draw();if(v>=6.5)clearInterval(id);},400);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-5">5. Liquidity vanishes when it is most needed</h2>
+<p>The scribes that quote prices in normal times are the first to withdraw when risk suddenly rises. They do not know why prices are falling, the risk of holding inventory has suddenly grown, and the safest course is to stop quoting or to pass on the ship shares they have just bought as quickly as possible. So the spread, narrow in normal times, becomes astonishingly wide just when trading is most needed.</p>
+<p>The joint report by the U.S. Securities and Exchange Commission and the Commodity Futures Trading Commission on the "Flash Crash" of 6 May 2010 records the following. A mutual fund used an algorithm to sell 75,000 S&amp;P 500 index futures contracts, worth about $4.1 billion. The algorithm sold at 9% of the previous minute's trading volume, taking account only of volume, not of price or time. High-frequency traders first bought, then rapidly passed contracts among themselves, trading more than 27,000 contracts within 14 seconds while buying only about 200 on net. Buy-side order book depth fell to less than 1% of its level that morning, and futures prices fell a further 1.7% in 15 seconds. After the exchange triggered an automatic mechanism that paused trading for 5 seconds, selling pressure eased and prices began to recover. Using that day's trading records, Kirilenko, Kyle, Samadi and Tuzun (2017) found that high-frequency traders did not trigger the crash, but their responses amplified the volatility.</p>
+<p><strong>Today's counterpart.</strong> After the Flash Crash, the U.S. Securities and Exchange Commission approved the "limit up–limit down" mechanism in 2012 (in effect from 2013) and revised the market-wide circuit breaker rules.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">A quarter of an hour on the afternoon of 6 May 2010</p><p class="figsub">The S&amp;P 500 index futures market as described in the joint report of the U.S. Securities and Exchange Commission and the Commodity Futures Trading Commission. Click a moment to see the details.</p></div><button class="replay" type="button" data-replay="fl17">Replay</button></div>
+    <div class="fl17" id="fl17" data-anim>
+      <div class="fl17-t" id="fl17-t"></div>
+      <p class="fl17-d" id="fl17-d" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Source: U.S. CFTC &amp; SEC (2010), <i>Findings Regarding the Market Events of May 6, 2010</i>. Times are p.m. U.S. Eastern Time.</figcaption>
+</figure>
+<style>
+.fl17-t{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;position:relative}
+.fl17-t button{font:inherit;cursor:pointer;text-align:left;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:8px 9px;color:var(--ink);font-size:12.5px;line-height:1.45;opacity:0;transform:translateY(6px);transition:opacity .35s,transform .35s,border-color .3s;transition-delay:calc(var(--i)*.25s)}
+.fl17.in .fl17-t button{opacity:1;transform:none}
+.fl17-t button em{display:block;font-style:normal;font-size:11px;color:var(--faint)}
+.fl17-t button.w{background:var(--warm-soft)} .fl17-t button.g{background:var(--accent-soft)}
+.fl17-t button.sel{border-color:var(--ink)}
+.fl17-d{font-size:14px;margin:12px 0 0;min-height:4.6em;background:var(--quote);border-radius:9px;padding:10px 12px}
+@media (max-width:640px){.fl17-t{grid-template-columns:1fr 1fr}}
+</style>
+<script>
+(function(){
+  const E=[['2:32','A large order starts selling','','A mutual fund starts a sell program for 75,000 contracts in all, worth about $4.1 billion. The execution algorithm sells at 9% of the previous minute\'s trading volume, without regard to price or time.'],
+    ['2:41–2:45:27','Prices plunge','w','Within four and a half minutes, the index futures fall more than 5%, and the corresponding index fund falls more than 6%.'],
+    ['2:45:13–2:45:27','Hot potato','w','With fundamental buyers lacking, high-frequency traders begin rapidly buying and selling among themselves: more than 27,000 contracts trade within 14 seconds, about 49% of volume in that period, yet net buying is only about 200 contracts.'],
+    ['2:45:27','Liquidity vanishes','w','Buy-side order book depth falls to about $58 million, less than 1% of its level that morning; within 15 seconds prices fall a further 1.7%, reaching the low of the day.'],
+    ['2:45:28–2:45:33','A 5-second pause','g','The exchange\'s automatic mechanism pauses trading for 5 seconds; selling pressure partly eases and buying interest returns. After trading resumes, prices stabilize and then begin to recover.']];
+  const t=document.getElementById('fl17-t'),d=document.getElementById('fl17-d');
+  t.innerHTML=E.map((e,i)=>`<button type="button" style="--i:${i}" class="${e[2]}"><em>${e[0]}</em>${e[1]}</button>`).join('');const bs=[...t.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));d.textContent=E[i][0]+': '+E[i][3];}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('fl17').addEventListener('anim-in',()=>{[0,1,2,3,4].forEach((i,k)=>setTimeout(()=>set(i),1500+k*1900));});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-6">6. Giving the market time to breathe</h2>
+<p>Since spirals come from selling in the same direction at the same moment, the way to break them is to slow time down. When prices fall too far within a very short time, trading is halted, giving scribes time to reassess and giving those willing to buy at low prices time to arrive. Continuous matching can be replaced by matching in a batch at very short intervals, so that being a moment faster loses its advantage (Budish, Cramton and Shim, 2015). Another approach is to keep participants diverse: the more scribes there are with different methods, the less likely a single piece of news is to set off action in the same direction.</p>
+<p>Halts have costs too. Those who want to sell cannot sell for a while, and prices may jump further when the halt ends. The threshold and length of a halt must balance breaking the spiral against obstructing trade.</p>
+<p><strong>Today's counterpart.</strong> The current market-wide circuit breakers in U.S. stock markets trigger when the S&amp;P 500 index falls 7%, 13% and 20% from the previous day's close. Under the single-stock limit up–limit down rule, trading pauses for 5 minutes when the price stays at the limit band for more than 15 seconds.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The circuit-breaker threshold</p><p class="figsub">In a market where half the scribes come from the same operator, the same large order sets off a plunge. Drag the circuit-breaker threshold and see when the breaker triggers and how large the biggest fall is.</p></div><button class="replay" type="button" data-replay="bk17">Replay</button></div>
+    <div class="bk17" id="bk17" data-anim>
+      <div class="bk17-bars" id="bk17-b"></div>
+      <div class="sl"><label for="bk17-t">Halt when one step falls by <b id="bk17-tv"></b></label><input id="bk17-t" type="range" min="1" max="12" step="1" value="4"></div>
+      <p class="bk17-msg" id="bk17-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the model is the same as in "A market of scribes", with half the scribes coming from the same operator; each halt lasts 3 steps. A threshold of 12 points is equivalent to having no circuit breaker.</figcaption>
+</figure>
+<style>
+.bk17-bars{display:grid;gap:12px;margin:4px 0 10px}
+.bk17-r{display:grid;grid-template-columns:7em 1fr 4.5em;gap:10px;align-items:center;font-size:12.5px}
+.bk17-r div{height:22px;background:var(--quote);border-radius:5px;overflow:hidden}
+.bk17-r i{display:block;height:100%;transition:width .4s}
+.bk17-r b{text-align:right;font-variant-numeric:tabular-nums}
+.bk17-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('bk17'+id),N=40,T=60,TH=.04;
+  function sim(th){let s=1717;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};const ns=20,ag=[];for(let i=0;i<N;i++)ag.push({th:i<ns?TH:TH*(1+r()*3),sold:false,mm:i%3===0});
+    let p=100,pause=0,paused=0;const P=[p];
+    for(let t=1;t<=T;t++){if(pause>0){pause--;paused++;p+=(100-p)*.2;P.push(p);continue;}
+      let sell=(t>=5&&t<15)?5:0;for(const a of ag){if(!a.sold&&(100-p)/100>=a.th){a.sold=true;sell+=1.5;}}
+      const prev=P[P.length-1],fall=P.length>1&&(P[P.length-2]-prev)>1.5,mm=ag.filter(a=>a.mm&&!a.sold).length,depth=2+(fall?mm*.25:mm);
+      p=Math.min(100,p-(sell-Math.max(0,100-p)*.12)/depth*2);if(th<12&&(prev-p)>th)pause=3;P.push(p);}
+    return {dd:100-Math.min(...P),paused};}
+  function draw(){const th=+$('-t').value,S=sim(th);$('-tv').textContent=th>=12?'no circuit breaker':th+' points';
+    $('-b').innerHTML=[['Largest fall',S.dd,50,'var(--warm)',S.dd.toFixed(1)+'%'],['Steps halted',S.paused,20,'var(--blue)',S.paused+'']].map(([k,v,m,c,t])=>`<div class="bk17-r"><span>${k}</span><div><i style="width:${Math.min(100,v/m*100)}%;background:${c}"></i></div><b>${t}</b></div>`).join('');
+    $('-msg').textContent=th>=12?`With no circuit breaker, the largest fall is ${S.dd.toFixed(1)}%.`:`Threshold ${th} points: the largest fall is ${S.dd.toFixed(1)}%, with ${S.paused} steps halted. If the threshold is too high, the breaker triggers only after prices have already fallen sharply; the lower the threshold, the earlier the spiral is broken. The cost is that those who want to sell cannot during the halt, and prices may jump when the halt ends.`;}
+  $('-t').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{let v=12;$('-t').value=12;draw();const id=setInterval(()=>{v-=1;$('-t').value=v;draw();if(v<=1)clearInterval(id);},300);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-7">7. A market of scribes: Civilization Simulator, version 17</h2>
+<p>The simulator unlocks "Agents as market participants". Forty scribes buy and sell the same ship share in the market square; some of them come from the same operator and use the same method. All of them follow a rule of cutting positions when losses mount. One day, a large holder's scribe must sell a big block of ship shares. You can adjust the share of scribes from the same operator and switch the circuit breaker on or off, then watch how low the price falls that day and how quickly it recovers.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Civilization Simulator · Chapter 17: a market of scribes</p><p class="figsub">Forty scribes buy and sell the same ship share, whose fundamental value is 100. From step 5, a large holder's scribe sells a big order in each of ten consecutive steps. Adjust the share of scribes that come from the same operator and use the same method, switch the circuit breaker on or off, and watch the price over the day.</p></div><button class="replay" type="button" data-replay="cs17">Replay</button></div>
+    <div class="cs-rules"><span class="on">Market</span><span class="on">Parameter: price of cognitive labour</span><span class="on">Guaranteeing agents</span><span class="on">Analysts for all</span><span class="on">Agents as market participants</span><span class="lock">Agents and human bias · Ch. 18</span></div>
+    <div class="cs17" id="cs17" data-anim>
+      <svg viewBox="0 0 660 220" role="img" aria-label="Price over one day"><g id="cs17-ax"></g><g id="cs17-pz"></g><path id="cs17-b" class="cs17-b"/><path id="cs17-p" class="cs17-p"/></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Price</span><span><i style="background:var(--faint)"></i>Price when scribes are not alike</span><span><i style="background:var(--warm-soft)"></i>Circuit-breaker halt</span></div>
+      <div class="sl"><label for="cs17-s">Scribes from the same operator <b id="cs17-sv"></b></label><input id="cs17-s" type="range" min="0" max="90" step="10" value="50"></div>
+      <div class="cs-sw"><label><input type="checkbox" id="cs17-k"> Rule: circuit breaker (halt 3 steps after a fall of more than 4 points in one step)</label></div>
+      <div class="cs17-out" id="cs17-out"></div>
+      <p class="cs17-msg" id="cs17-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model: every scribe follows the rule "sell once losses reach a certain percentage". Scribes from the same operator share the same threshold and trigger at the same time; the other scribes' thresholds are spread between 4% and 16%. One third of the scribes quote prices in the market, and when the price falls more than 1.5 points in one step, they withdraw three quarters of their quotes. Households willing to buy at low prices buy more the lower the price. During a halt, the price recovers one fifth of the way towards fundamental value, and selling rules do not trigger.</figcaption>
+</figure>
+<style>
+.cs17 svg{width:100%;height:auto;display:block}
+.cs17-p{fill:none;stroke:var(--accent);stroke-width:2.6}
+.cs17-b{fill:none;stroke:var(--faint);stroke-width:1.6;stroke-dasharray:5 4}
+.cs17-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cs17-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs17-out span{display:block;font-size:11.5px;color:var(--faint)} .cs17-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.cs17-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs17-out{grid-template-columns:1fr}.cs17 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs17'+id),N=40,T=60,TH=.04,BIG=5,VB=.12,X0=44,X1=628,YT=10,YB=180,x=t=>X0+t/T*(X1-X0),y=v=>YB-(v-40)/62*(YB-YT);
+  function sim(same,brk){let s=1717;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};
+    const ns=Math.round(same*N),ag=[];for(let i=0;i<N;i++)ag.push({th:i<ns?TH:TH*(1+r()*3),sold:false,mm:i%3===0});
+    let p=100,pause=0;const P=[p],Z=[];
+    for(let t=1;t<=T;t++){if(pause>0){pause--;Z.push(t);p+=(100-p)*.2;P.push(p);continue;}
+      let sell=(t>=5&&t<15)?BIG:0;for(const a of ag){if(!a.sold&&(100-p)/100>=a.th){a.sold=true;sell+=1.5;}}
+      const prev=P[P.length-1],fall=P.length>1&&(P[P.length-2]-prev)>1.5,mm=ag.filter(a=>a.mm&&!a.sold).length,depth=2+(fall?mm*.25:mm);
+      p=Math.min(100,p-(sell-Math.max(0,100-p)*VB)/depth*2);if(brk&&(prev-p)>4)pause=3;P.push(p);}
+    const mn=Math.min(...P),ti=P.indexOf(mn),rec=P.findIndex((v,i)=>i>ti&&v>=97);return {P,Z,mn,rec};}
+  function draw(){const sm=+$('-s').value/100,bk=$('-k').checked,S=sim(sm,bk),B=sim(0,false);$('-sv').textContent=Math.round(sm*100)+'%';
+    $('-ax').innerHTML=[40,60,80,100].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+[0,15,30,45,60].map(t=>`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">Step ${t}</text>`).join('');
+    $('-pz').innerHTML=S.Z.map(t=>`<rect x="${x(t-1)}" y="${YT}" width="${(X1-X0)/T}" height="${YB-YT}" fill="var(--warm-soft)"/>`).join('');
+    const L=P=>P.map((v,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(v).toFixed(1)).join('');$('-p').setAttribute('d',L(S.P));$('-b').setAttribute('d',sm>0||bk?L(B.P):'');
+    $('-out').innerHTML=[['Lowest price',S.mn.toFixed(1)],['Largest fall',(100-S.mn).toFixed(1)+'%'],['Back above 97',S.rec>0?'Step '+S.rec:(S.mn>=97?'Never below 97':'Not that day')]].map(([a,v])=>`<div><span>${a}</span><b>${v}</b></div>`).join('');
+    const d=100-S.mn;
+    $('-msg').textContent=sm===0?(bk?'The scribes all use different methods, so the shock of the large order is absorbed by scattered selling and by households willing to buy at low prices; the circuit breaker is hardly needed.':`The scribes all use different methods and their thresholds for cutting positions are spread out, so the large order pushes the price down only ${d.toFixed(1)}%.`):d>30?`Scribes from the same operator make up ${Math.round(sm*100)}%. They trigger selling at the same moment, the quoting scribes withdraw at once, and the price falls as low as ${S.mn.toFixed(0)}.`+(bk?(d>40?' The circuit breaker comes too late: the synchronized selling has already crushed the price within a single step.':''):' Try switching on the circuit breaker.'):`Scribes from the same operator make up ${Math.round(sm*100)}%. `+(bk?`When the price plunges, the circuit breaker halts trading, giving households that buy at low prices time to arrive and stopping the scribes' rules from triggering one after another; the largest fall is held to ${d.toFixed(1)}%.`:`The largest fall is ${d.toFixed(1)}%.`);}
+  ['-s','-k'].forEach(k=>$(k).addEventListener('input',draw));
+  $('').addEventListener('anim-in',()=>{[[0,0],[50,0],[50,1],[90,1]].forEach(([v,b],i)=>setTimeout(()=>{$('-s').value=v;$('-k').checked=!!b;draw();},300+i*2200));});
+  draw();
+})();
+</script>
+
+<h2 id="sec-8">8. What this step leaves open</h2>
+<p>Once scribes become the main market participants, several questions remain unresolved:</p>
+<ol><li><strong>Human bias.</strong> Can scribes help principals stick to their plans and not sell along with everyone else in a panic? Or will they be used to exploit human biases?</li><li><strong>Sources of diversity.</strong> Diversity among participants reduces action in the same direction, but who has an incentive to maintain that diversity?</li><li><strong>Coordinating rules.</strong> Each scribe's risk rules are reasonable, yet together they form a spiral. Who looks at the whole picture?</li><li><strong>What does not change.</strong> Ships can still sink; the risk of a fall does not disappear because of scribes.</li></ol>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">What this step leaves open</p><p class="figsub">Four questions that remain unresolved once scribes become the main market participants. Click a question to see the assumption it hides.</p></div><button class="replay" type="button" data-replay="nx17">Replay</button></div>
+    <div class="nx" id="nx17" data-anim>
+      <div class="nx-src"><b>A market of scribes</b><span>Cheap but fragile</span></div>
+      <div class="nx-list" id="nx17-l"></div>
+    </div>
+    <p class="nx-msg" id="nx17-msg" aria-live="polite"></p>
+  </div>
+</figure>
+<style>
+.nx{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:center}
+.nx-src{background:var(--ink);color:var(--bg);border-radius:10px;padding:14px 10px;text-align:center}
+.nx-src b{display:block;font-size:16px} .nx-src span{font-size:12px;opacity:.75}
+.nx-list{display:grid;gap:6px}
+.nx-i{font:inherit;text-align:left;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:9px 12px;color:var(--ink);opacity:0;transform:translateX(-8px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.3s)}
+.nx.in .nx-i{opacity:1;transform:none}
+.nx-i span{font-size:13.5px} .nx-i em{font-style:normal;font-size:11.5px;color:var(--faint);white-space:nowrap}
+.nx-i.sel{border-color:var(--accent)}
+.nx-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.nx{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const Q=[['Human bias','Chapter 18','Hidden assumption: principals will stick to their plans. In a panic a principal may tell the scribe to sell along with everyone else. Can the scribe help him hold to the plan, and will it exploit his biases?'],
+    ['Sources of diversity','Part Three','Hidden assumption: participants are naturally different from one another. Once methods and data converge, who has an incentive to maintain diversity?'],
+    ['Coordinating rules','Part Three','Hidden assumption: if each participant\'s rules are reasonable, the whole is stable. Rules that are reasonable one by one may together form a spiral, so someone must look at the whole picture.'],
+    ['What does not change','Chapter 19','Hidden assumption: better execution can eliminate risk. Ships can still sink; the risk of a fall does not disappear because of scribes.']];
+  const l=document.getElementById('nx17-l'),msg=document.getElementById('nx17-msg');
+  l.innerHTML=Q.map((q,i)=>`<button type="button" class="nx-i" style="--i:${i}" data-i="${i}"><span>${q[0]}</span><em>→ ${q[1]}</em></button>`).join('');
+  const bs=[...l.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));msg.textContent=Q[i][2];}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('nx17').addEventListener('anim-in',()=>{[0,1,2,3].forEach((i,k)=>setTimeout(()=>set(i),1600+k*1800));});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-9">9. Implications for products</h2>
+<p>As more and more of users' trades are executed by agents, a product faces not only the risk to each individual user but also the risk of many agents acting at once. Three implications follow. First, the fall in execution costs is real, but it shows up mainly on calm days; the product should let users know that in violent swings the price they get may be far from the usual one. Second, an agent's risk rules should not look only at a single user's account; they should also avoid firing at the same moment as large numbers of similar agents. Building delays, batching and price protection into the rules is safer than a hair trigger. Third, the more similar agents' methods and data are, the more fragile the market becomes. For a product, preserving each user's own agreement and differences, rather than putting every user on the same strategy, is itself a contribution to the market.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: agents become the main market participants</p><p class="figsub">Four conclusions, each corresponding to one mechanism in the chapter.</p></div><button class="replay" type="button" data-replay="g17summary">Replay</button></div>
+    <div class="g17summary" id="g17summary" data-anim><div class="g17summary-c" style="--i:0"><em>Rerun: the spread</em><b>Cheaper in normal times</b><p>Quoting and holding inventory cost scribes almost nothing, so spreads in calm times narrow sharply.</p></div><div class="g17summary-c" style="--i:1"><em>Information cascades</em><b>Scribes that resemble each other act at once</b><p>The same methods and data mean judgments are no longer independent, and uniform action may rest on very little information.</p></div><div class="g17summary-c warn" style="--i:2"><em>Liquidity spirals</em><b>Falls that cause falls</b><p>Rules for cutting positions and for margin trigger at the same time, and quoting scribes withdraw just when they are most needed.</p></div><div class="g17summary-c warn" style="--i:3"><em>Market design</em><b>Give the market time to breathe</b><p>Halts and circuit breakers break the spiral, and diversity among participants reduces action in the same direction.</p></div></div>
+  </div>
+</figure>
+<style>
+.g17summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g17summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g17summary-c.warn{border-left-color:var(--warm)}
+.g17summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g17summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g17summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g17summary.in .g17summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g17summary{grid-template-columns:1fr}}
+</style>
+
+<h2 id="sec-10">References</h2>
+<ul class="refs"><li>Banerjee, A. V. (1992). A simple model of herd behavior. <i>Quarterly Journal of Economics</i>, 107(3), 797–817.</li><li>Bikhchandani, S., Hirshleifer, D., &amp; Welch, I. (1992). A theory of fads, fashion, custom, and cultural change as informational cascades. <i>Journal of Political Economy</i>, 100(5), 992–1026.</li><li>Brunnermeier, M. K., &amp; Pedersen, L. H. (2009). Market liquidity and funding liquidity. <i>Review of Financial Studies</i>, 22(6), 2201–2238.</li><li>Budish, E., Cramton, P., &amp; Shim, J. (2015). The high-frequency trading arms race: Frequent batch auctions as a market design response. <i>Quarterly Journal of Economics</i>, 130(4), 1547–1621.</li><li>Demsetz, H. (1968). The cost of transacting. <i>Quarterly Journal of Economics</i>, 82(1), 33–53.</li><li>Financial Stability Board (2024). <i>The Financial Stability Implications of Artificial Intelligence</i>. Basel: FSB.</li><li>Khandani, A. E., &amp; Lo, A. W. (2011). What happened to the quants in August 2007? Evidence from factors and transactions data. <i>Journal of Financial Markets</i>, 14(1), 1–46.</li><li>Kirilenko, A., Kyle, A. S., Samadi, M., &amp; Tuzun, T. (2017). The Flash Crash: High-frequency trading in an electronic market. <i>Journal of Finance</i>, 72(3), 967–998.</li><li>U.S. Commodity Futures Trading Commission &amp; U.S. Securities and Exchange Commission (2010). <i>Findings Regarding the Market Events of May 6, 2010</i>. Report of the staffs of the CFTC and SEC to the Joint Advisory Committee on Emerging Regulatory Issues.</li><li>U.S. Securities and Exchange Commission (2010). Concept release on equity market structure. Release No. 34-61358.</li><li>U.S. Securities and Exchange Commission (2012). Order approving, on a pilot basis, the National Market System Plan to address extraordinary market volatility. Release No. 34-67091.</li></ul>
+<footer class="nav"><a href="g-16.html">← Chapter 16: If everyone has an analyst</a><a href="g-18.html">Chapter 18: Can an agent correct human bias? →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

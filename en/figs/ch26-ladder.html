@@ -1,0 +1,36 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The six-level ladder of authority</p><p class="figsub">Tap a level to see who takes the final step, what the user must do, and the attention the user spends and the exposure the user bears.</p></div><button class="replay" type="button" data-replay="ld2">Replay</button></div>
+    <div class="ld2" id="ld2" data-anim></div>
+    <div class="ld2-d" id="ld2-d"></div>
+  </div>
+  <figcaption>The six levels are this book's own summary, drawing on the ten levels of automation in Sheridan and Verplank (1978) and the four-stage model of Parasuraman, Sheridan and Wickens (2000). Attention and exposure are illustrative.</figcaption>
+</figure>
+<style>
+.ld2{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;align-items:end;height:190px}
+.ld2-s{font:inherit;border:1.5px solid var(--line);border-radius:8px 8px 0 0;background:color-mix(in srgb,var(--accent) var(--a),var(--surface));color:var(--ink);cursor:pointer;display:flex;flex-direction:column;justify-content:flex-start;padding:6px;text-align:left;height:0;transition:height .5s ease,border-color .2s;transition-delay:calc(var(--i)*.12s)}
+.ld2.in .ld2-s{height:var(--h)}
+.ld2-s em{font-style:normal;font-size:11px;color:var(--faint)}
+.ld2-s b{font-size:12.5px;line-height:1.35}
+.ld2-s.sel{border-color:var(--ink)}
+.ld2-d{margin-top:10px;background:var(--quote);border-radius:10px;padding:10px 12px;display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;font-size:13px;line-height:1.6}
+.ld2-d em{font-style:normal;font-size:11.5px;color:var(--faint);display:block}
+.ld2-m{display:grid;grid-template-columns:70px 1fr;gap:8px;align-items:center;font-size:12px}
+.ld2-m span{color:var(--faint)}
+.ld2-t{height:10px;background:var(--surface);border-radius:5px;overflow:hidden}
+.ld2-t i{display:block;height:100%;border-radius:5px;transition:width .4s}
+@media (max-width:640px){.ld2{grid-template-columns:repeat(3,1fr);height:auto}.ld2-s,.ld2.in .ld2-s{height:auto;min-height:60px}.ld2-d{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const L=[['Info only','The person','Judges and acts on their own','Gathers the latest announcements for a holding',90,5],['Draft a plan','The person','Reviews the plan, then executes it','Prepares a rebalancing plan',70,10],['Confirm each trade','The agent, with the person confirming each trade','Taps confirm for every trade','The agent asks before placing each order',50,25],['Approve a plan','The agent, within the plan','Approves a plan','Approves "invest 2,000 yuan each month"',25,45],['Time-limited veto','The agent, unless the person vetoes','Takes a look within the time limit and vetoes if needed','"Rebalancing will run tomorrow morning; reply to cancel"',15,65],['Autonomous within scope','The agent','Sets the scope and reads reports afterwards','Rebalances automatically within the agreed weights',5,85]];
+  const box=document.getElementById('ld2');
+  box.innerHTML=L.map(([n],i)=>`<button type="button" class="ld2-s" data-i="${i}" style="--i:${i};--h:${50+i*28}px;--a:${8+i*7}%"><em>Level ${i+1}</em><b>${n}</b></button>`).join('');
+  const bs=[...box.children];
+  function sel(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));const [n,who,user,ex,att,exp]=L[i];
+    document.getElementById('ld2-d').innerHTML=`<div><em>Who takes the final step</em>${who}</div><div><em>What the user does</em>${user}</div><div><em>Example</em>${ex}</div><div><div class="ld2-m"><span>User's attention</span><div class="ld2-t"><i style="width:${att}%;background:var(--gold)"></i></div></div><div class="ld2-m"><span>Exposure borne</span><div class="ld2-t"><i style="width:${exp}%;background:var(--warm)"></i></div></div></div>`;}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>sel(i)));
+  box.addEventListener('anim-in',()=>{[0,1,2,3,4,5].forEach(i=>setTimeout(()=>sel(i),700+i*700));});
+  sel(2);
+})();
+</script>

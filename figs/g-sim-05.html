@@ -1,0 +1,63 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">文明模拟器 · 第 5 章：互助的村子</p><p class="figsub">二十户人家，收成每年随机变化。选择各自储备、加入互助公仓或两者兼用，拖动全村共同年景所占的比重，看三十年里挨饿的户次与每户吃到的粮食的波动。</p></div><button class="replay" type="button" data-replay="cs5">重播</button></div>
+    <div class="cs-rules"><span class="on">储蓄</span><span class="on">留种</span><span class="on">借贷</span><span class="on">承诺</span><span class="on">货币</span><span class="on">保险</span><span class="lock">银行 · 第 6 章</span></div>
+    <div class="seg-btns" role="group" aria-label="应对办法">
+      <button type="button" data-cs5="self" aria-pressed="false">各自储备</button>
+      <button type="button" data-cs5="pool" aria-pressed="false">互助公仓</button>
+      <button type="button" data-cs5="both" aria-pressed="true">两者兼用</button>
+    </div>
+    <div class="cs5" id="cs5" data-anim>
+      <svg viewBox="0 0 660 210" role="img" aria-label="三十年里三户人家吃到的粮食"><g id="cs5-ax"></g><g id="cs5-l"></g></svg>
+      <div class="legend" id="cs5-lg"></div>
+      <div class="cs5-ctl">
+        <div class="sl"><label for="cs5-r">全村共同年景所占的比重 <b id="cs5-rv"></b></label><input id="cs5-r" type="range" min="0" max="100" step="10" value="30"></div>
+        <button type="button" class="replay" id="cs5-re">换一组年景</button>
+      </div>
+      <div class="cs5-out" id="cs5-out"></div>
+      <p class="cs5-msg" id="cs5-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意模型：每户收成平均 12 份、波动约四成，其中按设定比重来自全村共同的年景，其余来自各家自己的运气。各自储备：每户常年保有 6 份储备，每年损耗一成。互助公仓：全村收成平均分给各户。两者兼用：先平均分配，各户再保有储备。一年吃到不足 9 份即算挨饿。</figcaption>
+</figure>
+<style>
+.cs5 svg{width:100%;height:auto;display:block}
+.cs5-ctl{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:end;margin-top:8px}
+.cs5-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cs5-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs5-out span{display:block;font-size:11.5px;color:var(--faint)} .cs5-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.cs5-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs5-ctl{grid-template-columns:1fr}.cs5-out{grid-template-columns:1fr}.cs5 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs5'+id),N=20,Y=30,SIG=.4,B=6,NEED=9;let mode='both',seed=20261021;
+  const X0=40,X1=650,YT=10,YB=180,x=t=>X0+(t+.5)/Y*(X1-X0),y=v=>YB-Math.min(v,24)/24*(YB-YT);
+  const C=['var(--accent)','var(--warm)','var(--blue)'];
+  $('-lg').innerHTML=['第一户','第二户','第三户'].map((n,i)=>`<span><i style="background:${C[i]}"></i>${n}吃到的粮食</span>`).join('')+'<span><i style="background:var(--warm-soft)"></i>不足 9 份即挨饿</span>';
+  function shocks(){let s=seed;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};const g=()=>{let u=0;while(!u)u=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r());};
+    return {z:Array.from({length:Y},()=>g()),e:Array.from({length:Y},()=>Array.from({length:N},()=>g()))};}
+  function sim(rho){const S=shocks(),st=Array(N).fill(0),cons=[];
+    for(let t=0;t<Y;t++){const h=Array.from({length:N},(_,i)=>Math.max(0,12*(1+SIG*(Math.sqrt(rho)*S.z[t]+Math.sqrt(1-rho)*S.e[t][i]))));
+      let get=h.slice();if(mode!=='self'){const m=h.reduce((a,b)=>a+b,0)/N;get=Array(N).fill(m);}
+      const row=[];for(let i=0;i<N;i++){if(mode==='pool'){row.push(Math.min(get[i],16));continue;}let have=get[i]+st[i],c=Math.min(12,have);row.push(c);have-=c;st[i]=Math.min(B,have)*.9;}
+      cons.push(row);}
+    return cons;}
+  function draw(){const rho=+$('-r').value/100,cons=sim(rho);
+    $('-ax').innerHTML=`<rect x="${X0}" y="${y(NEED)}" width="${X1-X0}" height="${YB-y(NEED)}" fill="var(--warm-soft)"/>`+[0,6,12,18,24].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+[1,10,20,30].map(t=>`<text x="${x(t-1)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">第 ${t} 年</text>`).join('');
+    $('-l').innerHTML=[0,1,2].map(i=>`<path d="${cons.map((r,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(r[i]).toFixed(1)).join('')}" fill="none" stroke="${C[i]}" stroke-width="2" opacity=".9"/>`).join('');
+    let hungry=0,all=[];cons.forEach(r=>r.forEach(v=>{if(v<NEED)hungry++;all.push(v);}));
+    const per=[...Array(N).keys()].map(i=>{const v=cons.map(r=>r[i]),m=v.reduce((a,b)=>a+b,0)/Y;return Math.sqrt(v.reduce((a,b)=>a+(b-m)*(b-m),0)/Y)/12;});
+    const sd=per.reduce((a,b)=>a+b,0)/N,ce=Math.exp(all.reduce((a,v)=>a+Math.log(Math.max(v,.5)),0)/all.length);
+    $('-rv').textContent=Math.round(rho*100)+'%';
+    $('-out').innerHTML=[['三十年里挨饿的户次',hungry],['每户吃到的粮食的波动',Math.round(sd*100)+'%'],['相当于每年稳定吃',ce.toFixed(1)+' 份']].map(([a,b])=>`<div><span>${a}</span><b>${b}</b></div>`).join('');
+    $('-msg').textContent=mode==='self'?`各自储备时，一户连着遭两次灾就扛不住：三十年里挨饿 ${hungry} 户次，储备还在仓里不断损耗。`:
+      rho===0?`各家的运气互不相关，平均分配几乎消除了波动：挨饿 ${hungry} 户次。`:rho>=.99?'所有波动都来自全村共同的年景，互助公仓分担不了任何风险：各户一起丰收，也一起挨饿。':
+      mode==='pool'?`共同年景占 ${Math.round(rho*100)}%：平均分配抵消了各家自己的坏运气，但公仓不留储备，全村一起歉收的年份二十户同时挨饿，三十年共 ${hungry} 户次。分散只能对付各家自己的风险。`:
+      `共同年景占 ${Math.round(rho*100)}%：公仓抵消各家自己的坏运气，各户的储备再扛过一部分全村的歉收，挨饿降到 ${hungry} 户次。分散与储备对付的是两种不同的风险。`;}
+  document.querySelectorAll('[data-cs5]').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.cs5;document.querySelectorAll('[data-cs5]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  $('-r').addEventListener('input',draw);$('-re').addEventListener('click',()=>{seed=(seed*48271)%2147483647;draw();});
+  $('').addEventListener('anim-in',()=>{['self','pool','both'].forEach((k,i)=>setTimeout(()=>{mode=k;document.querySelectorAll('[data-cs5]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.cs5===k)));draw();},300+i*2400));});
+  draw();
+})();
+</script>

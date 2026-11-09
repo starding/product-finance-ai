@@ -1,0 +1,42 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The cost of an unclear request comes later</p><p class="figsub">The same need: compare two funds. Switch how the request is put to see how many rounds it takes and how much time is spent in total.</p></div><button class="replay" type="button" data-replay="sp">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="How the request is put">
+      <button type="button" data-sp="v" aria-pressed="true">Just "take a look"</button>
+      <button type="button" data-sp="c" aria-pressed="false">State acceptance criteria</button>
+    </div>
+    <div class="sp" id="sp" data-anim>
+      <div class="sp-req" id="sp-req"></div>
+      <div class="sp-rounds" id="sp-rounds"></div>
+      <div class="sp-tot"><span>Total time spent by the principal</span><b id="sp-tot"></b></div>
+    </div>
+  </div>
+  <figcaption>Illustrative figures. On why requirements errors cost more to fix the later they are found, see Boehm and Basili (2001).</figcaption>
+</figure>
+<style>
+.sp-req{background:var(--quote);border-radius:8px;padding:10px 12px;font-size:13.5px;line-height:1.7;min-height:4.6em}
+.sp-req em{font-style:normal;font-size:11.5px;color:var(--faint);display:block}
+.sp-rounds{display:grid;gap:5px;margin:10px 0}
+.sp-r{display:grid;grid-template-columns:76px 1fr 64px;gap:10px;align-items:center;font-size:13px;opacity:0;transform:translateX(-8px);transition:opacity .35s,transform .35s;transition-delay:calc(var(--i)*.35s)}
+.sp-r.on{opacity:1;transform:none}
+.sp-r span{color:var(--faint);font-size:12px}
+.sp-r p{margin:0;border-radius:6px;padding:5px 9px;background:var(--surface);border:1px solid var(--line)}
+.sp-r.bad p{border-color:var(--warm);background:var(--warm-soft)}
+.sp-r.ok p{border-color:var(--accent);background:var(--accent-soft)}
+.sp-r b{text-align:right;font-variant-numeric:tabular-nums}
+.sp-tot{display:flex;align-items:baseline;gap:10px}
+.sp-tot span{font-size:12px;color:var(--faint)} .sp-tot b{font-size:24px;font-variant-numeric:tabular-nums}
+</style>
+<script>
+(function(){
+  const D={v:['"Take a look at how these two funds are doing."',[['Round 1','A general overview comes back; not what was wanted',8,'bad'],['Round 2','"Compare the fees" is added; the period returned is wrong',8,'bad'],['Round 3','"Last three years, including maximum drawdown" is added; the definitions differ from the platform\'s',10,'bad'],['Round 4','Returned with consistent definitions and checked item by item',12,'ok']]],
+    c:['"Compare Fund A and Fund B: management fees, custody fees and maximum drawdown over the last three years, with data as of the end of last month and sources stated; return a table in which every figure links to its source."',[['Explaining','A few extra minutes to state the objects, period, measures and format',4,''],['Round 1','The table returned meets the requirements and is checked item by item against the list',6,'ok']]]};
+  const $=id=>document.getElementById(id);
+  function set(k){document.querySelectorAll('[data-sp]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.sp===k)));const [q,R]=D[k];
+    $('sp-req').innerHTML=`<em>The request</em>${q}`;$('sp-rounds').innerHTML=R.map(([a,b,m,c],i)=>`<div class="sp-r ${c}" style="--i:${i}"><span>${a}</span><p>${b}</p><b>${m} min</b></div>`).join('');
+    setTimeout(()=>document.querySelectorAll('.sp-r').forEach(e=>e.classList.add('on')),40);$('sp-tot').textContent=R.reduce((s,r)=>s+r[2],0)+' min';}
+  document.querySelectorAll('[data-sp]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.sp)));
+  $('sp').addEventListener('anim-in',()=>{set('v');setTimeout(()=>set('c'),3200);});
+  set('v');
+})();
+</script>

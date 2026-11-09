@@ -1,0 +1,34 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Grading by size and reversibility</p><p class="figsub">Two questions place every matter in one of four levels. Drag "Trust established" to see how the boundary of acting on its own moves; select a cell to see examples.</p></div><button class="replay" type="button" data-replay="lv21">Replay</button></div>
+    <div class="lv21" id="lv21" data-anim>
+      <div class="lv21-g" id="lv21-g"></div>
+      <div class="sl"><label for="lv21-t">Trust established <b id="lv21-tv"></b></label><input id="lv21-t" type="range" min="0" max="3" step="1" value="0"></div>
+      <p class="lv21-msg" id="lv21-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: "small" means no more than 2% of the household's property; as trust grows, the threshold for "small" is raised one step for each year the agreement is kept, to 5%, 10% and 25% in turn. Large and irreversible matters always require confirmation in advance, however high the trust.</figcaption>
+</figure>
+<style>
+.lv21-g{display:grid;grid-template-columns:5.5em 1fr 1fr;gap:6px;font-size:13px}
+.lv21-g .h{color:var(--faint);font-size:12px;align-self:end}
+.lv21-g button{font:inherit;cursor:pointer;text-align:left;border:1px solid transparent;border-radius:9px;padding:9px 10px;font-size:13px;line-height:1.5;color:var(--ink);background:var(--c);transition:background .4s,border-color .3s}
+.lv21-g button b{display:block;font-size:14px}
+.lv21-g button.sel{border-color:var(--ink)}
+.lv21-msg{font-size:14px;margin:10px 0 0;min-height:4.6em;background:var(--quote);border-radius:9px;padding:10px 12px}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('lv21'+id),T=['Just starting','One year kept','Two years kept','Three years kept'],TH=['2%','5%','10%','25%'];let sel=0;
+  const L={self:['Act on its own, record afterwards','var(--accent-soft)'],tell:['Act, then tell promptly','rgba(47,95,158,.14)'],conf:['Confirm first with him','var(--warm-soft)'],no:['Forbidden','var(--quote)']};
+  const C=[['Small','reversible','self','Scheduled regular deposits; bringing holdings back to the agreed proportions; buying within the limit.'],['Small','irreversible','tell','Selling a few ship shares within the agreed scope to pay a small fee.'],['Large','reversible','tell','A sizeable adjustment, such as bringing the retirement account\'s ship shares back to the agreed proportion after a storm.'],['Large','irreversible','conf','Moving grain out of the granary; changing the agreement itself; drawing early on the house or retirement money.']];
+  function draw(){const t=+$('-t').value;$('-tv').textContent=T[t]+' ("small" means no more than '+TH[t]+' of the property)';
+    const lv=i=>{let k=C[i][2];if(t>=1&&i===1)k='self';if(t>=2&&i===2)k='self';return k;};
+    $('-g').innerHTML=`<span></span><span class="h">Reversible</span><span class="h">Irreversible</span><span class="h">Small</span>${[0,1].map(i=>`<button type="button" data-i="${i}" class="${sel===i?'sel':''}" style="--c:${L[lv(i)][1]}"><b>${L[lv(i)][0]}</b></button>`).join('')}<span class="h">Large</span>${[2,3].map(i=>`<button type="button" data-i="${i}" class="${sel===i?'sel':''}" style="--c:${L[lv(i)][1]}"><b>${L[lv(i)][0]}</b></button>`).join('')}`;
+    $('-g').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{sel=+b.dataset.i;draw();}));
+    $('-msg').textContent=`${C[sel][0]} and ${C[sel][1]}: ${C[sel][3]} Current handling: "${L[lv(sel)][0]}".`+(t>0?' As trust grows, more matters are left to the scribe; but the bottom-right cell always requires his own confirmation.':'');}
+  $('-t').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{[[0,0],[0,3],[1,1],[2,2],[3,2]].forEach(([t,s],i)=>setTimeout(()=>{$('-t').value=t;sel=s;draw();},300+i*1800));});
+  draw();
+})();
+</script>

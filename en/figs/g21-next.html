@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">What this step leaves open</p><p class="figsub">Four problems that remain once the agreement and authority let the scribe act while he is away. Select one to see the assumption it hides.</p></div><button class="replay" type="button" data-replay="nx21">Replay</button></div>
+    <div class="nx" id="nx21" data-anim>
+      <div class="nx-src"><b>Ten years in his absence</b><span>Agreement and authority</span></div>
+      <div class="nx-list" id="nx21-l"></div>
+    </div>
+    <p class="nx-msg" id="nx21-msg" aria-live="polite"></p>
+  </div>
+</figure>
+<style>
+.nx{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:center}
+.nx-src{background:var(--ink);color:var(--bg);border-radius:10px;padding:14px 10px;text-align:center}
+.nx-src b{display:block;font-size:16px} .nx-src span{font-size:12px;opacity:.75}
+.nx-list{display:grid;gap:6px}
+.nx-i{font:inherit;text-align:left;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:9px 12px;color:var(--ink);opacity:0;transform:translateX(-8px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.3s)}
+.nx.in .nx-i{opacity:1;transform:none}
+.nx-i span{font-size:13.5px} .nx-i em{font-style:normal;font-size:11.5px;color:var(--faint);white-space:nowrap}
+.nx-i.sel{border-color:var(--accent)}
+.nx-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.nx{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const Q=[['He cannot read the accounts','Chapter 22','Hidden assumption: having records is enough. Every action of the scribe is recorded, but he looks only a few times a year. Can he understand what he sees?'],
+    ['He has no way to check','Chapter 22','Hidden assumption: if the scribe says it kept the agreement, it did. Why should he believe it?'],
+    ['A nod is not consent','Chapter 22','Hidden assumption: once he nods, he has confirmed. Does a nod given without understanding the situation count as genuine confirmation?'],
+    ['Agents make mistakes','Chapter 23','Hidden assumption: nothing goes wrong within the scope of authority. Who bears the consequences of an error made within that scope?']];
+  const l=document.getElementById('nx21-l'),msg=document.getElementById('nx21-msg');
+  l.innerHTML=Q.map((q,i)=>`<button type="button" class="nx-i" style="--i:${i}" data-i="${i}"><span>${q[0]}</span><em>→ ${q[1]}</em></button>`).join('');
+  const bs=[...l.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));msg.textContent=Q[i][2];}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('nx21').addEventListener('anim-in',()=>{[0,1,2,3].forEach((i,k)=>setTimeout(()=>set(i),1600+k*1800));});
+  set(0);
+})();
+</script>

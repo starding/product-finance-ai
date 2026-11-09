@@ -1,0 +1,36 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">山上的人先看见船</p><p class="figsub">第 2 天，山上的人看见船平安归来，份额的价值从 10 份升到 12 份；第 8 天消息才传遍全村。拖动他买入的力度，看价格在消息公开之前已经涨了多少，以及他赚到多少。</p></div><button class="replay" type="button" data-replay="hl">重播</button></div>
+    <div class="hl" id="hl" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="价值与价格"><g id="hl-ax"></g><path id="hl-g" class="hl-g"/><path id="hl-v" class="hl-v"/><path id="hl-p" class="hl-p"/></svg>
+      <div class="legend"><span><i style="background:var(--faint)"></i>份额的真实价值</span><span><i style="background:var(--accent)"></i>集市上的价格</span><span><i style="background:var(--gold);opacity:.5"></i>他赚到的差价</span></div>
+      <div class="sl"><label for="hl-k">他买入的力度 <b id="hl-kv"></b></label><input id="hl-k" type="range" min="0" max="100" step="10" value="40"></div>
+      <p class="hl-msg" id="hl-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：做市商见到持续的买单便上调报价，每天把价格向真实价值推近一部分；推近的比例随买入的力度增加。</figcaption>
+</figure>
+<style>
+.hl svg{width:100%;height:auto;display:block}
+.hl-v{fill:none;stroke:var(--faint);stroke-width:2;stroke-dasharray:5 4}
+.hl-p{fill:none;stroke:var(--accent);stroke-width:2.6}
+.hl-g{fill:var(--gold);fill-opacity:.25;stroke:none}
+.hl-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.hl svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),X0=46,X1=630,YT=12,YB=178,x=t=>X0+t/10*(X1-X0),y=v=>YB-(v-9)/4*(YB-YT);
+  $('hl-ax').innerHTML=[9,10,11,12,13].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+[0,2,4,6,8,10].map(t=>`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">第 ${t} 天</text>`).join('')+
+    `<text x="${x(2)}" y="${YT+10}" text-anchor="middle" font-size="11" class="t-warm">他看见船</text><text x="${x(8)}" y="${YT+10}" text-anchor="middle" font-size="11" class="t-muted">全村都知道</text>`;
+  $('hl-v').setAttribute('d',`M${x(0)},${y(10)}L${x(2)},${y(10)}L${x(2)},${y(12)}L${x(10)},${y(12)}`);
+  function draw(){const k=+$('hl-k').value/100,P=[];let p=10;for(let t=0;t<=10;t++){if(t>2&&t<=8)p+=(12-p)*k*.45;if(t>8)p=12;P.push(p);}
+    $('hl-p').setAttribute('d',P.map((v,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(v).toFixed(1)).join(''));
+    let g=`M${x(2)},${y(12)}`;for(let t=2;t<=8;t++)g+=`L${x(t)},${y(P[t])}`;g+=`L${x(8)},${y(12)}Z`;$('hl-g').setAttribute('d',g);
+    const pre=(P[8]-10)/2,gain=k>0?(12-(P.slice(2,9).reduce((a,b)=>a+b,0)/7))*k*10:0;$('hl-kv').textContent=Math.round(k*10)+' 成';
+    $('hl-msg').textContent=k===0?'他按兵不动，价格在消息公开之前纹丝不动，第 8 天一下子跳到 12 份。':`他买得${k>.6?'很猛':'不紧不慢'}，消息公开之前价格已经涨了 ${Math.round(pre*100)}%。他买得越猛，价格涨得越快，留给他的差价也越小：他的买入本身，就把消息传给了价格。`;}
+  $('hl-k').addEventListener('input',draw);
+  $('hl').addEventListener('anim-in',()=>{let v=0;$('hl-k').value=0;draw();const id=setInterval(()=>{v+=10;$('hl-k').value=v;draw();if(v>=100)clearInterval(id);},250);});
+  draw();
+})();
+</script>

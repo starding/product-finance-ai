@@ -1,0 +1,58 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">True randomness has longer runs than intuition expects</p>
+    <p class="figsub">Toss a coin 100 times: green is heads (up), grey is tails (down). The longest run of the same side is outlined in orange.</p>
+    <div class="sk" id="sk" data-anim>
+      <div class="sk-grid" id="sk-grid"></div>
+      <div class="sk-out">
+        <div><span>Longest run this time</span><b id="sk-max"></b></div>
+        <div><span>Sets tossed</span><b id="sk-n">0</b></div>
+        <div><span>Distribution of longest runs so far</span><div class="sk-hist" id="sk-hist"></div></div>
+      </div>
+      <div class="sk-ctrl"><button type="button" class="replay" id="sk-again">Toss 100 more</button><button type="button" class="replay" id="sk-many">Toss 50 sets</button></div>
+    </div>
+  </div>
+  <figcaption>In 100 independent tosses, the longest run of the same side is usually between 5 and 9, most often 6 or 7. “Random sequences” that people write themselves tend to alternate too often, see Bar-Hillel and Wagenaar (1991); the tendency to expect small samples to show the regularities of the whole population is what Tversky and Kahneman (1971) called the “law of small numbers”.</figcaption>
+</figure>
+<style>
+.sk-grid{display:grid;grid-template-columns:repeat(20,1fr);gap:3px}
+.sk-grid i{aspect-ratio:1;border-radius:3px;background:var(--line);transform:scale(.4);opacity:0;transition:transform .2s,opacity .2s,box-shadow .3s}
+.sk-grid i.h{background:var(--accent)} .sk-grid i.t{background:var(--gray-mark)}
+.sk-grid i.on{transform:none;opacity:1}
+.sk-grid i.run{box-shadow:0 0 0 2px var(--warm)}
+.sk-out{display:grid;grid-template-columns:1fr 1fr 2fr;gap:8px;margin-top:12px}
+.sk-out>div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.sk-out span{display:block;font-size:12px;color:var(--faint)}
+.sk-out b{font-size:22px;font-variant-numeric:tabular-nums}
+.sk-hist{display:flex;align-items:flex-end;gap:3px;height:44px;margin-top:4px}
+.sk-hist div{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;font-size:10px;color:var(--faint)}
+.sk-hist div i{display:block;width:100%;background:var(--warm);border-radius:2px 2px 0 0;transition:height .3s}
+.sk-ctrl{display:flex;gap:8px;margin-top:10px}
+@media (max-width:640px){.sk-grid{grid-template-columns:repeat(10,1fr)}.sk-out{grid-template-columns:1fr 1fr}.sk-out>div:last-child{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const grid=document.getElementById('sk-grid'), hist={}; let n=0, timer;
+  grid.innerHTML='<i></i>'.repeat(100);
+  const cells=[...grid.children];
+  const longest=a=>{let best=1,bs=0,cur=1,cs=0;for(let i=1;i<a.length;i++){if(a[i]===a[i-1]){cur++;}else{cur=1;cs=i;}if(cur>best){best=cur;bs=cs;}}return [best,bs];};
+  function drawHist(){
+    const keys=[3,4,5,6,7,8,9,10,11,12], mx=Math.max(1,...keys.map(k=>hist[k]||0));
+    document.getElementById('sk-hist').innerHTML=keys.map(k=>`<div><i style="height:${(hist[k]||0)/mx*30}px"></i>${k===12?'12+':k}</div>`).join('');
+  }
+  function flip(animate){
+    const a=Array.from({length:100},()=>Math.random()<0.5?1:0);
+    const [L,st]=longest(a); n++; const key=Math.min(12,Math.max(3,L)); hist[key]=(hist[key]||0)+1;
+    cells.forEach((c,i)=>{c.className=a[i]?'h':'t';if(!animate)c.classList.add('on');});
+    if(animate){cells.forEach((c,i)=>setTimeout(()=>c.classList.add('on'),i*14));}
+    setTimeout(()=>{for(let i=st;i<st+L;i++)cells[i].classList.add('run');},animate?1500:0);
+    document.getElementById('sk-max').textContent=L+'';
+    document.getElementById('sk-n').textContent=n;
+    drawHist();
+  }
+  document.getElementById('sk-again').addEventListener('click',()=>{clearInterval(timer);flip(true);});
+  document.getElementById('sk-many').addEventListener('click',()=>{clearInterval(timer);let k=0;timer=setInterval(()=>{flip(false);if(++k>=50)clearInterval(timer);},40);});
+  document.getElementById('sk').addEventListener('anim-in',()=>{if(n===0)flip(true);});
+  drawHist();
+})();
+</script>

@@ -1,0 +1,29 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Research once, use it on everyone's money</p><p class="figsub">Researching the fleet costs 30 portions of grain a year. Drag the number of households that hand their ship shares to the same manager to see the research cost per household.</p></div><button class="replay" type="button" data-replay="scl">Replay</button></div>
+    <div class="scl" id="scl" data-anim>
+      <svg viewBox="0 0 640 200" role="img" aria-label="Number of households and research cost per household"><g id="scl-ax"></g><path id="scl-c" class="scl-c"/><circle id="scl-p" r="6" fill="var(--ink)"/></svg>
+      <div class="sl"><label for="scl-n">Households delegating <b id="scl-nv"></b></label><input id="scl-n" type="range" min="0" max="100" step="1" value="0"></div>
+      <p class="scl-msg" id="scl-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the cost of research does not depend on how much money is managed; per household it is 30 ÷ number of households. The horizontal axis uses a logarithmic scale.</figcaption>
+</figure>
+<style>
+.scl svg{width:100%;height:auto;display:block}
+.scl-c{fill:none;stroke:var(--accent);stroke-width:2.5}
+.scl-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.scl svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),X0=46,X1=630,YT=12,YB=170,lx=n=>X0+Math.log(n)/Math.log(500)*(X1-X0),y=v=>YB-v/30*(YB-YT),nOf=v=>Math.max(1,Math.round(Math.pow(500,v/100)));
+  $('scl-ax').innerHTML=[0,10,20,30].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+[1,5,10,50,100,500].map(n=>`<text x="${lx(n)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${n}</text>`).join('')+`<text x="${X1}" y="${YT+10}" text-anchor="end" font-size="11" class="t-muted">Households (log scale)</text>`;
+  let d='';for(let n=1;n<=500;n*=1.05)d+=(n===1?'M':'L')+lx(n).toFixed(1)+','+y(30/n).toFixed(1);$('scl-c').setAttribute('d',d);
+  function draw(){const n=nOf(+$('scl-n').value),c=30/n;$('scl-p').setAttribute('cx',lx(n));$('scl-p').setAttribute('cy',y(c));$('scl-nv').textContent=n;
+    $('scl-msg').textContent=n===1?'A household researching on its own bears the whole 30-portion cost alone.':`With ${n} households delegating to the same manager, each bears only ${c<1?c.toFixed(2):c.toFixed(1)} portions. Research is paid for once and used many times; this is the scale advantage of delegation and of funds.`;}
+  $('scl-n').addEventListener('input',draw);
+  $('scl').addEventListener('anim-in',()=>{let v=0;$('scl-n').value=0;draw();const id=setInterval(()=>{v+=4;$('scl-n').value=Math.min(v,100);draw();if(v>=100)clearInterval(id);},120);});
+  draw();
+})();
+</script>

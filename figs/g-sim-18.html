@@ -1,0 +1,68 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">文明模拟器 · 第 18 章：手边的书记员</p><p class="figsub">四十户人家各有自己合适的储蓄比例，三十年里由书记员替自己储蓄与买卖。打开或关掉两条规则，切换书记员的目标，看各户存下多少、有多少户接近自己的目标。</p></div><button class="replay" type="button" data-replay="cs18">重播</button></div>
+    <div class="cs-rules"><span class="on">默认选项</span><span class="on">专属代理</span><span class="on">代理的担保</span><span class="on">代理成为市场参与者</span><span class="on">代理与人的偏差</span><span class="lock">没有改变的东西 · 第 19 章</span></div>
+    <div class="seg-btns" role="group" aria-label="书记员的目标">
+      <button type="button" data-cs18="plan" aria-pressed="true">按委托人的计划</button>
+      <button type="button" data-cs18="eng" aria-pressed="false">按交易次数</button>
+    </div>
+    <div class="cs18" id="cs18" data-anim>
+      <svg viewBox="0 0 660 220" role="img" aria-label="三十年里各户存款的中位数"><g id="cs18-ax"></g><path id="cs18-band" class="cs18-band"/><path id="cs18-p" class="cs18-p"/></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>存款的中位数</span><span><i style="background:var(--quote);border:1px solid var(--line)"></i>十分之一到十分之九的户</span></div>
+      <div class="cs-sw"><label><input type="checkbox" id="cs18-d"> 规则：每户专属的默认</label><label><input type="checkbox" id="cs18-c"> 规则：恐慌时提醒约定、隔一天确认</label></div>
+      <div class="cs18-ctl">
+        <div class="sl"><label for="cs18-b">偏重眼前的程度 <b id="cs18-bv"></b></label><input id="cs18-b" type="range" min="0" max="50" step="5" value="30"></div>
+        <div class="sl"><label for="cs18-q">恐慌抛售的倾向 <b id="cs18-qv"></b></label><input id="cs18-q" type="range" min="0" max="60" step="5" value="30"></div>
+      </div>
+      <div class="cs18-out" id="cs18-out"></div>
+      <p class="cs18-msg" id="cs18-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意模型：年景与“守住计划”的模拟器相同。每户合适的储蓄比例在 6%～18% 之间；没有专属默认时，各户按统一的 12% 储蓄。按委托人的计划行事时，书记员按时买入，偏重眼前不影响储蓄；按交易次数行事时，书记员在委托人想多花时不加阻拦、在涨后推动多买，大跌后的恐慌卖出增加一半，买卖成本每年 1%。提醒与冷静期使恐慌卖出降为五分之一。“接近目标”指三十年后的存款与按合适比例、按时储蓄所得相差不超过两成。</figcaption>
+</figure>
+<style>
+.cs18 svg{width:100%;height:auto;display:block}
+.cs18-p{fill:none;stroke:var(--accent);stroke-width:2.8}
+.cs18-band{fill:var(--quote);stroke:none}
+.cs18-ctl{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px}
+.cs18-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cs18-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs18-out span{display:block;font-size:11.5px;color:var(--faint)} .cs18-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.cs18-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs18-ctl{grid-template-columns:1fr;gap:4px}.cs18-out{grid-template-columns:1fr}.cs18 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs18'+id),N=40,Y=30;let mode='plan';
+  const X0=44,X1=628,YT=10,YB=186,x=t=>X0+t/Y*(X1-X0);
+  function irr(f,end){let lo=-.5,hi=.5;for(let k=0;k<80;k++){const m=(lo+hi)/2;let v=0;f.forEach((c,t)=>v+=c*Math.pow(1+m,Y-t));if(v>end)hi=m;else lo=m;}return (lo+hi)/2;}
+  function sim(beta,panic,pers,calm,eng){let s=15838;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};const g=()=>{let u=0;while(!u)u=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r());};
+    const R=[];for(let t=0;t<Y;t++){let v=.07+.12*g();if(r()<.08)v-=.25;R.push(v);}
+    const H=[];for(let i=0;i<N;i++)H.push({b:Math.max(.3,Math.min(1,beta+.15*(r()*2-1))),pz:r(),ideal:.06+.12*r(),out:-1,W:0,cash:0});
+    const agg=Array(Y).fill(0),Q=[[0,0,0]];let D=0;const fd=[];for(let t=0;t<Y;t++){D=(D+1)*(1+R[t]);}
+    for(let t=0;t<Y;t++){for(const h of H){let sv=pers?h.ideal:.12;if(eng)sv*=h.b;
+        if(eng&&t>0)sv*=Math.max(0,Math.min(2,1+5*(R[t-1]-.07)));
+        const pp=panic*2*h.pz*(eng?1.5:(calm?.2:1));
+        if(t>0&&R[t-1]<-.12&&h.out<0&&r()<pp){h.cash+=h.W;agg[t]-=h.W;h.W=0;h.out=3;}
+        if(h.out>0){h.cash+=sv;h.out--;if(h.out===0){h.W+=h.cash;agg[t]+=h.cash;h.cash=0;h.out=-1;}}else{h.W+=sv;agg[t]+=sv;}
+        h.W*=1+R[t]-(eng?.01:0);}
+      const v=H.map(h=>h.W+h.cash).sort((a,b)=>a-b);Q.push([v[4],v[20],v[35]]);}
+    const fin=H.map(h=>h.W+h.cash),reach=H.filter((h,i)=>Math.abs(fin[i]-h.ideal*D)<=.2*h.ideal*D).length;
+    let Dd=0;for(let t=0;t<Y;t++){fd.push(.12);Dd=(Dd+.12)*(1+R[t]);}
+    return {Q,reach,inv:irr(agg,fin.reduce((a,b)=>a+b,0)),ref:irr(fd,Dd)};}
+  function draw(){const beta=1-$('-b').value/100,pq=$('-q').value/100,pd=$('-d').checked,cl=$('-c').checked,eng=mode==='eng';$('-bv').textContent=$('-b').value+'%';$('-qv').textContent=$('-q').value+'%';
+    const S=sim(beta,pq,pd,cl,eng),mx=Math.max(4,...S.Q.map(q=>q[2]))*1.05,y=v=>YB-v/mx*(YB-YT),step=mx>12?4:2;
+    let ax='';for(let v=0;v<=mx;v+=step)ax+=`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v} 年</text>`;
+    $('-ax').innerHTML=ax+[0,10,20,30].map(t=>`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">第 ${t} 年</text>`).join('');
+    $('-p').setAttribute('d',S.Q.map((q,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(q[1]).toFixed(1)).join(''));
+    $('-band').setAttribute('d','M'+S.Q.map((q,t)=>x(t)+','+y(q[2])).join('L')+'L'+S.Q.map((q,t)=>x(t)+','+y(q[0])).reverse().join('L')+'Z');
+    const pc=v=>(v*100).toFixed(1)+'%';
+    $('-out').innerHTML=[['第 30 年存款的中位数',S.Q[Y][1].toFixed(1)+' 年收入'],['接近自己目标的户',S.reach+' ／ 40'],['委托人实际 ／ 按时定投',pc(S.inv)+' ／ '+pc(S.ref)]].map(([a,v])=>`<div><span>${a}</span><b>${v}</b></div>`).join('');
+    $('-msg').textContent=eng?`书记员按交易次数行事：它不拦委托人多花，涨后推着多买，跌后放任恐慌卖出，还收走每年 1% 的买卖成本。只有 ${S.reach} 户接近自己的目标，实际收益比按时定投少 ${((S.ref-S.inv)*100).toFixed(1)} 个百分点。同样的能力，用错了方向。`:`书记员按委托人的计划行事：按时储蓄与买入。`+(pd?'每户按自己合适的比例储蓄（手头紧的人家不再被迫多存，存款的中位数因此可能下降），':'各户都按统一的 12% 储蓄，打算多存的存少了、手头紧的存多了，')+(cl?'大跌之后它提醒约定、请委托人隔一天再确认，恐慌卖出少了许多。':'大跌之后仍有人恐慌卖出。')+`${S.reach} 户接近自己的目标。`;}
+  const bs=[...document.querySelectorAll('[data-cs18]')];
+  function set(m){mode=m;bs.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.cs18===m)));draw();}
+  bs.forEach(b=>b.addEventListener('click',()=>set(b.dataset.cs18)));['-d','-c','-b','-q'].forEach(k=>$(k).addEventListener('input',draw));
+  $('').addEventListener('anim-in',()=>{[['plan',0,0],['plan',1,0],['plan',1,1],['eng',1,1]].forEach(([m,a,b],i)=>setTimeout(()=>{$('-d').checked=!!a;$('-c').checked=!!b;set(m);},300+i*2200));});
+  draw();
+})();
+</script>

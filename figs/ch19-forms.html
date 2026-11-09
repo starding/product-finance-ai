@@ -1,0 +1,35 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">人类协作的三种基本形式</p><p class="figsub">点选一种形式，看交出去的是什么、结果何时可以核验、难点在哪里。用户把一件事交给 AI 代理，属于第三种。</p></div><button class="replay" type="button" data-replay="fm">重播</button></div>
+    <div class="fm" id="fm" data-anim>
+      <button type="button" class="fm-c" data-fm="0" style="--i:0"><em>一</em><b>交换</b><span>买卖一件已经存在的东西</span></button>
+      <button type="button" class="fm-c" data-fm="1" style="--i:1"><em>二</em><b>共同生产</b><span>几个人一起完成一件事</span></button>
+      <button type="button" class="fm-c sel" data-fm="2" style="--i:2"><em>三</em><b>委托—代理</b><span>把一件事交给别人替自己去做</span></button>
+    </div>
+    <dl class="fm-d" id="fm-d" aria-live="polite"></dl>
+  </div>
+  <figcaption>共同生产的难点见 Alchian 与 Demsetz（1972）；委托—代理见 Ross（1973）、Jensen 与 Meckling（1976）。</figcaption>
+</figure>
+<style>
+.fm{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.fm-c{font:inherit;text-align:left;cursor:pointer;background:var(--quote);border:1px solid transparent;border-radius:10px;padding:10px 12px;color:var(--ink);display:flex;flex-direction:column;gap:2px;opacity:0;transform:translateY(8px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.25s)}
+.fm.in .fm-c{opacity:1;transform:none}
+.fm-c em{font-style:normal;font-size:11px;color:var(--faint)} .fm-c b{font-size:15px} .fm-c span{font-size:12.5px;color:var(--muted)}
+.fm-c.sel{border-color:var(--accent);background:var(--accent-soft)}
+.fm-d{display:grid;grid-template-columns:7.5em 1fr;gap:6px 14px;margin:14px 0 0;font-size:14px;line-height:1.6}
+.fm-d dt{color:var(--faint);font-size:12.5px;padding-top:2px} .fm-d dd{margin:0}
+@media (max-width:640px){.fm{grid-template-columns:1fr}.fm-d{grid-template-columns:1fr;gap:2px}.fm-d dd{margin-bottom:8px}}
+</style>
+<script>
+(function(){
+  const K=['交出去的是什么','结果何时可以核验','主要难点','例子'];
+  const D=[['一件已经存在的物品或权利','交割时当场可以核验','质量与真伪，交割即告结束','买菜、买一台电脑、买入一只基金份额'],
+    ['各自的劳动与投入','合作完成之后','难以衡量每个人各自的贡献，容易有人偷懒','合唱、搬运重物、团队开发一个软件'],
+    ['行动的权利：替自己去做一件事','事后，且常常在信息不对称之下才显现','看不清对方的能力与行为，双方的目标也不完全一致','雇主与员工、病人与医生、投资者与基金经理、用户与 AI 代理']];
+  const d=document.getElementById('fm-d');
+  function set(k){document.querySelectorAll('[data-fm]').forEach(b=>b.classList.toggle('sel',+b.dataset.fm===k));d.innerHTML=K.map((x,i)=>`<dt>${x}</dt><dd>${D[k][i]}</dd>`).join('');}
+  document.querySelectorAll('[data-fm]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.fm)));
+  document.getElementById('fm').addEventListener('anim-in',()=>{[0,1,2].forEach((k,i)=>setTimeout(()=>set(k),400+i*1500));});
+  set(2);
+})();
+</script>

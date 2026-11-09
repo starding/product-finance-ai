@@ -1,0 +1,44 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">同一价位上，谁先成交</p><p class="figsub">四笔买单按到达先后挂在 10.00 元。一笔 900 股的市价卖单到来，切换优先规则，看成交如何分配。</p></div><button class="replay" type="button" data-replay="pr">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="优先规则">
+      <button type="button" data-pr="time" aria-pressed="true">时间优先</button>
+      <button type="button" data-pr="pro" aria-pressed="false">按比例分配</button>
+    </div>
+    <div class="pr" id="pr" data-anim>
+      <div class="pr-in"><span>市价卖单 900 股</span><i></i></div>
+      <div id="pr-q"></div>
+      <p class="pr-msg" id="pr-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>价格优先在两种规则下都适用；图中只比较同一价位上的第二条规则。按比例分配见于部分期货市场，实际规则常与时间优先组合使用。</figcaption>
+</figure>
+<style>
+.pr-in{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--warm);margin-bottom:10px}
+.pr-in i{flex:1;height:2px;background:linear-gradient(90deg,var(--warm),transparent)}
+.pr-row{display:grid;grid-template-columns:110px 1fr 120px;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.pr-row .t{height:22px;background:var(--quote);border-radius:5px;position:relative;overflow:hidden}
+.pr-row .t i{position:absolute;left:0;top:0;bottom:0;background:var(--accent-soft);border-radius:5px}
+.pr-row .t b{position:absolute;left:0;top:0;bottom:0;background:var(--warm);border-radius:5px;width:0;transition:width .7s ease;transition-delay:var(--d)}
+.pr-row em{font-style:normal;font-variant-numeric:tabular-nums;color:var(--muted);text-align:right}
+.pr-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const O=[['甲',300,'第 1 个到'],['乙',500,'第 2 个到'],['丙',200,'第 3 个到'],['丁',1000,'第 4 个到']], Q=900, MAX=1000, tot=O.reduce((s,o)=>s+o[1],0);
+  const q=document.getElementById('pr-q'), pr=document.getElementById('pr');
+  q.innerHTML=O.map(([n,s,t],i)=>`<div class="pr-row"><span><b>${n}</b> ${s} 股 · ${t}</span><span class="t"><i style="width:${s/MAX*100}%"></i><b style="--d:${i*0.25}s"></b></span><em></em></div>`).join('');
+  const rows=[...q.children];
+  function fills(rule){if(rule==='pro')return O.map(o=>Math.round(Q*o[1]/tot));let r=Q;return O.map(o=>{const f=Math.min(r,o[1]);r-=f;return f;});}
+  function set(rule){
+    document.querySelectorAll('[data-pr]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.pr===rule)));
+    const f=fills(rule);
+    rows.forEach((r,i)=>{const b=r.querySelector('.t b');b.style.width='0';r.querySelector('em').textContent='';});
+    setTimeout(()=>rows.forEach((r,i)=>{r.querySelector('.t b').style.width=(f[i]/MAX*100)+'%';r.querySelector('em').textContent='成交 '+f[i]+' 股';}),40);
+    document.getElementById('pr-msg').textContent=rule==='time'?'先到先得：甲、乙全部成交，丙成交 100 股，最晚到的丁一股未成交。早挂单的人得到回报，鼓励交易者尽早提供流动性。':'按挂单数量分配：每笔订单都成交 45%。挂单越大分到越多，鼓励交易者挂大单，但也会诱使人虚报数量。';
+  }
+  document.querySelectorAll('[data-pr]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.pr)));
+  pr.addEventListener('anim-in',()=>set(document.querySelector('[data-pr][aria-pressed="true"]').dataset.pr));
+  set('time');
+})();
+</script>

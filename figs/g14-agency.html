@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">代理成本的三项，各降多少</p><p class="figsub">按詹森与麦克林（1976）的分法，代理成本由监督成本、担保成本与剩余损失构成。拖动认知劳动的价格，再切换书记员为谁做事。</p></div><button class="replay" type="button" data-replay="ag14">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="书记员为谁做事">
+      <button type="button" data-ag14="p" aria-pressed="true">书记员为委托人做事</button>
+      <button type="button" data-ag14="s" aria-pressed="false">书记员为卖方做事</button>
+    </div>
+    <div class="ag14" id="ag14" data-anim>
+      <div class="ag14-g" id="ag14-g"></div>
+      <div class="sl"><label for="ag14-a">认知劳动的价格 <b id="ag14-av"></b></label><input id="ag14-a" type="range" min="0" max="100" step="5" value="100"></div>
+      <p class="ag14-msg" id="ag14-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：原来三项各为 40、25、35。监督成本九成是认知劳动；担保成本不是；书记员为委托人做事时，剩余损失随监督变严而减少一半，为卖方做事时反而增加。</figcaption>
+</figure>
+<style>
+.ag14-g{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;align-items:end;height:200px;margin:6px 0 10px}
+.ag14-c{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;font-size:12.5px}
+.ag14-c div{width:64%;display:flex;flex-direction:column;justify-content:flex-end;height:150px;position:relative}
+.ag14-c i{display:block;width:100%;border-radius:6px 6px 0 0;transition:height .6s}
+.ag14-c i.old{position:absolute;bottom:0;left:0;border:1.5px dashed var(--faint);background:transparent}
+.ag14-c b{font-variant-numeric:tabular-nums;margin:4px 0 2px}
+.ag14-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('ag14'+id);let who='p';
+  const B=[['监督成本',40,'var(--accent)'],['担保成本',25,'var(--warm)'],['剩余损失',35,'var(--ink)']];
+  function draw(){const a=+$('-a').value/100;$('-av').textContent=Math.round(a*100)+'%';
+    const m=40*(.9*a+.1),b=25,res=who==='p'?35*(.5+.5*a):35*(1+.6*(1-a)),V=[m,b,res],tot=m+b+res;
+    $('-g').innerHTML=B.map(([n,v,c],i)=>`<div class="ag14-c"><div><i class="old" style="height:${v*1.5}%"></i><i style="height:${V[i]*1.5}%;background:${c}"></i></div><b>${V[i].toFixed(0)}</b><span>${n}</span></div>`).join('');
+    $('-msg').textContent=a===1&&who==='p'?'认知劳动按原价计：监督成本 40、担保成本 25、剩余损失 35，合计 100。':who==='p'?`认知劳动的价格降到 ${Math.round(a*100)}%，监督成本从 40 降到 ${m.toFixed(0)}，剩余损失随之降到 ${res.toFixed(0)}；担保成本仍是 25。代理成本合计从 100 降到 ${tot.toFixed(0)}。`:`书记员为卖方做事：监督成本同样下降，剩余损失却升到 ${res.toFixed(0)}，因为替委托人做决定的，正是利益与他不一致的一方。合计 ${tot.toFixed(0)}。`;}
+  const bs=[...document.querySelectorAll('[data-ag14]')];
+  function set(w){who=w;bs.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.ag14===w)));draw();}
+  bs.forEach(b=>b.addEventListener('click',()=>set(b.dataset.ag14)));$('-a').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{set('p');let v=100;$('-a').value=100;draw();const id=setInterval(()=>{v-=5;$('-a').value=v;draw();if(v<=5){clearInterval(id);setTimeout(()=>set('s'),1400);}},90);});
+  draw();
+})();
+</script>

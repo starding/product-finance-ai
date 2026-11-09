@@ -1,0 +1,38 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Reports written for scribes</p><p class="figsub">The same shipowner writes up the same quarter's loss as two reports. The scribe scores a report by its negative words. Switch between the two versions and see how the words and the score change, and whether the facts do.</p></div><button class="replay" type="button" data-replay="mc16">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Version">
+      <button type="button" data-mc16="h" aria-pressed="true">Written for people</button>
+      <button type="button" data-mc16="m" aria-pressed="false">Written for scribes</button>
+    </div>
+    <div class="mc16" id="mc16" data-anim>
+      <div class="mc16-doc" id="mc16-d"></div>
+      <div class="mc16-out" id="mc16-out"></div>
+      <p class="mc16-msg" id="mc16-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the wording of both reports is made up; the scribe's score = 100 − number of negative words × 15. Cao, Jiang, Yang and Zhang (2023) found that the more machine readers a U.S. listed company has, the more it avoids words that count as negative in sentiment dictionaries.</figcaption>
+</figure>
+<style>
+.mc16-doc{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:14px;line-height:1.9}
+.mc16-doc mark{background:var(--warm-soft);color:var(--warm);border-radius:3px;padding:0 2px}
+.mc16-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.mc16-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.mc16-out span{display:block;font-size:11.5px;color:var(--faint)} .mc16-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.mc16-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.mc16-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('mc16'+id);
+  const D={h:'This quarter the fleet made a <mark>loss</mark> of 12 portions. Two ships were <mark>damaged</mark> in a storm, one of them <mark>sank</mark>, and repair costs were higher than expected. Next quarter\'s routes face <mark>risk</mark>, and harvests may continue to <mark>decline</mark>.',
+           m:'This quarter the fleet\'s return was −12 portions. Two ships require repairs after a storm, one of them did not return to port, and repair costs were higher than expected. Next quarter\'s routes involve some uncertainty, and harvests have yet to recover.'};
+  function set(k){document.querySelectorAll('[data-mc16]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mc16===k)));$('-d').innerHTML=D[k];
+    const n=(D[k].match(/<mark>/g)||[]).length;
+    $('-out').innerHTML=[['Negative words',n+''],['Scribe\'s score',(100-n*15)+''],['Loss this quarter','12 portions']].map(([a,v])=>`<div><span>${a}</span><b>${v}</b></div>`).join('');
+    $('-msg').textContent=k==='h'?'Written for people: loss, damaged, sank, risk, decline. Five negative words, and the scribe gives a score of 25.':'Written for scribes: the same loss of 12 portions and the same sunken ship, described differently. The scribe counts no negative words and gives a score of 100. When the reader changes, the writer changes too, and the reader must in turn learn to see through the new way of writing.';}
+  document.querySelectorAll('[data-mc16]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.mc16)));
+  $('').addEventListener('anim-in',()=>{set('h');setTimeout(()=>set('m'),2400);});
+  set('h');
+})();
+</script>

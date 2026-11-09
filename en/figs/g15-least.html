@@ -1,0 +1,51 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Grant only the authority needed</p><p class="figsub">First choose the scribe's task, then switch among three ways of granting authority, and see what it is allowed to do and the largest loss a single mistake could cause.</p></div><button class="replay" type="button" data-replay="lp15">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Task">
+      <button type="button" data-lp15t="book" aria-pressed="false">Keep accounts</button>
+      <button type="button" data-lp15t="dca" aria-pressed="true">Monthly purchases</button>
+      <button type="button" data-lp15t="reb" aria-pressed="false">Adjust to plan</button>
+    </div>
+    <div class="seg-btns" role="group" aria-label="Authorization">
+      <button type="button" data-lp15m="all" aria-pressed="true">Full authority</button>
+      <button type="button" data-lp15m="least" aria-pressed="false">Least authority</button>
+      <button type="button" data-lp15m="conf" aria-pressed="false">Least authority + confirm irreversible actions</button>
+    </div>
+    <div class="lp15" id="lp15" data-anim>
+      <div class="lp15-t" id="lp15-t"></div>
+      <div class="lp15-w"><span>Worst loss from one mistake</span><div><i id="lp15-wb"></i></div><b id="lp15-wv"></b></div>
+      <p class="lp15-msg" id="lp15-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: a household has 100 portions of property in all; the limit for monthly purchases is 2 portions, and adjusting to plan can move at most 10 portions at a time. The worst loss is the largest amount the scribe can use in a single mistake; operations that need confirmation cannot be completed by the scribe alone.</figcaption>
+</figure>
+<style>
+.lp15-t{display:grid;gap:4px;margin-top:6px}
+.lp15-r{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:6px 10px;border-radius:7px;background:var(--quote);font-size:13px}
+.lp15-r em{font-style:normal;font-size:12px;padding:1px 9px;border-radius:999px;transition:background .3s}
+.lp15-r em.y{background:var(--accent-soft);color:var(--accent)} .lp15-r em.n{background:var(--bg);color:var(--faint);border:1px solid var(--line)} .lp15-r em.c{background:var(--warm-soft);color:var(--warm)}
+.lp15-w{display:grid;grid-template-columns:10em 1fr 5.5em;gap:10px;align-items:center;margin-top:12px;font-size:12.5px}
+.lp15-w div{height:18px;background:var(--quote);border-radius:5px;overflow:hidden}
+.lp15-w i{display:block;height:100%;background:var(--warm);transition:width .6s}
+.lp15-w b{text-align:right;font-variant-numeric:tabular-nums}
+.lp15-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.lp15-w{grid-template-columns:1fr 5.5em}.lp15-w span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('lp15'+id);let task='dca',mode='all';
+  const A=[['View accounts and holdings',0,0],['Buy within the limit',2,0],['Sell',10,0],['Large trades above the limit',100,0],['Move grain out of the granary',100,1],['Change the authorization itself',100,1]];
+  const NEED={book:[0],dca:[0,1],reb:[0,1,2]};
+  function st(i){if(mode==='all')return 'y';if(!NEED[task].includes(i))return mode==='conf'&&A[i][2]?'c':'n';return 'y';}
+  function draw(){const S=A.map((_,i)=>st(i)),worst=Math.max(0,...A.map((a,i)=>S[i]==='y'?a[1]:0));
+    $('-t').innerHTML=A.map((a,i)=>`<div class="lp15-r"><span>${a[0]}</span><em class="${S[i]}">${{y:'Allowed',n:'Not allowed',c:'Principal must confirm'}[S[i]]}</em></div>`).join('');
+    $('-wb').style.width=worst+'%';$('-wv').textContent=worst+' portions';
+    $('-msg').textContent=mode==='all'?'Full authority: whatever the task, the scribe can use all of the household\'s property, and a single mistake or a single act of exploitation could ruin the household.':mode==='least'?`Least authority: only the operations needed for this task are allowed, and the worst loss from one mistake is ${worst} portions. It cannot perform any other operation at all; if the principal wants one done, separate authorization is needed.`:`On top of least authority, the two irreversible operations, moving grain out and changing the authorization, are left for the principal to confirm in person: the scribe cannot do them alone, and the principal need not worry about every small matter.`;}
+  const tb=[...document.querySelectorAll('[data-lp15t]')],mb=[...document.querySelectorAll('[data-lp15m]')];
+  function setT(t){task=t;tb.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lp15t===t)));draw();}
+  function setM(m){mode=m;mb.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lp15m===m)));draw();}
+  tb.forEach(b=>b.addEventListener('click',()=>setT(b.dataset.lp15t)));mb.forEach(b=>b.addEventListener('click',()=>setM(b.dataset.lp15m)));
+  $('').addEventListener('anim-in',()=>{['all','least','conf'].forEach((m,i)=>setTimeout(()=>setM(m),300+i*2200));});
+  draw();
+})();
+</script>

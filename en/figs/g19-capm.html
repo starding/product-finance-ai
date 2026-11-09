@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Only risk that cannot be diversified earns compensation</p><p class="figsub">The horizontal axis is how much a ship share moves with the whole village fleet; the vertical axis is its expected return. Points on the line are priced by the market. Pick the point with "high return without moving with the fleet" and see what happens.</p></div><button class="replay" type="button" data-replay="cp19">Replay</button></div>
+    <div class="cp19" id="cp19" data-anim>
+      <svg viewBox="0 0 660 220" role="img" aria-label="Systematic risk and expected return"><g id="cp19-g"></g></svg>
+      <div class="seg-btns" role="group" aria-label="Case">
+        <button type="button" data-cp19="0" aria-pressed="true">The market's pricing</button>
+        <button type="button" data-cp19="1" aria-pressed="false">High return without moving with the fleet</button>
+      </div>
+      <p class="cp19-msg" id="cp19-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the risk-free return is 2%, and a ship share that moves one-for-one with the fleet has an expected return of 7% (Sharpe, 1964). Individual risk can be diversified away and does not affect a point's position on the line.</figcaption>
+</figure>
+<style>
+.cp19 svg{width:100%;height:auto;display:block}
+.cp19 circle{transition:cy .9s,cx .9s}
+.cp19-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cp19 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cp19'+id),X0=56,X1=628,YT=12,YB=186,x=b=>X0+b/2*(X1-X0),y=r=>YB-r/.14*(YB-YT),er=b=>.02+.05*b;
+  const P=[[.3,'Public ferry'],[.8,'Coastal freighter'],[1,'Whole fleet'],[1.5,'Ocean trader'],[1.9,'Ship built on debt']];
+  function draw(k){let h=[0,.04,.08,.12].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text>`).join('')+[0,.5,1,1.5,2].map(b=>`<text x="${x(b)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${b}</text>`).join('')+`<text x="${X1}" y="${YB+30}" text-anchor="end" font-size="11" class="t-faint">How much it moves with the village fleet →</text>`;
+    h+=`<line x1="${x(0)}" x2="${x(2)}" y1="${y(er(0))}" y2="${y(er(2))}" stroke="var(--accent)" stroke-width="2.4"/>`;
+    P.forEach(([b,n])=>{const e=b>1.7;h+=`<circle cx="${x(b)}" cy="${y(er(b))}" r="6" fill="var(--accent)"/><text x="${e?x(b)-8:x(b)+8}" y="${y(er(b))+16}" font-size="11" text-anchor="${e?'end':'start'}" class="t-faint">${n}</text>`;});
+    const yy=k?er(.2):.12;h+=`<circle id="cp19-o" cx="${x(.2)}" cy="${y(yy)}" r="8" fill="var(--warm)"/><text x="${x(.2)+10}" y="${y(yy)-8}" font-size="11" fill="var(--warm)">${k?'After its price is bid up':'Claimed return 12%'}</text>`;
+    $('-g').innerHTML=h;
+    $('-msg').textContent=k?'If such a ship share really existed, every scribe would buy it; its price would be bid up at once and its return would fall to the line, leaving only 3%. An agent that promises high returns with no risk is either hiding risk or has made an error in its calculations.':'For every point on the line, the level of return depends only on how much it moves with the whole village fleet. The scribe can help people choose where on the line to stand, but it cannot put them above the line.';}
+  const bs=[...document.querySelectorAll('[data-cp19]')];
+  function set(k){bs.forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.cp19===k)));draw(k);}
+  bs.forEach(b=>b.addEventListener('click',()=>set(+b.dataset.cp19)));
+  $('').addEventListener('anim-in',()=>{set(0);setTimeout(()=>set(1),2400);});
+  set(0);
+})();
+</script>

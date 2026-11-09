@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：信任需要时间</p><p class="figsub">四条结论，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="g24summary">重播</button></div>
+    <div class="g24summary" id="g24summary" data-anim><div class="g24summary-c" style="--i:0"><em>信任的三个来源</em><b>能力、善意与正直，各有证据</b><p>记录证明能力，收费与目标证明善意，约定与核对证明正直。</p></div><div class="g24summary-c" style="--i:1"><em>信号传递</em><b>贵的信号才可信</b><p>保证金、保险、执照与审计，骗人的运营者付不起。</p></div><div class="g24summary-c warn" style="--i:2"><em>从小处开始与声誉</em><b>逐级放宽，记录改变判断</b><p>每一级的损失上限事先写明，骗人的书记员拿不到值得骗的权限。</p></div><div class="g24summary-c warn" style="--i:3"><em>不对称</em><b>出错之后退一步，不归零</b><p>越界收回授权，已赔付的执行错误退一级，判断失误不退级。</p></div></div>
+  </div>
+</figure>
+<style>
+.g24summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g24summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g24summary-c.warn{border-left-color:var(--warm)}
+.g24summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g24summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g24summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g24summary.in .g24summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g24summary{grid-template-columns:1fr}}
+</style>

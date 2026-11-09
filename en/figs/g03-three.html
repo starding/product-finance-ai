@@ -1,0 +1,34 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Three ways to make a promise credible</p><p class="figsub">Click an approach to see what it relies on, whom it suits, what it costs and whom it shuts out.</p></div><button class="replay" type="button" data-replay="th3">Replay</button></div>
+    <div class="th3" id="th3" data-anim>
+      <button type="button" class="th3-c" data-i="0" style="--i:0"><b>Reputation</b><span>Make the borrower care about the future</span></button>
+      <button type="button" class="th3-c" data-i="1" style="--i:1"><b>Collateral</b><span>Give the borrower something to lose</span></button>
+      <button type="button" class="th3-c" data-i="2" style="--i:2"><b>Third-party enforcement</b><span>Enforced by someone both sides recognise</span></button>
+    </div>
+    <dl class="th3-d" id="th3-d" aria-live="polite"></dl>
+  </div>
+</figure>
+<style>
+.th3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.th3-c{font:inherit;text-align:left;cursor:pointer;background:var(--quote);border:1px solid transparent;border-radius:10px;padding:10px 12px;color:var(--ink);opacity:0;transform:translateY(6px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.25s)}
+.th3.in .th3-c{opacity:1;transform:none}
+.th3-c b{display:block;font-size:15px} .th3-c span{font-size:12.5px;color:var(--muted)}
+.th3-c.sel{border-color:var(--accent);background:var(--accent-soft)}
+.th3-d{display:grid;grid-template-columns:7em 1fr;gap:6px 14px;margin:14px 0 0;font-size:13.5px;line-height:1.6}
+.th3-d dt{color:var(--faint);font-size:12px;padding-top:2px} .th3-d dd{margin:0}
+@media (max-width:640px){.th3{grid-template-columns:1fr}.th3-d{grid-template-columns:1fr;gap:1px}.th3-d dd{margin-bottom:6px}}
+</style>
+<script>
+(function(){
+  const K=['Relies on','Suits','Cost','Shut out','Today\'s counterpart'];
+  const D=[['Repeated dealings, and records of default that spread','Small, recurring loans between acquaintances','Requires long-term relationships and shared records; newcomers have no record','Newcomers with no record','Credit records, credit scores'],
+    ['Something the borrower owns and is willing to pledge','People with assets; larger loans','Collateral must be valued and kept; its value can change','People without assets','Mortgages, car loans, securities-backed lending and margin'],
+    ['A contract, and elders, a court or authorities able to enforce it','Larger loans between strangers','Recording, hearing and enforcing all cost something; the enforcer must itself be trustworthy','Small loans that cannot bear the cost of enforcement','Loan contracts, notarisation, court judgments']];
+  const d=document.getElementById('th3-d'),bs=[...document.querySelectorAll('.th3-c')];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));d.innerHTML=K.map((k,j)=>`<dt>${k}</dt><dd>${D[i][j]}</dd>`).join('');}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('th3').addEventListener('anim-in',()=>{[0,1,2].forEach((i,k)=>setTimeout(()=>set(i),400+k*1800));});
+  set(0);
+})();
+</script>

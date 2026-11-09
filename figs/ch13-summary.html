@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：让用户看见承诺背后的保障</p><p class="figsub">四条设计要求，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="ch13summary">重播</button></div>
+    <div class="ch13summary" id="ch13summary" data-anim><div class="ch13summary-c" style="--i:0"><em>金融产品是信任品</em><b>让过程可以被检验</b><p>提供依据、记录与可核查的数据，不只用短期结果证明产品质量。</p></div><div class="ch13summary-c" style="--i:1"><em>可信来自制度</em><b>把托管与保障讲清楚</b><p>说明资产由谁托管、是否与机构自有资产隔离、有哪些保障及其限额。</p></div><div class="ch13summary-c warn" style="--i:2"><em>代人监督也需要被监督</em><b>披露利益冲突与收费</b><p>说明中介从哪里赚钱，是否与用户的利益存在冲突。</p></div><div class="ch13summary-c" style="--i:3"><em>成交不等于交收</em><b>区分成交、交收与可用资金</b><p>展示资金与证券何时真正到账、何时可以取出。</p></div></div>
+  </div>
+</figure>
+<style>
+.ch13summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch13summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch13summary-c.warn{border-left-color:var(--warm)}
+.ch13summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch13summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch13summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch13summary.in .ch13summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch13summary{grid-template-columns:1fr}}
+</style>

@@ -1,0 +1,52 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Trading only redistributes the market return</p><p class="figsub">Suppose the three types of trader together hold the whole market, and the market produces 100 units of return in a year. See how trading changes each group's share.</p></div><button class="replay" type="button" data-replay="zs">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Stage">
+      <button type="button" data-zs="0" aria-pressed="true">Hold only, no trading</button>
+      <button type="button" data-zs="1" aria-pressed="false">After trading, before costs</button>
+      <button type="button" data-zs="2" aria-pressed="false">After costs</button>
+    </div>
+    <div class="zs" id="zs" data-anim>
+      <div class="zs-row" data-g="u"><span>Utilitarian</span><div class="zs-t"><i></i></div><b></b></div>
+      <div class="zs-row" data-g="p"><span>Profit-motivated</span><div class="zs-t"><i></i></div><b></b></div>
+      <div class="zs-row" data-g="f"><span>Futile</span><div class="zs-t"><i></i></div><b></b></div>
+      <div class="zs-row" data-g="c"><span>Trading costs</span><div class="zs-t"><i></i></div><b></b></div>
+      <div class="zs-sum"><span>All traders</span><b id="zs-sum"></b></div>
+      <p class="zs-msg" id="zs-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative numbers. For the real scale, see French (2008): from 1980 to 2006, the fees, trading costs and spreads US investors paid each year for active investing came to about 0.67% of the market value of stocks.</figcaption>
+</figure>
+<style>
+.zs-row{display:grid;grid-template-columns:118px 1fr 96px;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.zs-row b{text-align:right;white-space:nowrap;font-size:15px;font-variant-numeric:tabular-nums}
+.zs-t{height:22px;background:var(--quote);border-radius:6px;overflow:hidden}
+.zs-t i{display:block;height:100%;width:0;border-radius:6px;transition:width .8s ease}
+.zs-row[data-g="u"] i{background:var(--blue)} .zs-row[data-g="p"] i{background:var(--accent)} .zs-row[data-g="f"] i{background:var(--warm)} .zs-row[data-g="c"] i{background:var(--gray-mark)}
+.zs-row b.up{color:var(--accent)} .zs-row b.dn{color:var(--warm)}
+.zs-sum{display:flex;justify-content:space-between;border-top:1px solid var(--line);margin-top:10px;padding-top:8px;font-size:14px}
+.zs-sum b{font-size:18px;font-variant-numeric:tabular-nums}
+.zs-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const S=[
+    {u:50,p:30,f:20,c:0,m:'Without trading, each type of trader receives the market return in proportion to its holdings: 100 in total.'},
+    {u:47,p:37,f:16,c:0,m:'After trading, profit-motivated traders gain 7 units, exactly the 3 units utilitarian traders lose plus the 4 units futile traders lose. The total is still 100: trading only redistributes.'},
+    {u:46,p:35.5,f:15,c:3.5,m:'After trading costs, the three types together keep only 96.5; the missing 3.5 units go to brokers, exchanges and market makers. Zero-sum has become negative-sum.'}
+  ];
+  const rows=[...document.querySelectorAll('#zs .zs-row')], base={u:50,p:30,f:20,c:0};
+  const btns=[...document.querySelectorAll('[data-zs]')];
+  function set(k){
+    btns.forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.zs===k)));
+    const s=S[k];
+    rows.forEach(r=>{const g=r.dataset.g,v=s[g];r.querySelector('i').style.width=(v/60*100)+'%';
+      const b=r.querySelector('b');const dv=g==='c'?0:v-base[g];b.textContent=v+(g!=='c'&&k>0&&dv!==0?(dv>0?' (+':' (')+dv+')':'');b.className=g==='c'?'':dv>0?'up':dv<0?'dn':'';});
+    document.getElementById('zs-sum').textContent=(s.u+s.p+s.f);
+    document.getElementById('zs-msg').textContent=s.m;
+  }
+  btns.forEach(b=>b.addEventListener('click',()=>set(+b.dataset.zs)));
+  document.getElementById('zs').addEventListener('anim-in',()=>{set(0);setTimeout(()=>set(1),1800);setTimeout(()=>set(2),4200);});
+  set(0);
+})();
+</script>

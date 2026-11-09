@@ -1,0 +1,59 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">Four orders in the same market move</p>
+    <p class="figsub">The price starts at 100. Before the open on day 18, bad news breaks and the price jumps straight from 97 to 92. Choose an order to see when it is filled and at what price.</p>
+    <div class="seg-btns" role="group" aria-label="Order type">
+      <button type="button" data-od="mkt" aria-pressed="true">Market buy</button>
+      <button type="button" data-od="lim" aria-pressed="false">Limit buy 98</button>
+      <button type="button" data-od="stop" aria-pressed="false">Stop sell 95</button>
+      <button type="button" data-od="stl" aria-pressed="false">Stop-limit sell 95 / 94.5</button>
+    </div>
+    <div class="od" id="od" data-anim>
+      <svg viewBox="0 0 640 230" role="img" aria-label="Price path and when orders trigger and fill">
+        <g id="od-axis"></g>
+        <path id="od-path" class="od-path"/>
+        <g id="od-mk"></g>
+      </svg>
+      <p class="od-msg" id="od-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative price path. Orders are submitted after the close on day 0; the stop and stop-limit orders assume the investor already holds the stock. A triggered stop order becomes a market order and can only be filled at the first available price after the trigger.</figcaption>
+</figure>
+<style>
+.od svg{width:100%;height:auto;display:block}
+.od-path{fill:none;stroke:var(--ink);stroke-width:2;stroke-linejoin:round}
+.od-lv{stroke-width:1.5;stroke-dasharray:5 4}
+.od-lv.a{stroke:var(--accent)} .od-lv.w{stroke:var(--warm)}
+.od-dot{stroke:var(--surface);stroke-width:2}
+.od-dot.a{fill:var(--accent)} .od-dot.w{fill:var(--warm)}
+.od-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const P=[100,99.6,100.2,99.1,98.6,97.9,98.4,99.0,98.2,97.6,98.1,97.8,97.2,97.6,97.0,96.8,97.3,97.0,92.0,91.4,92.2,91.0,91.8,92.5,93.1,92.6,93.4,94.0,93.6,94.2];
+  const N=P.length-1,X0=50,X1=620,YT=16,YB=196,x=t=>X0+t/N*(X1-X0),y=p=>YB-(p-89)/(102-89)*(YB-YT);
+  let a='';[90,95,100].forEach(v=>a+=`<line x1="${X0}" y1="${y(v)}" x2="${X1}" y2="${y(v)}" class="s-line"/><text x="${X0-8}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`);
+  [0,5,10,15,20,25].forEach(t=>a+=`<text x="${x(t)}" y="216" text-anchor="middle" font-size="11" class="t-faint">Day ${t}</text>`);
+  a+=`<text x="${x(18)}" y="${y(97.6)}" text-anchor="middle" font-size="11" class="t-warm">Gap</text>`;
+  document.getElementById('od-axis').innerHTML=a;
+  const path=document.getElementById('od-path');
+  path.setAttribute('d','M'+P.map((p,t)=>`${x(t).toFixed(1)},${y(p).toFixed(1)}`).join('L'));
+  const mk=document.getElementById('od-mk'), msg=document.getElementById('od-msg');
+  const S={
+    mkt:{lv:null,f:[1,99.6,'a'],m:'Market buy: filled at once at the open on day 1, at 99.6. It is certain to be filled, but the market at that moment sets the price.'},
+    lim:{lv:[98,'a'],f:[5,97.9,'a'],m:'Limit buy at 98: not filled until the price falls below 98 on day 5, at 97.9. The price is guaranteed; if the price had never fallen to 98, the order would never have been filled.'},
+    stop:{lv:[95,'w'],f:[18,92.0,'w'],m:'Stop sell at 95: the price gaps from 97 to 92 and never trades near 95. Once triggered, the stop order becomes a market order and is filled at 92.0, 3 below the set price.'},
+    stl:{lv:[95,'w'],lv2:[94.5,'w'],f:null,m:'Stop-limit sell (stop 95, limit 94.5): also triggered at the gap, but the limit order requires at least 94.5 and the price stays below 94.5 throughout. The order is never filled, and the position keeps falling.'}
+  };
+  function set(k){
+    document.querySelectorAll('[data-od]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.od===k)));
+    const s=S[k]; let h='';
+    [s.lv,s.lv2].forEach((l,i)=>{if(l)h+=`<line class="od-lv ${l[1]}" x1="${X0}" y1="${y(l[0])}" x2="${X1}" y2="${y(l[0])}"/><text x="${X1}" y="${y(l[0])-5}" text-anchor="end" font-size="11" class="${l[1]==='a'?'t-accent':'t-warm'}">${i?'Limit ':(k==='lim'?'Limit ':'Stop ')}${l[0]}</text>`;});
+    if(s.f)h+=`<circle class="od-dot ${s.f[2]}" cx="${x(s.f[0])}" cy="${y(s.f[1])}" r="7"/>`;
+    mk.innerHTML=h; msg.textContent=s.m;
+  }
+  document.querySelectorAll('[data-od]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.od)));
+  document.getElementById('od').addEventListener('anim-in',()=>{const L=path.getTotalLength();path.style.transition='none';path.style.strokeDasharray=L;path.style.strokeDashoffset=L;path.getBoundingClientRect();path.style.transition='stroke-dashoffset 1.8s ease';path.style.strokeDashoffset=0;});
+  set('mkt');
+})();
+</script>

@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">How much each of the three agency costs falls</p><p class="figsub">Following Jensen and Meckling (1976), agency costs consist of monitoring costs, bonding costs and the residual loss. Drag the price of cognitive labour, then switch whom the scribe works for.</p></div><button class="replay" type="button" data-replay="ag14">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Whom the scribe works for">
+      <button type="button" data-ag14="p" aria-pressed="true">Scribe works for the principal</button>
+      <button type="button" data-ag14="s" aria-pressed="false">Scribe works for the seller</button>
+    </div>
+    <div class="ag14" id="ag14" data-anim>
+      <div class="ag14-g" id="ag14-g"></div>
+      <div class="sl"><label for="ag14-a">Price of cognitive labour <b id="ag14-av"></b></label><input id="ag14-a" type="range" min="0" max="100" step="5" value="100"></div>
+      <p class="ag14-msg" id="ag14-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the three components start at 40, 25 and 35. Monitoring costs are 90% cognitive labour; bonding costs are not cognitive labour at all. When the scribe works for the principal, the residual loss falls by up to half as monitoring tightens; when it works for the seller, the residual loss rises instead.</figcaption>
+</figure>
+<style>
+.ag14-g{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;align-items:end;height:200px;margin:6px 0 10px}
+.ag14-c{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;font-size:12.5px}
+.ag14-c div{width:64%;display:flex;flex-direction:column;justify-content:flex-end;height:150px;position:relative}
+.ag14-c i{display:block;width:100%;border-radius:6px 6px 0 0;transition:height .6s}
+.ag14-c i.old{position:absolute;bottom:0;left:0;border:1.5px dashed var(--faint);background:transparent}
+.ag14-c b{font-variant-numeric:tabular-nums;margin:4px 0 2px}
+.ag14-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('ag14'+id);let who='p';
+  const B=[['Monitoring costs',40,'var(--accent)'],['Bonding costs',25,'var(--warm)'],['Residual loss',35,'var(--ink)']];
+  function draw(){const a=+$('-a').value/100;$('-av').textContent=Math.round(a*100)+'%';
+    const m=40*(.9*a+.1),b=25,res=who==='p'?35*(.5+.5*a):35*(1+.6*(1-a)),V=[m,b,res],tot=m+b+res;
+    $('-g').innerHTML=B.map(([n,v,c],i)=>`<div class="ag14-c"><div><i class="old" style="height:${v*1.5}%"></i><i style="height:${V[i]*1.5}%;background:${c}"></i></div><b>${V[i].toFixed(0)}</b><span>${n}</span></div>`).join('');
+    $('-msg').textContent=a===1&&who==='p'?'With cognitive labour at its original price: monitoring costs 40, bonding costs 25, residual loss 35, for a total of 100.':who==='p'?`With the price of cognitive labour down to ${Math.round(a*100)}%, monitoring costs fall from 40 to ${m.toFixed(0)}, and the residual loss falls with them to ${res.toFixed(0)}; bonding costs remain 25. Total agency costs fall from 100 to ${tot.toFixed(0)}.`:`When the scribe works for the seller, monitoring costs fall just the same, but the residual loss rises to ${res.toFixed(0)}, because the one making decisions for the principal is precisely the party whose interests differ from the principal's. Total: ${tot.toFixed(0)}.`;}
+  const bs=[...document.querySelectorAll('[data-ag14]')];
+  function set(w){who=w;bs.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.ag14===w)));draw();}
+  bs.forEach(b=>b.addEventListener('click',()=>set(b.dataset.ag14)));$('-a').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{set('p');let v=100;$('-a').value=100;draw();const id=setInterval(()=>{v-=5;$('-a').value=v;draw();if(v<=5){clearInterval(id);setTimeout(()=>set('s'),1400);}},90);});
+  draw();
+})();
+</script>

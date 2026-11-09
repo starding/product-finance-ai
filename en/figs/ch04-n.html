@@ -1,0 +1,65 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">As you hold more stocks, how far does risk fall?</p>
+    <p class="figsub">Drag to change the number of stocks held. Grey is firm-specific risk that can be diversified away; green is systematic risk that cannot be diversified away however many stocks you hold.</p>
+    <div class="nn" id="nn" data-anim>
+      <svg viewBox="0 0 640 230" role="img" aria-label="Portfolio volatility as the number of stocks held changes">
+        <g id="nn-axis"></g>
+        <path id="nn-sys" class="nn-sys"/>
+        <path id="nn-idio" class="nn-idio"/>
+        <path id="nn-line" class="nn-line"/>
+        <line id="nn-cur" class="nn-cur" y1="14" y2="196"/>
+        <circle id="nn-dot" r="6" class="nn-dot"/>
+      </svg>
+      <div class="sl"><label for="nn-k">Number of stocks held <b id="nn-kv"></b></label><input id="nn-k" type="range" min="1" max="100" step="1" value="10"></div>
+      <div class="nn-out">
+        <div><span>Annual volatility of the portfolio</span><b id="nn-v"></b></div>
+        <div><span>Share of diversifiable risk removed</span><b id="nn-p"></b></div>
+        <div><span>Floor that cannot be diversified</span><b id="nn-f"></b></div>
+      </div>
+    </div>
+  </div>
+  <figcaption>Example parameters: each stock has an annual volatility of 35%, the average correlation between any two stocks is 0.2, and the portfolio is equally weighted. Portfolio variance is then roughly “average covariance + firm-specific risk ÷ number of stocks”, and the floor is about 15.7%. For empirical estimates of how many stocks are needed for diversification, see Evans and Archer (1968) and Statman (1987).</figcaption>
+</figure>
+<style>
+.nn svg{width:100%;height:auto;display:block}
+.nn-sys{fill:var(--accent-soft)}
+.nn-idio{fill:var(--quote)}
+.nn-line{fill:none;stroke:var(--ink);stroke-width:2.5;stroke-dasharray:900;stroke-dashoffset:900;transition:stroke-dashoffset 1.6s ease}
+.nn.in .nn-line{stroke-dashoffset:0}
+.nn-cur{stroke:var(--warm);stroke-dasharray:3 3}
+.nn-dot{fill:var(--warm)}
+.nn-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.nn-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.nn-out span{display:block;font-size:12px;color:var(--faint)}
+.nn-out b{font-size:19px;font-variant-numeric:tabular-nums}
+@media (max-width:640px){.nn-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const S=0.35, R=0.2, X0=50, X1=620, YT=14, YB=196, KMAX=100;
+  const vol=k=>Math.sqrt(S*S*(R+(1-R)/k)), floor=S*Math.sqrt(R);
+  const x=k=>X0+Math.log10(k)/Math.log10(KMAX)*(X1-X0), y=v=>YB-v/0.38*(YB-YT);
+  let a=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`;
+  [1,2,5,10,20,50,100].forEach(k=>a+=`<line x1="${x(k)}" y1="${YT}" x2="${x(k)}" y2="${YB}" class="s-line"/><text x="${x(k)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${k}</text>`);
+  [0.1,0.2,0.3].forEach(v=>a+=`<text x="${X0-8}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text>`);
+  a+=`<text x="${x(60)}" y="${y(floor/2)}" text-anchor="middle" font-size="12" class="t-accent">Systematic risk: stays</text><text x="${x(2.2)}" y="${y(0.3)}" font-size="12" class="t-muted">Firm-specific risk: diversifiable</text>`;
+  document.getElementById('nn-axis').innerHTML=a;
+  const ks=[];for(let i=0;i<=200;i++)ks.push(Math.pow(KMAX,i/200));
+  const top=ks.map(k=>`${x(k).toFixed(1)},${y(vol(k)).toFixed(1)}`);
+  document.getElementById('nn-line').setAttribute('d','M'+top.join('L'));
+  document.getElementById('nn-idio').setAttribute('d','M'+top.join('L')+`L${x(KMAX)},${y(floor)}L${x(1)},${y(floor)}Z`);
+  document.getElementById('nn-sys').setAttribute('d',`M${x(1)},${y(floor)}L${x(KMAX)},${y(floor)}L${x(KMAX)},${YB}L${x(1)},${YB}Z`);
+  const k=document.getElementById('nn-k');
+  function render(){const n=+k.value,v=vol(n);
+    document.getElementById('nn-kv').textContent=n+(n===1?' stock':' stocks');
+    const c=document.getElementById('nn-cur');c.setAttribute('x1',x(n));c.setAttribute('x2',x(n));
+    const d=document.getElementById('nn-dot');d.setAttribute('cx',x(n));d.setAttribute('cy',y(v));
+    document.getElementById('nn-v').textContent=(v*100).toFixed(1)+'%';
+    const removed=(S*S-v*v)/(S*S-floor*floor);
+    document.getElementById('nn-p').textContent=(removed*100).toFixed(0)+'%';
+    document.getElementById('nn-f').textContent=(floor*100).toFixed(1)+'%';}
+  k.addEventListener('input',render); render();
+  document.getElementById('nn').addEventListener('anim-in',()=>{let n=1;k.value=n;render();const id=setInterval(()=>{n=Math.min(100,Math.ceil(n*1.25));k.value=n;render();if(n>=30){clearInterval(id);setTimeout(()=>{k.value=10;render();},800);}},180);});
+})();
+</script>

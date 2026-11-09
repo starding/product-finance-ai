@@ -1,0 +1,41 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Keeping seed: eat less today, harvest more next year</p><p class="figsub">Set aside part of the 12-portion harvest as seed. The curve is the trade-off between what is eaten this year and what is harvested next year; drag the slider to see how much extra harvest the last portion of seed still brings.</p></div><button class="replay" type="button" data-replay="sd">Replay</button></div>
+    <div class="sd" id="sd" data-anim>
+      <svg viewBox="0 0 640 250" role="img" aria-label="Trade-off between this year's consumption and next year's harvest"><g id="sd-ax"></g><path id="sd-c" class="sd-l"/><line id="sd-tan" class="sd-tan"/><circle id="sd-p" r="6" fill="var(--ink)"/></svg>
+      <div class="sl"><label for="sd-s">Kept as seed <b id="sd-sv"></b></label><input id="sd-s" type="range" min="0" max="12" step="0.5" value="1"></div>
+      <div class="sd-out"><div><span>Eaten this year</span><b id="sd-now"></b></div><div><span>Next year's harvest</span><b id="sd-next"></b></div><div><span>Return on the last portion of seed</span><b id="sd-r"></b></div></div>
+      <p class="sd-msg" id="sd-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: next year's harvest = 12 + 4 × √(portions of seed). Land is limited, so the more seed is sown, the smaller the gain from each additional portion; the slope of the tangent is the return on the last portion of seed.</figcaption>
+</figure>
+<style>
+.sd svg{width:100%;height:auto;display:block}
+.sd-l{fill:none;stroke:var(--accent);stroke-width:2.5}
+.sd-tan{stroke:var(--warm);stroke-width:1.6;stroke-dasharray:5 4}
+.sd-out{display:flex;gap:24px;flex-wrap:wrap;margin-top:8px}
+.sd-out div{display:flex;flex-direction:column} .sd-out span{font-size:12px;color:var(--faint)} .sd-out b{font-size:20px;font-variant-numeric:tabular-nums}
+.sd-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.sd svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),X0=56,X1=620,YB=210,YT=12,x=v=>X0+v/12*(X1-X0),y=v=>YB-(v-10)/18*(YB-YT);
+  const H=s=>12+4*Math.sqrt(s);
+  $('sd-ax').innerHTML=`<line x1="${X0}" x2="${X1}" y1="${YB}" y2="${YB}" class="s-faint"/>`+[0,3,6,9,12].map(v=>`<text x="${x(v)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${v}</text>`).join('')+
+    [12,16,20,24,28].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+
+    `<text x="${X1}" y="${YB-6}" text-anchor="end" font-size="11.5" class="t-muted">Portions eaten this year →</text><text x="${X0+6}" y="${YT+10}" font-size="11.5" class="t-muted">Next year's harvest</text>`;
+  let d='';for(let s=0;s<=12;s+=.05){const c=12-s;d+=(s?'L':'M')+x(c).toFixed(1)+','+y(H(s)).toFixed(1);}$('sd-c').setAttribute('d',d);
+  const sl=$('sd-s');
+  function draw(){const s=Math.max(+sl.value,.0001),c=12-s,h=H(s),m=2/Math.sqrt(s);
+    $('sd-p').setAttribute('cx',x(c));$('sd-p').setAttribute('cy',y(h));
+    const dx=2;$('sd-tan').setAttribute('x1',x(c-dx));$('sd-tan').setAttribute('y1',y(h+m*dx));$('sd-tan').setAttribute('x2',x(c+dx));$('sd-tan').setAttribute('y2',y(h-m*dx));
+    $('sd-sv').textContent=(+sl.value)+((+sl.value)===1?' portion':' portions');$('sd-now').textContent=c.toFixed(1)+' portions';$('sd-next').textContent=h.toFixed(1)+' portions';
+    const r=+sl.value?m-1:Infinity;$('sd-r').textContent=+sl.value?(r>=0?'+':'')+Math.round(r*100)+'%':'—';
+    $('sd-msg').textContent=+sl.value?`The last portion of seed brings in ${m.toFixed(2)} portions of harvest, a return of ${Math.round(r*100)}%. ${r>0.2?'The return is still high, so keeping more seed is worthwhile.':r>0?'The return is no longer high; whether to keep more depends on how reluctant he is to eat one portion less today.':'Keeping more seed no longer pays.'}`:'With no seed, next year brings only 12 portions; the return on the first portion of seed is very high.';}
+  sl.addEventListener('input',draw);
+  $('sd').addEventListener('anim-in',()=>{let v=0;sl.value=0;draw();const id=setInterval(()=>{v+=.5;sl.value=v;draw();if(v>=6)clearInterval(id);},260);});
+  draw();
+})();
+</script>

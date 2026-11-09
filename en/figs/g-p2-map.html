@@ -1,0 +1,46 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Which steps to rerun</p><p class="figsub">Above are the twelve steps of Part One; below are six chapters of Part Two. Choose a chapter to see which steps it reruns and what question it must answer.</p></div><button class="replay" type="button" data-replay="pm2">Replay</button></div>
+    <div class="pm2" id="pm2" data-anim>
+      <div class="pm2-top" id="pm2-t"></div>
+      <div class="pm2-bot" id="pm2-b"></div>
+      <div class="pm2-d" id="pm2-d" aria-live="polite"></div>
+    </div>
+  </div>
+  <figcaption>"Expected" is the judgement made before the derivation; with all seven chapters written, the results of the derivation agree with it. Chapter 13 first establishes which part of the cost this parameter lowers and reruns no step.</figcaption>
+</figure>
+<style>
+.pm2-top{display:grid;grid-template-columns:repeat(12,1fr);gap:4px}
+.pm2-top span{font-size:11px;line-height:1.35;text-align:center;padding:6px 2px;border-radius:6px;background:var(--quote);color:var(--muted);transition:background .3s,color .3s;overflow-wrap:anywhere;hyphens:auto}
+.pm2-top span b{display:block;font-size:10px;font-weight:400;color:var(--faint)}
+.pm2-top span.hit{background:var(--warm-soft);color:var(--warm)}
+.pm2-bot{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-top:14px}
+.pm2-c{font:inherit;cursor:pointer;text-align:left;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:8px 9px;color:var(--ink);font-size:13px;line-height:1.45;opacity:0;transform:translateY(8px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.2s)}
+.pm2.in .pm2-c{opacity:1;transform:none}
+.pm2-c em{display:block;font-style:normal;font-size:11px;color:var(--faint)}
+.pm2-c.sel{border-color:var(--accent)}
+.pm2-d{margin-top:12px;display:grid;grid-template-columns:2fr 1fr;gap:8px}
+.pm2-d div{background:var(--quote);border-radius:8px;padding:9px 11px;font-size:13.5px;line-height:1.55}
+.pm2-d span{display:block;font-size:11px;color:var(--faint)}
+@media (max-width:640px){.pm2-top{grid-template-columns:repeat(6,1fr)}.pm2-bot{grid-template-columns:repeat(2,1fr)}.pm2-d{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const P=['Saving and seed','Lending','Commitment','Money','Insurance','Bank','Shares','Market','Information in prices','Delegation','Regulation & custody','Defaults'];
+  const C=[[14,'Can everyone have a personal agent?',[10],'Once research and comparison are almost free, can households with modest assets also afford a personal agent, and how far does the boundary of delegation move?','Loosens'],
+    [15,'Who guarantees an agent\'s promises',[3,11],'An agent has no property to pledge and no accumulated reputation. Who guarantees its actions, and how can one check what it did?','Tightens'],
+    [16,'If everyone has an analyst',[9],'When everyone can read every report, information advantages are used up faster. Where does the new asymmetry appear?','Loosens, then shifts'],
+    [17,'Agents become the main market participants',[8],'Execution becomes cheaper, but will agents that resemble one another make the same decision at the same time?','Loosens, with new risks'],
+    [18,'Can an agent correct human bias?',[12],'An agent can adjust defaults for each household at any time, and it can also be used to exploit biases.','Cuts both ways'],
+    [19,'What did not change',[1,2,5],'Time, risk and irreversible loss do not disappear because cognitive labour becomes cheaper.','Unchanged']];
+  const t=document.getElementById('pm2-t'),b=document.getElementById('pm2-b'),d=document.getElementById('pm2-d');
+  t.innerHTML=P.map((p,i)=>`<span><b>${i+1}</b>${p}</span>`).join('');
+  b.innerHTML=C.map((c,i)=>`<button type="button" class="pm2-c" style="--i:${i}"><em>Chapter ${c[0]}</em>${c[1]}</button>`).join('');
+  const ts=[...t.children],bs=[...b.children];
+  function set(i){const c=C[i];bs.forEach((x,j)=>x.classList.toggle('sel',j===i));ts.forEach((x,j)=>x.classList.toggle('hit',c[2].includes(j+1)));
+    d.innerHTML=`<div><span>Reruns step${c[2].length>1?'s':''} ${c[2].join(', ')}: ${c[2].map(k=>P[k-1]).join(', ')}</span>${c[3]}</div><div><span>Expected</span>${c[4]}</div>`;}
+  bs.forEach((x,i)=>x.addEventListener('click',()=>set(i)));
+  document.getElementById('pm2').addEventListener('anim-in',()=>{[0,1,2,3,4,5].forEach((i,k)=>setTimeout(()=>set(i),1500+k*1500));});
+  set(0);
+})();
+</script>

@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：谁来为代理人的承诺担保</p><p class="figsub">四条结论，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="g15summary">重播</button></div>
+    <div class="g15summary" id="g15summary" data-anim><div class="g15summary-c" style="--i:0"><em>判决无法执行</em><b>赔不起的不会太小心</b><p>书记员没有家产，惩罚它毫无意义，也不会主动投保。</p></div><div class="g15summary-c" style="--i:1"><em>声誉与替代责任</em><b>由背后的人担保</b><p>名字可以随意更换，声誉要附着在运营者身上；赔付由赔得起、又管得住的运营者承担。</p></div><div class="g15summary-c warn" style="--i:2"><em>记录</em><b>第三方保存、不可修改</b><p>有了逐笔的记录，核对从猜测变成比对，责任才落得下来。</p></div><div class="g15summary-c warn" style="--i:3"><em>最小权限</em><b>只给需要的权限</b><p>权限按大小与能否挽回分级，资产仍由独立的保管人持有。</p></div></div>
+  </div>
+</figure>
+<style>
+.g15summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g15summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g15summary-c.warn{border-left-color:var(--warm)}
+.g15summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g15summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g15summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g15summary.in .g15summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g15summary{grid-template-columns:1fr}}
+</style>

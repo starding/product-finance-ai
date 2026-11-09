@@ -1,0 +1,29 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">来的人越多，越容易卖出好价钱</p><p class="figsub">一个人带着一份船股来到集市。每位买方愿付的价格在 6～14 份之间。拖动来到集市的买方人数，看他至少能以 10 份卖出的可能，以及最高出价的平均值。</p></div><button class="replay" type="button" data-replay="tk">重播</button></div>
+    <div class="tk" id="tk" data-anim>
+      <div class="tk-b"><span>至少能卖 10 份的可能</span><div><i id="tk-p" style="background:var(--accent)"></i></div><b id="tk-pv"></b></div>
+      <div class="tk-b"><span>最高出价的平均值</span><div><i id="tk-m" style="background:var(--blue)"></i></div><b id="tk-mv"></b></div>
+      <div class="sl"><label for="tk-n">来到集市的买方 <b id="tk-nv"></b></label><input id="tk-n" type="range" min="1" max="30" step="1" value="1"></div>
+      <p class="tk-msg" id="tk-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：各位买方愿付的价格相互独立、在 6～14 份之间均匀分布；卖给出价最高的一位。最高出价的平均值 ＝ 6 ＋ 8 × 人数 ÷（人数 ＋ 1）。</figcaption>
+</figure>
+<style>
+.tk-b{display:grid;grid-template-columns:10em 1fr 4.5em;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.tk-b div{height:16px;background:var(--quote);border-radius:4px;overflow:hidden}
+.tk-b i{display:block;height:100%;transition:width .3s}
+.tk-b b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.tk-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  function draw(){const n=+$('tk-n').value,p=1-Math.pow(.5,n),m=6+8*n/(n+1);$('tk-p').style.width=p*100+'%';$('tk-m').style.width=(m-6)/8*100+'%';$('tk-pv').textContent=Math.round(p*100)+'%';$('tk-mv').textContent=m.toFixed(1)+' 份';$('tk-nv').textContent=n+' 人';
+    $('tk-msg').textContent=n===1?'只有一位买方，能否卖到 10 份全看运气：一半的可能卖不到。':`${n} 位买方同时在场，至少能卖 10 份的可能升到 ${Math.round(p*100)}%，最高出价平均 ${m.toFixed(1)} 份。来的人越多，越有理由来这里：买卖因此向少数几个地方集中。`;}
+  $('tk-n').addEventListener('input',draw);
+  $('tk').addEventListener('anim-in',()=>{let v=1;$('tk-n').value=1;draw();const id=setInterval(()=>{v++;$('tk-n').value=v;draw();if(v>=30)clearInterval(id);},100);});
+  draw();
+})();
+</script>

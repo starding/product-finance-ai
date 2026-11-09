@@ -1,0 +1,41 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">太信与不信</p><p class="figsub">书记员一年替委托人做 200 件事。拖动它的可靠程度，看委托人核对的比例与漏过的错误；勾选“关键操作由委托人亲自确认并负责”，再切换到“见它错一次之后”。</p></div><button class="replay" type="button" data-replay="tr18">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="情形">
+      <button type="button" data-tr18="use" aria-pressed="true">长期使用之后</button>
+      <button type="button" data-tr18="err" aria-pressed="false">见它错一次之后</button>
+    </div>
+    <div class="tr18" id="tr18" data-anim>
+      <div class="tr18-bars" id="tr18-b"></div>
+      <div class="sl"><label for="tr18-r">书记员的可靠程度 <b id="tr18-rv"></b></label><input id="tr18-r" type="range" min="80" max="99" step="1" value="95"></div>
+      <div class="cs-sw"><label><input type="checkbox" id="tr18-a"> 关键操作由委托人亲自确认并负责</label></div>
+      <p class="tr18-msg" id="tr18-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：长期使用后，委托人核对的比例随书记员的可靠程度上升而下降（越可靠越不核对）；亲自确认并负责时，核对的比例提高到至少六成。委托人自己做同样的事，出错率为 10%。“见它错一次之后”，七成的委托人不再使用书记员，改为全部自己做（帕拉苏拉曼与赖利，1997 所说的误用与弃用；斯基特卡等，2000；迪特沃斯特等，2015）。</figcaption>
+</figure>
+<style>
+.tr18-bars{display:grid;gap:12px;margin:6px 0 10px}
+.tr18-r{display:grid;grid-template-columns:9em 1fr 4.5em;gap:10px;align-items:center;font-size:12.5px}
+.tr18-r div{height:22px;background:var(--quote);border-radius:5px;overflow:hidden}
+.tr18-r i{display:block;height:100%;transition:width .4s}
+.tr18-r b{text-align:right;font-variant-numeric:tabular-nums}
+.tr18-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.tr18-r{grid-template-columns:1fr 4.5em}.tr18-r span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('tr18'+id),A=200,HE=.1;let mode='use';
+  function draw(){const rel=+$('-r').value/100,acc=$('-a').checked;$('-rv').textContent=Math.round(rel*100)+'%';
+    let chk=Math.max(.05,1-(rel-.8)/.19*.95);if(acc)chk=Math.max(chk,.6);
+    let errs;if(mode==='use')errs=A*(1-rel)*(1-chk);else errs=A*(.7*HE+.3*(1-rel)*(1-chk));
+    const best=A*(1-rel)*(1-Math.max(chk,.6));
+    $('-b').innerHTML=[['委托人核对的比例',mode==='use'?chk:.3*chk,1,'var(--blue)',Math.round((mode==='use'?chk:.3*chk)*100)+'%'],['漏过的错误',errs,20,'var(--warm)',errs.toFixed(1)+' 件']].map(([k,v,m,c,t])=>`<div class="tr18-r"><span>${k}</span><div><i style="width:${Math.min(100,v/m*100)}%;background:${c}"></i></div><b>${t}</b></div>`).join('');
+    $('-msg').textContent=mode==='use'?(acc?`亲自确认并负责：即使书记员可靠到 ${Math.round(rel*100)}%，委托人仍核对至少六成，一年漏过 ${errs.toFixed(1)} 件错误。`:`书记员可靠到 ${Math.round(rel*100)}%，委托人只核对 ${Math.round(chk*100)}%，一年漏过 ${errs.toFixed(1)} 件错误：越可靠越不核对，这就是误用。`):`见它错过一次，七成的委托人回到自己判断，自己做的出错率是 10%，一年漏过的错误反而升到 ${errs.toFixed(1)} 件：这就是弃用。按书记员实际的可靠程度使用它，一年只会漏过约 ${best.toFixed(1)} 件。`;}
+  const bs=[...document.querySelectorAll('[data-tr18]')];
+  function set(m){mode=m;bs.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.tr18===m)));draw();}
+  bs.forEach(b=>b.addEventListener('click',()=>set(b.dataset.tr18)));['-r','-a'].forEach(k=>$(k).addEventListener('input',draw));
+  $('').addEventListener('anim-in',()=>{set('use');$('-a').checked=false;let v=80;$('-r').value=80;draw();const id=setInterval(()=>{v+=1;$('-r').value=v;draw();if(v>=99){clearInterval(id);setTimeout(()=>{$('-a').checked=true;draw();},1000);setTimeout(()=>set('err'),2600);}},90);});
+  draw();
+})();
+</script>

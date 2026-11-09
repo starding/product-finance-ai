@@ -1,0 +1,59 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Investors themselves: ongoing monitoring decides the whole (author's estimate)</p><p class="figsub">Above, a year's investment effort broken down by task; below, set how many times faster ongoing monitoring and the other tasks become, to see the overall amplification factor.</p></div><button class="replay" type="button" data-replay="iv">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Investor type">
+      <button type="button" data-ivg="Allocation-oriented investor" aria-pressed="false">Allocation-oriented investor</button>
+      <button type="button" data-ivg="Trader" aria-pressed="true">Trader</button>
+    </div>
+    <div class="iv" id="iv" data-anim>
+      <div class="iv-bar" id="iv-bar"></div>
+      <div class="iv-list" id="iv-list"></div>
+      <div class="iv-sl">
+        <div class="sl"><label for="iv-m">Ongoing monitoring speed-up <b id="iv-mv"></b></label><input id="iv-m" type="range" min="1" max="20" step="1" value="10"></div>
+        <div class="sl"><label for="iv-o">Other tasks speed-up <b id="iv-ov"></b></label><input id="iv-o" type="range" min="1" max="20" step="1" value="2"></div>
+      </div>
+      <div class="iv-out"><span>Overall amplification factor</span><b id="iv-x"></b><span id="iv-x2"></span></div>
+      <div class="iv-cmp" id="iv-cmp"></div>
+    </div>
+  </div>
+  <figcaption>Author's estimate: the hours spent on each task per year are the author's assumptions for a typical individual investor; each task is matched to a professional's task in O*NET, and the ceiling is converted using that task's reachable share under the Agent tier. For methods and data, see <a href="estimates.html">Appendix: Methods and data behind the author's estimates</a>.</figcaption>
+</figure>
+<style>
+.iv-bar{display:flex;height:22px;border-radius:5px;overflow:hidden;background:var(--quote)}
+.iv-bar i{display:block;height:100%;border-right:1px solid var(--card);transition:width .6s}
+.iv-list{display:grid;grid-template-columns:repeat(2,1fr);gap:2px 16px;margin:8px 0 12px;font-size:12px;color:var(--muted)}
+.iv-list span b{color:var(--ink);font-weight:500;font-variant-numeric:tabular-nums;margin-left:4px}
+.iv-list i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px}
+.iv-sl{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.iv-out{display:flex;align-items:baseline;gap:10px;margin-top:10px;flex-wrap:wrap}
+.iv-out span{font-size:12.5px;color:var(--faint)} .iv-out b{font-size:26px;font-variant-numeric:tabular-nums}
+.iv-cmp{display:grid;gap:4px;margin-top:12px}
+.iv-ch{font-size:12px;color:var(--faint);margin:0 0 2px}
+.iv-cr{display:grid;grid-template-columns:15em 1fr 56px;gap:10px;align-items:center;font-size:12.5px}
+.iv-cr div{height:10px;background:var(--quote);border-radius:3px;overflow:hidden}
+.iv-cr div i{display:block;height:100%;border-radius:3px;transition:width .6s}
+.iv-cr b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+@media (max-width:640px){.iv-list{grid-template-columns:1fr}.iv-sl{grid-template-columns:1fr;gap:4px}.iv-cr{grid-template-columns:10em 1fr 44px;font-size:11px}}
+</style>
+<script>
+(function(){
+  const D=/*DATA:inv*/[["Allocation-oriented investor","Set goals, horizon and tolerable loss","1",0.0069,0.25],["Allocation-oriented investor","Ongoing monitoring of holdings and portfolio","4d",0.4324,0.75],["Allocation-oriented investor","Goal-based portfolio management","5",0.0553,0.25],["Allocation-oriented investor","Research on companies and views","4d",0.1291,0.825],["Allocation-oriented investor","Make trading plans","4d",0.0415,0.625],["Allocation-oriented investor","Submit orders","5",0.0005,0.25],["Allocation-oriented investor","Trade review","4d",0.0507,0.825],["Allocation-oriented investor","Interpret events","4d",0.083,0.825],["Allocation-oriented investor","Screen and compare securities","4d",0.0415,0.625],["Allocation-oriented investor","Build new analytical methods","4d",0.1107,0.825],["Allocation-oriented investor","Connect new data sources","4d",0.0015,0.75],["Allocation-oriented investor","Data lookups","4d",0.033,0.825],["Allocation-oriented investor","Share research","2",0.0138,0.825],["Trader","Set trading rules and risk limits","1",0.0022,0.4375],["Trader","Monitoring by set conditions in trading hours","4d",0.7286,0.825],["Trader","Check costs and risks before ordering","4d",0.0431,0.725],["Trader","Submit orders","5",0.0022,0.25],["Trader","Handle risk events","5",0.0141,0.625],["Trader","Make trading plans (about twice a week)","4d",0.1137,0.625],["Trader","Trade review (monthly)","4d",0.0962,0.825]]/*END*/;
+  const C={'1':'#8a5a9e','2':'var(--warm)','4d':'var(--accent)','5':'var(--blue)'};
+  const $=id=>document.getElementById(id);let g='Trader';
+  const isMon=a=>/monitor/i.test(a);
+  function rows(){return D.filter(d=>d[0]===g);}
+  function draw(){const R=rows(),mon=R.filter(d=>isMon(d[1])).reduce((a,d)=>a+d[3],0);
+    $('iv-bar').innerHTML=R.map(d=>`<i style="width:${d[3]*100}%;background:${C[d[2]]};opacity:${isMon(d[1])?1:.55}" title="${d[1]}"></i>`).join('');
+    $('iv-list').innerHTML=R.slice().sort((a,b)=>b[3]-a[3]).map(d=>`<span><i style="background:${C[d[2]]}"></i>${d[1]}<b>${(d[3]*100).toFixed(d[3]<.01?1:0)}%</b></span>`).join('');
+    const m=+$('iv-m').value,o=+$('iv-o').value,x=1/(mon/m+(1-mon)/o);
+    $('iv-mv').textContent=m+'×';$('iv-ov').textContent=o+'×';$('iv-x').textContent=x.toFixed(1)+'×';
+    $('iv-x2').textContent=`Ongoing monitoring is about ${Math.round(mon*100)}% of the effort`;
+    const onet=1/R.reduce((a,d)=>a+d[3]*(1-d[4]),0);
+    const P=[[`${g} (converted via professionals\' tasks)`,onet,'var(--accent)'],['Securities, Commodities, and Financial Services Sales Agents',2.39,'var(--faint)'],['Investment Fund Managers',1.89,'var(--faint)'],['Personal Financial Advisors',1.79,'var(--faint)']];
+    $('iv-cmp').innerHTML='<p class="iv-ch">Overall ceiling under the Agent tier: investors themselves and professionals</p>'+P.map(([n,v,c])=>`<div class="iv-cr"><span>${n}</span><div><i style="width:${(v-1)/5*100}%;background:${c}"></i></div><b>${v.toFixed(1)}×</b></div>`).join('');}
+  document.querySelectorAll('[data-ivg]').forEach(b=>b.addEventListener('click',()=>{g=b.dataset.ivg;document.querySelectorAll('[data-ivg]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  ['iv-m','iv-o'].forEach(id=>$(id).addEventListener('input',draw));
+  $('iv').addEventListener('anim-in',()=>{const s=[[10,2],[2,10],[10,2]];s.forEach(([m,o],i)=>setTimeout(()=>{$('iv-m').value=m;$('iv-o').value=o;draw();},300+i*2200));});
+  draw();
+})();
+</script>

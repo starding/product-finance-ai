@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">熔断的门槛</p><p class="figsub">在一半书记员出自同一运营者的集市里，同一笔大单引发急跌。拖动熔断的门槛，看熔断在什么时候触发、最大跌幅有多大。</p></div><button class="replay" type="button" data-replay="bk17">重播</button></div>
+    <div class="bk17" id="bk17" data-anim>
+      <div class="bk17-bars" id="bk17-b"></div>
+      <div class="sl"><label for="bk17-t">一步之内跌多少即暂停 <b id="bk17-tv"></b></label><input id="bk17-t" type="range" min="1" max="12" step="1" value="4"></div>
+      <p class="bk17-msg" id="bk17-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：模型与“书记员的集市”相同，出自同一运营者的书记员占一半；每次暂停 3 步。门槛设为 12 个点相当于没有熔断。</figcaption>
+</figure>
+<style>
+.bk17-bars{display:grid;gap:12px;margin:4px 0 10px}
+.bk17-r{display:grid;grid-template-columns:7em 1fr 4.5em;gap:10px;align-items:center;font-size:12.5px}
+.bk17-r div{height:22px;background:var(--quote);border-radius:5px;overflow:hidden}
+.bk17-r i{display:block;height:100%;transition:width .4s}
+.bk17-r b{text-align:right;font-variant-numeric:tabular-nums}
+.bk17-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('bk17'+id),N=40,T=60,TH=.04;
+  function sim(th){let s=1717;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};const ns=20,ag=[];for(let i=0;i<N;i++)ag.push({th:i<ns?TH:TH*(1+r()*3),sold:false,mm:i%3===0});
+    let p=100,pause=0,paused=0;const P=[p];
+    for(let t=1;t<=T;t++){if(pause>0){pause--;paused++;p+=(100-p)*.2;P.push(p);continue;}
+      let sell=(t>=5&&t<15)?5:0;for(const a of ag){if(!a.sold&&(100-p)/100>=a.th){a.sold=true;sell+=1.5;}}
+      const prev=P[P.length-1],fall=P.length>1&&(P[P.length-2]-prev)>1.5,mm=ag.filter(a=>a.mm&&!a.sold).length,depth=2+(fall?mm*.25:mm);
+      p=Math.min(100,p-(sell-Math.max(0,100-p)*.12)/depth*2);if(th<12&&(prev-p)>th)pause=3;P.push(p);}
+    return {dd:100-Math.min(...P),paused};}
+  function draw(){const th=+$('-t').value,S=sim(th);$('-tv').textContent=th>=12?'不设熔断':th+' 个点';
+    $('-b').innerHTML=[['最大跌幅',S.dd,50,'var(--warm)',S.dd.toFixed(1)+'%'],['暂停的步数',S.paused,20,'var(--blue)',S.paused+' 步']].map(([k,v,m,c,t])=>`<div class="bk17-r"><span>${k}</span><div><i style="width:${Math.min(100,v/m*100)}%;background:${c}"></i></div><b>${t}</b></div>`).join('');
+    $('-msg').textContent=th>=12?`不设熔断，最大跌幅 ${S.dd.toFixed(1)}%。`:`门槛 ${th} 个点：最大跌幅 ${S.dd.toFixed(1)}%，暂停 ${S.paused} 步。门槛过高，熔断要等价格已经大跌才触发；门槛越低，越早打断螺旋。代价是暂停期间想卖的人卖不出，暂停结束时价格也可能跳动。`;}
+  $('-t').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{let v=12;$('-t').value=12;draw();const id=setInterval(()=>{v-=1;$('-t').value=v;draw();if(v<=1)clearInterval(id);},300);});
+  draw();
+})();
+</script>

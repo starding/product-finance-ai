@@ -1,0 +1,47 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">文明模拟器 · 第 20 章：一户人家的约定</p><p class="figsub">设定这位村民的年龄、收成是否稳定、对起落的厌恶程度，以及每年能存下多少。书记员按三本账给出配置与每年的存入，并在两千组年景下计算每个目标按时达到的把握。</p></div><button class="replay" type="button" data-replay="cs20">重播</button></div>
+    <div class="cs-rules"><span class="on">没有改变的东西</span><span class="on">产品：承诺什么</span><span class="lock">委托参数与授权 · 第 21 章</span></div>
+    <div class="cs20" id="cs20" data-anim>
+      <div class="cs20-ctl">
+        <div class="sl"><label for="cs20-a">年龄 <b id="cs20-av"></b></label><input id="cs20-a" type="range" min="25" max="55" step="1" value="30"></div>
+        <div class="sl"><label for="cs20-g">厌恶起落的程度 <b id="cs20-gv"></b></label><input id="cs20-g" type="range" min="1" max="8" step="0.5" value="3"></div>
+        <div class="sl"><label for="cs20-s">每年能存下收入的 <b id="cs20-sv"></b></label><input id="cs20-s" type="range" min="5" max="35" step="1" value="20"></div>
+      </div>
+      <div class="cs-sw"><label><input type="checkbox" id="cs20-v"> 他在船上做工，收成随船队起落</label></div>
+      <div class="cs20-g" id="cs20-res"></div>
+      <div class="cs20-doc" id="cs20-doc"></div>
+    </div>
+  </div>
+  <figcaption>示意模型：收入每年为 1，积蓄 1.5 年收入；应急账户留半年收入、放在粮仓；盖房账户起初有 0.6 年收入，五年后需要 1.2 年收入；养老账户起初有 0.4 年收入，60 岁时需要八年收入。船股每年平均 6%、波动 16%，稳妥处 2%、波动 3%。盖房账户的船股比例取默顿比例与“期限 ÷ 25”中较小者；养老账户按把未来收入计入家产后的比例，封顶 100%，收成随船队起落时按“未来收入的六成承担船股风险”扣减。前五年的存入先满足盖房账户按 2% 计算所需的数额，余下存入养老账户；第五年之后全部存入养老账户。“按时达到”指到期时不少于所需数额。</figcaption>
+</figure>
+<style>
+.cs20-ctl{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.cs20-g{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.cs20-c{background:var(--quote);border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.55}
+.cs20-c em{display:block;font-style:normal;font-size:11.5px;color:var(--faint)}
+.cs20-c b{display:block;font-size:22px;margin:2px 0;font-variant-numeric:tabular-nums}
+.cs20-c .bar{height:8px;border-radius:4px;background:var(--line);overflow:hidden;margin-top:4px}
+.cs20-c .bar i{display:block;height:100%;background:var(--accent);transition:width .5s}
+.cs20-doc{margin-top:10px;border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-size:13.5px;line-height:1.75;background:var(--bg)}
+.cs20-doc p{margin:0 0 4px;font-size:12px;color:var(--faint)}
+@media (max-width:640px){.cs20-ctl,.cs20-g{grid-template-columns:1fr;gap:4px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs20'+id);
+  function mc(w,H,init,c,T,c2=c,n=2000){let s=2020+H;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};const g=()=>{let u=0;while(!u)u=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r());};
+    let ok=0;const F=[];for(let k=0;k<n;k++){let v=init;for(let t=0;t<H;t++)v=(v+(t<5?c:c2))*(1+w*(.06+.16*g())+(1-w)*(.02+.03*g()));F.push(v);if(v>=T)ok++;}F.sort((a,b)=>a-b);return {p:ok/n,p10:F[Math.floor(n*.1)]};}
+  function draw(){const age=+$('-a').value,gm=+$('-g').value,sv=+$('-s').value/100,vol=$('-v').checked;$('-av').textContent=age+' 岁';$('-gv').textContent=gm.toFixed(1);$('-sv').textContent=Math.round(sv*100)+'%';
+    const m=Math.min(1,.04/(gm*.16*.16)),Hr=60-age;let hc=0;for(let t=1;t<=65-age;t++)hc+=1/Math.pow(1.03,t);
+    const init=1.5,em=.5,hInit=.6,rInit=init-em-hInit;
+    const wH=Math.min(m,5/25),need=Math.max(0,(1.2-hInit*Math.pow(1.02,5))/((Math.pow(1.02,5)-1)/.02*1.02)),cH=Math.min(sv,need),cR=sv-cH;
+    const fin=Math.max(.3,rInit+sv*Math.min(10,Hr)),wR=Math.max(0,Math.min(1,(m*(fin+hc)-(vol?.6*hc:0))/fin));
+    const A=mc(wH,5,hInit,cH,1.2),B=mc(wR,Hr,rInit,cR,8,sv);
+    $('-res').innerHTML=[['应急账户 · 船股 0%','随时可取','留出半年的收入，放在粮仓里。',null],[`盖房账户 · 船股 ${Math.round(wH*100)}%`,(A.p*100).toFixed(0)+'%','五年后按时达到的把握；最差的十分之一年景下，到时有 '+A.p10.toFixed(2)+' 年收入。',A.p],[`养老账户 · 船股 ${Math.round(wR*100)}%`,(B.p*100).toFixed(0)+'%',`${Hr} 年后按时达到的把握；最差的十分之一年景下，到时有 ${B.p10.toFixed(1)} 年收入。`,B.p]].map(([e,b,t,p])=>`<div class="cs20-c"><em>${e}</em><b>${b}</b>${t}${p===null?'':`<div class="bar"><i style="width:${p*100}%"></i></div>`}</div>`).join('');
+    $('-doc').innerHTML=`<p>约定（由书记员起草，经他确认）</p>每年存入收入的 ${Math.round(sv*100)}%：前五年其中 ${(cH*100).toFixed(1)}% 存入盖房账户、${(cR*100).toFixed(1)}% 存入养老账户，盖房之后全部存入养老账户${cH<need?'（不足以按 2% 计算凑齐盖房所需，已如实标明）':''}。盖房账户的船股不超过 ${Math.round(wH*100)}%，养老账户不超过 ${Math.round(wR*100)}%，每年按此调整。费用合计不超过每年 0.3%。每个账户达到目标的把握与最差年景下的结果，每年按同一方法重算并告知。<b>不承诺</b>任何账户的收益或按时达到。`;}
+  ['-a','-g','-s','-v'].forEach(k=>$(k).addEventListener('input',draw));
+  $('').addEventListener('anim-in',()=>{[[30,3,20,0],[30,3,10,0],[30,3,20,1],[45,3,25,0]].forEach(([a,g,s,v],i)=>setTimeout(()=>{$('-a').value=a;$('-g').value=g;$('-s').value=s;$('-v').checked=!!v;draw();},300+i*2400));});
+  draw();
+})();
+</script>

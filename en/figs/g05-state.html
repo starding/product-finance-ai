@@ -1,0 +1,38 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Insurance: a state-contingent claim</p><p class="figsub">In 90% of years the harvest is 13 portions; in 10% disaster strikes and it is only 3. Once insured, the household pays a premium every year and receives 10 portions in a disaster year. Drag the loading in the premium and see whether insurance is worth buying.</p></div><button class="replay" type="button" data-replay="st5">Replay</button></div>
+    <div class="st5" id="st5" data-anim>
+      <div class="st5-g">
+        <div><b>Good year (90%)</b><div class="st5-row"><span>Uninsured</span><i id="st5-a0"></i><em id="st5-a0v"></em></div><div class="st5-row"><span>Insured</span><i id="st5-a1" class="on"></i><em id="st5-a1v"></em></div></div>
+        <div><b>Disaster year (10%)</b><div class="st5-row"><span>Uninsured</span><i id="st5-b0"></i><em id="st5-b0v"></em></div><div class="st5-row"><span>Insured</span><i id="st5-b1" class="on"></i><em id="st5-b1v"></em></div></div>
+      </div>
+      <div class="sl"><label for="st5-l">Loading in the premium <b id="st5-lv"></b></label><input id="st5-l" type="range" min="0" max="100" step="5" value="20"></div>
+      <p class="st5-msg" id="st5-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the expected payout is 1 portion a year; premium = expected payout × (1 + loading), where the loading covers compensation for bearing risk and running costs. Whether insurance is worthwhile is compared using logarithmic satisfaction.</figcaption>
+</figure>
+<style>
+.st5-g{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.st5-g>div{background:var(--quote);border-radius:10px;padding:10px 12px}
+.st5-g b{font-size:14px;display:block;margin-bottom:6px}
+.st5-row{display:grid;grid-template-columns:5em 1fr 6em;gap:8px;align-items:center;font-size:12.5px;margin:4px 0}
+.st5-row i{display:block;height:12px;border-radius:3px;background:var(--faint);transition:width .4s}
+.st5-row i.on{background:var(--accent)}
+.st5-row em{font-style:normal;font-variant-numeric:tabular-nums;text-align:right}
+.st5-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.st5-g{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),W=v=>v/14*100+'%';
+  function draw(){const l=+$('st5-l').value/100,P=1*(1+l),a0=13,b0=3,a1=13-P,b1=3-P+10;
+    [['a0',a0],['a1',a1],['b0',b0],['b1',b1]].forEach(([k,v])=>{$('st5-'+k).style.width=W(v);$('st5-'+k+'v').textContent=v.toFixed(1)+' portions';});
+    const U0=.9*Math.log(a0)+.1*Math.log(b0),U1=.9*Math.log(a1)+.1*Math.log(b1),ce0=Math.exp(U0),ce1=Math.exp(U1);
+    $('st5-lv').textContent=Math.round(l*100)+'%';
+    $('st5-msg').textContent=U1>=U0?`Premium of ${P.toFixed(2)} portions: eat a little less in good years and much more in disaster years. Insured, the household is equivalent to a steady ${ce1.toFixed(2)} portions a year, more than the ${ce0.toFixed(2)} uninsured; insurance is worthwhile even though the premium exceeds the expected payout.`:`The loading is too high, making the premium ${P.toFixed(2)} portions: insured, the household is equivalent to a steady ${ce1.toFixed(2)} portions a year, less than the ${ce0.toFixed(2)} uninsured; insurance is no longer worthwhile.`;}
+  $('st5-l').addEventListener('input',draw);
+  $('st5').addEventListener('anim-in',()=>{let v=0;$('st5-l').value=0;draw();const id=setInterval(()=>{v+=10;$('st5-l').value=v;draw();if(v>=100)clearInterval(id);},300);});
+  draw();
+})();
+</script>

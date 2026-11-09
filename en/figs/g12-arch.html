@@ -1,0 +1,53 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The same options, two architectures</p><p class="figsub">Two account-opening pages offer exactly the same options; only the defaults, ordering and steps differ. Switch between the two designs to see what a hundred principals end up choosing.</p></div><button class="replay" type="button" data-replay="ar12">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Page design">
+      <button type="button" data-ar12="p" aria-pressed="true">Designed for the principal</button>
+      <button type="button" data-ar12="s" aria-pressed="false">Designed for the seller</button>
+    </div>
+    <div class="ar12" id="ar12" data-anim>
+      <div class="ar12-two">
+        <div class="ar12-form" id="ar12-f"></div>
+        <div class="ar12-res" id="ar12-r"></div>
+      </div>
+      <p class="ar12-msg" id="ar12-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: assume seven in ten people accept the page's defaults and its first option, while the rest choose according to their own needs; when leaving takes three extra steps, only three in ten of those who want to leave actually complete it.</figcaption>
+</figure>
+<style>
+.ar12-two{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.ar12-form{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--bg);font-size:13px;display:grid;gap:8px}
+.ar12-form p{margin:0;font-size:11.5px;color:var(--faint)}
+.ar12-row{display:flex;gap:8px;align-items:center;padding:6px 8px;border-radius:8px;background:var(--quote);transition:outline-color .3s}
+.ar12-row i{width:14px;height:14px;border-radius:4px;border:1.5px solid var(--faint);flex:none;display:grid;place-items:center;font-style:normal;font-size:10px;line-height:1}
+.ar12-row.on i{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.ar12-row.mark{outline:2px solid var(--warm);outline-offset:1px}
+.ar12-row span{flex:1} .ar12-row em{font-style:normal;color:var(--faint);font-size:11.5px}
+.ar12-exit{font-size:11.5px;color:var(--faint);text-align:right}
+.ar12-res{display:grid;gap:8px}
+.ar12-bar span{display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:3px}
+.ar12-bar div{height:10px;border-radius:5px;background:var(--quote);overflow:hidden}
+.ar12-bar div i{display:block;height:100%;background:var(--accent);transition:width .6s}
+.ar12-bar.w div i{background:var(--warm)}
+.ar12-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.ar12-two{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('ar12'+id);let mode='p';
+  const D={p:{rows:[['Low-fee whole-market portfolio','0.1%',1,0],['Actively selected portfolio','1.5%',0,0],['Add-on advisory service','30 portions a month',0,0]],exit:'Leave at any time: top right of this page',res:[['Chose the low-fee portfolio',.7+.3*.6,0],['Chose the high-fee portfolio',.3*.4,1],['Signed up for the add-on',.3*.2,1],['Wanted to leave and did',1,0]],
+      msg:'The default is the low-fee portfolio most people would choose after thinking it through, the add-on service has to be ticked deliberately, and leaving is as easy as joining: inertia helps principals keep to what they intended.'},
+    s:{rows:[['Actively selected portfolio','1.5%',1,1],['Low-fee whole-market portfolio','0.1%',0,0],['Add-on advisory service','30 portions a month',1,1]],exit:'Leave: Settings › Account › More › Request',res:[['Chose the low-fee portfolio',.3*.6,0],['Chose the high-fee portfolio',.7+.3*.4,1],['Signed up for the add-on',.7+.3*.2,1],['Wanted to leave and did',.3,1]],
+      msg:'The options are exactly the same; the high-fee portfolio is simply listed first and set as the default, the add-on is pre-ticked, and leaving takes three extra steps: the same inertia becomes the seller\'s revenue.'}};
+  function draw(){const d=D[mode];
+    $('-f').innerHTML='<p>Choose how to invest</p>'+d.rows.map(([a,b,on,mk])=>`<div class="ar12-row${on?' on':''}${mk?' mark':''}"><i>${on?'✓':''}</i><span>${a}</span><em>${b}</em></div>`).join('')+`<div class="ar12-exit${mode==='s'?' ':''}">${d.exit}</div>`;
+    $('-r').innerHTML=d.res.map(([a,v,w])=>`<div class="ar12-bar${w?' w':''}"><span>${a}<b>${Math.round(v*100)}%</b></span><div><i style="width:${v*100}%"></i></div></div>`).join('');
+    $('-msg').textContent=d.msg;}
+  const bs=[...document.querySelectorAll('[data-ar12]')];
+  function set(m){mode=m;bs.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.ar12===m)));draw();}
+  bs.forEach(b=>b.addEventListener('click',()=>set(b.dataset.ar12)));
+  $('').addEventListener('anim-in',()=>{set('p');setTimeout(()=>set('s'),2600);});
+  draw();
+})();
+</script>

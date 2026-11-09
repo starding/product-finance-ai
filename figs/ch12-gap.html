@@ -1,0 +1,60 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">基金的收益，与投资者拿到的收益</p>
+    <p class="figsub">同一只指数基金 20 年的走势。比较两位投资者：一位每年固定投入 1 万元，另一位在上涨后加大投入、在下跌后撤出。</p>
+    <div class="seg-btns" role="group" aria-label="投资者">
+      <button type="button" data-gp="plan" aria-pressed="true">按计划每年投入</button>
+      <button type="button" data-gp="chase" aria-pressed="false">追涨杀跌</button>
+    </div>
+    <div class="gp" id="gp" data-anim>
+      <svg viewBox="0 0 640 220" role="img" aria-label="指数走势与投资者的资金进出">
+        <g id="gp-axis"></g><path id="gp-idx" class="gp-idx"/><g id="gp-flow"></g>
+      </svg>
+      <div class="gp-out">
+        <div><span>基金每年的收益（时间加权）</span><b id="gp-tw"></b></div>
+        <div><span>这位投资者每年的收益（资金加权）</span><b id="gp-dw"></b></div>
+        <div><span>差距</span><b id="gp-d"></b></div>
+      </div>
+    </div>
+  </div>
+  <figcaption>示意模拟。柱形为每年的资金进出，绿色为投入，橙色为撤出。实证中，Dichev（2007）发现，1926～2002 年纽约与美国证券交易所的投资者按资金进出计算的收益每年比买入持有低约 1.3 个百分点。</figcaption>
+</figure>
+<style>
+.gp svg{width:100%;height:auto;display:block}
+.gp-idx{fill:none;stroke:var(--ink);stroke-width:2.2}
+#gp-flow rect.in{fill:var(--accent);opacity:.7} #gp-flow rect.out{fill:var(--warm);opacity:.75}
+.gp-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.gp-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.gp-out span{display:block;font-size:12px;color:var(--faint)}
+.gp-out b{font-size:19px;font-variant-numeric:tabular-nums}
+#gp-d{color:var(--warm)}
+@media (max-width:640px){.gp-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const R=[0.18,0.12,-0.05,0.22,0.15,-0.28,0.25,0.10,0.04,0.16,-0.08,0.20,0.12,-0.18,0.28,0.09,0.06,-0.04,0.19,0.07];
+  const N=R.length,X0=50,X1=620,YT=14,YB=150,YF=196,x=t=>X0+t/N*(X1-X0);
+  const idx=[1];R.forEach(r=>idx.push(idx[idx.length-1]*(1+r)));
+  const y=v=>YB-(Math.log(v)-Math.log(0.8))/(Math.log(Math.max(...idx)*1.1)-Math.log(0.8))*(YB-YT);
+  let a=`<line x1="${X0}" y1="${YF}" x2="${X1}" y2="${YF}" class="s-faint"/>`;
+  [0,5,10,15,20].forEach(t=>a+=`<text x="${x(t)}" y="214" text-anchor="middle" font-size="11" class="t-faint">第 ${t} 年</text>`);
+  document.getElementById('gp-axis').innerHTML=a;
+  document.getElementById('gp-idx').setAttribute('d','M'+idx.map((v,t)=>`${x(t).toFixed(1)},${y(v).toFixed(1)}`).join('L'));
+  const tw=Math.pow(idx[N],1/N)-1;
+  function irr(cf,fv){let lo=-0.5,hi=0.5;for(let k=0;k<80;k++){const m=(lo+hi)/2;let npv=-fv/Math.pow(1+m,N);cf.forEach((c,t)=>npv+=c/Math.pow(1+m,t));if(npv>0)hi=m;else lo=m;}return (lo+hi)/2;}
+  function set(k){
+    document.querySelectorAll('[data-gp]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.gp===k)));
+    const cf=[];let units=0;
+    for(let t=0;t<N;t++){let c=1;if(k==='chase'&&t>0){const last=R[t-1];c=last>0.15?2.5:last<-0.1?-Math.min(units*idx[t],3):last<0?0.2:1;}
+      if(c<0){const sell=Math.min(-c,units*idx[t]);units-=sell/idx[t];cf.push(-sell);}else{units+=c/idx[t];cf.push(c);}}
+    const fv=units*idx[N], r=irr(cf,fv);
+    document.getElementById('gp-flow').innerHTML=cf.map((c,t)=>{const h=Math.min(28,Math.abs(c)*9);return `<rect class="${c>=0?'in':'out'}" x="${x(t)+3}" y="${c>=0?YF-h:YF}" width="${(X1-X0)/N-6}" height="${h}"/>`;}).join('');
+    document.getElementById('gp-tw').textContent=(tw*100).toFixed(1)+'%';
+    document.getElementById('gp-dw').textContent=(r*100).toFixed(1)+'%';
+    document.getElementById('gp-d').textContent=((r-tw)*100).toFixed(1)+' 个百分点';
+  }
+  document.querySelectorAll('[data-gp]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.gp)));
+  document.getElementById('gp').addEventListener('anim-in',()=>{set('plan');setTimeout(()=>set('chase'),2400);});
+  set('plan');
+})();
+</script>

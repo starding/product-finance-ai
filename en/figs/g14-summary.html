@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: how the boundary of delegation moves</p><p class="figsub">Four conclusions, each tied to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="g14summary">Replay</button></div>
+    <div class="g14summary" id="g14summary" data-anim><div class="g14summary-c" style="--i:0"><em>Threshold</em><b>A fixed cost divided by property</b><p>As cognitive labour gets cheaper, the threshold falls; checking and bearing responsibility set its floor.</p></div><div class="g14summary-c" style="--i:1"><em>Personal</em><b>From one arrangement to one for each household</b><p>Tailoring that once belonged only to the wealthy can reach many more households.</p></div><div class="g14summary-c warn" style="--i:2"><em>Agency costs</em><b>Monitoring falls; bonding does not</b><p>Of the three agency costs, only monitoring falls clearly with the price of cognitive labour.</p></div><div class="g14summary-c warn" style="--i:3"><em>Allegiance</em><b>It works for whoever pays it</b><p>An agent that appears free may leave the principal paying more.</p></div></div>
+  </div>
+</figure>
+<style>
+.g14summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g14summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g14summary-c.warn{border-left-color:var(--warm)}
+.g14summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g14summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g14summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g14summary.in .g14summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g14summary{grid-template-columns:1fr}}
+</style>

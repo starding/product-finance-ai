@@ -1,0 +1,36 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The force of reputation: caring about the future, records that travel</p><p class="figsub">Not repaying once gains 4 portions now. Drag how much the borrower cares about the future, switch how far a record of default travels, and compare what default gains with the future it loses.</p></div><button class="replay" type="button" data-replay="rp">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Record">
+      <button type="button" data-rp="1" aria-pressed="false">Only the cheated lender knows</button>
+      <button type="button" data-rp="10" aria-pressed="true">The whole village knows</button>
+    </div>
+    <div class="rp" id="rp" data-anim>
+      <div class="rp-b"><span>Default gains now</span><div><i id="rp-g" style="background:var(--warm)"></i></div><b id="rp-gv"></b></div>
+      <div class="rp-b"><span>Default loses in future</span><div><i id="rp-l" style="background:var(--accent)"></i></div><b id="rp-lv"></b></div>
+      <div class="sl"><label for="rp-d">How much the borrower cares about the future <b id="rp-dv"></b></label><input id="rp-d" type="range" min="0" max="95" step="5" value="80"></div>
+      <p class="rp-msg" id="rp-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the village has 10 households able to lend, and the borrower gains 1 portion a year from borrowing. "How much the borrower cares about the future" is what one portion next year is worth as a percentage of one portion today. When only the cheated lender knows, the defaulter loses only his dealings with that household and can still borrow from the other 9.</figcaption>
+</figure>
+<style>
+.rp-b{display:grid;grid-template-columns:9em 1fr 6em;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.rp-b div{height:16px;background:var(--quote);border-radius:4px;overflow:hidden}
+.rp-b i{display:block;height:100%;transition:width .3s}
+.rp-b b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.rp-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);let share=10;
+  function draw(){const d=+$('rp-d').value/100,V=d>=.999?99:d/(1-d)*1,lost=V*share/10,G=4,M=12;
+    $('rp-g').style.width=G/M*100+'%';$('rp-l').style.width=Math.min(lost,M)/M*100+'%';$('rp-gv').textContent=G+' portions';$('rp-lv').textContent=lost.toFixed(1)+' portions';
+    $('rp-dv').textContent=Math.round(d*100)+'%';
+    $('rp-msg').textContent=lost>=G?`The future lost (${lost.toFixed(1)} portions) is no less than the gain now: keeping the promise pays better, and the promise is credible.`:share<10?`Only the cheated household knows of the default, so the defaulter borrows from another household as before, and the future lost is only ${lost.toFixed(1)} portions: not repaying pays better. The farther records travel, the stronger reputation is.`:`The borrower does not care enough about the future, and the future lost is only ${lost.toFixed(1)} portions: not repaying pays better.`;}
+  document.querySelectorAll('[data-rp]').forEach(b=>b.addEventListener('click',()=>{share=+b.dataset.rp;document.querySelectorAll('[data-rp]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  $('rp-d').addEventListener('input',draw);
+  $('rp').addEventListener('anim-in',()=>{let v=0;$('rp-d').value=0;draw();const id=setInterval(()=>{v+=5;$('rp-d').value=v;draw();if(v>=90)clearInterval(id);},180);});
+  draw();
+})();
+</script>

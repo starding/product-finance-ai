@@ -1,0 +1,59 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">四种订单，在同一段行情里的结果</p>
+    <p class="figsub">股价从 100 起步，第 18 天开盘前传出利空，价格从 97 直接跳到 92。选择一种订单，看它何时成交、成交在什么价格。</p>
+    <div class="seg-btns" role="group" aria-label="订单类型">
+      <button type="button" data-od="mkt" aria-pressed="true">市价买入</button>
+      <button type="button" data-od="lim" aria-pressed="false">限价买入 98</button>
+      <button type="button" data-od="stop" aria-pressed="false">止损卖出 95</button>
+      <button type="button" data-od="stl" aria-pressed="false">止损限价卖出 95／94.5</button>
+    </div>
+    <div class="od" id="od" data-anim>
+      <svg viewBox="0 0 640 230" role="img" aria-label="价格走势与订单的触发、成交">
+        <g id="od-axis"></g>
+        <path id="od-path" class="od-path"/>
+        <g id="od-mk"></g>
+      </svg>
+      <p class="od-msg" id="od-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意行情。订单在第 0 天收盘后提交；止损单与止损限价单假设投资者已持有股票。止损单触发后转为市价单，只能以触发后的第一个可成交价格成交。</figcaption>
+</figure>
+<style>
+.od svg{width:100%;height:auto;display:block}
+.od-path{fill:none;stroke:var(--ink);stroke-width:2;stroke-linejoin:round}
+.od-lv{stroke-width:1.5;stroke-dasharray:5 4}
+.od-lv.a{stroke:var(--accent)} .od-lv.w{stroke:var(--warm)}
+.od-dot{stroke:var(--surface);stroke-width:2}
+.od-dot.a{fill:var(--accent)} .od-dot.w{fill:var(--warm)}
+.od-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const P=[100,99.6,100.2,99.1,98.6,97.9,98.4,99.0,98.2,97.6,98.1,97.8,97.2,97.6,97.0,96.8,97.3,97.0,92.0,91.4,92.2,91.0,91.8,92.5,93.1,92.6,93.4,94.0,93.6,94.2];
+  const N=P.length-1,X0=50,X1=620,YT=16,YB=196,x=t=>X0+t/N*(X1-X0),y=p=>YB-(p-89)/(102-89)*(YB-YT);
+  let a='';[90,95,100].forEach(v=>a+=`<line x1="${X0}" y1="${y(v)}" x2="${X1}" y2="${y(v)}" class="s-line"/><text x="${X0-8}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`);
+  [0,5,10,15,20,25].forEach(t=>a+=`<text x="${x(t)}" y="216" text-anchor="middle" font-size="11" class="t-faint">第 ${t} 天</text>`);
+  a+=`<text x="${x(18)}" y="${y(97.6)}" text-anchor="middle" font-size="11" class="t-warm">跳空</text>`;
+  document.getElementById('od-axis').innerHTML=a;
+  const path=document.getElementById('od-path');
+  path.setAttribute('d','M'+P.map((p,t)=>`${x(t).toFixed(1)},${y(p).toFixed(1)}`).join('L'));
+  const mk=document.getElementById('od-mk'), msg=document.getElementById('od-msg');
+  const S={
+    mkt:{lv:null,f:[1,99.6,'a'],m:'市价买入：第 1 天开盘立即成交，价格 99.6。一定能成交，但价格由当时的市场决定。'},
+    lim:{lv:[98,'a'],f:[5,97.9,'a'],m:'限价买入 98：直到第 5 天价格跌到 98 以下才成交，成交价 97.9。价格有保证；如果价格一直没跌到 98，就永远不会成交。'},
+    stop:{lv:[95,'w'],f:[18,92.0,'w'],m:'止损卖出 95：价格从 97 跳空到 92，从未在 95 附近交易过。止损单触发后转为市价单，成交在 92.0，比设定价低了 3 元。'},
+    stl:{lv:[95,'w'],lv2:[94.5,'w'],f:null,m:'止损限价卖出（触发价 95，限价 94.5）：同样在跳空时触发，但限价单要求不低于 94.5，而价格一直在 94.5 以下，订单始终没有成交，持仓仍在下跌中。'}
+  };
+  function set(k){
+    document.querySelectorAll('[data-od]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.od===k)));
+    const s=S[k]; let h='';
+    [s.lv,s.lv2].forEach((l,i)=>{if(l)h+=`<line class="od-lv ${l[1]}" x1="${X0}" y1="${y(l[0])}" x2="${X1}" y2="${y(l[0])}"/><text x="${X1}" y="${y(l[0])-5}" text-anchor="end" font-size="11" class="${l[1]==='a'?'t-accent':'t-warm'}">${i?'限价 ':(k==='lim'?'限价 ':'触发价 ')}${l[0]}</text>`;});
+    if(s.f)h+=`<circle class="od-dot ${s.f[2]}" cx="${x(s.f[0])}" cy="${y(s.f[1])}" r="7"/>`;
+    mk.innerHTML=h; msg.textContent=s.m;
+  }
+  document.querySelectorAll('[data-od]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.od)));
+  document.getElementById('od').addEventListener('anim-in',()=>{const L=path.getTotalLength();path.style.transition='none';path.style.strokeDasharray=L;path.style.strokeDashoffset=L;path.getBoundingClientRect();path.style.transition='stroke-dashoffset 1.8s ease';path.style.strokeDashoffset=0;});
+  set('mkt');
+})();
+</script>

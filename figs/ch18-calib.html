@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">与可信程度相称的信任</p><p class="figsub">横轴是一项服务实际的可靠程度，纵轴是用户的信任。对角线附近是校准的信任。打开“让可信程度可见”，看两种失衡怎样回到对角线。</p></div><button class="replay" type="button" data-replay="cl">重播</button></div>
+    <label class="cl-chk"><input type="checkbox" id="cl-x"> 让可信程度可见：展示依据、记录与已知的局限</label>
+    <div class="cl" id="cl" data-anim>
+      <svg viewBox="0 0 640 300" role="img" aria-label="信任与可靠程度"><g id="cl-g"></g><g id="cl-pts"></g></svg>
+      <p class="cl-msg" id="cl-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意。误用与弃用的概念见 Parasuraman 与 Riley（1997），信任的校准见 Lee 与 See（2004）。</figcaption>
+</figure>
+<style>
+.cl-chk{display:flex;gap:6px;align-items:center;font-size:14px;margin-bottom:6px}
+.cl-chk input{accent-color:var(--accent);width:16px;height:16px}
+.cl svg{width:100%;height:auto;display:block}
+.cl-pt{transition:transform .9s ease}
+.cl-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.cl svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const X0=195,S=250,YT=20,x=v=>X0+v*S,y=v=>YT+(1-v)*S;
+  const $=id=>document.getElementById(id);
+  $('cl-g').innerHTML=`<rect x="${x(0)}" y="${y(1)}" width="${S}" height="${S}" fill="none" class="s-faint"/>`+
+    `<path d="M${x(0)},${y(.12)} L${x(.88)},${y(1)} L${x(1)},${y(1)} L${x(1)},${y(.88)} L${x(.12)},${y(0)} L${x(0)},${y(0)}Z" fill="var(--accent-soft)"/>`+
+    `<line x1="${x(0)}" y1="${y(0)}" x2="${x(1)}" y2="${y(1)}" stroke="var(--accent)" stroke-dasharray="4 4"/>`+
+    `<text x="${x(.22)}" y="${y(.85)}" text-anchor="middle" font-size="12" class="t-warm">误用</text><text x="${x(.22)}" y="${y(.85)+15}" text-anchor="middle" font-size="10.5" class="t-faint">信任高于可靠程度</text>`+
+    `<text x="${x(.8)}" y="${y(.15)}" text-anchor="middle" font-size="12" class="t-warm">弃用</text><text x="${x(.8)}" y="${y(.15)+15}" text-anchor="middle" font-size="10.5" class="t-faint">信任低于可靠程度</text>`+
+    `<text x="${x(.5)}" y="${y(0)+20}" text-anchor="middle" font-size="11" class="t-faint">实际的可靠程度 →</text><text transform="translate(${x(0)-14},${y(.5)}) rotate(-90)" text-anchor="middle" font-size="11" class="t-faint">用户的信任 →</text>`;
+  const P=[[.5,.92,.52,'只展示结论、语气笃定的服务','可靠程度一般，却显得很有把握：用户不再核对，错误被放过。'],[.88,.32,.85,'可靠却不透明的服务','实际相当可靠，但用户看不到依据，只好不用或反复手动核对。']];
+  $('cl-pts').innerHTML=P.map(([r,t,t2,n],i)=>`<g class="cl-pt" id="cl-p${i}"><circle cx="${x(r)}" cy="${y(t)}" r="8" fill="var(--warm)"/><text x="${x(r)+(i?-14:14)}" y="${y(t)+4}" text-anchor="${i?'end':'start'}" font-size="12" class="t-ink">${n}</text></g>`).join('');
+  const cb=$('cl-x');
+  function r(){const on=cb.checked;P.forEach(([rr,t,t2],i)=>{const g=$('cl-p'+i);g.style.transform=on?`translateY(${y(t2)-y(t)}px)`:'none';g.querySelector('circle').setAttribute('fill',on?'var(--accent)':'var(--warm)');});
+    $('cl-msg').textContent=on?'展示依据与记录、说明适用范围与局限之后，用户能够判断该在什么时候依靠、什么时候核对：两种服务的信任都回到了与可靠程度相称的位置。':P.map(p=>p[3]+'：'+p[4]).join('');}
+  cb.addEventListener('change',r);
+  $('cl').addEventListener('anim-in',()=>{cb.checked=false;r();setTimeout(()=>{cb.checked=true;r();},1800);});
+  r();
+})();
+</script>

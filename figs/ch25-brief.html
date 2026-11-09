@@ -1,0 +1,46 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">从一句话到一份委托书</p><p class="figsub">“帮我把这 50 万元打理好。”每个圆点是一种可能的做法。逐项写入委托书，看还剩多少种做法。</p></div><button class="replay" type="button" data-replay="bf">重播</button></div>
+    <div class="bf-sl" role="group" aria-label="委托书的部分">
+      <label><input type="checkbox" data-bf="0"> 目标与衡量</label><label><input type="checkbox" data-bf="1"> 约束</label><label><input type="checkbox" data-bf="2"> 例外的处理</label><label><input type="checkbox" data-bf="3"> 期限与复核</label>
+    </div>
+    <div class="bf" id="bf" data-anim>
+      <div class="bf-dots" id="bf-dots"></div>
+      <div class="bf-doc" id="bf-doc"></div>
+    </div>
+    <p class="bf-msg" id="bf-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>示意。委托书的结构参照投资政策说明书（Maginn 等，2007；CFA 协会，2010），并加入例外处理与复核两项。</figcaption>
+</figure>
+<style>
+.bf-sl{display:flex;flex-wrap:wrap;gap:6px 14px;margin-bottom:8px}
+.bf-sl label{display:flex;gap:6px;align-items:center;font-size:13.5px;cursor:pointer}
+.bf-sl input{accent-color:var(--accent);width:16px;height:16px}
+.bf{display:grid;grid-template-columns:1fr 1.1fr;gap:12px;align-items:start}
+.bf-dots{display:grid;grid-template-columns:repeat(8,1fr);gap:5px}
+.bf-dots i{aspect-ratio:1;border-radius:50%;background:var(--accent);transition:opacity .4s,transform .4s}
+.bf-dots i.x{opacity:.12;transform:scale(.6)}
+.bf-doc{background:var(--quote);border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.7;min-height:200px}
+.bf-doc p{margin:0 0 6px;opacity:.25;transition:opacity .3s}
+.bf-doc p.on{opacity:1}
+.bf-doc em{font-style:normal;font-size:11.5px;color:var(--faint);display:block}
+.bf-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.bf{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const N=40,cut=[[0,40],[18,40],[34,40],[37,40]];
+  const D=[['目标与衡量','十年后用于子女教育；年化回报不低于通胀加 3 个百分点，最大回撤不超过 20%'],['约束','每年可能取出 5 万元；不使用杠杆与衍生品；不持有烟草公司'],['例外的处理','遇到委托书没有覆盖的情况，暂停新交易，提出方案请示'],['期限与复核','每年复核一次；收入、家庭或目标变化时立即复核']];
+  const g=document.getElementById('bf-dots');g.innerHTML='<i></i>'.repeat(N);const ds=[...g.children];
+  const order=Array.from({length:N},(_,i)=>(i*17)%N);
+  document.getElementById('bf-doc').innerHTML=D.map(([h,t],i)=>`<p data-i="${i}"><em>${h}</em>${t}</p>`).join('');
+  const ps=[...document.querySelectorAll('.bf-doc p')],cb=[...document.querySelectorAll('[data-bf]')];
+  function r(){const on=cb.map(c=>c.checked);let k=0;if(on[0])k=22;if(on[1])k=on[0]?34:14;if(on[2])k+=on[0]&&on[1]?3:0;const left=N-k;
+    order.forEach((d,j)=>ds[d].classList.toggle('x',j<k));ps.forEach((p,i)=>p.classList.toggle('on',on[i]));
+    const m=on.every(Boolean)?`还剩 ${left} 种做法，而且这份委托写明了遇到意外怎么办、何时需要复核：代理的每一步都有可以检查的依据。`:left===N?'只有一句话时，买货币基金、集中持有几只成长股、加杠杆，都可以算“打理好”：40 种做法都说得通。':`还剩 ${left} 种做法。${!on[2]?'没有写到的情形，代理仍要自己判断。':''}${!on[3]?'委托书没有写有效期，情况变化后仍会被继续执行。':''}`;
+    document.getElementById('bf-msg').textContent=m;}
+  cb.forEach(c=>c.addEventListener('change',r));
+  document.getElementById('bf').addEventListener('anim-in',()=>{cb.forEach(c=>c.checked=false);r();cb.forEach((c,i)=>setTimeout(()=>{c.checked=true;r();},1200*(i+1)));});
+  r();
+})();
+</script>

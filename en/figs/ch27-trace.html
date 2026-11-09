@@ -1,0 +1,31 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Records decide whether liability can be apportioned</p><p class="figsub">An incident: the agent sold part of a holding beyond the agreed proportion. Afterwards, six questions need answers. Switch how complete the records are and see how many can be answered.</p></div><button class="replay" type="button" data-replay="tr">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Records"><button type="button" data-tr="0" aria-pressed="true">Trade records only</button><button type="button" data-tr="1" aria-pressed="false">Every key action recorded</button></div>
+    <div class="tr" id="tr" data-anim></div>
+    <p class="tr-msg" id="tr-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>Illustrative. For the records brokers must keep and how, see the U.S. Securities and Exchange Commission's Rule 17a-4; for AI agents, records must also cover inputs, the basis for action and authorization.</figcaption>
+</figure>
+<style>
+.tr{display:grid;gap:5px}
+.tr-r{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:10px;align-items:center;font-size:12.5px;background:var(--quote);border-radius:8px;padding:7px 10px;opacity:0;transform:translateY(4px);transition:opacity .3s,transform .3s;transition-delay:calc(var(--i)*.12s)}
+.tr-r.on{opacity:1;transform:none}
+.tr-r span:last-child{border-radius:6px;padding:3px 8px}
+.tr-r .k{background:var(--accent-soft);color:var(--ink)} .tr-r .n{background:var(--surface);color:var(--faint);border:1px dashed var(--line)}
+.tr-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.tr-r{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const Q=[['What was sold, and when was it filled','Sold 1,200 shares, filled at 10:32',1],['The price and holding weight the agent saw at the time','Market data at 10:31:58; holding weight 38% (mandate limit 30%)',0],['Which clause of the mandate it relied on','Clause 3: when a single holding exceeds 30%, reduce it to 30%',0],['Why it sold more than needed','The agent misread "reduce to 30%" as "reduce by 30%"',0],['Whether the execution layer ran checks','Checked instrument and per-trade amount, but not the post-trade weight (missing check)',0],['Whether the principal was notified','Notice sent at 10:33, read by the principal at 10:40',0]];
+  const box=document.getElementById('tr');
+  function set(k){document.querySelectorAll('[data-tr]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.tr===k)));
+    box.innerHTML=Q.map(([q,a,base],i)=>{const ok=k||base;return `<div class="tr-r" style="--i:${i}"><span>${q}</span><span class="${ok?'k':'n'}">${ok?a:'Cannot be reconstructed'}</span></div>`;}).join('');
+    setTimeout(()=>box.querySelectorAll('.tr-r').forEach(e=>e.classList.add('on')),40);
+    document.getElementById('tr-msg').textContent=k?'All six questions can be answered: the error came from the agent misreading a clause, and the execution layer lacked one check. The platform bears liability, compensation has a basis, and the missing check can be added.':'With trade records alone, we know only what was sold, not why. Liability cannot be apportioned, and there is no way to prevent the same error.';}
+  document.querySelectorAll('[data-tr]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.tr)));
+  box.addEventListener('anim-in',()=>{set(0);setTimeout(()=>set(1),2600);});
+  set(0);
+})();
+</script>

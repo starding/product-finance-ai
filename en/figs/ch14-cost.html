@@ -1,0 +1,47 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">Trading off regulatory intensity</p>
+    <p class="figsub">The benefits of protection diminish as regulation tightens, while compliance costs and limits on supply increase. Drag the regulatory intensity to see where the net effect is greatest.</p>
+    <div class="co" id="co" data-anim>
+      <svg viewBox="0 0 640 230" role="img" aria-label="Regulatory intensity against benefits, costs and net effect">
+        <g id="co-axis"></g>
+        <path id="co-b" class="co-l b"/><path id="co-c" class="co-l c"/><path id="co-n" class="co-l n"/>
+        <line id="co-cur" class="co-cur" y1="14" y2="196"/><circle id="co-dot" r="6" class="co-dot"/>
+        <text id="co-opt" font-size="11" class="t-accent" text-anchor="middle"></text>
+      </svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Benefits of protection</span><span><i style="background:var(--warm)"></i>Compliance costs and limits on supply</span><span><i style="background:var(--ink)"></i>Net effect</span></div>
+      <div class="sl" style="margin-top:8px"><label for="co-s">Regulatory intensity <b id="co-sv"></b></label><input id="co-s" type="range" min="0" max="100" step="5" value="30"></div>
+      <p class="co-msg" id="co-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative curves showing direction only; they do not correspond to any measurement. Regulators can also come under the influence of the industries they regulate, known as "regulatory capture"; see Stigler (1971).</figcaption>
+</figure>
+<style>
+.co svg{width:100%;height:auto;display:block}
+.co-l{fill:none;stroke-width:2.5}
+.co-l.b{stroke:var(--accent)} .co-l.c{stroke:var(--warm)} .co-l.n{stroke:var(--ink);stroke-dasharray:6 4}
+.co-cur{stroke:var(--faint);stroke-dasharray:3 3}
+.co-dot{fill:var(--ink)}
+.co-msg{font-size:14px;margin:6px 0 0;min-height:1.7em}
+</style>
+<script>
+(function(){
+  const X0=50,X1=620,YT=14,YB=196,x=s=>X0+s/100*(X1-X0),y=v=>YB-(v+20)/(100+20)*(YB-YT);
+  const B=s=>90*(1-Math.exp(-s/22)), C=s=>0.009*s*s+0.1*s, Nf=s=>B(s)-C(s);
+  let a=`<line x1="${X0}" y1="${y(0)}" x2="${X1}" y2="${y(0)}" class="s-faint"/>`;
+  [0,25,50,75,100].forEach(s=>a+=`<text x="${x(s)}" y="${YB+16}" text-anchor="${s===100?'end':s===0?'start':'middle'}" font-size="11" class="t-faint">${s===0?'None':s===100?'Very strict':''}</text>`);
+  document.getElementById('co-axis').innerHTML=a;
+  const P=f=>{let d='';for(let s=0;s<=100;s++)d+=(s?'L':'M')+x(s).toFixed(1)+','+y(f(s)).toFixed(1);return d;};
+  document.getElementById('co-b').setAttribute('d',P(B));document.getElementById('co-c').setAttribute('d',P(C));document.getElementById('co-n').setAttribute('d',P(Nf));
+  let opt=0;for(let s=0;s<=100;s++)if(Nf(s)>Nf(opt))opt=s;
+  const ot=document.getElementById('co-opt');ot.setAttribute('x',x(opt));ot.setAttribute('y',y(Nf(opt))-12);ot.textContent='Net effect peaks';
+  const sl=document.getElementById('co-s');
+  function r(){const s=+sl.value,c=document.getElementById('co-cur');c.setAttribute('x1',x(s));c.setAttribute('x2',x(s));
+    const d=document.getElementById('co-dot');d.setAttribute('cx',x(s));d.setAttribute('cy',y(Nf(s)));
+    document.getElementById('co-sv').textContent=s;
+    document.getElementById('co-msg').textContent=s<opt-10?'Too little regulation: information asymmetry and conflicts of interest go unchecked, and the weaker party bears the losses.':s>opt+10?'Too much regulation: compliance costs are passed on to clients, product supply and innovation are held back, and the net effect falls.':'Close to balance: the benefits of protection roughly match its costs.';}
+  sl.addEventListener('input',r);
+  document.getElementById('co').addEventListener('anim-in',()=>{let v=0;sl.value=v;r();const id=setInterval(()=>{v+=5;sl.value=v;r();if(v>=90){clearInterval(id);setTimeout(()=>{sl.value=opt;r();},600);}},140);});
+  r();
+})();
+</script>

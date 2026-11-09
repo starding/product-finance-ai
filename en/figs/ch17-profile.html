@@ -1,0 +1,43 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Within one profile, differences are large</p><p class="figsub">100 investors with similar questionnaire answers, placed in the same risk grade: how far each let a 30% decline go before selling. Switch between two ways of phrasing it.</p></div><button class="replay" type="button" data-replay="pf">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Phrasing">
+      <button type="button" data-pf="ind" aria-pressed="true">A conclusion about the individual</button>
+      <button type="button" data-pf="stat" aria-pressed="false">A description of a statistical group</button>
+    </div>
+    <div class="pf" id="pf" data-anim>
+      <svg viewBox="0 0 640 170" role="img" aria-label="Distribution of actually tolerated declines within one grade"><g id="pf-g"></g></svg>
+      <div class="pf-say" id="pf-say"></div>
+    </div>
+  </div>
+  <figcaption>Illustrative distribution. Each dot is the decline at which an investor sold; those still holding at 30% are placed at the right end. Common risk questionnaires explain only a limited part of actual allocations to risky assets; see Klement (2015).</figcaption>
+</figure>
+<style>
+.pf svg{width:100%;height:auto;display:block}
+.pf-d{opacity:0;transition:opacity .3s}
+.pf.in .pf-d{opacity:1}
+.pf-say{border-radius:10px;padding:12px 14px;font-size:14px;line-height:1.7;border-left:3px solid var(--accent);background:var(--quote);min-height:5.4em}
+.pf-say.bad{border-left-color:var(--warm)}
+.pf-say em{display:block;font-style:normal;font-size:12px;color:var(--faint)}
+@media (max-width:640px){.pf svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  let s=7;const rnd=()=>{s=(s*9301+49297)%233280;return s/233280;};
+  const D=Array.from({length:100},()=>{const u=rnd(),v=rnd();const z=Math.sqrt(-2*Math.log(u+1e-9))*Math.cos(2*Math.PI*v);return Math.max(6,Math.min(30,20+z*7));}).sort((a,b)=>a-b);
+  const X0=40,X1=600,x=v=>X0+(v-5)/(30-5)*(X1-X0),YB=130;
+  const bins={};let g=`<line x1="${X0}" y1="${YB+8}" x2="${X1}" y2="${YB+8}" class="s-faint"/>`;
+  [5,10,15,20,25,30].forEach(v=>g+=`<text x="${x(v)}" y="${YB+24}" text-anchor="middle" font-size="11" class="t-faint">${v===30?'Held':v+'%'}</text>`);
+  D.forEach((v,i)=>{const b=v>=30?30:Math.round(v);bins[b]=(bins[b]||0)+1;g+=`<circle class="pf-d" style="transition-delay:${i*12}ms" cx="${x(b)}" cy="${YB-(bins[b]-1)*8.5}" r="3.6" fill="${b>=30?'var(--accent)':'var(--warm)'}"/>`;});
+  const hold=D.filter(v=>v>=30).length,sold=D.filter(v=>v<30),p10=sold[Math.floor(sold.length*.1)],p90=sold[Math.floor(sold.length*.9)];
+  g+=`<rect x="${x(p10)}" y="${YB+3}" width="${x(p90)-x(p10)}" height="4" rx="2" fill="var(--ink)" opacity=".5"/>`;
+  document.getElementById('pf-g').innerHTML=g;
+  const T={ind:['A conclusion about the individual (should not be used)','You are a balanced investor and can bear a 30% decline.'],
+    stat:['A description of a statistical group',`Among investors whose answers were similar to these in the past, about ${hold} held on through a 30% decline; of the other ${100-hold}, eight in ten sold at some point between declines of ${Math.round(p10)}% and ${Math.round(p90)}%. This is only a statistic for similar investors and does not represent the outcome for any one person.`]};
+  function set(k){document.querySelectorAll('[data-pf]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.pf===k)));const e=document.getElementById('pf-say');
+    e.classList.toggle('bad',k==='ind');e.innerHTML=`<em>${T[k][0]}</em>${T[k][1]}${k==='ind'?'<br><span style="font-size:12.5px;color:var(--warm)">Only '+hold+' people in the same grade managed this; the sentence makes the judgment on the user\'s behalf and makes a promise that cannot be kept.</span>':''}`;}
+  document.querySelectorAll('[data-pf]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.pf)));
+  document.getElementById('pf').addEventListener('anim-in',()=>{set('ind');setTimeout(()=>set('stat'),3000);});
+  set('ind');
+})();
+</script>

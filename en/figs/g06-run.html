@@ -1,0 +1,35 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">A run: the fear that others will withdraw first</p><p class="figsub">The granary keeps back 20% of deposits; the other 80% has been lent to orchard planters and can be recalled early only at half its value. Drag the share of people who have no emergency but come out of fear, and see whether the granary holds.</p></div><button class="replay" type="button" data-replay="rn">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Beliefs">
+      <button type="button" data-rn="0" aria-pressed="true">Everyone trusts the granary</button>
+      <button type="button" data-rn="100" aria-pressed="false">Everyone fears others go first</button>
+    </div>
+    <div class="rn" id="rn" data-anim>
+      <div class="rn-b"><span>Withdrawals demanded</span><div><i id="rn-d" style="background:var(--warm)"></i></div><b id="rn-dv"></b></div>
+      <div class="rn-b"><span>Most the granary can pay</span><div><i id="rn-c" style="background:var(--accent)"></i></div><b id="rn-cv"></b></div>
+      <div class="sl"><label for="rn-f">Withdrawing out of fear <b id="rn-fv"></b></label><input id="rn-f" type="range" min="0" max="100" step="5" value="0"></div>
+      <p class="rn-msg" id="rn-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: each year 10% of deposits is withdrawn for emergencies in any case; the most the granary can pay = the 20% kept back + the 80% of loans at half value. All percentages are of total deposits.</figcaption>
+</figure>
+<style>
+.rn-b{display:grid;grid-template-columns:10em 1fr 4em;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.rn-b div{height:18px;background:var(--quote);border-radius:4px;overflow:hidden}
+.rn-b i{display:block;height:100%;transition:width .4s}
+.rn-b b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.rn-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),CAP=.2+.8*.5;
+  function draw(){const f=+$('rn-f').value/100,d=.1+.9*f;$('rn-d').style.width=d*100+'%';$('rn-c').style.width=CAP*100+'%';$('rn-dv').textContent=Math.round(d*100)+'%';$('rn-cv').textContent=Math.round(CAP*100)+'%';$('rn-fv').textContent=Math.round(f*100)+'%';
+    document.querySelectorAll('[data-rn]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.rn===Math.round(f*100))));
+    $('rn-msg').textContent=d<=.2?'Only those with emergencies come; the 20% kept back is enough, and the orchards grow as usual.':d<=CAP?`Withdrawals exceed the 20% kept back, so the granary has to recall some loans early at half value, cutting down some fruit trees; but it holds.`:`More than ${Math.round((CAP-.1)/.9*100)}% come out of fear, and even cutting down every tree the granary cannot pay: it falls, and those who did not withdraw in time lose everything. The same granary is sound when people trust it, and falls when they fear for it.`;}
+  document.querySelectorAll('[data-rn]').forEach(b=>b.addEventListener('click',()=>{$('rn-f').value=b.dataset.rn;draw();}));
+  $('rn-f').addEventListener('input',draw);
+  $('rn').addEventListener('anim-in',()=>{let v=0;$('rn-f').value=0;draw();const id=setInterval(()=>{v+=5;$('rn-f').value=v;draw();if(v>=80)clearInterval(id);},180);});
+  draw();
+})();
+</script>

@@ -1,0 +1,31 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Who decides the cases the agreement leaves out</p><p class="figsub">Eight things that might happen over ten years. The agreement states only goals, boundaries and everyday rules. Tick "State the residual right to decide" to see how the uncovered cases are handled.</p></div><button class="replay" type="button" data-replay="gp21">Replay</button></div>
+    <div class="gp21" id="gp21" data-anim>
+      <div class="gp21-g" id="gp21-g"></div>
+      <div class="cs-sw"><label><input type="checkbox" id="gp21-c"> State the residual right to decide: reversible matters are handled in the spirit of the agreement and reported; irreversible ones wait for his return</label></div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Covered by the agreement</span><span><i style="background:var(--blue)"></i>Not covered; the scribe acts in the spirit of the agreement and tells him</span><span><i style="background:var(--faint)"></i>Not covered; waits for his return</span><span><i style="background:var(--warm)"></i>Not covered; the scribe decides on its own</span></div>
+      <p class="gp21-msg" id="gp21-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the eight events are invented examples.</figcaption>
+</figure>
+<style>
+.gp21-g{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
+.gp21-c{border-radius:8px;padding:7px 10px;font-size:13px;line-height:1.5;background:var(--quote);border-left:4px solid var(--c);transition:border-color .3s}
+.gp21-c em{display:block;font-style:normal;font-size:11.5px;color:var(--faint)}
+.gp21-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.gp21-g{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('gp21'+id);
+  const E=[['Monthly deposit on schedule',1,1],['Ship shares drift 20% from the agreed proportion',1,1],['Retirement account down 30% after a storm',1,1],['The village introduces a new tax-free retirement account',0,1],['The usual fleet changes route and its fees rise',0,1],['A distant relative asks to borrow a large amount of grain',0,0],['The price of land for the house suddenly doubles',0,0],['He wants to withdraw the retirement money early',0,0]];
+  function draw(){const c=$('-c').checked;let n={w:0,a:0,u:0,s:0};
+    $('-g').innerHTML=E.map(([t,cov,rev])=>{let col,lab;if(cov){col='var(--accent)';lab='Covered by the agreement';n.w++;}else if(!c){col='var(--warm)';lab='The scribe decides on its own';n.s++;}else if(rev){col='var(--blue)';lab='Handled in the spirit of the agreement, and he is told';n.a++;}else{col='var(--faint)';lab='Waits for him to decide';n.u++;}return `<div class="gp21-c" style="--c:${col}"><em>${lab}</em>${t}</div>`;}).join('');
+    $('-msg').textContent=c?`With the residual right to decide stated: ${n.a} reversible matters are handled by the scribe in the spirit of the agreement and reported, and ${n.u} irreversible ones wait for his return. The uncovered cases are no fewer, but each now has an owner.`:`The agreement covers ${n.w}; for the ${n.s} it does not cover, the scribe can only decide on its own, including lending grain and withdrawing money, which cannot be taken back once done.`;}
+  $('-c').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{$('-c').checked=false;draw();setTimeout(()=>{$('-c').checked=true;draw();},2200);});
+  draw();
+})();
+</script>

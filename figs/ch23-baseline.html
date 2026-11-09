@@ -1,0 +1,72 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">以什么为基准，决定了能省多少</p>
+    <p class="figsub">三类金融委托。切换基准：按专业人员的规范流程计，还是按个人投资者的实际行为计。</p>
+    <div class="seg-btns" role="group" aria-label="基准">
+      <button type="button" data-bl="norm" aria-pressed="true">规范流程</button>
+      <button type="button" data-bl="act" aria-pressed="false">个人实际行为</button>
+    </div>
+    <div class="bl" id="bl" data-anim data-bl="norm">
+      <div class="bl-scale" id="bl-scale"></div>
+      <div id="bl-rows"></div>
+    </div>
+  </div>
+  <figcaption>对数刻度，单位为委托人投入的分钟数。规范流程与委托后投入为作者估算的理论值；个人投资者每笔交易用于研究的时间中位数约 6 分钟，见 Laarits 与 Wurgler（2025）；智能投顾采用后投资者登录与交易并未减少，见 D'Acunto、Prabhala 与 Rossi（2019）。</figcaption>
+</figure>
+<style>
+.bl-scale{position:relative;height:18px;margin-left:120px;font-size:11px;color:var(--faint)}
+.bl-scale span{position:absolute;transform:translateX(-50%);white-space:nowrap}
+.bl-r{display:grid;grid-template-columns:110px 1fr;gap:10px;padding:12px 0;border-top:1px solid var(--line)}
+.bl-n b{display:block;font-size:14px}
+.bl-n span{font-size:11px;color:var(--faint);line-height:1.4;display:block}
+.bl-bars{position:relative}
+.bl-line{position:relative;height:16px;margin:3px 0}
+.bl-line i{position:absolute;top:0;height:100%;border-radius:8px;transition:left .6s ease,width .6s ease}
+.bl-line.base i{background:var(--gray-mark)}
+.bl-line.del i{background:var(--accent)}
+.bl-line em{position:absolute;top:0;font-style:normal;font-size:11px;color:var(--muted);white-space:nowrap;transition:left .6s ease;line-height:16px}
+.bl-out{font-size:13px;margin-top:6px;min-height:1.6em}
+.bl-out b{font-size:16px;font-variant-numeric:tabular-nums}
+.bl-out b.up{color:var(--accent)} .bl-out b.down{color:var(--warm)} .bl-out b.na{color:var(--gold)}
+@media (max-width:640px){.bl-r{grid-template-columns:1fr}.bl-scale{margin-left:0}}
+</style>
+<script>
+(function(){
+  const lo=0.1, hi=2000, X=v=>Math.log10(v/lo)/Math.log10(hi/lo)*100;
+  const sc=document.getElementById('bl-scale');
+  sc.innerHTML=[[0.1,'6 秒'],[1,'1 分钟'],[10,'10 分钟'],[60,'1 小时'],[480,'8 小时']].map(([v,l])=>`<span style="left:${X(v)}%">${l}</span>`).join('');
+  // 每行：名称、说明、基准区间（规范/实际）、委托后区间、实际行为下的说明
+  const R=[
+    {n:'公司研究',s:'读财报、估值、同业比较',norm:[480,1200],act:[6,6],del:[30,60],
+     out:{norm:'理论倍数 <b class="up">8～40 倍</b>',act:'委托后的核对比原来花的时间更长：<b class="down">低于 1 倍</b>。代理改变的是研究的深度，而不是用时。'}},
+    {n:'交易指令',s:'录入并提交一笔订单',norm:[0.5,0.5],act:[0.5,0.5],del:[0.2,0.5],
+     out:{norm:'理论倍数 <b class="up">1～2.5 倍</b>：自己下单本来只要半分钟',act:'与规范流程相同：<b class="up">1～2.5 倍</b>，可省的只有十几秒'}},
+    {n:'组合管理',s:'每季度检查并调整',norm:[240,480],act:null,del:[15,30],
+     out:{norm:'理论倍数 <b class="up">8～32 倍</b>',act:'多数个人原本不做系统的配置；采用之后登录与交易并未减少。价值是<b class="na">从做不到变为做得到</b>，无法用时间衡量。'}},
+  ];
+  const rows=document.getElementById('bl-rows');
+  rows.innerHTML=R.map((r,i)=>`<div class="bl-r"><div class="bl-n"><b>${r.n}</b><span>${r.s}</span></div><div class="bl-bars">
+    <div class="bl-line base"><i id="bl-b${i}"></i><em id="bl-be${i}"></em></div>
+    <div class="bl-line del"><i id="bl-d${i}"></i><em id="bl-de${i}">交给代理后</em></div>
+    <div class="bl-out" id="bl-o${i}"></div></div></div>`).join('');
+  const bl=document.getElementById('bl'), btns=[...document.querySelectorAll('[data-bl]')].filter(b=>b.tagName==='BUTTON');
+  const place=(bar,lab,rg,text)=>{
+    if(!rg){bar.style.width='0';lab.style.left='0';lab.textContent=text;return;}
+    const a=X(rg[0]),b=X(rg[1]),w=Math.max(1.6,b-a);bar.style.left=a+'%';bar.style.width=w+'%';
+    lab.style.left=Math.min(78,a+w+1.5)+'%';lab.textContent=text;
+  };
+  function set(k){
+    bl.dataset.bl=k; btns.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.bl===k)));
+    R.forEach((r,i)=>{
+      const rg=k==='norm'?r.norm:r.act;
+      place(document.getElementById('bl-b'+i),document.getElementById('bl-be'+i),rg,k==='norm'?'规范流程':(rg?'个人实际':'个人原本不做'));
+      place(document.getElementById('bl-d'+i),document.getElementById('bl-de'+i),r.del,'交给代理后');
+      document.getElementById('bl-o'+i).innerHTML=r.out[k];
+    });
+  }
+  let t;
+  btns.forEach(b=>b.addEventListener('click',()=>{clearTimeout(t);set(b.dataset.bl);}));
+  bl.addEventListener('anim-in',()=>{set('norm');clearTimeout(t);t=setTimeout(()=>set('act'),3000);});
+  set('norm');
+})();
+</script>

@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The market maker: the spread in exchange for immediacy</p><p class="figsub">The market maker is willing to buy and to sell at any time. Drag the volatility of the share price and the number of trades a day, and see how wide a spread he will quote.</p></div><button class="replay" type="button" data-replay="sp8">Replay</button></div>
+    <div class="sp8" id="sp8" data-anim>
+      <div class="sp8-q"><div class="sp8-b"><em>Bid</em><b id="sp8-bid"></b><span>Sellers can sell to him at any time</span></div><div class="sp8-mid"><i id="sp8-w"></i><span id="sp8-wv"></span></div><div class="sp8-a"><em>Ask</em><b id="sp8-ask"></b><span>Buyers can buy from him at any time</span></div></div>
+      <div class="sp8-sl">
+        <div class="sl"><label for="sp8-v">Price volatility <b id="sp8-vv"></b></label><input id="sp8-v" type="range" min="5" max="60" step="5" value="20"></div>
+        <div class="sl"><label for="sp8-n">Trades per day <b id="sp8-nv"></b></label><input id="sp8-n" type="range" min="1" max="100" step="1" value="10"></div>
+      </div>
+      <p class="sp8-msg" id="sp8-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: spread = fixed cost per trade + compensation for inventory risk; inventory risk rises with price volatility and falls as trading becomes more frequent (shares held can soon be passed on). The value on prospects is taken as 10 portions.</figcaption>
+</figure>
+<style>
+.sp8-q{display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:10px;align-items:center}
+.sp8-b,.sp8-a{background:var(--quote);border-radius:10px;padding:10px 12px;text-align:center}
+.sp8-q em{display:block;font-style:normal;font-size:11.5px;color:var(--faint)} .sp8-q b{display:block;font-size:22px;font-variant-numeric:tabular-nums} .sp8-q span{font-size:11.5px;color:var(--muted)}
+.sp8-mid{position:relative;height:54px;text-align:center}
+.sp8-mid i{position:absolute;left:50%;top:10px;height:18px;transform:translateX(-50%);background:var(--warm-soft);border:1px solid var(--warm);border-radius:6px;transition:width .3s}
+.sp8-mid span{position:relative;top:32px;font-size:12px;color:var(--warm);font-variant-numeric:tabular-nums}
+.sp8-sl{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px}
+.sp8-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.sp8-q{grid-template-columns:1fr 1fr}.sp8-mid{grid-column:1/-1;order:3}.sp8-sl{grid-template-columns:1fr;gap:4px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  function draw(){const v=+$('sp8-v').value/100,n=+$('sp8-n').value,s=.05+2.4*v/Math.sqrt(n),bid=10-s/2,ask=10+s/2;
+    $('sp8-bid').textContent=bid.toFixed(2);$('sp8-ask').textContent=ask.toFixed(2);$('sp8-w').style.width=Math.min(100,s/4*100)+'%';$('sp8-wv').textContent=`Spread ${s.toFixed(2)} portions (${(s/10*100).toFixed(1)}%)`;
+    $('sp8-vv').textContent=Math.round(v*100)+'%';$('sp8-nv').textContent=n;
+    $('sp8-msg').textContent=`A seller can sell at once for ${bid.toFixed(2)} portions without waiting; the ${(s/2).toFixed(2)} portions given up are the price of immediacy.${n>=50?' The more frequent the trades, the sooner the market maker passes on the shares he holds, and the narrower the spread.':v>=.4?' The more volatile the price, the greater the risk of holding inventory, and the wider the spread.':''}`;}
+  ['sp8-v','sp8-n'].forEach(k=>$(k).addEventListener('input',draw));
+  $('sp8').addEventListener('anim-in',()=>{let v=1;$('sp8-n').value=1;draw();const id=setInterval(()=>{v+=5;$('sp8-n').value=Math.min(v,100);draw();if(v>=100)clearInterval(id);},120);});
+  draw();
+})();
+</script>

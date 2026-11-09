@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">What this step leaves open</p><p class="figsub">Four questions still unresolved once personal agents become cheap. Select a question to see the assumption behind it.</p></div><button class="replay" type="button" data-replay="nx14">Replay</button></div>
+    <div class="nx" id="nx14" data-anim>
+      <div class="nx-src"><b>Personal agents</b><span>The threshold for delegation falls</span></div>
+      <div class="nx-list" id="nx14-l"></div>
+    </div>
+    <p class="nx-msg" id="nx14-msg" aria-live="polite"></p>
+  </div>
+</figure>
+<style>
+.nx{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:center}
+.nx-src{background:var(--ink);color:var(--bg);border-radius:10px;padding:14px 10px;text-align:center}
+.nx-src b{display:block;font-size:16px} .nx-src span{font-size:12px;opacity:.75}
+.nx-list{display:grid;gap:6px}
+.nx-i{font:inherit;text-align:left;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:9px 12px;color:var(--ink);opacity:0;transform:translateX(-8px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.3s)}
+.nx.in .nx-i{opacity:1;transform:none}
+.nx-i span{font-size:13.5px} .nx-i em{font-style:normal;font-size:11.5px;color:var(--faint);white-space:nowrap}
+.nx-i.sel{border-color:var(--accent)}
+.nx-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.nx{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const Q=[['Guarantees','Chapter 15','The assumption: when an agent does something wrong, someone is able to pay compensation. The scribes have no property to pledge and no accumulated reputation. On whom does the duty to compensate fall?'],
+    ['Checking','Chapter 15','The assumption: the principal\'s own scribe is reliable. It has checked the manager; who checks it?'],
+    ['The poorest households','Chapter 19','The assumption: the threshold can keep falling. The fixed cost of checking and bearing responsibility remains, and the households with the least property still cannot clear the threshold.'],
+    ['When everyone has an agent','Chapter 16','The assumption: only a few people have someone reading reports for them. When everyone has a scribe, information advantages will wear away faster.']];
+  const l=document.getElementById('nx14-l'),msg=document.getElementById('nx14-msg');
+  l.innerHTML=Q.map((q,i)=>`<button type="button" class="nx-i" style="--i:${i}" data-i="${i}"><span>${q[0]}</span><em>→ ${q[1]}</em></button>`).join('');
+  const bs=[...l.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));msg.textContent=Q[i][2];}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('nx14').addEventListener('anim-in',()=>{[0,1,2,3].forEach((i,k)=>setTimeout(()=>set(i),1600+k*1800));});
+  set(0);
+})();
+</script>

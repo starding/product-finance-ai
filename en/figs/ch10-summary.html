@@ -1,0 +1,21 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: show users the true cost of trading</p><p class="figsub">Four design requirements, each tied to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="s05">Replay</button></div>
+    <div class="s05" id="s05" data-anim>
+      <div class="s05-c" style="--i:0"><em>Large orders eat through several price levels</em><b>Show the estimated average fill price before an order is placed</b><p>Estimate the average fill price and the cost relative to the midpoint from the current order book, rather than showing only the last price.</p></div>
+      <div class="s05-c" style="--i:1"><em>The spread is the price of immediacy</em><b>Help users fill non-urgent trades patiently</b><p>Offer limit orders and filling in tranches so that users who are not in a hurry pay less spread, and explain the risk of not being filled.</p></div>
+      <div class="s05-c" style="--i:2"><em>Liquidity has a price</em><b>Calculate trading frequency and spread together</b><p>For illiquid assets, show how much frequent buying and selling will cost each year.</p></div>
+      <div class="s05-c warn" style="--i:3"><em>Liquidity can vanish suddenly</em><b>Warn of risk in turbulent and unusual sessions</b><p>Show spread and depth around the open and close, in pre-market and after-hours trading, and in violent swings; explain that a triggered stop order may be filled at a price far worse than expected.</p></div>
+    </div>
+  </div>
+</figure>
+<style>
+.s05{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.s05-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.s05-c.warn{border-left-color:var(--warm)}
+.s05-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.s05-c b{display:block;font-size:15px;margin:2px 0 4px}
+.s05-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.s05.in .s05-c{opacity:1;transform:none}
+@media (max-width:640px){.s05{grid-template-columns:1fr}}
+</style>

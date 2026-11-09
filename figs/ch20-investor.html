@@ -1,0 +1,59 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">投资者本人：持续监测决定整体（作者估算）</p><p class="figsub">上方是一年投资投入按事务的构成；下方调整持续监测与其余事务各提速多少倍，看整体的放大倍数。</p></div><button class="replay" type="button" data-replay="iv">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="投资者类型">
+      <button type="button" data-ivg="配置型投资者" aria-pressed="false">配置型投资者</button>
+      <button type="button" data-ivg="交易者" aria-pressed="true">交易者</button>
+    </div>
+    <div class="iv" id="iv" data-anim>
+      <div class="iv-bar" id="iv-bar"></div>
+      <div class="iv-list" id="iv-list"></div>
+      <div class="iv-sl">
+        <div class="sl"><label for="iv-m">持续监测提速 <b id="iv-mv"></b></label><input id="iv-m" type="range" min="1" max="20" step="1" value="10"></div>
+        <div class="sl"><label for="iv-o">其余事务提速 <b id="iv-ov"></b></label><input id="iv-o" type="range" min="1" max="20" step="1" value="2"></div>
+      </div>
+      <div class="iv-out"><span>整体放大倍数</span><b id="iv-x"></b><span id="iv-x2"></span></div>
+      <div class="iv-cmp" id="iv-cmp"></div>
+    </div>
+  </div>
+  <figcaption>作者估算：各事务一年投入的小时数为作者对典型个人投资者的假设；每件事务对应到 O*NET 中从业者的一项任务，按该任务的 Agent 可达比例折算上限。方法与数据见<a href="estimates.html">附录：作者估算的方法与数据</a>。</figcaption>
+</figure>
+<style>
+.iv-bar{display:flex;height:22px;border-radius:5px;overflow:hidden;background:var(--quote)}
+.iv-bar i{display:block;height:100%;border-right:1px solid var(--card);transition:width .6s}
+.iv-list{display:grid;grid-template-columns:repeat(2,1fr);gap:2px 16px;margin:8px 0 12px;font-size:12px;color:var(--muted)}
+.iv-list span b{color:var(--ink);font-weight:500;font-variant-numeric:tabular-nums;margin-left:4px}
+.iv-list i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px}
+.iv-sl{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.iv-out{display:flex;align-items:baseline;gap:10px;margin-top:10px;flex-wrap:wrap}
+.iv-out span{font-size:12.5px;color:var(--faint)} .iv-out b{font-size:26px;font-variant-numeric:tabular-nums}
+.iv-cmp{display:grid;gap:4px;margin-top:12px}
+.iv-ch{font-size:12px;color:var(--faint);margin:0 0 2px}
+.iv-cr{display:grid;grid-template-columns:11em 1fr 56px;gap:10px;align-items:center;font-size:12.5px}
+.iv-cr div{height:10px;background:var(--quote);border-radius:3px;overflow:hidden}
+.iv-cr div i{display:block;height:100%;border-radius:3px;transition:width .6s}
+.iv-cr b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+@media (max-width:640px){.iv-list{grid-template-columns:1fr}.iv-sl{grid-template-columns:1fr;gap:4px}.iv-cr{grid-template-columns:8.5em 1fr 48px;font-size:11.5px}}
+</style>
+<script>
+(function(){
+  const D=/*DATA:inv*/[["配置型投资者","确定目标、期限与可承受损失","1",0.0069,0.25],["配置型投资者","持续监测标的与组合","4d",0.4324,0.75],["配置型投资者","目标导向的组合管理","5",0.0553,0.25],["配置型投资者","公司与观点研究","4d",0.1291,0.825],["配置型投资者","制定交易计划","4d",0.0415,0.625],["配置型投资者","提交订单","5",0.0005,0.25],["配置型投资者","交易复盘","4d",0.0507,0.825],["配置型投资者","事件解读","4d",0.083,0.825],["配置型投资者","标的筛选与比较","4d",0.0415,0.625],["配置型投资者","建立新的分析方法","4d",0.1107,0.825],["配置型投资者","接入新的数据来源","4d",0.0015,0.75],["配置型投资者","数据查询","4d",0.033,0.825],["配置型投资者","分享研究成果","2",0.0138,0.825],["交易者","确定交易规则与风险上限","1",0.0022,0.4375],["交易者","交易时段按条件持续监测","4d",0.7286,0.825],["交易者","下单前核对成本与风险","4d",0.0431,0.725],["交易者","提交订单","5",0.0022,0.25],["交易者","风险事件处置","5",0.0141,0.625],["交易者","制定交易计划（每周约 2 次）","4d",0.1137,0.625],["交易者","交易复盘（按月）","4d",0.0962,0.825]]/*END*/;
+  const C={'1':'#8a5a9e','2':'var(--warm)','4d':'var(--accent)','5':'var(--blue)'};
+  const $=id=>document.getElementById(id);let g='交易者';
+  const isMon=a=>/监测|盯盘/.test(a);
+  function rows(){return D.filter(d=>d[0]===g);}
+  function draw(){const R=rows(),mon=R.filter(d=>isMon(d[1])).reduce((a,d)=>a+d[3],0);
+    $('iv-bar').innerHTML=R.map(d=>`<i style="width:${d[3]*100}%;background:${C[d[2]]};opacity:${isMon(d[1])?1:.55}" title="${d[1]}"></i>`).join('');
+    $('iv-list').innerHTML=R.slice().sort((a,b)=>b[3]-a[3]).map(d=>`<span><i style="background:${C[d[2]]}"></i>${d[1]}<b>${(d[3]*100).toFixed(d[3]<.01?1:0)}%</b></span>`).join('');
+    const m=+$('iv-m').value,o=+$('iv-o').value,x=1/(mon/m+(1-mon)/o);
+    $('iv-mv').textContent=m+' 倍';$('iv-ov').textContent=o+' 倍';$('iv-x').textContent=x.toFixed(1)+' 倍';
+    $('iv-x2').textContent=`持续监测约占投入的 ${Math.round(mon*100)}%`;
+    const onet=1/R.reduce((a,d)=>a+d[3]*(1-d[4]),0);
+    const P=[[`${g}（按从业者任务折算）`,onet,'var(--accent)'],['经纪人',2.39,'var(--faint)'],['投资基金经理',1.89,'var(--faint)'],['个人理财顾问',1.79,'var(--faint)']];
+    $('iv-cmp').innerHTML='<p class="iv-ch">Agent 条件下整体的上限：投资者本人与从业者</p>'+P.map(([n,v,c])=>`<div class="iv-cr"><span>${n}</span><div><i style="width:${(v-1)/5*100}%;background:${c}"></i></div><b>${v.toFixed(1)} 倍</b></div>`).join('');}
+  document.querySelectorAll('[data-ivg]').forEach(b=>b.addEventListener('click',()=>{g=b.dataset.ivg;document.querySelectorAll('[data-ivg]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  ['iv-m','iv-o'].forEach(id=>$(id).addEventListener('input',draw));
+  $('iv').addEventListener('anim-in',()=>{const s=[[10,2],[2,10],[10,2]];s.forEach(([m,o],i)=>setTimeout(()=>{$('iv-m').value=m;$('iv-o').value=o;draw();},300+i*2200));});
+  draw();
+})();
+</script>

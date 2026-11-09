@@ -1,0 +1,38 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">五个部分</p><p class="figsub">五个约束长出的五个部分。点选一个部分，看它回答的问题。</p></div><button class="replay" type="button" data-replay="nx24">重播</button></div>
+    <div class="nx" id="nx24" data-anim>
+      <div class="nx-src"><b>五个部分</b><span>合起来是一个产品</span></div>
+      <div class="nx-list" id="nx24-l"></div>
+    </div>
+    <p class="nx-msg" id="nx24-msg" aria-live="polite"></p>
+  </div>
+</figure>
+<style>
+.nx{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:center}
+.nx-src{background:var(--ink);color:var(--bg);border-radius:10px;padding:14px 10px;text-align:center}
+.nx-src b{display:block;font-size:16px} .nx-src span{font-size:12px;opacity:.75}
+.nx-list{display:grid;gap:6px}
+.nx-i{font:inherit;text-align:left;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:9px 12px;color:var(--ink);opacity:0;transform:translateX(-8px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.3s)}
+.nx.in .nx-i{opacity:1;transform:none}
+.nx-i span{font-size:13.5px} .nx-i em{font-style:normal;font-size:11.5px;color:var(--faint);white-space:nowrap}
+.nx-i.sel{border-color:var(--accent)}
+.nx-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.nx{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const Q=[['承诺什么','第 20 章','回答：凭什么相信它会守约之前，先说清它承诺什么。承诺过程而不承诺结果：配置、执行、费用与风险边界可以核对。'],
+    ['委托参数与授权','第 21 章','回答：他不在场时它该怎么做。目标、边界、规则、例外与期限，授权按大小与能否挽回分级。'],
+    ['过程记录与可核对的证据','第 22 章','回答：他怎样知道它做了什么。第三方保存的分层记录，写明当时的信息与依据。'],
+    ['上限、确认与赔付','第 23 章','回答：它出错了怎么办。层层设防、在快处放慢，赔付按错误的种类事先写清。'],
+    ['信任的建立路径','第 24 章','回答：他凭什么开始信任。借来昂贵的信号，从小处开始，按错误的种类调整。']];
+  const l=document.getElementById('nx24-l'),msg=document.getElementById('nx24-msg');
+  l.innerHTML=Q.map((q,i)=>`<button type="button" class="nx-i" style="--i:${i}" data-i="${i}"><span>${q[0]}</span><em>→ ${q[1]}</em></button>`).join('');
+  const bs=[...l.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));msg.textContent=Q[i][2];}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('nx24').addEventListener('anim-in',()=>{[0,1,2,3,4].forEach((i,k)=>setTimeout(()=>set(i),1600+k*1800));});
+  set(0);
+})();
+</script>

@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: banks</p><p class="figsub">Four conclusions, each tied to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="g06summary">Replay</button></div>
+    <div class="g06summary" id="g06summary" data-anim><div class="g06summary-c" style="--i:0"><em>Maturity transformation</em><b>Deposits withdrawable at any time become long-term loans</b><p>When many people pool their grain, the share withdrawn each year is quite stable, so only part needs to be kept back.</p></div><div class="g06summary-c" style="--i:1"><em>Monitoring</em><b>The bank watches borrowers for depositors</b><p>Each borrower is inspected once, and depositors need only care about the bank itself; the cost of monitoring sets the value of this delegation.</p></div><div class="g06summary-c warn" style="--i:2"><em>Bank runs</em><b>Confidence itself is a risk</b><p>Fear that others will withdraw first brings everyone at once, and even a well-run granary can fall.</p></div><div class="g06summary-c warn" style="--i:3"><em>Defences</em><b>Deposit insurance and the lender of last resort</b><p>They spare people the need to rush; the cost is moral hazard, which calls for capital requirements and supervision.</p></div></div>
+  </div>
+</figure>
+<style>
+.g06summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g06summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g06summary-c.warn{border-left-color:var(--warm)}
+.g06summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g06summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g06summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g06summary.in .g06summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g06summary{grid-template-columns:1fr}}
+</style>

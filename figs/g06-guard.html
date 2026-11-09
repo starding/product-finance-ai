@@ -1,0 +1,38 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">让人不必抢先</p><p class="figsub">流言传开，六成的人想抢先来取。切换防线，看粮仓能否撑住；再看存款有了保障之后，粮仓冒险的倾向。</p></div><button class="replay" type="button" data-replay="gd">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="防线">
+      <button type="button" data-gd="none" aria-pressed="true">没有防线</button>
+      <button type="button" data-gd="ins" aria-pressed="false">存款保险</button>
+      <button type="button" data-gd="lolr" aria-pressed="false">最后贷款人</button>
+    </div>
+    <div class="gd" id="gd" data-anim>
+      <div class="gd-b"><span>被要求取回</span><div><i id="gd-d" style="background:var(--warm)"></i></div><b id="gd-dv"></b></div>
+      <div class="gd-b"><span>粮仓最多能付</span><div><i id="gd-c" style="background:var(--accent)"></i></div><b id="gd-cv"></b></div>
+      <div class="gd-b"><span>粮仓冒险的倾向</span><div><i id="gd-r" style="background:var(--gold)"></i></div><b id="gd-rv"></b></div>
+      <div class="cs-sw"><label><input type="checkbox" id="gd-k"> 同时要求粮仓保有足够的自有粮食（资本要求）</label></div>
+      <p class="gd-msg" id="gd-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：没有防线时，粮仓最多能付六成存粮；最后贷款人以果园为抵押、按较高的利率向粮仓放贷，使它能付清全部提取；冒险的倾向为相对高低。</figcaption>
+</figure>
+<style>
+.gd-b{display:grid;grid-template-columns:7.5em 1fr 4em;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.gd-b div{height:16px;background:var(--quote);border-radius:4px;overflow:hidden}
+.gd-b i{display:block;height:100%;transition:width .4s}
+.gd-b b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.gd-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);let m='none';
+  function draw(){const k=$('gd-k').checked,d=m==='ins'?.1:.1+.9*.6,c=m==='lolr'?1:.6,risk=m==='ins'?(k?.45:.85):(k?.35:.4);
+    $('gd-d').style.width=d*100+'%';$('gd-c').style.width=c*100+'%';$('gd-r').style.width=risk*100+'%';
+    $('gd-dv').textContent=Math.round(d*100)+'%';$('gd-cv').textContent=Math.round(c*100)+'%';$('gd-rv').textContent=risk>.6?'高':risk>.4?'中':'低';
+    $('gd-msg').textContent=m==='none'?'没有防线：六成的人抢先来取，粮仓付不出，倒下。':m==='ins'?(k?'存款有了保障，没有急用的人不再抢先，挤兑没有发生；资本要求让粮仓自己也有损失可失，冒险的倾向被压了下来。':'存款有了保障，没有急用的人不再抢先，挤兑没有发生。但存粮的人不再关心粮仓借给了谁，粮仓冒险的倾向上升：这是保险带来的道德风险。'):'最后贷款人以果园为抵押向粮仓放贷，粮仓付得清所有提取，人们见到取得出，恐慌随之平息。较高的利率防止粮仓平时依赖这条后路。';}
+  document.querySelectorAll('[data-gd]').forEach(b=>b.addEventListener('click',()=>{m=b.dataset.gd;document.querySelectorAll('[data-gd]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  $('gd-k').addEventListener('input',draw);
+  $('gd').addEventListener('anim-in',()=>{['none','ins','lolr'].forEach((k,i)=>setTimeout(()=>{m=k;document.querySelectorAll('[data-gd]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.gd===k)));draw();},300+i*2400));});
+  draw();
+})();
+</script>

@@ -1,0 +1,65 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">怎样构造一个因子</p><p class="figsub">40 只股票按账面市值比排序：买入最高的 30%，卖出最低的 30%，多空组合的收益就是这一期的价值因子收益。</p></div><button class="replay" type="button" id="bd-re">换一期数据</button></div>
+    <div class="bd" id="bd" data-anim>
+      <svg viewBox="0 0 640 200" role="img" aria-label="按账面市值比排序构造多空组合">
+        <g id="bd-axis"></g><g id="bd-dots"></g>
+        <rect id="bd-s" class="bd-zone s" y="20" height="140"/><rect id="bd-l" class="bd-zone l" y="20" height="140"/>
+        <text id="bd-st" class="t-warm" font-size="12" text-anchor="middle" y="16">卖出：账面市值比最低的 30%</text>
+        <text id="bd-lt" class="t-accent" font-size="12" text-anchor="middle" y="16">买入：账面市值比最高的 30%</text>
+      </svg>
+      <div class="bd-out">
+        <div><span>买入一组的平均收益</span><b id="bd-a"></b></div>
+        <div><span>卖出一组的平均收益</span><b id="bd-b"></b></div>
+        <div><span>价值因子收益（多减空）</span><b id="bd-f"></b></div>
+      </div>
+    </div>
+  </div>
+  <figcaption>示意模拟：每只股票的收益 ＝ 共同的市场收益 ＋ 与账面市值比相关的小幅溢价 ＋ 个别噪声。多空相减后，市场的共同部分被抵消，剩下的就是与该特征相关的收益。构造方法参照 Fama 与 French（1993）。</figcaption>
+</figure>
+<style>
+.bd svg{width:100%;height:auto;display:block}
+.bd-dot{transition:cx .9s ease,cy .9s ease,fill .3s}
+.bd-zone{opacity:0;transition:opacity .4s .9s}
+.bd-zone.s{fill:var(--warm-soft)} .bd-zone.l{fill:var(--accent-soft)}
+#bd-st,#bd-lt{opacity:0;transition:opacity .4s 1s}
+.bd.sorted .bd-zone,.bd.sorted #bd-st,.bd.sorted #bd-lt{opacity:1}
+.bd-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.bd-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.bd-out span{display:block;font-size:12px;color:var(--faint)}
+.bd-out b{font-size:19px;font-variant-numeric:tabular-nums}
+#bd-f{color:var(--accent)}
+@media (max-width:640px){.bd-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const N=40,X0=40,X1=620,YM=90,bd=document.getElementById('bd'),dots=document.getElementById('bd-dots');
+  const g=()=>{let u=0,v=0;while(!u)u=Math.random();v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);};
+  const x=i=>X0+(i+0.5)/N*(X1-X0);
+  dots.innerHTML=Array.from({length:N},()=>'<circle class="bd-dot" r="6"/>').join('');
+  const cs=[...dots.children];
+  let ax=`<line x1="${X0}" y1="${YM}" x2="${X1}" y2="${YM}" class="s-line"/><text x="${X0}" y="188" font-size="11" class="t-faint">账面市值比 低</text><text x="${X1}" y="188" text-anchor="end" font-size="11" class="t-faint">高</text><text x="${X0-6}" y="${YM+4}" text-anchor="end" font-size="10" class="t-faint">0</text>`;
+  document.getElementById('bd-axis').innerHTML=ax;
+  const k=Math.round(N*0.3);
+  document.getElementById('bd-s').setAttribute('x',X0);document.getElementById('bd-s').setAttribute('width',x(k-1)-X0+8);
+  document.getElementById('bd-l').setAttribute('x',x(N-k)-8);document.getElementById('bd-l').setAttribute('width',X1-x(N-k)+8);
+  document.getElementById('bd-st').setAttribute('x',(X0+x(k-1))/2);document.getElementById('bd-lt').setAttribute('x',(x(N-k)+X1)/2);
+  function run(){
+    bd.classList.remove('sorted');
+    const mkt=0.01*g(), S=Array.from({length:N},()=>{const bm=Math.random();return {bm,r:mkt+0.006*(bm-0.5)+0.04*g()};});
+    const order=S.map((s,i)=>i);
+    cs.forEach((c,i)=>{c.setAttribute('cx',X0+Math.random()*(X1-X0));c.setAttribute('cy',YM-S[i].r*900);c.style.fill='var(--gray-mark)';});
+    setTimeout(()=>{
+      const sorted=order.slice().sort((a,b)=>S[a].bm-S[b].bm);
+      sorted.forEach((i,pos)=>{const c=cs[i];c.setAttribute('cx',x(pos));c.style.fill=pos<k?'var(--warm)':pos>=N-k?'var(--accent)':'var(--gray-mark)';});
+      bd.classList.add('sorted');
+      const L=sorted.slice(N-k).map(i=>S[i].r), Sh=sorted.slice(0,k).map(i=>S[i].r), avg=a=>a.reduce((p,q)=>p+q,0)/a.length;
+      const pct=v=>(v>0?'+':'')+(v*100).toFixed(2)+'%';
+      document.getElementById('bd-a').textContent=pct(avg(L));document.getElementById('bd-b').textContent=pct(avg(Sh));document.getElementById('bd-f').textContent=pct(avg(L)-avg(Sh));
+    },700);
+  }
+  document.getElementById('bd-re').addEventListener('click',run);
+  bd.addEventListener('anim-in',run);
+  run();
+})();
+</script>

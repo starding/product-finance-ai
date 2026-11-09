@@ -1,0 +1,36 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">文明模拟器 · 第 23 章：防线之下的十年</p><p class="figsub">十年里书记员会犯执行错误与越界两类错误，其中一部分发生在不可挽回的操作上。打开或关掉三条规则，调整出错的频率，看十年里出错造成的损失、其中他自己吞下的部分，以及他为此付出的确认与费用。</p></div><button class="replay" type="button" data-replay="cs23">重播</button></div>
+    <div class="cs-rules"><span class="on">产品：承诺什么</span><span class="on">产品：委托参数与授权</span><span class="on">产品：过程记录</span><span class="on">产品：上限、确认与赔付</span><span class="lock">信任的建立路径 · 第 24 章</span></div>
+    <div class="cs23" id="cs23" data-anim>
+      <div class="cs23-bars" id="cs23-b"></div>
+      <div class="cs-sw"><label><input type="checkbox" id="cs23-c"> 规则：每一步与每一天的上限</label><label><input type="checkbox" id="cs23-f"> 规则：不可挽回操作的确认与延迟</label><label><input type="checkbox" id="cs23-p"> 规则：运营者赔付并投保</label></div>
+      <div class="sl"><label for="cs23-m">出错的频率 <b id="cs23-mv"></b></label><input id="cs23-m" type="range" min="0.5" max="3" step="0.25" value="1"></div>
+      <p class="cs23-msg" id="cs23-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意模型：图中为十年的期望值，损失以家产的百分比计。基准频率下，执行错误每年 2 次，九成八损失约 0.2%，其余的约 10%；越界每年 0.3 次，平均损失 2%。有上限时，单次执行错误的损失不超过 2%，越界损失减半。两类错误中两成发生在不可挽回的操作上，确认与延迟能拦住其中八成。运营者赔付时，执行错误与越界的损失全部赔付，赔付与保险的成本按 1.2 倍计入他每年的费用。判断失误属于约定承担的市场风险，不在图中。</figcaption>
+</figure>
+<style>
+.cs23-bars{display:grid;gap:10px;margin:4px 0 10px}
+.cs23-r{display:grid;grid-template-columns:10em 1fr 5.5em;gap:10px;align-items:center;font-size:12.5px}
+.cs23-r div{height:22px;background:var(--quote);border-radius:5px;overflow:hidden}
+.cs23-r i{display:block;height:100%;transition:width .4s}
+.cs23-r b{text-align:right;font-variant-numeric:tabular-nums}
+.cs23-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs23-r{grid-template-columns:1fr 5.5em}.cs23-r span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs23'+id);
+  function calc(cap,conf,pay,m){const ne=20*m,nv=3*m,le=cap?.98*.2+.02*2:.98*.2+.02*10,lv=cap?1:2,keep=conf?(1-.2*.8):1,loss=(ne*le+nv*lv)*keep;
+    return {loss,unpaid:pay?0:loss,fee:pay?loss/10*1.2:0,confirms:conf?4:0};}
+  function draw(){const c=$('-c').checked,f=$('-f').checked,p=$('-p').checked,m=+$('-m').value,S=calc(c,f,p,m),B=calc(0,0,0,m);$('-mv').textContent=m.toFixed(2)+' 倍';
+    $('-b').innerHTML=[['十年出错造成的损失',S.loss,B.loss,'var(--warm)',S.loss.toFixed(1)+'%'],['其中他自己吞下的',S.unpaid,B.loss,'var(--warm)',S.unpaid.toFixed(1)+'%'],['每年多付的费用',S.fee,3,'var(--blue)',S.fee.toFixed(2)+'%'],['每年要他确认的次数',S.confirms,10,'var(--gold)',S.confirms+' 次']].map(([a,v,mx,col,t])=>`<div class="cs23-r"><span>${a}</span><div><i style="width:${Math.min(100,v/Math.max(mx,.01)*100)}%;background:${col}"></i></div><b>${t}</b></div>`).join('');
+    const n=[c,f,p].filter(Boolean).length;
+    $('-msg').textContent=n===0?`没有任何防线：十年出错造成约 ${S.loss.toFixed(0)}% 的损失，全部由他自己吞下；损失的大半来自少数几次大的错误。`:n===3?`三条都在：上限削去了大的错误，确认与延迟拦住了多数不可挽回的错误，十年损失降到约 ${S.loss.toFixed(1)}%，全部由运营者赔付；代价是他每年多付约 ${S.fee.toFixed(2)}% 的费用、确认 4 次。保险的成本略高于预期的损失，换来的是损失不再落在他一个人身上，也不会突然来一笔大的。`:`${c?'上限削去了大的错误':'没有上限，少数几次大的错误占了损失的大半'}；${f?'确认与延迟拦住了多数不可挽回的错误':'不可挽回的错误没有人拦'}；${p?'损失由运营者赔付':'损失全部由他自己吞下'}。十年损失约 ${S.loss.toFixed(1)}%。`;}
+  ['-c','-f','-p','-m'].forEach(k=>$(k).addEventListener('input',draw));
+  $('').addEventListener('anim-in',()=>{[[0,0,0],[1,0,0],[1,1,0],[1,1,1]].forEach(([a,b,c],i)=>setTimeout(()=>{$('-c').checked=!!a;$('-f').checked=!!b;$('-p').checked=!!c;draw();},300+i*2200));});
+  draw();
+})();
+</script>

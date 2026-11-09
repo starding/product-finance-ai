@@ -1,0 +1,54 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">一年下来省下多少</p><p class="figsub">调整单次自己完成的用时、一年发生的次数与放大倍数，看一年省下的时间。曲线是单次能省下的比例：超过约 5 倍之后，它几乎不再上升。</p></div><button class="replay" type="button" data-replay="yr">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="示例">
+      <button type="button" data-yr="0" aria-pressed="true">每周整理财经新闻</button>
+      <button type="button" data-yr="1" aria-pressed="false">每年报一次税</button>
+      <button type="button" data-yr="2" aria-pressed="false">交易日查看持仓</button>
+    </div>
+    <div class="yr" id="yr" data-anim>
+      <svg viewBox="0 0 640 200" role="img" aria-label="放大倍数与单次节省比例"><g id="yr-ax"></g><path id="yr-p" class="yr-l"/><circle id="yr-d" r="6" fill="var(--ink)"/><text id="yr-dt" font-size="12" class="t-ink"></text></svg>
+      <div class="yr-sl">
+        <div class="sl"><label for="yr-t">单次自己完成 <b id="yr-tv"></b></label><input id="yr-t" type="range" min="5" max="480" step="5"></div>
+        <div class="sl"><label for="yr-f">一年发生 <b id="yr-fv"></b></label><input id="yr-f" type="range" min="0" max="100" step="1"></div>
+        <div class="sl"><label for="yr-s">放大倍数 <b id="yr-sv"></b></label><input id="yr-s" type="range" min="0" max="100" step="1"></div>
+      </div>
+      <div class="yr-out"><span>一年省下</span><b id="yr-h"></b><span id="yr-h2"></span></div>
+      <p class="yr-msg" id="yr-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>一年省下的时间 ＝ 单次自己完成的用时 ×（1 − 1 ÷ 放大倍数）× 年频次；能力扩展与结果改善不在此图中。三个示例的用时与次数为示意。</figcaption>
+</figure>
+<style>
+.yr svg{width:100%;height:auto;display:block}
+.yr-l{fill:none;stroke:var(--accent);stroke-width:2.5}
+.yr-sl{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:6px}
+.yr-out{display:flex;align-items:baseline;gap:10px;margin-top:12px;flex-wrap:wrap}
+.yr-out span{font-size:12.5px;color:var(--faint)} .yr-out b{font-size:26px;font-variant-numeric:tabular-nums}
+.yr-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.yr-sl{grid-template-columns:1fr;gap:6px}.yr svg text{font-size:17px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),X0=56,X1=620,YT=12,YB=168;
+  const lx=s=>X0+Math.log(s)/Math.log(50)*(X1-X0),ly=v=>YB-v*(YB-YT);
+  const fOf=v=>Math.round(Math.pow(10,v/100*Math.log10(365))),sOf=v=>+Math.pow(50,v/100).toFixed(1);
+  const vOfF=f=>Math.round(Math.log10(f)/Math.log10(365)*100),vOfS=s=>Math.round(Math.log(s)/Math.log(50)*100);
+  $('yr-ax').innerHTML=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`+[0,.5,.8,.9,1].map(v=>`<text x="${X0-6}" y="${ly(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text><line x1="${X0}" x2="${X1}" y1="${ly(v)}" y2="${ly(v)}" class="s-line"/>`).join('')+
+    [1,2,5,10,20,50].map(s=>`<text x="${lx(s)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${s} 倍</text>`).join('')+
+    `<line x1="${lx(5)}" x2="${lx(5)}" y1="${YT}" y2="${YB}" class="s-faint" stroke-dasharray="3 4"/>`;
+  let d='';for(let s=1;s<=50;s*=1.03)d+=(s===1?'M':'L')+lx(s).toFixed(1)+','+ly(1-1/s).toFixed(1);$('yr-p').setAttribute('d',d);
+  const P=[[60,52,8],[240,1,3],[30,250,6]];const t=$('yr-t'),f=$('yr-f'),s=$('yr-s');
+  function draw(){const T=+t.value,F=fOf(+f.value),S=Math.max(1,sOf(+s.value)),k=1-1/S,h=T*k*F/60;
+    $('yr-tv').textContent=T>=60?(T/60).toFixed(T%60?1:0)+' 小时':T+' 分钟';$('yr-fv').textContent=F+' 次';$('yr-sv').textContent=S+' 倍';
+    $('yr-d').setAttribute('cx',lx(S));$('yr-d').setAttribute('cy',ly(k));const dt=$('yr-dt');dt.setAttribute('x',lx(S)+(S>20?-10:10));dt.setAttribute('y',ly(k)+(k>.9?18:-10));dt.setAttribute('text-anchor',S>20?'end':'start');dt.textContent=`单次省下 ${Math.round(k*100)}%`;
+    $('yr-h').textContent=h>=10?Math.round(h)+' 小时':h.toFixed(1)+' 小时';$('yr-h2').textContent=`约合 ${(h/8).toFixed(h/8<10?1:0)} 个八小时工作日`;
+    const S2=Math.min(50,S*2),gain=T*((1-1/S2)-k)*F/60;
+    $('yr-msg').textContent=`放大倍数再翻一倍到 ${S2.toFixed(1)} 倍，一年只多省 ${gain<1?(gain*60).toFixed(0)+' 分钟':gain.toFixed(1)+' 小时'}；把次数或单次用时翻一倍，省下的时间就翻一倍。`;}
+  function preset(i){document.querySelectorAll('[data-yr]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.yr===i)));t.value=P[i][0];f.value=vOfF(P[i][1]);s.value=vOfS(P[i][2]);draw();}
+  document.querySelectorAll('[data-yr]').forEach(b=>b.addEventListener('click',()=>preset(+b.dataset.yr)));
+  [t,f,s].forEach(e=>e.addEventListener('input',()=>{document.querySelectorAll('[data-yr]').forEach(b=>b.setAttribute('aria-pressed','false'));draw();}));
+  $('yr').addEventListener('anim-in',()=>{preset(0);let v=0;s.value=0;draw();const id=setInterval(()=>{v+=4;s.value=v;draw();if(v>=100){clearInterval(id);setTimeout(()=>preset(0),700);}},90);});
+  preset(0);
+})();
+</script>

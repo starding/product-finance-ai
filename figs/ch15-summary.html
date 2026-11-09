@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：从任务出发设计产品</p><p class="figsub">四条设计要求，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="ch15summary">重播</button></div>
+    <div class="ch15summary" id="ch15summary" data-anim><div class="ch15summary-c" style="--i:0"><em>用户要的是完成一件事</em><b>按任务而不是按产品组织</b><p>先问用钱的时间、金额与可承受的损失，再推荐产品；同一产品在不同任务中可能是错误的选择。</p></div><div class="ch15summary-c" style="--i:1"><em>任务有层次</em><b>让底层操作服务于上层目标</b><p>在查看与下单的界面里，显示这次操作与用户目标和计划的关系。</p></div><div class="ch15summary-c warn" style="--i:2"><em>结果受运气影响</em><b>按过程定义完成标准</b><p>事先写明目标、约束与检查方式，事后按是否遵守来评价，而不只看收益。</p></div><div class="ch15summary-c warn" style="--i:3"><em>交付要完整，持续任务要有交代</em><b>让委托人知情并管得住</b><p>八个阶段逐项具备；持续任务的每个周期都说明状态，区分正常、受阻与等待确认。</p></div></div>
+  </div>
+</figure>
+<style>
+.ch15summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch15summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch15summary-c.warn{border-left-color:var(--warm)}
+.ch15summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch15summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch15summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch15summary.in .ch15summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch15summary{grid-template-columns:1fr}}
+</style>

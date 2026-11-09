@@ -1,0 +1,38 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Structural alignment, not just disclosure</p><p class="figsub">Add four structural arrangements one by one and see how much room the agent has left to lean toward the platform's interest (illustrative).</p></div><button class="replay" type="button" data-replay="al2">Replay</button></div>
+    <div class="al2-sl" id="al2-sl"></div>
+    <div class="al2" id="al2" data-anim>
+      <div class="al2-m"><span>Room to favour the platform</span><div class="al2-t"><i id="al2-bar"></i></div><b id="al2-v"></b></div>
+      <div class="al2-list" id="al2-list"></div>
+    </div>
+  </div>
+  <figcaption>Illustrative. The U.S. Securities and Exchange Commission's 2023 proposed rule (Release No. 34-97990, withdrawn in 2025) would have required firms to identify and eliminate conflicts of interest in predictive data analytics.</figcaption>
+</figure>
+<style>
+.al2-sl{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px;margin-bottom:8px}
+.al2-sl label{display:flex;gap:6px;align-items:center;font-size:13.5px;cursor:pointer}
+.al2-sl input{accent-color:var(--accent);width:16px;height:16px}
+.al2-m{display:grid;grid-template-columns:150px 1fr 50px;gap:10px;align-items:center;font-size:13px}
+.al2-m span{color:var(--muted)}
+.al2-t{height:18px;background:var(--quote);border-radius:9px;overflow:hidden}
+.al2-t i{display:block;height:100%;border-radius:9px;background:var(--warm);transition:width .6s ease}
+.al2-m b{text-align:right;font-variant-numeric:tabular-nums}
+.al2-list{display:grid;gap:5px;margin-top:10px}
+.al2-i{font-size:13px;line-height:1.6;background:var(--quote);border-radius:8px;padding:7px 10px;border-left:3px solid var(--line);transition:all .3s}
+.al2-i.on{border-left-color:var(--accent);background:var(--accent-soft)}
+.al2-i b{font-size:13.5px}
+@media (max-width:640px){.al2-sl{grid-template-columns:1fr}.al2-m{grid-template-columns:100px 1fr 40px}}
+</style>
+<script>
+(function(){
+  const S=[['Revenue does not vary with trades or recommendations',35,'A fixed subscription: whether the agent suggests one more trade or recommends one more product, the platform\'s revenue stays the same.'],['Evaluate the agent on the user\'s net value and compliance',30,'The agent\'s metrics no longer include trading volume or time spent, so it optimizes toward the user\'s outcome.'],['Revenue by product hidden when advising',15,'When making a recommendation, the agent cannot know which product brings the platform more revenue.'],['Regular independent audit of bias in advice',12,'Check whether the agent\'s recommendations lean systematically toward options that favour the platform, and publish the results.']];
+  const box=document.getElementById('al2-sl');box.innerHTML=S.map(([n],i)=>`<label><input type="checkbox" data-al2="${i}"> ${n}</label>`).join('');
+  document.getElementById('al2-list').innerHTML=S.map(([n,,d])=>`<div class="al2-i"><b>${n}</b>: ${d}</div>`).join('');
+  const cb=[...document.querySelectorAll('[data-al2]')],li=[...document.querySelectorAll('.al2-i')];
+  function r(){let v=100;cb.forEach((c,i)=>{if(c.checked)v-=S[i][1];li[i].classList.toggle('on',c.checked);});document.getElementById('al2-bar').style.width=v+'%';document.getElementById('al2-v').textContent=v;}
+  cb.forEach(c=>c.addEventListener('change',r));
+  document.getElementById('al2').addEventListener('anim-in',()=>{cb.forEach(c=>c.checked=false);r();cb.forEach((c,i)=>setTimeout(()=>{c.checked=true;r();},900*(i+1)));});
+  r();
+})();
+</script>

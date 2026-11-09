@@ -1,0 +1,35 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Where to spend verification</p><p class="figsub">The scribe carries out 300 actions a year, 6 of them breaches. Most breaches occur where results are poor or a trigger fires, but some hide among good results. Switch among three ways of checking and compare the effort spent with the breaches found.</p></div><button class="replay" type="button" data-replay="ad22">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Verification method">
+      <button type="button" data-ad22="all" aria-pressed="true">Check every entry</button>
+      <button type="button" data-ad22="bad" aria-pressed="false">Check only poor results</button>
+      <button type="button" data-ad22="mix" aria-pressed="false">Detailed checks on poor results or triggers, plus 10% random spot checks</button>
+    </div>
+    <div class="ad22" id="ad22" data-anim>
+      <div class="ad22-bars" id="ad22-b"></div>
+      <p class="ad22-msg" id="ad22-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: of the 300 actions, 30 had poor results or set off a trigger, and 4 breaches hide among them; the other 270 hide 2 breaches. Each detailed check takes about 6 minutes. With random spot checks, the scribe does not know which action will be examined (Townsend's 1979 idea of verifying only when results are poor, plus random spot checks).</figcaption>
+</figure>
+<style>
+.ad22-bars{display:grid;gap:12px;margin:6px 0 10px}
+.ad22-r{display:grid;grid-template-columns:8em 1fr 5em;gap:10px;align-items:center;font-size:12.5px}
+.ad22-r div{height:22px;background:var(--quote);border-radius:5px;overflow:hidden}
+.ad22-r i{display:block;height:100%;transition:width .4s}
+.ad22-r b{text-align:right;font-variant-numeric:tabular-nums}
+.ad22-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.ad22-r{grid-template-columns:1fr 5em}.ad22-r span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('ad22'+id);
+  const M={all:[300,6,'Checking every entry: 300 checks a year, 30 hours, and all 6 breaches found. He does not have that much time in a year.'],bad:[30,4,'Checking only poor results: 30 checks a year, 3 hours, and 4 breaches found; the 2 hidden among good results slip through, and the scribe will learn to hide breaches in good results.'],mix:[57,4.2,'Detailed checks on poor results or triggers, plus 10% random spot checks: 57 checks a year, under 6 hours, and 4.2 breaches found on average. More importantly, the scribe does not know which action will be drawn, so the temptation to breach shrinks.']};
+  function set(k){document.querySelectorAll('[data-ad22]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.ad22===k)));const [n,f,msg]=M[k];
+    $('-b').innerHTML=[['Actions checked',n,300,'var(--blue)',String(n)],['Time spent',n*.1,30,'var(--gold)',(n*.1).toFixed(1)+' h'],['Breaches found',f,6,'var(--accent)',f+' / 6']].map(([a,v,m,c,t])=>`<div class="ad22-r"><span>${a}</span><div><i style="width:${v/m*100}%;background:${c}"></i></div><b>${t}</b></div>`).join('');$('-msg').textContent=msg;}
+  document.querySelectorAll('[data-ad22]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.ad22)));
+  $('').addEventListener('anim-in',()=>{['all','bad','mix'].forEach((k,i)=>setTimeout(()=>set(k),300+i*2400));});
+  set('all');
+})();
+</script>

@@ -1,0 +1,44 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">The spread has three components</p>
+    <p class="figsub">Tap any part to see what it compensates. Switch the type of stock to see how the composition changes.</p>
+    <div class="seg-btns" role="group" aria-label="Type of stock">
+      <button type="button" data-cp="big" aria-pressed="true">Large caps (empirical estimate)</button>
+      <button type="button" data-cp="small" aria-pressed="false">Opaque small caps (illustrative)</button>
+    </div>
+    <div class="cp" id="cp" data-anim>
+      <div class="cp-bar" id="cp-bar">
+        <button type="button" data-k="op"><span>Order processing</span><em></em></button>
+        <button type="button" data-k="inv"><span>Inventory</span><em></em></button>
+        <button type="button" data-k="adv"><span>Adverse selection</span><em></em></button>
+      </div>
+      <div class="cp-d" id="cp-d" aria-live="polite"></div>
+    </div>
+  </div>
+  <figcaption>The large-cap set follows Huang and Stoll (1997), who estimated the components for the 20 stocks in the Major Market Index in 1992 (using New York Stock Exchange trade and quote data); the original figures are 61.8%, 28.7% and 9.6%, rounded here and adjusted to sum to 100. The small-cap set only shows the direction of change and is not an empirical estimate.</figcaption>
+</figure>
+<style>
+.cp-bar{display:flex;height:58px;border-radius:10px;overflow:hidden;gap:2px}
+.cp-bar button{font:inherit;border:0;cursor:pointer;color:#fff;display:flex;flex-direction:column;justify-content:center;align-items:center;font-size:13px;min-width:0;transition:flex-grow .7s ease,filter .2s;flex-grow:0;flex-basis:0;overflow:hidden;white-space:nowrap}
+.cp-bar button em{font-style:normal;font-size:12px;opacity:.9}
+.cp-bar [data-k="op"]{background:var(--gray-mark)} .cp-bar [data-k="inv"]{background:var(--blue)} .cp-bar [data-k="adv"]{background:var(--warm)}
+.cp-bar button.sel{filter:brightness(1.12);box-shadow:inset 0 0 0 3px rgba(255,255,255,.6)}
+.cp-d{margin-top:12px;background:var(--quote);border-radius:10px;padding:10px 14px;font-size:14px;line-height:1.7;min-height:5em}
+</style>
+<script>
+(function(){
+  const V={big:{op:62,inv:28,adv:10},small:{op:40,inv:25,adv:35}};
+  const T={op:['Order-processing costs','Fixed outlays such as systems, staff, and exchange and clearing fees, spread across each trade. The more active the trading, the less each trade bears.'],
+           inv:['Inventory costs','The market maker passively builds up a position on one side and bears the risk of price moves until it can sell. The more volatile the price and the harder the position is to pass on, the larger this part.'],
+           adv:['Adverse-selection costs','The counterparty may hold information the market maker does not. Trading with the informed is bound to lose money, which can only be made back from other traders. The more opaque the information, the larger this part.']};
+  const bs=[...document.querySelectorAll('#cp-bar button')], d=document.getElementById('cp-d');
+  let cur='big';
+  function set(k){cur=k;document.querySelectorAll('[data-cp]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.cp===k)));
+    bs.forEach(b=>{const v=V[k][b.dataset.k];b.style.flexGrow=v;b.querySelector('em').textContent=(k==='big'?'about ':'')+v+'%';});}
+  function show(key){bs.forEach(b=>b.classList.toggle('sel',b.dataset.k===key));d.innerHTML=`<b>${T[key][0]}</b>: ${T[key][1]}`;}
+  bs.forEach(b=>b.addEventListener('click',()=>show(b.dataset.k)));
+  document.querySelectorAll('[data-cp]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.cp)));
+  document.getElementById('cp').addEventListener('anim-in',()=>{bs.forEach(b=>b.style.flexGrow=0);setTimeout(()=>set(cur),50);});
+  set('big'); show('adv');
+})();
+</script>

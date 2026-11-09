@@ -1,0 +1,34 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Seen afterwards, and seen at the time</p><p class="figsub">Three days before a storm, the scribe bought some ship shares as the agreement required. Switch between two ways of looking and judge whether the step was sound.</p></div><button class="replay" type="button" data-replay="pt22">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Way of looking">
+      <button type="button" data-pt22="after" aria-pressed="true">Afterwards: only the outcome is known</button>
+      <button type="button" data-pt22="then" aria-pressed="false">At the time: the record states what was known then</button>
+    </div>
+    <div class="pt22" id="pt22" data-anim>
+      <div class="pt22-d" id="pt22-d"></div>
+      <p class="pt22-msg" id="pt22-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the record entries are invented examples.</figcaption>
+</figure>
+<style>
+.pt22-d{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pt22-d div{border-radius:9px;padding:10px 12px;font-size:13.5px;line-height:1.65;background:var(--quote)}
+.pt22-d span{display:block;font-size:11.5px;color:var(--faint)}
+.pt22-d .v{font-size:15px;font-weight:600}
+.pt22-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.pt22-d{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('pt22'+id);
+  const S={after:[['What he sees','On Mar 1 the scribe bought ship shares worth 0.2 years of income; on Mar 4 a storm struck and those shares fell 30%.'],['Verdict','<span class="v" style="color:var(--warm)">Foolish</span>"The storm was only three days away."']],
+    then:[['The record says (Mar 1)','The retirement account\'s ship-share proportion had fallen to 72%, below the agreed 80%; brought back per clause 3 of the agreement. News at the time: the weather was calm and the fishermen\'s forecast did not mention a storm; the estimated maximum one-year loss was about 25%, within the boundaries.'],['Verdict','<span class="v" style="color:var(--accent)">Kept the agreement</span>On the information available then and the agreement, the step was right; the poor outcome came from a storm nobody foresaw.']]};
+  const M={after:'Knowing only the outcome, good decisions are blamed for bad luck. People who know an outcome tend to overestimate how likely it was beforehand.',then:'Only when the record states what was known at the time and which clause applied can the judgment go back to the moment of decision. The question to ask is whether the agreement should change, not what the scribe did wrong.'};
+  function set(k){document.querySelectorAll('[data-pt22]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.pt22===k)));$('-d').innerHTML=S[k].map(([a,b])=>`<div><span>${a}</span>${b}</div>`).join('');$('-msg').textContent=M[k];}
+  document.querySelectorAll('[data-pt22]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.pt22)));
+  $('').addEventListener('anim-in',()=>{set('after');setTimeout(()=>set('then'),2600);});
+  set('after');
+})();
+</script>

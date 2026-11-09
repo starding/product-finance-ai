@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">报告的数字与真实的资产</p><p class="figsub">经理每年报告 8% 的收益，船队实际只有 6%，他还悄悄留下一部分。拖动他每年挪用的比例，看报告的数字与真实的资产怎样分开，以及靠新来的委托能维持多久。</p></div><button class="replay" type="button" data-replay="hd">重播</button></div>
+    <div class="hd" id="hd" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="报告的资产与真实的资产"><g id="hd-ax"></g><path id="hd-g" class="hd-g"/><path id="hd-r" class="hd-r"/><path id="hd-a" class="hd-a"/><g id="hd-x"></g></svg>
+      <div class="legend"><span><i style="background:var(--faint)"></i>经理报告的资产</span><span><i style="background:var(--accent)"></i>真实的资产</span><span><i style="background:var(--warm-soft)"></i>差额</span></div>
+      <div class="sl"><label for="hd-s">每年挪用 <b id="hd-sv"></b></label><input id="hd-s" type="range" min="0" max="10" step="1" value="6"></div>
+      <div class="cs-sw"><label><input type="checkbox" id="hd-c"> 由独立的保管人直接向委托人报告</label></div>
+      <p class="hd-msg" id="hd-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：起初委托 100 份，此后每年有 3 份新委托流入；委托人每年按报告的数字取走 6%。真实的资产不足以支付取款时，骗局崩溃。</figcaption>
+</figure>
+<style>
+.hd svg{width:100%;height:auto;display:block}
+.hd-r{fill:none;stroke:var(--faint);stroke-width:2;stroke-dasharray:5 4}
+.hd-a{fill:none;stroke:var(--accent);stroke-width:2.6}
+.hd-g{fill:var(--warm-soft);stroke:none}
+.hd-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.hd svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),T=20,X0=46,X1=630,YT=12,YB=178,x=t=>X0+t/T*(X1-X0);
+  function run(s){let R=100,A=100;const r=[R],a=[A];let crash=-1;for(let t=1;t<=T;t++){R=R*1.08+3;const w=R*.06;R-=w;A=A*(1.06-s)+3-w;if(A<0&&crash<0)crash=t;r.push(R);a.push(Math.max(A,0));}return {r,a,crash};}
+  function draw(){const s=+$('hd-s').value/100,c=$('hd-c').checked,S=run(s),M=Math.max(...S.r)*1.05,y=v=>YB-v/M*(YB-YT);
+    $('hd-ax').innerHTML=[0,.5,1].map(k=>{const v=Math.round(M*k/50)*50;return `<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`;}).join('')+[0,5,10,15,20].map(t=>`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">第 ${t} 年</text>`).join('');
+    const end=S.crash>0?S.crash:T,rr=c?S.a:S.r;
+    $('hd-r').setAttribute('d',rr.slice(0,end+1).map((v,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(v).toFixed(1)).join(''));
+    $('hd-a').setAttribute('d',S.a.slice(0,end+1).map((v,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(v).toFixed(1)).join(''));
+    $('hd-g').setAttribute('d',c?'':'M'+S.r.slice(0,end+1).map((v,t)=>x(t)+','+y(v)).join('L')+'L'+S.a.slice(0,end+1).map((v,t)=>x(t)+','+y(v)).reverse().join('L')+'Z');
+    $('hd-x').innerHTML=S.crash>0&&!c?`<line x1="${x(S.crash)}" x2="${x(S.crash)}" y1="${YT}" y2="${YB}" stroke="var(--warm)" stroke-width="2"/><text x="${x(S.crash)-4}" y="${YT+12}" text-anchor="end" font-size="11" class="t-warm">崩溃</text>`:'';
+    $('hd-sv').textContent=Math.round(s*100)+'%';
+    $('hd-msg').textContent=c?(s>0?'独立的保管人直接报告真实的资产，差额从第一年起就暴露在委托人眼前，挪用无处藏身。':'没有挪用时，真实的资产与报告一致。'):s===0?'不挪用，报告的 8% 仍高于实际的 6%，差额会慢慢累积。':S.crash>0?`每年挪用 ${Math.round(s*100)}%，靠新来的委托撑到第 ${S.crash} 年，真实的资产付不出取款，骗局崩溃。此前的每一年，委托人看到的都是漂亮的数字。`:`每年挪用 ${Math.round(s*100)}%，二十年里差额越来越大，却一直靠新来的委托掩盖着。`;}
+  ['hd-s','hd-c'].forEach(k=>$(k).addEventListener('input',draw));
+  $('hd').addEventListener('anim-in',()=>{let v=0;$('hd-s').value=0;$('hd-c').checked=false;draw();const id=setInterval(()=>{v++;$('hd-s').value=v;draw();if(v>=8)clearInterval(id);},350);});
+  draw();
+})();
+</script>

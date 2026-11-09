@@ -1,0 +1,68 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Civilization Simulator · Chapter 18: the scribe at hand</p><p class="figsub">Forty households each have their own suitable saving rate, and for thirty years a scribe saves and trades for each of them. Switch two rules on or off and change the scribe's goal, then see how much each household saves and how many come close to their goal.</p></div><button class="replay" type="button" data-replay="cs18">Replay</button></div>
+    <div class="cs-rules"><span class="on">Defaults</span><span class="on">Personal agent</span><span class="on">Guaranteeing agents</span><span class="on">Agents as market participants</span><span class="on">Agents and human bias</span><span class="lock">What did not change · Ch. 19</span></div>
+    <div class="seg-btns" role="group" aria-label="The scribe's goal">
+      <button type="button" data-cs18="plan" aria-pressed="true">Acts on the principal's plan</button>
+      <button type="button" data-cs18="eng" aria-pressed="false">Acts on the number of trades</button>
+    </div>
+    <div class="cs18" id="cs18" data-anim>
+      <svg viewBox="0 0 660 220" role="img" aria-label="Median household savings over thirty years"><g id="cs18-ax"></g><path id="cs18-band" class="cs18-band"/><path id="cs18-p" class="cs18-p"/></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Median savings (years of income)</span><span><i style="background:var(--quote);border:1px solid var(--line)"></i>10th to 90th percentile of households</span></div>
+      <div class="cs-sw"><label><input type="checkbox" id="cs18-d"> Rule: a default tailored to each household</label><label><input type="checkbox" id="cs18-c"> Rule: in a panic, show the agreement and confirm a day later</label></div>
+      <div class="cs18-ctl">
+        <div class="sl"><label for="cs18-b">Weight on the present <b id="cs18-bv"></b></label><input id="cs18-b" type="range" min="0" max="50" step="5" value="30"></div>
+        <div class="sl"><label for="cs18-q">Tendency to panic-sell <b id="cs18-qv"></b></label><input id="cs18-q" type="range" min="0" max="60" step="5" value="30"></div>
+      </div>
+      <div class="cs18-out" id="cs18-out"></div>
+      <p class="cs18-msg" id="cs18-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model: the run of years is the same as in the "keeping to the plan" simulator. Each household's suitable saving rate lies between 6% and 18%; without tailored defaults, every household saves the single rate of 12%. When acting on the principal's plan, the scribe buys on schedule, and weighting the present does not affect saving. When acting on the number of trades, the scribe does not stop the principal from spending more and pushes him to buy more after gains; panic selling after sharp falls rises by half, and trading costs are 1% a year. Reminders and the cooling-off period cut panic selling to one fifth. "Close to the goal" means savings after thirty years within 20% of what saving on time at the suitable rate would have produced.</figcaption>
+</figure>
+<style>
+.cs18 svg{width:100%;height:auto;display:block}
+.cs18-p{fill:none;stroke:var(--accent);stroke-width:2.8}
+.cs18-band{fill:var(--quote);stroke:none}
+.cs18-ctl{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px}
+.cs18-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cs18-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs18-out span{display:block;font-size:11.5px;color:var(--faint)} .cs18-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.cs18-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs18-ctl{grid-template-columns:1fr;gap:4px}.cs18-out{grid-template-columns:1fr}.cs18 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs18'+id),N=40,Y=30;let mode='plan';
+  const X0=44,X1=628,YT=10,YB=186,x=t=>X0+t/Y*(X1-X0);
+  function irr(f,end){let lo=-.5,hi=.5;for(let k=0;k<80;k++){const m=(lo+hi)/2;let v=0;f.forEach((c,t)=>v+=c*Math.pow(1+m,Y-t));if(v>end)hi=m;else lo=m;}return (lo+hi)/2;}
+  function sim(beta,panic,pers,calm,eng){let s=15838;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};const g=()=>{let u=0;while(!u)u=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r());};
+    const R=[];for(let t=0;t<Y;t++){let v=.07+.12*g();if(r()<.08)v-=.25;R.push(v);}
+    const H=[];for(let i=0;i<N;i++)H.push({b:Math.max(.3,Math.min(1,beta+.15*(r()*2-1))),pz:r(),ideal:.06+.12*r(),out:-1,W:0,cash:0});
+    const agg=Array(Y).fill(0),Q=[[0,0,0]];let D=0;const fd=[];for(let t=0;t<Y;t++){D=(D+1)*(1+R[t]);}
+    for(let t=0;t<Y;t++){for(const h of H){let sv=pers?h.ideal:.12;if(eng)sv*=h.b;
+        if(eng&&t>0)sv*=Math.max(0,Math.min(2,1+5*(R[t-1]-.07)));
+        const pp=panic*2*h.pz*(eng?1.5:(calm?.2:1));
+        if(t>0&&R[t-1]<-.12&&h.out<0&&r()<pp){h.cash+=h.W;agg[t]-=h.W;h.W=0;h.out=3;}
+        if(h.out>0){h.cash+=sv;h.out--;if(h.out===0){h.W+=h.cash;agg[t]+=h.cash;h.cash=0;h.out=-1;}}else{h.W+=sv;agg[t]+=sv;}
+        h.W*=1+R[t]-(eng?.01:0);}
+      const v=H.map(h=>h.W+h.cash).sort((a,b)=>a-b);Q.push([v[4],v[20],v[35]]);}
+    const fin=H.map(h=>h.W+h.cash),reach=H.filter((h,i)=>Math.abs(fin[i]-h.ideal*D)<=.2*h.ideal*D).length;
+    let Dd=0;for(let t=0;t<Y;t++){fd.push(.12);Dd=(Dd+.12)*(1+R[t]);}
+    return {Q,reach,inv:irr(agg,fin.reduce((a,b)=>a+b,0)),ref:irr(fd,Dd)};}
+  function draw(){const beta=1-$('-b').value/100,pq=$('-q').value/100,pd=$('-d').checked,cl=$('-c').checked,eng=mode==='eng';$('-bv').textContent=$('-b').value+'%';$('-qv').textContent=$('-q').value+'%';
+    const S=sim(beta,pq,pd,cl,eng),mx=Math.max(4,...S.Q.map(q=>q[2]))*1.05,y=v=>YB-v/mx*(YB-YT),step=mx>12?4:2;
+    let ax='';for(let v=0;v<=mx;v+=step)ax+=`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v} yr</text>`;
+    $('-ax').innerHTML=ax+[0,10,20,30].map(t=>`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">Year ${t}</text>`).join('');
+    $('-p').setAttribute('d',S.Q.map((q,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(q[1]).toFixed(1)).join(''));
+    $('-band').setAttribute('d','M'+S.Q.map((q,t)=>x(t)+','+y(q[2])).join('L')+'L'+S.Q.map((q,t)=>x(t)+','+y(q[0])).reverse().join('L')+'Z');
+    const pc=v=>(v*100).toFixed(1)+'%';
+    $('-out').innerHTML=[['Median savings in year 30',S.Q[Y][1].toFixed(1)+' years\' income'],['Households close to their goal',S.reach+' / 40'],['Principal\'s actual / regular investing',pc(S.inv)+' / '+pc(S.ref)]].map(([a,v])=>`<div><span>${a}</span><b>${v}</b></div>`).join('');
+    $('-msg').textContent=eng?`The scribe acts on the number of trades: it does not stop the principal from spending more, pushes him to buy more after gains, lets panic selling run after falls, and takes 1% a year in trading costs. Only ${S.reach} households come close to their goal, and the realized return is ${((S.ref-S.inv)*100).toFixed(1)} percentage points below regular investing. The same capability, turned in the wrong direction.`:`The scribe acts on the principal's plan: it saves and buys on schedule. `+(pd?'Each household saves at its own suitable rate (households short of money are no longer forced to save more, so median savings may fall); ':'Every household saves the single rate of 12%, so those who meant to save more save too little and those short of money save too much; ')+(cl?'after sharp falls it shows the agreement and asks the principal to confirm a day later, so there is far less panic selling. ':'after sharp falls some still sell in a panic. ')+`${S.reach} households come close to their goal.`;}
+  const bs=[...document.querySelectorAll('[data-cs18]')];
+  function set(m){mode=m;bs.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.cs18===m)));draw();}
+  bs.forEach(b=>b.addEventListener('click',()=>set(b.dataset.cs18)));['-d','-c','-b','-q'].forEach(k=>$(k).addEventListener('input',draw));
+  $('').addEventListener('anim-in',()=>{[['plan',0,0],['plan',1,0],['plan',1,1],['eng',1,1]].forEach(([m,a,b],i)=>setTimeout(()=>{$('-d').checked=!!a;$('-c').checked=!!b;set(m);},300+i*2200));});
+  draw();
+})();
+</script>

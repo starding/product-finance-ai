@@ -1,0 +1,38 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">契约层：违反一条原则，净价值的哪一项受损</p><p class="figsub">上方是遵守契约层全部原则时的净价值分解（示意）。选择违反其中一条，看结果、投入与风险怎样变化。</p></div><button class="replay" type="button" data-replay="contractF">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="违反的原则"><button type="button" data-contract="g" aria-pressed="false">全部遵守</button><button type="button" data-contract="0" aria-pressed="true">违反第 4 条</button><button type="button" data-contract="1" aria-pressed="false">违反第 5 条</button><button type="button" data-contract="2" aria-pressed="false">违反第 6 条</button></div>
+    <div class="lyF" id="contractF" data-anim>
+      <div class="lyF-n" id="contract-name"></div>
+      <div class="lyF-r"><span>结果</span><div class="lyF-t"><i data-k="r" style="background:var(--accent)"></i></div><b data-k="r"></b></div>
+      <div class="lyF-r"><span>－ 用户的投入</span><div class="lyF-t"><i data-k="e" style="background:var(--gold)"></i></div><b data-k="e"></b></div>
+      <div class="lyF-r"><span>－ 承担的风险</span><div class="lyF-t"><i data-k="k" style="background:var(--warm)"></i></div><b data-k="k"></b></div>
+      <div class="lyF-r tot"><span>＝ 净价值</span><div class="lyF-t"><i data-k="n" style="background:var(--ink)"></i></div><b data-k="n"></b></div>
+      <p class="lyF-msg" id="contract-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意数字，只表示各项受损的方向。</figcaption>
+</figure>
+<style>
+.lyF-n{font-size:13.5px;font-weight:700;margin-bottom:6px;min-height:1.6em}
+.lyF-r{display:grid;grid-template-columns:110px 1fr 44px;gap:10px;align-items:center;font-size:13px;margin:6px 0}
+.lyF-r span{color:var(--muted)} .lyF-r.tot span{color:var(--ink);font-weight:700}
+.lyF-t{height:16px;background:var(--quote);border-radius:8px;overflow:hidden}
+.lyF-t i{display:block;height:100%;width:0;border-radius:8px;transition:width .6s ease}
+.lyF-r b{text-align:right;font-variant-numeric:tabular-nums}
+.lyF-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const G=[62, 18, 10],V=[[62, 22, 35, "只写“跑赢基准”，代理承担了看不见的尾部风险"], [62, 18, 40, "卖出与转出也交给代理自主，一次失误无法撤回"], [55, 28, 22, "代理按交易量评价，频繁建议交易"]],N=["把交代写成委托书", "按可逆性分配授权，边界在执行层", "收入与目标站在用户一边，责任跟随控制"],K='contract';
+  const box=document.getElementById(K+'F');
+  function set(s){document.querySelectorAll('[data-'+K+']').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset[K]===s)));
+    const v=s==='g'?[...G,'']:V[+s];const n=Math.max(0,v[0]-v[1]-v[2]),d={r:v[0],e:v[1],k:v[2],n:n};
+    box.querySelectorAll('.lyF-t i').forEach(i=>{i.style.width='0';setTimeout(()=>i.style.width=d[i.dataset.k]+'%',40);});box.querySelectorAll('.lyF-r b').forEach(b=>b.textContent=d[b.dataset.k]);
+    document.getElementById(K+'-name').textContent=s==='g'?'全部遵守':'违反：'+N[+s];
+    document.getElementById(K+'-msg').textContent=s==='g'?`遵守契约层的全部原则：净价值为 ${n}。`:`${v[3]}：净价值从 ${G[0]-G[1]-G[2]} 降到 ${n}。`;}
+  document.querySelectorAll('[data-'+K+']').forEach(b=>b.addEventListener('click',()=>set(b.dataset[K])));
+  box.addEventListener('anim-in',()=>{const seq=['g',...V.map((_,j)=>String(j)),'g'];seq.forEach((s,i)=>setTimeout(()=>set(s),i*1800));});
+  set('g');
+})();
+</script>

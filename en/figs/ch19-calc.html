@@ -1,0 +1,72 @@
+<figure id="calcfig">
+  <div class="card">
+    <p class="figtitle">Breaking down the amplification factor</p>
+    <p class="figsub">Take the input to do a task yourself as 100, adjust three factors, and see how much the principal still has to put in.</p>
+    <div class="presets" role="group" aria-label="Preset parameters">
+      <button type="button" data-p="1,5,100">Vendor demo</button>
+      <button type="button" data-p="1,27,100">Expert checks every item</button>
+      <button type="button" data-p="0.3,25,70">Real deployment</button>
+      <button type="button" data-p="0.9,8,90">Programmatically verifiable</button>
+    </div>
+    <div class="calc">
+      <div>
+        <div class="sl"><label for="a">Applicable share <b id="av"></b></label><input id="a" type="range" min="0" max="100" step="1"><div class="hint">The share of the work that can be handed to the agent; the rest is still done yourself</div></div>
+        <div class="sl"><label for="c">Checking cost <b id="cv"></b></label><input id="c" type="range" min="1" max="60" step="1"><div class="hint">Time to explain the task and check the output, as a share of the time to do it yourself</div></div>
+        <div class="sl"><label for="p">First-time success rate <b id="pv"></b></label><input id="p" type="range" min="20" max="100" step="1"><div class="hint">The probability the agent gets it right the first time; when it is wrong, the principal must redo the work</div></div>
+      </div>
+      <div class="result" aria-live="polite">
+        <div class="lbl">Amplification factor</div>
+        <div class="big" id="mult">—</div>
+        <div class="cmp" id="cmp"></div>
+      </div>
+    </div>
+    <div class="stack">
+      <div class="stackrow"><span>Do it yourself</span><div class="stackbar"><div class="seg self" style="width:100%"></div></div></div>
+      <div class="stackrow"><span>Hand to agent</span><div class="stackbar" id="after"><div class="seg self" id="s1"></div><div class="seg check" id="s2"></div><div class="seg redo" id="s3"></div></div></div>
+      <div class="legend"><span><i style="background:var(--gray-mark)"></i>Agent not applicable, still done yourself</span><span><i style="background:var(--accent)"></i>Explaining and checking</span><span><i style="background:var(--warm)"></i>Redoing after errors</span></div>
+    </div>
+  </div>
+  <figcaption>Principal's input = (1 − applicable share) + applicable share × [checking cost + (1 − success rate)]; the amplification factor is its reciprocal. For simplicity, the model assumes the principal redoes the work from scratch after an error; in practice rework may be less, or more if the error is found late. Of the presets, "Vendor demo" and "Expert checks every item" correspond to the measures cited in the text; "Real deployment" uses illustrative values drawn from the studies in the text, not measurements from any single study; "Programmatically verifiable" illustrates tasks such as code migration, whose results can be checked automatically by compilation and tests, so the checking cost is low and the applicable share is wide.</figcaption>
+</figure>
+<style>
+.calc{display:grid;grid-template-columns:1fr 200px;gap:24px;align-items:start}
+.result{text-align:center;border-left:1px solid var(--line);padding-left:20px}
+.result .big{font-size:56px;font-weight:700;line-height:1.1;color:var(--accent);font-variant-numeric:tabular-nums}
+.result .lbl{font-size:13px;color:var(--muted)}
+.result .cmp{font-size:12px;color:var(--faint);margin-top:10px;line-height:1.6}
+.stack{margin-top:8px}
+.stackrow{display:grid;grid-template-columns:88px 1fr;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.stackbar{height:22px;background:var(--quote);border-radius:4px;display:flex;overflow:hidden}
+.seg{height:100%;transition:width .35s ease}
+.seg.self{background:var(--gray-mark)} .seg.check{background:var(--accent)} .seg.redo{background:var(--warm)}
+@media (max-width:640px){.calc{grid-template-columns:1fr}.result{border-left:none;border-top:1px solid var(--line);padding:16px 0 0}}
+</style>
+<script>
+/* ---------- Breaking down the amplification factor ---------- */
+(function(){
+  const a=document.getElementById('a'), c=document.getElementById('c'), p=document.getElementById('p');
+  const btns=[...document.querySelectorAll('.presets button')];
+  function render(){
+    const A=a.value/100, C=c.value/100, P=p.value/100;
+    const self=1-A, check=A*C, redo=A*(1-P);
+    const total=self+check+redo, m=1/total;
+    document.getElementById('av').textContent=a.value+'%';
+    document.getElementById('cv').textContent=c.value+'%';
+    document.getElementById('pv').textContent=p.value+'%';
+    document.getElementById('mult').textContent=(m>=10?m.toFixed(0):m.toFixed(2).replace(/0$/,''))+'×';
+    const w=v=>Math.min(100,v*100).toFixed(1)+'%';
+    document.getElementById('s1').style.width=w(self);
+    document.getElementById('s2').style.width=w(check);
+    document.getElementById('s3').style.width=w(redo);
+    document.getElementById('after').style.width=Math.min(100,total*100)+'%';
+    document.getElementById('cmp').textContent='The principal still puts in '+Math.round(total*100)+'% of the original input';
+    const key=[A,c.value,p.value].join(',');
+    btns.forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.p===key)));
+  }
+  function set(s){const [A,C,P]=s.split(',');a.value=Math.round(A*100);c.value=C;p.value=P;render();}
+  btns.forEach(b=>b.addEventListener('click',()=>set(b.dataset.p)));
+  [a,c,p].forEach(el=>el.addEventListener('input',render));
+  set('0.3,25,70');
+})();
+
+</script>

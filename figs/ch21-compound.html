@@ -1,0 +1,42 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">每一步都很可靠，整件事却未必</p>
+    <p class="figsub">调节每一步的正确率与步骤数，看整件事全部正确的概率。打开检查点：每 10 步核验一次，九成的错误能被发现并纠正。</p>
+    <div class="cp" id="cp" data-anim>
+      <svg viewBox="0 0 640 220" role="img" aria-label="步骤数与整体成功率"><g id="cp-ax"></g><path id="cp-a" class="cp-l a"/><path id="cp-b" class="cp-l b"/><circle id="cp-d" r="6" fill="var(--ink)"/></svg>
+      <div class="cp-sl">
+        <div class="sl"><label for="cp-p">每一步的正确率 <b id="cp-pv"></b></label><input id="cp-p" type="range" min="90" max="99.9" step="0.1" value="99"></div>
+        <div class="sl"><label for="cp-n">步骤数 <b id="cp-nv"></b></label><input id="cp-n" type="range" min="1" max="200" step="1" value="100"></div>
+      </div>
+      <label class="cp-chk"><input type="checkbox" id="cp-x"> 每 10 步设一个检查点</label>
+      <div class="legend"><span><i style="background:var(--warm)"></i>没有检查点</span><span><i style="background:var(--accent)"></i>有检查点</span></div>
+      <p class="cp-msg" id="cp-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意计算：没有检查点时，整体成功率 ＝ 单步正确率的 n 次方；有检查点时，每 10 步为一段，一段出错后有 90% 的概率被发现并纠正，按段数连乘（不足一段按比例计）。</figcaption>
+</figure>
+<style>
+.cp svg{width:100%;height:auto;display:block}
+.cp-l{fill:none;stroke-width:2.5} .cp-l.a{stroke:var(--warm)} .cp-l.b{stroke:var(--accent);transition:opacity .3s}
+.cp-sl{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cp-chk{display:flex;gap:6px;align-items:center;font-size:14px;margin:4px 0}
+.cp-chk input{accent-color:var(--accent);width:16px;height:16px}
+.cp-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.cp-sl{grid-template-columns:1fr}.cp svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const X0=50,X1=620,YT=14,YB=190,x=n=>X0+(n-1)/199*(X1-X0),y=v=>YB-v*(YB-YT);
+  const A=(p,n)=>Math.pow(p,n),B=(p,n)=>{const s=Math.pow(p,10),seg=s+(1-s)*.9;return Math.pow(seg,n/10);};
+  const $=id=>document.getElementById(id),pp=$('cp-p'),nn=$('cp-n'),cx=$('cp-x');
+  $('cp-ax').innerHTML=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`+[0,.5,1].map(v=>`<text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text>`).join('')+[1,50,100,150,200].map(n=>`<text x="${x(n)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${n} 步</text>`).join('');
+  function r(){const p=+pp.value/100,n=+nn.value,on=cx.checked;let a='',b='';for(let k=1;k<=200;k++){a+=(k>1?'L':'M')+x(k).toFixed(1)+','+y(A(p,k)).toFixed(1);b+=(k>1?'L':'M')+x(k).toFixed(1)+','+y(B(p,k)).toFixed(1);}
+    $('cp-a').setAttribute('d',a);$('cp-b').setAttribute('d',b);$('cp-b').style.opacity=on?1:0;
+    const v=on?B(p,n):A(p,n);$('cp-d').setAttribute('cx',x(n));$('cp-d').setAttribute('cy',y(v));
+    $('cp-pv').textContent=(p*100).toFixed(1)+'%';$('cp-nv').textContent=n+' 步';
+    $('cp-msg').textContent=`单步正确率 ${(p*100).toFixed(1)}%、共 ${n} 步时，整件事全部正确的概率${on?'在设置检查点后':''}约为 ${(v*100).toFixed(0)}%。`+(on?'检查点让错误止于一段之内，不再一路传递。':(v<.5?'一半以上的情况下，委托人要发现并修正至少一处错误。':''));}
+  [pp,nn].forEach(e=>e.addEventListener('input',r));cx.addEventListener('change',r);
+  $('cp').addEventListener('anim-in',()=>{cx.checked=false;let n=1;nn.value=1;r();const id=setInterval(()=>{n+=6;nn.value=n;r();if(n>=100){clearInterval(id);setTimeout(()=>{cx.checked=true;r();},900);}},90);});
+  r();
+})();
+</script>

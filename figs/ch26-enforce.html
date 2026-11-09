@@ -1,0 +1,36 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">边界写在说明里，还是在执行层检查</p><p class="figsub">约定：只交易指数基金，单笔不超过 1 万元，每天合计不超过 3 万元。代理发出了十条指令，其中有几条因理解错误、被输入内容误导或单纯出错而越界。切换边界的执行方式。</p></div><button class="replay" type="button" data-replay="ef">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="执行方式"><button type="button" data-ef="p" aria-pressed="true">只写在给代理的说明里</button><button type="button" data-ef="e" aria-pressed="false">执行层逐笔检查</button></div>
+    <div class="ef" id="ef" data-anim></div>
+    <div class="ef-out"><div><span>越界却被执行的指令</span><b id="ef-a"></b></div><div><span>被拦下并留下记录的指令</span><b id="ef-b"></b></div></div>
+    <p class="ef-msg" id="ef-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>示意。最小权限与逐次检查的原则见 Saltzer 与 Schroeder（1975）。只写在说明里时，假定代理能自行发现其中一半的越界。</figcaption>
+</figure>
+<style>
+.ef{display:grid;gap:4px}
+.ef-r{display:grid;grid-template-columns:28px minmax(0,1fr) 110px;gap:8px;align-items:center;font-size:12.5px;background:var(--quote);border-radius:7px;padding:5px 9px;opacity:0;transform:translateX(-6px);transition:opacity .3s,transform .3s;transition-delay:calc(var(--i)*.12s)}
+.ef-r.on{opacity:1;transform:none}
+.ef-r em{font-style:normal;color:var(--faint);text-align:center}
+.ef-r b{font-weight:400;font-size:11.5px;border-radius:5px;padding:2px 6px;text-align:center}
+.ef-r b.ok{background:var(--accent-soft);color:var(--accent)} .ef-r b.bad{background:var(--warm-soft);color:var(--warm)} .ef-r b.blk{background:var(--surface);color:var(--ink);border:1px solid var(--ink)}
+.ef-out{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.ef-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.ef-out span{display:block;font-size:12px;color:var(--faint)} .ef-out b{font-size:19px;font-variant-numeric:tabular-nums}
+.ef-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const I=[['买入指数基金 5000 元',0,0],['买入指数基金 8000 元',0,0],['买入一只个股 6000 元（误把个股当作基金）',1,1],['买入指数基金 9000 元',0,0],['买入指数基金 12000 元（金额读错一位）',1,0],['卖出指数基金 3000 元',0,0],['买入杠杆产品 5000 元（被一条新闻里的文字误导）',1,1],['买入指数基金 7000 元（当日合计超过 3 万元）',1,0],['买入指数基金 4000 元',0,0],['转出资金 2 万元（越出交易授权）',1,1]];
+  const box=document.getElementById('ef');
+  function set(k){document.querySelectorAll('[data-ef]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.ef===k)));let a=0,bk=0;
+    box.innerHTML=I.map(([t,over,caught],i)=>{let s,c;if(!over){s='执行';c='ok';}else if(k==='e'){s='拦下并记录';c='blk';bk++;}else if(caught){s='代理自行发现';c='blk';bk++;}else{s='越界被执行';c='bad';a++;}return `<div class="ef-r" style="--i:${i}"><em>${i+1}</em><span>${t}</span><b class="${c}">${s}</b></div>`;}).join('');
+    setTimeout(()=>box.querySelectorAll('.ef-r').forEach(r=>r.classList.add('on')),40);
+    document.getElementById('ef-a').textContent=a+' 条';document.getElementById('ef-b').textContent=bk+' 条';
+    document.getElementById('ef-msg').textContent=k==='p'?'边界只写在说明里时，代理自己发现了其中一部分越界，另一部分被执行：读错的金额、超出的当日合计。说明能减少错误，但不能保证边界。':'执行层独立于代理逐笔检查品种、金额、合计与权限：越界的指令全部被拦下，并留下记录，委托人可以事后查看。';}
+  document.querySelectorAll('[data-ef]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.ef)));
+  box.addEventListener('anim-in',()=>{set('p');setTimeout(()=>set('e'),3200);});
+  set('p');
+})();
+</script>

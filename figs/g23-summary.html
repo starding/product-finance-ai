@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：代理会出错</p><p class="figsub">四条结论，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="g23summary">重播</button></div>
+    <div class="g23summary" id="g23summary" data-anim><div class="g23summary-c" style="--i:0"><em>三种错误</em><b>后果按种类分配</b><p>执行错误与越界由运营者赔，判断失误按约定由用户承担，记录决定是哪一种。</p></div><div class="g23summary-c" style="--i:1"><em>瑞士奶酪模型</em><b>层层设防，彼此独立</b><p>没有哪一道防线万无一失，共用漏洞的防线会一起失效。</p></div><div class="g23summary-c warn" style="--i:2"><em>正常事故</em><b>快的地方刻意放慢</b><p>上限、异常自动停止与延迟，让错误在扩散之前被截住。</p></div><div class="g23summary-c warn" style="--i:3"><em>重跑：不可逆与替代责任</em><b>少而有分量的确认，事先写清的赔付</b><p>只确认不可挽回的操作并摆出后果；运营者投保，赔付不以用户举证为前提。</p></div></div>
+  </div>
+</figure>
+<style>
+.g23summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g23summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g23summary-c.warn{border-left-color:var(--warm)}
+.g23summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g23summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g23summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g23summary.in .g23summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g23summary{grid-template-columns:1fr}}
+</style>

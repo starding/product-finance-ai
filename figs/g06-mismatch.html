@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">一借五年，中途会不会急用</p><p class="figsub">五十户存粮的人，每户每年都有一定可能遇到急用。拖动急用的可能与借出的年限，看有多少户会在期满之前需要取回粮食。</p></div><button class="replay" type="button" data-replay="mi">重播</button></div>
+    <div class="mi" id="mi" data-anim>
+      <div class="mi-dots" id="mi-d"></div>
+      <div class="legend"><span><i style="background:var(--warm)"></i>期满之前遇到急用</span><span><i style="background:var(--quote);border:1px solid var(--line)"></i>期满之前没有急用</span></div>
+      <div class="mi-sl">
+        <div class="sl"><label for="mi-p">每户每年急用的可能 <b id="mi-pv"></b></label><input id="mi-p" type="range" min="2" max="30" step="1" value="10"></div>
+        <div class="sl"><label for="mi-t">借出的年限 <b id="mi-tv"></b></label><input id="mi-t" type="range" min="1" max="10" step="1" value="5"></div>
+      </div>
+      <p class="mi-msg" id="mi-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：每户每年是否急用相互独立；期满之前至少急用一次的可能 ＝ 1 −（1 − 每年的可能）^ 年限。每个方块的急用时间由同一组随机数决定。</figcaption>
+</figure>
+<style>
+.mi-dots{display:grid;grid-template-columns:repeat(10,1fr);gap:5px}
+.mi-dots i{height:22px;border-radius:5px;background:var(--quote);transition:background .3s}
+.mi-dots i.on{background:var(--warm)}
+.mi-sl{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:10px}
+.mi-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.mi-sl{grid-template-columns:1fr;gap:4px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);let s=99;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};
+  const U=Array.from({length:50},()=>Array.from({length:10},()=>r()));
+  $('mi-d').innerHTML='<i></i>'.repeat(50);const ds=[...$('mi-d').children];
+  function draw(){const p=+$('mi-p').value/100,T=+$('mi-t').value;let n=0;
+    ds.forEach((d,i)=>{const hit=U[i].slice(0,T).some(u=>u<p);d.classList.toggle('on',hit);if(hit)n++;});
+    const q=1-Math.pow(1-p,T);$('mi-pv').textContent=Math.round(p*100)+'%';$('mi-tv').textContent=T+' 年';
+    $('mi-msg').textContent=`每年急用的可能为 ${Math.round(p*100)}%、借出 ${T} 年时，每户在期满之前遇到急用的可能约为 ${Math.round(q*100)}%：五十户中有 ${n} 户会在中途需要取回粮食。这样的借贷，很少有人愿意直接去做。`;}
+  ['mi-p','mi-t'].forEach(k=>$(k).addEventListener('input',draw));
+  $('mi').addEventListener('anim-in',()=>{let v=1;$('mi-t').value=1;draw();const id=setInterval(()=>{v++;$('mi-t').value=v;draw();if(v>=10)clearInterval(id);},350);});
+  draw();
+})();
+</script>

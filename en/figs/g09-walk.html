@@ -1,0 +1,29 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">After a pattern is discovered</p><p class="figsub">The ships always return after the harvest festival, and the shares always rise afterwards. Drag how many people discover this pattern and buy early to see how the price path over the year changes.</p></div><button class="replay" type="button" data-replay="wk">Replay</button></div>
+    <div class="wk" id="wk" data-anim>
+      <svg viewBox="0 0 640 200" role="img" aria-label="Price over a year"><g id="wk-ax"></g><path id="wk-p" class="wk-p"/></svg>
+      <div class="sl"><label for="wk-n">People who buy early <b id="wk-nv"></b></label><input id="wk-n" type="range" min="0" max="100" step="5" value="0"></div>
+      <p class="wk-msg" id="wk-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the value rises by 2 portions in month 9 (after the harvest festival). The more people buy early, the earlier and more gradual the rise; when everyone knows, the rise is spread evenly across the year, and there is no longer a predictable jump after the festival.</figcaption>
+</figure>
+<style>
+.wk svg{width:100%;height:auto;display:block}
+.wk-p{fill:none;stroke:var(--accent);stroke-width:2.6}
+.wk-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.wk svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),X0=46,X1=630,YT=12,YB=170,x=m=>X0+m/12*(X1-X0),y=v=>YB-(v-9.5)/3*(YB-YT);
+  $('wk-ax').innerHTML=[10,11,12].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+[0,3,6,9,12].map(m=>`<text x="${x(m)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">Month ${m}</text>`).join('')+`<line x1="${x(9)}" x2="${x(9)}" y1="${YT}" y2="${YB}" class="s-faint" stroke-dasharray="3 4"/><text x="${x(9)+4}" y="${YT+10}" font-size="11" class="t-muted">Harvest festival</text>`;
+  function draw(){const a=+$('wk-n').value/100;let d='';for(let m=0;m<=12;m+=.1){const jump=(1-a)*(m>=9?2:0),drift=a*2*m/12;d+=(m?'L':'M')+x(m).toFixed(1)+','+y(10+jump+drift).toFixed(1);}
+    $('wk-p').setAttribute('d',d);$('wk-nv').textContent=Math.round(a*100)+'%';
+    $('wk-msg').textContent=a===0?'No one buys early: the price jumps by 2 portions after the festival, a pattern anyone could predict but no one exploits.':a===1?'Everyone buys early: the rise is spread across the whole year, and there is no longer a jump after the festival. The pattern disappears as it is exploited, and the remaining price changes come only from new news.':`${Math.round(a*100)}% of people buy early; the jump after the festival shrinks to ${(2*(1-a)).toFixed(1)} portions, and the rise moves to before the festival.`;}
+  $('wk-n').addEventListener('input',draw);
+  $('wk').addEventListener('anim-in',()=>{let v=0;$('wk-n').value=0;draw();const id=setInterval(()=>{v+=5;$('wk-n').value=v;draw();if(v>=100)clearInterval(id);},180);});
+  draw();
+})();
+</script>

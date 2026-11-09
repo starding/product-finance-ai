@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：让承诺可信</p><p class="figsub">四条结论，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="g03summary">重播</button></div>
+    <div class="g03summary" id="g03summary" data-anim><div class="g03summary-c" style="--i:0"><em>承诺问题</em><b>还款那一刻，还已经没有好处</b><p>一次性的交往中不还是理性的，于是借贷根本不会发生。</p></div><div class="g03summary-c" style="--i:1"><em>三种办法</em><b>声誉、抵押与第三方执行</b><p>让借款人在乎将来、有东西可失，或由第三方强制执行。</p></div><div class="g03summary-c warn" style="--i:2"><em>代价</em><b>每种办法都会挡住一些人</b><p>新来的人没有记录，没有资产的人没有抵押物，小额借贷付不起执行成本。</p></div><div class="g03summary-c warn" style="--i:3"><em>利率</em><b>利率不能替代信任</b><p>利率越高，稳健的人越早退出，留下的越可能不还。</p></div></div>
+  </div>
+</figure>
+<style>
+.g03summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g03summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g03summary-c.warn{border-left-color:var(--warm)}
+.g03summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g03summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g03summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g03summary.in .g03summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g03summary{grid-template-columns:1fr}}
+</style>

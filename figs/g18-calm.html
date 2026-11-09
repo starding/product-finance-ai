@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">一把更聪明的锁</p><p class="figsub">同一户人家遇到两件事：一次风暴后船股大跌、他想全部卖出；一次家里有人生病、他急需用粮。切换三种锁，看两件事各自的结果。</p></div><button class="replay" type="button" data-replay="cl18">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="锁">
+      <button type="button" data-cl18="none" aria-pressed="true">没有锁</button>
+      <button type="button" data-cl18="hard" aria-pressed="false">取不出的仓</button>
+      <button type="button" data-cl18="smart" aria-pressed="false">书记员：提醒约定、隔一天确认、急用放行</button>
+    </div>
+    <div class="cl18" id="cl18" data-anim>
+      <div class="cl18-g" id="cl18-g"></div>
+      <p class="cl18-msg" id="cl18-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：大跌后立即卖出，平均会错过随后的回升；“取不出的仓”在急用时也取不出。书记员区分两件事的依据，是委托人事先写下的约定：哪些情形属于急用。</figcaption>
+</figure>
+<style>
+.cl18-g{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cl18-c{background:var(--quote);border-radius:10px;padding:10px 12px;font-size:13.5px;line-height:1.6;border-left:3px solid var(--faint);transition:border-color .3s}
+.cl18-c.ok{border-left-color:var(--accent)} .cl18-c.bad{border-left-color:var(--warm)}
+.cl18-c b{display:block;font-size:14.5px;margin-bottom:2px}
+.cl18-c em{font-style:normal;font-size:12px;color:var(--faint)}
+.cl18-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.cl18-g{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cl18'+id);
+  const S={none:[['bad','卖在了低处','风暴之后他一冲动就全部卖出，错过了随后的回升。'],['ok','取到了粮','急需时随时可以取用。'],'没有锁：急用时方便，冲动时也方便，两件事一样容易。'],
+    hard:[['ok','没能卖出','粮存在取不出的仓里，冲动过去，船股保住了。'],['bad','急用也取不出','家里有人生病，却要等一年才能取出。'],'取不出的仓：挡住了冲动，也挡住了急用。锁得太死。'],
+    smart:[['ok','隔了一天，没有卖','书记员把当初的约定与这次下跌在历史上的位置摆出来，请他隔一天再确认；第二天他改了主意。'],['ok','当天取到了粮','生病属于约定中的急用，书记员当即放行。'],'书记员的锁：按事先写下的约定，对冲动增加阻力，对急用放行。']};
+  function set(k){document.querySelectorAll('[data-cl18]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.cl18===k)));const v=S[k];
+    $('-g').innerHTML=[['风暴之后想全部卖出',v[0]],['家里有人生病急需用粮',v[1]]].map(([t,[c,b,p]])=>`<div class="cl18-c ${c}"><em>${t}</em><b>${b}</b>${p}</div>`).join('');$('-msg').textContent=v[2];}
+  document.querySelectorAll('[data-cl18]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.cl18)));
+  $('').addEventListener('anim-in',()=>{['none','hard','smart'].forEach((k,i)=>setTimeout(()=>set(k),300+i*2400));});
+  set('none');
+})();
+</script>

@@ -1,0 +1,585 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trust takes time</title>
+<meta name="description" content="Chapter 24 of Product × Finance × AI: Derived from Zero. A scribe has just opened for business; on what basis should the villager begin to trust it? Trust rests on three things, ability, benevolence and integrity, each with its own evidence. A newcomer without a record can borrow signals that others cannot afford. Authority starts small and is widened level by level as a record of keeping the agreement builds up. The record gradually changes his judgement of what kind of scribe it is. Trust is lost faster than it is built; after a mistake it should step back rather than fall to zero, and trust should always match how reliable the agent actually is">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="g-24">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="Contents">
+<div class="side-head"><a class="sidetitle" href="index.html">Product × Finance × AI<small>Financial Products in the Age of AI</small></a></div>
+<div class="side-view" role="group" aria-label="Way of reading"><a href="preface.html">Decomposition</a><a href="g-preface.html" class="on" aria-current="true">Derivation</a></div>
+<a class="side-about" href="index.html#about">About this book</a>
+<a class="" href="g-preface.html"><span class="n">Preface</span>The best way to understand financial products is to build them from zero</a>
+<a class="side-part" href="g-part1.html"><span class="pn">Part One</span>From 0 to 1: how a world without finance grows finance</a>
+<a class="" href="g-01.html"><span class="n">1</span>One person, one year&#x27;s harvest</a>
+<a class="" href="g-02.html"><span class="n">2</span>Two people, short of grain at different times</a>
+<a class="" href="g-03.html"><span class="n">3</span>What if a loan is not repaid</a>
+<a class="" href="g-04.html"><span class="n">4</span>Exchange among many</a>
+<a class="" href="g-05.html"><span class="n">5</span>Harvests good and bad</a>
+<a class="" href="g-06.html"><span class="n">6</span>Savers may need their grain at any time; borrowers need it for years</a>
+<a class="" href="g-07.html"><span class="n">7</span>No one household can pay for a ship</a>
+<a class="" href="g-08.html"><span class="n">8</span>Securities must be saleable</a>
+<a class="" href="g-09.html"><span class="n">9</span>Prices carry everyone&#x27;s information</a>
+<a class="" href="g-10.html"><span class="n">10</span>Ordinary people have neither the time nor the expertise</a>
+<a class="" href="g-11.html"><span class="n">11</span>Trustees may not do their duty</a>
+<a class="" href="g-12.html"><span class="n">12</span>The institutions are in place, and people still make mistakes</a>
+<a class="side-part" href="g-part2.html"><span class="pn">Part Two</span>Changing one parameter: when agency becomes almost free</a>
+<a class="" href="g-13.html"><span class="n">13</span>A new parameter: the cost of cognitive labour collapses</a>
+<a class="" href="g-14.html"><span class="n">14</span>Can everyone have a personal agent?</a>
+<a class="" href="g-15.html"><span class="n">15</span>Who guarantees an agent&#x27;s promises</a>
+<a class="" href="g-16.html"><span class="n">16</span>If everyone has an analyst</a>
+<a class="" href="g-17.html"><span class="n">17</span>Agents become the main market participants</a>
+<a class="" href="g-18.html"><span class="n">18</span>Can an agent correct human bias?</a>
+<a class="" href="g-19.html"><span class="n">19</span>What did not change</a>
+<a class="side-part" href="g-part3.html"><span class="pn">Part Three</span>Deriving a product in the new world</a>
+<a class="" href="g-20.html"><span class="n">20</span>One person and one sum of money</a>
+<a class="" href="g-21.html"><span class="n">21</span>The user is not present</a>
+<a class="" href="g-22.html"><span class="n">22</span>The user cannot see the process</a>
+<a class="" href="g-23.html"><span class="n">23</span>Agents make mistakes</a>
+<a class=" cur" href="g-24.html" aria-current="page"><span class="n">24</span>Trust takes time</a>
+<a class="side-app" href="g-epilogue.html"><span class="n">Epilogue</span>Back to the governing rule</a>
+<a class="side-app" href="method.html"><span class="n">Appendix</span>How this book was written</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="Open contents" title="Contents"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">Product × Finance × AI: Financial Products in the Age of AI</a><span>Part Three  Deriving a product</span><a class="langlink" href="../g-24.html" hreflang="zh-CN">中文</a></header>
+
+<div class="chapno">Chapter 24</div><h1>Trust takes time<small>The path to trust</small></h1>
+<blockquote><p>Promises, the agreement, records, defences and compensation are all in place, yet the villager still hesitates. The scribe has only just opened for business; he has never seen it work. Why should he hand it the grain for his house and his retirement? Trust is not given all at once. He needs to believe three things: that it is capable, that it has his interests at heart, and that it does not say one thing and do another. Each has its own evidence. A scribe without a record can borrow signals that others cannot afford: the operator's capital, insurance and licence. Authority starts small and is widened by one level each time the agreement has been kept for a period, and the record of keeping the agreement gradually changes his judgement of the scribe. Trust is lost faster than it is built. After a mistake, trust should step back rather than drop to zero at once, and the amount of trust should always match how reliable the scribe actually is.</p></blockquote>
+<h2 id="sec-1">1. What he needs to believe</h2>
+<p>"Trusting the scribe" contains three different things. The first is believing that it is capable: it can keep accounts, understands the fleet, and does not make elementary mistakes. The second is believing that it has his interests at heart: its pay comes from him, not from the people who sell ship shares, and what it recommends is what he would choose himself after thinking it through. The third is believing that its words and actions match: it really keeps the boundaries written in the agreement, and the grounds written in the records really exist. Each has its own evidence: capability is judged by the past record, whose interests it serves by how it is paid and what its goals are, and consistency between words and actions by the agreement and its verification. If any one is missing, trust cannot stand.</p>
+<p>There is one new constraint: the user has no prior about a new agent, and trust takes time.</p>
+<aside class="principle"><p class="pr-k">Derived so far: a principle</p><p class="pr-n">Three sources of trustworthiness</p><p class="pr-c"><span><em>Discipline</em>Management › Organizational behaviour (trust)</span><span><em>Type</em>Theoretical model</span></p><p class="pr-s">Trust is one party's willingness to be exposed to risk from another party's actions without being able to monitor or control that party. How trustworthy the other party is depends on three things, ability, benevolence and integrity, and how much trust is given also depends on the principal's own propensity to trust.</p><dl><div><dt>Standing in the field</dt><dd>The paper defines trust as "willingness to be vulnerable" and distinguishes trust from the other party's trustworthiness; a later meta-analysis found that ability, benevolence, integrity and trust propensity each affect trust independently</dd></div><div><dt>Constraint it answers</dt><dd>The principal cannot monitor the agent at all times, yet must entrust it with important matters</dd></div><div><dt>Premises</dt><dd>The object of trust can be judged by observable behaviour and arrangements; the principal has some propensity to trust</dd></div><div><dt>Proposed by</dt><dd>Mayer, Davis and Schoorman, 1995</dd></div><div><dt>Open question</dt><dd>For a newcomer without a record, what proves each of the three?</dd></div></dl></aside>
+<p><strong>Today's counterpart.</strong> The relationship summary that the U.S. Securities and Exchange Commission requires of brokers and investment advisers must describe the services offered, fees and costs, conflicts of interest, and whether there is a disciplinary history. These correspond roughly to ability, benevolence and integrity.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Three sources of trust, each with its own evidence</p><p class="figsub">Select one to see what he needs to believe, what the product uses as proof, and what happens if it is missing.</p></div><button class="replay" type="button" data-replay="ab24">Replay</button></div>
+    <div class="ab24" id="ab24" data-anim><div class="ab24-g" id="ab24-g"></div><div class="ab24-d" id="ab24-d" aria-live="polite"></div></div>
+  </div>
+  <figcaption>The three-part division comes from Mayer, Davis and Schoorman (1995); the column "The product's evidence" is a design derived in this book.</figcaption>
+</figure>
+<style>
+.ab24-g{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ab24-g button{font:inherit;cursor:pointer;border:1px solid transparent;border-radius:12px;padding:14px 10px;background:var(--quote);color:var(--ink);font-size:16px;font-weight:600;opacity:0;transform:scale(.9);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.25s)}
+.ab24.in .ab24-g button{opacity:1;transform:none}
+.ab24-g button em{display:block;font-style:normal;font-weight:400;font-size:12px;color:var(--faint);margin-top:2px}
+.ab24-g button.sel{border-color:var(--accent);color:var(--accent)}
+.ab24-d{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.ab24-d div{background:var(--quote);border-radius:8px;padding:9px 11px;font-size:13.5px;line-height:1.6}
+.ab24-d div:last-child{background:var(--warm-soft)}
+.ab24-d span{display:block;font-size:11px;color:var(--faint)}
+@media (max-width:640px){.ab24-d{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const A=[['Ability','Is it capable?','It can keep accounts, understands the fleet, and does not make elementary mistakes.','A verifiable past record: how reliably it has met goals, how many mistakes it has made and of what kinds, and its compensation history.','It keeps the agreement but keeps getting things wrong, and he bears the losses for nothing.'],
+    ['Benevolence','Whose interests does it serve?','What it recommends is what he would choose himself after thinking it through.','It charges him rather than taking commissions from sellers; its goals are written into the agreement, and it acts according to his plan rather than the number of trades.','It is capable and keeps the agreement, but uses its ability to make him buy and sell more.'],
+    ['Integrity','Do its words match its actions?','It really keeps the boundaries in the agreement, and the grounds in the records really exist.','Records kept by a third party that cannot be altered; independent verification; penalties for overstepping written into the agreement.','It says the right things but does something else, and he has no way of finding out.']];
+  const g=document.getElementById('ab24-g'),d=document.getElementById('ab24-d');
+  g.innerHTML=A.map((a,i)=>`<button type="button" style="--i:${i}">${a[0]}<em>${a[1]}</em></button>`).join('');const bs=[...g.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));d.innerHTML=`<div><span>What he needs to believe</span>${A[i][2]}</div><div><span>The product's evidence</span>${A[i][3]}</div><div><span>If it is missing</span>${A[i][4]}</div>`;}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('ab24').addEventListener('anim-in',()=>{[0,1,2].forEach((i,k)=>setTimeout(()=>set(i),1000+k*2000));});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-2">2. Borrowed trust</h2>
+<p>A scribe that has just opened for business has no record, so there is no way to prove its ability. It can borrow trust from others: the operator that deploys it puts up capital as a deposit, buys insurance against its errors, obtains a licence, and has its accounts audited by a third party. What matters about all of these is that they are expensive. An operator that intends to cheat cannot afford such a cost, or would find it not worth paying. Precisely because they are costly, they can separate the reliable from the unreliable. Saying "we are trustworthy" costs nothing, and so it proves nothing.</p>
+<aside class="principle"><p class="pr-k">Derived so far: a principle</p><p class="pr-n">Signalling</p><p class="pr-c"><span><em>Discipline</em>Economics › Information economics</span><span><em>Type</em>Theoretical model</span></p><p class="pr-s">A party with private information can credibly convey its type by taking an action that would be too costly for a low-quality type. As long as the cost of the action differs by type, different types will make different choices, and the market can tell them apart.</p><dl><div><dt>Standing in the field</dt><dd>Using education as an example, the paper shows that even if education does not raise productivity, it can separate job seekers of high and low ability. For this Spence shared the 2001 Nobel Memorial Prize in Economic Sciences with Akerlof and Stiglitz "for their analyses of markets with asymmetric information"</dd></div><div><dt>Constraint it answers</dt><dd>A new agent has no record, and the principal cannot see what type it is</dd></div><div><dt>Premises</dt><dd>The cost of the signal differs by type; the principal can observe the signal</dd></div><div><dt>Proposed by</dt><dd>Spence, 1973</dd></div><div><dt>Open question</dt><dd>The signal vouches for the operator; the scribe's own ability still has to be shown by its record</dd></div></dl></aside>
+<p><strong>Today's counterpart.</strong> Securities and investment advisory businesses are licensed, and firms are subject to requirements on capital, personnel and internal controls.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Only costly signals are credible</p><p class="figsub">Two kinds of operator: reliable, and intending to cheat. Drag the cost of a signal and see whether each kind is willing to pay it, and whether the signal can tell them apart.</p></div><button class="replay" type="button" data-replay="sg24">Replay</button></div>
+    <div class="sg24" id="sg24" data-anim>
+      <div class="sg24-g" id="sg24-g"></div>
+      <div class="sl"><label for="sg24-c">Cost of the signal (deposit, insurance, licence and audit) <b id="sg24-cv"></b></label><input id="sg24-c" type="range" min="0" max="20" step="1" value="0"></div>
+      <p class="sg24-msg" id="sg24-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: a reliable operator runs its business for the long term and, once trusted, gains 15 more portions over ten years. An operator intending to cheat wants only one big haul and then to leave; once trusted, it can cheat its way to 8 portions, but if things go wrong it loses everything it spent on the deposit and insurance. Each pays the cost of the signal only when what it gains exceeds what it pays (following Spence, 1973).</figcaption>
+</figure>
+<style>
+.sg24-g{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sg24-c{border-radius:10px;padding:12px;background:var(--quote);font-size:13.5px;line-height:1.6;border-left:4px solid var(--c);transition:border-color .3s}
+.sg24-c b{display:block;font-size:15px}
+.sg24-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('sg24'+id);
+  function draw(){const c=+$('-c').value,good=15>c,bad=8>c;$('-cv').textContent=c+(c===1?' portion':' portions');
+    $('-g').innerHTML=[['Reliable operator',good,15],['Operator intending to cheat',bad,8]].map(([n,y,g])=>`<div class="sg24-c" style="--c:${y?'var(--accent)':'var(--faint)'}"><b>${n}</b>${y?'Pays the cost and sends the signal':'Does not pay and sends no signal'} (gains ${g} portions, pays ${c})</div>`).join('');
+    $('-msg').textContent=c===0?'The signal costs nothing, so both kinds of operator will say "we are trustworthy": the signal proves nothing.':good&&bad?`At a cost of ${c}, both kinds of operator can afford it, and the signal still cannot tell them apart.`:good?`At a cost of ${c}: the reliable operator can afford it and finds it worth paying, while for the one intending to cheat it does not pay. The signal tells the two apart.`:'The cost is so high that even the reliable operator will not pay: no one in the market sends the signal.';}
+  $('-c').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{let v=0;$('-c').value=0;draw();const id=setInterval(()=>{v+=1;$('-c').value=v;draw();if(v>=12)clearInterval(id);},220);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-3">3. Starting small</h2>
+<p>Even with borrowed trust, there is no need to hand everything over at the start. Work it through to see the cheapest way to begin. First give the scribe the smallest task, such as investing on schedule each month, where one mistake can lose at most a small portion. After it has kept the agreement for a while, widen its authority by one level and let it adjust the proportions as the agreement provides. After another period of keeping the agreement, let it handle the rebalancing after a storm. At each level, the loss limit matches the confidence he has already built up. A scribe that intends to cheat must first do small tasks honestly for a long time before it gets a task large enough to be worth cheating on, and during that time its record has long been in front of him.</p>
+<aside class="principle"><p class="pr-k">Derived so far: a principle</p><p class="pr-n">Starting small</p><p class="pr-c"><span><em>Discipline</em>Economics › Game theory (relational contracts)</span><span><em>Type</em>Theoretical model</span></p><p class="pr-s">In a long-term relationship where each side is unsure whether the other is reliable, starting the scale of dealings small and increasing it as cooperation continues is an arrangement that makes both sides willing to keep cooperating; the growth in scale makes early betrayal unprofitable for an unreliable party.</p><dl><div><dt>Standing in the field</dt><dd>The paper studies long-term relationships in which the two parties jointly decide the scale of dealings and each chooses to cooperate or betray; it proves that under a strong renegotiation condition, "starting small" is the unique equilibrium selected</dd></div><div><dt>Constraint it answers</dt><dd>The principal has no prior about a new agent, and the agent may be unreliable</dd></div><div><dt>Premises</dt><dd>The scale of dealings can be adjusted step by step; each side can observe whether the other betrays</dd></div><div><dt>Proposed by</dt><dd>Watson, 1999</dd></div><div><dt>Open question</dt><dd>How much to widen at each level, and how long the agreement must be kept before widening</dd></div><div><dt>After the rerun</dt><dd>Applied to products, the boundaries of authority are widened level by level as the record of keeping the agreement builds up: at each higher level, more matters can be handled on its own and the limit on what a single action can move is higher, with each level's limit written down in advance; large matters that cannot be undone always require confirmation first</dd></div></dl></aside>
+<p><strong>Today's counterpart.</strong> Many places have graduated licensing for new drivers: they first drive under restrictions, and the restrictions are lifted step by step as conditions are met. A Cochrane Collaboration systematic review concluded that such schemes are associated with fewer crashes among young drivers, and that the effect is more pronounced where restrictions are stronger.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Start small, widen level by level</p><p class="figsub">Authority has four levels and is widened by one level each time the agreement has been kept for a period. Switch the type of scribe to see the largest loss it can cause at each level, and how long a scribe intending to cheat must keep the agreement before it gets authority worth cheating with.</p></div><button class="replay" type="button" data-replay="sm24">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Type">
+      <button type="button" data-sm24="good" aria-pressed="true">Reliable scribe</button>
+      <button type="button" data-sm24="bad" aria-pressed="false">Scribe intending to cheat</button>
+    </div>
+    <div class="sm24" id="sm24" data-anim>
+      <svg viewBox="0 0 660 190" role="img" aria-label="Authority level widening over time"><g id="sm24-g"></g></svg>
+      <p class="sm24-msg" id="sm24-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: at Level 1 the scribe can only make scheduled investments, moving at most 2% of household wealth at a time; at Level 2 it can adjust proportions as the agreement provides, up to 5%; at Level 3 it can handle rebalancing after a storm, up to 10%; at Level 4 it handles most matters on its own within the agreement, up to 25%. After a full year of keeping the agreement at one level, authority is widened by one level (starting small, as described by Watson, 1999).</figcaption>
+</figure>
+<style>
+.sm24 svg{width:100%;height:auto;display:block}
+.sm24-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.sm24 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('sm24'+id),L=[2,5,10,25],X0=50,X1=628,YB=160,YT=12,x=t=>X0+t/6*(X1-X0),y=v=>YB-v/25*(YB-YT);
+  function set(k){document.querySelectorAll('[data-sm24]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.sm24===k)));
+    let h=[0,5,10,15,20,25].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}%</text>`).join('')+[0,1,2,3,4,5,6].map(t=>`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">Year ${t}</text>`).join('');
+    const S=[];for(let t=0;t<6;t++){const lv=k==='bad'?(t<2?t:t===2?2:-1):Math.min(3,t);S.push(lv);}
+    S.forEach((lv,t)=>{const v=lv<0?0:L[lv];h+=`<rect x="${x(t)+4}" y="${y(v)}" width="${x(1)-x(0)-8}" height="${YB-y(v)}" fill="${lv<0?'var(--faint)':k==='bad'&&t===2?'var(--warm)':'var(--accent)'}" opacity="${lv<0?.3:1}"/>`;});
+    if(k==='bad')h+=`<text x="${x(2)+4}" y="${y(10)-6}" font-size="11" fill="var(--warm)">Cheats in year 3, is caught, loses authority</text>`;
+    $('-g').innerHTML=h;
+    $('-msg').textContent=k==='good'?'The reliable scribe is widened one level for each year it keeps the agreement. After three years it reaches Level 4 and handles most matters for him; at every level, the largest possible loss matches the confidence he already has.':'The scribe intending to cheat must first do small tasks honestly for two years, and only in the third year does it get authority to move up to 10%. It cheats in the third year, takes at most 10%, and is caught at once and loses its authority. In the first two years its record of keeping the agreement itself benefits him, and the large sum it wanted to steal never reaches its hands.';}
+  document.querySelectorAll('[data-sm24]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.sm24)));
+  $('').addEventListener('anim-in',()=>{set('good');setTimeout(()=>set('bad'),2600);});
+  set('good');
+})();
+</script>
+
+<h2 id="sec-4">4. The record gradually changes the judgement</h2>
+<p>His judgement of the scribe is not simply "trust" or "distrust" but a probability: how likely it is to be the reliable type. Each time it keeps the agreement, the probability moves up a little; each time it breaches the agreement, it drops a long way. The starting probability depends on the borrowed signals; changes after that depend on the record. With a reliable scribe, given a long enough record of keeping the agreement, his judgement will eventually approach the truth. An unreliable scribe that wants to keep its reputation must keep the agreement for a long time, and that in itself reduces the harm it can do.</p>
+<aside class="principle"><p class="pr-k">Derived so far: a principle</p><p class="pr-n">Building a reputation</p><p class="pr-c"><span><em>Discipline</em>Economics › Game theory (reputation theory)</span><span><em>Type</em>Theoretical model</span></p><p class="pr-s">When it is uncertain whether one party is a "keeps-its-word type", the other party continually revises its judgement on the basis of past behaviour. Even when the number of interactions is finite, the wish to keep a reputation as a keeps-its-word type can lead a party that has an incentive to betray to keep its word for a long time.</p><dl><div><dt>Standing in the field</dt><dd>The paper responds to Selten's "chain-store paradox", showing that a small amount of uncertainty about one party's type is enough for the intuitively expected reputation effect to appear even in a finite number of interactions. Together with the paper by Milgrom and Roberts in the same issue of the same journal, it explains reputation through uncertainty about types</dd></div><div><dt>Constraint it answers</dt><dd>The principal cannot see the agent's type, only its behaviour</dd></div><div><dt>Premises</dt><dd>The principal has an initial judgement about the agent's type; the agent's behaviour can be observed and recorded</dd></div><div><dt>Proposed by</dt><dd>Kreps and Wilson, 1982; Milgrom and Roberts, 1982</dd></div><div><dt>Open question</dt><dd>How long does the judgement take to approach the truth, and how much should one breach lower it?</dd></div></dl></aside>
+<p><strong>Today's counterpart.</strong> Credit scores are updated monthly according to repayment history: on-time repayments raise the score slowly, while one serious delinquency lowers it sharply.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The record gradually changes the judgement</p><p class="figsub">There are two types of scribe: a reliable one makes 0 to 1 small mistakes a year, an unreliable one makes one or two. His initial judgement depends on the borrowed signals. Switch the scribe's actual type and his initial judgement, and see how his estimate of the probability that "it is reliable" changes over ten years.</p></div><button class="replay" type="button" data-replay="by24">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Actual type">
+      <button type="button" data-by24t="good" aria-pressed="true">Actually reliable</button>
+      <button type="button" data-by24t="bad" aria-pressed="false">Actually unreliable</button>
+    </div>
+    <div class="seg-btns" role="group" aria-label="Initial judgement">
+      <button type="button" data-by24p=".5" aria-pressed="true">No signal: starts at 50%</button>
+      <button type="button" data-by24p=".8" aria-pressed="false">Costly signal: starts at 80%</button>
+    </div>
+    <div class="by24" id="by24" data-anim>
+      <svg viewBox="0 0 660 200" role="img" aria-label="Probability that it is reliable"><g id="by24-g"></g></svg>
+      <p class="by24-msg" id="by24-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the number of mistakes per year follows a Poisson distribution with mean 0.5 for the reliable type and mean 1.5 for the unreliable type. Each year he updates his judgement by Bayes' rule according to the number of mistakes observed (judgements about type revised in light of behaviour, as in Kreps and Wilson, 1982). The number below each dot is the number of mistakes observed that year.</figcaption>
+</figure>
+<style>
+.by24 svg{width:100%;height:auto;display:block}
+.by24-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.by24 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('by24'+id);let type='good',prior=.5;const X0=50,X1=628,YT=12,YB=160,x=t=>X0+t/10*(X1-X0),y=v=>YB-v*(YB-YT);
+  const pois=(l,k)=>{let p=Math.exp(-l);for(let i=1;i<=k;i++)p*=l/i;return p;};
+  function obs(){let s=2424+(type==='good'?0:7);const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};const l=type==='good'?.5:1.5;return Array.from({length:10},()=>{let k=0,p=Math.exp(-l),u=r(),a=p;while(u>a){k++;p*=l/k;a+=p;}return k;});}
+  function draw(){const O=obs(),P=[prior];O.forEach(k=>{const q=P[P.length-1],a=q*pois(.5,k),b=(1-q)*pois(1.5,k);P.push(a/(a+b));});
+    let h=[0,.25,.5,.75,1].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text>`).join('')+[0,2,4,6,8,10].map(t=>`<text x="${x(t)}" y="${YB+30}" text-anchor="middle" font-size="11" class="t-faint">Year ${t}</text>`).join('');
+    h+=`<path d="${P.map((v,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(v).toFixed(1)).join('')}" fill="none" stroke="var(--accent)" stroke-width="2.6"/>`+P.map((v,t)=>`<circle cx="${x(t)}" cy="${y(v)}" r="4.5" fill="var(--accent)"/>`+(t?`<text x="${x(t)}" y="${YB+15}" text-anchor="middle" font-size="11" fill="${O[t-1]>1?'var(--warm)':'var(--muted)'}">${O[t-1]}</text>`:'')).join('');
+    $('-g').innerHTML=h;const end=P[10];
+    $('-msg').textContent=type==='good'?`Actually reliable: it starts at ${Math.round(prior*100)}%, is ${Math.round(P[3]*100)}% after three years and ${Math.min(99,Math.round(end*100))}% after ten. A year with a few more mistakes moves the judgement down, but never to zero.`:`Actually unreliable: it starts at ${Math.round(prior*100)}%, falls to ${Math.round(P[3]*100)}% after three years and is only ${Math.max(1,Math.round(end*100))}% after ten. ${prior>.5?'The costly signal gives it a higher starting point, but the record soon pulls it down; and an unreliable operator could not have afforded such a signal in the first place.':''}`;}
+  const tb=[...document.querySelectorAll('[data-by24t]')],pb=[...document.querySelectorAll('[data-by24p]')];
+  tb.forEach(b=>b.addEventListener('click',()=>{type=b.dataset.by24t;tb.forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  pb.forEach(b=>b.addEventListener('click',()=>{prior=+b.dataset.by24p;pb.forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  $('').addEventListener('anim-in',()=>{[['good',.5],['good',.8],['bad',.8]].forEach(([t,p],i)=>setTimeout(()=>{type=t;prior=p;tb.forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.by24t===t)));pb.forEach(x=>x.setAttribute('aria-pressed',String(+x.dataset.by24p===p)));draw();},300+i*2200));});
+  draw();
+})();
+</script>
+
+<h2 id="sec-5">5. Lost faster than it is built</h2>
+<p>One instance of overstepping can wipe out years of keeping the agreement. People react far more strongly to bad news than to good news, and this is not wrong in itself: a single breach often reveals much more information than a single instance of keeping the agreement. But if every mistake sent trust back to zero, a single misjudgement or one small execution error by the scribe would put him back at the starting point. All the authority built up over years would be withdrawn, and he would return to his own, worse judgement.</p>
+<p>Work it through to see what a reasonable response to mistakes looks like. First, look at what kind of mistake it is. Overstepping and concealment suggest the scribe may be the unreliable type, and its authority should be largely withdrawn. For a small execution error that has already been compensated, with its cause found and fixed, the authority steps back only one level. A misjudgement is a risk the agreement has accepted, so there is no need to withdraw authority, but the agreement should be reviewed to see whether it needs to change. Only by stepping back rather than dropping to zero can trust keep accumulating after a mistake.</p>
+<p>Slovic (1993), discussing risk perception and trust, argued that negative events affect trust far more than positive ones, so that trust is easily lost and hard to build. Experiments by White and Eiser (2005) found that this asymmetry is less pronounced when the information is less specific and the risk is lower.</p>
+<p><strong>Today's counterpart.</strong> China's motor vehicle driving licences use a points system: each cycle allows 12 points, and each violation adds 1 to 12 points depending on its seriousness. A driver who reaches 12 points must attend a full-points study course and pass an examination, while serious violations such as drunk driving lead to revocation of the licence under the law.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">After a mistake: back to zero, or one step back?</p><p class="figsub">A reliable scribe makes an execution error in year 4, which is compensated and fixed. In year 7 it shifts the proportions back as the agreement says and then meets a storm, which is a misjudgement. Switch between two ways of treating mistakes, and see the authority level over ten years and how much it gets done for him.</p></div><button class="replay" type="button" data-replay="as24">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Approach">
+      <button type="button" data-as24="zero" aria-pressed="true">Any mistake resets to zero</button>
+      <button type="button" data-as24="kind" aria-pressed="false">Adjust by kind of mistake</button>
+    </div>
+    <div class="as24" id="as24" data-anim>
+      <svg viewBox="0 0 660 170" role="img" aria-label="Authority level"><g id="as24-g"></g></svg>
+      <p class="as24-msg" id="as24-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: authority has four levels (L1 to L4 on the vertical axis), rising one level for each year the agreement is kept. Under "Adjust by kind of mistake", an execution error that has been compensated and fixed steps back one level, a misjudgement does not step back, and only overstepping and concealment lead to authority being withdrawn. What it gets done for him in one year at each level counts as 1, 2, 4 and 7 respectively.</figcaption>
+</figure>
+<style>
+.as24 svg{width:100%;height:auto;display:block}
+.as24-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.as24 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('as24'+id),V=[1,2,4,7],X0=50,X1=628,YB=140,YT=12,bw=(X1-X0)/10,y=l=>YB-(l+1)/4*(YB-YT);
+  function path(m){const L=[];let lv=0;for(let t=0;t<10;t++){L.push(lv);if(t===3){lv=m==='zero'?0:Math.max(0,lv-1);continue;}if(t===6){lv=m==='zero'?0:Math.min(3,lv+1);continue;}lv=Math.min(3,lv+1);}return L;}
+  function set(m){document.querySelectorAll('[data-as24]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.as24===m)));const L=path(m),tot=L.reduce((a,l)=>a+V[l],0),o=path(m==='zero'?'kind':'zero').reduce((a,l)=>a+V[l],0);
+    let h=['1','2','3','4'].map((n,i)=>`<text x="${X0-6}" y="${y(i)+14}" text-anchor="end" font-size="11" class="t-faint">L${n}</text>`).join('');
+    L.forEach((l,t)=>{h+=`<rect x="${X0+t*bw+4}" y="${y(l)}" width="${bw-8}" height="${YB-y(l)}" fill="var(--accent)" opacity="${.35+l*.2}"/><text x="${X0+t*bw+bw/2}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${t+1}</text>`;});
+    h+=`<text x="${X0+3*bw+bw/2}" y="${YT+8}" text-anchor="middle" font-size="11" fill="var(--warm)">Execution error</text><text x="${X0+6*bw+bw/2}" y="${YT+8}" text-anchor="middle" font-size="11" fill="var(--blue)">Misjudgement</text>`;
+    $('-g').innerHTML=h;
+    $('-msg').textContent=m==='zero'?`Any mistake resets to zero: both mistakes send authority back to Level 1, and over ten years what it gets done for him totals ${tot}. Each time, he also falls back on his own, worse judgement.`:`Adjust by kind of mistake: the execution error, compensated and fixed, steps back only one level; the misjudgement does not step back. Over ten years what it gets done for him totals ${tot}, ${Math.round((tot/o-1)*100)}% more than the ${o} under resetting to zero.`;}
+  document.querySelectorAll('[data-as24]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.as24)));
+  $('').addEventListener('anim-in',()=>{set('zero');setTimeout(()=>set('kind'),2400);});
+  set('zero');
+})();
+</script>
+
+<h2 id="sec-6">6. Ten years of trust: Civilization Simulator, version 24</h2>
+<p>The simulator unlocks the last item of Part Three: "the path to trust". Over ten years the villager deals with a new scribe. You can set whether the scribe is in fact reliable or unreliable, and choose how authority is granted: handing everything over at the start; widening level by level but dropping to zero after any mistake; or widening level by level and adjusting according to the kind of mistake. You can also turn the borrowed signals on or off. Then see how much the scribe got done for him over ten years, the losses he suffered from trusting too much, and whether he gave up entirely after a mistake.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Civilization Simulator · Chapter 24: ten years of trust</p><p class="figsub">The villager deals with a new scribe for ten years. Choose the scribe's actual type and the way authority is granted, turn the borrowed signals on or off, and see the average result over 400 ten-year runs.</p></div><button class="replay" type="button" data-replay="cs24">Replay</button></div>
+    <div class="cs-rules"><span class="on">Product: what to promise</span><span class="on">Product: mandate and authority</span><span class="on">Product: process records</span><span class="on">Product: limits, confirmation and compensation</span><span class="on">Product: the path to trust</span></div>
+    <div class="cs24-sel"><span>Type</span><div class="seg-btns" role="group" aria-label="Type"><button type="button" data-cs24t="good" aria-pressed="true">Actually reliable</button><button type="button" data-cs24t="bad" aria-pressed="false">Actually unreliable</button></div></div>
+    <div class="cs24-sel"><span>Authority</span><div class="seg-btns" role="group" aria-label="Authority"><button type="button" data-cs24p="all" aria-pressed="false">Hand everything over at the start</button><button type="button" data-cs24p="zero" aria-pressed="false">Widen by level, reset on any mistake</button><button type="button" data-cs24p="kind" aria-pressed="true">Widen by level, adjust by kind of mistake</button></div></div>
+    <div class="cs24" id="cs24" data-anim>
+      <div class="cs-sw"><label><input type="checkbox" id="cs24-s" checked> Rule: the operator provides a deposit, insurance and audit (only a reliable operator can afford them)</label></div>
+      <div class="cs24-bars" id="cs24-b"></div>
+      <p class="cs24-msg" id="cs24-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model: authority has four levels; what the scribe gets done for him in one year at each level counts as 1, 2, 4 and 7, and a single action can move at most 2%, 5%, 10% and 25% of household wealth. Each year, both types of scribe have a one-in-four chance of one execution error, which is compensated. Once an unreliable scribe reaches Level 3 or above, it has a 60% chance each year of overstepping, losing an amount equal to that level's limit. When everything is handed over at the start, any single mistake has a 50% chance of making him give up entirely. Under "adjust by kind of mistake", an execution error steps back one level and overstepping ends the relationship. With signals, a reliable scribe starts at Level 2, while an unreliable operator cannot afford the signals and still starts at Level 1.</figcaption>
+</figure>
+<style>
+.cs24-sel{display:grid;grid-template-columns:5.5em 1fr;gap:8px;align-items:center;font-size:12.5px;color:var(--muted)}
+.cs24-sel .seg-btns{margin:4px 0}
+.cs24-bars{display:grid;gap:10px;margin:8px 0}
+.cs24-r{display:grid;grid-template-columns:11em 1fr 5.5em;gap:10px;align-items:center;font-size:12.5px}
+.cs24-r div{height:22px;background:var(--quote);border-radius:5px;overflow:hidden}
+.cs24-r i{display:block;height:100%;transition:width .4s}
+.cs24-r b{text-align:right;font-variant-numeric:tabular-nums}
+.cs24-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs24-sel{grid-template-columns:1fr}.cs24-r{grid-template-columns:1fr 5.5em}.cs24-r span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs24'+id),V=[1,2,4,7],CAP=[2,5,10,25];let type='good',pol='kind';
+  function run(sig,seed){let s=seed;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};
+    let lv=pol==='all'?3:(sig&&type==='good'?1:0),val=0,loss=0,end=0;
+    for(let y=0;y<10;y++){if(end)break;val+=V[lv];const exe=r()<.25,cheat=type==='bad'&&lv>=2&&r()<.6;
+      if(cheat){loss+=CAP[lv];if(pol==='all'||pol==='kind')end=1;else lv=0;continue;}
+      if(exe){if(pol==='all'){if(r()<.5)end=1;}else if(pol==='zero')lv=0;else lv=Math.max(0,lv-1);continue;}
+      if(pol!=='all')lv=Math.min(3,lv+1);}
+    return [val,loss,end];}
+  function draw(){const sig=$('-s').checked;let a=[0,0,0];for(let k=1;k<=400;k++){const o=run(sig,k*7919);a=a.map((v,i)=>v+o[i]);}a=a.map(v=>v/400);
+    $('-b').innerHTML=[['Done for him in ten years',a[0],60,'var(--accent)',a[0].toFixed(1)],['Loss from over-trusting',a[1],30,'var(--warm)',a[1].toFixed(1)+'%'],[type==='good'?'Share who give up entirely':'Share of relationships ended',a[2],1,type==='good'?'var(--warm)':'var(--blue)',Math.round(a[2]*100)+'%']].map(([k,v,m,c,t])=>`<div class="cs24-r"><span>${k}</span><div><i style="width:${Math.min(100,v/m*100)}%;background:${c}"></i></div><b>${t}</b></div>`).join('');
+    $('-msg').textContent=type==='good'?(pol==='all'?`Handing everything over at the start: the fastest beginning, but one small mistake has a 50% chance of making him give up entirely. In more than 40% of the ten-year runs he quits partway, and on average ${a[0].toFixed(1)} gets done.`:pol==='zero'?`Widening by level, resetting on any mistake: no one gives up, but every small mistake sends authority back to Level 1, and on average ${a[0].toFixed(1)} gets done.`:`Widening by level, adjusting by kind of mistake: a small mistake steps back only one level${sig?', and the borrowed signals let it start at Level 2':''}. On average ${a[0].toFixed(1)} gets done, the most of the three approaches.`):(pol==='all'?`Handing everything over to an unreliable scribe at the start: in the first year it may already overstep with a quarter of the household wealth. The average loss is ${a[1].toFixed(1)}%.`:pol==='zero'?`Widening by level, resetting on any mistake: after each instance of overstepping it is sent back to Level 1, but it soon climbs back up and does it again. The average loss is ${a[1].toFixed(1)}%.`:`Widening by level, ending the relationship on overstepping: it must keep the agreement for two years before it gets authority it can abuse, and the relationship ends at the first instance of overstepping. The average loss is ${a[1].toFixed(1)}%, the lowest of the three approaches.`);}
+  const tb=[...document.querySelectorAll('[data-cs24t]')],pb=[...document.querySelectorAll('[data-cs24p]')];
+  tb.forEach(b=>b.addEventListener('click',()=>{type=b.dataset.cs24t;tb.forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  pb.forEach(b=>b.addEventListener('click',()=>{pol=b.dataset.cs24p;pb.forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  $('-s').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{[['good','all'],['good','zero'],['good','kind'],['bad','all'],['bad','kind']].forEach(([t,p],i)=>setTimeout(()=>{type=t;pol=p;tb.forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.cs24t===t)));pb.forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.cs24p===p)));draw();},300+i*2000));});
+  draw();
+})();
+</script>
+
+<h2 id="sec-7">7. After this step</h2>
+<p>Five constraints, five parts: what to promise; mandate parameters and authority; process records and verifiable evidence; limits, confirmation and compensation; and the path to trust. Together they make up a financial product that can stand in a world where cognitive labour is almost free.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Five parts</p><p class="figsub">The five parts that grew from five constraints. Select a part to see the question it answers.</p></div><button class="replay" type="button" data-replay="nx24">Replay</button></div>
+    <div class="nx" id="nx24" data-anim>
+      <div class="nx-src"><b>Five parts</b><span>Together, one product</span></div>
+      <div class="nx-list" id="nx24-l"></div>
+    </div>
+    <p class="nx-msg" id="nx24-msg" aria-live="polite"></p>
+  </div>
+</figure>
+<style>
+.nx{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:center}
+.nx-src{background:var(--ink);color:var(--bg);border-radius:10px;padding:14px 10px;text-align:center}
+.nx-src b{display:block;font-size:16px} .nx-src span{font-size:12px;opacity:.75}
+.nx-list{display:grid;gap:6px}
+.nx-i{font:inherit;text-align:left;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:9px 12px;color:var(--ink);opacity:0;transform:translateX(-8px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.3s)}
+.nx.in .nx-i{opacity:1;transform:none}
+.nx-i span{font-size:13.5px} .nx-i em{font-style:normal;font-size:11.5px;color:var(--faint);white-space:nowrap}
+.nx-i.sel{border-color:var(--accent)}
+.nx-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.nx{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const Q=[['What to promise','Chapter 20','Answers: before asking why he should believe it will keep its word, state what it promises. It promises the process, not the result: allocation, execution, fees and risk boundaries can all be verified.'],
+    ['Mandate parameters and authority','Chapter 21','Answers: what it should do when he is not there. Goals, boundaries, rules, exceptions and term, with authority graded by size and by whether an action can be undone.'],
+    ['Process records and verifiable evidence','Chapter 22','Answers: how he knows what it did. Layered records kept by a third party, stating the information available at the time and the grounds for each action.'],
+    ['Limits, confirmation and compensation','Chapter 23','Answers: what happens when it makes a mistake. Layered defences, slowing down where things move fast, and compensation written in advance by kind of mistake.'],
+    ['The path to trust','Chapter 24','Answers: on what basis he begins to trust it. Borrow costly signals, start small, and adjust according to the kind of mistake.']];
+  const l=document.getElementById('nx24-l'),msg=document.getElementById('nx24-msg');
+  l.innerHTML=Q.map((q,i)=>`<button type="button" class="nx-i" style="--i:${i}" data-i="${i}"><span>${q[0]}</span><em>→ ${q[1]}</em></button>`).join('');
+  const bs=[...l.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));msg.textContent=Q[i][2];}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('nx24').addEventListener('anim-in',()=>{[0,1,2,3,4].forEach((i,k)=>setTimeout(()=>set(i),1600+k*1800));});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-8">8. Implications for products</h2>
+<p>For a wealth-management product built around an agent, the last part to grow is "the path to trust". Three implications follow. First, provide separate evidence for ability, benevolence and integrity: ability rests on verifiable records, benevolence on charging the user and writing down the goals, and integrity on the agreement and independent verification. Second, a new agent first borrows expensive signals, namely the operator's capital, insurance, licence and audit, then starts small and has its authority widened level by level as its record of keeping the agreement builds up, with the loss limit at each level written down in advance. Third, adjust trust according to the kind of mistake: overstepping and concealment lead to a large withdrawal of authority, an execution error that has been compensated and fixed steps back only one level, and a misjudgement does not withdraw authority; the amount of trust always matches how reliable the agent actually is.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: trust takes time</p><p class="figsub">Four conclusions, each tied to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="g24summary">Replay</button></div>
+    <div class="g24summary" id="g24summary" data-anim><div class="g24summary-c" style="--i:0"><em>Three sources of trustworthiness</em><b>Ability, benevolence and integrity, each with evidence</b><p>Records prove ability, fees and goals prove benevolence, and the agreement and its verification prove integrity.</p></div><div class="g24summary-c" style="--i:1"><em>Signalling</em><b>Only costly signals are credible</b><p>A deposit, insurance, a licence and an audit are what a cheating operator cannot afford.</p></div><div class="g24summary-c warn" style="--i:2"><em>Starting small and reputation</em><b>Widen level by level; the record changes the judgement</b><p>The loss limit at each level is written down in advance, so a cheating scribe never gets authority worth cheating with.</p></div><div class="g24summary-c warn" style="--i:3"><em>Asymmetry</em><b>After a mistake, step back rather than reset to zero</b><p>Overstepping withdraws authority, a compensated execution error steps back one level, and a misjudgement does not step back.</p></div></div>
+  </div>
+</figure>
+<style>
+.g24summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g24summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g24summary-c.warn{border-left-color:var(--warm)}
+.g24summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g24summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g24summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g24summary.in .g24summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g24summary{grid-template-columns:1fr}}
+</style>
+
+<h2 id="sec-9">References</h2>
+<ul class="refs"><li>Colquitt, J. A., Scott, B. A., &amp; LePine, J. A. (2007). Trust, trustworthiness, and trust propensity: A meta-analytic test of their unique relationships with risk taking and job performance. <i>Journal of Applied Psychology</i>, 92(4), 909–927.</li><li>Kreps, D. M., &amp; Wilson, R. (1982). Reputation and imperfect information. <i>Journal of Economic Theory</i>, 27(2), 253–279.</li><li>Mayer, R. C., Davis, J. H., &amp; Schoorman, F. D. (1995). An integrative model of organizational trust. <i>Academy of Management Review</i>, 20(3), 709–734.</li><li>Milgrom, P., &amp; Roberts, J. (1982). Predation, reputation, and entry deterrence. <i>Journal of Economic Theory</i>, 27(2), 280–312.</li><li>Ministry of Public Security of the People's Republic of China (2021). Measures for the Administration of Points for Road Traffic Safety Violations (Order of the Ministry of Public Security No. 163).</li><li>Nobel Prize Outreach. <i>The Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel 2001</i>. NobelPrize.org.</li><li>Road Traffic Safety Law of the People's Republic of China, Article 91.</li><li>Russell, K. F., Vandermeer, B., &amp; Hartling, L. (2011). Graduated driver licensing for reducing motor vehicle crashes among young drivers. <i>Cochrane Database of Systematic Reviews</i>, CD003300.</li><li>Slovic, P. (1993). Perceived risk, trust, and democracy. <i>Risk Analysis</i>, 13(6), 675–682.</li><li>Spence, M. (1973). Job market signaling. <i>Quarterly Journal of Economics</i>, 87(3), 355–374.</li><li>Watson, J. (1999). Starting small and renegotiation. <i>Journal of Economic Theory</i>, 85(1), 52–90.</li><li>White, M. P., &amp; Eiser, J. R. (2005). Information specificity and hazard risk potential as moderators of trust asymmetry. <i>Risk Analysis</i>, 25(5), 1187–1198.</li></ul>
+<footer class="nav"><a href="g-23.html">← Chapter 23: Agents make mistakes</a><a href="g-epilogue.html">Epilogue: Back to the governing rule →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

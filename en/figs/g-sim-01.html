@@ -1,0 +1,89 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Civilization Simulator · Chapter 1: one person's lifetime</p><p class="figsub">He begins farming at 20, can no longer work the land after 60 and lives to 80. Choose a way of eating, adjust losses and seed, and see how much he eats in each month of his life.</p></div><button class="replay" type="button" data-replay="cs1">Replay</button></div>
+    <div class="cs-rules"><span class="on">Saving</span><span class="on">Seed</span><span class="lock">Lending · Ch. 2</span><span class="lock">Commitment · Ch. 3</span><span class="lock">Insurance · Ch. 5</span></div>
+    <div class="seg-btns" role="group" aria-label="Way of eating">
+      <button type="button" data-cs="free" aria-pressed="false">Eat as much as he likes</button>
+      <button type="button" data-cs="year" aria-pressed="false">Spread each year evenly</button>
+      <button type="button" data-cs="life" aria-pressed="true">Plan for a lifetime</button>
+    </div>
+    <div class="cs" id="cs1" data-anim>
+      <svg viewBox="0 0 660 240" role="img" aria-label="Monthly consumption and grain in the granary over a lifetime"><g id="cs1-ax"></g><path id="cs1-st" class="cs-st"/><path id="cs1-c" class="cs-c"/></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Eaten each month (left axis, portions)</span><span><i style="background:var(--faint);opacity:.35"></i>Grain in the granary (right axis, portions)</span><span><i style="background:var(--warm-soft)"></i>Below 0.6 portions means hunger</span></div>
+      <div class="cs-ctl">
+        <div class="sl"><label for="cs1-d">Monthly loss <b id="cs1-dv"></b></label><input id="cs1-d" type="range" min="0" max="3" step="0.1" value="1"></div>
+        <div class="sl"><label for="cs1-p">Share of harvest kept as seed <b id="cs1-pv"></b></label><input id="cs1-p" type="range" min="0" max="40" step="1" value="10"></div>
+      </div>
+      <div class="cs-sw"><label><input type="checkbox" id="cs1-old" checked> Rule: unable to farm after 60</label><label><input type="checkbox" id="cs1-rot" checked> Rule: grain spoils</label></div>
+      <div class="cs-out" id="cs1-out"></div>
+      <p class="cs-msg" id="cs1-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model: the harvest comes every autumn, with a base harvest of 12 portions; next year's harvest = 12 + 4 × √(seed kept last year). Satisfaction is the logarithm of the portions eaten each month, summarized as "equivalent steady monthly consumption over a lifetime" (the exponential of the average monthly logarithm; months with less than 0.05 portions count as 0.05). "Plan for a lifetime" recalculates at each harvest: monthly consumption from then on falls by a factor of (1 − loss), which is the best arrangement when storage involves losses, and the granary is guaranteed not to run empty before 80.</figcaption>
+</figure>
+<style>
+.cs svg{width:100%;height:auto;display:block}
+.cs-c{fill:none;stroke:var(--accent);stroke-width:2;stroke-linejoin:round}
+.cs-st{fill:var(--faint);fill-opacity:.18;stroke:none}
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-ctl{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+.cs-out{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.cs-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs-out span{display:block;font-size:11.5px;color:var(--faint)} .cs-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.cs-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs-ctl{grid-template-columns:1fr;gap:4px}.cs-out{grid-template-columns:repeat(2,1fr)}.cs svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs1'+id),A0=20,A1=80,RET=60,N=(A1-A0)*12;
+  const X0=40,X1=620,YT=12,YB=206,x=m=>X0+m/N*(X1-X0),yc=v=>YB-Math.min(v,3)/3*(YB-YT);
+  let pol='life';
+  // 模拟：返回每月消费与月初库存
+  function run(o,cfix){const d=o.rot?o.d:0,c=[],st=[];let s=0,seed=0,plan=0,planAt=0;
+    for(let m=0;m<N;m++){const age=A0+m/12,mo=m%12;
+      if(mo===0){const work=!(o.old&&age>=RET);
+        if(work){const H=12+4*Math.sqrt(seed);const nextWork=!(o.old&&age+1>=RET)&&age+1<A1;seed=nextWork?o.p*H:0;s+=H-seed;} else seed=0;
+        if(cfix===undefined){if(o.pol==='year')plan=s/12;if(o.pol==='life'){plan=solve(o,m,s,seed);planAt=m;}}}
+      const want=cfix!==undefined?cfix:o.pol==='free'?3:o.pol==='life'?plan*Math.pow(q(o),m-planAt):plan;const e=Math.max(0,Math.min(want,s));
+      st.push(s);c.push(e);s=(s-e)*(1-d);}
+    return [c,st];}
+  // 从第 m 个月起、手上有 s 份、已留种 seed：按最优路径逐月递减（每月乘以（1 − 损耗）），求可行的最大起点
+  const q=o=>1-(o.rot?o.d:0);
+  function feasible(o,m0,s0,seed0,c){const d=o.rot?o.d:0,k=q(o);let s=s0,seed=seed0;
+    for(let m=m0;m<N;m++){const age=A0+m/12;
+      if(m>m0&&m%12===0&&!(o.old&&age>=RET)){const H=12+4*Math.sqrt(seed);const nw=!(o.old&&age+1>=RET)&&age+1<A1;seed=nw?o.p*H:0;s+=H-seed;}
+      const cm=c*Math.pow(k,m-m0);if(s<cm-1e-9)return false;s=(s-cm)*(1-d);}
+    return true;}
+  function solve(o,m,s,seed){let lo=0,hi=40;for(let i=0;i<32;i++){const mid=(lo+hi)/2;if(feasible(o,m,s,seed,mid))lo=mid;else hi=mid;}return lo;}
+  function axes(smax){const ys=v=>YB-v/smax*(YB-YT);
+    let h=`<rect x="${X0}" y="${yc(.6)}" width="${X1-X0}" height="${YB-yc(.6)}" fill="var(--warm-soft)"/>`;
+    h+=[0,1,2,3].map(v=>`<line x1="${X0}" x2="${X1}" y1="${yc(v)}" y2="${yc(v)}" class="s-line"/><text x="${X0-6}" y="${yc(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('');
+    h+=[0,.5,1].map(f=>`<text x="${X1+6}" y="${ys(f*smax)+4}" font-size="11" class="t-faint">${Math.round(f*smax)}</text>`).join('');
+    h+=[20,30,40,50,60,70,80].map(a=>`<text x="${x((a-A0)*12)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">Age ${a}</text>`).join('');
+    h+=`<line x1="${x((RET-A0)*12)}" x2="${x((RET-A0)*12)}" y1="${YT}" y2="${YB}" class="s-faint" stroke-dasharray="3 4"/>`;
+    return [h,ys];}
+  function draw(){const o={pol,d:+$('-d').value/100,p:+$('-p').value/100,old:$('-old').checked,rot:$('-rot').checked};
+    $('-dv').textContent=(o.d*100).toFixed(1)+'%';$('-pv').textContent=Math.round(o.p*100)+'%';
+    const [c,st]=run(o);const smax=Math.max(20,Math.ceil(Math.max(...st)/20)*20);const [ax,ys]=axes(smax);$('-ax').innerHTML=ax;
+    let pc='',ps=`M${x(0)},${YB}`;for(let m=0;m<N;m++){pc+=(m?'L':'M')+x(m).toFixed(1)+','+yc(c[m]).toFixed(1);ps+='L'+x(m).toFixed(1)+','+ys(st[m]).toFixed(1);}ps+=`L${x(N-1)},${YB}Z`;
+    $('-c').setAttribute('d',pc);$('-st').setAttribute('d',ps);
+    const U=Math.exp(c.reduce((a,v)=>a+Math.log(Math.max(v,.05)),0)/c.length),hungry=c.filter(v=>v<.6).length,oldc=c.slice((RET-A0)*12).reduce((a,v)=>a+v,0)/((A1-RET)*12),young=c.slice(0,(RET-A0)*12).reduce((a,v)=>a+v,0)/((RET-A0)*12);
+    $('-out').innerHTML=[['Equivalent steady monthly consumption',U.toFixed(2)+' portions'],['Months of hunger',hungry],['Average per month before 60',young.toFixed(2)+' portions'],['Average per month after 60',oldc.toFixed(2)+' portions']].map(([a,b])=>`<div><span>${a}</span><b>${b}</b></div>`).join('');
+    let msg='';
+    if(!o.old)msg='Switch off the rule "unable to farm" and there is a harvest throughout life, so saving need only span one year. It is old age alone that makes saving span decades.';
+    else if(!o.rot)msg='Switch off the rule "grain spoils" and grain can be kept for decades without loss: planning for a lifetime lets him eat as much in old age as in youth. No such granary exists in reality.';
+    else if(pol==='free')msg=`He eats his fill after each harvest, and within a few months the granary is empty: ${hungry} months of hunger over a lifetime, and almost no grain after 60.`;
+    else if(pol==='year')msg=`Each year's harvest is spread evenly over twelve months, so he is not hungry when young; but nothing is left for old age, and after 60 he goes hungry for ${hungry} months in all.`;
+    else msg=o.d<.001?`With no losses, planning for a lifetime lets him eat as much in old age as in youth.`:`Planning for a lifetime, he saves more when young. But with a monthly loss of ${(o.d*100).toFixed(1)}%, only about ${Math.round(Math.pow(1-o.d,240)*100)}% is left after twenty years of storage: the longer grain is kept, the less it pays. After 60 he can eat only ${oldc.toFixed(2)} portions a month on average, with ${hungry} months of hunger. This is as far as one person can go.`;
+    $('-msg').textContent=msg;}
+  document.querySelectorAll('[data-cs]').forEach(b=>b.addEventListener('click',()=>{pol=b.dataset.cs;document.querySelectorAll('[data-cs]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  ['-d','-p','-old','-rot'].forEach(k=>$(k).addEventListener('input',draw));
+  $('').addEventListener('anim-in',()=>{['free','year','life'].forEach((k,i)=>setTimeout(()=>{pol=k;document.querySelectorAll('[data-cs]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.cs===k)));draw();},300+i*2600));});
+  draw();
+})();
+</script>

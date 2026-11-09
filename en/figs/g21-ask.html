@@ -1,0 +1,31 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">How much to ask</p><p class="figsub">The scribe makes 200 decisions a year; 20 of them matter and depend on what he cares about. He can answer only 12 requests a year with real care; beyond that he nods without thinking. Drag the share of decisions referred to him and see how many bad decisions result.</p></div><button class="replay" type="button" data-replay="ak21">Replay</button></div>
+    <div class="ak21" id="ak21" data-anim>
+      <svg viewBox="0 0 660 200" role="img" aria-label="Share of decisions referred to him and bad decisions"><g id="ak21-g"></g></svg>
+      <div class="sl"><label for="ak21-e">Share referred to him <b id="ak21-ev"></b></label><input id="ak21-e" type="range" min="0" max="100" step="1" value="5"></div>
+      <p class="ak21-msg" id="ak21-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the scribe ranks matters by importance and refers the most important first; an important matter decided by the scribe alone goes against his wishes 40% of the time; the probability that he answers with care is 12 ÷ number of requests (capped at 1), and a careless answer is the same as leaving the decision to the scribe. Vertical axis: number of bad decisions per year.</figcaption>
+</figure>
+<style>
+.ak21 svg{width:100%;height:auto;display:block}
+.ak21-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.ak21 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('ak21'+id),D=200,I=20,C=12,X0=50,X1=628,YT=12,YB=170,x=e=>X0+e*(X1-X0),y=v=>YB-v/10*(YB-YT);
+  const bad=e=>{const n=Math.round(e*D),imp=Math.min(I,n),care=n?Math.min(1,C/n):1;return (I-imp)*.4+imp*(1-care)*.4;};
+  function draw(){const e=+$('-e').value/100,n=Math.round(e*D),b=bad(e);$('-ev').textContent=Math.round(e*100)+'% ('+n+' a year)';
+    let h=[0,2,4,6,8,10].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+[0,.25,.5,.75,1].map(v=>`<text x="${x(v)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${v*100}%</text>`).join('');
+    let d='';for(let k=0;k<=100;k++)d+=(k?'L':'M')+x(k/100).toFixed(1)+','+y(bad(k/100)).toFixed(1);
+    h+=`<path d="${d}" fill="none" stroke="var(--warm)" stroke-width="2.6"/><circle cx="${x(e)}" cy="${y(b)}" r="7" fill="var(--warm)"/>`;
+    $('-g').innerHTML=h;
+    $('-msg').textContent=n===0?'Never asking: all 20 important decisions are made by the scribe, and about 8 go against his wishes.':n<=C?`Asking ${n} times a year, he can answer every request with care; about ${b.toFixed(1)} of the remaining important decisions go against his wishes.`:`Asking ${n} times a year, he can look carefully at only ${C} of them and nods the rest through without thinking: bad decisions rise again to about ${b.toFixed(1)}. Asking too much is the same as not asking.`;}
+  $('-e').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{let v=0;$('-e').value=0;draw();const id=setInterval(()=>{v+=2;$('-e').value=v;draw();if(v>=60)clearInterval(id);},80);});
+  draw();
+})();
+</script>

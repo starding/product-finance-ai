@@ -1,0 +1,48 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">扣除费用后，实际业绩比纯运气还差</p>
+    <p class="figsub">灰色是假设所有基金经理都毫无技能时，基金超额收益 t 值的分布；橙色线是扣除费用后的实际分布（示意）。切换查看。</p>
+    <div class="seg-btns" role="group" aria-label="显示">
+      <button type="button" data-sk="luck" aria-pressed="true">只看纯运气</button>
+      <button type="button" data-sk="both" aria-pressed="false">叠加实际业绩</button>
+    </div>
+    <div class="sk12" id="sk12" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="基金超额收益 t 值的分布">
+        <g id="sk12-axis"></g><g id="sk12-bars"></g><path id="sk12-act" class="sk12-act"/>
+        <line id="sk12-th" class="sk12-th" y1="14" y2="176"/>
+      </svg>
+      <p class="sk12-msg" id="sk12-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意形状，依据 Fama 与 French（2010）的方法与结论：把实际基金的超额收益与模拟的“零技能”分布对比，扣除费用后，实际分布整体落在纯运气分布的左侧，说明多数基金扣费后的真实超额收益为负；右尾也看不出优于运气，能稳定覆盖成本的经理极少。曲线不是原文数据。</figcaption>
+</figure>
+<style>
+.sk12 svg{width:100%;height:auto;display:block}
+#sk12-bars rect{fill:var(--gray-mark);opacity:.5}
+.sk12-act{fill:none;stroke:var(--warm);stroke-width:2.5;opacity:0;transition:opacity .5s}
+.sk12[data-m="both"] .sk12-act{opacity:1}
+.sk12-th{stroke:var(--ink);stroke-dasharray:3 3}
+.sk12-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const X0=40,X1=620,YB=176,lo=-4,hi=4,x=t=>X0+(t-lo)/(hi-lo)*(X1-X0);
+  const pdf=(t,m,s)=>Math.exp(-0.5*((t-m)/s)**2)/(s*Math.sqrt(2*Math.PI));
+  const y=v=>YB-v/0.42*150;
+  let a=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`;
+  [-3,-2,-1,0,1,2,3].forEach(t=>a+=`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${t}</text>`);
+  a+=`<text x="${X1}" y="${YB+30}" text-anchor="end" font-size="11" class="t-faint">扣费后超额收益的 t 值</text><text x="${x(2)+4}" y="24" font-size="11" class="t-muted">t ＝ 2</text>`;
+  document.getElementById('sk12-axis').innerHTML=a;
+  const th=document.getElementById('sk12-th');th.setAttribute('x1',x(2));th.setAttribute('x2',x(2));
+  let b='';const w=0.25;for(let t=lo;t<hi;t+=w){const v=pdf(t+w/2,0,1);b+=`<rect x="${x(t)+1}" y="${y(v)}" width="${x(t+w)-x(t)-2}" height="${YB-y(v)}"/>`;}
+  document.getElementById('sk12-bars').innerHTML=b;
+  let d='';for(let i=0;i<=160;i++){const t=lo+i*(hi-lo)/160;d+=(i?'L':'M')+x(t).toFixed(1)+','+y(pdf(t,-0.7,1.05)).toFixed(1);}
+  document.getElementById('sk12-act').setAttribute('d',d);
+  const sk=document.getElementById('sk12');
+  function set(m){sk.dataset.m=m;document.querySelectorAll('[data-sk]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.sk===m)));
+    document.getElementById('sk12-msg').textContent=m==='luck'?'即使没有任何技能，也会有约 2.3% 的基金 t 值超过 2，看起来“显著跑赢”。':'实际分布整体落在纯运气分布的左侧：扣除费用后，多数基金的真实超额收益为负；右侧超过 2 的部分也不比纯运气多，看不出优于运气的技能。';}
+  document.querySelectorAll('[data-sk]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.sk)));
+  sk.addEventListener('anim-in',()=>{set('luck');setTimeout(()=>set('both'),2200);});
+  set('luck');
+})();
+</script>

@@ -1,0 +1,52 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">The six functions of the financial system</p>
+    <p class="figsub">Institutions change; functions are comparatively stable. Choose an innovation to see which functions it mainly improves.</p>
+    <div class="seg-btns" role="group" aria-label="Innovation">
+      <button type="button" data-fn="idx" aria-pressed="false">Index funds</button>
+      <button type="button" data-fn="etr" aria-pressed="false">Electronic trading and online account opening</button>
+      <button type="button" data-fn="rat" aria-pressed="false">Credit ratings and audits</button>
+      <button type="button" data-fn="ai" aria-pressed="false">AI agents (yet to be tested)</button>
+    </div>
+    <div class="fn" id="fn">
+      <div class="fn-t" data-k="1"><b>1</b><strong>Transferring resources</strong><span>Across time, places and industries</span></div>
+      <div class="fn-t" data-k="2"><b>2</b><strong>Managing risk</strong><span>Diversifying, hedging and transferring</span></div>
+      <div class="fn-t" data-k="3"><b>3</b><strong>Clearing and settling payments</strong><span>Getting trades settled</span></div>
+      <div class="fn-t" data-k="4"><b>4</b><strong>Pooling funds and subdividing ownership</strong><span>Splitting large investments into small shares</span></div>
+      <div class="fn-t" data-k="5"><b>5</b><strong>Providing price information</strong><span>Helping dispersed decision-makers coordinate</span></div>
+      <div class="fn-t" data-k="6"><b>6</b><strong>Dealing with information asymmetry and incentives</strong><span>Making promises checkable</span></div>
+    </div>
+    <p class="fn-msg" id="fn-msg" aria-live="polite">Choose an innovation above.</p>
+  </div>
+  <figcaption>The division into functions is from Merton and Bodie (1995). The mapping of innovations to functions is this book's own synthesis; the AI agent case is a hypothesis yet to be tested and is shown with dashed lines.</figcaption>
+</figure>
+<style>
+.fn{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.fn-t{border:1.5px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:2px;transition:background .3s,border-color .3s,transform .3s,opacity .3s}
+.fn-t b{font-size:12px;color:var(--faint)}
+.fn-t strong{font-size:14px}
+.fn-t span{font-size:12px;color:var(--muted)}
+.fn.sel .fn-t{opacity:.45}
+.fn .fn-t.on{opacity:1;background:var(--accent-soft);border-color:var(--accent);transform:translateY(-2px)}
+.fn .fn-t.maybe{opacity:1;border-style:dashed;border-color:var(--warm);background:var(--warm-soft)}
+.fn-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.fn{grid-template-columns:repeat(2,1fr)}}
+</style>
+<script>
+(function(){
+  const M={
+    idx:{on:[2,4],msg:'Index funds let ordinary investors hold the whole market at very low cost, making diversification of risk (function 2) and subdivision of ownership (function 4) cheaper.'},
+    etr:{on:[3,1],msg:'Electronic trading, electronic settlement and online account opening lowered the cost of clearing, payment and market participation (function 3), letting more people direct resources to capital markets (function 1).'},
+    rat:{on:[6,5],msg:'Ratings and audits have specialist firms check the condition of promisors centrally, easing information asymmetry (function 6), and their conclusions also enter prices (function 5).'},
+    ai:{maybe:[6,2,5],msg:'AI agents may lower the cost of checking and execution (function 6), help users keep diversification and discipline (function 2), and speed up information processing (function 5). These are hypotheses yet to be tested: whether checking costs really fall depends on measurement.'}
+  };
+  const fn=document.getElementById('fn'), btns=[...document.querySelectorAll('[data-fn]')];
+  btns.forEach(b=>b.addEventListener('click',()=>{
+    const m=M[b.dataset.fn];
+    btns.forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
+    fn.classList.add('sel');
+    fn.querySelectorAll('.fn-t').forEach(t=>{const k=+t.dataset.k;t.classList.toggle('on',(m.on||[]).includes(k));t.classList.toggle('maybe',(m.maybe||[]).includes(k));});
+    document.getElementById('fn-msg').textContent=m.msg;
+  }));
+})();
+</script>

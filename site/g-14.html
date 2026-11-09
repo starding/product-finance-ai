@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>人人都能有专属代理人吗</title>
+<meta name="description" content="《产品×金融×AI：从零推演》第 14 章：重跑委托这一步。过去只有大户请得起账房，因为每位委托人都有一笔固定的成本；书记员让这笔成本中的认知劳动几乎免费，门槛随之下降，标准化的产品可以变成每户专属的安排。但核对与担责的成本仍在，最穷的人家仍被挡在门外；代理成本中只有监督一项明显下降；免费的代理由谁付钱，它就为谁做事">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="g-14">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="全书目录">
+<div class="side-head"><a class="sidetitle" href="index.html">产品×金融×AI<small>AI 时代的金融产品</small></a></div>
+<div class="side-view" role="group" aria-label="阅读方式"><a href="preface.html">分解式</a><a href="g-preface.html" class="on" aria-current="true">生成式</a></div>
+<a class="side-about" href="index.html#about">关于本书</a>
+<a class="" href="g-preface.html"><span class="n">序</span>理解金融产品最好的方法，是从零造一个</a>
+<a class="side-part" href="g-part1.html"><span class="pn">第一部分</span>从 0 到 1：一个没有金融的世界如何长出金融</a>
+<a class="" href="g-01.html"><span class="n">1</span>一个人，一年的收成</a>
+<a class="" href="g-02.html"><span class="n">2</span>两个人，缺的时间不同</a>
+<a class="" href="g-03.html"><span class="n">3</span>借了不还怎么办</a>
+<a class="" href="g-04.html"><span class="n">4</span>很多人一起交换</a>
+<a class="" href="g-05.html"><span class="n">5</span>收成好坏不定</a>
+<a class="" href="g-06.html"><span class="n">6</span>存的人要随时取，借的人要长期用</a>
+<a class="" href="g-07.html"><span class="n">7</span>一个人出不起一艘船的钱</a>
+<a class="" href="g-08.html"><span class="n">8</span>证券要能卖出去</a>
+<a class="" href="g-09.html"><span class="n">9</span>价格里有所有人的信息</a>
+<a class="" href="g-10.html"><span class="n">10</span>普通人没有时间也没有专长</a>
+<a class="" href="g-11.html"><span class="n">11</span>受托人可能不尽责</a>
+<a class="" href="g-12.html"><span class="n">12</span>制度齐备，人仍会犯错</a>
+<a class="side-part" href="g-part2.html"><span class="pn">第二部分</span>改变一个参数：当代理变得几乎免费</a>
+<a class="" href="g-13.html"><span class="n">13</span>新参数：认知劳动的成本骤降</a>
+<a class=" cur" href="g-14.html" aria-current="page"><span class="n">14</span>人人都能有专属代理人吗</a>
+<a class="" href="g-15.html"><span class="n">15</span>谁来为代理人的承诺担保</a>
+<a class="" href="g-16.html"><span class="n">16</span>如果人人都有分析师</a>
+<a class="" href="g-17.html"><span class="n">17</span>代理人成为市场的主要参与者</a>
+<a class="" href="g-18.html"><span class="n">18</span>代理人能否矫正人的偏差</a>
+<a class="" href="g-19.html"><span class="n">19</span>没有改变的东西</a>
+<a class="side-part" href="g-part3.html"><span class="pn">第三部分</span>在新的世界里推演一个产品</a>
+<a class="" href="g-20.html"><span class="n">20</span>一个人和一笔钱</a>
+<a class="" href="g-21.html"><span class="n">21</span>用户不在场</a>
+<a class="" href="g-22.html"><span class="n">22</span>用户看不见过程</a>
+<a class="" href="g-23.html"><span class="n">23</span>代理会出错</a>
+<a class="" href="g-24.html"><span class="n">24</span>信任需要时间</a>
+<a class="side-app" href="g-epilogue.html"><span class="n">结语</span>回到总则</a>
+<a class="side-app" href="method.html"><span class="n">附录</span>本书的写法</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="展开目录" title="目录"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">产品×金融×AI：AI 时代的金融产品</a><span>第二部分　改变一个参数</span><a class="langlink" href="en/g-14.html" hreflang="en">English</a></header>
+
+<div class="chapno">第 14 章</div><h1>人人都能有专属代理人吗<small>委托的边界怎样移动</small></h1>
+<blockquote><p>过去，只有家产最多的几户人家请得起专门的账房：账房要了解每户的收成、债务与打算，再替它挑船、记账、按时调整，这些劳动每户都要做一遍，家产少的人家付不起。大多数人只能买标准化的安排，例如只按份额持有全部船股。书记员来了之后，这些劳动几乎不要报酬，门槛随之下降，标准化的安排可以变成每户专属的安排。可是核对与担责的成本仍在，最穷的人家仍被挡在门外；代理成本中只有监督的部分明显下降；而一个不向委托人收费的代理，迟早会为付钱给它的人做事。</p></blockquote>
+<h2 id="sec-1">一、账房过去只属于大户</h2>
+<p>岛上种地、织布与造船的效率一年年提高，粮食与布匹越来越便宜。账房的工作却没有变快：了解一户人家、替它挑选与核对，一百年前要花多少时间，现在仍要花多少时间。别的行当工钱上涨，账房若不跟着涨，就没有人愿意做账房；于是账房的工钱也随之上涨，请一位账房相对于买一匹布就越来越贵。账房并没有变差，只是别的东西变得更便宜了。</p>
+<aside class="principle"><p class="pr-k">推演至此，得到一条原理</p><p class="pr-n">成本病</p><p class="pr-c"><span><em>学科</em>经济学 › 经济增长与服务业经济学</span><span><em>类型</em>理论模型（两部门模型）</span></p><p class="pr-s">一个行当的生产率停滞、别的行当的生产率不断提高时，前者的工钱仍须随整体上涨，它的相对价格因此持续上升。</p><dl><div><dt>在学科中的位置</dt><dd>以提出者命名，通称“鲍莫尔成本病”；原文用它解释城市公共服务的财政困境，此后常被用来解释教育、医疗等服务的价格长期上涨</dd></div><div><dt>回应的约束</dt><dd>一对一的服务要逐户提供，劳动无法省去</dd></div><div><dt>成立的前提</dt><dd>服务所需的劳动不随技术进步而减少；各行当的工钱彼此跟随</dd></div><div><dt>提出者</dt><dd>鲍莫尔，1967，以教育、医疗与现场演出为例</dd></div><div><dt>留下的问题</dt><dd>核对与担责的劳动能否也变得更便宜</dd></div><div><dt>重跑之后</dt><dd>书记员让账房工作中认知劳动的生产率跃升，这一部分不再满足“生产率停滞”的前提；核对与担责的部分仍然满足</dd></div></dl></aside>
+<p>重跑委托这一步时，只改变一处：书记员让账房工作中的认知劳动几乎免费。</p>
+<p><strong>今天的对应。</strong>一对一的财富管理服务通常设有较高的起投金额，主要服务资产较多的客户。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">请账房为什么越来越贵</p><p class="figsub">织布的效率每年提高 3%，账房的效率不变，两边的工钱一起上涨。纵轴是请账房一年相当于多少匹布。勾选“书记员到来”，看第 30 年之后会怎样。</p></div><button class="replay" type="button" data-replay="bm14">重播</button></div>
+    <div class="bm14" id="bm14" data-anim>
+      <svg viewBox="0 0 660 210" role="img" aria-label="账房相对于布的价格"><g id="bm14-g"></g></svg>
+      <div class="cs-sw"><label><input type="checkbox" id="bm14-c"> 书记员到来：第 30 年起，账房工作中八成的认知劳动几乎免费</label></div>
+      <p class="bm14-msg" id="bm14-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：鲍莫尔（1967）两部门模型。账房的相对价格＝（1＋3%）的 t 次方；书记员到来后，账房所需的劳动降到原来的两成，此后核对与担责的部分仍按原来的效率。</figcaption>
+</figure>
+<style>
+.bm14 svg{width:100%;height:auto;display:block}
+.bm14-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.bm14 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('bm14'+id),T=50,X0=50,X1=628,YT=12,YB=180,x=t=>X0+t/T*(X1-X0);
+  function draw(n){const c=$('-c').checked,N=n===undefined?T:n,P=[];for(let t=0;t<=T;t++)P.push(Math.pow(1.03,t)*(c&&t>=30?.2:1));
+    const mx=5,y=v=>YB-v/mx*(YB-YT);
+    let h=[0,1,2,3,4,5].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v} 倍</text>`).join('')+[0,10,20,30,40,50].map(t=>`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">第 ${t} 年</text>`).join('');
+    if(c)h+=`<line x1="${x(30)}" x2="${x(30)}" y1="${YT}" y2="${YB}" stroke="var(--warm)" stroke-dasharray="4 4"/><text x="${x(30)+6}" y="${YT+12}" font-size="11" fill="var(--warm)">书记员到来</text>`;
+    h+=`<path d="${P.slice(0,N+1).map((v,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(v).toFixed(1)).join('')}" fill="none" stroke="var(--accent)" stroke-width="2.6"/>`;
+    $('-g').innerHTML=h;
+    $('-msg').textContent=c?`第 29 年，请账房一年相当于 ${P[29].toFixed(1)} 匹布；书记员到来后，降到 ${P[30].toFixed(1)} 匹。但剩下的核对与担责仍不会变快，第 50 年又回升到 ${P[50].toFixed(1)} 匹。`:`五十年后，请账房一年相当于 ${P[50].toFixed(1)} 匹布：账房没有变得更差，只是别的东西变得更便宜了。`;}
+  $('-c').addEventListener('input',()=>draw());
+  $('').addEventListener('anim-in',()=>{$('-c').checked=false;let n=0;const id=setInterval(()=>{n+=1;draw(n);if(n>=T){clearInterval(id);setTimeout(()=>{$('-c').checked=true;draw();},1200);}},40);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-2">二、门槛：固定的成本除以家产</h2>
+<p>账房的成本有一大部分与家产多少无关：无论一户有一百份还是一千份家产，了解它的情况、为它记账与核对，所花的劳动差不多。这笔固定的成本除以家产，就是委托的成本占家产的比例；家产越少，这一比例越高。只有这一比例低于委托带来的好处时，委托才划算。每一户都在三种做法之间比较：自己打理、买一份标准化的安排、请一位专属的账房；哪一种的总成本最低，就选哪一种。固定成本中的认知劳动变便宜之后，专属账房的成本下降，原来只能自己打理或只能买标准化产品的人家，也请得起专属的安排。</p>
+<aside class="principle"><p class="pr-k">推演至此，得到一条原理</p><p class="pr-n">交易成本与组织的边界</p><p class="pr-c"><span><em>学科</em>经济学 › 新制度经济学（交易成本经济学）</span><span><em>类型</em>理论</span></p><p class="pr-s">一件事由自己做、交给市场还是交给一个组织，取决于各种做法的相对成本；某一种做法的成本下降，边界就向它移动。</p><dl><div><dt>在学科中的位置</dt><dd>论文提出“为什么存在企业”这一问题，并以使用市场的成本作答；科斯因“发现并阐明了交易成本与产权对经济的制度结构与运行的意义”获 1991 年诺贝尔经济学奖</dd></div><div><dt>回应的约束</dt><dd>注意力与专长稀缺，委托本身也有成本</dd></div><div><dt>成立的前提</dt><dd>各种做法的成本可以比较；成本中有一部分与规模无关</dd></div><div><dt>提出者</dt><dd>科斯，1937</dd></div><div><dt>留下的问题</dt><dd>核对与担责的成本若不下降，家产最少的人家怎样得到委托</dd></div><div><dt>重跑之后</dt><dd>委托的固定成本中认知劳动的部分几乎消失，边界向专属委托移动；核对与担责的部分不变，决定了边界移动的终点</dd></div></dl></aside>
+<p>雷赫尔与索科林斯基（2024）研究了美国一家大型智能投顾把起投金额从 5,000 美元降到 500 美元的前后变化：参加的中等收入投资者明显增加，最穷的投资者却没有增加。门槛降低了，但并没有降到所有人都能跨过。</p>
+<p><strong>今天的对应。</strong>智能投顾以较低的起投金额与费率，提供按问卷配置、自动调整的组合。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">门槛：固定成本除以家产</p><p class="figsub">委托一年的成本占家产的比例，随家产增加而下降；低于委托带来的好处（虚线）的那一段，委托才划算。拖动认知劳动的价格，看门槛移到哪里。</p></div><button class="replay" type="button" data-replay="th14">重播</button></div>
+    <div class="th14" id="th14" data-anim>
+      <svg viewBox="0 0 660 220" role="img" aria-label="委托成本占家产的比例"><g id="th14-g"></g></svg>
+      <div class="sl"><label for="th14-a">认知劳动的价格 <b id="th14-av"></b></label><input id="th14-a" type="range" min="0" max="2" step="0.1" value="0"></div>
+      <p class="th14-msg" id="th14-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：固定成本＝3 份 × 认知劳动的价格＋0.3 份核对与担责；委托带来的好处为家产的 1.3%。横轴为家产，对数刻度。</figcaption>
+</figure>
+<style>
+.th14 svg{width:100%;height:auto;display:block}
+.th14-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.th14 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('th14'+id),X0=50,X1=628,YT=12,YB=180,L0=1,L1=4,x=w=>X0+(Math.log10(w)-L0)/(L1-L0)*(X1-X0),mx=6,y=v=>YB-Math.min(v,mx)/mx*(YB-YT),B=1.3;
+  function draw(){const ls=+$('-a').value,a=Math.pow(10,-ls),F=3*a+.3,th=F/B*100;$('-av').textContent=a>=.1?Math.round(a*100)+'%':(a*100).toFixed(1)+'%';
+    let h=[0,2,4,6].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}%</text>`).join('')+[10,100,1000,10000].map(w=>`<text x="${x(w)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${w} 份</text>`).join('');
+    h+=`<rect x="${x(Math.max(10,Math.min(1e4,th)))}" y="${YT}" width="${X1-x(Math.max(10,Math.min(1e4,th)))}" height="${YB-YT}" fill="var(--accent)" opacity=".08"/>`;
+    h+=`<line x1="${X0}" x2="${X1}" y1="${y(B)}" y2="${y(B)}" stroke="var(--warm)" stroke-dasharray="5 4"/><text x="${X1}" y="${y(B)-6}" text-anchor="end" font-size="11" fill="var(--warm)">委托的好处 1.3%</text>`;
+    let d='';for(let l=L0;l<=L1+1e-9;l+=.02){const w=Math.pow(10,l);d+=(d?'L':'M')+x(w).toFixed(1)+','+y(F/w*100).toFixed(1);}
+    const fl=.3/B*100;
+    h+=`<path d="${d}" fill="none" stroke="var(--accent)" stroke-width="2.6"/>`;
+    if(th>=10&&th<=1e4)h+=`<line x1="${x(th)}" x2="${x(th)}" y1="${y(B)}" y2="${YB}" stroke="var(--accent)"/><text x="${x(th)+6}" y="${YB-8}" font-size="11">门槛 ${Math.round(th)} 份</text>`;
+    $('-g').innerHTML=h;
+    $('-msg').textContent=ls===0?`认知劳动按原价计，固定成本 3.3 份，家产超过 ${Math.round(th)} 份的人家委托才划算。`:`认知劳动的价格降到 ${a>=.1?Math.round(a*100):(a*100).toFixed(1)}%，固定成本 ${F.toFixed(2)} 份，门槛降到 ${Math.round(th)} 份。认知劳动再便宜，门槛也不会低于 ${Math.round(fl)} 份：那是 0.3 份的核对与担责决定的。`;}
+  $('-a').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{let v=0;$('-a').value=0;draw();const id=setInterval(()=>{v+=.1;$('-a').value=v.toFixed(1);draw();if(v>=2)clearInterval(id);},150);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-3">三、从标准化到专属</h2>
+<p>请不起账房的人家，只能接受为大多数人设计的安排：一种组合、一个默认的比例、一条按年龄调整的路径。这些安排对平均的人家合适，对具体的某一户却未必合适：家里有人收入不稳定，或者几年后要用一大笔钱，合适的安排就与平均的不同。书记员可以为每一户单独计算，标准化的安排因此可以变成专属的安排。</p>
+<p>达昆托、普拉巴拉与罗西（2019）研究了印度一家大型券商推出的组合优化工具：使用之前分散不足的投资者，持有的股票增多，组合波动更小、收益更好；原本已经充分分散的投资者，持有的股票反而减少，交易也更频繁。使用者的处置效应、追涨与排名效应等偏差也有所减少。</p>
+<p><strong>今天的对应。</strong>目标日期基金按年龄分档；按问卷配置的组合按风险等级分档；更细的专属配置，过去只出现在私人银行的服务中。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">从一种安排到每户一种</p><p class="figsub">四十户人家各有最合适的船股比例（圆点），取决于年龄、收入是否稳定、几年后是否要用一大笔钱。横线是实际得到的比例。切换三种安排，看平均偏离了多少。</p></div><button class="replay" type="button" data-replay="ft14">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="安排">
+      <button type="button" data-ft14="one" aria-pressed="true">人人一种</button>
+      <button type="button" data-ft14="age" aria-pressed="false">按年龄分档</button>
+      <button type="button" data-ft14="own" aria-pressed="false">每户专属</button>
+    </div>
+    <div class="ft14" id="ft14" data-anim>
+      <svg viewBox="0 0 660 220" role="img" aria-label="合适的比例与实际的比例"><g id="ft14-g"></g></svg>
+      <div class="legend"><span><i style="background:var(--accent);border-radius:50%"></i>最合适的比例</span><span><i style="background:var(--ink)"></i>实际得到的比例</span><span><i style="background:var(--warm)"></i>偏离</span></div>
+      <p class="ft14-msg" id="ft14-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：四十户按年龄从轻到老排列。最合适的比例随年龄下降，并因各户的收入与用钱计划上下浮动；“按年龄分档”按四个年龄段各取平均。</figcaption>
+</figure>
+<style>
+.ft14 svg{width:100%;height:auto;display:block}
+.ft14-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.ft14 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('ft14'+id);let s=1415;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};
+  const N=40,I=Array.from({length:N},(_,i)=>Math.max(.05,Math.min(.95,.9-.6*i/(N-1)+(r()-.5)*.45)));
+  const X0=50,X1=628,YT=12,YB=180,x=i=>X0+(i+.5)/N*(X1-X0),y=v=>YB-v*(YB-YT);let mode='one';
+  const avg=a=>a.reduce((p,q)=>p+q,0)/a.length;
+  function given(){if(mode==='own')return I.slice();if(mode==='one'){const m=avg(I);return I.map(()=>m);}return I.map((_,i)=>{const k=Math.floor(i/10);return avg(I.slice(k*10,k*10+10));});}
+  function draw(){const G=given();let h=[0,.25,.5,.75,1].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text>`).join('')+`<text x="${X0}" y="${YB+16}" font-size="11" class="t-faint">年轻</text><text x="${X1}" y="${YB+16}" text-anchor="end" font-size="11" class="t-faint">年长</text>`;
+    I.forEach((v,i)=>{h+=`<line x1="${x(i)}" x2="${x(i)}" y1="${y(v)}" y2="${y(G[i])}" stroke="var(--warm)" stroke-width="2"/><line x1="${x(i)-6}" x2="${x(i)+6}" y1="${y(G[i])}" y2="${y(G[i])}" stroke="var(--ink)" stroke-width="2"/><circle cx="${x(i)}" cy="${y(v)}" r="4.2" fill="var(--accent)"/>`;});
+    $('-g').innerHTML=h;const dev=avg(I.map((v,i)=>Math.abs(v-G[i])))*100;
+    $('-msg').textContent={one:`人人一种：所有人家得到同一个比例，平均偏离 ${dev.toFixed(0)} 个百分点，年轻人太保守，年长的人太冒险。`,age:`按年龄分档：平均偏离降到 ${dev.toFixed(0)} 个百分点；同一年龄段里收入与用钱计划不同的人家，仍得到同样的安排。`,own:'每户专属：每户得到自己最合适的比例。过去只有请得起账房的人家才有这样的安排。'}[mode];}
+  const bs=[...document.querySelectorAll('[data-ft14]')];
+  function set(m){mode=m;bs.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.ft14===m)));draw();}
+  bs.forEach(b=>b.addEventListener('click',()=>set(b.dataset.ft14)));
+  $('').addEventListener('anim-in',()=>{['one','age','own'].forEach((m,i)=>setTimeout(()=>set(m),300+i*2200));});
+  draw();
+})();
+</script>
+
+<h2 id="sec-4">四、代理成本中哪一项下降</h2>
+<p>委托人为委托付出的，可以分成三项：为了看住经理而付出的监督成本，经理为了让委托人相信自己而付出的担保成本，以及监督与担保之后仍然存在的、因双方利益不一致而造成的剩余损失。书记员对三项的影响并不相同。监督的成本明显下降：委托人可以请自己的书记员逐笔核对经理做了什么。担保的成本几乎不变：书记员没有家产可以抵押，为它担保的仍是背后的人。剩余损失则取决于书记员为谁做事。</p>
+<aside class="principle"><p class="pr-k">重跑至此，重新检验一条原理</p><p class="pr-n">代理成本的三项</p><p class="pr-c"><span><em>学科</em>金融学 › 公司金融（代理理论）</span><span><em>类型</em>理论</span></p><p class="pr-s">代理成本由委托人的监督成本、代理人的担保成本与剩余损失三项构成，委托人选择的监督与担保，以三项之和最小为准。</p><dl><div><dt>在学科中的位置</dt><dd>把股东与经理人的关系表述为代理关系，并给出代理成本的定义；研究激励与契约的契约理论，2016 年由哈特与霍姆斯特罗姆获诺贝尔经济学奖</dd></div><div><dt>回应的约束</dt><dd>代理人的利益与委托人不一致，行动又看不全</dd></div><div><dt>成立的前提</dt><dd>监督与担保都要花费资源；利益无法完全一致</dd></div><div><dt>提出者</dt><dd>詹森与麦克林，1976</dd></div><div><dt>留下的问题</dt><dd>没有家产可以抵押的代理，由谁为它担保</dd></div><div><dt>重跑之后</dt><dd>监督成本随认知劳动的价格明显下降；担保成本不变；剩余损失取决于书记员为谁做事，可能下降，也可能上升</dd></div></dl></aside>
+<p><strong>今天的对应。</strong>对账、费用比较与持仓分析的工具，使委托人核对受托人的成本大为降低；赔付与牌照责任仍由机构承担。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">代理成本的三项，各降多少</p><p class="figsub">按詹森与麦克林（1976）的分法，代理成本由监督成本、担保成本与剩余损失构成。拖动认知劳动的价格，再切换书记员为谁做事。</p></div><button class="replay" type="button" data-replay="ag14">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="书记员为谁做事">
+      <button type="button" data-ag14="p" aria-pressed="true">书记员为委托人做事</button>
+      <button type="button" data-ag14="s" aria-pressed="false">书记员为卖方做事</button>
+    </div>
+    <div class="ag14" id="ag14" data-anim>
+      <div class="ag14-g" id="ag14-g"></div>
+      <div class="sl"><label for="ag14-a">认知劳动的价格 <b id="ag14-av"></b></label><input id="ag14-a" type="range" min="0" max="100" step="5" value="100"></div>
+      <p class="ag14-msg" id="ag14-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：原来三项各为 40、25、35。监督成本九成是认知劳动；担保成本不是；书记员为委托人做事时，剩余损失随监督变严而减少一半，为卖方做事时反而增加。</figcaption>
+</figure>
+<style>
+.ag14-g{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;align-items:end;height:200px;margin:6px 0 10px}
+.ag14-c{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;font-size:12.5px}
+.ag14-c div{width:64%;display:flex;flex-direction:column;justify-content:flex-end;height:150px;position:relative}
+.ag14-c i{display:block;width:100%;border-radius:6px 6px 0 0;transition:height .6s}
+.ag14-c i.old{position:absolute;bottom:0;left:0;border:1.5px dashed var(--faint);background:transparent}
+.ag14-c b{font-variant-numeric:tabular-nums;margin:4px 0 2px}
+.ag14-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('ag14'+id);let who='p';
+  const B=[['监督成本',40,'var(--accent)'],['担保成本',25,'var(--warm)'],['剩余损失',35,'var(--ink)']];
+  function draw(){const a=+$('-a').value/100;$('-av').textContent=Math.round(a*100)+'%';
+    const m=40*(.9*a+.1),b=25,res=who==='p'?35*(.5+.5*a):35*(1+.6*(1-a)),V=[m,b,res],tot=m+b+res;
+    $('-g').innerHTML=B.map(([n,v,c],i)=>`<div class="ag14-c"><div><i class="old" style="height:${v*1.5}%"></i><i style="height:${V[i]*1.5}%;background:${c}"></i></div><b>${V[i].toFixed(0)}</b><span>${n}</span></div>`).join('');
+    $('-msg').textContent=a===1&&who==='p'?'认知劳动按原价计：监督成本 40、担保成本 25、剩余损失 35，合计 100。':who==='p'?`认知劳动的价格降到 ${Math.round(a*100)}%，监督成本从 40 降到 ${m.toFixed(0)}，剩余损失随之降到 ${res.toFixed(0)}；担保成本仍是 25。代理成本合计从 100 降到 ${tot.toFixed(0)}。`:`书记员为卖方做事：监督成本同样下降，剩余损失却升到 ${res.toFixed(0)}，因为替委托人做决定的，正是利益与他不一致的一方。合计 ${tot.toFixed(0)}。`;}
+  const bs=[...document.querySelectorAll('[data-ag14]')];
+  function set(w){who=w;bs.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.ag14===w)));draw();}
+  bs.forEach(b=>b.addEventListener('click',()=>set(b.dataset.ag14)));$('-a').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{set('p');let v=100;$('-a').value=100;draw();const id=setInterval(()=>{v-=5;$('-a').value=v;draw();if(v<=5){clearInterval(id);setTimeout(()=>set('s'),1400);}},90);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-5">五、谁付钱，就为谁做事</h2>
+<p>一个不向委托人收费的代理，总要从别处得到报酬。如果它的报酬来自卖船股的人，按成交收取佣金，它就有理由推荐佣金最高的船股，而不是最适合委托人的船股。卖方之间也会因此竞争：不比谁的船股更好，而比谁给推荐人的佣金更多。委托人没有直接付钱，却通过更高的费用付了更多。</p>
+<aside class="principle"><p class="pr-k">推演至此，得到一条原理</p><p class="pr-n">佣金与推荐的偏向</p><p class="pr-c"><span><em>学科</em>经济学 › 产业组织与金融中介</span><span><em>类型</em>理论模型</span></p><p class="pr-s">顾问的报酬来自卖方时，推荐会对卖方给出的激励作出反应，卖方之间也会转而以佣金竞争；强制披露与佣金上限等规定，有时会带来意想不到的后果。</p><dl><div><dt>在学科中的位置</dt><dd>在信息不对称的框架内专门分析零售金融与医疗服务中的中间人佣金，并评估了强制披露、佣金上限等常见政策的效果</dd></div><div><dt>回应的约束</dt><dd>委托人依赖中间人在专门的产品之间作选择</dd></div><div><dt>成立的前提</dt><dd>委托人看不清各种产品的好坏；中间人的报酬来自卖方</dd></div><div><dt>提出者</dt><dd>因德斯特与奥塔维亚尼，2012，以零售金融产品与医疗服务为例</dd></div><div><dt>留下的问题</dt><dd>怎样让代理的报酬来自委托人，又不让门槛重新升高</dd></div><div><dt>重跑之后</dt><dd>书记员让专属代理变得便宜，却没有改变这一点：代理的报酬由谁支付，决定了它首先为谁着想</dd></div></dl></aside>
+<p><strong>今天的对应。</strong>英国金融服务管理局 2010 年发布的规则规定，自 2012 年 12 月 31 日起，投资顾问不得再收取产品方为推荐其产品而支付的佣金，顾问的收费标准由顾问自行制定、与客户约定。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">谁付钱，就为谁做事</p><p class="figsub">集市上有三种船股：费用低的全市场组合、费用中等的组合、费用高但给推荐人佣金最多的组合。切换代理的报酬来源，看一百位委托人被推荐了什么、每年多付多少。</p></div><button class="replay" type="button" data-replay="wh14">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="报酬来源">
+      <button type="button" data-wh14="0" aria-pressed="true">委托人按年付费</button>
+      <button type="button" data-wh14="1" aria-pressed="false">卖方按成交付佣金</button>
+      <button type="button" data-wh14="2" aria-pressed="false">免费，靠推荐赚钱</button>
+    </div>
+    <div class="wh14" id="wh14" data-anim>
+      <div class="wh14-g" id="wh14-g"></div>
+      <div class="wh14-out" id="wh14-out"></div>
+      <p class="wh14-msg" id="wh14-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：三种船股每年的费用为 0.1%、0.8%、1.8%，给推荐人的佣金为 0、0.3%、1.0%；委托人按年付费时，代理每年收 0.3%。推荐比例按代理的收入多少设定，为示意（因德斯特与奥塔维亚尼，2012 的分析思路）。</figcaption>
+</figure>
+<style>
+.wh14-g{display:grid;grid-template-columns:repeat(20,1fr);gap:3px;max-width:520px}
+.wh14-g i{aspect-ratio:1;border-radius:50%;transition:background .4s;transition-delay:calc(var(--i)*6ms)}
+.wh14-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.wh14-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.wh14-out span{display:block;font-size:11.5px;color:var(--faint)} .wh14-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.wh14-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.wh14-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('wh14'+id),F=[.1,.8,1.8],C=['var(--accent)','var(--faint)','var(--warm)'];
+  const S=[[80,15,5,.3,'委托人直接付费，代理的收入与推荐什么无关，于是大多推荐费用最低的组合。'],[20,30,50,0,'代理的收入来自佣金，推荐偏向佣金最高的组合：委托人没有直接付钱，却通过更高的费用付了更多。'],[10,25,65,0,'看上去免费的代理，收入全部来自推荐，推荐最集中于费用最高的组合。']];
+  $('-g').innerHTML=Array.from({length:100},(_,i)=>`<i style="--i:${i}"></i>`).join('');const cs=[...$('-g').children];
+  function set(k){document.querySelectorAll('[data-wh14]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.wh14===k)));const [a,b,c,fee,msg]=S[k];
+    cs.forEach((x,i)=>x.style.background=C[i<a?0:i<a+b?1:2]);const cost=(a*F[0]+b*F[1]+c*F[2])/100+fee;
+    $('-out').innerHTML=[['推荐费用最低的组合',a+' 人'],['推荐费用最高的组合',c+' 人'],['委托人平均每年付出',cost.toFixed(2)+'%']].map(([x,v])=>`<div><span>${x}</span><b>${v}</b></div>`).join('');$('-msg').textContent=msg;}
+  document.querySelectorAll('[data-wh14]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.wh14)));
+  $('').addEventListener('anim-in',()=>{[0,1,2].forEach((k,i)=>setTimeout(()=>set(k),300+i*2200));});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-6">六、人人都有账房的村子：文明模拟器第十四版</h2>
+<p>模拟器解锁了“专属代理”。四十户人家可以自己打理、只按份额持有全部，或者请一位专属代理。专属代理每年收取一笔固定的费用与一定比例的费用，其中认知劳动的部分随认知劳动的价格下降，核对与担责的部分不变；它能为每户定制，并帮人少犯追涨杀跌的错误。拖动认知劳动的价格，看各户选择什么、二十年后各自的家产；再让代理改由卖方付钱，看会发生什么。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">文明模拟器 · 第 14 章：人人都有账房的村子</p><p class="figsub">四十户人家按家产从少到多排列，每户选择自己打理、只按份额持有全部或请一位专属代理，选每年代价最小的一种。拖动认知劳动的价格，看谁请得起专属代理、二十年后家产是起初的几倍；再让代理改由卖方付钱。</p></div><button class="replay" type="button" data-replay="cs14">重播</button></div>
+    <div class="cs-rules"><span class="on">委托</span><span class="on">监管与托管</span><span class="on">默认选项</span><span class="on">参数：认知劳动的价格</span><span class="on">专属代理</span><span class="lock">代理的担保 · 第 15 章</span></div>
+    <div class="cs14" id="cs14" data-anim>
+      <div class="cs14-strip" id="cs14-s"></div>
+      <div class="cs14-ax"><span>家产最少</span><span>家产最多</span></div>
+      <div class="legend"><span><i style="background:var(--faint)"></i>自己打理</span><span><i style="background:var(--quote);border:1px solid var(--line)"></i>只按份额持有全部</span><span><i style="background:var(--accent)"></i>专属代理</span><span><i style="background:var(--warm)"></i>卖方付钱的代理</span></div>
+      <div class="sl"><label for="cs14-a">认知劳动的价格 <b id="cs14-av"></b></label><input id="cs14-a" type="range" min="0" max="2" step="0.1" value="0"></div>
+      <div class="cs-sw"><label><input type="checkbox" id="cs14-k"> 代理不向委托人收费，由卖方按成交付给它佣金</label></div>
+      <button type="button" class="replay" id="cs14-re">换一组年景</button>
+      <div class="cs14-out" id="cs14-out"></div>
+      <p class="cs14-msg" id="cs14-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意模型：船队每年平均收益 6%、波动 15%。每年的代价按家产的百分比计：自己打理 1.8%（交易与判断的失误），五分之一的人家精于此道，只有 0.5%；只按份额持有全部 1.5%（费用 0.1%，追涨杀跌与安排不合身 1.4%）；专属代理＝固定费用 ÷ 家产＋比例费用＋0.2% 的残余失误，固定费用为 3 份 × 认知劳动的价格＋0.3 份核对与担责，比例费用为 0.8% × 认知劳动的价格＋0.1%。卖方付钱时，委托人看到的代价只有 0.2%，实际还要为被推荐的高费用船股多付 2%。</figcaption>
+</figure>
+<style>
+.cs14-strip{display:grid;grid-template-columns:repeat(40,1fr);gap:2px;align-items:end;height:110px}
+.cs14-strip i{display:block;border-radius:2px 2px 0 0;background:var(--quote);border:1px solid var(--line);transition:background .35s}
+.cs14-strip i.self{background:var(--faint);border-color:var(--faint)}
+.cs14-strip i.agent{background:var(--accent);border-color:var(--accent)}
+.cs14-strip i.kick{background:var(--warm);border-color:var(--warm)}
+.cs14-ax{display:flex;justify-content:space-between;font-size:11.5px;color:var(--faint);margin:4px 0 6px}
+.cs14-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cs14-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs14-out span{display:block;font-size:11.5px;color:var(--faint)} .cs14-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.cs14-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs14-strip{gap:1px;height:90px}.cs14-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs14'+id);let seed=1414;
+  let s0=1414;const r0=()=>{s0=(s0*16807)%2147483647;return s0/2147483647;};const g0=()=>{let u=0;while(!u)u=r0();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r0());};
+  const W0=Array.from({length:40},()=>Math.max(8,Math.round(100*Math.exp(1.1*g0())))).sort((a,b)=>a-b),SK=W0.map((_,i)=>i%5===3);
+  function choose(i,a,kick){const self=SK[i]?.5:1.8,idx=1.5,F=3*a+.3,fee=.8*a+.1,beh=.2,seen=kick?beh:F/W0[i]*100+fee+beh,act=kick?beh+2:seen;
+    const best=Math.min(self,idx,seen);return best===seen?[kick?'kick':'agent',act]:best===self?['self',self]:['idx',idx];}
+  function sim(a,kick){let s=seed;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};const g=()=>{let u=0;while(!u)u=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r());};
+    const M=[];for(let t=0;t<20;t++)M.push(.06+.15*g());const C=W0.map((_,i)=>choose(i,a,kick)),W=W0.slice(),I=W0.slice();
+    for(let i=0;i<40;i++)for(let t=0;t<20;t++){W[i]*=Math.max(.05,1+M[t]-C[i][1]/100+(C[i][0]==='self'?.05*g():0));I[i]*=1+M[t]-.015;}
+    const R=W.map((w,i)=>w/W0[i]),med=a=>a.slice().sort((x,y)=>x-y)[Math.floor(a.length/2)];
+    return {C,bot:med(R.slice(0,20)),top:med(R.slice(20)),idx:I[0]/W0[0]};}
+  function draw(){const ls=+$('-a').value,a=Math.pow(10,-ls),kick=$('-k').checked,S=sim(a,kick),mx=Math.log(W0[39]);
+    $('-av').textContent=a>=.1?Math.round(a*100)+'%':(a*100).toFixed(1)+'%';
+    $('-s').innerHTML=S.C.map((c,i)=>`<i class="${c[0]}" style="height:${12+Math.log(W0[i])/mx*88}%" title="家产 ${W0[i]} 份"></i>`).join('');
+    const n=S.C.filter(c=>c[0]==='agent'||c[0]==='kick').length,first=S.C.findIndex(c=>c[0]==='agent');
+    $('-out').innerHTML=[['请专属代理的户',n+' 户'],['家产较少的一半：二十年后为起初的',S.bot.toFixed(2)+' 倍'],['家产较多的一半：二十年后为起初的',S.top.toFixed(2)+' 倍']].map(([x,v])=>`<div><span>${x}</span><b>${v}</b></div>`).join('');
+    $('-msg').textContent=kick?`代理看上去不要钱，${n} 户人家全都请了它；可它推荐的是佣金最高的船股，每户每年实际多付 2%，家产较少的一半二十年后只有起初的 ${S.bot.toFixed(2)} 倍，还不如只按份额持有全部的 ${S.idx.toFixed(2)} 倍。`:ls===0?`认知劳动按原价计，专属代理的固定费用约 3.3 份，只有家产最多的 ${n} 户请得起；其余人家只按份额持有全部，或者自己打理。`:`认知劳动的价格降到 ${a>=.1?Math.round(a*100):(a*100).toFixed(1)}%，${n} 户请得起专属代理`+(first>0?`，家产在 ${W0[first]} 份以上、不精于此道的人家都会请它；更穷的人家仍被 0.3 份的核对与担责挡在门外`:'')+`。二十年后，家产较多的一半是起初的 ${S.top.toFixed(2)} 倍，较少的一半是 ${S.bot.toFixed(2)} 倍。`;}
+  ['-a','-k'].forEach(k=>$(k).addEventListener('input',draw));$('-re').addEventListener('click',()=>{seed=(seed*48271)%2147483647;draw();});
+  $('').addEventListener('anim-in',()=>{$('-k').checked=false;let v=0;$('-a').value=0;draw();const id=setInterval(()=>{v+=.1;$('-a').value=v.toFixed(1);draw();if(v>=2){clearInterval(id);setTimeout(()=>{$('-k').checked=true;draw();},1500);}},160);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-7">七、这一步留下的问题</h2>
+<p>专属代理变得便宜，但还有几个问题没有解决：</p>
+<ol><li><strong>担保。</strong>书记员没有家产可以抵押，也没有积累的名声；它做错了事，由谁赔付？</li><li><strong>核对。</strong>委托人能请自己的书记员核对经理，但谁来核对委托人自己的书记员？</li><li><strong>最穷的人家。</strong>核对与担责的固定成本仍在，家产最少的人家仍跨不过门槛。</li><li><strong>人人都有代理之后。</strong>每户都有书记员替自己读报告、挑船股，信息的优势会怎样变化？</li></ol>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">这一步留下的问题</p><p class="figsub">专属代理变得便宜之后仍未解决的四个问题。点选一个问题，看它隐含的假设。</p></div><button class="replay" type="button" data-replay="nx14">重播</button></div>
+    <div class="nx" id="nx14" data-anim>
+      <div class="nx-src"><b>专属代理</b><span>委托的门槛下降</span></div>
+      <div class="nx-list" id="nx14-l"></div>
+    </div>
+    <p class="nx-msg" id="nx14-msg" aria-live="polite"></p>
+  </div>
+</figure>
+<style>
+.nx{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:center}
+.nx-src{background:var(--ink);color:var(--bg);border-radius:10px;padding:14px 10px;text-align:center}
+.nx-src b{display:block;font-size:16px} .nx-src span{font-size:12px;opacity:.75}
+.nx-list{display:grid;gap:6px}
+.nx-i{font:inherit;text-align:left;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:9px 12px;color:var(--ink);opacity:0;transform:translateX(-8px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.3s)}
+.nx.in .nx-i{opacity:1;transform:none}
+.nx-i span{font-size:13.5px} .nx-i em{font-style:normal;font-size:11.5px;color:var(--faint);white-space:nowrap}
+.nx-i.sel{border-color:var(--accent)}
+.nx-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.nx{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const Q=[['担保','第 15 章','隐含的假设：代理做错了事，有人能够赔付。书记员没有家产可以抵押，也没有积累的名声，赔付的责任落在谁身上？'],
+    ['核对','第 15 章','隐含的假设：委托人自己的书记员是可靠的。它核对了经理，谁来核对它？'],
+    ['最穷的人家','第 19 章','隐含的假设：门槛可以一直降下去。核对与担责的固定成本仍在，家产最少的人家仍跨不过门槛。'],
+    ['人人都有代理之后','第 16 章','隐含的假设：只有少数人有人替自己读报告。人人都有书记员时，信息的优势会消耗得更快。']];
+  const l=document.getElementById('nx14-l'),msg=document.getElementById('nx14-msg');
+  l.innerHTML=Q.map((q,i)=>`<button type="button" class="nx-i" style="--i:${i}" data-i="${i}"><span>${q[0]}</span><em>→ ${q[1]}</em></button>`).join('');
+  const bs=[...l.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));msg.textContent=Q[i][2];}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('nx14').addEventListener('anim-in',()=>{[0,1,2,3].forEach((i,k)=>setTimeout(()=>set(i),1600+k*1800));});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-8">八、对产品的含义</h2>
+<p>智能投顾与以大模型为基础的理财助手，都在推动委托的边界移动。由此得到三条含义。第一，门槛取决于固定成本中降不下来的部分；要让更多人用得起，就要把核对与担责的成本也一并降低，而不只是降低研究与建议的成本。第二，专属的价值在于适合每一户，而不在于看上去更聪明；产品要说清楚它为这一户做了哪些与标准化安排不同的事。第三，收费方式决定立场；向用户直接收费、费用透明的代理，比看上去免费的代理更值得信任。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：委托的边界怎样移动</p><p class="figsub">四条结论，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="g14summary">重播</button></div>
+    <div class="g14summary" id="g14summary" data-anim><div class="g14summary-c" style="--i:0"><em>门槛</em><b>固定成本除以家产</b><p>认知劳动变便宜，门槛下降；核对与担责决定门槛的下限。</p></div><div class="g14summary-c" style="--i:1"><em>专属</em><b>从一种安排到每户一种</b><p>过去只属于大户的定制，可以给到更多人家。</p></div><div class="g14summary-c warn" style="--i:2"><em>代理成本</em><b>监督降了，担保没降</b><p>三项代理成本中，只有监督随认知劳动明显下降。</p></div><div class="g14summary-c warn" style="--i:3"><em>立场</em><b>谁付钱，就为谁做事</b><p>看上去免费的代理，可能让委托人付得更多。</p></div></div>
+  </div>
+</figure>
+<style>
+.g14summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g14summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g14summary-c.warn{border-left-color:var(--warm)}
+.g14summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g14summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g14summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g14summary.in .g14summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g14summary{grid-template-columns:1fr}}
+</style>
+
+<h2 id="sec-9">参考文献</h2>
+<ul class="refs"><li>Baumol, W. J. (1967). Macroeconomics of unbalanced growth: The anatomy of urban crisis. <i>American Economic Review</i>, 57(3), 415–426.</li><li>Coase, R. H. (1937). The nature of the firm. <i>Economica</i>, 4(16), 386–405.</li><li>D'Acunto, F., Prabhala, N., &amp; Rossi, A. G. (2019). The promises and pitfalls of robo-advising. <i>Review of Financial Studies</i>, 32(5), 1983–2020.</li><li>Financial Services Authority (2010). <i>Distribution of Retail Investments: Delivering the RDR</i>. Policy Statement PS10/6.</li><li>Inderst, R., &amp; Ottaviani, M. (2012). Competition through commissions and kickbacks. <i>American Economic Review</i>, 102(2), 780–809.</li><li>Jensen, M. C., &amp; Meckling, W. H. (1976). Theory of the firm: Managerial behavior, agency costs and ownership structure. <i>Journal of Financial Economics</i>, 3(4), 305–360.</li><li>Nobel Prize Outreach. <i>The Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel 1991</i>. NobelPrize.org.</li><li>Reher, M., &amp; Sokolinski, S. (2024). Robo advisors and access to wealth management. <i>Journal of Financial Economics</i>, 155, 103829.</li></ul>
+<footer class="nav"><a href="g-13.html">← 第 13 章　新参数：认知劳动的成本骤降</a><a href="g-15.html">第 15 章　谁来为代理人的承诺担保 →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

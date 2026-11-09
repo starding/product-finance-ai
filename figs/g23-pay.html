@@ -1,0 +1,26 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">谁来赔</p><p class="figsub">四种损失，四种归属。点选一行，看赔付的依据与条件。</p></div><button class="replay" type="button" data-replay="py23">重播</button></div>
+    <div class="py23" id="py23" data-anim><div class="py23-t" id="py23-t"></div><p class="py23-msg" id="py23-msg" aria-live="polite"></p></div>
+  </div>
+  <figcaption>示意：赔付规则为本书推演的产品设计，不是任何现行规定的转述；“券商倒闭、资产缺失”一行参照证券投资者保护公司的保障范围。</figcaption>
+</figure>
+<style>
+.py23-t{display:grid;gap:5px}
+.py23-t button{font:inherit;cursor:pointer;display:grid;grid-template-columns:1.2fr 1fr;gap:10px;text-align:left;border:1px solid transparent;border-radius:9px;padding:9px 12px;background:var(--quote);color:var(--ink);font-size:13.5px;opacity:0;transform:translateX(-6px);transition:opacity .35s,transform .35s,border-color .3s;transition-delay:calc(var(--i)*.15s)}
+.py23.in .py23-t button{opacity:1;transform:none}
+.py23-t button.sel{border-color:var(--ink)}
+.py23-t b{font-weight:600} .py23-t span{color:var(--c)}
+.py23-msg{font-size:14px;margin:10px 0 0;min-height:4.6em;background:var(--quote);border-radius:9px;padding:10px 12px}
+</style>
+<script>
+(function(){
+  const R=[['执行错误','运营者全额赔付','var(--warm)','只要记录显示执行的数额或去向与指令不符，就全额赔付，不要求他证明损失是怎么来的；运营者为此投保。'],['越界','运营者赔付，另受约定的处罚','var(--warm)','记录显示这一步越过了边界或说不出依据，即按越界处理；赔付之外，约定中写明的处罚（例如退还当年的费用）同时生效。'],['判断失误','他按约定自己承担','var(--accent)','书记员完全守约、依据当时的信息作出决定，结果不好，属于约定本身承担的风险；约定时已告诉他这类损失可能有多大。'],['券商倒闭、资产缺失','投资者保护基金在限额内保障','var(--blue)','资产由独立的托管人持有；托管人或券商倒闭、资产缺失时，由投资者保护基金在限额内保障，市场下跌造成的损失不在其列。']];
+  const t=document.getElementById('py23-t'),m=document.getElementById('py23-msg');
+  t.innerHTML=R.map((r,i)=>`<button type="button" style="--i:${i};--c:${r[2]}"><b>${r[0]}</b><span>${r[1]}</span></button>`).join('');const bs=[...t.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));m.textContent=R[i][3];}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('py23').addEventListener('anim-in',()=>{[0,1,2,3].forEach((i,k)=>setTimeout(()=>set(i),1000+k*1800));});
+  set(0);
+})();
+</script>

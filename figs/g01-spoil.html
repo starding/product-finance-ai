@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">储藏的回报是负的</p><p class="figsub">拖动每月的损耗比例。柱子是此时最好的吃法：刚收获时多吃，越往后越少；虚线是坚持每月吃一样多的吃法。</p></div><button class="replay" type="button" data-replay="sp">重播</button></div>
+    <div class="sp" id="sp" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="有损耗时每月的消费"><g id="sp-ax"></g><g id="sp-b"></g><path id="sp-e" class="sp-e"/></svg>
+      <div class="sl"><label for="sp-d">每月损耗 <b id="sp-dv"></b></label><input id="sp-d" type="range" min="0" max="6" step="0.5" value="0"></div>
+      <div class="sp-out"><div><span>一年里损耗掉</span><b id="sp-lost"></b></div><div><span>第一个月 / 最后一个月</span><b id="sp-fl"></b></div></div>
+      <p class="sp-msg" id="sp-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：12 份粮食，满足感按对数计算。最好的吃法满足“这个月多吃一口的满足，等于留到下个月、扣掉损耗之后那一口的满足”，于是每月的消费按（1 − 损耗）递减：第一个月吃 1 份，此后每月少一点。</figcaption>
+</figure>
+<style>
+.sp svg{width:100%;height:auto;display:block}
+.sp-e{fill:none;stroke:var(--ink);stroke-width:1.6;stroke-dasharray:5 4}
+.sp-b rect{transition:height .4s,y .4s}
+.sp-out{display:flex;gap:24px;flex-wrap:wrap;margin-top:8px}
+.sp-out div{display:flex;flex-direction:column} .sp-out span{font-size:12px;color:var(--faint)} .sp-out b{font-size:20px;font-variant-numeric:tabular-nums}
+.sp-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.sp svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),X0=40,X1=630,YB=180,YT=12,W=(X1-X0)/12,y=v=>YB-v/1.8*(YB-YT);
+  $('sp-ax').innerHTML=[0,.5,1,1.5].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+
+    Array.from({length:12},(_,i)=>`<text x="${X0+W*i+W/2}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${i+1}</text>`).join('');
+  $('sp-b').innerHTML=Array.from({length:12},(_,i)=>`<rect x="${X0+W*i+W*.18}" width="${W*.64}" y="${YB}" height="0" rx="2" fill="var(--accent)"/>`).join('');
+  const rs=[...document.querySelectorAll('#sp-b rect')],sl=$('sp-d');
+  function draw(){const d=+sl.value/100,k=1-d;const c=Array.from({length:12},(_,t)=>Math.pow(k,t)),eaten=c.reduce((a,b)=>a+b,0);
+    let Se=0;for(let t=0;t<12;t++)Se+=Math.pow(k,-t);const ce=12/Se;
+    rs.forEach((r,i)=>{r.setAttribute('y',y(c[i]));r.setAttribute('height',YB-y(c[i]));});
+    $('sp-e').setAttribute('d',`M${X0},${y(ce)}L${X1},${y(ce)}`);
+    $('sp-dv').textContent=(d*100).toFixed(1)+'%';$('sp-lost').textContent=(12-eaten).toFixed(1)+' 份';$('sp-fl').textContent=c[0].toFixed(2)+' / '+c[11].toFixed(2);
+    $('sp-msg').textContent=d===0?'没有损耗时，最好的吃法就是每月 1 份，与虚线重合。':`每月损耗 ${(d*100).toFixed(1)}% 时，储藏的回报是 −${(d*100).toFixed(1)}%。刚收获时多吃、越往后越少更划算；即使如此，仍有 ${(12-eaten).toFixed(1)} 份粮食白白损失。坚持每月吃一样多，每月只能吃 ${ce.toFixed(2)} 份。`;}
+  sl.addEventListener('input',draw);
+  $('sp').addEventListener('anim-in',()=>{let v=0;sl.value=0;draw();const id=setInterval(()=>{v+=.5;sl.value=v;draw();if(v>=4)clearInterval(id);},300);});
+  draw();
+})();
+</script>

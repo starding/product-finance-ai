@@ -1,0 +1,707 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>复利与波动拖累</title>
+<meta name="description" content="《产品×金融×AI：AI 时代的金融产品》第 5 章：波动会压低复合收益，回撤与恢复不对称，固定杠杆与再平衡的方向决定了波动带来的偏差">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="ch05">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="全书目录">
+<div class="side-head"><a class="sidetitle" href="index.html">产品×金融×AI<small>AI 时代的金融产品</small></a></div>
+<div class="side-view" role="group" aria-label="阅读方式"><a href="preface.html" class="on" aria-current="true">分解式</a><a href="g-preface.html">生成式</a></div>
+<a class="side-about" href="index.html#about">关于本书</a>
+<a class="" href="preface.html"><span class="n">序</span>为什么金融产品在 AI 时代需要重新学</a>
+<a class="side-part" href="part1.html"><span class="pn">第一部分</span>市场：收益与风险从何而来</a>
+<a class="" href="ch01.html"><span class="n">1</span>金融产品卖的是什么</a>
+<a class="" href="ch02.html"><span class="n">2</span>利率与期限</a>
+<a class="" href="ch03.html"><span class="n">3</span>风险长什么样</a>
+<a class="" href="ch04.html"><span class="n">4</span>分散：哪些风险有补偿</a>
+<a class=" cur" href="ch05.html" aria-current="page"><span class="n">5</span>复利与波动拖累</a>
+<a class="" href="ch06.html"><span class="n">6</span>因子：风险补偿可以分解</a>
+<a class="" href="ch07.html"><span class="n">7</span>价格为什么难以预测</a>
+<a class="" href="ch08.html"><span class="n">8</span>信息如何进入价格</a>
+<a class="" href="ch09.html"><span class="n">9</span>市场里的交易者</a>
+<a class="" href="ch10.html"><span class="n">10</span>流动性与买卖价差</a>
+<a class="" href="ch11.html"><span class="n">11</span>订单、规则与市场结构</a>
+<a class="" href="ch12.html"><span class="n">12</span>主动管理的算术</a>
+<a class="" href="ch13.html"><span class="n">13</span>承诺如何被兑现</a>
+<a class="" href="ch14.html"><span class="n">14</span>监管为何存在</a>
+<a class="side-part" href="part2.html"><span class="pn">第二部分</span>用户：人要什么、能承受什么</a>
+<a class="" href="ch15.html"><span class="n">15</span>用户要完成的任务</a>
+<a class="" href="ch16.html"><span class="n">16</span>用户如何做决定</a>
+<a class="" href="ch17.html"><span class="n">17</span>用户能承受什么</a>
+<a class="" href="ch18.html"><span class="n">18</span>用户如何判断与信任</a>
+<a class="side-part" href="part3.html"><span class="pn">第三部分</span>AI：代理能替人做多少</a>
+<a class="" href="ch19.html"><span class="n">19</span>放大倍数：理论与实测</a>
+<a class="" href="ch20.html"><span class="n">20</span>哪些事务能交给 AI</a>
+<a class="" href="ch21.html"><span class="n">21</span>能力从哪里来、在哪里失效</a>
+<a class="" href="ch22.html"><span class="n">22</span>可验证性：核对的成本</a>
+<a class="" href="ch23.html"><span class="n">23</span>金融场景的特殊约束</a>
+<a class="side-part" href="part4.html"><span class="pn">第四部分</span>设计：在三组约束下设计金融产品</a>
+<a class="" href="ch24.html"><span class="n">24</span>承诺什么</a>
+<a class="" href="ch25.html"><span class="n">25</span>委托参数：交代的目标与约束</a>
+<a class="" href="ch26.html"><span class="n">26</span>授权与不可逆敞口</a>
+<a class="" href="ch27.html"><span class="n">27</span>责任与利益冲突</a>
+<a class="" href="ch28.html"><span class="n">28</span>能力装配与过程可见</a>
+<a class="" href="ch29.html"><span class="n">29</span>保障强度</a>
+<a class="" href="ch30.html"><span class="n">30</span>信任如何建立</a>
+<a class="" href="ch31.html"><span class="n">31</span>设计原则</a>
+<a class="side-app" href="estimates.html"><span class="n">附录</span>作者估算的方法与数据</a>
+<a class="side-app" href="method.html"><span class="n">附录</span>本书的写法</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="展开目录" title="目录"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">产品×金融×AI：AI 时代的金融产品</a><span>第一部分 · 第二篇　风险补偿：承担风险的价格</span><a class="langlink" href="en/ch05.html" hreflang="en">English</a></header>
+
+<div class="chapno">第 5 章</div><h1>复利与波动拖累<small>平均收益为什么会骗人</small></h1>
+<div class="eqstrip" aria-label="本章在回报等式中的位置"><span class="lbl">实际回报 ＝</span><a class="" href="ch02.html">时间补偿</a><span class="cur">＋风险补偿</span><a class="" href="ch07.html">＋信息优势</a><a class="" href="ch10.html">－交易成本</a><span class="">＋运气</span><span class="keep"><a href="ch13.html">前提：承诺得到兑现</a></span></div>
+<blockquote><p>风险补偿体现在平均收益上，投资者拿到的却是复合收益。两者之间隔着波动：同样的平均收益，波动越大，复合下来的结果越少，多数人的结果低于平均数。这不是什么额外的损耗，而是复利本身的数学性质；它在固定杠杆的产品里被放大，在定期再平衡的组合里则可能反过来带来好处。</p></blockquote>
+<h2 id="sec-1">一、平均收益的两种算法</h2>
+<p>一笔钱第一年涨 50%，第二年跌 50%。平均每年的收益是多少？按两年收益直接相加再平均，是 0%；可是 100 元先变成 150 元，再变成 75 元，两年下来实际亏了 25%。前一种叫算术平均，后一种叫几何平均，也就是复合收益。投资者真正拿到的，是几何平均。</p>
+<figure>
+  <div class="card">
+    <p class="figtitle">涨 50%、跌 50%，平均是多少</p>
+    <p class="figsub">每年要么上涨 x%，要么下跌 x%，交替出现。调节 x，比较算术平均与实际拿到的复合收益。</p>
+    <div class="mn" id="mn" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="交替涨跌下净值的变化">
+        <g id="mn-axis"></g>
+        <path id="mn-flat" class="mn-flat"/>
+        <path id="mn-path" class="mn-path"/>
+        <g id="mn-dots"></g>
+      </svg>
+      <div class="sl"><label for="mn-x">每年涨跌幅 x <b id="mn-xv"></b></label><input id="mn-x" type="range" min="5" max="60" step="5" value="50"></div>
+      <div class="mn-out">
+        <div><span>算术平均收益</span><b>0%</b></div>
+        <div><span>10 年后的净值（起点 100）</span><b id="mn-end"></b></div>
+        <div><span>每年的复合收益</span><b id="mn-g"></b></div>
+      </div>
+    </div>
+  </div>
+  <figcaption>算术平均是各年收益相加后平均；复合收益（几何平均）是每年都按同一比例增长时，能得到相同终值的那个比例。投资者拿到的是后者。</figcaption>
+</figure>
+<style>
+.mn svg{width:100%;height:auto;display:block}
+.mn-flat{stroke:var(--faint);stroke-dasharray:5 4;fill:none}
+.mn-path{fill:none;stroke:var(--warm);stroke-width:2.5;stroke-linejoin:round}
+.mn-dots circle{fill:var(--warm)}
+.mn-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mn-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.mn-out span{display:block;font-size:12px;color:var(--faint)}
+.mn-out b{font-size:20px;font-variant-numeric:tabular-nums}
+#mn-g{color:var(--warm)}
+@media (max-width:640px){.mn-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const N=10,X0=50,X1=620,YT=14,YB=180,x=t=>X0+t/N*(X1-X0);
+  const xs=document.getElementById('mn-x');
+  function render(anim){
+    const r=+xs.value/100; let v=100; const P=[v];
+    for(let t=1;t<=N;t++){v*=t%2?1+r:1-r;P.push(v);}
+    const hi=Math.max(...P)*1.08, y=u=>YB-u/hi*(YB-YT);
+    let a=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`;
+    for(let t=0;t<=N;t+=2)a+=`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${t} 年</text>`;
+    a+=`<text x="${X0-8}" y="${y(100)+4}" text-anchor="end" font-size="11" class="t-faint">100</text><text x="${X1}" y="${y(100)-6}" text-anchor="end" font-size="11" class="t-faint">按算术平均 0% 的预期</text>`;
+    document.getElementById('mn-axis').innerHTML=a;
+    document.getElementById('mn-flat').setAttribute('d',`M${x(0)},${y(100)}L${x(N)},${y(100)}`);
+    const path=document.getElementById('mn-path');path.setAttribute('d','M'+P.map((u,t)=>`${x(t).toFixed(1)},${y(u).toFixed(1)}`).join('L'));
+    document.getElementById('mn-dots').innerHTML=P.map((u,t)=>`<circle cx="${x(t)}" cy="${y(u)}" r="3.5"/>`).join('');
+    document.getElementById('mn-xv').textContent='±'+xs.value+'%';
+    document.getElementById('mn-end').textContent=v.toFixed(1);
+    document.getElementById('mn-g').textContent=((Math.sqrt((1+r)*(1-r))-1)*100).toFixed(1)+'%';
+    if(anim){const L=path.getTotalLength();path.style.transition='none';path.style.strokeDasharray=L;path.style.strokeDashoffset=L;path.getBoundingClientRect();path.style.transition='stroke-dashoffset 1.6s ease';path.style.strokeDashoffset=0;}else path.style.strokeDasharray='none';
+  }
+  xs.addEventListener('input',()=>render(false));
+  document.getElementById('mn').addEventListener('anim-in',()=>render(true));
+  render(false);
+})();
+</script>
+
+<h2 id="sec-2">二、波动拖累</h2>
+<p>算术平均与几何平均之间的差距，来自波动：波动越大，差距越大，差距约等于波动率平方的一半。年化波动率 20% 的资产，复合收益比算术平均收益低约 2 个百分点；波动率 40% 时，低约 8 个百分点。这就是“波动拖累”。</p>
+<figure>
+  <div class="card">
+    <p class="figtitle">同样的平均收益，波动越大，复合越少</p>
+    <p class="figsub">两项资产的算术平均收益都是每年 8%。调节右边一项的波动率，看 20 年后典型结果（中位数）的差距。</p>
+    <div class="dg" id="dg" data-anim>
+      <div class="dg-bars">
+        <div class="dg-c"><div class="dg-t"><i id="dg-b0"></i></div><b id="dg-v0"></b><span>波动率 0%</span></div>
+        <div class="dg-c"><div class="dg-t"><i id="dg-b1" class="w"></i></div><b id="dg-v1"></b><span id="dg-l1"></span></div>
+      </div>
+      <div class="sl"><label for="dg-s">右边一项的年波动率 <b id="dg-sv"></b></label><input id="dg-s" type="range" min="0" max="50" step="5" value="20"></div>
+      <div class="dg-out">
+        <div><span>算术平均收益</span><b>8.0%</b></div>
+        <div><span>复合收益（约）</span><b id="dg-g"></b></div>
+        <div><span>波动拖累（约为波动率平方的一半）</span><b id="dg-d"></b></div>
+      </div>
+    </div>
+  </div>
+  <figcaption>按对数正态的示意模型：复合收益约等于算术平均收益减去波动率平方的一半；柱高为 20 年后中位数结果，起点 100。</figcaption>
+</figure>
+<style>
+.dg-bars{display:flex;gap:40px;justify-content:center;align-items:flex-end;height:220px;margin-bottom:10px}
+.dg-c{display:flex;flex-direction:column;align-items:center;gap:4px;width:120px;height:100%;justify-content:flex-end}
+.dg-t{width:64px;flex:1;display:flex;align-items:flex-end}
+.dg-t i{display:block;width:100%;background:var(--accent);border-radius:6px 6px 0 0;transition:height .5s ease;height:0}
+.dg-t i.w{background:var(--warm)}
+.dg-c b{font-size:18px;font-variant-numeric:tabular-nums}
+.dg-c span{font-size:12px;color:var(--faint)}
+.dg-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.dg-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.dg-out span{display:block;font-size:12px;color:var(--faint)}
+.dg-out b{font-size:19px;font-variant-numeric:tabular-nums}
+#dg-d{color:var(--warm)}
+@media (max-width:640px){.dg-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const M=0.08, T=20, s=document.getElementById('dg-s');
+  const med=sg=>100*Math.exp((Math.log(1+M)-0)*T)*Math.exp(-sg*sg/2*T);
+  const base=100*Math.pow(1+M,T), H=180;
+  function render(){
+    const sg=+s.value/100, v1=med(sg);
+    document.getElementById('dg-sv').textContent=s.value+'%';
+    document.getElementById('dg-b0').style.height=(base/base*H)+'px';
+    document.getElementById('dg-b1').style.height=(v1/base*H)+'px';
+    document.getElementById('dg-v0').textContent=Math.round(base);
+    document.getElementById('dg-v1').textContent=Math.round(v1);
+    document.getElementById('dg-l1').textContent='波动率 '+s.value+'%';
+    document.getElementById('dg-g').textContent=((M-sg*sg/2)*100).toFixed(1)+'%';
+    document.getElementById('dg-d').textContent=(sg*sg/2*100).toFixed(1)+' 个百分点';
+  }
+  s.addEventListener('input',render);
+  document.getElementById('dg').addEventListener('anim-in',()=>{let v=0;s.value=v;render();const id=setInterval(()=>{v+=5;s.value=v;render();if(v>=40){clearInterval(id);setTimeout(()=>{s.value=20;render();},700);}},250);});
+  render();
+})();
+</script>
+
+<p>这意味着，比较两项资产不能只看平均收益。平均收益相同、波动更大的那一项，长期复合下来的结果更差。也正因为如此，分散在降低波动的同时，也提高了组合的复合收益。</p>
+<h2 id="sec-3">三、回撤与恢复不对称</h2>
+<p>波动拖累有一个更直观的表现：亏损之后，需要更大的涨幅才能回到原点。跌 10%，需要涨 11% 才能回本；跌 50%，需要涨 100%；跌 80%，需要涨 400%。下跌与上涨用的是不同的基数。</p>
+<figure>
+  <div class="card">
+    <p class="figtitle">跌下去容易，涨回来难</p>
+    <p class="figsub">拖动亏损幅度，看需要多大的涨幅才能回到原点。</p>
+    <div class="dd" id="dd" data-anim>
+      <svg viewBox="0 0 640 230" role="img" aria-label="亏损幅度与回本所需涨幅">
+        <g id="dd-axis"></g>
+        <path id="dd-curve" class="dd-curve"/>
+        <rect id="dd-down" class="dd-down" width="70"/>
+        <rect id="dd-up" class="dd-up" width="70"/>
+        <text id="dd-dt" font-size="13" text-anchor="middle" class="t-warm"></text>
+        <text id="dd-ut" font-size="13" text-anchor="middle" class="t-accent"></text>
+        <circle id="dd-dot" r="6" class="dd-dot"/>
+      </svg>
+      <div class="sl"><label for="dd-l">亏损幅度 <b id="dd-lv"></b></label><input id="dd-l" type="range" min="5" max="90" step="5" value="50"></div>
+      <p class="dd-msg" id="dd-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>回本所需涨幅 ＝ 亏损幅度 ÷（1 － 亏损幅度）。下跌按原来的金额计算比例，上涨按亏损后的金额计算比例，两者基数不同。</figcaption>
+</figure>
+<style>
+.dd svg{width:100%;height:auto;display:block}
+.dd-curve{fill:none;stroke:var(--ink);stroke-width:2}
+.dd-down{fill:var(--warm-soft);stroke:var(--warm);transition:y .3s,height .3s}
+.dd-up{fill:var(--accent-soft);stroke:var(--accent);transition:y .3s,height .3s}
+.dd-dot{fill:var(--ink)}
+.dd-msg{font-size:14px;margin:6px 0 0;min-height:1.7em}
+</style>
+<script>
+(function(){
+  const X0=56,X1=380,YT=14,YB=196, need=l=>l/(1-l)*100, x=l=>X0+(l-0)/(0.9)*(X1-X0), y=g=>YB-Math.min(g,400)/400*(YB-YT);
+  let a=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/><line x1="${X0}" y1="${YT}" x2="${X0}" y2="${YB}" class="s-faint"/>`;
+  [0,0.2,0.4,0.6,0.8].forEach(l=>a+=`<text x="${x(l)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${l*100}%</text>`);
+  [100,200,300,400].forEach(g=>a+=`<line x1="${X0}" y1="${y(g)}" x2="${X1}" y2="${y(g)}" class="s-line"/><text x="${X0-8}" y="${y(g)+4}" text-anchor="end" font-size="11" class="t-faint">${g}%</text>`);
+  a+=`<text x="${X1}" y="${YB+32}" text-anchor="end" font-size="11" class="t-faint">亏损幅度</text><text x="${X0}" y="${YT-2}" font-size="11" class="t-faint">回本所需涨幅</text>`;
+  const BX=440, BY=196, BH=170; // 右侧柱：以 100 为基准
+  a+=`<line x1="${BX-10}" y1="${BY}" x2="${BX+190}" y2="${BY}" class="s-faint"/><text x="${BX+35}" y="${BY+16}" text-anchor="middle" font-size="11" class="t-faint">亏损</text><text x="${BX+145}" y="${BY+16}" text-anchor="middle" font-size="11" class="t-faint">回本所需涨幅</text>`;
+  document.getElementById('dd-axis').innerHTML=a;
+  let d='';for(let i=0;i<=90;i++){const l=i/100;d+=(i?'L':'M')+x(l).toFixed(1)+','+y(need(l)).toFixed(1);}
+  document.getElementById('dd-curve').setAttribute('d',d);
+  const sl=document.getElementById('dd-l');
+  function render(){
+    const l=+sl.value/100, g=need(l);
+    document.getElementById('dd-lv').textContent=sl.value+'%';
+    const dot=document.getElementById('dd-dot');dot.setAttribute('cx',x(l));dot.setAttribute('cy',y(g));
+    const hD=l*100/400*BH, hU=Math.min(g,400)/400*BH;
+    const dn=document.getElementById('dd-down');dn.setAttribute('x',BX);dn.setAttribute('y',BY-hD);dn.setAttribute('height',hD);
+    const up=document.getElementById('dd-up');up.setAttribute('x',BX+110);up.setAttribute('y',BY-hU);up.setAttribute('height',hU);
+    const dt=document.getElementById('dd-dt');dt.setAttribute('x',BX+35);dt.setAttribute('y',BY-hD-6);dt.textContent='−'+sl.value+'%';
+    const ut=document.getElementById('dd-ut');ut.setAttribute('x',BX+145);ut.setAttribute('y',BY-hU-6);ut.textContent='+'+g.toFixed(0)+'%';
+    document.getElementById('dd-msg').textContent=`跌 ${sl.value}% 之后，需要涨 ${g.toFixed(1)}% 才能回到原点。`;
+  }
+  sl.addEventListener('input',render);
+  document.getElementById('dd').addEventListener('anim-in',()=>{let v=5;sl.value=v;render();const id=setInterval(()=>{v+=5;sl.value=v;render();if(v>=80){clearInterval(id);setTimeout(()=>{sl.value=50;render();},700);}},160);});
+  render();
+})();
+</script>
+
+<h2 id="sec-4">四、多数人的结果低于平均数</h2>
+<p>把时间拉长，复合收益的分布会越来越偏：少数特别好的结果把平均数拉得很高，多数人的结果却落在平均数之下。持有一项高波动资产 30 年，平均结果可能很可观，但多数路径的终点低于这个平均。只用平均收益介绍一个长期产品，会让多数用户的预期落空。</p>
+<figure>
+  <div class="card">
+    <p class="figtitle">平均数之下的多数人</p>
+    <p class="figsub">模拟 2,000 位投资者各自持有同一项资产。选择持有年限与波动率，看终值分布、平均数与中位数，以及有多少人低于平均数。</p>
+    <div class="md" id="md" data-anim>
+      <div class="presets" role="group" aria-label="持有年限">
+        <button type="button" data-y="5">5 年</button><button type="button" data-y="10">10 年</button><button type="button" data-y="30">30 年</button>
+      </div>
+      <div class="sl"><label for="md-s">年波动率 <b id="md-sv"></b></label><input id="md-s" type="range" min="10" max="50" step="5" value="30"></div>
+      <svg viewBox="0 0 640 210" role="img" aria-label="终值分布">
+        <g id="md-axis"></g><g id="md-bars"></g>
+        <line id="md-mean" class="md-mean" y1="14" y2="176"/><line id="md-med" class="md-med" y1="14" y2="176"/>
+        <text id="md-mt" font-size="11" class="t-ink" text-anchor="start"></text><text id="md-dt" font-size="11" class="t-warm" text-anchor="end"></text>
+      </svg>
+      <div class="md-out">
+        <div><span>平均数</span><b id="md-a"></b></div>
+        <div><span>中位数</span><b id="md-m"></b></div>
+        <div><span>低于平均数的人</span><b id="md-p"></b></div>
+      </div>
+    </div>
+  </div>
+  <figcaption>示例参数：算术平均收益每年 8%，起点 100，每年收益独立抽取。横轴为终值，按对数刻度显示，超出右端的结果并入最右一档。</figcaption>
+</figure>
+<style>
+.md svg{width:100%;height:auto;display:block}
+#md-bars rect{fill:var(--accent);opacity:.55;transition:height .4s,y .4s}
+#md-bars rect.hi{fill:var(--gray-mark);opacity:.45}
+.md-mean{stroke:var(--ink);stroke-width:2}
+.md-med{stroke:var(--warm);stroke-width:2;stroke-dasharray:4 3}
+.md-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.md-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.md-out span{display:block;font-size:12px;color:var(--faint)}
+.md-out b{font-size:19px;font-variant-numeric:tabular-nums}
+#md-p{color:var(--warm)}
+@media (max-width:640px){.md-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const N=2000, M=0.08, X0=40, X1=620, YB=176, B=40;
+  let seed=13; const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
+  const g=()=>{let u=0,v=0;while(!u)u=rnd();v=rnd();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);};
+  const Z=Array.from({length:N},()=>Array.from({length:30},g));
+  let Y=10; const s=document.getElementById('md-s');
+  function render(){
+    const sg=+s.value/100, mu=Math.log(1+M)-sg*sg/2;
+    document.getElementById('md-sv').textContent=s.value+'%';
+    document.querySelectorAll('[data-y]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.y===Y)));
+    const V=Z.map(z=>{let l=0;for(let t=0;t<Y;t++)l+=mu+sg*z[t];return 100*Math.exp(l);});
+    const mean=V.reduce((a,b)=>a+b,0)/N, srt=V.slice().sort((a,b)=>a-b), med=srt[N/2], below=V.filter(v=>v<mean).length/N;
+    const lo=Math.log(Math.max(5,srt[Math.floor(N*0.01)])), hi=Math.log(srt[Math.floor(N*0.99)]);
+    const x=v=>X0+(Math.log(v)-lo)/(hi-lo)*(X1-X0);
+    const bins=new Array(B).fill(0);V.forEach(v=>{const k=Math.max(0,Math.min(B-1,Math.floor((Math.log(v)-lo)/(hi-lo)*B)));bins[k]++;});
+    const mx=Math.max(...bins), bw=(X1-X0)/B;
+    document.getElementById('md-bars').innerHTML=bins.map((c,k)=>{const h=c/mx*150,cx=X0+k*bw;const val=Math.exp(lo+(k+0.5)/B*(hi-lo));return `<rect class="${val>mean?'hi':''}" x="${cx.toFixed(1)}" y="${(YB-h).toFixed(1)}" width="${(bw*0.85).toFixed(1)}" height="${h.toFixed(1)}"/>`;}).join('');
+    let a=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`;
+    [50,100,200,400,800,1600].forEach(v=>{if(Math.log(v)>lo&&Math.log(v)<hi)a+=`<text x="${x(v)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${v}</text>`;});
+    document.getElementById('md-axis').innerHTML=a;
+    const L=(id,v)=>{const e=document.getElementById(id);e.setAttribute('x1',x(v));e.setAttribute('x2',x(v));};
+    L('md-mean',mean);L('md-med',med);
+    const mt=document.getElementById('md-mt');mt.setAttribute('x',x(mean)+5);mt.setAttribute('y',24);mt.textContent='平均数';
+    const dt=document.getElementById('md-dt');dt.setAttribute('x',x(med)-5);dt.setAttribute('y',24);dt.textContent='中位数';
+    document.getElementById('md-a').textContent=Math.round(mean);
+    document.getElementById('md-m').textContent=Math.round(med);
+    document.getElementById('md-p').textContent=Math.round(below*100)+'%';
+  }
+  document.querySelectorAll('[data-y]').forEach(b=>b.addEventListener('click',()=>{Y=+b.dataset.y;render();}));
+  s.addEventListener('input',render);
+  document.getElementById('md').addEventListener('anim-in',()=>{Y=5;render();setTimeout(()=>{Y=10;render();},900);setTimeout(()=>{Y=30;render();},1800);});
+  render();
+})();
+</script>
+
+<h2 id="sec-5">五、固定杠杆：追涨杀跌放大了偏差</h2>
+<p>每日两倍、三倍的杠杆 ETF，常被认为存在一种“损耗”。作者在一篇公开发表的文章中用一个简单的例子说明：复利本身并不构成问题，偏差的来源是为了维持固定杠杆而进行的追涨杀跌。</p>
+<p>设有 100 美元，再借 100 美元，共 200 美元买入，即两倍杠杆。第一天上涨 10%，持仓变为 220 美元，其中自己的部分是 120 美元，杠杆降到约 1.83 倍；为了维持两倍，需要再借 20 美元买入，这是在高位加仓。第二天下跌 10%，持仓亏损 24 美元，全部由自己承担，自有资金降到 96 美元，杠杆升到 2.25 倍；为了维持两倍，只能卖出 24 美元的持仓还债，这是在低位减仓。两天下来，标的只跌了 1%，按“两倍”直觉应该亏 2%，实际却亏了 4%。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">维持两倍杠杆：一步一步看</p><p class="figsub">自有 100 美元，借 100 美元，共 200 美元买入。标的第一天涨 10%，第二天跌 10%。</p></div><button class="replay" type="button" id="lf-step">下一步</button></div>
+    <div class="lf" id="lf" data-anim>
+      <div class="lf-tbl" id="lf-tbl"></div>
+      <p class="lf-msg" id="lf-msg" aria-live="polite"></p>
+    </div>
+    <div class="lf2">
+      <p class="figtitle" style="margin-top:18px">换一种走势，偏差的方向会变</p>
+      <div class="seg-btns" role="group" aria-label="走势">
+        <button type="button" data-mk="chop" aria-pressed="true">来回震荡</button>
+        <button type="button" data-mk="up" aria-pressed="false">单边上涨</button>
+        <button type="button" data-mk="down" aria-pressed="false">单边下跌</button>
+      </div>
+      <div class="sl"><label for="lf-k">每日杠杆倍数 <b id="lf-kv"></b></label><input id="lf-k" type="range" min="1" max="3" step="0.5" value="2"></div>
+      <svg viewBox="0 0 640 210" role="img" aria-label="杠杆产品净值与按倍数推算的净值">
+        <g id="lf-axis"></g><path id="lf-naive" class="lf-l naive"/><path id="lf-act" class="lf-l act"/>
+      </svg>
+      <div class="legend"><span><i style="background:var(--faint)"></i>按“标的累计涨跌 × 倍数”推算</span><span><i style="background:var(--warm)"></i>每日维持固定杠杆的实际净值</span></div>
+      <p class="lf-msg" id="lf-msg2" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>第一部分的数字取自作者公开发表的文章（2024-12-28）。第二部分为示意模拟：60 个交易日，不计借款利息与管理费。路径依赖的系统分析见 Cheng 与 Madhavan（2009）、Avellaneda 与 Zhang（2010）。</figcaption>
+</figure>
+<style>
+.lf-tbl{display:grid;grid-template-columns:120px repeat(4,1fr);gap:4px;font-size:13px;font-variant-numeric:tabular-nums}
+.lf-tbl div{padding:6px 8px;border-radius:6px;background:var(--quote);opacity:.25;transition:opacity .4s,background .4s}
+.lf-tbl div.h{background:transparent;color:var(--faint);font-size:12px;opacity:1}
+.lf-tbl div.on{opacity:1}
+.lf-tbl div.buy{background:var(--warm-soft)} .lf-tbl div.sell{background:var(--accent-soft)}
+.lf-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+.lf2 svg{width:100%;height:auto;display:block}
+.lf-l{fill:none;stroke-width:2.2}
+.lf-l.naive{stroke:var(--faint);stroke-dasharray:5 4} .lf-l.act{stroke:var(--warm);stroke-width:2.6}
+@media (max-width:640px){.lf-tbl{grid-template-columns:88px repeat(4,1fr);font-size:12px}}
+</style>
+<script>
+(function(){
+  // 第一部分：逐步表
+  const R=[['步骤','持仓','自有','借款','杠杆'],
+    ['开始','200','100','100','2.00'],
+    ['第一天涨 10%','220','120','100','1.83'],
+    ['借 20 再买入（追涨）','240','120','120','2.00','buy'],
+    ['第二天跌 10%','216','96','120','2.25'],
+    ['卖 24 还债（杀跌）','192','96','96','2.00','sell']];
+  const M=['开始：自有 100 美元，借 100 美元，持仓 200 美元，杠杆 2 倍。','标的涨 10%，持仓 220 美元，其中自有 120 美元，杠杆降到约 1.83 倍。','为了回到 2 倍，再借 20 美元买入：这是在高位加仓。','标的跌 10%，持仓亏 24 美元，全部由自有资金承担：自有降到 96 美元，杠杆升到 2.25 倍。','为了回到 2 倍，卖出 24 美元持仓还债：这是在低位减仓。两天下来标的只跌了 1%，按两倍应亏 2%，实际亏了 4%。'];
+  const tbl=document.getElementById('lf-tbl');
+  tbl.innerHTML=R.map((r,i)=>r.slice(0,5).map(c=>`<div class="${i===0?'h':''} ${r[5]||''}" data-r="${i}">${c}</div>`).join('')).join('');
+  let step=0;
+  const show=k=>{step=k;tbl.querySelectorAll('div[data-r]').forEach(d=>{const r=+d.dataset.r;d.classList.toggle('on',r>0&&r<=k+1);});document.getElementById('lf-msg').textContent=M[k];};
+  document.getElementById('lf-step').addEventListener('click',()=>show((step+1)%5));
+  let timer; document.getElementById('lf').addEventListener('anim-in',()=>{clearInterval(timer);show(0);let k=0;timer=setInterval(()=>{k++;show(k);if(k>=4)clearInterval(timer);},1600);});
+  show(0);
+  // 第二部分：不同走势下的偏差
+  const N=60,X0=50,X1=620,YT=14,YB=184,x=t=>X0+t/N*(X1-X0);
+  let seed=21; const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
+  const g=()=>{let u=0,v=0;while(!u)u=rnd();v=rnd();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);};
+  const noise=Array.from({length:N},g);
+  const MK={chop:t=>(t%2?-0.03:0.03)+0.004*noise[t],up:t=>0.01+0.006*noise[t],down:t=>-0.01+0.006*noise[t]};
+  let mk='chop'; const kEl=document.getElementById('lf-k');
+  function sim(){
+    const k=+kEl.value; document.getElementById('lf-kv').textContent=k+' 倍';
+    document.querySelectorAll('[data-mk]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mk===mk)));
+    let u=1,a=1; const NA=[1],AC=[1];
+    for(let t=0;t<N;t++){const r=MK[mk](t);u*=1+r;a*=1+k*r;NA.push(Math.max(0.01,1+k*(u-1)));AC.push(a);}
+    const all=NA.concat(AC), lo=Math.min(...all)*0.95, hi=Math.max(...all)*1.05, y=v=>YB-(v-lo)/(hi-lo)*(YB-YT);
+    let ax=`<line x1="${X0}" y1="${y(1)}" x2="${X1}" y2="${y(1)}" class="s-line"/><text x="${X0-8}" y="${y(1)+4}" text-anchor="end" font-size="11" class="t-faint">100</text>`;
+    [0,20,40,60].forEach(t=>ax+=`<text x="${x(t)}" y="${YB+18}" text-anchor="middle" font-size="11" class="t-faint">第 ${t} 天</text>`);
+    document.getElementById('lf-axis').innerHTML=ax;
+    const P=arr=>'M'+arr.map((v,t)=>`${x(t).toFixed(1)},${y(v).toFixed(1)}`).join('L');
+    document.getElementById('lf-naive').setAttribute('d',P(NA));document.getElementById('lf-act').setAttribute('d',P(AC));
+    const dev=(AC[N]-NA[N])*100;
+    document.getElementById('lf-msg2').textContent=k===1?'不加杠杆时，两条线重合，没有偏差。':`60 天后，实际净值 ${(AC[N]*100).toFixed(0)}，按倍数推算 ${(NA[N]*100).toFixed(0)}，偏差 ${dev>0?'+':''}${dev.toFixed(0)}。${mk==='chop'?'来回震荡时，每天追涨杀跌，偏差不利。':'单边趋势中，追涨杀跌反而顺势加码，偏差有利。'}`;
+  }
+  document.querySelectorAll('[data-mk]').forEach(b=>b.addEventListener('click',()=>{mk=b.dataset.mk;sim();}));
+  kEl.addEventListener('input',sim); sim();
+})();
+</script>
+
+<p>普通人直接买入杠杆 ETF 后放着不动，并没有亲手追涨杀跌；这一过程由基金每日调整，通过净值结算转移到持有人身上，所以难以察觉。这里的“损耗”更准确的说法是“偏差”，它本身是中性的：在单边上涨或下跌的趋势中，偏差可能是有利的；在来回震荡的市场中，偏差是不利的。Cheng 与 Madhavan（2009）、Avellaneda 与 Zhang（2010）对这种路径依赖作了系统的分析。</p>
+<p>也因为如此，想“利用”杠杆 ETF 的偏差套利，逻辑上只等价于自己反向做一次高抛低吸，而高抛低吸并不保证盈利。</p>
+<h2 id="sec-6">六、再平衡：方向相反的同一个机制</h2>
+<p>固定比例的分散组合，例如股票与债券各占一半，定期再平衡时做的事情恰好相反：卖出涨多了的资产，买入跌多了的资产，即高抛低吸。在来回震荡的市场里，这会让组合的复合收益高于各资产复合收益的加权平均，布斯与法玛在 1992 年称之为“分散收益”；在单边趋势中，它则会落后于不调整的组合。</p>
+<figure>
+  <div class="card">
+    <p class="figtitle">再平衡：方向相反的同一个机制</p>
+    <p class="figsub">两项资产各投 50 元，长期走势相同但涨跌交替。比较“买入后不再调整”与“每期调回各占一半”的结果。</p>
+    <div class="seg-btns" role="group" aria-label="走势">
+      <button type="button" data-rb="chop" aria-pressed="true">来回震荡</button>
+      <button type="button" data-rb="trend" aria-pressed="false">一项持续上涨</button>
+    </div>
+    <div class="rb" id="rb" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="买入持有与定期再平衡的组合净值">
+        <g id="rb-axis"></g><path id="rb-bh" class="rb-l bh"/><path id="rb-re" class="rb-l re"/>
+      </svg>
+      <div class="legend"><span><i style="background:var(--faint)"></i>买入后不再调整</span><span><i style="background:var(--accent)"></i>每期再平衡（高抛低吸）</span></div>
+      <p class="rb-msg" id="rb-msg" aria-live="polite"></p>
+      <div class="rb-cmp">
+        <div><b>固定杠杆</b><span>涨了加仓、跌了减仓（追涨杀跌）</span><em class="w">震荡中吃亏，趋势中占优</em></div>
+        <div><b>固定比例</b><span>涨了减仓、跌了加仓（高抛低吸）</span><em>震荡中获益，趋势中落后</em></div>
+      </div>
+    </div>
+  </div>
+  <figcaption>示意模拟，不计交易成本。震荡情形下，两项资产每期在 2% 的基础上分别涨跌 20%、方向相反，各自长期几乎不涨；趋势情形下，一项每期上涨 8%、另一项不变。再平衡带来的“分散收益”见 Booth 与 Fama（1992）。</figcaption>
+</figure>
+<style>
+.rb svg{width:100%;height:auto;display:block}
+.rb-l{fill:none;stroke-width:2.5}
+.rb-l.bh{stroke:var(--faint);stroke-dasharray:5 4} .rb-l.re{stroke:var(--accent)}
+.rb-msg{font-size:14px;margin:8px 0;min-height:1.7em}
+.rb-cmp{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rb-cmp div{background:var(--quote);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;font-size:13px}
+.rb-cmp span{color:var(--muted)}
+.rb-cmp em{font-style:normal;color:var(--accent);font-weight:500}
+.rb-cmp em.w{color:var(--warm)}
+@media (max-width:640px){.rb-cmp{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const N=20,X0=50,X1=620,YT=14,YB=184,x=t=>X0+t/N*(X1-X0);
+  const S={chop:t=>[(t%2?-0.2:0.2)+0.02,(t%2?0.2:-0.2)+0.02],trend:t=>[0.08,0]};
+  let k='chop';
+  function render(){
+    document.querySelectorAll('[data-rb]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.rb===k)));
+    let a=50,b=50,re=100; const BH=[100],RE=[100];
+    for(let t=0;t<N;t++){const [ra,rb]=S[k](t);a*=1+ra;b*=1+rb;re*=1+(ra+rb)/2;BH.push(a+b);RE.push(re);}
+    const all=BH.concat(RE), lo=Math.min(...all)*0.95, hi=Math.max(...all)*1.05, y=v=>YB-(v-lo)/(hi-lo)*(YB-YT);
+    let ax=`<line x1="${X0}" y1="${y(100)}" x2="${X1}" y2="${y(100)}" class="s-line"/><text x="${X0-8}" y="${y(100)+4}" text-anchor="end" font-size="11" class="t-faint">100</text>`;
+    [0,5,10,15,20].forEach(t=>ax+=`<text x="${x(t)}" y="${YB+18}" text-anchor="middle" font-size="11" class="t-faint">第 ${t} 期</text>`);
+    document.getElementById('rb-axis').innerHTML=ax;
+    const P=arr=>'M'+arr.map((v,t)=>`${x(t).toFixed(1)},${y(v).toFixed(1)}`).join('L');
+    document.getElementById('rb-bh').setAttribute('d',P(BH));document.getElementById('rb-re').setAttribute('d',P(RE));
+    document.getElementById('rb-msg').textContent=k==='chop'?`20 期后：不调整 ${BH[N].toFixed(0)}，再平衡 ${RE[N].toFixed(0)}。每项资产单独来看几乎原地踏步，再平衡的组合却在增长。`:`20 期后：不调整 ${BH[N].toFixed(0)}，再平衡 ${RE[N].toFixed(0)}。持续卖出上涨的资产，使再平衡落后于不调整。`;
+  }
+  document.querySelectorAll('[data-rb]').forEach(b=>b.addEventListener('click',()=>{k=b.dataset.rb;render();}));
+  document.getElementById('rb').addEventListener('anim-in',()=>{k='chop';render();setTimeout(()=>{k='trend';render();},2600);setTimeout(()=>{k='chop';render();},5200);});
+  render();
+})();
+</script>
+
+<p>固定杠杆与固定比例，是同一个数学性质的两个方向：前者追涨杀跌，在震荡中吃亏；后者高抛低吸，在震荡中获益。它们都不是免费的午餐，而是对市场走势形态的不同押注。</p>
+<h2 id="sec-7">七、对产品设计的含义</h2>
+<p>投资者拿到的是复合收益，产品展示的却常常是平均收益，这中间的差距需要产品主动讲清楚。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：把复合收益讲清楚</p><p class="figsub">四条设计要求，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="ch05summary">重播</button></div>
+    <div class="ch05summary" id="ch05summary" data-anim><div class="ch05summary-c" style="--i:0"><em>投资者拿到的是复合收益</em><b>展示复合收益，而不只是平均收益</b><p>历史业绩用年化复合收益表示；平均收益与复合收益差距较大时，说明原因。</p></div><div class="ch05summary-c warn" style="--i:1"><em>回撤与恢复不对称</em><b>同时展示最大回撤与恢复所需涨幅</b><p>让用户在买入前就知道，一次 50% 的回撤需要翻倍才能回本。</p></div><div class="ch05summary-c" style="--i:2"><em>多数人的结果低于平均数</em><b>长期产品用中位数与区间说明预期</b><p>不要只用平均情形介绍长期结果，应展示典型结果与较差情形。</p></div><div class="ch05summary-c warn" style="--i:3"><em>固定杠杆在震荡中产生不利偏差</em><b>杠杆产品讲清每日再平衡的机制</b><p>说明持有超过一天时结果会偏离“倍数”，偏差方向取决于走势形态，而不是简单的“损耗”。</p></div></div>
+  </div>
+</figure>
+<style>
+.ch05summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch05summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch05summary-c.warn{border-left-color:var(--warm)}
+.ch05summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch05summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch05summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch05summary.in .ch05summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch05summary{grid-template-columns:1fr}}
+</style>
+
+<h2 id="sec-8">参考文献</h2>
+<ul class="refs"><li>Booth, D. &amp; Fama, E. (1992). Diversification returns and asset contributions. <i>Financial Analysts Journal</i>, 48(3), 26–32.</li><li>Cheng, M. &amp; Madhavan, A. (2009). The dynamics of leveraged and inverse exchange-traded funds. <i>Journal of Investment Management</i>, 7(4), 43–62.</li><li>Avellaneda, M. &amp; Zhang, S. (2010). Path-dependence of leveraged ETF returns. <i>SIAM Journal on Financial Mathematics</i>, 1(1), 586–603.</li><li>兴华 XingHua（2024）. 补充一些计算中隐藏的细节. 2024-12-28.</li></ul>
+<footer class="nav"><a href="ch04.html">← 第 4 章　分散：哪些风险有补偿</a><a href="ch06.html">第 6 章　因子：风险补偿可以分解 →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

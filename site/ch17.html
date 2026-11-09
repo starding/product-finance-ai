@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>用户能承受什么</title>
+<meta name="description" content="《产品×金融×AI：AI 时代的金融产品》第 17 章：风险承受力有三个面，客观上能承受多少、主观上愿意承受多少、下跌时实际承受了多少；三者不一致时，以最低的一面为准；画像只能作统计描述，不能断言个人">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="ch17">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="全书目录">
+<div class="side-head"><a class="sidetitle" href="index.html">产品×金融×AI<small>AI 时代的金融产品</small></a></div>
+<div class="side-view" role="group" aria-label="阅读方式"><a href="preface.html" class="on" aria-current="true">分解式</a><a href="g-preface.html">生成式</a></div>
+<a class="side-about" href="index.html#about">关于本书</a>
+<a class="" href="preface.html"><span class="n">序</span>为什么金融产品在 AI 时代需要重新学</a>
+<a class="side-part" href="part1.html"><span class="pn">第一部分</span>市场：收益与风险从何而来</a>
+<a class="" href="ch01.html"><span class="n">1</span>金融产品卖的是什么</a>
+<a class="" href="ch02.html"><span class="n">2</span>利率与期限</a>
+<a class="" href="ch03.html"><span class="n">3</span>风险长什么样</a>
+<a class="" href="ch04.html"><span class="n">4</span>分散：哪些风险有补偿</a>
+<a class="" href="ch05.html"><span class="n">5</span>复利与波动拖累</a>
+<a class="" href="ch06.html"><span class="n">6</span>因子：风险补偿可以分解</a>
+<a class="" href="ch07.html"><span class="n">7</span>价格为什么难以预测</a>
+<a class="" href="ch08.html"><span class="n">8</span>信息如何进入价格</a>
+<a class="" href="ch09.html"><span class="n">9</span>市场里的交易者</a>
+<a class="" href="ch10.html"><span class="n">10</span>流动性与买卖价差</a>
+<a class="" href="ch11.html"><span class="n">11</span>订单、规则与市场结构</a>
+<a class="" href="ch12.html"><span class="n">12</span>主动管理的算术</a>
+<a class="" href="ch13.html"><span class="n">13</span>承诺如何被兑现</a>
+<a class="" href="ch14.html"><span class="n">14</span>监管为何存在</a>
+<a class="side-part" href="part2.html"><span class="pn">第二部分</span>用户：人要什么、能承受什么</a>
+<a class="" href="ch15.html"><span class="n">15</span>用户要完成的任务</a>
+<a class="" href="ch16.html"><span class="n">16</span>用户如何做决定</a>
+<a class=" cur" href="ch17.html" aria-current="page"><span class="n">17</span>用户能承受什么</a>
+<a class="" href="ch18.html"><span class="n">18</span>用户如何判断与信任</a>
+<a class="side-part" href="part3.html"><span class="pn">第三部分</span>AI：代理能替人做多少</a>
+<a class="" href="ch19.html"><span class="n">19</span>放大倍数：理论与实测</a>
+<a class="" href="ch20.html"><span class="n">20</span>哪些事务能交给 AI</a>
+<a class="" href="ch21.html"><span class="n">21</span>能力从哪里来、在哪里失效</a>
+<a class="" href="ch22.html"><span class="n">22</span>可验证性：核对的成本</a>
+<a class="" href="ch23.html"><span class="n">23</span>金融场景的特殊约束</a>
+<a class="side-part" href="part4.html"><span class="pn">第四部分</span>设计：在三组约束下设计金融产品</a>
+<a class="" href="ch24.html"><span class="n">24</span>承诺什么</a>
+<a class="" href="ch25.html"><span class="n">25</span>委托参数：交代的目标与约束</a>
+<a class="" href="ch26.html"><span class="n">26</span>授权与不可逆敞口</a>
+<a class="" href="ch27.html"><span class="n">27</span>责任与利益冲突</a>
+<a class="" href="ch28.html"><span class="n">28</span>能力装配与过程可见</a>
+<a class="" href="ch29.html"><span class="n">29</span>保障强度</a>
+<a class="" href="ch30.html"><span class="n">30</span>信任如何建立</a>
+<a class="" href="ch31.html"><span class="n">31</span>设计原则</a>
+<a class="side-app" href="estimates.html"><span class="n">附录</span>作者估算的方法与数据</a>
+<a class="side-app" href="method.html"><span class="n">附录</span>本书的写法</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="展开目录" title="目录"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">产品×金融×AI：AI 时代的金融产品</a><span>第二部分　用户：人要什么、能承受什么</span><a class="langlink" href="en/ch17.html" hreflang="en">English</a></header>
+
+<div class="chapno">第 17 章</div><h1>用户能承受什么<small>能力、意愿与行为</small></h1>
+<blockquote><p>一个计划能否执行到底，取决于用户能承受什么。承受力有三个面：能力，即在不影响生活与目标的前提下客观上能承受多大的损失；意愿，即主观上愿意承担多大的风险；行为，即真正遇到下跌时做了什么。三者经常不一致，而计划只能按最低的一面来定。能力随年龄与收入变化，意愿随市场涨跌变化，行为只有经历过下跌才能看见。因此，对承受力的任何测量都是一种统计判断：它描述历史上相似的投资者通常怎样，而不能断言某一个人一定怎样。</p></blockquote>
+<h2 id="sec-1">一、承受力的三个面</h2>
+<p>两个人填写同一份问卷，都选择了“愿意承担较高风险”。一位三十岁，收入稳定，没有负债，二十年后才用这笔钱；另一位五十八岁，这笔钱是全部积蓄，两年后就要退休。前者的意愿与能力一致；后者的意愿远远超出了能力。即使二者的能力与意愿都相同，在一次大跌中的反应也可能完全不同。投资实务因此把风险承受力分为能力与意愿两个方面（克莱门特，2015），行为金融的研究又补上了第三个方面：实际的行为。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">承受力的三个面</p><p class="figsub">三位投资者在问卷中都选择了“愿意承担较高风险”。切换查看，比较三个面的高低，以及计划最终能按哪一档执行。</p></div><button class="replay" type="button" data-replay="fc">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="投资者">
+      <button type="button" data-fc="a" aria-pressed="true">三十岁，收入稳定</button>
+      <button type="button" data-fc="b" aria-pressed="false">五十八岁，两年后退休</button>
+      <button type="button" data-fc="c" aria-pressed="false">上次大跌中卖出过</button>
+    </div>
+    <div class="fc" id="fc" data-anim>
+      <div class="fc-bars" id="fc-bars"></div>
+      <p class="fc-msg" id="fc-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意。五档从低到高；虚线为三个面中最低的一档，即计划可以执行的上限。</figcaption>
+</figure>
+<style>
+.fc-bars{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:18px;height:200px;align-items:end;padding:0 8px;border-bottom:1px solid var(--faint)}
+.fc-b{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.fc-b i{display:block;width:70%;max-width:110px;border-radius:6px 6px 0 0;height:0;transition:height .6s ease}
+.fc-b b{font-size:13px;margin-bottom:4px}
+.fc-cap{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;padding:0 8px;margin-top:6px;text-align:center;font-size:13px}
+.fc-cap span{color:var(--faint);font-size:11.5px;display:block}
+.fc-line{position:absolute;left:0;right:0;border-top:2px dashed var(--ink);transition:bottom .6s ease}
+.fc-line em{position:absolute;left:0;top:-18px;font-style:normal;font-size:11.5px;background:var(--surface);padding:0 4px}
+.fc-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const N=['能力','意愿','行为'],D=['客观上能承受多少','主观上愿意承担多少','下跌时实际承受了多少'],C=['var(--blue)','var(--accent)','var(--warm)'],L=['','很低','较低','中等','较高','很高'];
+  const P={a:[5,4,4,'三个面都较高，且大致一致：计划可以按较高的一档执行。行为一面尚未经过大跌检验，仍需在下跌中复核。'],
+    b:[2,4,3,'意愿较高，能力却较低：这笔钱是全部积蓄，两年后就要使用。计划只能按能力一档执行，否则一次下跌可能直接影响退休生活。'],
+    c:[5,5,2,'能力与意愿都很高，但上一次大跌时在跌幅过半前就卖出了。行为记录显示的实际承受力最低，计划应以它为准。']};
+  const box=document.getElementById('fc');
+  box.querySelector('.fc-bars').innerHTML=N.map((n,i)=>`<div class="fc-b"><i id="fc-i${i}" style="background:${C[i]}"></i></div>`).join('')+'<div class="fc-line" id="fc-line"><em id="fc-le"></em></div>';
+  box.querySelector('.fc-bars').insertAdjacentHTML('afterend','<div class="fc-cap">'+N.map((n,i)=>`<div>${n}：<b id="fc-v${i}"></b><span>${D[i]}</span></div>`).join('')+'</div>');
+  function set(k,anim){document.querySelectorAll('[data-fc]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.fc===k)));
+    const v=P[k];if(anim)N.forEach((n,i)=>document.getElementById('fc-i'+i).style.height='0');
+    setTimeout(()=>{N.forEach((n,i)=>{document.getElementById('fc-i'+i).style.height=v[i]/5*180+'px';document.getElementById('fc-v'+i).textContent=L[v[i]];});
+      const m=Math.min(v[0],v[1],v[2]);document.getElementById('fc-line').style.bottom=m/5*180+'px';document.getElementById('fc-le').textContent='计划上限：'+L[m];},anim?60:0);
+    document.getElementById('fc-msg').textContent=v[3];}
+  document.querySelectorAll('[data-fc]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.fc,false)));
+  box.addEventListener('anim-in',()=>{set('a',true);setTimeout(()=>set('b'),2600);setTimeout(()=>set('c'),5200);});
+  set('a',false);
+})();
+</script>
+
+<h2 id="sec-2">二、能力：一个人的财富不只有金融资产</h2>
+<p>一个人的全部财富，除了账户里的金融资产，还有未来工作收入的现值，即人力资本。年轻人的金融资产不多，人力资本却很大；随着年龄增长，人力资本逐渐转化为金融资产，直到退休时基本耗尽。博迪、默顿与萨缪尔森（1992）以及维塞拉（2001）的研究表明，如果工作收入稳定、与股市关系不大，人力资本的性质接近债券，年轻人的金融资产就可以多承担一些股票风险；如果收入本身随经济起落，例如收入依赖于奖金或销售提成，人力资本更接近股票，金融资产就应当更稳健一些。能承受多少风险，取决于全部财富的构成，而不只是账户里的数字。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">全部财富：金融资产与人力资本</p><p class="figsub">拖动年龄，看全部财富的构成；切换工作收入的性质，看金融资产中适合持有的股票比例怎样变化。</p></div><button class="replay" type="button" data-replay="hc">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="收入性质">
+      <button type="button" data-hc="s" aria-pressed="true">收入稳定，接近债券</button>
+      <button type="button" data-hc="c" aria-pressed="false">收入随经济起落，接近股票</button>
+    </div>
+    <div class="hc" id="hc" data-anim>
+      <div class="sl"><label for="hc-a">年龄 <b id="hc-av"></b></label><input id="hc-a" type="range" min="25" max="65" step="1" value="30"></div>
+      <div class="hc-w"><span>全部财富</span><div class="hc-t"><i id="hc-h" style="background:var(--blue)"></i><i id="hc-f" style="background:var(--accent)"></i></div></div>
+      <div class="legend"><span><i style="background:var(--blue)"></i>人力资本：未来工作收入的现值</span><span><i style="background:var(--accent)"></i>金融资产</span></div>
+      <svg viewBox="0 0 640 180" role="img" aria-label="金融资产中的股票比例随年龄变化"><g id="hc-g"></g></svg>
+      <p class="hc-msg" id="hc-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意模型：年收入为 1，65 岁退休，折现率 2%；每年储蓄收入的 15%，金融资产年增长 4%；全部财富中的股票目标为 60%，稳定收入的人力资本按 10% 视作股票，随经济起落的按 50% 视作股票。思路见 Bodie、Merton 与 Samuelson（1992），Viceira（2001）。</figcaption>
+</figure>
+<style>
+.hc-w{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:center;font-size:12.5px;color:var(--faint);margin:6px 0}
+.hc-t{display:flex;height:22px;border-radius:5px;overflow:hidden;background:var(--quote)}
+.hc-t i{display:block;height:100%;transition:width .4s}
+.hc svg{width:100%;height:auto;display:block;margin-top:6px}
+.hc-msg{font-size:14px;margin:4px 0 0;min-height:3.4em}
+@media (max-width:640px){.hc svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const H=a=>{let s=0;for(let k=1;k<=65-a;k++)s+=1/Math.pow(1.02,k);return s;};
+  const F=a=>{let f=.5;for(let k=25;k<a;k++)f=f*1.04+.15;return f;};
+  const S=(a,b)=>Math.max(0,Math.min(1,(.6*(F(a)+H(a))-b*H(a))/F(a)));
+  const B={s:.1,c:.5},X0=50,X1=620,YT=14,YB=150,x=a=>X0+(a-25)/40*(X1-X0),y=v=>YB-v*(YB-YT);
+  const $=id=>document.getElementById(id),sl=$('hc-a');let k='s';
+  const path=b=>{let d='';for(let a=25;a<=65;a++)d+=(a===25?'M':'L')+x(a).toFixed(1)+','+y(S(a,b)).toFixed(1);return d;};
+  function draw(){const a=+sl.value;let g=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`;
+    [0,.5,1].forEach(v=>g+=`<text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text>`);
+    [25,35,45,55,65].forEach(v=>g+=`<text x="${x(v)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${v} 岁</text>`);
+    ['s','c'].forEach(j=>g+=`<path d="${path(B[j])}" fill="none" stroke="${j==='s'?'var(--blue)':'var(--warm)'}" stroke-width="${j===k?3:1.5}" opacity="${j===k?1:.35}"/>`);
+    g+=`<text x="${X1}" y="${YT+4}" text-anchor="end" font-size="11" class="t-faint">金融资产中的股票比例</text>`;
+    const s=S(a,B[k]);g+=`<line x1="${x(a)}" y1="${YT}" x2="${x(a)}" y2="${YB}" class="s-faint" stroke-dasharray="3 3"/><circle cx="${x(a)}" cy="${y(s)}" r="6" fill="var(--ink)"/>`;
+    $('hc-g').innerHTML=g;
+    const h=H(a),f=F(a),t=h+f;$('hc-h').style.width=h/t*100+'%';$('hc-f').style.width=f/t*100+'%';$('hc-av').textContent=a+' 岁';
+    $('hc-msg').textContent=`${a} 岁时，人力资本约占全部财富的 ${(h/t*100).toFixed(0)}%。${k==='s'?'收入稳定时，人力资本像一笔债券':'收入随经济起落时，人力资本本身已经承担了不少股票风险'}，金融资产中适合持有的股票比例约为 ${(S(a,B[k])*100).toFixed(0)}%。`;}
+  function set(j){k=j;document.querySelectorAll('[data-hc]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.hc===j)));draw();}
+  document.querySelectorAll('[data-hc]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.hc)));
+  sl.addEventListener('input',draw);
+  $('hc').addEventListener('anim-in',()=>{let a=25;sl.value=a;draw();const id=setInterval(()=>{a+=1;sl.value=a;draw();if(a>=65){clearInterval(id);sl.value=30;draw();}},90);});
+  set('s');
+})();
+</script>
+
+<h2 id="sec-3">三、意愿：测得出来，但并不稳定</h2>
+<p>测量风险意愿的常见方法，是让人在一系列确定收益与有风险的选择之间作出取舍。霍尔特与劳里（2002）设计了一组成对的抽奖：随着高收益一方的概率逐步提高，一个人在第几行从稳妥的选项转向冒险的选项，就反映了这个人的风险厌恶程度。问卷测得的意愿却并不稳定。吉索、萨皮恩扎与辛加莱斯（2018）对一家意大利银行客户的调查发现，2008 年金融危机之后，客户的风险厌恶程度明显上升，即使是没有遭受损失的客户也是如此。意愿会随市场的涨跌与近期的经历改变：在上涨之后高估自己，在下跌之后低估自己。</p>
+<figure>
+  <div class="card">
+    <p class="figtitle">用一组抽奖测量风险意愿</p>
+    <p class="figsub">每一行在稳妥的甲与冒险的乙之间选一个。从上往下，乙得到高奖金的概率逐步提高。点按从哪一行开始改选乙。</p>
+    <div class="ht" id="ht" data-anim>
+      <div class="ht-tb" id="ht-tb"></div>
+      <label class="ht-chk"><input type="checkbox" id="ht-x"> 刚刚经历了一次大跌</label>
+      <p class="ht-msg" id="ht-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>选项按 Holt 与 Laury（2002）的设计，金额单位为元。风险中性的人在第 5 行改选乙；越晚改选，越厌恶风险。“经历大跌”的效果为示意，方向依据 Guiso、Sapienza 与 Zingales（2018）。</figcaption>
+</figure>
+<style>
+.ht-tb{display:grid;gap:3px}
+.ht-r{font:inherit;display:grid;grid-template-columns:30px 1fr 1fr 100px;gap:8px;align-items:center;font-size:12.5px;border:1.5px solid transparent;border-radius:7px;padding:4px 8px;background:var(--quote);color:var(--ink);cursor:pointer;text-align:left}
+.ht-r em{font-style:normal;color:var(--faint)}
+.ht-r span{border-radius:5px;padding:2px 6px}
+.ht-r .on{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.ht-r .onb{background:var(--warm-soft);color:var(--warm);font-weight:600}
+.ht-r.sw{border-color:var(--ink)}
+.ht-r b{white-space:nowrap;font-weight:400;font-size:11.5px;color:var(--faint);text-align:right}
+.ht-chk{display:flex;gap:6px;align-items:center;font-size:14px;margin-top:10px}
+.ht-chk input{accent-color:var(--accent);width:16px;height:16px}
+.ht-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.ht-r{grid-template-columns:22px 1fr 1fr;font-size:11.5px}.ht-r b{display:none}}
+</style>
+<script>
+(function(){
+  const tb=document.getElementById('ht-tb'),x=document.getElementById('ht-x');let sw=5;
+  tb.innerHTML=Array.from({length:10},(_,i)=>{const p=(i+1)/10,ea=p*2+(1-p)*1.6,eb=p*3.85+(1-p)*.1;
+    return `<button type="button" class="ht-r" data-i="${i+1}"><em>${i+1}</em><span>甲：${i+1}/10 得 2.00，否则 1.60</span><span>乙：${i+1}/10 得 3.85，否则 0.10</span><b>期望差 ${(eb-ea>=0?'＋':'－')+Math.abs(eb-ea).toFixed(2)}</b></button>`;}).join('');
+  const rs=[...tb.children];
+  function show(){const s=Math.min(11,sw+(x.checked?2:0));
+    rs.forEach((r,i)=>{const n=i+1,[a,b]=r.querySelectorAll('span');a.className=n<s?'on':'';b.className=n>=s?'onb':'';r.classList.toggle('sw',n===s);});
+    const t=s<=4?'偏好风险':s===5?'接近风险中性':s<=7?'中等程度的风险厌恶':'较强的风险厌恶';
+    document.getElementById('ht-msg').textContent=(s>10?'十行都选择甲：极强的风险厌恶。':`从第 ${s} 行开始改选乙：${t}。`)+(x.checked?'同一个人在大跌之后，改选的位置往往会向下移动；测得的意愿反映的是当时的状态。':'第 5 行起，乙的期望收益已经高于甲。');}
+  rs.forEach(r=>r.addEventListener('click',()=>{sw=+r.dataset.i-(x.checked?2:0);sw=Math.max(1,sw);show();}));
+  x.addEventListener('change',show);
+  document.getElementById('ht').addEventListener('anim-in',()=>{x.checked=false;sw=7;show();setTimeout(()=>{x.checked=true;show();},2200);setTimeout(()=>{x.checked=false;show();},4400);});
+  sw=7;show();
+})();
+</script>
+
+<h2 id="sec-4">四、行为：下跌时实际做了什么</h2>
+<p>计划写着“能承受 30% 的下跌”，真正经历下跌时，一部分人会在下跌途中卖出。霍夫曼、波斯特与彭宁斯（2013）跟踪了一批荷兰个人投资者在金融危机期间的感受与交易：他们的收益预期与风险承受意愿在危机最严重时下降、风险感知上升，此后又逐步恢复；交易与风险承担的变化随这些感受起伏。在下跌中卖出，往往意味着把账面损失变成了实际损失，并错过随后的恢复。对产品而言，行为这一面最难事先测量，却最终决定了用户得到的结果。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">计划写的承受力与下跌时的实际承受力</p><p class="figsub">一个组合先下跌约一半，此后用数年恢复并创出新高。拖动“实际能承受的跌幅”：跌幅一旦超过它，投资者就卖出并持有现金，看最终结果与持有到底相差多少。</p></div><button class="replay" type="button" data-replay="dd">重播</button></div>
+    <div class="dd" id="dd" data-anim>
+      <svg viewBox="0 0 640 230" role="img" aria-label="下跌与恢复路径"><g id="dd-ax"></g><path id="dd-p" class="dd-l"/><path id="dd-c" class="dd-c"/><line id="dd-th" class="dd-th"/><text id="dd-tt" font-size="11" class="t-warm"></text><circle id="dd-s" r="6" fill="var(--warm)"/></svg>
+      <div class="sl"><label for="dd-r">实际能承受的跌幅 <b id="dd-rv"></b></label><input id="dd-r" type="range" min="10" max="60" step="5" value="25"></div>
+      <div class="dd-out"><div><span>持有到底</span><b id="dd-h"></b></div><div><span>按实际承受力</span><b id="dd-a"></b></div></div>
+      <p class="dd-msg" id="dd-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意路径，形态接近一次严重的熊市及其恢复，不对应任何具体指数；简化为卖出后不再买回。危机中个人投资者的感受与交易变化见 Hoffmann、Post 与 Pennings（2013）。</figcaption>
+</figure>
+<style>
+.dd svg{width:100%;height:auto;display:block}
+.dd-l{fill:none;stroke:var(--accent);stroke-width:2.5;stroke-dasharray:1500;stroke-dashoffset:1500;transition:stroke-dashoffset 2s ease}
+.dd.in .dd-l{stroke-dashoffset:0}
+.dd-c{fill:none;stroke:var(--warm);stroke-width:2.5;stroke-dasharray:5 4}
+.dd-th{stroke:var(--warm);stroke-dasharray:3 3;opacity:.6}
+.dd-out{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.dd-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.dd-out span{display:block;font-size:12px;color:var(--faint)} .dd-out b{font-size:19px;font-variant-numeric:tabular-nums}
+.dd-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.dd svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const K=[[0,100],[6,106],[12,88],[17,70],[22,58],[26,52],[30,60],[36,72],[44,82],[52,95],[60,108],[72,128]];
+  const v=t=>{for(let i=1;i<K.length;i++)if(t<=K[i][0]){const [a,va]=K[i-1],[b,vb]=K[i];return va+(vb-va)*(t-a)/(b-a);}return K[K.length-1][1];};
+  const X0=50,X1=620,YT=12,YB=200,x=t=>X0+t/72*(X1-X0),y=p=>YB-(p-40)/(140-40)*(YB-YT);
+  const $=id=>document.getElementById(id);
+  let a=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`;
+  [40,70,100,130].forEach(p=>a+=`<text x="${X0-6}" y="${y(p)+4}" text-anchor="end" font-size="11" class="t-faint">${p}</text>`);
+  [0,1,2,3,4,5,6].forEach(k=>a+=`<text x="${x(k*12)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${k?'第 '+k+' 年':'开始'}</text>`);
+  $('dd-ax').innerHTML=a;
+  let d='';for(let t=0;t<=72;t+=.5)d+=(t?'L':'M')+x(t).toFixed(1)+','+y(v(t)).toFixed(1);$('dd-p').setAttribute('d',d);
+  const sl=$('dd-r');
+  function r(){const tol=+sl.value/100;let pk=0,ts=null;for(let t=0;t<=72;t+=.5){pk=Math.max(pk,v(t));if(v(t)<=pk*(1-tol)){ts=t;break;}}
+    $('dd-rv').textContent=sl.value+'%';$('dd-h').textContent=v(72).toFixed(0);
+    const th=106*(1-tol);$('dd-th').setAttribute('x1',X0);$('dd-th').setAttribute('x2',X1);$('dd-th').setAttribute('y1',y(th));$('dd-th').setAttribute('y2',y(th));
+    $('dd-tt').setAttribute('x',X1);$('dd-tt').setAttribute('text-anchor','end');$('dd-tt').setAttribute('y',y(th)-5);$('dd-tt').textContent=th>=40?'承受线':'';
+    if(ts===null){$('dd-s').setAttribute('opacity',0);$('dd-c').setAttribute('d','');$('dd-a').textContent=v(72).toFixed(0);
+      $('dd-msg').textContent='实际承受力超过了这次下跌的幅度，投资者坚持到了恢复，结果与持有到底相同。';return;}
+    const sv=v(ts);$('dd-s').setAttribute('opacity',1);$('dd-s').setAttribute('cx',x(ts));$('dd-s').setAttribute('cy',y(sv));
+    $('dd-c').setAttribute('d',`M${x(ts)},${y(sv)}L${X1},${y(sv)}`);$('dd-a').textContent=sv.toFixed(0);
+    $('dd-msg').textContent=`跌幅达到 ${sl.value}% 时卖出，账面损失变为实际损失，此后错过了全部恢复：最终为 ${sv.toFixed(0)}，持有到底为 ${v(72).toFixed(0)}。${+sl.value<=30?'计划上写的承受力若高于实际，差距会在最坏的时候兑现。':''}`;}
+  sl.addEventListener('input',r);
+  $('dd').addEventListener('anim-in',()=>{sl.value=60;r();setTimeout(()=>{let k=60;const id=setInterval(()=>{k-=5;sl.value=k;r();if(k<=25)clearInterval(id);},300);},2000);});
+  r();
+})();
+</script>
+
+<h2 id="sec-5">五、三个面不一致时，以最低的一面为准</h2>
+<p>能力、意愿与行为三者不一致时，计划只能按最低的一面来定。意愿超出能力时，即使用户本人愿意，也不应当按意愿配置，否则一次下跌可能危及生活与目标，这也是适当性规则的出发点；能力超出意愿时，可以解释承担更多风险的长期好处，但不应强迫，因为超出意愿的计划很可能在下跌中被放弃；而行为记录显示的实际承受力，是对前两者最直接的检验。</p>
+<figure>
+  <div class="card">
+    <p class="figtitle">三个面不一致时，以最低的一面为准</p>
+    <p class="figsub">分别调节能力、意愿与行为三个面，看计划可以执行的风险档位，以及产品应当怎样回应。</p>
+    <div class="mn" id="mn" data-anim>
+      <div class="mn-s" id="mn-s"></div>
+      <div class="mn-out"><span>计划可以执行的风险档位</span><div class="mn-lv" id="mn-lv"></div></div>
+      <p class="mn-msg" id="mn-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意。五档从低到高。意愿高于能力时的约束，即适当性规则的出发点。</figcaption>
+</figure>
+<style>
+.mn-s{display:grid;gap:6px}
+.mn-s .sl label b{font-variant-numeric:tabular-nums}
+.mn-out{margin-top:10px;background:var(--quote);border-radius:10px;padding:10px 12px}
+.mn-out>span{font-size:12px;color:var(--faint)}
+.mn-lv{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-top:6px}
+.mn-lv i{font-style:normal;text-align:center;font-size:12px;padding:6px 0;border-radius:6px;background:var(--surface);color:var(--faint);border:1.5px solid var(--line);transition:all .3s}
+.mn-lv i.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.mn-msg{font-size:14px;margin:10px 0 0;min-height:5.1em}
+</style>
+<script>
+(function(){
+  const N=[['ab','能力',2],['wi','意愿',4],['be','行为',3]],L=['','很低','较低','中等','较高','很高'];
+  const box=document.getElementById('mn-s');
+  box.innerHTML=N.map(([k,n,v])=>`<div class="sl"><label for="mn-${k}">${n} <b id="mn-${k}v"></b></label><input id="mn-${k}" type="range" min="1" max="5" step="1" value="${v}"></div>`).join('');
+  document.getElementById('mn-lv').innerHTML=L.slice(1).map(l=>`<i>${l}</i>`).join('');
+  const lv=[...document.querySelectorAll('#mn-lv i')];
+  function r(){const v=N.map(([k])=>+document.getElementById('mn-'+k).value);N.forEach(([k],i)=>document.getElementById('mn-'+k+'v').textContent=L[v[i]]);
+    const m=Math.min(...v);lv.forEach((e,i)=>e.classList.toggle('on',i+1===m));
+    const [a,w,b]=v,t=[];
+    if(a===m)t.push(w>a?'意愿高于能力：即使用户本人愿意，也不按意愿配置，并说明原因。':'能力是最低的一面：配置以不影响生活与目标为限。');
+    if(w===m&&w<a)t.push('意愿低于能力：可以解释承担更多风险的长期好处，但不强迫；超出意愿的计划很可能在下跌中被放弃。');
+    if(b===m&&b<Math.min(a,w))t.push('行为最低：过去的下跌中实际承受得更少，以行为记录为准，并在下一次下跌前提前沟通。');
+    if(a===w&&w===b)t.push('三个面一致：计划可以按这一档执行，并在下跌中复核。');
+    document.getElementById('mn-msg').textContent=t.join('');}
+  N.forEach(([k])=>document.getElementById('mn-'+k).addEventListener('input',r));
+  document.getElementById('mn').addEventListener('anim-in',()=>{const S=[[2,4,3],[5,2,4],[5,5,2],[3,3,3]];S.forEach((s,j)=>setTimeout(()=>{N.forEach(([k],i)=>document.getElementById('mn-'+k).value=s[i]);r();},j*1800));});
+  r();
+})();
+</script>
+
+<h2 id="sec-6">六、画像是统计描述，而不是个人断言</h2>
+<p>把问卷、资产与行为记录汇总为一个风险等级或一种投资者画像，便于沟通，也便于匹配产品。但画像本质上是统计描述：它说明的是“答案与此相近的投资者，历史上通常怎样”，同一类别内部的差异往往很大。克莱门特（2015）的综述指出，常见的风险问卷对实际风险资产配置的解释力有限。因此，画像的表述应当归因于统计群体，例如“历史上与此相似的投资者，在 30% 的下跌中约有三分之一卖出”（示例数字），而不是对个人下结论，例如“你能承受 30% 的下跌”。前者提供参照，后者替用户作了判断，也替机构作了无法兑现的承诺。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">同一类画像，内部差异很大</p><p class="figsub">100 位问卷答案相近、被归为同一风险等级的投资者，在一次 30% 的下跌中各自承受到了多大的跌幅才卖出。切换两种表述方式。</p></div><button class="replay" type="button" data-replay="pf">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="表述方式">
+      <button type="button" data-pf="ind" aria-pressed="true">对个人下结论</button>
+      <button type="button" data-pf="stat" aria-pressed="false">按统计群体描述</button>
+    </div>
+    <div class="pf" id="pf" data-anim>
+      <svg viewBox="0 0 640 170" role="img" aria-label="同一等级投资者的实际承受跌幅分布"><g id="pf-g"></g></svg>
+      <div class="pf-say" id="pf-say"></div>
+    </div>
+  </div>
+  <figcaption>示意分布。圆点为每位投资者卖出时的跌幅，30% 处仍持有的记在右端。常见风险问卷对实际风险资产配置的解释力有限，见 Klement（2015）。</figcaption>
+</figure>
+<style>
+.pf svg{width:100%;height:auto;display:block}
+.pf-d{opacity:0;transition:opacity .3s}
+.pf.in .pf-d{opacity:1}
+.pf-say{border-radius:10px;padding:12px 14px;font-size:14px;line-height:1.7;border-left:3px solid var(--accent);background:var(--quote);min-height:5.4em}
+.pf-say.bad{border-left-color:var(--warm)}
+.pf-say em{display:block;font-style:normal;font-size:12px;color:var(--faint)}
+@media (max-width:640px){.pf svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  let s=7;const rnd=()=>{s=(s*9301+49297)%233280;return s/233280;};
+  const D=Array.from({length:100},()=>{const u=rnd(),v=rnd();const z=Math.sqrt(-2*Math.log(u+1e-9))*Math.cos(2*Math.PI*v);return Math.max(6,Math.min(30,20+z*7));}).sort((a,b)=>a-b);
+  const X0=40,X1=600,x=v=>X0+(v-5)/(30-5)*(X1-X0),YB=130;
+  const bins={};let g=`<line x1="${X0}" y1="${YB+8}" x2="${X1}" y2="${YB+8}" class="s-faint"/>`;
+  [5,10,15,20,25,30].forEach(v=>g+=`<text x="${x(v)}" y="${YB+24}" text-anchor="middle" font-size="11" class="t-faint">${v===30?'仍持有':v+'%'}</text>`);
+  D.forEach((v,i)=>{const b=v>=30?30:Math.round(v);bins[b]=(bins[b]||0)+1;g+=`<circle class="pf-d" style="transition-delay:${i*12}ms" cx="${x(b)}" cy="${YB-(bins[b]-1)*8.5}" r="3.6" fill="${b>=30?'var(--accent)':'var(--warm)'}"/>`;});
+  const hold=D.filter(v=>v>=30).length,sold=D.filter(v=>v<30),p10=sold[Math.floor(sold.length*.1)],p90=sold[Math.floor(sold.length*.9)];
+  g+=`<rect x="${x(p10)}" y="${YB+3}" width="${x(p90)-x(p10)}" height="4" rx="2" fill="var(--ink)" opacity=".5"/>`;
+  document.getElementById('pf-g').innerHTML=g;
+  const T={ind:['对个人下结论（不应采用）','你属于平衡型投资者，能承受 30% 的下跌。'],
+    stat:['按统计群体描述',`历史上答案与此相近的投资者，在一次 30% 的下跌中约有 ${hold} 人坚持持有；其余 ${100-hold} 人中，八成在跌幅 ${Math.round(p10)}% 至 ${Math.round(p90)}% 之间陆续卖出。这只是同类投资者的统计，不代表任何一个人的结果。`]};
+  function set(k){document.querySelectorAll('[data-pf]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.pf===k)));const e=document.getElementById('pf-say');
+    e.classList.toggle('bad',k==='ind');e.innerHTML=`<em>${T[k][0]}</em>${T[k][1]}${k==='ind'?'<br><span style="font-size:12.5px;color:var(--warm)">同一等级中只有 '+hold+' 人做到了这一点；这句话替用户作了判断，也作出了无法兑现的承诺。</span>':''}`;}
+  document.querySelectorAll('[data-pf]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.pf)));
+  document.getElementById('pf').addEventListener('anim-in',()=>{set('ind');setTimeout(()=>set('stat'),3000);});
+  set('ind');
+})();
+</script>
+
+<h2 id="sec-7">七、对产品设计的含义</h2>
+<p>承受力要从三个面分别了解，按最低的一面执行，并随时间复核；描述它时，只作统计判断。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：按真实的承受力设计</p><p class="figsub">四条设计要求，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="ch17summary">重播</button></div>
+    <div class="ch17summary" id="ch17summary" data-anim><div class="ch17summary-c" style="--i:0"><em>承受力有三个面</em><b>分别了解能力、意愿与行为</b><p>问卷之外，结合资产、收入、期限与过去下跌中的实际交易记录。</p></div><div class="ch17summary-c" style="--i:1"><em>财富不只有金融资产</em><b>把人力资本与用钱时间纳入能力</b><p>询问收入的稳定性与用钱计划，让年龄与收入性质影响建议的风险档位。</p></div><div class="ch17summary-c warn" style="--i:2"><em>意愿随市场变化</em><b>按最低的一面执行，并定期复核</b><p>意愿高于能力时说明原因并加以约束；大涨或大跌之后、目标临近时重新评估。</p></div><div class="ch17summary-c warn" style="--i:3"><em>画像是统计描述</em><b>只作统计口径的表述</b><p>说明“历史上相似的投资者通常怎样”，展示群体内部的差异，不对个人断言能承受多少。</p></div></div>
+  </div>
+</figure>
+<style>
+.ch17summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch17summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch17summary-c.warn{border-left-color:var(--warm)}
+.ch17summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch17summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch17summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch17summary.in .ch17summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch17summary{grid-template-columns:1fr}}
+</style>
+
+<h2 id="sec-8">参考文献</h2>
+<ul class="refs"><li>Klement, J. (2015). <i>Investor Risk Profiling: An Overview</i>. CFA Institute Research Foundation.</li><li>Bodie, Z., Merton, R. C., &amp; Samuelson, W. F. (1992). Labor supply flexibility and portfolio choice in a life cycle model. <i>Journal of Economic Dynamics and Control</i>, 16(3–4), 427–449.</li><li>Viceira, L. M. (2001). Optimal portfolio choice for long-horizon investors with nontradable labor income. <i>Journal of Finance</i>, 56(2), 433–470.</li><li>Holt, C. A., &amp; Laury, S. K. (2002). Risk aversion and incentive effects. <i>American Economic Review</i>, 92(5), 1644–1655.</li><li>Guiso, L., Sapienza, P., &amp; Zingales, L. (2018). Time varying risk aversion. <i>Journal of Financial Economics</i>, 128(3), 403–421.</li><li>Hoffmann, A. O. I., Post, T., &amp; Pennings, J. M. E. (2013). Individual investor perceptions and behavior during the financial crisis. <i>Journal of Banking &amp; Finance</i>, 37(1), 60–74.</li></ul>
+<footer class="nav"><a href="ch16.html">← 第 16 章　用户如何做决定</a><a href="ch18.html">第 18 章　用户如何判断与信任 →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

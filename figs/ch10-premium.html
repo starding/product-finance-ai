@@ -1,0 +1,47 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">流动性差的资产，要用更高的收益补偿</p>
+    <p class="figsub">左：价差与交易频率决定每年付出的成本。右：价差越大的股票，平均收益越高，且增幅逐渐放缓。</p>
+    <div class="pm5" id="pm5" data-anim>
+      <div class="pm5-l">
+        <div class="sl"><label for="pm5-s">买卖价差 <b id="pm5-sv"></b></label><input id="pm5-s" type="range" min="1" max="200" step="1" value="20"></div>
+        <div class="sl"><label for="pm5-n">每年买卖来回次数 <b id="pm5-nv"></b></label><input id="pm5-n" type="range" min="1" max="50" step="1" value="4"></div>
+        <div class="pm5-out"><span>每年因价差付出的成本</span><b id="pm5-c"></b><em id="pm5-e"></em></div>
+      </div>
+      <svg viewBox="0 0 300 220" role="img" aria-label="价差与平均收益的关系示意">
+        <line x1="40" y1="186" x2="290" y2="186" class="s-faint"/><line x1="40" y1="14" x2="40" y2="186" class="s-faint"/>
+        <text x="290" y="206" text-anchor="end" font-size="11" class="t-faint">买卖价差</text>
+        <text x="44" y="14" font-size="11" class="t-faint">平均收益</text>
+        <path id="pm5-curve" class="pm5-curve" d="M44,170 C110,110 180,72 286,56"/>
+        <g id="pm5-pts"></g>
+      </svg>
+    </div>
+  </div>
+  <figcaption>左侧为算术示意：每次买卖来回付出一个价差。右侧为 Amihud 与 Mendelson（1986）结论的示意形状：按价差分组的组合，平均收益随价差上升且呈凹形；圆点不是原文数据。</figcaption>
+</figure>
+<style>
+.pm5{display:grid;grid-template-columns:1fr 300px;gap:18px;align-items:center}
+.pm5 svg{width:100%;height:auto;display:block}
+.pm5-curve{fill:none;stroke:var(--accent);stroke-width:2.5;stroke-dasharray:320;stroke-dashoffset:320;transition:stroke-dashoffset 1.4s ease}
+.pm5.in .pm5-curve{stroke-dashoffset:0}
+#pm5-pts circle{fill:var(--accent);opacity:0;transition:opacity .3s}
+.pm5.in #pm5-pts circle{opacity:.8;transition-delay:calc(1.2s + var(--k)*.15s)}
+.pm5-out{background:var(--quote);border-radius:8px;padding:10px 12px}
+.pm5-out span{display:block;font-size:12px;color:var(--faint)}
+.pm5-out b{font-size:26px;font-variant-numeric:tabular-nums;color:var(--warm)}
+.pm5-out em{display:block;font-style:normal;font-size:12px;color:var(--muted);margin-top:4px}
+@media (max-width:640px){.pm5{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const s=document.getElementById('pm5-s'), n=document.getElementById('pm5-n');
+  function r(){const sp=+s.value/100, k=+n.value, c=sp*k;
+    document.getElementById('pm5-sv').textContent=sp.toFixed(2)+'%';
+    document.getElementById('pm5-nv').textContent=k+' 次';
+    document.getElementById('pm5-c').textContent=c.toFixed(2)+'%';
+    document.getElementById('pm5-e').textContent=c<0.5?'对长期持有者影响很小':c<3?'相当于一部分长期股票收益':'足以吞掉股票的大部分长期收益';}
+  s.addEventListener('input',r); n.addEventListener('input',r); r();
+  const P=[[60,154],[95,128],[130,106],[170,88],[215,74],[262,62]];
+  document.getElementById('pm5-pts').innerHTML=P.map(([x,y],k)=>`<circle cx="${x}" cy="${y+(k%2?6:-5)}" r="4" style="--k:${k}"/>`).join('');
+})();
+</script>

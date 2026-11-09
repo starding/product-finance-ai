@@ -1,0 +1,61 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">交出去的东西有三种尺度</p><p class="figsub">点选一种尺度，看时间关系、代理自己的时间、留下什么，以及委托人最稀缺的资源。三种尺度逐层包含。</p></div><button class="replay" type="button" data-replay="sc">重播</button></div>
+    <div class="sc" id="sc" data-anim>
+      <div class="sc-nest" aria-hidden="true">
+        <div class="sc-box b2" data-sc="2"><span>一项持续的责任</span>
+          <div class="sc-box b1" data-sc="1"><span>一件有交付物的事</span>
+            <div class="sc-box b0" data-sc="0"><span>一个问题</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="sc-side">
+        <div class="seg-btns" role="group" aria-label="尺度">
+          <button type="button" data-scb="0" aria-pressed="false">一个问题</button>
+          <button type="button" data-scb="1" aria-pressed="false">一件事</button>
+          <button type="button" data-scb="2" aria-pressed="true">一项持续的责任</button>
+        </div>
+        <dl class="sc-d" id="sc-d" aria-live="polite"></dl>
+      </div>
+    </div>
+    <div class="sc-req" id="sc-req"><b>持续的异时带来的三项要求</b>
+      <span><em>打扰要分层</em>代理醒来的次数远多于委托人愿意被打扰的次数，大多数检查只记录、不打扰</span>
+      <span><em>过去要能核查</em>委托人多不在场，事后核查依靠记录，记录要写明当时的状态与依据</span>
+      <span><em>将来要可见</em>委托人提前知道什么时候必须决定，哪些事落在同一天</span>
+    </div>
+  </div>
+  <figcaption>同时与异时的划分见 Johansen（1988）的协作时间—空间矩阵；三种尺度与三项要求为作者的归纳。</figcaption>
+</figure>
+<style>
+.sc{display:grid;grid-template-columns:minmax(200px,40%) 1fr;gap:18px;align-items:start}
+.sc-box{border-radius:12px;padding:26px 10px 10px;position:relative;transition:background .4s,box-shadow .4s,opacity .5s,transform .5s;opacity:0;transform:scale(.94)}
+.sc.in .sc-box{opacity:1;transform:none}
+.sc-box>span{position:absolute;top:6px;left:10px;font-size:12px;color:var(--muted)}
+.sc-box.b2{background:var(--quote);min-height:210px;transition-delay:.0s}
+.sc-box.b1{background:var(--surface);min-height:150px;transition-delay:.25s}
+.sc-box.b0{background:var(--quote);min-height:70px;transition-delay:.5s}
+.sc-box.on{box-shadow:0 0 0 2px var(--accent)} .sc-box.on>span{color:var(--accent);font-weight:600}
+.sc-d{display:grid;grid-template-columns:7.2em 1fr;gap:6px 12px;margin:0;font-size:13.5px;line-height:1.6}
+.sc-d dt{color:var(--faint);font-size:12px;padding-top:2px} .sc-d dd{margin:0}
+.sc-req{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px;transition:opacity .4s}
+.sc-req b{grid-column:1/-1;font-size:13px}
+.sc-req span{background:var(--accent-soft);border-radius:8px;padding:8px 10px;font-size:12.5px;line-height:1.55;color:var(--muted)}
+.sc-req em{display:block;font-style:normal;font-weight:600;color:var(--ink);font-size:13.5px}
+.sc-req.dim{opacity:.35}
+@media (max-width:640px){.sc{grid-template-columns:1fr}.sc-box.b2{min-height:170px}.sc-req{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const K=['交出去的','时间关系','时间跨度','代理自己的时间','完成后留下什么','最稀缺的资源'];
+  const D=[['一个问题：回答我','同时：委托人在场等待','秒到分钟','没有：只在被提问时工作','一份回答','委托人等待的时间：回答要快'],
+    ['一件有交付物的事：替我完成它','有边界的异时：交代之后离开，完成时回来验收','分钟到数小时','运行期间有，完成即停止','交付物，以及做事的规则与配置','委托人的信任：交出去能不能办成'],
+    ['一项持续的责任：持续照看它','持续的异时：双方各有自己的时间，间歇接触','数周到数年，直到委托结束','有：大多数时候休眠，到约定的时间或外部发生变化时醒来','目标、触发条件、授权与履约记录','委托人的注意力：什么时候值得打扰']];
+  const d=document.getElementById('sc-d'),req=document.getElementById('sc-req');
+  function set(k){document.querySelectorAll('[data-scb]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.scb===k)));
+    document.querySelectorAll('.sc-box').forEach(b=>b.classList.toggle('on',+b.dataset.sc===k));
+    d.innerHTML=K.map((x,i)=>`<dt>${x}</dt><dd>${D[k][i]}</dd>`).join('');req.classList.toggle('dim',k!==2);}
+  document.querySelectorAll('[data-scb]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.scb)));
+  document.getElementById('sc').addEventListener('anim-in',()=>{[0,1,2].forEach((k,i)=>setTimeout(()=>set(k),600+i*1800));});
+  set(2);
+})();
+</script>

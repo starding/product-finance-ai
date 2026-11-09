@@ -1,0 +1,68 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">知情交易者如何藏身于噪声</p><p class="figsub">只有知情者知道股票真实价值为 110，当前价格 100。他把买单拆成 20 次，混在噪声交易里；做市商只看到总订单流，据此调整价格。</p></div><button class="replay" type="button" id="ky-run">重新模拟</button></div>
+    <div class="ky" id="ky" data-anim>
+      <svg viewBox="0 0 640 230" role="img" aria-label="价格逐步向真实价值收敛">
+        <g id="ky-axis"></g>
+        <g id="ky-flow"></g>
+        <path id="ky-path" class="ky-path"/>
+      </svg>
+      <div class="sl"><label for="ky-n">噪声交易的规模 <b id="ky-nv"></b></label><input id="ky-n" type="range" min="1" max="5" step="1" value="2"><div class="hint">噪声越多，知情者的订单越不显眼</div></div>
+      <div class="ky-out">
+        <div><span>最后一次交易后的价格</span><b id="ky-p"></b></div>
+        <div><span>知情者每次的买入量（平均）</span><b id="ky-q"></b></div>
+        <div><span>知情者的利润</span><b id="ky-pi"></b></div>
+      </div>
+    </div>
+  </div>
+  <figcaption>按 Kyle（1985）的思路简化：做市商按订单流的不平衡调整价格，噪声越多，同样的订单流对价格的影响越小；知情者据此把剩余的价差平均分到剩下的交易次数里。柱形为每次的订单流，绿色为知情者的部分，灰色为噪声。数字为示意。</figcaption>
+</figure>
+<style>
+.ky svg{width:100%;height:auto;display:block}
+.ky-path{fill:none;stroke:var(--accent);stroke-width:2.5;stroke-linejoin:round}
+#ky-flow rect.inf{fill:var(--accent);opacity:.75}
+#ky-flow rect.noi{fill:var(--gray-mark);opacity:.55}
+.ky-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ky-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.ky-out span{display:block;font-size:12px;color:var(--faint)}
+.ky-out b{font-size:20px;font-variant-numeric:tabular-nums}
+@media (max-width:640px){.ky-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const N=20,V=110,P0=100,X0=50,X1=620,YP0=120,YP1=14,YF=200;
+  const x=t=>X0+t/N*(X1-X0), y=p=>YP0-(p-97)/(113-97)*(YP0-YP1);
+  let a=`<line x1="${X0}" y1="${y(V)}" x2="${X1}" y2="${y(V)}" class="s-faint" stroke-dasharray="4 3"/><text x="${X1}" y="${y(V)-6}" text-anchor="end" font-size="11" class="t-muted">真实价值 110</text>`;
+  a+=`<line x1="${X0}" y1="${y(P0)}" x2="${X1}" y2="${y(P0)}" class="s-line"/><text x="${X0-8}" y="${y(P0)+4}" text-anchor="end" font-size="11" class="t-faint">100</text>`;
+  a+=`<line x1="${X0}" y1="${YF}" x2="${X1}" y2="${YF}" class="s-faint"/><text x="${X0-8}" y="${YF+4}" text-anchor="end" font-size="10" class="t-faint">订单流</text>`;
+  for(let t=0;t<=N;t+=5)a+=`<text x="${x(t)}" y="${YF+24}" text-anchor="middle" font-size="11" class="t-faint">第 ${t} 次</text>`;
+  document.getElementById('ky-axis').innerHTML=a;
+  const s=document.getElementById('ky-n');
+  const gauss=()=>{let u=0,v=0;while(!u)u=Math.random();v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);};
+  let timer;
+  function run(){
+    clearInterval(timer);
+    const sn=+s.value, lam=0.5/sn; // 噪声越大，做市商对订单流越不敏感
+    document.getElementById('ky-nv').textContent=['','很少','较少','中等','较多','很多'][sn];
+    let p=P0, prof=0, qs=0, pts=[[0,P0]], bars='', t=0;
+    const path=document.getElementById('ky-path'), flow=document.getElementById('ky-flow');
+    flow.innerHTML=''; path.setAttribute('d',`M${x(0)},${y(P0)}`);
+    timer=setInterval(()=>{
+      t++; const xi=(V-p)/(lam*(N-t+1)), u=sn*1.6*gauss(), np=p+lam*(xi+u);
+      prof+=xi*(V-np); qs+=xi; p=np; pts.push([t,p]);
+      const bw=(X1-X0)/N*0.7, bx=x(t)-bw, sc=4;
+      const hi=Math.max(-40,Math.min(40,xi*sc)), hu=Math.max(-40,Math.min(40,u*sc));
+      flow.insertAdjacentHTML('beforeend',`<rect class="inf" x="${bx}" y="${hi>=0?YF-hi:YF}" width="${bw/2}" height="${Math.abs(hi)}"/><rect class="noi" x="${bx+bw/2}" y="${hu>=0?YF-hu:YF}" width="${bw/2}" height="${Math.abs(hu)}"/>`);
+      path.setAttribute('d','M'+pts.map(([tt,pp])=>`${x(tt).toFixed(1)},${y(Math.max(97,Math.min(113,pp))).toFixed(1)}`).join('L'));
+      document.getElementById('ky-p').textContent=p.toFixed(1);
+      document.getElementById('ky-q').textContent=(qs/t).toFixed(1);
+      document.getElementById('ky-pi').textContent=prof.toFixed(0);
+      if(t>=N)clearInterval(timer);
+    },110);
+  }
+  s.addEventListener('input',run);
+  document.getElementById('ky-run').addEventListener('click',run);
+  document.getElementById('ky').addEventListener('anim-in',run);
+  document.getElementById('ky-nv').textContent='较少';
+})();
+</script>

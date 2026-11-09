@@ -1,0 +1,62 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">一生的收入与支出</p><p class="figsub">收入集中在工作的几十年，支出贯穿一生。逐层打开，看由此产生的四类金融任务。</p></div><button class="replay" type="button" data-replay="lf">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="任务">
+      <button type="button" data-lf="save" aria-pressed="true">储蓄与增值</button>
+      <button type="button" data-lf="draw" aria-pressed="false">退休后支取</button>
+      <button type="button" data-lf="shock" aria-pressed="false">应对意外</button>
+      <button type="button" data-lf="pay" aria-pressed="false">日常收付</button>
+    </div>
+    <div class="lf" id="lf" data-anim>
+      <svg viewBox="0 0 640 230" role="img" aria-label="生命周期中的收入与消费">
+        <path id="lf-s" class="lf-a s"/><path id="lf-d" class="lf-a d"/>
+        <path id="lf-i" class="lf-l i"/><path id="lf-c" class="lf-l c"/>
+        <g id="lf-ax"></g><g id="lf-sh"></g><g id="lf-py"></g>
+      </svg>
+      <div class="legend"><span><i style="background:var(--blue)"></i>收入</span><span><i style="background:var(--ink)"></i>希望的消费</span><span><i style="background:var(--accent)"></i>储蓄</span><span><i style="background:var(--warm)"></i>支取</span></div>
+      <p class="lf-msg" id="lf-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意曲线，依据 Modigliani 与 Brumberg（1954）的生命周期假说；四类任务的归纳参考 Merton（1995）对金融体系功能的概括。</figcaption>
+</figure>
+<style>
+.lf svg{width:100%;height:auto;display:block}
+.lf-l{fill:none;stroke-width:2.5;stroke-dasharray:900;stroke-dashoffset:900;transition:stroke-dashoffset 1.4s ease}
+.lf-l.i{stroke:var(--blue)} .lf-l.c{stroke:var(--ink)}
+.lf.in .lf-l{stroke-dashoffset:0}
+.lf-a{opacity:0;transition:opacity .5s}
+.lf-a.s{fill:var(--accent);} .lf-a.d{fill:var(--warm)}
+.lf-a.on{opacity:.3}
+@media (max-width:640px){.lf svg text{font-size:17px}}
+.lf-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const X0=40,X1=620,YB=190,YT=20,x=a=>X0+(a-20)/(90-20)*(X1-X0),y=v=>YB-v/100*(YB-YT);
+  const inc=a=>a<65?Math.max(0,95*Math.exp(-Math.pow((a-50)/17,2))):8, con=a=>52;
+  const P=(f,a0,a1)=>{let d='';for(let a=a0;a<=a1;a+=0.5)d+=(a===a0?'M':'L')+x(a).toFixed(1)+','+y(f(a)).toFixed(1);return d;};
+  const area=(f,g,a0,a1)=>{let d='M'+x(a0)+','+y(g(a0));for(let a=a0;a<=a1;a+=0.5)d+='L'+x(a).toFixed(1)+','+y(f(a)).toFixed(1);for(let a=a1;a>=a0;a-=0.5)d+='L'+x(a).toFixed(1)+','+y(g(a)).toFixed(1);return d+'Z';};
+  let a0=20;while(inc(a0)<con(a0))a0+=0.5;let a1=a0;while(a1<65&&inc(a1)>=con(a1))a1+=0.5;
+  const $=id=>document.getElementById(id);
+  $('lf-i').setAttribute('d',P(inc,20,90));$('lf-c').setAttribute('d',P(con,20,90));
+  $('lf-s').setAttribute('d',area(inc,con,a0,a1));$('lf-d').setAttribute('d',area(con,a=>inc(a),65,90));
+  let ax=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`;
+  [20,30,40,50,60,70,80,90].forEach(a=>ax+=`<text x="${x(a)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${a}${a===20?' 岁':''}</text>`);
+  ax+=`<line x1="${x(65)}" y1="${YT}" x2="${x(65)}" y2="${YB}" class="s-faint" stroke-dasharray="3 3"/><text x="${x(65)+4}" y="${YT+10}" font-size="11" class="t-faint">退休</text>`;
+  $('lf-ax').innerHTML=ax;
+  $('lf-sh').innerHTML=[[38,'失业'],[57,'疾病']].map(([a,t])=>`<g class="lf-shk" opacity="0" style="transition:opacity .4s"><line x1="${x(a)}" y1="${y(inc(a))}" x2="${x(a)}" y2="${y(inc(a))+52}" stroke="var(--gold)" stroke-width="2.5"/><path d="M${x(a)-5},${y(inc(a))+44} L${x(a)},${y(inc(a))+54} L${x(a)+5},${y(inc(a))+44}" fill="var(--gold)"/><text x="${x(a)}" y="${y(inc(a))-6}" text-anchor="middle" font-size="12" fill="var(--gold)">${t}</text></g>`).join('');
+  let py='';for(let a=22;a<=88;a+=3)py+=`<circle cx="${x(a)}" cy="${YB-6}" r="2.5" fill="var(--faint)"/>`;
+  $('lf-py').innerHTML=`<g id="lf-pyg" opacity="0" style="transition:opacity .4s">${py}<text x="${x(24)}" y="${YB-14}" font-size="11" class="t-faint">每月的收付</text></g>`;
+  const M={save:'工作期间收入高于希望的消费，多出的部分要储蓄起来，并在几十年的等待中增值。这是最基本的金融任务：把今天的钱转移到将来。',
+    draw:'退休后收入下降，消费要靠此前的积累支撑。任务是按计划支取，并确保钱不会在生命结束前用完。',
+    shock:'失业、疾病等意外会使收入骤降或支出骤增。任务是留出应急资金或购买保险，让一次意外不至于打乱整个计划。',
+    pay:'工资到账、缴费、转账，每月都在发生。这类任务要求便捷、准确与安全，通常不涉及投资判断。'};
+  function set(k){document.querySelectorAll('[data-lf]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lf===k)));
+    $('lf-s').classList.toggle('on',k==='save');$('lf-d').classList.toggle('on',k==='draw');
+    document.querySelectorAll('.lf-shk').forEach(g=>g.setAttribute('opacity',k==='shock'?1:0));
+    $('lf-pyg').setAttribute('opacity',k==='pay'?1:0);$('lf-msg').textContent=M[k];}
+  document.querySelectorAll('[data-lf]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.lf)));
+  $('lf').addEventListener('anim-in',()=>{set('save');['draw','shock','pay','save'].forEach((k,i)=>setTimeout(()=>set(k),1800+i*1800));});
+  set('save');
+})();
+</script>

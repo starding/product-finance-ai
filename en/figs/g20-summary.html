@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: one person and one sum of money</p><p class="figsub">Four conclusions, each tied to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="g20summary">Replay</button></div>
+    <div class="g20summary" id="g20summary" data-anim><div class="g20summary-c" style="--i:0"><em>Goals</em><b>First write down what he wants</b><p>The amount and deadline of each goal, and what happens if it comes late or short.</p></div><div class="g20summary-c" style="--i:1"><em>Merton ratio and human capital</em><b>How much risk to take</b><p>It depends on compensation, swings and aversion to them; future harvests are part of his wealth too.</p></div><div class="g20summary-c warn" style="--i:2"><em>Accounts by goal</em><b>One account for each goal</b><p>Each account chooses its allocation by its own horizon; its risk is the chance of falling far short when due.</p></div><div class="g20summary-c warn" style="--i:3"><em>Promises</em><b>Promise the process, not the outcome</b><p>Allocation, execution, fees and risk limits can be checked; the outcome is a distribution.</p></div></div>
+  </div>
+</figure>
+<style>
+.g20summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g20summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g20summary-c.warn{border-left-color:var(--warm)}
+.g20summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g20summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g20summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g20summary.in .g20summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g20summary{grid-template-columns:1fr}}
+</style>

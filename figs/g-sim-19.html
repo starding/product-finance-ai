@@ -1,0 +1,47 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">文明模拟器 · 第 19 章：哪些变了，哪些没变</p><p class="figsub">四十户人家储蓄三十年，在八组不同的年景下各运行一次。每组年景比较两种情形：认知劳动按原价计、各户自己打理；认知劳动几乎免费、每户都有按计划行事的专属代理。点选一组年景查看细节。</p></div><button class="replay" type="button" data-replay="cs19">重播</button></div>
+    <div class="cs-rules"><span class="on">储蓄与留种</span><span class="on">借贷</span><span class="on">保险</span><span class="on">参数：认知劳动的价格</span><span class="on">专属代理</span><span class="on">代理的担保</span><span class="on">人人都有分析师</span><span class="on">代理成为市场参与者</span><span class="on">代理与人的偏差</span><span class="on">没有改变的东西</span></div>
+    <div class="cs19" id="cs19" data-anim>
+      <svg viewBox="0 0 660 230" role="img" aria-label="八组年景下的存款中位数"><g id="cs19-g"></g></svg>
+      <div class="legend"><span><i style="background:var(--faint)"></i>认知劳动按原价计、自己打理</span><span><i style="background:var(--accent)"></i>人人有按计划行事的专属代理</span></div>
+      <div class="cs19-out" id="cs19-out"></div>
+      <p class="cs19-msg" id="cs19-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意模型：年景的生成与“守住计划”的模拟器相同，每组年景下方注明船股三十年的年化收益。自己打理时，各户按统一的 12% 并受偏重眼前影响地储蓄，涨后多买、跌后恐慌卖出，费用每年 1.2%；有专属代理时，各户按自己合适的比例按时储蓄，恐慌卖出降为五分之一，费用每年 0.2%。纵轴为第 30 年存款的中位数，以相当于几年的收入计。</figcaption>
+</figure>
+<style>
+.cs19 svg{width:100%;height:auto;display:block}
+.cs19 rect{cursor:pointer}
+.cs19-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.cs19-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs19-out span{display:block;font-size:11.5px;color:var(--faint)} .cs19-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.cs19-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs19-out{grid-template-columns:1fr}.cs19 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs19'+id),N=40,Y=30,K=8,X0=44,X1=628,YT=12,YB=180;
+  function sim(seed,agent){let s=seed;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};const g=()=>{let u=0;while(!u)u=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r());};
+    const R=[];for(let t=0;t<Y;t++){let v=.07+.12*g();if(r()<.08)v-=.25;R.push(v);}
+    const H=[];for(let i=0;i<N;i++)H.push({b:Math.max(.3,Math.min(1,.7+.15*(r()*2-1))),pz:r(),ideal:.06+.12*r(),out:-1,W:0,cash:0});
+    for(let t=0;t<Y;t++){for(const h of H){let sv=agent?h.ideal:.12*h.b;if(!agent&&t>0)sv*=Math.max(0,Math.min(2,1+5*(R[t-1]-.07)));
+      if(t>0&&R[t-1]<-.12&&h.out<0&&r()<.6*h.pz*(agent?.2:1)){h.cash+=h.W;h.W=0;h.out=3;}
+      if(h.out>0){h.cash+=sv;h.out--;if(h.out===0){h.W+=h.cash;h.cash=0;h.out=-1;}}else h.W+=sv;
+      h.W*=1+R[t]-(agent?.002:.012);}}
+    const f=H.map(h=>h.W+h.cash).sort((a,b)=>a-b);return {med:f[20],gm:Math.pow(R.reduce((a,b)=>a*(1+b),1),1/Y)-1};}
+  const D=Array.from({length:K},(_,k)=>{const sd=(k+1)*7919+11;return {a:sim(sd,0),b:sim(sd,1)};});
+  const order=D.map((d,i)=>i).sort((i,j)=>D[i].a.gm-D[j].a.gm),mx=Math.max(...D.map(d=>d.b.med))*1.1,y=v=>YB-v/mx*(YB-YT),bw=(X1-X0)/K;
+  let sel=-1;
+  function draw(){let h='';for(let v=0;v<=mx;v+=2)h+=`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v} 年</text>`;
+    order.forEach((i,k)=>{const d=D[i],cx=X0+k*bw;h+=`<rect data-i="${i}" x="${cx+bw*.12}" y="${y(d.a.med)}" width="${bw*.34}" height="${YB-y(d.a.med)}" fill="var(--faint)" opacity="${sel<0||sel===i?1:.35}"/><rect data-i="${i}" x="${cx+bw*.5}" y="${y(d.b.med)}" width="${bw*.34}" height="${YB-y(d.b.med)}" fill="var(--accent)" opacity="${sel<0||sel===i?1:.35}"/><text x="${cx+bw/2}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${(d.a.gm*100).toFixed(1)}%</text>`;});
+    h+=`<text x="${X1}" y="${YB+32}" text-anchor="end" font-size="11" class="t-faint">八组年景，按船股三十年的年化收益排列 →</text>`;
+    $('-g').innerHTML=h;$('-g').querySelectorAll('rect').forEach(r=>r.addEventListener('click',()=>{sel=+r.dataset.i;draw();}));
+    const up=D.map(d=>d.b.med/d.a.med),aMin=Math.min(...D.map(d=>d.a.med)),aMax=Math.max(...D.map(d=>d.a.med)),bMin=Math.min(...D.map(d=>d.b.med)),bMax=Math.max(...D.map(d=>d.b.med));
+    $('-out').innerHTML=[['代理带来的提高（平均）','约 '+(up.reduce((a,b)=>a+b,0)/K).toFixed(1)+' 倍'],['自己打理：最差～最好',aMin.toFixed(1)+'～'+aMax.toFixed(1)+' 年'],['有代理：最差～最好',bMin.toFixed(1)+'～'+bMax.toFixed(1)+' 年']].map(([a,v])=>`<div><span>${a}</span><b>${v}</b></div>`).join('');
+    $('-msg').textContent=sel>=0?`这组年景中，船股三十年的年化收益为 ${(D[sel].a.gm*100).toFixed(1)}%：自己打理时存款中位数相当于 ${D[sel].a.med.toFixed(1)} 年的收入，有专属代理时 ${D[sel].b.med.toFixed(1)} 年。`:`${D.every(d=>d.b.med>d.a.med)?'在每一组年景里，专属代理都让各户存得更多':'专属代理在多数年景里让各户存得更多'}；可是年景本身的好坏一点没变，${bMin<aMax?`最差的年景里有代理（${bMin.toFixed(1)} 年），仍不如最好的年景里自己打理（${aMax.toFixed(1)} 年）。`:`有代理时，各组年景之间仍相差 ${(bMax-bMin).toFixed(1)} 年的收入。`}代理改善的是费用、失误与执行，改变不了时间与风险。`;}
+  $('').addEventListener('anim-in',()=>{sel=-1;draw();order.forEach((i,k)=>setTimeout(()=>{sel=i;draw();},1200+k*700));setTimeout(()=>{sel=-1;draw();},1200+K*700+600);});
+  draw();
+})();
+</script>

@@ -1,0 +1,32 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">借钱造船：利率要多高，出借人才不亏</p><p class="figsub">船长自己没有粮食，向全村借 100 份造船。拖动利率，看出借人与船长各自的预期所得。</p></div><button class="replay" type="button" data-replay="db">重播</button></div>
+    <div class="db" id="db" data-anim>
+      <div class="db-b"><span>出借人的预期净所得</span><div class="db-t"><i id="db-a"></i></div><b id="db-av"></b></div>
+      <div class="db-b"><span>船长的预期所得</span><div class="db-t"><i id="db-c"></i></div><b id="db-cv"></b></div>
+      <div class="sl"><label for="db-r">利率 <b id="db-rv"></b></label><input id="db-r" type="range" min="0" max="150" step="5" value="10"></div>
+      <p class="db-msg" id="db-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：船回来（七成）时货物值 250 份，先还本息，剩下的归船长；船沉没（三成）时船长一无所有，出借人收不回任何东西。</figcaption>
+</figure>
+<style>
+.db-b{display:grid;grid-template-columns:9em 1fr 4.5em;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.db-t{position:relative;height:16px;background:var(--quote);border-radius:4px}
+.db-t::before{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;border-left:1px solid var(--faint)}
+.db-t i{position:absolute;top:0;height:100%;border-radius:4px;transition:left .3s,width .3s}
+.db-b b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.db-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  function bar(el,v,M){const w=Math.min(50,Math.abs(v)/M*50);el.style.left=(v>=0?50:50-w)+'%';el.style.width=w+'%';el.style.background=v>=0?'var(--accent)':'var(--warm)';}
+  function draw(){const r=+$('db-r').value/100,rep=Math.min(250,100*(1+r)),lend=.7*rep-100,cap=.7*(250-rep);
+    bar($('db-a'),lend,80);bar($('db-c'),cap,80);$('db-av').textContent=(lend>=0?'+':'−')+Math.abs(lend).toFixed(0)+' 份';$('db-cv').textContent=cap.toFixed(0)+' 份';$('db-rv').textContent=Math.round(r*100)+'%';
+    $('db-msg').textContent=lend<0?`利率 ${Math.round(r*100)}%：出借人有三成的可能血本无归，预期亏损 ${Math.abs(lend).toFixed(0)} 份，不会出借。利率至少要到 43% 左右才不亏。`:cap<20?`利率 ${Math.round(r*100)}%：出借人不再亏损，可是船长即使成功也所剩无几，不值得冒险。`:`利率 ${Math.round(r*100)}%：出借人勉强不亏，船长成功时还能剩下一些。但三成的可能血本无归，让大多数出借人望而却步。`;}
+  $('db-r').addEventListener('input',draw);
+  $('db').addEventListener('anim-in',()=>{let v=0;$('db-r').value=0;draw();const id=setInterval(()=>{v+=5;$('db-r').value=v;draw();if(v>=120)clearInterval(id);},150);});
+  draw();
+})();
+</script>

@@ -1,0 +1,27 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Once discovered, predictability weakens</p><p class="figsub">Average returns of 97 published return predictors in three periods (original sample period = 100).</p></div><button class="replay" type="button" data-replay="dc">Replay</button></div>
+    <div class="dc" id="dc" data-anim>
+      <div class="dc-row" style="--i:0;--v:100"><span>Original sample period</span><div class="dc-t"><i></i></div><b>100</b></div>
+      <div class="dc-row" style="--i:1;--v:74"><span>Out of sample, before publication</span><div class="dc-t"><i></i></div><b>74</b></div>
+      <div class="dc-row" style="--i:2;--v:42"><span>After publication</span><div class="dc-t"><i></i></div><b>42</b></div>
+      <div class="dc-notes">
+        <p style="--i:3"><em>100 → 74</em>The fall out of sample: some “patterns” held only by chance in a particular sample, a bias produced by data mining.</p>
+        <p style="--i:4"><em>74 → 42</em>The further fall after publication: once investors know, they trade on it, and trading erodes the predictable part.</p>
+      </div>
+    </div>
+  </div>
+  <figcaption>Data from McLean and Pontiff (2016): compared with the original sample period, portfolio returns were on average 26% lower out of sample and 58% lower after publication. The authors treat the out-of-sample decline as an upper bound on statistical bias, and attribute the additional decline after publication to investors learning about the mispricing from the papers and trading on it.</figcaption>
+</figure>
+<style>
+.dc-row{display:grid;grid-template-columns:150px 1fr 40px;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.dc-row b{font-size:18px;font-variant-numeric:tabular-nums;text-align:right}
+.dc-t{height:24px;background:var(--quote);border-radius:6px;overflow:hidden}
+.dc-t i{display:block;height:100%;width:0;background:var(--accent);border-radius:6px;transition:width .8s ease;transition-delay:calc(var(--i)*.6s)}
+.dc-row:nth-child(3) .dc-t i{background:var(--warm)}
+.dc.in .dc-t i{width:calc(var(--v)*1%)}
+.dc-notes p{font-size:13px;color:var(--muted);margin:8px 0 0;opacity:0;transition:opacity .5s;transition-delay:calc(var(--i)*.6s)}
+.dc-notes em{font-style:normal;font-weight:700;color:var(--ink);margin-right:8px;font-variant-numeric:tabular-nums}
+.dc.in .dc-notes p{opacity:1}
+@media (max-width:640px){.dc-row{grid-template-columns:1fr 40px}.dc-row span{grid-column:1/-1}}
+</style>

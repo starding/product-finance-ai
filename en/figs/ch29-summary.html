@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: keeping assurance proportionate to risk</p><p class="figsub">Four design requirements, each corresponding to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="ch29summary">Replay</button></div>
+    <div class="ch29summary" id="ch29summary" data-anim><div class="ch29summary-c" style="--i:0"><em>Consequence × difficulty of verification</em><b>Give each function an assurance level</b><p>Spot checks, evaluation sets, stratified evaluation and review, formal constraints and checks on everything, allocated by level.</p></div><div class="ch29summary-c" style="--i:1"><em>Non-deterministic systems</em><b>Validate statistically on a large enough evaluation set</b><p>Set the number of questions by the error rate to be shown; even with 0 errors, you need at least 3 ÷ target error rate questions.</p></div><div class="ch29summary-c warn" style="--i:2"><em>Overall figures hide critical cases</em><b>Stratify evaluation by case, and red-team</b><p>Expiry days, sharp swings, suspensions and missing data must each meet the bar on their own.</p></div><div class="ch29summary-c warn" style="--i:3"><em>Launch is not the end</em><b>Monitor continuously, release in stages, keep assurance proportionate to risk</b><p>Set alerts and rollback on key metrics; let new versions go to a small group first; do not slow low-risk functions with the highest standard.</p></div></div>
+  </div>
+</figure>
+<style>
+.ch29summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch29summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch29summary-c.warn{border-left-color:var(--warm)}
+.ch29summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch29summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch29summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch29summary.in .ch29summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch29summary{grid-template-columns:1fr}}
+</style>

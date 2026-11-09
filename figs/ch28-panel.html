@@ -1,0 +1,36 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">现在有什么在等我</p><p class="figsub">同样的信息，两种呈现方式。切换查看：从聊天记录里找，还是在任务面板上一眼看到。</p></div><button class="replay" type="button" data-replay="pn">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="呈现方式"><button type="button" data-pn="c" aria-pressed="true">只有聊天记录</button><button type="button" data-pn="p" aria-pressed="false">任务面板</button></div>
+    <div class="pn" id="pn" data-anim></div>
+    <p class="pn-msg" id="pn-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>示意界面。系统状态难以判断的问题称为“评估的鸿沟”，见 Norman（1988）。</figcaption>
+</figure>
+<style>
+.pn{background:var(--quote);border-radius:10px;padding:10px;min-height:250px}
+.pn-m{font-size:12.5px;line-height:1.6;border-radius:8px;padding:6px 10px;margin:4px 0;max-width:86%;background:var(--surface)}
+.pn-m.u{margin-left:auto;background:var(--accent-soft)}
+.pn-m.k{outline:2px solid var(--warm)}
+.pn-s{margin-bottom:8px}
+.pn-s>b{font-size:12px;color:var(--faint);display:block;margin-bottom:4px}
+.pn-r{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;font-size:12.5px;background:var(--surface);border-radius:7px;padding:6px 10px;margin-bottom:4px;border-left:3px solid var(--c)}
+.pn-r em{font-style:normal;font-size:11.5px;color:var(--faint)}
+.pn-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const C=[['a','三只持仓本周的公告已经整理好了。'],['u','好的，谢谢。'],['a','提醒：持有的期权将在 10 月 25 日到期，目前为实值，请确认处理方式。',1],['a','今天的行情摘要：……'],['u','帮我看一下那家公司的财报。'],['a','财报分析如下：……'],['a','行情数据源暂时中断，今天的跟踪检查没有完成。',1],['a','再平衡方案已拟好，明天 10:00 执行，如需取消请回复。',1],['a','今天的行情摘要：……']];
+  const box=document.getElementById('pn');
+  function set(k){document.querySelectorAll('[data-pn]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.pn===k)));
+    if(k==='c'){box.innerHTML=C.map(([w,t,key])=>`<div class="pn-m ${w==='u'?'u':''}${key?' k':''}">${t}</div>`).join('');
+      document.getElementById('pn-msg').textContent='三件需要关注的事（标红框）散落在九条消息之间，夹在行情摘要与普通回复里。委托人要逐条翻找，才知道有什么在等自己。';}
+    else{box.innerHTML=`<div class="pn-s"><b>等待你确认</b><div class="pn-r" style="--c:var(--warm)"><span>期权到期处理（实值）</span><em>截止 10 月 25 日</em></div><div class="pn-r" style="--c:var(--gold)"><span>再平衡方案：明天 10:00 执行，可取消</span><em>还剩 18 小时</em></div></div>`+
+      `<div class="pn-s"><b>检查受阻</b><div class="pn-r" style="--c:var(--warm)"><span>今日跟踪检查未完成：行情数据源中断</span><em>恢复后补做</em></div></div>`+
+      `<div class="pn-s"><b>正在进行</b><div class="pn-r" style="--c:var(--accent)"><span>持仓跟踪</span><em>下次运行：今天 16:30</em></div><div class="pn-r" style="--c:var(--accent)"><span>每日行情摘要</span><em>下次运行：明天 09:00</em></div></div>`;
+      document.getElementById('pn-msg').textContent='任务面板按“等待你确认”“检查受阻”“正在进行”分组，并标出截止时刻：委托人打开就能看到需要自己做什么。';}}
+  document.querySelectorAll('[data-pn]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.pn)));
+  box.addEventListener('anim-in',()=>{set('c');setTimeout(()=>set('p'),3000);});
+  set('c');
+})();
+</script>

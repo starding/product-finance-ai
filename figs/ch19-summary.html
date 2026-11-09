@@ -1,0 +1,23 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：设计代理产品的六条要求</p><p class="figsub">每一条对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="s17">重播</button></div>
+    <div class="s17" id="s17" data-anim>
+      <div class="s17-c" style="--i:0"><em>委托—代理</em><b>把代理成本当作设计对象</b><p>让委托人看得见做了什么、让代理的利益与委托人一致、用硬性上限限定损失。</p></div>
+      <div class="s17-c" style="--i:1"><em>口径</em><b>用委托人投入衡量价值</b><p>问委托人少花了多少时间、付出了多少核对，而不是代理多快完成。</p></div>
+      <div class="s17-c" style="--i:2"><em>年度价值</em><b>先找频繁发生、单次投入大的事</b><p>倍数超过约 5 倍之后，省下多少主要由单次投入与次数决定；能力扩展另计。</p></div>
+      <div class="s17-c" style="--i:3"><em>拆解</em><b>先降核对成本，再谈生成速度</b><p>给出依据与来源，标出关键假设，突出变化，能自动校验的自动校验。</p></div>
+      <div class="s17-c" style="--i:4"><em>可验证性</em><b>从结果可核验的任务做起</b><p>出错代价可控的先交给代理；难以核验、错误不可逆的保留人的确认。</p></div>
+      <div class="s17-c fin" style="--i:5"><em>适用范围</em><b>先扩大代理能完整承担的范围</b><p>代理只覆盖一小部分工作时，其余部分仍由委托人完成，整体倍数被压在低位。</p></div>
+    </div>
+  </div>
+</figure>
+<style>
+.s17{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.s17-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.25s)}
+.s17-c.fin{border-left-color:var(--warm)}
+.s17-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.s17-c b{display:block;font-size:15px;margin:2px 0 4px}
+.s17-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.s17.in .s17-c{opacity:1;transform:none}
+@media (max-width:640px){.s17{grid-template-columns:1fr}}
+</style>

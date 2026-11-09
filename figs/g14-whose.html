@@ -1,0 +1,38 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">谁付钱，就为谁做事</p><p class="figsub">集市上有三种船股：费用低的全市场组合、费用中等的组合、费用高但给推荐人佣金最多的组合。切换代理的报酬来源，看一百位委托人被推荐了什么、每年多付多少。</p></div><button class="replay" type="button" data-replay="wh14">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="报酬来源">
+      <button type="button" data-wh14="0" aria-pressed="true">委托人按年付费</button>
+      <button type="button" data-wh14="1" aria-pressed="false">卖方按成交付佣金</button>
+      <button type="button" data-wh14="2" aria-pressed="false">免费，靠推荐赚钱</button>
+    </div>
+    <div class="wh14" id="wh14" data-anim>
+      <div class="wh14-g" id="wh14-g"></div>
+      <div class="wh14-out" id="wh14-out"></div>
+      <p class="wh14-msg" id="wh14-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：三种船股每年的费用为 0.1%、0.8%、1.8%，给推荐人的佣金为 0、0.3%、1.0%；委托人按年付费时，代理每年收 0.3%。推荐比例按代理的收入多少设定，为示意（因德斯特与奥塔维亚尼，2012 的分析思路）。</figcaption>
+</figure>
+<style>
+.wh14-g{display:grid;grid-template-columns:repeat(20,1fr);gap:3px;max-width:520px}
+.wh14-g i{aspect-ratio:1;border-radius:50%;transition:background .4s;transition-delay:calc(var(--i)*6ms)}
+.wh14-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.wh14-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.wh14-out span{display:block;font-size:11.5px;color:var(--faint)} .wh14-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.wh14-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.wh14-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('wh14'+id),F=[.1,.8,1.8],C=['var(--accent)','var(--faint)','var(--warm)'];
+  const S=[[80,15,5,.3,'委托人直接付费，代理的收入与推荐什么无关，于是大多推荐费用最低的组合。'],[20,30,50,0,'代理的收入来自佣金，推荐偏向佣金最高的组合：委托人没有直接付钱，却通过更高的费用付了更多。'],[10,25,65,0,'看上去免费的代理，收入全部来自推荐，推荐最集中于费用最高的组合。']];
+  $('-g').innerHTML=Array.from({length:100},(_,i)=>`<i style="--i:${i}"></i>`).join('');const cs=[...$('-g').children];
+  function set(k){document.querySelectorAll('[data-wh14]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.wh14===k)));const [a,b,c,fee,msg]=S[k];
+    cs.forEach((x,i)=>x.style.background=C[i<a?0:i<a+b?1:2]);const cost=(a*F[0]+b*F[1]+c*F[2])/100+fee;
+    $('-out').innerHTML=[['推荐费用最低的组合',a+' 人'],['推荐费用最高的组合',c+' 人'],['委托人平均每年付出',cost.toFixed(2)+'%']].map(([x,v])=>`<div><span>${x}</span><b>${v}</b></div>`).join('');$('-msg').textContent=msg;}
+  document.querySelectorAll('[data-wh14]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.wh14)));
+  $('').addEventListener('anim-in',()=>{[0,1,2].forEach((k,i)=>setTimeout(()=>set(k),300+i*2200));});
+  set(0);
+})();
+</script>

@@ -1,0 +1,28 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">谁最能以低成本避免，谁就负责</p><p class="figsub">六起代理出错的情形。点按“判定责任”，看按“最低成本避免者”原则，损失应当由谁承担。</p></div><button class="replay" type="button" id="lb-go">判定责任</button></div>
+    <div class="lb" id="lb" data-anim></div>
+    <p class="lb-msg" id="lb-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>示意判断，不构成法律意见。最低成本避免者原则见 Calabresi（1970）；实际的责任划分取决于各地法律与合同约定。</figcaption>
+</figure>
+<style>
+.lb{display:grid;gap:5px}
+.lb-r{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr) 90px;gap:10px;align-items:center;font-size:12.5px;background:var(--quote);border-radius:8px;padding:7px 10px}
+.lb-r span:nth-child(2){color:var(--muted);font-size:12px}
+.lb-r b{text-align:center;font-size:12px;border-radius:6px;padding:3px 6px;opacity:0;transform:scale(.8);transition:opacity .3s,transform .3s;transition-delay:calc(var(--i)*.2s)}
+.lb.on .lb-r b{opacity:1;transform:none}
+.lb-r b.p{background:rgba(47,95,158,.14);color:var(--blue)} .lb-r b.u{background:var(--accent-soft);color:var(--accent)} .lb-r b.d{background:rgba(160,120,24,.15);color:var(--gold)}
+.lb-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.lb-r{grid-template-columns:1fr 80px}.lb-r span:nth-child(2){grid-column:1/-1;grid-row:2}}
+</style>
+<script>
+(function(){
+  const C=[['执行层没有拦下超出单笔上限的指令','平台控制执行层的检查','平台','p'],['代理误解了写得清楚的委托书','平台选择与评测代理','平台','p'],['数据源推送了错误的价格','数据提供方控制数据质量','数据提供方','d'],['委托书写得含糊，代理按合理理解执行','委托人最能把要求写清楚','双方分担','u'],['按用户明确的指令执行，结果不如预期','决定来自用户本人','用户','u'],['代理按时提醒，用户未处理而错过截止','提醒已送达，决定在用户','用户','u']];
+  const box=document.getElementById('lb');
+  box.innerHTML=C.map(([a,b,c,k],i)=>`<div class="lb-r"><span>${a}</span><span>${b}</span><b class="${k}" style="--i:${i}">${c}</b></div>`).join('');
+  function go(){box.classList.remove('on');void box.offsetWidth;box.classList.add('on');document.getElementById('lb-msg').textContent='责任跟随控制：能以最低成本避免这次损失的一方承担它。这样分配，也让每一方都有动机做好自己控制的那一环。';}
+  document.getElementById('lb-go').addEventListener('click',go);
+  box.addEventListener('anim-in',()=>setTimeout(go,600));
+})();
+</script>

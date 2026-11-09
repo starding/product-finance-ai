@@ -1,0 +1,58 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">涨 50%、跌 50%，平均是多少</p>
+    <p class="figsub">每年要么上涨 x%，要么下跌 x%，交替出现。调节 x，比较算术平均与实际拿到的复合收益。</p>
+    <div class="mn" id="mn" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="交替涨跌下净值的变化">
+        <g id="mn-axis"></g>
+        <path id="mn-flat" class="mn-flat"/>
+        <path id="mn-path" class="mn-path"/>
+        <g id="mn-dots"></g>
+      </svg>
+      <div class="sl"><label for="mn-x">每年涨跌幅 x <b id="mn-xv"></b></label><input id="mn-x" type="range" min="5" max="60" step="5" value="50"></div>
+      <div class="mn-out">
+        <div><span>算术平均收益</span><b>0%</b></div>
+        <div><span>10 年后的净值（起点 100）</span><b id="mn-end"></b></div>
+        <div><span>每年的复合收益</span><b id="mn-g"></b></div>
+      </div>
+    </div>
+  </div>
+  <figcaption>算术平均是各年收益相加后平均；复合收益（几何平均）是每年都按同一比例增长时，能得到相同终值的那个比例。投资者拿到的是后者。</figcaption>
+</figure>
+<style>
+.mn svg{width:100%;height:auto;display:block}
+.mn-flat{stroke:var(--faint);stroke-dasharray:5 4;fill:none}
+.mn-path{fill:none;stroke:var(--warm);stroke-width:2.5;stroke-linejoin:round}
+.mn-dots circle{fill:var(--warm)}
+.mn-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mn-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.mn-out span{display:block;font-size:12px;color:var(--faint)}
+.mn-out b{font-size:20px;font-variant-numeric:tabular-nums}
+#mn-g{color:var(--warm)}
+@media (max-width:640px){.mn-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const N=10,X0=50,X1=620,YT=14,YB=180,x=t=>X0+t/N*(X1-X0);
+  const xs=document.getElementById('mn-x');
+  function render(anim){
+    const r=+xs.value/100; let v=100; const P=[v];
+    for(let t=1;t<=N;t++){v*=t%2?1+r:1-r;P.push(v);}
+    const hi=Math.max(...P)*1.08, y=u=>YB-u/hi*(YB-YT);
+    let a=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`;
+    for(let t=0;t<=N;t+=2)a+=`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${t} 年</text>`;
+    a+=`<text x="${X0-8}" y="${y(100)+4}" text-anchor="end" font-size="11" class="t-faint">100</text><text x="${X1}" y="${y(100)-6}" text-anchor="end" font-size="11" class="t-faint">按算术平均 0% 的预期</text>`;
+    document.getElementById('mn-axis').innerHTML=a;
+    document.getElementById('mn-flat').setAttribute('d',`M${x(0)},${y(100)}L${x(N)},${y(100)}`);
+    const path=document.getElementById('mn-path');path.setAttribute('d','M'+P.map((u,t)=>`${x(t).toFixed(1)},${y(u).toFixed(1)}`).join('L'));
+    document.getElementById('mn-dots').innerHTML=P.map((u,t)=>`<circle cx="${x(t)}" cy="${y(u)}" r="3.5"/>`).join('');
+    document.getElementById('mn-xv').textContent='±'+xs.value+'%';
+    document.getElementById('mn-end').textContent=v.toFixed(1);
+    document.getElementById('mn-g').textContent=((Math.sqrt((1+r)*(1-r))-1)*100).toFixed(1)+'%';
+    if(anim){const L=path.getTotalLength();path.style.transition='none';path.style.strokeDasharray=L;path.style.strokeDashoffset=L;path.getBoundingClientRect();path.style.transition='stroke-dashoffset 1.6s ease';path.style.strokeDashoffset=0;}else path.style.strokeDasharray='none';
+  }
+  xs.addEventListener('input',()=>render(false));
+  document.getElementById('mn').addEventListener('anim-in',()=>render(true));
+  render(false);
+})();
+</script>

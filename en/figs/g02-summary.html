@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: finance between two people</p><p class="figsub">Four conclusions, each corresponding to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="g02summary">Replay</button></div>
+    <div class="g02summary" id="g02summary" data-anim><div class="g02summary-c" style="--i:0"><em>Lending</em><b>Lending out is storage without losses</b><p>Two people who run short at different times lend to each other, so grain need not spoil in the granary.</p></div><div class="g02summary-c" style="--i:1"><em>Constraint</em><b>The benefit comes from mismatched timing</b><p>If both run short at the same time, lending cannot help; with a half-year gap, the benefit is greatest.</p></div><div class="g02summary-c warn" style="--i:2"><em>Interest</em><b>The price of time has a floor and a ceiling</b><p>The floor is the lender's other options, the ceiling the borrower's circumstances; when storage involves losses, the floor can be negative.</p></div><div class="g02summary-c warn" style="--i:3"><em>Commitment</em><b>Lending requires the other party to be able to repay later</b><p>What is lent is today's grain; what comes back is a promise about the future, and it may not be kept.</p></div></div>
+  </div>
+</figure>
+<style>
+.g02summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g02summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g02summary-c.warn{border-left-color:var(--warm)}
+.g02summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g02summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g02summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g02summary.in .g02summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g02summary{grid-template-columns:1fr}}
+</style>

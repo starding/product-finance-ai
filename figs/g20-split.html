@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">一个比例，还是三本账</p><p class="figsub">切换两种安排，看盖房与养老两个目标到期时差得太多的可能各有多大。</p></div><button class="replay" type="button" data-replay="sp20">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="安排">
+      <button type="button" data-sp20="one" aria-pressed="true">合在一起，一个比例</button>
+      <button type="button" data-sp20="three" aria-pressed="false">按目标分成三本账</button>
+    </div>
+    <div class="sp20" id="sp20" data-anim>
+      <div class="sp20-g" id="sp20-g"></div>
+      <p class="sp20-msg" id="sp20-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：船股每年平均收益 6%、波动 16%，稳妥处 2%、波动 3%；盖房的钱五年后用，养老的钱三十年后用；“差得太多”指到期时少于按 2% 计算的预期数额的八成。概率由两千组年景计算。</figcaption>
+</figure>
+<style>
+.sp20-g{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.sp20-c{background:var(--quote);border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.55}
+.sp20-c em{display:block;font-style:normal;font-size:11.5px;color:var(--faint)}
+.sp20-c b{display:block;font-size:20px;margin:2px 0;font-variant-numeric:tabular-nums}
+.sp20-c .bar{height:8px;border-radius:4px;background:var(--line);overflow:hidden;margin-top:4px}
+.sp20-c .bar i{display:block;height:100%;background:var(--warm);transition:width .5s}
+.sp20-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.sp20-g{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('sp20'+id);let mode='one';
+  function short(w,H,n=2000){let s=2020;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};const g=()=>{let u=0;while(!u)u=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r());};
+    const tgt=.8*Math.pow(1.02,H);let bad=0;for(let k=0;k<n;k++){let v=1;for(let t=0;t<H;t++)v*=1+w*(.06+.16*g())+(1-w)*(.02+.03*g());if(v<tgt)bad++;}return bad/n;}
+  const A={one:[[0,'应急'],[.6,'盖房'],[.6,'养老']],three:[[0,'应急'],[.15,'盖房'],[.8,'养老']]};
+  function set(m){mode=m;document.querySelectorAll('[data-sp20]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.sp20===m)));
+    const R=A[m].map(([w,n],i)=>[n,w,i===0?0:short(w,i===1?5:30)]);
+    $('-g').innerHTML=R.map(([n,w,p],i)=>`<div class="sp20-c"><em>${n}　船股 ${Math.round(w*100)}%</em>${i===0?'<b>随时可取</b>放在粮仓里':`<b>${(p*100).toFixed(0)}%</b>到期时差得太多的可能<div class="bar"><i style="width:${p*100}%"></i></div>`}</div>`).join('');
+    $('-msg').textContent=m==='one'?`合在一起按 60% 放在船股上：养老的钱还好，盖房的钱五年后有 ${(R[1][2]*100).toFixed(0)}% 的可能差得太多。`:`按目标分账：盖房的钱只放 15% 在船股上，差得太多的可能降到 ${(R[1][2]*100).toFixed(0)}%；养老的钱有三十年，放 80% 在船股上，差得太多的可能为 ${(R[2][2]*100).toFixed(0)}%。每本账用的是它自己最在乎的标准。`;}
+  document.querySelectorAll('[data-sp20]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.sp20)));
+  $('').addEventListener('anim-in',()=>{set('one');setTimeout(()=>set('three'),2400);});
+  set('one');
+})();
+</script>

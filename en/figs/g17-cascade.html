@@ -1,0 +1,40 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Following those ahead</p><p class="figsub">A certain ship's prospects are in fact poor. Twenty scribes decide in turn whether to buy. Each has a clue of its own that is right 70% of the time, and each can see what the scribes before it did. Switch the source of the clues, try a few sets of clues, and see how judgments form.</p></div><button class="replay" type="button" data-replay="cc17">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Source of clues">
+      <button type="button" data-cc17="ind" aria-pressed="true">Each has its own clue</button>
+      <button type="button" data-cc17="same" aria-pressed="false">Clues from the same source</button>
+    </div>
+    <div class="cc17" id="cc17" data-anim>
+      <div class="cc17-row" id="cc17-r"></div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Do not buy (correct)</span><span><i style="background:var(--warm)"></i>Buy</span><span><i style="outline:2px solid var(--ink);outline-offset:-2px;background:transparent"></i>Drops its own clue and follows those ahead</span></div>
+      <button type="button" class="replay" id="cc17-re">Another set of clues</button>
+      <p class="cc17-msg" id="cc17-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: each scribe infers its predecessors' clues from their actions and adds its own clue to reach a judgment. When the inferred favourable and unfavourable clues differ by two or more, its own clue can no longer change the conclusion, so it follows those ahead (a simplification of Bikhchandani, Hirshleifer and Welch, 1992). With "the same source", every scribe receives the same clue.</figcaption>
+</figure>
+<style>
+.cc17-row{display:grid;grid-template-columns:repeat(20,1fr);gap:3px;margin:6px 0}
+.cc17-row i{aspect-ratio:1;border-radius:50%;opacity:0;transform:scale(.6);transition:opacity .25s,transform .25s;transition-delay:calc(var(--i)*.07s)}
+.cc17.in .cc17-row i{opacity:1;transform:none}
+.cc17-row i.b{background:var(--warm)} .cc17-row i.n{background:var(--accent)} .cc17-row i.f{outline:2px solid var(--ink);outline-offset:1px}
+.cc17-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cc17'+id);let mode='ind',seed=1701;
+  function run(){let s=seed;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};const one=r()<.7?-1:1;
+    let d=0;const A=[];for(let i=0;i<20;i++){const sig=mode==='same'?one:(r()<.7?-1:1);let act,fol=false;
+      if(d>=2){act=1;fol=true;}else if(d<=-2){act=-1;fol=true;}else{act=d+sig>0?1:d+sig<0?-1:sig;d+=act;}
+      A.push([act,fol]);}return A;}
+  function draw(){const A=run();$('-r').innerHTML=A.map(([a,f],i)=>`<i style="--i:${i}" class="${a>0?'b':'n'}${f?' f':''}"></i>`).join('');
+    const ok=A.filter(a=>a[0]<0).length,fi=A.findIndex(a=>a[1]);
+    $('-msg').textContent=mode==='same'?`All twenty scribes received the same clue. ${ok===20?'This time the clue was right, and none of them bought':'This time the clue was wrong, and all of them bought'}: their judgments are perfectly correlated, and twenty judgments are worth only one.`:fi<0?`With this set of clues no cascade formed, and ${ok} scribes judged correctly.`:`From scribe ${fi+1} on, every later scribe dropped its own clue and followed those ahead ${A[fi][0]>0?'in buying (wrongly)':'in not buying (rightly)'}; ${ok} scribes judged correctly. A long run of identical actions rests only on the first few clues.`;}
+  const bs=[...document.querySelectorAll('[data-cc17]')];
+  function set(m){mode=m;bs.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.cc17===m)));draw();}
+  bs.forEach(b=>b.addEventListener('click',()=>set(b.dataset.cc17)));$('-re').addEventListener('click',()=>{seed=(seed*48271)%2147483647;draw();});
+  $('').addEventListener('anim-in',()=>{set('ind');setTimeout(()=>{seed=(seed*48271)%2147483647;draw();},2200);setTimeout(()=>set('same'),4400);});
+  draw();
+})();
+</script>

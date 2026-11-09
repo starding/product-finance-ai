@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">一份承诺要过三道检验</p><p class="figsub">十条常见的承诺，逐条检查：市场能否提供，产品能否兑现，用户能否核验。打开筛选，只看三条都满足的。</p></div><button class="replay" type="button" data-replay="th3">重播</button></div>
+    <label class="th3-chk"><input type="checkbox" id="th3-x"> 只看三条都满足的承诺</label>
+    <div class="th3" id="th3" data-anim>
+      <div class="th3-h"><span>承诺</span><span>能提供</span><span>能兑现</span><span>能核验</span></div>
+      <div id="th3-rows"></div>
+    </div>
+    <p class="th3-msg" id="th3-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>示意判断。“能核验”指用户或第三方能在合理的时间内检查承诺是否被遵守。</figcaption>
+</figure>
+<style>
+.th3-chk{display:flex;gap:6px;align-items:center;font-size:14px;margin-bottom:8px}
+.th3-chk input{accent-color:var(--accent);width:16px;height:16px}
+.th3-h,.th3-r{display:grid;grid-template-columns:minmax(0,1fr) 54px 54px 54px;gap:8px;align-items:center}
+.th3-h{font-size:11.5px;color:var(--faint);padding:0 10px 4px}
+.th3-h span:not(:first-child),.th3-r i{text-align:center}
+.th3-r{background:var(--quote);border-radius:8px;padding:7px 10px;margin-bottom:4px;font-size:13px;transition:opacity .3s,max-height .3s;overflow:hidden;max-height:60px}
+.th3-r i{font-style:normal;font-size:14px;opacity:0;transform:scale(.6);transition:opacity .3s,transform .3s;transition-delay:calc(var(--d)*1ms)}
+.th3.in .th3-r i{opacity:1;transform:none}
+.th3-r i.y{color:var(--accent)} .th3-r i.n{color:var(--warm)}
+.th3-r.ok{background:var(--accent-soft)}
+.th3.f .th3-r:not(.ok){opacity:0;max-height:0;padding:0 10px;margin:0}
+.th3-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const P=[['年化收益不低于 15%',0,0,1],['跑赢大盘',0,0,1],['准确预测涨跌',0,0,1],['费用不超过每年 0.5%',1,1,1],['按约定比例定期再平衡',1,1,1],['不超出约定的风险与品种限制',1,1,1],['持续任务的每个周期都有交代',1,1,1],['每个数字注明来源与时点',1,1,1],['帮用户做出最好的投资决定',1,0,0],['以合理的成本执行订单',1,1,1]];
+  document.getElementById('th3-rows').innerHTML=P.map(([n,a,b,c],i)=>{const ok=a&&b&&c;return `<div class="th3-r${ok?' ok':''}"><span>${n}</span>${[a,b,c].map((v,j)=>`<i class="${v?'y':'n'}" style="--d:${i*120+j*60}">${v?'✓':'✗'}</i>`).join('')}</div>`;}).join('');
+  const box=document.getElementById('th3'),x=document.getElementById('th3-x');
+  function r(){box.classList.toggle('f',x.checked);document.getElementById('th3-msg').textContent=x.checked?'剩下的六条都在产品自己的控制之内，市场给得起，用户也查得到：这些才是可以长期坚持的承诺。':'收益与预测类的承诺，看起来最有吸引力，却在第一道检验就不能通过；“帮用户做出最好的决定”无法兑现，也无法核验。';}
+  x.addEventListener('change',r);
+  box.addEventListener('anim-in',()=>{x.checked=false;r();setTimeout(()=>{x.checked=true;r();},3200);});
+  r();
+})();
+</script>

@@ -1,0 +1,86 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">四种讲法</p>
+    <p class="figsub">不同性质的内容，交给不同的可视化方式。</p>
+    <div class="pp" id="pp" data-anim>
+      <div class="pp-t">
+        <p class="pp-k">结构 → 图</p>
+        <svg viewBox="0 0 200 90" class="pp-struct" aria-hidden="true">
+          <line x1="40" y1="45" x2="100" y2="22"/><line x1="40" y1="45" x2="100" y2="68"/><line x1="100" y1="22" x2="160" y2="45"/><line x1="100" y1="68" x2="160" y2="45"/>
+          <circle cx="40" cy="45" r="11"/><circle cx="100" cy="22" r="11"/><circle cx="100" cy="68" r="11"/><circle cx="160" cy="45" r="11"/>
+        </svg>
+        <p class="pp-d">谁与谁相连、各处于什么位置</p>
+      </div>
+      <div class="pp-t">
+        <p class="pp-k">过程 → 动画</p>
+        <svg viewBox="0 0 200 90" class="pp-proc" aria-hidden="true">
+          <line x1="20" y1="60" x2="180" y2="60"/><text x="20" y="80" font-size="11">今天</text><text x="180" y="80" font-size="11" text-anchor="end">将来</text>
+          <circle class="pp-coin" cx="20" cy="45" r="9"/>
+        </svg>
+        <p class="pp-d">先发生什么、后发生什么、如何传递</p>
+      </div>
+      <div class="pp-t">
+        <p class="pp-k">参数 → 可操作的模拟</p>
+        <div class="pp-sim">
+          <label>年波动率 <b id="pp-sv">20%</b><input type="range" id="pp-s" min="0" max="40" value="20" aria-label="年波动率"></label>
+          <div class="pp-bars"><div><i id="pp-b1"></i><span>无波动</span></div><div><i id="pp-b2"></i><span>有波动</span></div></div>
+        </div>
+        <p class="pp-d">改变一个条件，结论随之改变</p>
+      </div>
+      <div class="pp-t">
+        <p class="pp-k">随机 → 分布</p>
+        <svg viewBox="0 0 200 90" class="pp-dist" id="pp-dist" aria-hidden="true"></svg>
+        <p class="pp-d">不只给平均数，而是展示所有可能 <button type="button" class="replay" id="pp-again">再抽一次</button></p>
+      </div>
+    </div>
+  </div>
+  <figcaption>第三格示意：期望收益同为每年 8%，持有 20 年后中位数结果的差别；波动越大，中位数越低。第四格为 200 次模拟的结果分布。</figcaption>
+</figure>
+<style>
+.pp{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.pp-t{background:var(--quote);border-radius:10px;padding:12px 14px}
+.pp-k{margin:0 0 6px;font-size:14px;font-weight:700}
+.pp-d{margin:6px 0 0;font-size:12px;color:var(--muted);line-height:1.5}
+.pp svg{width:100%;height:auto;display:block}
+.pp-struct line{stroke:var(--faint);stroke-width:1.5;stroke-dasharray:80;stroke-dashoffset:80;transition:stroke-dashoffset .8s .3s}
+.pp-struct circle{fill:var(--accent);transform-box:fill-box;transform-origin:center;transform:scale(0);transition:transform .4s}
+.pp.in .pp-struct line{stroke-dashoffset:0}
+.pp.in .pp-struct circle{transform:none}
+.pp-proc line{stroke:var(--faint)} .pp-proc text{fill:var(--faint)}
+.pp-coin{fill:var(--warm)}
+.pp.in .pp-coin{animation:ppmove 2.4s ease-in-out infinite}
+@keyframes ppmove{0%{transform:translateX(0)}70%,100%{transform:translateX(160px)}}
+.pp-sim label{display:block;font-size:12px;color:var(--muted)}
+.pp-sim label b{color:var(--ink);float:right}
+.pp-bars{display:flex;gap:10px;align-items:flex-end;height:58px;margin-top:6px}
+.pp-bars div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;font-size:11px;color:var(--faint)}
+.pp-bars i{display:block;width:60%;background:var(--accent);border-radius:4px 4px 0 0;transition:height .3s}
+.pp-bars div:last-child i{background:var(--warm)}
+.pp-dist rect{fill:var(--accent);opacity:.8}
+.pp-dist line{stroke:var(--faint)}
+.pp-d .replay{margin-left:6px;padding:1px 8px}
+@media (max-width:640px){.pp{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const s=document.getElementById('pp-s');
+  function sim(){
+    const sg=s.value/100, T=20, a=1.08**T, m=Math.exp((Math.log(1.08)-sg*sg/2)*T);
+    document.getElementById('pp-sv').textContent=s.value+'%';
+    document.getElementById('pp-b1').style.height=Math.round(a/a*48)+'px';
+    document.getElementById('pp-b2').style.height=Math.max(2,Math.round(m/a*48))+'px';
+  }
+  s.addEventListener('input',sim); sim();
+  const svg=document.getElementById('pp-dist');
+  function dist(){
+    const bins=new Array(20).fill(0);
+    for(let i=0;i<200;i++){let w=0;for(let t=0;t<20;t++){let u=0,v=0;while(!u)u=Math.random();v=Math.random();w+=Math.log(1.08)-0.02+0.2*Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}const x=Math.exp(w);const b=Math.min(19,Math.floor(Math.log(x)/Math.log(20)*10+6));if(b>=0)bins[b]++;}
+    const mx=Math.max(...bins);let h=`<line x1="5" y1="82" x2="195" y2="82"/>`;
+    bins.forEach((c,i)=>{const hh=c/mx*70;h+=`<rect x="${8+i*9.4}" y="${82-hh}" width="7.6" height="${hh}" rx="1"><animate attributeName="height" from="0" to="${hh}" dur=".5s" begin="${i*0.03}s" fill="freeze"/><animate attributeName="y" from="82" to="${82-hh}" dur=".5s" begin="${i*0.03}s" fill="freeze"/></rect>`;});
+    svg.innerHTML=h;
+  }
+  document.getElementById('pp-again').addEventListener('click',dist);
+  document.getElementById('pp').addEventListener('anim-in',dist);
+  dist();
+})();
+</script>

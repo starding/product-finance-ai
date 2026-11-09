@@ -1,0 +1,40 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">跟着前面的人走</p><p class="figsub">某艘船的前景实际上不好。二十位书记员依次决定买不买，每位都有一条自己的线索，七成的可能是对的，也都能看到前面的书记员怎么做。切换线索的来源，换几组线索，看判断怎样形成。</p></div><button class="replay" type="button" data-replay="cc17">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="线索的来源">
+      <button type="button" data-cc17="ind" aria-pressed="true">各有各的线索</button>
+      <button type="button" data-cc17="same" aria-pressed="false">线索出自同一来源</button>
+    </div>
+    <div class="cc17" id="cc17" data-anim>
+      <div class="cc17-row" id="cc17-r"></div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>不买（正确）</span><span><i style="background:var(--warm)"></i>买入</span><span><i style="outline:2px solid var(--ink);outline-offset:-2px;background:transparent"></i>放弃自己的线索、跟随前人</span></div>
+      <button type="button" class="replay" id="cc17-re">换一组线索</button>
+      <p class="cc17-msg" id="cc17-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：每位书记员根据前人的行动推断他们的线索，再加上自己的线索作判断；推断出的看好与看坏相差两条及以上时，自己的线索不再改变结论，于是跟随前人（比赫昌达尼、赫什莱弗与韦尔奇，1992 的简化）。“同一来源”时，所有书记员拿到的是同一条线索。</figcaption>
+</figure>
+<style>
+.cc17-row{display:grid;grid-template-columns:repeat(20,1fr);gap:3px;margin:6px 0}
+.cc17-row i{aspect-ratio:1;border-radius:50%;opacity:0;transform:scale(.6);transition:opacity .25s,transform .25s;transition-delay:calc(var(--i)*.07s)}
+.cc17.in .cc17-row i{opacity:1;transform:none}
+.cc17-row i.b{background:var(--warm)} .cc17-row i.n{background:var(--accent)} .cc17-row i.f{outline:2px solid var(--ink);outline-offset:1px}
+.cc17-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cc17'+id);let mode='ind',seed=1701;
+  function run(){let s=seed;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};const one=r()<.7?-1:1;
+    let d=0;const A=[];for(let i=0;i<20;i++){const sig=mode==='same'?one:(r()<.7?-1:1);let act,fol=false;
+      if(d>=2){act=1;fol=true;}else if(d<=-2){act=-1;fol=true;}else{act=d+sig>0?1:d+sig<0?-1:sig;d+=act;}
+      A.push([act,fol]);}return A;}
+  function draw(){const A=run();$('-r').innerHTML=A.map(([a,f],i)=>`<i style="--i:${i}" class="${a>0?'b':'n'}${f?' f':''}"></i>`).join('');
+    const ok=A.filter(a=>a[0]<0).length,fi=A.findIndex(a=>a[1]);
+    $('-msg').textContent=mode==='same'?`二十位书记员拿到的是同一条线索，${ok===20?'这一次线索是对的，全体都没有买':'这一次线索是错的，全体都买了'}：它们的判断完全相关，二十个判断只相当于一个。`:fi<0?`这一组线索里，没有形成瀑布，${ok} 位作出了正确的判断。`:`从第 ${fi+1} 位起，后来者都放弃了自己的线索，跟着前人${A[fi][0]>0?'买入（错了）':'不买（对了）'}；${ok} 位作出了正确的判断。一长串一致的行动，只建立在开头几条线索上。`;}
+  const bs=[...document.querySelectorAll('[data-cc17]')];
+  function set(m){mode=m;bs.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.cc17===m)));draw();}
+  bs.forEach(b=>b.addEventListener('click',()=>set(b.dataset.cc17)));$('-re').addEventListener('click',()=>{seed=(seed*48271)%2147483647;draw();});
+  $('').addEventListener('anim-in',()=>{set('ind');setTimeout(()=>{seed=(seed*48271)%2147483647;draw();},2200);setTimeout(()=>set('same'),4400);});
+  draw();
+})();
+</script>

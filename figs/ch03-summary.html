@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：按风险的真实形态呈现结果</p><p class="figsub">四条设计要求，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="ch03summary">重播</button></div>
+    <div class="ch03summary" id="ch03summary" data-anim><div class="ch03summary-c" style="--i:0"><em>不确定性随时间扩大</em><b>用区间与概率代替单点预测</b><p>展示不同持有期下可能结果的范围，而不是一个目标价或一个平均收益。</p></div><div class="ch03summary-c" style="--i:1"><em>长期正收益淹没在短期波动里</em><b>按持有期解释“上涨的概率”</b><p>持有一天与持有十年，上涨的概率差别很大；不要用长期结论引导短期交易。</p></div><div class="ch03summary-c" style="--i:2"><em>波动会聚集</em><b>把模型与 AI 用在可以估计的地方</b><p>波动与风险暴露比涨跌方向更值得估计；波动上升时及时调整风险提示。</p></div><div class="ch03summary-c warn" style="--i:3"><em>极端结果比正态分布预计的多</em><b>压力测试按厚尾而非正态</b><p>展示历史上真实出现过的极端情形，不只给“正常情况下”的波动范围。</p></div></div>
+  </div>
+</figure>
+<style>
+.ch03summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch03summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch03summary-c.warn{border-left-color:var(--warm)}
+.ch03summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch03summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch03summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch03summary.in .ch03summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch03summary{grid-template-columns:1fr}}
+</style>

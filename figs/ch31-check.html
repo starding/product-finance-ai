@@ -1,0 +1,40 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">用十二个问题检查一个设计</p><p class="figsub">逐条回答，或选择一个示例产品。每一层的得分条显示还有多少问题没有解决。</p></div></div>
+    <div class="seg-btns" role="group" aria-label="示例"><button type="button" data-ck="a" aria-pressed="false">只追求收益的产品</button><button type="button" data-ck="b" aria-pressed="false">按原则设计的产品</button><button type="button" data-ck="c" aria-pressed="false">清空</button></div>
+    <div class="ck" id="ck" data-anim>
+      <div class="ck-sc" id="ck-sc"></div>
+      <div class="ck-list" id="ck-list"></div>
+    </div>
+    <p class="ck-msg" id="ck-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>示意清单。每个回答“否”的问题，对应净价值中某一项可以预见的损失。</figcaption>
+</figure>
+<style>
+.ck-sc{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px}
+.ck-sc div{background:var(--quote);border-radius:8px;padding:6px 8px;font-size:12px}
+.ck-sc b{display:block;font-size:13px}
+.ck-st{height:8px;background:var(--surface);border-radius:4px;overflow:hidden;margin-top:4px}
+.ck-st i{display:block;height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.ck-list{display:grid;gap:4px}
+.ck-i{display:grid;grid-template-columns:44px minmax(0,1fr);gap:8px;align-items:center;font-size:12.5px;background:var(--quote);border-radius:7px;padding:5px 9px;cursor:pointer}
+.ck-i input{accent-color:var(--accent);width:16px;height:16px;justify-self:center}
+.ck-i em{font-style:normal;font-size:11px;color:var(--faint)}
+.ck-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.ck-sc{grid-template-columns:1fr 1fr}}
+</style>
+<script>
+(function(){
+  const Q=[["价值", "承诺的内容市场能提供、产品能兑现、用户能核验吗？"], ["价值", "是否同时说明了用户得到什么、付出什么、承担什么？"], ["价值", "价值是否不依赖比别人预测得更准？"], ["契约", "目标、约束、默认规则与复核时间是否写清？"], ["契约", "不可逆的操作是否由本人确认，边界是否在执行层强制？"], ["契约", "代理的收入与评价指标是否不随交易量变化？"], ["实现", "代理能完整承担的部分是否足够大，结果是否容易核对？"], ["实现", "长任务中是否有检查点，没把握时是否会停下？"], ["实现", "约定与记录是否存为对象、按时点保存、可以回放？"], ["实现", "保障强度是否与后果和验证难度相称？"], ["信任", "用户能否看到诊断力高、难以伪造的证据？"], ["信任", "默认值是否站在用户一边，是否以邀请代替说教，退出是否容易？"]],LY=['价值','契约','实现','信任'];
+  const A={a:[0,0,0,0,0,0,1,0,0,0,0,0],b:[1,1,1,1,1,1,1,1,1,1,1,1]};
+  document.getElementById('ck-list').innerHTML=Q.map(([l,q],i)=>`<label class="ck-i"><input type="checkbox" data-q="${i}"><span><em>${l}层</em>　${q}</span></label>`).join('');
+  document.getElementById('ck-sc').innerHTML=LY.map(l=>`<div><b>${l}层</b><span id="ck-${l}"></span><div class="ck-st"><i id="ck-b-${l}"></i></div></div>`).join('');
+  const cb=[...document.querySelectorAll('[data-q]')];
+  function r(){let tot=0;LY.forEach(l=>{const items=Q.map((q,i)=>[q,i]).filter(([q])=>q[0]===l),ok=items.filter(([,i])=>cb[i].checked).length;tot+=ok;document.getElementById('ck-'+l).textContent=ok+' / '+items.length;document.getElementById('ck-b-'+l).style.width=ok/items.length*100+'%';});
+    document.getElementById('ck-msg').textContent=tot===12?'十二个问题都回答“是”：这不保证成功，但净价值的每一项都没有可以预见的损失。':tot===0?'逐条回答，看这个设计在哪一层还有缺口。':`回答“是”的有 ${tot} 条；其余 ${12-tot} 条，各自对应一项可以预见的损失。`;}
+  cb.forEach(c=>c.addEventListener('change',r));
+  document.querySelectorAll('[data-ck]').forEach(b=>b.addEventListener('click',()=>{const k=b.dataset.ck;document.querySelectorAll('[data-ck]').forEach(z=>z.setAttribute('aria-pressed',String(z===b)));cb.forEach((c,i)=>c.checked=k==='c'?false:!!A[k][i]);r();}));
+  document.getElementById('ck').addEventListener('anim-in',()=>{document.querySelector('[data-ck=a]').click();setTimeout(()=>document.querySelector('[data-ck=b]').click(),2600);});
+  r();
+})();
+</script>

@@ -1,0 +1,35 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">2010 年 5 月 6 日下午的十几分钟</p><p class="figsub">美国证券交易委员会与商品期货交易委员会联合调查报告所记述的标普 500 股指期货市场。点选一个时刻查看细节。</p></div><button class="replay" type="button" data-replay="fl17">重播</button></div>
+    <div class="fl17" id="fl17" data-anim>
+      <div class="fl17-t" id="fl17-t"></div>
+      <p class="fl17-d" id="fl17-d" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>资料：U.S. CFTC &amp; SEC（2010），《关于 2010 年 5 月 6 日市场事件的调查结果》。时刻为美国东部时间下午。</figcaption>
+</figure>
+<style>
+.fl17-t{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;position:relative}
+.fl17-t button{font:inherit;cursor:pointer;text-align:left;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:8px 9px;color:var(--ink);font-size:12.5px;line-height:1.45;opacity:0;transform:translateY(6px);transition:opacity .35s,transform .35s,border-color .3s;transition-delay:calc(var(--i)*.25s)}
+.fl17.in .fl17-t button{opacity:1;transform:none}
+.fl17-t button em{display:block;font-style:normal;font-size:11px;color:var(--faint)}
+.fl17-t button.w{background:var(--warm-soft)} .fl17-t button.g{background:var(--accent-soft)}
+.fl17-t button.sel{border-color:var(--ink)}
+.fl17-d{font-size:14px;margin:12px 0 0;min-height:4.6em;background:var(--quote);border-radius:9px;padding:10px 12px}
+@media (max-width:640px){.fl17-t{grid-template-columns:1fr 1fr}}
+</style>
+<script>
+(function(){
+  const E=[['2:32','大单开始卖出','','一家共同基金启动卖出程序，共 7.5 万份合约，价值约 41 亿美元。执行算法按此前一分钟成交量的 9% 卖出，不考虑价格与时间。'],
+    ['2:41～2:45:27','价格急跌','w','四分半钟内，股指期货跌了 5% 以上，对应的指数基金跌了 6% 以上。'],
+    ['2:45:13～2:45:27','烫手山芋','w','缺少基本面买方，高频交易者开始在彼此之间快速买卖：14 秒内成交 2.7 万多份合约，约占同期成交量的 49%，净买入却只有约 200 份。'],
+    ['2:45:27','流动性消失','w','买方挂单深度降到约 5,800 万美元，不到当天早上的 1%；15 秒内价格又跌 1.7%，触及当天最低点。'],
+    ['2:45:28～2:45:33','暂停 5 秒','g','交易所的自动机制暂停交易 5 秒，卖压部分缓解，买方兴趣回升；恢复交易后价格企稳，随后开始回升。']];
+  const t=document.getElementById('fl17-t'),d=document.getElementById('fl17-d');
+  t.innerHTML=E.map((e,i)=>`<button type="button" style="--i:${i}" class="${e[2]}"><em>${e[0]}</em>${e[1]}</button>`).join('');const bs=[...t.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));d.textContent=E[i][0]+'：'+E[i][3];}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('fl17').addEventListener('anim-in',()=>{[0,1,2,3,4].forEach((i,k)=>setTimeout(()=>set(i),1500+k*1900));});
+  set(0);
+})();
+</script>

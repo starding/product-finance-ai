@@ -1,0 +1,41 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">Assurance level: consequence × difficulty of verification</p>
+    <p class="figsub">Across is how severe the consequences of an error are; down is how hard the result is to verify. Each cell shows its assurance level. Tap a function to see the assurance it needs.</p>
+    <div class="gd" id="gd" data-anim>
+      <div class="gd-h"><span></span><span>Light consequences</span><span>Moderate consequences</span><span>Severe consequences</span></div>
+      <div class="gd-row" data-r="0"><span class="gd-y">Hard to verify</span></div>
+      <div class="gd-row" data-r="1"><span class="gd-y">Needs expert judgment</span></div>
+      <div class="gd-row" data-r="2"><span class="gd-y">Easy to verify</span></div>
+    </div>
+    <div class="gd-d" id="gd-d">Tap a function.</div>
+  </div>
+  <figcaption>Illustrative grading. Setting safety integrity levels by severity, frequency of exposure and controllability follows ISO 26262 (2018).</figcaption>
+</figure>
+<style>
+.gd-h,.gd-row{display:grid;grid-template-columns:80px repeat(3,minmax(0,1fr));gap:6px}
+.gd-h span{font-size:11.5px;color:var(--faint);text-align:center}
+.gd-row{margin-top:6px}
+.gd-y{font-size:12px;color:var(--faint);align-self:center}
+.gd-c{border-radius:10px;padding:8px;min-height:84px;display:flex;flex-direction:column;gap:5px;background:color-mix(in srgb,var(--warm) var(--a),var(--quote))}
+.gd-c em{font-style:normal;font-size:11px;color:var(--muted)}
+.gd-i{font:inherit;text-align:left;font-size:12.5px;border:1px solid var(--line);border-radius:7px;padding:4px 8px;background:var(--surface);color:var(--ink);cursor:pointer;opacity:0;transform:translateY(5px);transition:opacity .3s,transform .3s;transition-delay:calc(var(--i)*.1s)}
+.gd.in .gd-i{opacity:1;transform:none}
+.gd-i.sel{border-color:var(--ink)}
+.gd-d{margin-top:10px;background:var(--quote);border-radius:10px;padding:10px 12px;font-size:13.5px;line-height:1.7;min-height:4.6em}
+.gd-d b{display:block}
+@media (max-width:640px){.gd-h,.gd-row{grid-template-columns:56px repeat(3,minmax(0,1fr))}.gd-i{font-size:11.5px}}
+.gd-row>*{min-width:0;overflow-wrap:anywhere}
+</style>
+<script>
+(function(){
+  const LV=[[2,3,4],[2,3,4],[1,2,3]];
+  const P={1:'Spot checks: attach sources and timestamps, and sample at random periodically.',2:'Evaluation set: before launch, measure the error rate on a sufficiently large evaluation set; after launch, monitor.',3:'Evaluation set plus stratified evaluation and human review: critical cases must meet the bar on their own, and new versions are reviewed and then released in stages.',4:'Formal constraints plus checks on everything: the execution layer enforces boundaries on every action, key operations are confirmed by the principal, and new versions first run without taking effect.'};
+  const F=[[2,0,'Market summary with sources'],[2,0,'Look up a historical figure'],[2,1,'Portfolio return calculation'],[2,2,'Expiry and margin-call alerts'],[1,0,'Explain a price move'],[1,1,'Research a company'],[1,2,'Rebalancing plan'],[0,0,'Market sentiment overview'],[0,1,'Investor profile description'],[0,2,'Automatic trading within authority']];
+  const rows=[...document.querySelectorAll('.gd-row')];
+  rows.forEach((row,r)=>{for(let c=0;c<3;c++){const d=document.createElement('div');d.className='gd-c';d.style.setProperty('--a',(LV[r][c]*9)+'%');d.innerHTML=`<em>Level ${LV[r][c]}</em>`;d.dataset.lv=LV[r][c];row.appendChild(d);}});
+  let n=0;F.forEach(([r,c,t])=>{const cell=rows[r].querySelectorAll('.gd-c')[c],b=document.createElement('button');b.type='button';b.className='gd-i';b.style.setProperty('--i',n++);b.textContent=t;b.dataset.lv=cell.dataset.lv;cell.appendChild(b);});
+  const bs=[...document.querySelectorAll('.gd-i')];
+  bs.forEach(b=>b.addEventListener('click',()=>{bs.forEach(x=>x.classList.toggle('sel',x===b));document.getElementById('gd-d').innerHTML=`<b>${b.textContent}: Level ${b.dataset.lv}</b>${P[b.dataset.lv]}`;}));
+})();
+</script>

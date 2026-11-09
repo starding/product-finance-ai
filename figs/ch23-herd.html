@@ -1,0 +1,36 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">很多代理用同一条规则</p><p class="figsub">50 个代理各自管理一个组合，都设有“下跌超过一定幅度就减仓”的规则。拖动规则的相似程度，再触发一次 3% 的下跌，看有多少代理同时卖出，以及价格最终跌了多少。</p></div><button class="replay" type="button" id="hd-run">触发下跌</button></div>
+    <div class="hd" id="hd" data-anim>
+      <div class="hd-g" id="hd-g"></div>
+      <div class="sl"><label for="hd-s">规则的相似程度 <b id="hd-sv"></b></label><input id="hd-s" type="range" min="0" max="100" step="10" value="30"></div>
+      <div class="hd-out"><div><span>同时卖出的代理</span><b id="hd-n"></b></div><div><span>价格的总跌幅</span><b id="hd-d"></b></div></div>
+      <p class="hd-msg" id="hd-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意模型：规则相似时，各代理的减仓阈值集中在 3% 附近；每个代理卖出使价格再跌 0.15%，可能触发更多代理卖出；相似程度超过某个水平后，连锁卖出会突然出现。同质策略同时平仓的实例见 Khandani 与 Lo（2011），2010 年闪电崩盘见 Kirilenko 等（2017）。</figcaption>
+</figure>
+<style>
+.hd-g{display:grid;grid-template-columns:repeat(25,1fr);gap:4px;margin-bottom:8px}
+.hd-g i{aspect-ratio:1;border-radius:50%;background:var(--accent-soft);border:1.5px solid var(--accent);transition:all .25s}
+.hd-g i.s{background:var(--warm);border-color:var(--warm)}
+.hd-out{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.hd-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.hd-out span{display:block;font-size:12px;color:var(--faint)} .hd-out b{font-size:19px;font-variant-numeric:tabular-nums}
+.hd-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const N=50,g=document.getElementById('hd-g');g.innerHTML='<i></i>'.repeat(N);const cs=[...g.children],sl=document.getElementById('hd-s');let tm;
+  const U=Array.from({length:N},(_,i)=>((i*37)%N)/N);
+  const th=h=>U.map(u=>{const spread=3+12*(1-h);return 3+ (u-.5)*2*spread*.5+spread*.5;});
+  function run(){clearInterval(tm);const h=+sl.value/100,T=th(h);document.getElementById('hd-sv').textContent=sl.value+'%';cs.forEach(c=>c.classList.remove('s'));
+    let drop=3,sold=new Set();const step=()=>{let nw=[];T.forEach((t,i)=>{if(!sold.has(i)&&t<=drop)nw.push(i);});if(!nw.length){clearInterval(tm);fin();return;}nw.forEach(i=>{sold.add(i);cs[i].classList.add('s');});drop+=nw.length*.15;up();};
+    const up=()=>{document.getElementById('hd-n').textContent=sold.size+' 个';document.getElementById('hd-d').textContent=drop.toFixed(1)+'%';};
+    const fin=()=>{document.getElementById('hd-msg').textContent=sold.size<=5?'规则各不相同时，只有少数代理在 3% 的下跌中卖出，价格很快稳定。':`规则高度相似时，${sold.size} 个代理几乎同时卖出，彼此的卖出又触发了更多卖出：一次 3% 的下跌被放大到 ${drop.toFixed(1)}%。每个代理的规则都合理，同时执行的结果却对所有人不利。`;};
+    up();document.getElementById('hd-msg').textContent='';tm=setInterval(step,350);}
+  sl.addEventListener('input',run);document.getElementById('hd-run').addEventListener('click',run);
+  document.getElementById('hd').addEventListener('anim-in',()=>{sl.value=20;run();setTimeout(()=>{sl.value=90;run();},4200);});
+  document.getElementById('hd-sv').textContent=sl.value+'%';
+})();
+</script>

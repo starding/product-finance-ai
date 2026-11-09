@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：一个人的世界里的金融</p><p class="figsub">四条结论，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="g01summary">重播</button></div>
+    <div class="g01summary" id="g01summary" data-anim><div class="g01summary-c" style="--i:0"><em>储蓄的需要</em><b>先问用户的钱什么时候要用</b><p>收入与消费不在同一时间，是一切金融产品要服务的第一个需要。</p></div><div class="g01summary-c" style="--i:1"><em>价值储藏</em><b>不损耗本身就是价值</b><p>一种不会损耗的储藏手段，即使没有收益，也已经让人过得更好。</p></div><div class="g01summary-c warn" style="--i:2"><em>回报的来源</em><b>正的回报最初来自生产</b><p>留种的回报来自地里多长出的粮食，而不是来自任何人的承诺。</p></div><div class="g01summary-c warn" style="--i:3"><em>一个人的极限</em><b>跨越几十年需要别人</b><p>储藏会损耗，年老无收成：跨越一生的储蓄，一个人做不到。</p></div></div>
+  </div>
+</figure>
+<style>
+.g01summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g01summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g01summary-c.warn{border-left-color:var(--warm)}
+.g01summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g01summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g01summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g01summary.in .g01summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g01summary{grid-template-columns:1fr}}
+</style>

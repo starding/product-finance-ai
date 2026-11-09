@@ -1,0 +1,72 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">从工具到代理人</p>
+    <p class="figsub">用户与市场之间的那一环，从听命执行变为自行决定。</p>
+    <div class="seg-btns" role="group" aria-label="切换">
+      <button type="button" data-mode="tool" aria-pressed="true">过去：工具</button>
+      <button type="button" data-mode="agent" aria-pressed="false">现在：代理人</button>
+    </div>
+    <div class="ag" id="ag" data-anim data-mode="tool">
+      <svg viewBox="0 0 640 250" role="img" aria-label="用户、工具或代理人、市场三者的关系">
+        <defs>
+          <marker id="ag-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ag-mk"/></marker>
+        </defs>
+        <!-- 节点 -->
+        <g class="ag-node"><rect x="20" y="95" width="110" height="56" rx="12"/><text x="75" y="129" text-anchor="middle" class="t-ink" font-size="16" font-weight="700">用户</text></g>
+        <g class="ag-node mid"><rect x="265" y="95" width="110" height="56" rx="12"/>
+          <text x="320" y="129" text-anchor="middle" font-size="16" font-weight="700" class="ag-mid-t tool-only">工具</text>
+          <text x="320" y="129" text-anchor="middle" font-size="16" font-weight="700" class="ag-mid-t agent-only">代理人</text></g>
+        <g class="ag-node"><rect x="510" y="95" width="110" height="56" rx="12"/><text x="565" y="129" text-anchor="middle" class="t-ink" font-size="16" font-weight="700">市场</text></g>
+        <!-- 过去 -->
+        <g class="tool-only">
+          <line x1="132" y1="123" x2="261" y2="123" class="ag-flow" marker-end="url(#ag-arr)"/>
+          <text x="196" y="112" text-anchor="middle" font-size="12" class="t-muted">每一步亲自操作</text>
+          <line x1="377" y1="123" x2="506" y2="123" class="ag-flow" marker-end="url(#ag-arr)"/>
+          <text x="441" y="112" text-anchor="middle" font-size="12" class="t-muted">照指令执行</text>
+          <text x="320" y="200" text-anchor="middle" font-size="13" class="t-faint">判断与责任都在用户一侧</text>
+        </g>
+        <!-- 现在 -->
+        <g class="agent-only">
+          <line x1="132" y1="113" x2="261" y2="113" class="ag-flow" marker-end="url(#ag-arr)"/>
+          <text x="196" y="102" text-anchor="middle" font-size="12" class="t-muted">交代目标</text>
+          <line x1="261" y1="135" x2="132" y2="135" class="ag-flow back" marker-end="url(#ag-arr)"/>
+          <text x="196" y="153" text-anchor="middle" font-size="12" class="t-muted">汇报结果</text>
+          <line x1="377" y1="123" x2="506" y2="123" class="ag-flow" marker-end="url(#ag-arr)"/>
+          <text x="441" y="112" text-anchor="middle" font-size="12" class="t-muted">自行决定并执行</text>
+          <g class="ag-q" style="--d:.3s"><rect x="150" y="34" width="120" height="28" rx="14"/><text x="210" y="53" text-anchor="middle" font-size="12">① 能替人做多少</text></g>
+          <g class="ag-q" style="--d:.7s"><rect x="372" y="34" width="120" height="28" rx="14"/><text x="432" y="53" text-anchor="middle" font-size="12">② 交出去的是什么</text></g>
+          <g class="ag-q" style="--d:1.1s"><rect x="150" y="186" width="120" height="28" rx="14"/><text x="210" y="205" text-anchor="middle" font-size="12">③ 出错谁负责</text></g>
+          <g class="ag-q" style="--d:1.5s"><rect x="372" y="186" width="120" height="28" rx="14"/><text x="432" y="205" text-anchor="middle" font-size="12">④ 凭什么信任</text></g>
+        </g>
+      </svg>
+    </div>
+  </div>
+  <figcaption>工具执行用户的每一步指令；代理人接受目标，自行决定步骤。由此产生的四个问题，分别在第三部分与第四部分讨论。</figcaption>
+</figure>
+<style>
+.ag svg{width:100%;height:auto;display:block}
+.ag-node rect{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+.ag-node.mid rect{transition:fill .4s,stroke .4s}
+.ag[data-mode="agent"] .ag-node.mid rect{fill:var(--accent-soft);stroke:var(--accent)}
+.ag-mid-t{fill:var(--ink)}
+.ag-mk{fill:var(--faint)}
+.ag-flow{stroke:var(--faint);stroke-width:1.6;stroke-dasharray:5 5;animation:agflow 1.2s linear infinite}
+.ag-flow.back{stroke:var(--accent)}
+@keyframes agflow{to{stroke-dashoffset:-20}}
+.tool-only,.agent-only{transition:opacity .45s}
+.ag[data-mode="tool"] .agent-only{opacity:0}
+.ag[data-mode="agent"] .tool-only{opacity:0}
+.ag-q{opacity:0;transform:translateY(6px);transform-box:fill-box;transition:opacity .4s,transform .4s}
+.ag[data-mode="agent"] .ag-q{opacity:1;transform:none;transition-delay:var(--d)}
+.ag-q rect{fill:var(--warm-soft);stroke:var(--warm);stroke-width:1}
+.ag-q text{fill:var(--warm);font-weight:500}
+</style>
+<script>
+(function(){
+  const ag=document.getElementById('ag'), btns=[...ag.parentElement.querySelectorAll('[data-mode]')].filter(b=>b.tagName==='BUTTON');
+  let timer;
+  const set=m=>{ag.dataset.mode=m;btns.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===m)));};
+  btns.forEach(b=>b.addEventListener('click',()=>{clearTimeout(timer);set(b.dataset.mode);}));
+  ag.addEventListener('anim-in',()=>{set('tool');clearTimeout(timer);timer=setTimeout(()=>set('agent'),2200);});
+})();
+</script>

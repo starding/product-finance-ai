@@ -1,0 +1,54 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">理论收益更高，还是能坚持到底</p>
+    <p class="figsub">两种方法各模拟 2,000 种 20 年的走势。假设投资者在回撤超过自己能承受的幅度时会放弃，把钱转为存款。拖动能承受的最大回撤，比较两种方法的典型结果。</p>
+    <div class="st12" id="st12" data-anim>
+      <div class="sl"><label for="st12-d">能承受的最大回撤 <b id="st12-dv"></b></label><input id="st12-d" type="range" min="10" max="60" step="5" value="25"></div>
+      <div class="st12-rows">
+        <div class="st12-r"><span>全部买入股票指数<em>预期年收益 8%，波动率 18%</em></span><div class="st12-t"><i id="st12-b1"></i><b class="ref" id="st12-r1"></b></div><strong id="st12-v1"></strong><small id="st12-q1"></small></div>
+        <div class="st12-r"><span>股六债四，定期再平衡<em>预期年收益 6.2%，波动率 11%</em></span><div class="st12-t"><i id="st12-b2" class="b"></i><b class="ref" id="st12-r2"></b></div><strong id="st12-v2"></strong><small id="st12-q2"></small></div>
+      </div>
+      <p class="st12-msg" id="st12-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意模拟：起点 100，每年收益独立抽取；放弃后按年利率 2% 计息直到第 20 年。竖线为假如始终坚持时的典型结果（中位数）。参数不对应任何具体产品。思路来自作者关于 Buy and Hold 基准的文章（2025-03-07）。</figcaption>
+</figure>
+<style>
+.st12-r{display:grid;grid-template-columns:190px 1fr 64px;gap:4px 10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.st12-r span{font-size:13px;font-weight:500;line-height:1.4}
+.st12-r em{display:block;font-style:normal;font-size:11px;color:var(--faint);font-weight:400}
+.st12-t{position:relative;height:20px;background:var(--quote);border-radius:5px}
+.st12-t i{position:absolute;left:0;top:0;bottom:0;background:var(--warm);border-radius:5px;transition:width .4s ease}
+.st12-t i.b{background:var(--accent)}
+.st12-t b.ref{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink);transition:left .4s}
+.st12-r strong{text-align:right;font-size:17px;font-variant-numeric:tabular-nums}
+.st12-r small{grid-column:2/-1;font-size:12px;color:var(--muted)}
+.st12-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.st12-r{grid-template-columns:1fr 64px}.st12-r span{grid-column:1/-1}.st12-r small{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const N=2000,T=20,S=[{m:0.08,s:0.18},{m:0.062,s:0.11}];
+  let seed=31; const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
+  const g=()=>{let u=0,v=0;while(!u)u=rnd();v=rnd();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);};
+  const Z=Array.from({length:N},()=>Array.from({length:T},g));
+  const d=document.getElementById('st12-d');
+  const med=a=>{const s=a.slice().sort((p,q)=>p-q);return s[Math.floor(s.length/2)];};
+  function sim(k,tol){const {m,s}=S[k],mu=Math.log(1+m)-s*s/2;let quit=0;const out=Z.map(z=>{let v=100,peak=100,q=false;for(let t=0;t<T;t++){if(q){v*=1.02;continue;}v*=Math.exp(mu+s*z[t]);peak=Math.max(peak,v);if(v/peak-1<-tol){q=true;quit++;}}return v;});
+    const hold=Z.map(z=>{let v=100;for(let t=0;t<T;t++)v*=Math.exp(mu+s*z[t]);return v;});
+    return {med:med(out),hold:med(hold),quit:quit/N};}
+  function render(){
+    const tol=+d.value/100; d.value; document.getElementById('st12-dv').textContent=d.value+'%';
+    const A=sim(0,tol),B=sim(1,tol), MX=500, w=v=>Math.min(100,v/MX*100)+'%';
+    document.getElementById('st12-b1').style.width=w(A.med);document.getElementById('st12-r1').style.left=w(A.hold);
+    document.getElementById('st12-b2').style.width=w(B.med);document.getElementById('st12-r2').style.left=w(B.hold);
+    document.getElementById('st12-v1').textContent=Math.round(A.med);document.getElementById('st12-v2').textContent=Math.round(B.med);
+    document.getElementById('st12-q1').textContent=`${Math.round(A.quit*100)}% 的人中途放弃；若始终坚持，典型结果为 ${Math.round(A.hold)}`;
+    document.getElementById('st12-q2').textContent=`${Math.round(B.quit*100)}% 的人中途放弃；若始终坚持，典型结果为 ${Math.round(B.hold)}`;
+    document.getElementById('st12-msg').textContent=A.med<B.med?'在这个承受能力下，理论收益更低、但更容易坚持的方法，实际典型结果反而更好。':'在这个承受能力下，投资者大多能坚持全股票的方法，理论收益更高的方法胜出。';
+  }
+  d.addEventListener('input',render);
+  document.getElementById('st12').addEventListener('anim-in',()=>{let v=60;d.value=v;render();const id=setInterval(()=>{v-=5;d.value=v;render();if(v<=25)clearInterval(id);},300);});
+  render();
+})();
+</script>

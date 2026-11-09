@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: money</p><p class="figsub">Four conclusions, each tied to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="g04summary">Replay</button></div>
+    <div class="g04summary" id="g04summary" data-anim><div class="g04summary-c" style="--i:0"><em>Medium of exchange</em><b>An exchange only has to match on one side</b><p>One thing that everyone accepts frees exchange from the need for a double coincidence.</p></div><div class="g04summary-c" style="--i:1"><em>Unit of account</em><b>A common yardstick</b><p>Ten goods mean forty-five rates to remember; with money, ten prices are enough.</p></div><div class="g04summary-c warn" style="--i:2"><em>Record</em><b>Money is a convenient record</b><p>It records who has given to others; the more reliable the record, the more exchanges can rest on it.</p></div><div class="g04summary-c warn" style="--i:3"><em>Belief and discipline</em><b>Value rests on belief and discipline in issuing</b><p>If people stop believing the next person will accept it, or issuance loses its discipline, money loses value.</p></div></div>
+  </div>
+</figure>
+<style>
+.g04summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g04summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g04summary-c.warn{border-left-color:var(--warm)}
+.g04summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g04summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g04summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g04summary.in .g04summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g04summary{grid-template-columns:1fr}}
+</style>

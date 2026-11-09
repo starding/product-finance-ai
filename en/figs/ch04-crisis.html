@@ -1,0 +1,67 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">In a sell-off, assets fall together</p>
+    <p class="figsub">The same 30-stock portfolio. Example: suppose the correlation between stocks is 0.25 in calm markets and rises to 0.7 in a sharp fall. Switch the market state and see how much of the benefit of diversification remains.</p>
+    <div class="seg-btns" role="group" aria-label="Market state">
+      <button type="button" data-cs="calm" aria-pressed="true">Calm market</button>
+      <button type="button" data-cs="crisis" aria-pressed="false">Sharply falling market</button>
+    </div>
+    <div class="cs4" id="cs4" data-anim>
+      <svg viewBox="0 0 640 220" role="img" aria-label="Portfolio volatility against number of stocks held in two market states">
+        <g id="cs4-axis"></g>
+        <path id="cs4-calm" class="cs4-l calm"/><path id="cs4-cri" class="cs4-l cri"/>
+        <line id="cs4-cur" class="cs4-cur" y1="14" y2="186"/>
+        <circle id="cs4-dot" r="6" class="cs4-dot"/>
+      </svg>
+      <div class="cs4-out">
+        <div><span>Annual volatility of one stock</span><b>35%</b></div>
+        <div><span>Annual volatility of a 30-stock portfolio</span><b id="cs4-v"></b></div>
+        <div><span>Share of risk removed by diversification</span><b id="cs4-p"></b></div>
+      </div>
+      <p class="cs4-msg" id="cs4-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Example parameters. Only the correlation changes; the volatility of a single stock stays at 35% (in reality volatility itself also rises in a sell-off). For evidence that correlations rise in falling markets, see Longin and Solnik (2001), who studied correlations between national stock markets.</figcaption>
+</figure>
+<style>
+.cs4 svg{width:100%;height:auto;display:block}
+.cs4-l{fill:none;stroke-width:2.5;transition:opacity .4s}
+.cs4-l.calm{stroke:var(--accent)} .cs4-l.cri{stroke:var(--warm)}
+.cs4[data-s="calm"] .cs4-l.cri{opacity:.25} .cs4[data-s="crisis"] .cs4-l.calm{opacity:.25}
+.cs4-cur{stroke:var(--faint);stroke-dasharray:3 3}
+.cs4-dot{fill:var(--ink);transition:cy .6s ease}
+.cs4-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.cs4-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.cs4-out span{display:block;font-size:12px;color:var(--faint)}
+.cs4-out b{font-size:19px;font-variant-numeric:tabular-nums}
+.cs4-msg{font-size:14px;margin:8px 0 0;min-height:1.7em}
+@media (max-width:640px){.cs4-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const S=0.35, X0=50, X1=620, YT=14, YB=186, KMAX=100;
+  const vol=(k,r)=>Math.sqrt(S*S*(r+(1-r)/k));
+  const x=k=>X0+Math.log10(k)/Math.log10(KMAX)*(X1-X0), y=v=>YB-v/0.38*(YB-YT);
+  let a=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`;
+  [1,2,5,10,30,100].forEach(k=>a+=`<text x="${x(k)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${k}</text>`);
+  [0.1,0.2,0.3].forEach(v=>a+=`<line x1="${X0}" y1="${y(v)}" x2="${X1}" y2="${y(v)}" class="s-line"/><text x="${X0-8}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text>`);
+  a+=`<text x="${x(60)}" y="${y(vol(60,0.25))-8}" text-anchor="middle" font-size="11" class="t-accent">Calm</text><text x="${x(60)}" y="${y(vol(60,0.7))-8}" text-anchor="middle" font-size="11" class="t-warm">Sharp fall</text>`;
+  document.getElementById('cs4-axis').innerHTML=a;
+  const ks=[];for(let i=0;i<=150;i++)ks.push(Math.pow(KMAX,i/150));
+  const P=r=>'M'+ks.map(k=>`${x(k).toFixed(1)},${y(vol(k,r)).toFixed(1)}`).join('L');
+  document.getElementById('cs4-calm').setAttribute('d',P(0.25)); document.getElementById('cs4-cri').setAttribute('d',P(0.7));
+  const cur=document.getElementById('cs4-cur');cur.setAttribute('x1',x(30));cur.setAttribute('x2',x(30));
+  const cs=document.getElementById('cs4');
+  function set(k){
+    cs.dataset.s=k; document.querySelectorAll('[data-cs]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.cs===k)));
+    const r=k==='calm'?0.25:0.7, v=vol(30,r), removed=1-v*v/(S*S);
+    const d=document.getElementById('cs4-dot');d.setAttribute('cx',x(30));d.setAttribute('cy',y(v));
+    document.getElementById('cs4-v').textContent=(v*100).toFixed(1)+'%';
+    document.getElementById('cs4-p').textContent=(removed*100).toFixed(0)+'%';
+    document.getElementById('cs4-msg').textContent=k==='calm'?'In calm markets, a 30-stock portfolio diversifies away most of the risk of a single stock.':'In a sharp fall, stocks fall together; the same portfolio is nearly as volatile as a single stock, and the benefit of diversification shrinks sharply.';
+  }
+  document.querySelectorAll('[data-cs]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.cs)));
+  cs.addEventListener('anim-in',()=>{set('calm');setTimeout(()=>set('crisis'),2200);});
+  set('calm');
+})();
+</script>

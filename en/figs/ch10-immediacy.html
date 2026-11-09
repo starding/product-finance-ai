@@ -1,0 +1,78 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">Buyers and sellers do not arrive at the same time</p>
+    <p class="figsub">Buyers (top) and sellers (bottom) arriving at random over one hour. Switch the market maker on and off to compare waiting times and the price paid.</p>
+    <div class="seg-btns" role="group" aria-label="With or without a market maker">
+      <button type="button" data-im="0" aria-pressed="true">No market maker: wait for a counterparty</button>
+      <button type="button" data-im="1" aria-pressed="false">Market maker: trade at once</button>
+    </div>
+    <div class="im" id="im" data-anim>
+      <svg viewBox="0 0 640 190" role="img" aria-label="Arrival times of buyers and sellers and how they trade">
+        <g id="im-axis"></g>
+        <g id="im-links"></g>
+        <g id="im-dots"></g>
+        <g class="im-mm" id="im-mm"><rect x="4" y="80" width="80" height="30" rx="8"/><text x="44" y="99" text-anchor="middle" font-size="10.5" font-weight="700">Market maker</text></g>
+      </svg>
+      <div class="im-out">
+        <div><span>Average wait</span><b id="im-w"></b></div>
+        <div><span>Spread paid per trade</span><b id="im-c"></b></div>
+      </div>
+      <p class="im-msg" id="im-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative simulation: buyers and sellers each arrive on average once every 4 minutes, at random times. Without a market maker, whoever arrives first waits for the next counterparty, and traders are paired in order of arrival. The spread is an example value. The idea comes from Demsetz (1968).</figcaption>
+</figure>
+<style>
+.im svg{width:100%;height:auto;display:block}
+.im-b{fill:var(--accent)} .im-s{fill:var(--warm)}
+.im-wait{stroke:var(--faint);stroke-width:3;opacity:.5}
+.im-link{stroke:var(--ink);stroke-width:1;opacity:.35}
+.im-mml{stroke:var(--accent);stroke-width:1;opacity:.45}
+.im-mm{opacity:0;transition:opacity .4s}
+.im-mm rect{fill:var(--accent-soft);stroke:var(--accent)}
+.im-mm text{fill:var(--ink)}
+.im[data-m="1"] .im-mm{opacity:1}
+.im-out{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.im-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.im-out span{display:block;font-size:12px;color:var(--faint)}
+.im-out b{font-size:20px;font-variant-numeric:tabular-nums}
+.im-msg{font-size:14px;margin:8px 0 0;min-height:1.7em}
+</style>
+<script>
+(function(){
+  const T=60,X0=96,X1=630,YB=40,YS=150,x=t=>X0+t/T*(X1-X0);
+  let seed=17; const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
+  const arr=()=>{const a=[];let t=0;while(true){t+=-4*Math.log(1-rnd());if(t>T)break;a.push(t);}return a;};
+  const B=arr(), S=arr();
+  let ax=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-line"/><line x1="${X0}" y1="${YS}" x2="${X1}" y2="${YS}" class="s-line"/>`;
+  ax+=`<text x="${X0-8}" y="${YB+4}" text-anchor="end" font-size="12" class="t-accent">Buyers</text><text x="${X0-8}" y="${YS+4}" text-anchor="end" font-size="12" class="t-warm">Sellers</text>`;
+  [0,15,30,45,60].forEach(t=>ax+=`<text x="${x(t)}" y="182" text-anchor="middle" font-size="11" class="t-faint">${t} min</text>`);
+  document.getElementById('im-axis').innerHTML=ax;
+  document.getElementById('im-dots').innerHTML=B.map(t=>`<circle class="im-b" cx="${x(t)}" cy="${YB}" r="5"/>`).join('')+S.map(t=>`<circle class="im-s" cx="${x(t)}" cy="${YS}" r="5"/>`).join('');
+  const im=document.getElementById('im'), links=document.getElementById('im-links');
+  function set(m){
+    im.dataset.m=m; document.querySelectorAll('[data-im]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.im===m)));
+    let h='', waits=[];
+    if(m===0){
+      const n=Math.min(B.length,S.length);
+      for(let i=0;i<n;i++){const tb=B[i],ts=S[i],tm=Math.max(tb,ts);waits.push(tm-Math.min(tb,ts));
+        const early=tb<ts?['b',tb]:['s',ts], yE=early[0]==='b'?YB:YS;
+        h+=`<line class="im-wait" x1="${x(early[1])}" y1="${yE}" x2="${x(tm)}" y2="${yE}"/><line class="im-link" x1="${x(tm)}" y1="${YB}" x2="${x(tm)}" y2="${YS}"/>`;}
+      const w=waits.reduce((s,v)=>s+v,0)/waits.length;
+      document.getElementById('im-w').textContent=w.toFixed(1)+' min';
+      document.getElementById('im-c').textContent='0';
+      document.getElementById('im-msg').textContent=`${B.length-n+S.length-n>0?(B.length+S.length-2*n)+' more traders never found a counterparty. ':''}Whoever arrives first must wait for a counterparty, and the price may change while they wait.`;
+    } else {
+      B.forEach(t=>h+=`<line class="im-mml" x1="${x(t)}" y1="${YB}" x2="44" y2="80"/>`);
+      S.forEach(t=>h+=`<line class="im-mml" x1="${x(t)}" y1="${YS}" x2="44" y2="110"/>`);
+      document.getElementById('im-w').textContent='0 min';
+      document.getElementById('im-c').textContent='Half the spread';
+      document.getElementById('im-msg').textContent='The market maker trades with each arrival at once, bridging the mismatch in timing between the two sides; each trade pays half the spread as the price of this service.';
+    }
+    links.innerHTML=h;
+  }
+  document.querySelectorAll('[data-im]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.im)));
+  im.addEventListener('anim-in',()=>{set(0);setTimeout(()=>set(1),2800);});
+  set(0);
+})();
+</script>

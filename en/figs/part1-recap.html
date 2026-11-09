@@ -1,0 +1,41 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Summary of Part One: what each term of the equation yields</p><p class="figsub">Switch views: each term's conclusion, its implications for financial products, and its implications for AI entering financial products.</p></div><button class="replay" type="button" data-replay="rc1">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="View">
+      <button type="button" data-rv="c" aria-pressed="true">Conclusions</button>
+      <button type="button" data-rv="p" aria-pressed="false">Implications for products</button>
+      <button type="button" data-rv="a" aria-pressed="false">Implications for AI</button>
+    </div>
+    <div class="rc1" id="rc1" data-anim></div>
+  </div>
+  <figcaption>Each row corresponds to one section of Part One; chapter numbers are shown beneath each term.</figcaption>
+</figure>
+<style>
+.rc1{display:grid;gap:6px}
+.rc1-r{display:grid;grid-template-columns:150px 1fr;gap:12px;align-items:center;padding:10px 12px;border-radius:10px;background:var(--quote);opacity:0;transform:translateY(6px);transition:opacity .4s,transform .4s;transition-delay:calc(var(--i)*.15s)}
+.rc1.in .rc1-r{opacity:1;transform:none}
+.rc1-r b{font-size:14px;display:block}
+.rc1-r em{font-style:normal;font-size:11px;color:var(--faint)}
+.rc1-r p{margin:0;font-size:13.5px;line-height:1.6}
+.rc1-r.keep{background:rgba(160,120,24,.1)}
+.rc1-r .sign{display:inline-block;width:18px;color:var(--faint);font-weight:700}
+@media (max-width:640px){.rc1-r{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const R=[
+    ['＋','Time compensation','2',{c:'Waiting deserves compensation in itself; the compensation must be measured in purchasing power, and maturity must match when the money is needed.',p:'State the horizon and basis of any quoted return, and ask first when the money will be needed.',a:'AI can help users spell out when they will need the money, but it cannot create time compensation.'}],
+    ['＋','Risk compensation','3–6',{c:'Only systematic risk that cannot be diversified away is compensated; volatility drags down compound returns; long-term returns decompose into a few factors.',p:'Make diversification the default; describe outcomes with compound returns, medians and drawdowns; use factors to show where returns come from.',a:'AI is well suited to estimating risk, breaking down factor exposures, and keeping the discipline of diversification and rebalancing.'}],
+    ['＋','Information advantage','7–9',{c:'Prices are hard to predict; public information enters prices within minutes; information advantage is zero-sum and is used up by competition.',p:'Do not promise to predict direction; mark news with its time and how far it is already reflected; do not encourage trading without an edge.',a:'AI makes analysis cheap, so the edge from analysis shrinks as it spreads; the value of AI does not lie in predicting prices.'}],
+    ['－','Trading costs','10–11',{c:'Spreads, market impact and rules make trading negative-sum in aggregate; liquidity is the first thing to vanish when it is needed most.',p:'Show the true cost before an order is placed; fill non-urgent trades patiently; warn of risk in turbulent markets.',a:'AI can lower execution costs and choose suitable orders and timing; this is value that can last.'}],
+    ['＋','Luck','12',{c:'Active management underperforms in aggregate, and after fees most funds\' true excess return is negative; short-term performance is mostly luck; the returns investors receive are often lower than the returns of the products they hold.',p:'Do not recommend by short-term rankings; show users their own money-weighted returns; recommend methods by how well they can be stuck to.',a:'AI can help users keep to their plans and chase performance less, narrowing the gap between theory and practice.'}],
+    ['','Premise: promises kept','13–14',{c:'Credence goods need institutions: disclosure, custody, central counterparties, suitability, conflict-of-interest management and deposit insurance.',p:'Design verifiability, custody, suitability and conflict-of-interest disclosure as product features.',a:'An AI agent is a new kind of promisor, and it too needs a verifiable process, clear responsibility and aligned interests.'}]
+  ];
+  const box=document.getElementById('rc1');
+  function set(v){document.querySelectorAll('[data-rv]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.rv===v)));
+    box.innerHTML=R.map(([s,n,ch,t],i)=>`<div class="rc1-r${n.startsWith('Premise')?' keep':''}" style="--i:${i}"><div><b><span class="sign">${s}</span>${n}</b><em>Ch. ${ch}</em></div><p>${t[v]}</p></div>`).join('');
+    box.classList.remove('in');void box.offsetWidth;box.classList.add('in');}
+  document.querySelectorAll('[data-rv]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.rv)));
+  set('c'); box.classList.remove('in');
+})();
+</script>

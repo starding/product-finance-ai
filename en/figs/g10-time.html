@@ -1,0 +1,35 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Manage it yourself, or pay someone</p><p class="figsub">Drag a household's wealth and the hours per week it would take to study shipping itself, and compare the time spent managing it yourself with the fee paid each year for someone else to manage it.</p></div><button class="replay" type="button" data-replay="tm">Replay</button></div>
+    <div class="tm" id="tm" data-anim>
+      <div class="tm-b"><span>Do it yourself: time spent, in grain</span><div><i id="tm-s" style="background:var(--warm)"></i></div><b id="tm-sv"></b></div>
+      <div class="tm-b"><span>Pay someone: fee per year</span><div><i id="tm-f" style="background:var(--blue)"></i></div><b id="tm-fv"></b></div>
+      <div class="tm-sl">
+        <div class="sl"><label for="tm-w">Wealth <b id="tm-wv"></b></label><input id="tm-w" type="range" min="20" max="1000" step="20" value="200"></div>
+        <div class="sl"><label for="tm-h">Hours needed per week <b id="tm-hv"></b></label><input id="tm-h" type="range" min="0" max="10" step="0.5" value="3"></div>
+      </div>
+      <p class="tm-msg" id="tm-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: each hour spent on research, if spent farming instead, would yield 0.05 portions more grain; having someone manage the shares costs 1.5% of wealth a year in fees.</figcaption>
+</figure>
+<style>
+.tm-b{display:grid;grid-template-columns:13em 1fr 4.5em;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.tm-b div{height:16px;background:var(--quote);border-radius:4px;overflow:hidden}
+.tm-b i{display:block;height:100%;transition:width .3s}
+.tm-b b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.tm-sl{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.tm-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.tm-b{grid-template-columns:1fr 4.5em}.tm-b span{grid-column:1/-1}.tm-sl{grid-template-columns:1fr;gap:4px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  function draw(){const w=+$('tm-w').value,h=+$('tm-h').value,s=h*52*.05,f=w*.015,M=Math.max(s,f,10);
+    $('tm-s').style.width=s/M*100+'%';$('tm-f').style.width=f/M*100+'%';$('tm-sv').textContent=s.toFixed(1);$('tm-fv').textContent=f.toFixed(1);$('tm-wv').textContent=w+' portions';$('tm-hv').textContent=h+(h===1?' hour':' hours');
+    $('tm-msg').textContent=h===0?'Spending no time managing it yourself means leaving it unattended: that too is a choice, and its price is that no one is looking after it.':s>f?`Spending ${h} hours a week means ${s.toFixed(1)} portions less grain a year, more than the ${f.toFixed(1)}-portion fee for paying someone: for households without much wealth, paying someone is the better deal.`:`The more wealth, the higher the fee: ${w} portions of wealth cost ${f.toFixed(1)} portions a year, more than the ${s.toFixed(1)} portions your own time would cost. Wealthier households either manage it themselves or look for a cheaper form of delegation.`;}
+  ['tm-w','tm-h'].forEach(k=>$(k).addEventListener('input',draw));
+  $('tm').addEventListener('anim-in',()=>{let v=20;$('tm-w').value=v;draw();const id=setInterval(()=>{v+=40;$('tm-w').value=Math.min(v,1000);draw();if(v>=1000)clearInterval(id);},120);});
+  draw();
+})();
+</script>

@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">What this step leaves open</p><p class="figsub">Six questions to be derived again. Select a question to see the assumption behind it.</p></div><button class="replay" type="button" data-replay="nx13">Replay</button></div>
+    <div class="nx" id="nx13" data-anim>
+      <div class="nx-src"><b>Scribes</b><span>The price of cognitive labour collapses</span></div>
+      <div class="nx-list" id="nx13-l"></div>
+    </div>
+    <p class="nx-msg" id="nx13-msg" aria-live="polite"></p>
+  </div>
+</figure>
+<style>
+.nx{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:center}
+.nx-src{background:var(--ink);color:var(--bg);border-radius:10px;padding:14px 10px;text-align:center}
+.nx-src b{display:block;font-size:16px} .nx-src span{font-size:12px;opacity:.75}
+.nx-list{display:grid;gap:6px}
+.nx-i{font:inherit;text-align:left;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:9px 12px;color:var(--ink);opacity:0;transform:translateX(-8px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.3s)}
+.nx.in .nx-i{opacity:1;transform:none}
+.nx-i span{font-size:13.5px} .nx-i em{font-style:normal;font-size:11.5px;color:var(--faint);white-space:nowrap}
+.nx-i.sel{border-color:var(--accent)}
+.nx-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.nx{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const Q=[['The boundary of delegation','Chapter 14','The assumption: the cost of delegation is mainly the labour of research and comparison. If so, households without much wealth should also be able to afford a personal agent; if checking and bearing responsibility are the larger part, the boundary moves only a little.'],
+    ['Commitment and guarantees','Chapter 15','The assumption: whoever does the work has property to pledge and a reputation to lose. The scribes have neither. Who will guarantee their actions, and how can what they did be checked?'],
+    ['Competition over information','Chapter 16','The assumption: information advantages exist because few people read reports and do analysis. When everyone has a scribe, advantages wear away faster, and new asymmetries appear elsewhere.'],
+    ['Participants in the market','Chapter 17','The assumption: buying and selling are done by many people each making their own judgement. When scribes place orders directly and resemble one another, will they all make the same decisions at the same time?'],
+    ['Human bias','Chapter 18','The assumption: defaults can only be designed for the majority. Scribes can adjust for each household at any moment, but the same ability can also be used to exploit people\'s biases.'],
+    ['What does not change','Chapter 19','The assumption: new technology can solve every problem. Time, risk and irreversible losses do not disappear because of the scribes.']];
+  const l=document.getElementById('nx13-l'),msg=document.getElementById('nx13-msg');
+  l.innerHTML=Q.map((q,i)=>`<button type="button" class="nx-i" style="--i:${i}" data-i="${i}"><span>${q[0]}</span><em>→ ${q[1]}</em></button>`).join('');
+  const bs=[...l.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));msg.textContent=Q[i][2];}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('nx13').addEventListener('anim-in',()=>{[0,1,2,3,4,5].forEach((i,k)=>setTimeout(()=>set(i),1600+k*1800));});
+  set(0);
+})();
+</script>

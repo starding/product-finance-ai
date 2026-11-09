@@ -1,0 +1,29 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">一把共同的尺子</p><p class="figsub">拖动物产的种类数。没有记账单位时，每两种物品之间都要记一个兑换比例；有了货币，每种物品只需一个价格。</p></div><button class="replay" type="button" data-replay="un">重播</button></div>
+    <div class="un" id="un" data-anim>
+      <div class="un-grid"><div><b>没有记账单位</b><div class="un-dots" id="un-a"></div><span id="un-av"></span></div><div><b>以货币为单位</b><div class="un-dots" id="un-m"></div><span id="un-mv"></span></div></div>
+      <div class="sl"><label for="un-k">物产的种类 <b id="un-kv"></b></label><input id="un-k" type="range" min="2" max="20" step="1" value="10"></div>
+    </div>
+  </div>
+  <figcaption>没有记账单位时，比例的个数为 种类数 ×（种类数 − 1）÷ 2；以货币为单位时，每种物品各有一个价格，价格的个数等于物品的种类数（货币本身不在其中）。</figcaption>
+</figure>
+<style>
+.un-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.un-grid>div{background:var(--quote);border-radius:10px;padding:10px 12px}
+.un-grid b{font-size:14px} .un-grid span{display:block;font-size:13px;margin-top:6px;font-variant-numeric:tabular-nums}
+.un-dots{display:flex;flex-wrap:wrap;gap:2px;margin-top:8px;min-height:60px;align-content:flex-start}
+.un-dots i{width:7px;height:7px;border-radius:2px;background:var(--warm)}
+#un-m i{background:var(--accent)}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  function draw(){const k=+$('un-k').value,a=k*(k-1)/2,m=k;$('un-kv').textContent=k+' 种';
+    $('un-a').innerHTML='<i></i>'.repeat(a);$('un-m').innerHTML='<i></i>'.repeat(m);
+    $('un-av').textContent=`要记 ${a} 个兑换比例`;$('un-mv').textContent=`只需 ${m} 个价格`;}
+  $('un-k').addEventListener('input',draw);
+  $('un').addEventListener('anim-in',()=>{let v=2;$('un-k').value=2;draw();const id=setInterval(()=>{v++;$('un-k').value=v;draw();if(v>=20)clearInterval(id);},180);});
+  draw();
+})();
+</script>

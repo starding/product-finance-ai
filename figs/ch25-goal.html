@@ -1,0 +1,41 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">同一个愿望，三种衡量方式</p>
+    <p class="figsub">委托人说要“稳健增值”。选择一种衡量方式，看代理据此推出的配置（示意）。</p>
+    <div class="seg-btns" role="group" aria-label="衡量方式">
+      <button type="button" data-gl="dd" aria-pressed="true">最大回撤不超过 10%</button>
+      <button type="button" data-gl="vol" aria-pressed="false">年化波动不超过 8%</button>
+      <button type="button" data-gl="cap" aria-pressed="false">无论如何不亏本金</button>
+    </div>
+    <div class="gl" id="gl" data-anim>
+      <div class="gl-bar" id="gl-bar"></div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>股票</span><span><i style="background:var(--blue)"></i>债券</span><span><i style="background:var(--gold)"></i>存款与货币基金</span></div>
+      <div class="gl-out"><div><span>长期预期年化回报（示意）</span><b id="gl-r"></b></div><div><span>历史上最坏一年（示意）</span><b id="gl-w"></b></div></div>
+      <p class="gl-msg" id="gl-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意数字。股票与债券的长期回报与回撤只表示方向，不对应任何市场的估计。</figcaption>
+</figure>
+<style>
+.gl-bar{display:flex;height:36px;border-radius:8px;overflow:hidden}
+.gl-bar i{display:flex;align-items:center;justify-content:center;font-style:normal;font-size:12px;color:#fff;transition:width .6s ease;white-space:nowrap;overflow:hidden}
+.gl-out{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.gl-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.gl-out span{display:block;font-size:12px;color:var(--faint)} .gl-out b{font-size:19px;font-variant-numeric:tabular-nums}
+.gl-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const S={dd:[[25,'var(--accent)'],[55,'var(--blue)'],[20,'var(--gold)'],4.1,'－9%','回撤上限约束的是最坏的一段下跌：股票只能占四分之一左右，其余放在债券与现金。'],
+    vol:[[40,'var(--accent)'],[50,'var(--blue)'],[10,'var(--gold)'],5.0,'－16%','波动上限约束的是平均起伏：股票可以多一些，但最坏的一年可能跌得比委托人预想的多。'],
+    cap:[[0,'var(--accent)'],[15,'var(--blue)'],[85,'var(--gold)'],2.2,'0%','不亏本金几乎排除了一切有风险的资产：本金安全，但长期回报可能跑不赢通胀。']};
+  const bar=document.getElementById('gl-bar');
+  function set(k){document.querySelectorAll('[data-gl]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.gl===k)));const s=S[k];
+    bar.innerHTML=[s[0],s[1],s[2]].map(([w,c])=>`<i style="background:${c};width:0" data-w="${w}">${w>=12?w+'%':''}</i>`).join('');
+    setTimeout(()=>bar.querySelectorAll('i').forEach(i=>i.style.width=i.dataset.w+'%'),40);
+    document.getElementById('gl-r').textContent=s[3].toFixed(1)+'%';document.getElementById('gl-w').textContent=s[4];document.getElementById('gl-msg').textContent=s[5];}
+  document.querySelectorAll('[data-gl]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.gl)));
+  document.getElementById('gl').addEventListener('anim-in',()=>{['dd','vol','cap','dd'].forEach((k,i)=>setTimeout(()=>set(k),i*2000));});
+  set('dd');
+})();
+</script>

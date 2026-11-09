@@ -1,0 +1,42 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">用一组抽奖测量风险意愿</p>
+    <p class="figsub">每一行在稳妥的甲与冒险的乙之间选一个。从上往下，乙得到高奖金的概率逐步提高。点按从哪一行开始改选乙。</p>
+    <div class="ht" id="ht" data-anim>
+      <div class="ht-tb" id="ht-tb"></div>
+      <label class="ht-chk"><input type="checkbox" id="ht-x"> 刚刚经历了一次大跌</label>
+      <p class="ht-msg" id="ht-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>选项按 Holt 与 Laury（2002）的设计，金额单位为元。风险中性的人在第 5 行改选乙；越晚改选，越厌恶风险。“经历大跌”的效果为示意，方向依据 Guiso、Sapienza 与 Zingales（2018）。</figcaption>
+</figure>
+<style>
+.ht-tb{display:grid;gap:3px}
+.ht-r{font:inherit;display:grid;grid-template-columns:30px 1fr 1fr 100px;gap:8px;align-items:center;font-size:12.5px;border:1.5px solid transparent;border-radius:7px;padding:4px 8px;background:var(--quote);color:var(--ink);cursor:pointer;text-align:left}
+.ht-r em{font-style:normal;color:var(--faint)}
+.ht-r span{border-radius:5px;padding:2px 6px}
+.ht-r .on{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.ht-r .onb{background:var(--warm-soft);color:var(--warm);font-weight:600}
+.ht-r.sw{border-color:var(--ink)}
+.ht-r b{white-space:nowrap;font-weight:400;font-size:11.5px;color:var(--faint);text-align:right}
+.ht-chk{display:flex;gap:6px;align-items:center;font-size:14px;margin-top:10px}
+.ht-chk input{accent-color:var(--accent);width:16px;height:16px}
+.ht-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.ht-r{grid-template-columns:22px 1fr 1fr;font-size:11.5px}.ht-r b{display:none}}
+</style>
+<script>
+(function(){
+  const tb=document.getElementById('ht-tb'),x=document.getElementById('ht-x');let sw=5;
+  tb.innerHTML=Array.from({length:10},(_,i)=>{const p=(i+1)/10,ea=p*2+(1-p)*1.6,eb=p*3.85+(1-p)*.1;
+    return `<button type="button" class="ht-r" data-i="${i+1}"><em>${i+1}</em><span>甲：${i+1}/10 得 2.00，否则 1.60</span><span>乙：${i+1}/10 得 3.85，否则 0.10</span><b>期望差 ${(eb-ea>=0?'＋':'－')+Math.abs(eb-ea).toFixed(2)}</b></button>`;}).join('');
+  const rs=[...tb.children];
+  function show(){const s=Math.min(11,sw+(x.checked?2:0));
+    rs.forEach((r,i)=>{const n=i+1,[a,b]=r.querySelectorAll('span');a.className=n<s?'on':'';b.className=n>=s?'onb':'';r.classList.toggle('sw',n===s);});
+    const t=s<=4?'偏好风险':s===5?'接近风险中性':s<=7?'中等程度的风险厌恶':'较强的风险厌恶';
+    document.getElementById('ht-msg').textContent=(s>10?'十行都选择甲：极强的风险厌恶。':`从第 ${s} 行开始改选乙：${t}。`)+(x.checked?'同一个人在大跌之后，改选的位置往往会向下移动；测得的意愿反映的是当时的状态。':'第 5 行起，乙的期望收益已经高于甲。');}
+  rs.forEach(r=>r.addEventListener('click',()=>{sw=+r.dataset.i-(x.checked?2:0);sw=Math.max(1,sw);show();}));
+  x.addEventListener('change',show);
+  document.getElementById('ht').addEventListener('anim-in',()=>{x.checked=false;sw=7;show();setTimeout(()=>{x.checked=true;show();},2200);setTimeout(()=>{x.checked=false;show();},4400);});
+  sw=7;show();
+})();
+</script>

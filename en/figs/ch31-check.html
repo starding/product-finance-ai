@@ -1,0 +1,40 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Checking a design with twelve questions</p><p class="figsub">Answer the questions one by one, or choose an example product. Each layer's score bar shows how many questions remain unresolved.</p></div></div>
+    <div class="seg-btns" role="group" aria-label="Example"><button type="button" data-ck="a" aria-pressed="false">A product that chases returns only</button><button type="button" data-ck="b" aria-pressed="false">A product designed by the principles</button><button type="button" data-ck="c" aria-pressed="false">Clear</button></div>
+    <div class="ck" id="ck" data-anim>
+      <div class="ck-sc" id="ck-sc"></div>
+      <div class="ck-list" id="ck-list"></div>
+    </div>
+    <p class="ck-msg" id="ck-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>Illustrative checklist. Each question answered "no" corresponds to a foreseeable loss in some term of net value.</figcaption>
+</figure>
+<style>
+.ck-sc{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px}
+.ck-sc div{background:var(--quote);border-radius:8px;padding:6px 8px;font-size:12px}
+.ck-sc b{display:block;font-size:13px}
+.ck-st{height:8px;background:var(--surface);border-radius:4px;overflow:hidden;margin-top:4px}
+.ck-st i{display:block;height:100%;background:var(--accent);border-radius:4px;transition:width .4s}
+.ck-list{display:grid;gap:4px}
+.ck-i{display:grid;grid-template-columns:44px minmax(0,1fr);gap:8px;align-items:center;font-size:12.5px;background:var(--quote);border-radius:7px;padding:5px 9px;cursor:pointer}
+.ck-i input{accent-color:var(--accent);width:16px;height:16px;justify-self:center}
+.ck-i em{font-style:normal;font-size:11px;color:var(--faint)}
+.ck-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.ck-sc{grid-template-columns:1fr 1fr}}
+</style>
+<script>
+(function(){
+  const Q=[["Value", "Can markets provide, the product deliver and users verify what is promised?"], ["Value", "Does it state what users get, what they give up and what risk they bear?"], ["Value", "Does the value not depend on predicting better than others?"], ["Contract", "Are the goal, constraints, default rules and review date written down clearly?"], ["Contract", "Are irreversible operations confirmed by the principal, and are boundaries enforced at the execution layer?"], ["Contract", "Do the agent's income and evaluation metrics stay unaffected by trading volume?"], ["Implementation", "Is the part the agent can take on in full large enough, and are results easy to check?"], ["Implementation", "Do long tasks have checkpoints, and does the agent stop when unsure?"], ["Implementation", "Are agreements and records stored as objects, kept point in time, and replayable?"], ["Implementation", "Is the level of assurance proportionate to the consequences and the difficulty of verification?"], ["Trust", "Can users see evidence that is highly diagnostic and hard to fake?"], ["Trust", "Are defaults on the user's side, does it invite rather than lecture, and is leaving easy?"]],LY=['Value','Contract','Implementation','Trust'];
+  const A={a:[0,0,0,0,0,0,1,0,0,0,0,0],b:[1,1,1,1,1,1,1,1,1,1,1,1]};
+  document.getElementById('ck-list').innerHTML=Q.map(([l,q],i)=>`<label class="ck-i"><input type="checkbox" data-q="${i}"><span><em>${l} layer</em>  ${q}</span></label>`).join('');
+  document.getElementById('ck-sc').innerHTML=LY.map(l=>`<div><b>${l} layer</b><span id="ck-${l}"></span><div class="ck-st"><i id="ck-b-${l}"></i></div></div>`).join('');
+  const cb=[...document.querySelectorAll('[data-q]')];
+  function r(){let tot=0;LY.forEach(l=>{const items=Q.map((q,i)=>[q,i]).filter(([q])=>q[0]===l),ok=items.filter(([,i])=>cb[i].checked).length;tot+=ok;document.getElementById('ck-'+l).textContent=ok+' / '+items.length;document.getElementById('ck-b-'+l).style.width=ok/items.length*100+'%';});
+    document.getElementById('ck-msg').textContent=tot===12?'All twelve questions answered "yes": this does not guarantee success, but no term of net value faces a foreseeable loss.':tot===0?'Answer the questions one by one to see in which layer this design still has gaps.':`${tot} answered "yes"; each of the other ${12-tot} corresponds to a foreseeable loss.`;}
+  cb.forEach(c=>c.addEventListener('change',r));
+  document.querySelectorAll('[data-ck]').forEach(b=>b.addEventListener('click',()=>{const k=b.dataset.ck;document.querySelectorAll('[data-ck]').forEach(z=>z.setAttribute('aria-pressed',String(z===b)));cb.forEach((c,i)=>c.checked=k==='c'?false:!!A[k][i]);r();}));
+  document.getElementById('ck').addEventListener('anim-in',()=>{document.querySelector('[data-ck=a]').click();setTimeout(()=>document.querySelector('[data-ck=b]').click(),2600);});
+  r();
+})();
+</script>

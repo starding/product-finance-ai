@@ -1,0 +1,33 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">五道防线</p><p class="figsub">一个错误要造成损失，得穿过五道防线。拖动每道防线漏掉错误的比例，再勾选“几道防线共用同一份数据”，看一万个错误中有多少穿过全部防线。</p></div><button class="replay" type="button" data-replay="ch23">重播</button></div>
+    <div class="ch23" id="ch23" data-anim>
+      <div class="ch23-l" id="ch23-l"></div>
+      <div class="sl"><label for="ch23-p">每道防线漏掉的比例 <b id="ch23-pv"></b></label><input id="ch23-p" type="range" min="5" max="60" step="5" value="20"></div>
+      <div class="cs-sw"><label><input type="checkbox" id="ch23-c"> 后三道防线共用书记员自己的一份数据：一道漏了，另两道也漏</label></div>
+      <p class="ch23-msg" id="ch23-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：五道防线依次为约定的边界、执行前的自动检查、每一步的上限、关键操作的确认、事后的核对（里森的瑞士奶酪模型）。</figcaption>
+</figure>
+<style>
+.ch23-l{display:grid;gap:6px;margin:6px 0 10px}
+.ch23-r{display:grid;grid-template-columns:7.5em 1fr 5.5em;gap:10px;align-items:center;font-size:12.5px}
+.ch23-r div{height:20px;background:var(--quote);border-radius:5px;overflow:hidden}
+.ch23-r i{display:block;height:100%;background:var(--warm);transition:width .5s}
+.ch23-r b{text-align:right;font-variant-numeric:tabular-nums}
+.ch23-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.ch23-r{grid-template-columns:1fr 5.5em}.ch23-r span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('ch23'+id),L=['约定的边界','执行前的检查','每一步的上限','关键操作的确认','事后的核对'];
+  function draw(){const p=+$('-p').value/100,c=$('-c').checked;$('-pv').textContent=Math.round(p*100)+'%';let n=10000;const R=[];
+    L.forEach((l,i)=>{if(c&&(i===3||i===4)){}else n*=p;R.push([l,n]);});
+    $('-l').innerHTML=`<div class="ch23-r"><span>出现的错误</span><div><i style="width:100%"></i></div><b>10000</b></div>`+R.map(([l,v])=>`<div class="ch23-r"><span>穿过${l}</span><div><i style="width:${Math.max(.3,v/100)}%"></i></div><b>${v<10?v.toFixed(1):Math.round(v)}</b></div>`).join('');
+    const end=R[4][1];$('-msg').textContent=c?`后三道防线共用一份数据，实际只相当于三道：一万个错误中有 ${end<10?end.toFixed(1):Math.round(end)} 个穿过全部防线，是彼此独立时的 ${Math.round(1/(p*p))} 倍。`:`每道防线都漏掉 ${Math.round(p*100)}%，五道彼此独立：一万个错误中只有 ${end<10?end.toFixed(1):Math.round(end)} 个穿过全部防线。没有哪一道万无一失，合在一起却很少失守。`;}
+  ['-p','-c'].forEach(k=>$(k).addEventListener('input',draw));
+  $('').addEventListener('anim-in',()=>{$('-c').checked=false;draw();setTimeout(()=>{$('-c').checked=true;draw();},2200);});
+  draw();
+})();
+</script>

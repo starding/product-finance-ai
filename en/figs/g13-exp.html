@@ -1,0 +1,42 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Three experiments: how much was saved</p><p class="figsub">Select a study to see its subjects, method and main results.</p></div><button class="replay" type="button" data-replay="ex13">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Study">
+      <button type="button" data-ex13="0" aria-pressed="true">Writing tasks</button>
+      <button type="button" data-ex13="1" aria-pressed="false">Customer support</button>
+      <button type="button" data-ex13="2" aria-pressed="false">Consulting tasks</button>
+    </div>
+    <div class="ex13" id="ex13" data-anim>
+      <p class="ex13-who" id="ex13-who"></p>
+      <div class="ex13-bars" id="ex13-b"></div>
+      <p class="ex13-msg" id="ex13-msg"></p>
+    </div>
+  </div>
+  <figcaption>Data: Noy and Zhang (2023, <i>Science</i>); Brynjolfsson, Li and Raymond (2025, <i>Quarterly Journal of Economics</i>; the improvement for novices comes from the 2023 working paper); Dell'Acqua et al. (2023, Harvard Business School working paper). Bar lengths follow each study's own percentages; the measures in different studies are not directly comparable.</figcaption>
+</figure>
+<style>
+.ex13-who{font-size:13px;color:var(--muted);margin:4px 0 10px}
+.ex13-bars{display:grid;gap:8px}
+.ex13-r{display:grid;grid-template-columns:10.5em 1fr;gap:10px;align-items:center;font-size:12.5px}
+.ex13-r div{position:relative;height:22px}
+.ex13-r i{position:absolute;top:0;height:100%;border-radius:4px;background:var(--accent);transition:width .7s}
+.ex13-r i.neg{background:var(--warm)}
+.ex13-r em{position:absolute;top:2px;font-style:normal;font-size:12px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.ex13-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.ex13-r{grid-template-columns:1fr;gap:2px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('ex13'+id);
+  const S=[['453 college-educated professionals completed writing tasks from their own occupations; half were randomly allowed to use a conversational large model.',[['Time taken reduced',40],['Quality improved',18]],'On short, self-contained writing tasks, both time and quality improved clearly, and the gaps between people narrowed.'],
+    ['5,172 customer-support agents gained access to an AI assistant in stages; issues resolved per hour were compared before and after.',[['Average improvement',15],['Novices and lower-skilled (working paper)',34]],'The gains went mainly to the less experienced: the assistant passed the practices of experienced agents on to novices; the most experienced saw almost no improvement.'],
+    ['758 consultants completed a set of tasks within the large model\'s capabilities and one task outside them.',[['Within range: more tasks done',12.2],['Within range: faster',25.1],['Within range: higher quality',40],['Outside range: change in correct answers',-19]],'Within its range of capability, everything improved; on a task that looked similar but lay outside that range, users were more likely to get it wrong.']];
+  function set(k){document.querySelectorAll('[data-ex13]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.ex13===k)));const s=S[k];$('-who').textContent=s[0];
+    $('-b').innerHTML=s[1].map(([n,v])=>`<div class="ex13-r"><span>${n}</span><div><i class="${v<0?'neg':''}" style="left:${v<0?0:0}%;width:0"></i><em></em></div></div>`).join('');
+    requestAnimationFrame(()=>[...$('-b').children].forEach((r,i)=>{const v=s[1][i][1],w=Math.abs(v)*1.6;const bar=r.querySelector('i'),t=r.querySelector('em');bar.style.width=w+'%';t.style.left=`calc(${w}% + 6px)`;t.textContent=(v<0?'−'+(-v)+' percentage points':(k===2&&i===2?'over 40%':v+'%'));}));
+    $('-msg').textContent=s[2];}
+  document.querySelectorAll('[data-ex13]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.ex13)));
+  $('').addEventListener('anim-in',()=>{[0,1,2].forEach((k,i)=>setTimeout(()=>set(k),200+i*2600));});
+  set(0);
+})();
+</script>

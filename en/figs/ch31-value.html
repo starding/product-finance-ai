@@ -1,0 +1,38 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Value layer: violate a principle, and which term of net value suffers</p><p class="figsub">Above is the breakdown of net value when every principle of the value layer is followed (illustrative). Choose one to violate and see how the result, input and risk change.</p></div><button class="replay" type="button" data-replay="valueF">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Principle violated"><button type="button" data-value="g" aria-pressed="false">Follow all</button><button type="button" data-value="0" aria-pressed="true">Violate no. 1</button><button type="button" data-value="1" aria-pressed="false">Violate no. 2</button><button type="button" data-value="2" aria-pressed="false">Violate no. 3</button></div>
+    <div class="lyF" id="valueF" data-anim>
+      <div class="lyF-n" id="value-name"></div>
+      <div class="lyF-r"><span>Result</span><div class="lyF-t"><i data-k="r" style="background:var(--accent)"></i></div><b data-k="r"></b></div>
+      <div class="lyF-r"><span>− User's input</span><div class="lyF-t"><i data-k="e" style="background:var(--gold)"></i></div><b data-k="e"></b></div>
+      <div class="lyF-r"><span>− Risk borne</span><div class="lyF-t"><i data-k="k" style="background:var(--warm)"></i></div><b data-k="k"></b></div>
+      <div class="lyF-r tot"><span>= Net value</span><div class="lyF-t"><i data-k="n" style="background:var(--ink)"></i></div><b data-k="n"></b></div>
+      <p class="lyF-msg" id="value-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative numbers; they show only the direction in which each term suffers.</figcaption>
+</figure>
+<style>
+.lyF-n{font-size:13.5px;font-weight:700;margin-bottom:6px;min-height:1.6em}
+.lyF-r{display:grid;grid-template-columns:110px 1fr 44px;gap:10px;align-items:center;font-size:13px;margin:6px 0}
+.lyF-r span{color:var(--muted)} .lyF-r.tot span{color:var(--ink);font-weight:700}
+.lyF-t{height:16px;background:var(--quote);border-radius:8px;overflow:hidden}
+.lyF-t i{display:block;height:100%;width:0;border-radius:8px;transition:width .6s ease}
+.lyF-r b{text-align:right;font-variant-numeric:tabular-nums}
+.lyF-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const G=[62, 20, 12],V=[[70, 35, 30, "Promising \"15% a year\": users chase short-term returns and give up in a downturn"], [70, 35, 30, "Showing only returns: the user's time and risk are left out of the account"], [65, 30, 28, "Selling on prediction: the advantage disappears once similar agents spread"]],N=["Promise only value that can be provided, delivered and verified", "Measure the product by net value", "Place value where it does not disappear as it spreads"],K='value';
+  const box=document.getElementById(K+'F');
+  function set(s){document.querySelectorAll('[data-'+K+']').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset[K]===s)));
+    const v=s==='g'?[...G,'']:V[+s];const n=Math.max(0,v[0]-v[1]-v[2]),d={r:v[0],e:v[1],k:v[2],n:n};
+    box.querySelectorAll('.lyF-t i').forEach(i=>{i.style.width='0';setTimeout(()=>i.style.width=d[i.dataset.k]+'%',40);});box.querySelectorAll('.lyF-r b').forEach(b=>b.textContent=d[b.dataset.k]);
+    document.getElementById(K+'-name').textContent=s==='g'?'Follow all':'Violated: '+N[+s];
+    document.getElementById(K+'-msg').textContent=s==='g'?`Following every principle of the value layer: net value is ${n}.`:`${v[3]}. Net value falls from ${G[0]-G[1]-G[2]} to ${n}.`;}
+  document.querySelectorAll('[data-'+K+']').forEach(b=>b.addEventListener('click',()=>set(b.dataset[K])));
+  box.addEventListener('anim-in',()=>{const seq=['g',...V.map((_,j)=>String(j)),'g'];seq.forEach((s,i)=>setTimeout(()=>set(s),i*1800));});
+  set('g');
+})();
+</script>

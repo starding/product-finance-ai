@@ -1,0 +1,34 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">How many households does one ship take?</p><p class="figsub">A ship costs 100 portions of grain, and each household can spare at most 5. Drag the number of investing households and see whether the ship gets built, and how much each household loses if it sinks.</p></div><button class="replay" type="button" data-replay="sh">Replay</button></div>
+    <div class="sh" id="sh" data-anim>
+      <div class="sh-bar"><i id="sh-f"></i><span class="sh-line"></span></div>
+      <div class="sh-hh" id="sh-hh"></div>
+      <div class="sl"><label for="sh-n">Investing households <b id="sh-nv"></b></label><input id="sh-n" type="range" min="1" max="20" step="1" value="1"></div>
+      <div class="sh-out"><div><span>Ship returns (70%): each gets</span><b id="sh-w"></b></div><div><span>Ship sinks (30%): each loses</span><b id="sh-l"></b></div></div>
+      <p class="sh-msg" id="sh-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: when the ship returns, its cargo is worth two and a half times the cost of building it; when it sinks, all the grain put in is lost.</figcaption>
+</figure>
+<style>
+.sh-bar{position:relative;height:28px;background:var(--quote);border-radius:6px;overflow:hidden}
+.sh-bar i{display:block;height:100%;background:var(--accent);transition:width .3s}
+.sh-hh{display:grid;grid-template-columns:repeat(20,1fr);gap:3px;margin:8px 0}
+.sh-hh i{height:16px;border-radius:3px;background:var(--quote);transition:background .3s}
+.sh-hh i.on{background:var(--accent)}
+.sh-out{display:flex;gap:24px;flex-wrap:wrap;margin-top:8px}
+.sh-out div{display:flex;flex-direction:column} .sh-out span{font-size:12px;color:var(--faint)} .sh-out b{font-size:20px;font-variant-numeric:tabular-nums}
+.sh-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);$('sh-hh').innerHTML='<i></i>'.repeat(20);const hs=[...$('sh-hh').children];
+  function draw(){const n=+$('sh-n').value,tot=n*5,ok=tot>=100;$('sh-f').style.width=Math.min(tot,100)+'%';hs.forEach((h,i)=>h.classList.toggle('on',i<n));$('sh-nv').textContent=n+(n===1?' household':' households');
+    $('sh-w').textContent=ok?'12.5 portions':'—';$('sh-l').textContent=ok?'5 portions':'—';
+    $('sh-msg').textContent=ok?'Twenty households put in 5 portions each, and the ship is built. If it returns, each household gets 12.5 portions; if it sinks, each loses its own 5 portions, which does not ruin anyone.':`${n} household${n===1?'':'s'} raise ${tot} portions in all, ${100-tot} short; the ship cannot be built.`;}
+  $('sh-n').addEventListener('input',draw);
+  $('sh').addEventListener('anim-in',()=>{let v=1;$('sh-n').value=1;draw();const id=setInterval(()=>{v++;$('sh-n').value=v;draw();if(v>=20)clearInterval(id);},150);});
+  draw();
+})();
+</script>

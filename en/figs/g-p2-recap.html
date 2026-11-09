@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Summary of Part Two: loosened, tightened, shifted and unchanged</p><p class="figsub">After the price of cognitive labour collapses, the constraints of Part One fall into four groups. Choose a group to see its constraints and the corresponding chapters.</p></div><button class="replay" type="button" data-replay="pr2">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Group">
+      <button type="button" data-pr2="0" aria-pressed="true">Loosened</button>
+      <button type="button" data-pr2="1" aria-pressed="false">Tightened</button>
+      <button type="button" data-pr2="2" aria-pressed="false">Shifted</button>
+      <button type="button" data-pr2="3" aria-pressed="false">Unchanged</button>
+    </div>
+    <div class="pr2" id="pr2" data-anim><div class="pr2-g" id="pr2-g"></div><p class="pr2-msg" id="pr2-msg" aria-live="polite"></p></div>
+  </div>
+</figure>
+<style>
+.pr2-g{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.pr2-c{background:var(--quote);border-radius:9px;padding:9px 11px;font-size:13px;line-height:1.55;color:var(--muted);border-left:3px solid var(--c);opacity:0;transform:translateY(6px);transition:opacity .35s,transform .35s;transition-delay:calc(var(--i)*.08s)}
+.pr2.in .pr2-c{opacity:1;transform:none}
+.pr2-c b{display:block;font-size:14px;color:var(--ink);margin-bottom:2px}
+.pr2-c em{font-style:normal;font-size:11.5px;color:var(--faint)}
+.pr2-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.pr2-g{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const K=[['var(--accent)','Research and comparison are almost free, the threshold for delegation falls, and everyday execution is cheaper; this is exactly the cognitive labour that scribes are good at.',
+      [['Cost of research and comparison','Chapters 13, 14, 16','Reading reports and comparing fleets costs almost nothing.'],['Threshold for delegation','Chapter 14','Personalized arrangements no longer belong only to large clients, but checking and accountability set the floor.'],['Cost of monitoring','Chapters 14, 15','The principal can have a scribe of their own check every transaction.'],['Cost of execution and quotes','Chapter 17','In calm times, spreads narrow sharply.'],['Personalized defaults and commitments','Chapter 18','Defaults can be set for each household, and locks can be effective without being rigid.']]],
+    ['var(--warm)','Scribes have no property, can change their names at will, resemble one another and are present at critical moments, which brings new constraints.',
+      [['Guarantees','Chapter 15','An agent cannot afford to pay for its mistakes and reputation cannot attach to it, so only the operator can be held responsible and insured.'],['Checking and records','Chapter 15','Records must be held by a third party and be unalterable before responsibility can be assigned.'],['Attention and ranking','Chapter 16','The more information there is, the greater the power of ranking.'],['Herding and liquidity','Chapter 17','Similar scribes act at the same time, and quoters withdraw when things are urgent.'],['Exploiting bias','Chapter 18','The same ability can make people buy and sell more.'],['Calibrating trust','Chapter 18','People easily trust too much or too little.']]],
+    ['var(--blue)','The advantage did not disappear; it only moved.',
+      [['Information advantage','Chapter 16','Public reports are no longer worth much; the advantage shifts to exclusive data and speed.'],['The race to be first','Chapters 16, 17','The speed of understanding news converges, and the race turns to who is closest to the source.']]],
+    ['var(--faint)','Not one of the problems finance first set out to handle has disappeared.',
+      [['Time','Chapter 19','When income arrives and when needs arise does not change, nor does the number of years needed to build savings.'],['Systemic risk','Chapter 19','Risk that cannot be diversified away does not shrink at all, and only bearing it earns compensation.'],['Irreversibility','Chapter 19','Some losses cannot be undone; the faster the execution, the more room must be left.'],['The arithmetic of active management','Chapter 16','Before costs, active investors as a whole can only earn the average.']]]];
+  const g=document.getElementById('pr2-g'),m=document.getElementById('pr2-msg'),bs=[...document.querySelectorAll('[data-pr2]')];
+  function set(k){bs.forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.pr2===k)));const [c,msg,L]=K[k];
+    g.innerHTML=L.map(([n,ch,d],i)=>`<div class="pr2-c" style="--i:${i};--c:${c}"><em>${ch}</em><b>${n}</b>${d}</div>`).join('');m.textContent=msg;}
+  bs.forEach(b=>b.addEventListener('click',()=>set(+b.dataset.pr2)));
+  document.getElementById('pr2').addEventListener('anim-in',()=>{[0,1,2,3].forEach((k,i)=>setTimeout(()=>set(k),300+i*2400));});
+  set(0);
+})();
+</script>

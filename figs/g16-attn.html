@@ -1,0 +1,38 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">信息越多，注意力越稀缺</p><p class="figsub">书记员每天为一户人家写出若干条提醒与分析，委托人每天只看得完 8 条。拖动每天写出的条数，再切换书记员按谁的利益排序，看委托人看到了什么。</p></div><button class="replay" type="button" data-replay="at16">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="排序">
+      <button type="button" data-at16="p" aria-pressed="true">按委托人的目标排序</button>
+      <button type="button" data-at16="s" aria-pressed="false">按卖方付费排序</button>
+    </div>
+    <div class="at16" id="at16" data-anim>
+      <div class="at16-g" id="at16-g"></div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>与委托人的计划相关、要紧的</span><span><i style="background:var(--warm)"></i>卖方付费推广的</span><span><i style="background:var(--quote);border:1px solid var(--line)"></i>其他</span><span><i style="outline:2px solid var(--ink);outline-offset:-2px;background:transparent"></i>委托人看到的 8 条</span></div>
+      <div class="sl"><label for="at16-n">每天写出的条数 <b id="at16-nv"></b></label><input id="at16-n" type="range" min="8" max="80" step="4" value="40"></div>
+      <p class="at16-msg" id="at16-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：写出的条目中约一成与委托人的计划相关且要紧，约两成是卖方付费推广的，其余为一般的资讯；委托人每天只看排在最前面的 8 条（西蒙，1971 所说的注意力稀缺）。</figcaption>
+</figure>
+<style>
+.at16-g{display:grid;grid-template-columns:repeat(20,1fr);gap:3px;max-width:520px}
+.at16-g i{aspect-ratio:1;border-radius:3px;background:var(--quote);border:1px solid var(--line);transition:background .3s}
+.at16-g i.k{background:var(--accent);border-color:var(--accent)} .at16-g i.a{background:var(--warm);border-color:var(--warm)} .at16-g i.seen{outline:2px solid var(--ink);outline-offset:1px}
+.at16-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('at16'+id);let mode='p';
+  const T=Array.from({length:80},(_,i)=>i%10===3?'k':(i%5===1?'a':'o'));
+  function draw(){const n=+$('-n').value;$('-nv').textContent=n+' 条';const items=T.slice(0,n);
+    const order=items.map((t,i)=>i).sort((a,b)=>{const r=t=>mode==='p'?{k:0,o:1,a:2}[t]:{a:0,o:1,k:2}[t];return r(items[a])-r(items[b])||a-b;}),seen=new Set(order.slice(0,8));
+    $('-g').innerHTML=items.map((t,i)=>`<i class="${t==='o'?'':t}${seen.has(i)?' seen':''}"></i>`).join('');
+    const k=items.filter(t=>t==='k').length,ks=[...seen].filter(i=>items[i]==='k').length;
+    $('-msg').textContent=`书记员每天写出 ${n} 条，委托人只看 8 条，占 ${Math.round(800/n)}%。`+(mode==='p'?`按委托人的目标排序，要紧的 ${k} 条中看到了 ${ks} 条。`:`按卖方付费排序，看到的 8 条几乎都是推广，要紧的 ${k} 条中只看到 ${ks} 条。写得越多，排序的权力越大。`);}
+  const bs=[...document.querySelectorAll('[data-at16]')];
+  function set(m){mode=m;bs.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.at16===m)));draw();}
+  bs.forEach(b=>b.addEventListener('click',()=>set(b.dataset.at16)));$('-n').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{set('p');let v=8;$('-n').value=8;draw();const id=setInterval(()=>{v+=4;$('-n').value=v;draw();if(v>=80){clearInterval(id);setTimeout(()=>set('s'),1200);}},120);});
+  draw();
+})();
+</script>

@@ -1,0 +1,73 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The structure of the principal–agent problem</p><p class="figsub">Two roots produce two kinds of problem, and the principal pays agency costs for them. Pick a type of remedy to see what it targets.</p></div><button class="replay" type="button" data-replay="pa">Replay</button></div>
+    <div class="pa" id="pa" data-anim>
+      <div class="pa-top">
+        <div class="pa-who"><b>Principal</b><span>Hands over task and authority</span></div>
+        <div class="pa-mid">
+          <div class="pa-arrow r"><span>Hands over the task, grants authority</span></div>
+          <div class="pa-roots"><i class="pa-root" data-g="obs">Asymmetric information<small>Ability and conduct are hard to see</small></i><i class="pa-root" data-g="inc">Conflicting goals<small>Interests are not fully aligned</small></i></div>
+          <div class="pa-arrow l"><span>Performs and reports</span></div>
+        </div>
+        <div class="pa-who"><b>Agent</b><span>Acts for the principal</span></div>
+      </div>
+      <div class="pa-row">
+        <div class="pa-p" data-g="obs inc"><em>Before the handover</em><b>Adverse selection</b><span>Ability is hard to see, so the wrong party may be chosen</span></div>
+        <div class="pa-p" data-g="obs inc"><em>After the handover</em><b>Moral hazard</b><span>Conduct cannot be seen, so the agent may shirk or serve itself</span></div>
+      </div>
+      <div class="pa-cost">
+        <span class="pa-lab">Agency costs</span>
+        <i data-g="obs" style="--w:34%">Monitoring<small>The principal verifies what was done</small></i>
+        <i data-g="inc" style="--w:26%">Bonding<small>Borne by the agent to win confidence</small></i>
+        <i data-g="cap" style="--w:40%">Residual loss<small>The part that still cannot be removed</small></i>
+      </div>
+      <div class="seg-btns pa-gov" role="group" aria-label="Remedies">
+        <button type="button" data-pg="obs" aria-pressed="false">Raise observability</button>
+        <button type="button" data-pg="inc" aria-pressed="false">Align incentives</button>
+        <button type="button" data-pg="cap" aria-pressed="false">Cap losses, assign responsibility</button>
+      </div>
+      <p class="pa-msg" id="pa-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>The three-part division of agency costs is from Jensen and Meckling (1976); the three types of remedy are the author's grouping. The lengths of the cost bars are illustrative only.</figcaption>
+</figure>
+<style>
+.pa-top{display:grid;grid-template-columns:92px 1fr 92px;gap:10px;align-items:center}
+.pa-who{background:var(--ink);color:var(--bg);border-radius:10px;padding:12px 8px;text-align:center}
+.pa-who b{display:block;font-size:15px} .pa-who span{font-size:11px;opacity:.75}
+.pa-mid{display:flex;flex-direction:column;gap:8px}
+.pa-arrow{position:relative;height:18px;font-size:11.5px;color:var(--muted);text-align:center}
+.pa-arrow::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:1.5px solid var(--faint)}
+.pa-arrow span{position:relative;background:var(--card);padding:0 8px}
+.pa-arrow.r::after,.pa-arrow.l::after{content:"";position:absolute;top:calc(50% - 4px);border:4px solid transparent}
+.pa-arrow.r::after{right:-2px;border-left:7px solid var(--faint)} .pa-arrow.l::after{left:-2px;border-right:7px solid var(--faint)}
+.pa-roots{display:flex;gap:8px;justify-content:center}
+.pa-root{font-style:normal;font-size:13.5px;font-weight:600;background:var(--warm-soft);color:var(--warm);border-radius:8px;padding:6px 10px;text-align:center;transition:opacity .3s,box-shadow .3s}
+.pa-root small{display:block;font-weight:400;font-size:11px;color:var(--muted)}
+.pa-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.pa-p{background:var(--quote);border-radius:10px;padding:10px 12px;transition:opacity .3s,box-shadow .3s}
+.pa-p em{font-style:normal;font-size:11px;color:var(--faint)} .pa-p b{display:block;font-size:15px} .pa-p span{font-size:12.5px;color:var(--muted)}
+.pa-cost{display:flex;align-items:stretch;gap:3px;margin-top:14px;flex-wrap:wrap}
+.pa-lab{width:100%;font-size:12px;color:var(--faint);margin-bottom:2px}
+.pa-cost i{font-style:normal;flex:0 0 calc(var(--w) - 3px);background:var(--quote);border-left:3px solid var(--gold);border-radius:6px;padding:6px 8px;font-size:13px;font-weight:600;transform-origin:left;transform:scaleX(0);transition:transform .6s,opacity .3s,box-shadow .3s}
+.pa-cost i small{display:block;font-weight:400;font-size:11px;color:var(--muted)}
+.pa.in .pa-cost i{transform:none}
+.pa-gov{margin:14px 0 0}
+.pa.dim [data-g]{opacity:.3} .pa.dim [data-g].hit{opacity:1;box-shadow:0 0 0 2px var(--accent)}
+.pa-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.pa-top{grid-template-columns:76px 1fr 76px}.pa-who b{font-size:13px}.pa-roots{flex-direction:column}.pa-cost i{flex-basis:100%}}
+</style>
+<script>
+(function(){
+  const M={obs:'Raise observability: let the principal verify what the agent did and on what basis. This narrows the information asymmetry, eases both adverse selection and moral hazard, and lowers monitoring expenditure.',
+    inc:'Align incentives: make the agent\'s self-interested behaviour also serve the principal\'s interest, for example through sharing in results, and disclosure and avoidance of conflicts of interest. It targets conflicting goals.',
+    cap:'Cap losses and assign responsibility: for example a limit enforced by the system, and compensation and accountability after errors. It does not narrow the first two gaps; it only caps the residual loss.'};
+  const box=document.getElementById('pa'),msg=document.getElementById('pa-msg');
+  function set(g){document.querySelectorAll('[data-pg]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.pg===g)));
+    box.classList.toggle('dim',!!g);box.querySelectorAll('[data-g]').forEach(e=>e.classList.toggle('hit',!!g&&e.dataset.g.split(' ').includes(g)));
+    msg.textContent=g?M[g]:'Asymmetric information and conflicting goals together produce adverse selection and moral hazard; the price the principal pays for them is agency costs.';}
+  document.querySelectorAll('[data-pg]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.pg===box.dataset.cur?'':(box.dataset.cur=b.dataset.pg))));
+  box.addEventListener('anim-in',()=>{box.dataset.cur='';set('');['obs','inc','cap',''].forEach((g,i)=>setTimeout(()=>{box.dataset.cur=g;set(g);},1400+i*2600));});
+  set('');
+})();
+</script>

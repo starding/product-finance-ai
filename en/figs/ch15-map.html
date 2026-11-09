@@ -1,0 +1,53 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">Eight typical jobs: frequency and the cost of getting it wrong</p>
+    <p class="figsub">The horizontal axis is how often a job occurs; the vertical axis is the consequence of getting it wrong. Filled dots are jobs completed in one go; hollow dots are ongoing jobs. Tap one to see its input, output and standard of completion.</p>
+    <div class="tm" id="tm" data-anim>
+      <svg viewBox="0 0 640 300" role="img" aria-label="Frequency and consequences of typical jobs">
+        <g id="tm-ax"></g><g id="tm-pts"></g>
+      </svg>
+      <div class="tm-d" id="tm-d"><p>Tap a job.</p></div>
+    </div>
+  </div>
+  <figcaption>Illustrative positions showing relative relationships. Jobs in the upper left call for confirmation, evidence and the ability to undo; jobs in the lower right call for convenience.</figcaption>
+</figure>
+<style>
+.tm svg{width:100%;height:auto;display:block}
+.tm-p{cursor:pointer;opacity:0;transition:opacity .4s;transition-delay:calc(var(--i)*.15s)}
+.tm.in .tm-p{opacity:1}
+.tm-p circle{stroke-width:2.5;transition:r .2s}
+.tm-p.sel circle{r:11}
+.tm-p text{font-size:12.5px}
+.tm-zone{fill:var(--quote)}
+.tm-d{background:var(--quote);border-radius:8px;padding:10px 12px;margin-top:6px;min-height:5.6em;font-size:13.5px;line-height:1.65}
+.tm-d p{margin:0} .tm-d b{font-size:14.5px}
+.tm-d dl{display:grid;grid-template-columns:72px 1fr;gap:2px 10px;margin:4px 0 0}
+@media (max-width:640px){.tm-p text{font-size:20px}.tm svg text.t-faint{font-size:17px}}
+.tm-d dt{color:var(--faint);font-size:12.5px} .tm-d dd{margin:0}
+</style>
+<script>
+(function(){
+  const X0=60,X1=620,YT=16,YB=260,px=v=>X0+v/100*(X1-X0),py=v=>YB-v/100*(YB-YT);
+  const T=[['Look up a figure',90,10,1,'A question','A figure with its source and time','The figure is correct and its basis is clear'],
+    ['Understand something',72,22,1,'An event or a news item','An explanation with its grounds','The explanation fits the facts and marks what is conjecture'],
+    ['Research',38,46,1,'A company or a view','An analysis that can be tested','The grounds can be traced, and the conclusion states the conditions under which it would be overturned'],
+    ['Screen and compare',55,36,1,'A set of criteria','A shortlist with comparisons','The criteria are applied exactly, and omissions and the basis for ranking are clear'],
+    ['Plan and place an order',30,88,1,'Goal, funds and constraints','A plan and its execution result','Consistent with constraints and suitability, executed after user confirmation, reversible'],
+    ['Ongoing monitoring',80,52,0,'Assets and conditions to watch','The result of each cycle\'s check','Every cycle is accounted for: changed, unchanged, or check blocked'],
+    ['Goal-based portfolio',12,95,0,'Goal, horizon and risk constraints','The portfolio and a record of adjustments','Stays within constraints, asks for instructions when it drifts, and is measured against the goal'],
+    ['Review',18,60,0,'Decisions and results over a period','A breakdown of process and outcome','Separates decision quality from luck and yields improvements that can be acted on']];
+  const $=id=>document.getElementById(id);
+  let ax=`<rect class="tm-zone" x="${X0}" y="${YT}" width="${(X1-X0)/2}" height="${(YB-YT)/2}" rx="6"/>`+
+    `<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/><line x1="${X0}" y1="${YT}" x2="${X0}" y2="${YB}" class="s-faint"/>`+
+    `<text x="${X1}" y="${YB+18}" text-anchor="end" font-size="11" class="t-faint">More frequent →</text><text x="${X0}" y="${YB+18}" font-size="11" class="t-faint">Rare</text>`+
+    `<text x="${X0-8}" y="${YT+8}" text-anchor="end" font-size="11" class="t-faint">High</text><text x="${X0-8}" y="${YB}" text-anchor="end" font-size="11" class="t-faint">Low</text>`+
+    `<text transform="translate(16,${(YT+YB)/2}) rotate(-90)" text-anchor="middle" font-size="11" class="t-faint">Cost of an error</text>`;
+  $('tm-ax').innerHTML=ax;
+  $('tm-pts').innerHTML=T.map(([n,f,c,once],i)=>{const left=f>70;return `<g class="tm-p" data-i="${i}" style="--i:${i}"><circle cx="${px(f)}" cy="${py(c)}" r="8" fill="${once?'var(--accent)':'var(--surface)'}" stroke="var(--accent)"/><text x="${px(f)+(left?-14:14)}" y="${py(c)+4}" text-anchor="${left?'end':'start'}" class="t-ink">${n}</text></g>`;}).join('');
+  const ps=[...document.querySelectorAll('.tm-p')];
+  function sel(i){ps.forEach((p,j)=>p.classList.toggle('sel',j===i));const [n,,,once,inp,out,done]=T[i];
+    $('tm-d').innerHTML=`<b>${n}</b>&emsp;<span style="color:var(--faint);font-size:12px">${once?'Completed in one go':'Ongoing'}</span><dl><dt>Input</dt><dd>${inp}</dd><dt>Output</dt><dd>${out}</dd><dt>Done when</dt><dd>${done}</dd></dl>`;}
+  ps.forEach((p,i)=>p.addEventListener('click',()=>sel(i)));
+  sel(4);
+})();
+</script>

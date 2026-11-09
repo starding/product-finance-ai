@@ -1,0 +1,36 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Many agents using the same rule</p><p class="figsub">Fifty agents each manage a portfolio, and each has a rule to "cut the position when the fall exceeds a certain size". Drag how similar the rules are, then trigger a 3% fall, and see how many agents sell at the same time and how far the price falls in the end.</p></div><button class="replay" type="button" id="hd-run">Trigger fall</button></div>
+    <div class="hd" id="hd" data-anim>
+      <div class="hd-g" id="hd-g"></div>
+      <div class="sl"><label for="hd-s">Similarity of rules <b id="hd-sv"></b></label><input id="hd-s" type="range" min="0" max="100" step="10" value="30"></div>
+      <div class="hd-out"><div><span>Agents selling at once</span><b id="hd-n"></b></div><div><span>Total price fall</span><b id="hd-d"></b></div></div>
+      <p class="hd-msg" id="hd-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model: when rules are similar, the agents' selling thresholds cluster around 3%; each agent's sale pushes the price down a further 0.15%, which may trigger more agents to sell; beyond a certain level of similarity, cascading sales appear suddenly. For an actual case of similar strategies unwinding at once, see Khandani and Lo (2011); for the 2010 flash crash, see Kirilenko et al. (2017).</figcaption>
+</figure>
+<style>
+.hd-g{display:grid;grid-template-columns:repeat(25,1fr);gap:4px;margin-bottom:8px}
+.hd-g i{aspect-ratio:1;border-radius:50%;background:var(--accent-soft);border:1.5px solid var(--accent);transition:all .25s}
+.hd-g i.s{background:var(--warm);border-color:var(--warm)}
+.hd-out{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.hd-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.hd-out span{display:block;font-size:12px;color:var(--faint)} .hd-out b{font-size:19px;font-variant-numeric:tabular-nums}
+.hd-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const N=50,g=document.getElementById('hd-g');g.innerHTML='<i></i>'.repeat(N);const cs=[...g.children],sl=document.getElementById('hd-s');let tm;
+  const U=Array.from({length:N},(_,i)=>((i*37)%N)/N);
+  const th=h=>U.map(u=>{const spread=3+12*(1-h);return 3+ (u-.5)*2*spread*.5+spread*.5;});
+  function run(){clearInterval(tm);const h=+sl.value/100,T=th(h);document.getElementById('hd-sv').textContent=sl.value+'%';cs.forEach(c=>c.classList.remove('s'));
+    let drop=3,sold=new Set();const step=()=>{let nw=[];T.forEach((t,i)=>{if(!sold.has(i)&&t<=drop)nw.push(i);});if(!nw.length){clearInterval(tm);fin();return;}nw.forEach(i=>{sold.add(i);cs[i].classList.add('s');});drop+=nw.length*.15;up();};
+    const up=()=>{document.getElementById('hd-n').textContent=sold.size+'';document.getElementById('hd-d').textContent=drop.toFixed(1)+'%';};
+    const fin=()=>{document.getElementById('hd-msg').textContent=sold.size<=5?'When the rules all differ, only a few agents sell in a 3% fall, and the price soon steadies.':`When the rules are highly similar, ${sold.size} agents sell almost at once, and their sales trigger still more selling: a 3% fall is amplified to ${drop.toFixed(1)}%. Each agent's rule is reasonable, yet executing them all at once is bad for everyone.`;};
+    up();document.getElementById('hd-msg').textContent='';tm=setInterval(step,350);}
+  sl.addEventListener('input',run);document.getElementById('hd-run').addEventListener('click',run);
+  document.getElementById('hd').addEventListener('anim-in',()=>{sl.value=20;run();setTimeout(()=>{sl.value=90;run();},4200);});
+  document.getElementById('hd-sv').textContent=sl.value+'%';
+})();
+</script>

@@ -1,0 +1,82 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">回报的分解与第一部分的结构</p><p class="figsub">每一列是等式中的一项：上方是它的收益与风险，下方是推出它的章节。点按一项查看说明；已写成的章节可以点击进入。</p></div><button class="replay" type="button" data-replay="pm6">重播</button></div>
+    <div class="pm6-wrap"><div class="pm6" id="pm6" data-anim>
+      <div class="pm6-col" data-k="time" style="--i:0">
+        <button class="pm6-term" type="button"><em>＋</em><b>时间补偿</b><span>人人可得</span></button>
+        <div class="pm6-rr"><p><i>收益</i>利率</p><p><i>风险</i>通胀、期限错配</p></div>
+        <div class="pm6-ch"><span class="pm6-pn">第一篇</span><a href="ch02.html"><em>2</em>利率与期限</a></div>
+      </div>
+      <div class="pm6-col" data-k="risk" style="--i:1">
+        <button class="pm6-term" type="button"><em>＋</em><b>风险补偿</b><span>人人可得，须承担风险</span></button>
+        <div class="pm6-rr"><p><i>收益</i>风险溢价、因子</p><p><i>风险</i>波动、回撤、厚尾</p></div>
+        <div class="pm6-ch"><span class="pm6-pn">第二篇</span><a href="ch03.html"><em>3</em>风险长什么样</a><a href="ch04.html"><em>4</em>分散</a><a href="ch05.html"><em>5</em>复利与波动拖累</a><a href="ch06.html"><em>6</em>因子</a></div>
+      </div>
+      <div class="pm6-col" data-k="info" style="--i:2">
+        <button class="pm6-term" type="button"><em>＋</em><b>信息优势</b><span>零和</span></button>
+        <div class="pm6-rr"><p><i>收益</i>超额收益</p><p><i>风险</i>逆向选择、伪知情</p></div>
+        <div class="pm6-ch"><span class="pm6-pn">第三篇</span><a href="ch07.html"><em>7</em>价格为什么难以预测</a><a href="ch08.html"><em>8</em>信息如何进入价格</a><a href="ch09.html"><em>9</em>市场里的交易者</a></div>
+      </div>
+      <div class="pm6-col" data-k="cost" style="--i:3">
+        <button class="pm6-term" type="button"><em>－</em><b>交易成本</b><span>负和</span></button>
+        <div class="pm6-rr"><p><i>收益</i>无</p><p><i>风险</i>流动性、执行</p></div>
+        <div class="pm6-ch"><span class="pm6-pn">第四篇</span><a href="ch10.html"><em>10</em>流动性与买卖价差</a><a href="ch11.html"><em>11</em>订单、规则与市场结构</a></div>
+      </div>
+      <div class="pm6-col" data-k="luck" style="--i:4">
+        <button class="pm6-term" type="button"><em>＋</em><b>运气</b><span>长期平均为零</span></button>
+        <div class="pm6-rr"><p><i>收益</i>短期结果</p><p><i>风险</i>结果的离散</p></div>
+        <div class="pm6-ch"><span class="pm6-pn">第五篇</span><a href="ch12.html"><em>12</em>主动管理的算术</a></div>
+      </div>
+      <div class="pm6-keep" data-k="keep" style="--i:5">
+        <button class="pm6-term" type="button"><b>前提：承诺得到兑现</b><span>由制度保障</span></button>
+        <div class="pm6-rr"><p><i>风险</i>对手方风险、制度风险</p></div>
+        <div class="pm6-ch"><span class="pm6-pn">第六篇</span><a href="ch13.html"><em>13</em>承诺如何被兑现</a><a href="ch14.html"><em>14</em>监管为何存在</a></div>
+      </div>
+    </div></div>
+    <p class="pm6-d" id="pm6-d" aria-live="polite">点按等式中的一项。</p>
+  </div>
+  <figcaption>第 1 章「金融产品卖的是什么」为引子，说明回报所指向的对象。</figcaption>
+</figure>
+<style>
+.pm6-wrap{overflow-x:auto}
+.pm6{display:grid;grid-template-columns:repeat(5,minmax(118px,1fr));gap:8px;min-width:620px}
+.pm6-col,.pm6-keep{display:flex;flex-direction:column;gap:6px;opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.25s)}
+.pm6.in .pm6-col,.pm6.in .pm6-keep{opacity:1;transform:none}
+.pm6-keep{grid-column:1/-1;flex-direction:row;align-items:center;flex-wrap:wrap;gap:10px;border-top:1px dashed var(--line);padding-top:8px}
+.pm6-term{font:inherit;text-align:left;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;padding:8px 10px;cursor:pointer;display:flex;flex-direction:column;gap:1px}
+.pm6-term em{font-style:normal;font-size:18px;font-weight:700;color:var(--faint);line-height:1}
+.pm6-term b{font-size:15px}
+.pm6-term span{font-size:11px;color:var(--faint)}
+.pm6-col[data-k="time"] .pm6-term,.pm6-col[data-k="risk"] .pm6-term{background:var(--accent-soft)}
+.pm6-col[data-k="info"] .pm6-term{background:rgba(47,95,158,.12)}
+.pm6-col[data-k="cost"] .pm6-term{background:var(--warm-soft)}
+.pm6-col[data-k="luck"] .pm6-term{background:var(--quote)}
+.pm6-keep .pm6-term{background:rgba(160,120,24,.12)}
+.pm6-term.sel{border-color:var(--ink)}
+.pm6-rr{font-size:11.5px;color:var(--muted);line-height:1.5;padding:0 2px}
+.pm6-rr p{margin:0}
+.pm6-rr i{font-style:normal;color:var(--faint);margin-right:6px}
+.pm6-ch{display:flex;flex-direction:column;gap:4px}
+.pm6-keep .pm6-ch{flex-direction:row;flex-wrap:wrap;align-items:center}
+.pm6-pn{font-size:11px;color:var(--faint)}
+.pm6-ch a,.pm6-ch .todo{font-size:12.5px;border-radius:7px;padding:5px 8px;text-decoration:none;line-height:1.35;display:block}
+.pm6-ch a{background:var(--surface);border:1px solid var(--accent);color:var(--ink)}
+.pm6-ch a:hover{background:var(--accent-soft)}
+.pm6-ch .todo{background:var(--quote);color:var(--faint);border:1px solid transparent}
+.pm6-ch em{font-style:normal;color:var(--faint);margin-right:6px;font-variant-numeric:tabular-nums}
+.pm6-d{font-size:14px;margin:12px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const D={
+    time:'时间补偿：把今天的钱留到将来，本身就应得补偿。它人人可得，但要按购买力衡量，并与用钱时间匹配。',
+    risk:'风险补偿：承担分散不掉的风险，才能获得长期的额外回报，即风险溢价。它人人可得，代价是承受波动、回撤与极端结果。',
+    info:'信息优势：知道得比别人多而多得的部分。一方多得，必有另一方少得，整体是零和；竞争使这部分不断被消耗。',
+    cost:'交易成本：价差、冲击成本与各种费用。所有交易者共同承担，使交易整体变为负和。',
+    luck:'运气：短期结果的主要来源，长期平均为零。判断一个结果，首先要把运气与技能分开。',
+    keep:'兑现的前提：以上各项都以承诺能够兑现为前提，由信息披露、托管隔离、中央对手方与监管等制度保障。'
+  };
+  const d=document.getElementById('pm6-d'), bs=[...document.querySelectorAll('#pm6 .pm6-term')];
+  bs.forEach(b=>b.addEventListener('click',()=>{bs.forEach(x=>x.classList.toggle('sel',x===b));d.textContent=D[b.closest('[data-k]').dataset.k];}));
+})();
+</script>

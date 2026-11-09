@@ -1,0 +1,31 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">挤在同一扇门</p><p class="figsub">十个组合中的一个被迫卖出全部持仓。拖动组合之间持仓的重叠程度，看其他九个组合的亏损，以及它们按减仓规则跟着卖出后的第二轮亏损。</p></div><button class="replay" type="button" data-replay="cw17">重播</button></div>
+    <div class="cw17" id="cw17" data-anim>
+      <div class="cw17-g" id="cw17-g"></div>
+      <div class="legend"><span><i style="background:var(--warm)"></i>第一轮亏损</span><span><i style="background:var(--warm-soft);border:1px solid var(--warm)"></i>跟着卖出后的第二轮亏损</span></div>
+      <div class="sl"><label for="cw17-o">持仓的重叠程度 <b id="cw17-ov"></b></label><input id="cw17-o" type="range" min="0" max="100" step="10" value="20"></div>
+      <p class="cw17-msg" id="cw17-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：被迫卖出使它持有的船股下跌 10%；其他组合的第一轮亏损＝10% × 重叠程度；亏损超过 3% 的组合卖出一半持仓，每有一个组合这样做，重叠部分再跌 1.5%（坎达尼与罗，2011 所描述的平仓过程的简化）。</figcaption>
+</figure>
+<style>
+.cw17-g{display:grid;grid-template-columns:repeat(9,1fr);gap:8px;align-items:end;height:150px;margin:6px 0 8px}
+.cw17-c{display:flex;flex-direction:column;justify-content:flex-start;height:100%;font-size:11px;color:var(--faint);text-align:center}
+.cw17-c div{width:70%;margin:0 auto;display:flex;flex-direction:column}
+.cw17-c i{display:block;transition:height .5s}
+.cw17-c i.a{background:var(--warm)} .cw17-c i.b{background:var(--warm-soft);border:1px solid var(--warm);border-top:none}
+.cw17-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cw17'+id);
+  function draw(){const o=+$('-o').value/100;$('-ov').textContent=Math.round(o*100)+'%';const r1=10*o,sellers=r1>3?9:0,r2=sellers*1.5*o,sc=4.5;
+    $('-g').innerHTML=Array.from({length:9},(_,i)=>`<div class="cw17-c"><span>组合 ${i+2}</span><div><i class="a" style="height:${r1*sc}px"></i><i class="b" style="height:${r2*sc}px"></i></div></div>`).join('');
+    $('-msg').textContent=r1<=3?`重叠 ${Math.round(o*100)}%：其他组合各亏 ${r1.toFixed(1)}%，没有触发减仓，冲击到此为止。`:`重叠 ${Math.round(o*100)}%：其他组合第一轮各亏 ${r1.toFixed(1)}%，全部触发减仓；九个组合一起卖出，重叠的船股再跌，第二轮又各亏 ${r2.toFixed(1)}%。门越窄，挤的人越多，出去得越慢。`;}
+  $('-o').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{let v=0;$('-o').value=0;draw();const id=setInterval(()=>{v+=10;$('-o').value=v;draw();if(v>=80)clearInterval(id);},350);});
+  draw();
+})();
+</script>

@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：按真实的承受力设计</p><p class="figsub">四条设计要求，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="ch17summary">重播</button></div>
+    <div class="ch17summary" id="ch17summary" data-anim><div class="ch17summary-c" style="--i:0"><em>承受力有三个面</em><b>分别了解能力、意愿与行为</b><p>问卷之外，结合资产、收入、期限与过去下跌中的实际交易记录。</p></div><div class="ch17summary-c" style="--i:1"><em>财富不只有金融资产</em><b>把人力资本与用钱时间纳入能力</b><p>询问收入的稳定性与用钱计划，让年龄与收入性质影响建议的风险档位。</p></div><div class="ch17summary-c warn" style="--i:2"><em>意愿随市场变化</em><b>按最低的一面执行，并定期复核</b><p>意愿高于能力时说明原因并加以约束；大涨或大跌之后、目标临近时重新评估。</p></div><div class="ch17summary-c warn" style="--i:3"><em>画像是统计描述</em><b>只作统计口径的表述</b><p>说明“历史上相似的投资者通常怎样”，展示群体内部的差异，不对个人断言能承受多少。</p></div></div>
+  </div>
+</figure>
+<style>
+.ch17summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch17summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch17summary-c.warn{border-left-color:var(--warm)}
+.ch17summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch17summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch17summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch17summary.in .ch17summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch17summary{grid-template-columns:1fr}}
+</style>

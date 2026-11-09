@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">三层的记录</p><p class="figsub">同一年的记录分三层。点选一层查看；在第一层点任何一句话，都能追到下面一层的依据。</p></div><button class="replay" type="button" data-replay="ly22">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="层">
+      <button type="button" data-ly22="0" aria-pressed="true">一句话</button>
+      <button type="button" data-ly22="1" aria-pressed="false">关键节点</button>
+      <button type="button" data-ly22="2" aria-pressed="false">全部记录</button>
+    </div>
+    <div class="ly22" id="ly22" data-anim>
+      <div class="ly22-d" id="ly22-d"></div>
+      <p class="ly22-msg" id="ly22-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：记录的内容为虚构的例子；“全部记录”只显示前几条，实际共 312 条。</figcaption>
+</figure>
+<style>
+.ly22-d{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--bg);font-size:13.5px;line-height:1.75;min-height:9.5em}
+.ly22-d p{margin:0 0 6px}
+.ly22-d .k{display:grid;grid-template-columns:4.5em 1fr;gap:8px;padding:4px 0;border-bottom:1px dashed var(--line)}
+.ly22-d .k span{color:var(--faint);font-size:12px}
+.ly22-d mark{background:var(--warm-soft);color:var(--warm);border-radius:3px;padding:0 3px}
+.ly22-d .row{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--muted)}
+.ly22-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('ly22'+id);
+  const L=[`<p><b>今年三本账都在约定的边界之内。</b></p><p>盖房账户离目标近了，达到的把握从 61% 升到 70%；养老账户离目标远了一些，把握从 84% 降到 79%，原因是一场风暴。</p><p>有 <mark>1 件事</mark> 等你确认：村里新出的免税养老账户，是否转入。</p>`,
+    `<div class="k"><span>3 月 2 日</span>风暴后养老账户跌 22%，超过 15%，按约定停下来问你；你确认后，按约定第三条把船股比例从 74% 调回 80%。</div><div class="k"><span>6 月 15 日</span>你换了工作，收入提高；按约定第四条暂停调整，已请你确认新的存入比例，你确认为 22%。</div><div class="k"><span>9 月 1 日</span>船队费用上调，年费用升到 0.28%，仍低于 0.3% 的上限。</div><div class="k"><span>11 月 20 日</span><mark>待确认</mark>：是否把养老账户转入新的免税账户。</div>`,
+    `<div class="row">01-05 09:12　存入 0.017　依据：第三条　当时比例：盖房 19.6% 船股</div><div class="row">01-05 09:12　买入稳妥份额 0.014　依据：第三条</div><div class="row">02-05 09:10　存入 0.017　依据：第三条</div><div class="row">03-02 15:40　卖出稳妥份额 0.21，买入船股 0.21　依据：第三条，你于 3 月 2 日确认　当时：养老船股 74%，约定 80%</div><div class="row">……共 312 条，由第三方保存，不可修改</div>`];
+  const M=['一年只看一次的人，停在这一层就够了：离目标多远、有没有越界、有什么要他决定。','想知道为什么的人，看这几个关键节点：较大的、不可挽回的、触发了条件的决定。','要深究或替他核对的人，看全部记录；每一条都写明依据与当时的数值。'];
+  function set(k){document.querySelectorAll('[data-ly22]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.ly22===k)));$('-d').innerHTML=L[k];$('-msg').textContent=M[k];}
+  document.querySelectorAll('[data-ly22]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.ly22)));
+  $('').addEventListener('anim-in',()=>{[0,1,2].forEach((k,i)=>setTimeout(()=>set(k),300+i*2600));});
+  set(0);
+})();
+</script>

@@ -1,0 +1,35 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">同一种能力，两种目标</p><p class="figsub">书记员的能力是了解一户人家、在关键时刻在场。点选一个时刻，比较它按委托人的计划行事与按交易次数或推广收入行事时，各会怎样做。</p></div><button class="replay" type="button" data-replay="gl18">重播</button></div>
+    <div class="gl18" id="gl18" data-anim>
+      <div class="gl18-m" id="gl18-m"></div>
+      <div class="gl18-d" id="gl18-d" aria-live="polite"></div>
+    </div>
+  </div>
+  <figcaption>示意：对照为虚构的例子。</figcaption>
+</figure>
+<style>
+.gl18-m{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.gl18-m button{font:inherit;cursor:pointer;text-align:left;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:8px 10px;color:var(--ink);font-size:13px;opacity:0;transform:translateY(6px);transition:opacity .35s,transform .35s,border-color .3s;transition-delay:calc(var(--i)*.2s)}
+.gl18.in .gl18-m button{opacity:1;transform:none}
+.gl18-m button.sel{border-color:var(--ink)}
+.gl18-d{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.gl18-d div{border-radius:9px;padding:10px 12px;font-size:13.5px;line-height:1.6}
+.gl18-d div:first-child{background:var(--accent-soft)} .gl18-d div:last-child{background:var(--warm-soft)}
+.gl18-d span{display:block;font-size:11.5px;color:var(--faint)}
+@media (max-width:640px){.gl18-m{grid-template-columns:1fr 1fr}.gl18-d{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const M=[['发薪那天','把约定的比例自动存入，多出的钱提醒是否也存一些。','推送一款“限时”的高收益产品，正好用掉这个月多出的钱。'],
+    ['风暴之后大跌','摆出当初的约定与这次下跌的历史位置，请他隔一天再确认。','推送“抄底良机”与“止损提醒”，一买一卖都是成交。'],
+    ['连涨几周','提醒组合已偏离约定的比例，按计划卖出一部分。','推送涨幅榜与“你错过了”的提示，再放一阵彩带。'],
+    ['他什么也不做','什么也不做，计划自己在运行。','推送消息，直到他再打开一次。']];
+  const g=document.getElementById('gl18-m'),d=document.getElementById('gl18-d');
+  g.innerHTML=M.map((m,i)=>`<button type="button" style="--i:${i}">${m[0]}</button>`).join('');const bs=[...g.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));d.innerHTML=`<div><span>按委托人的计划</span>${M[i][1]}</div><div><span>按交易次数或推广收入</span>${M[i][2]}</div>`;}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('gl18').addEventListener('anim-in',()=>{[0,1,2,3].forEach((i,k)=>setTimeout(()=>set(i),1200+k*2000));});
+  set(0);
+})();
+</script>

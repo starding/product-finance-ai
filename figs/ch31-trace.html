@@ -1,0 +1,32 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">十二条原则，各自来自哪组约束</p><p class="figsub">每一行是一条原则，三列是三组约束，圆点表示这条原则由该组约束推出。点按一行，查看推导的链条。</p></div><button class="replay" type="button" data-replay="tc">重播</button></div>
+    <div class="tc" id="tc" data-anim>
+      <div class="tc-h"><span></span><span>原则</span><span>市场</span><span>用户</span><span>AI</span></div>
+      <button type="button" class="tc-r" data-i="0" style="--i:0"><em>1</em><span>只承诺能提供、能兑现、能核验的价值</span><i class="on"></i><i class=""></i><i class="on"></i></button><button type="button" class="tc-r" data-i="1" style="--i:1"><em>2</em><span>以净价值衡量产品</span><i class=""></i><i class="on"></i><i class=""></i></button><button type="button" class="tc-r" data-i="2" style="--i:2"><em>3</em><span>价值落在不随普及而消失的地方</span><i class="on"></i><i class=""></i><i class="on"></i></button><button type="button" class="tc-r" data-i="3" style="--i:3"><em>4</em><span>把交代写成委托书</span><i class=""></i><i class="on"></i><i class="on"></i></button><button type="button" class="tc-r" data-i="4" style="--i:4"><em>5</em><span>按可逆性分配授权，边界在执行层</span><i class="on"></i><i class="on"></i><i class="on"></i></button><button type="button" class="tc-r" data-i="5" style="--i:5"><em>6</em><span>收入与目标站在用户一边，责任跟随控制</span><i class="on"></i><i class=""></i><i class="on"></i></button><button type="button" class="tc-r" data-i="6" style="--i:6"><em>7</em><span>从适用比例高、易核对的任务做起</span><i class=""></i><i class=""></i><i class="on"></i></button><button type="button" class="tc-r" data-i="7" style="--i:7"><em>8</em><span>缩短无人检查的段落，没把握时停下</span><i class=""></i><i class=""></i><i class="on"></i></button><button type="button" class="tc-r" data-i="8" style="--i:8"><em>9</em><span>关系存为对象，按时点记录，可见可回放</span><i class="on"></i><i class="on"></i><i class="on"></i></button><button type="button" class="tc-r" data-i="9" style="--i:9"><em>10</em><span>保障强度与风险相称</span><i class="on"></i><i class=""></i><i class="on"></i></button><button type="button" class="tc-r" data-i="10" style="--i:10"><em>11</em><span>用可诊断、难伪造的证据换取信任</span><i class="on"></i><i class="on"></i><i class=""></i></button><button type="button" class="tc-r" data-i="11" style="--i:11"><em>12</em><span>默认值站在用户一边，邀请改进，追求相称的信任</span><i class=""></i><i class="on"></i><i class="on"></i></button>
+    </div>
+    <div class="tc-d" id="tc-d">点按一条原则。</div>
+  </div>
+  <figcaption>括号内为相关章节。</figcaption>
+</figure>
+<style>
+.tc-h,.tc-r{display:grid;grid-template-columns:24px minmax(0,1fr) 44px 44px 44px;gap:8px;align-items:center}
+.tc-h{font-size:11.5px;color:var(--faint);padding:0 10px 4px}
+.tc-h span:nth-child(n+3){text-align:center}
+.tc-r{font:inherit;width:100%;text-align:left;background:var(--quote);border:1.5px solid transparent;border-radius:7px;padding:5px 10px;margin-bottom:3px;font-size:12.5px;color:var(--ink);cursor:pointer;opacity:0;transform:translateX(-6px);transition:opacity .3s,transform .3s;transition-delay:calc(var(--i)*.07s)}
+.tc.in .tc-r{opacity:1;transform:none}
+.tc-r em{font-style:normal;color:var(--faint)}
+.tc-r i{justify-self:center;width:12px;height:12px;border-radius:50%;background:var(--surface);border:1.5px solid var(--line)}
+.tc-r i.on{background:var(--accent);border-color:var(--accent)}
+.tc-r.sel{border-color:var(--ink)}
+.tc-d{margin-top:10px;background:var(--quote);border-radius:10px;padding:10px 12px;font-size:13.5px;line-height:1.7;min-height:4.6em}
+.tc-d b{display:block}
+@media (max-width:640px){.tc-h,.tc-r{grid-template-columns:20px minmax(0,1fr) 30px 30px 30px}}
+</style>
+<script>
+(function(){
+  const P=[["只承诺能提供、能兑现、能核验的价值", "价值", "信息优势零和、短期结果主要来自运气 → 收益与方向不可承诺 → 只承诺费用、执行、纪律与覆盖", "7–12、24"], ["以净价值衡量产品", "价值", "注意力有限、承受力有三个面 → 用户的投入与风险是真实的代价 → 结果减投入减风险", "15–17、24"], ["价值落在不随普及而消失的地方", "价值", "分析变便宜后预测优势递减 → 可持续的是成本、纪律、行为与可及性", "19、23"], ["把交代写成委托书", "契约", "可度量的目标会被钻空子、合同写不全 → 目标配风险约束，写明默认规则与复核", "15、21、25"], ["按可逆性分配授权，边界在执行层", "契约", "交易成交后不可撤回、代理会出错 → 不可逆的一步由本人完成，执行层强制边界", "13、21、26"], ["收入与目标站在用户一边，责任跟随控制", "契约", "信任品与利益冲突、代理朝被衡量的指标优化 → 结构性对齐，最低成本避免者负责", "13、14、27"], ["从适用比例高、易核对的任务做起", "实现", "放大倍数受适用比例与核对成本限制 → 先做能完整承担、容易核对的事", "19、20、22"], ["缩短无人检查的段落，没把握时停下", "实现", "误差随步骤累积、没有把握时倾向于猜 → 检查点、请示与说“不知道”", "21"], ["关系存为对象，按时点记录，可见可回放", "实现", "数据会被修订、持续任务没有终点 → 长期对象、时点记录、任务面板与回放", "15、28"], ["保障强度与风险相称", "实现", "代理的输出不确定、金融错误后果严重 → 按后果与验证难度定级、统计评测、监控与分级发布", "22、29"], ["用可诊断、难伪造的证据换取信任", "信任", "信任是随证据更新的信念、收益证据诊断力低 → 过程证据、第三方核验、抢先说明", "13、18、30"], ["默认值站在用户一边，邀请改进，追求相称的信任", "信任", "偏差有方向、过度信任导致误用、用户的现状也是一种稳态 → 呈现与默认值服务于任务，退出容易；先尊重习惯，用用户自己的记录邀请改进", "16、18、30"]];
+  const rs=[...document.querySelectorAll('.tc-r')];
+  rs.forEach((r,i)=>r.addEventListener('click',()=>{rs.forEach(x=>x.classList.toggle('sel',x===r));const [n,l,ch,cp]=P[i];document.getElementById('tc-d').innerHTML=`<b>${i+1}　${n}（${l}层）</b>${ch}（第 ${cp} 章）`;}));
+})();
+</script>

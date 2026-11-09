@@ -1,0 +1,55 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">Same average return: more volatility, less compounding</p>
+    <p class="figsub">Both assets have an arithmetic mean return of 8% a year. Adjust the volatility of the one on the right and see the gap in the typical (median) outcome after 20 years.</p>
+    <div class="dg" id="dg" data-anim>
+      <div class="dg-bars">
+        <div class="dg-c"><div class="dg-t"><i id="dg-b0"></i></div><b id="dg-v0"></b><span>Volatility 0%</span></div>
+        <div class="dg-c"><div class="dg-t"><i id="dg-b1" class="w"></i></div><b id="dg-v1"></b><span id="dg-l1"></span></div>
+      </div>
+      <div class="sl"><label for="dg-s">Annual volatility of the right-hand asset <b id="dg-sv"></b></label><input id="dg-s" type="range" min="0" max="50" step="5" value="20"></div>
+      <div class="dg-out">
+        <div><span>Arithmetic mean return</span><b>8.0%</b></div>
+        <div><span>Compound return (approx.)</span><b id="dg-g"></b></div>
+        <div><span>Volatility drag (about half the volatility squared)</span><b id="dg-d"></b></div>
+      </div>
+    </div>
+  </div>
+  <figcaption>Illustrative lognormal model: the compound return is roughly the arithmetic mean return minus half the square of the volatility. Bar heights show the median outcome after 20 years, starting from 100.</figcaption>
+</figure>
+<style>
+.dg-bars{display:flex;gap:40px;justify-content:center;align-items:flex-end;height:220px;margin-bottom:10px}
+.dg-c{display:flex;flex-direction:column;align-items:center;gap:4px;width:120px;height:100%;justify-content:flex-end}
+.dg-t{width:64px;flex:1;display:flex;align-items:flex-end}
+.dg-t i{display:block;width:100%;background:var(--accent);border-radius:6px 6px 0 0;transition:height .5s ease;height:0}
+.dg-t i.w{background:var(--warm)}
+.dg-c b{font-size:18px;font-variant-numeric:tabular-nums}
+.dg-c span{font-size:12px;color:var(--faint)}
+.dg-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.dg-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.dg-out span{display:block;font-size:12px;color:var(--faint)}
+.dg-out b{font-size:19px;font-variant-numeric:tabular-nums}
+#dg-d{color:var(--warm)}
+@media (max-width:640px){.dg-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const M=0.08, T=20, s=document.getElementById('dg-s');
+  const med=sg=>100*Math.exp((Math.log(1+M)-0)*T)*Math.exp(-sg*sg/2*T);
+  const base=100*Math.pow(1+M,T), H=180;
+  function render(){
+    const sg=+s.value/100, v1=med(sg);
+    document.getElementById('dg-sv').textContent=s.value+'%';
+    document.getElementById('dg-b0').style.height=(base/base*H)+'px';
+    document.getElementById('dg-b1').style.height=(v1/base*H)+'px';
+    document.getElementById('dg-v0').textContent=Math.round(base);
+    document.getElementById('dg-v1').textContent=Math.round(v1);
+    document.getElementById('dg-l1').textContent='Volatility '+s.value+'%';
+    document.getElementById('dg-g').textContent=((M-sg*sg/2)*100).toFixed(1)+'%';
+    document.getElementById('dg-d').textContent=(sg*sg/2*100).toFixed(1)+' pp';
+  }
+  s.addEventListener('input',render);
+  document.getElementById('dg').addEventListener('anim-in',()=>{let v=0;s.value=v;render();const id=setInterval(()=>{v+=5;s.value=v;render();if(v>=40){clearInterval(id);setTimeout(()=>{s.value=20;render();},700);}},250);});
+  render();
+})();
+</script>

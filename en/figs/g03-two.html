@@ -1,0 +1,34 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Unable to repay, unwilling to repay</p><p class="figsub">Click a situation to see which kind of default it is. This chapter considers only unwillingness; inability comes from uncertain harvests and is left until risk is discussed.</p></div><button class="replay" type="button" data-replay="w2">Replay</button></div>
+    <div class="w2" id="w2" data-anim>
+      <div class="w2-bins"><div class="w2-bin" data-b="0"><b>Unable to repay</b><span>Has nothing to give: a matter of risk</span><div class="w2-in" id="w2-b0"></div></div><div class="w2-bin on" data-b="1"><b>Unwilling to repay</b><span>Could give, chooses not to: this chapter's problem</span><div class="w2-in" id="w2-b1"></div></div></div>
+      <div class="w2-pool" id="w2-pool"></div>
+      <p class="w2-msg" id="w2-msg" aria-live="polite"></p>
+    </div>
+  </div>
+</figure>
+<style>
+.w2-bins{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.w2-bin{background:var(--quote);border-radius:10px;padding:10px 12px;min-height:130px;border-top:3px solid var(--line)}
+.w2-bin.on{border-top-color:var(--accent)}
+.w2-bin b{font-size:15px;display:block} .w2-bin>span{font-size:12px;color:var(--muted)}
+.w2-in{display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.w2-pool{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;min-height:34px}
+.w2-c{font:inherit;font-size:12.5px;cursor:pointer;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 10px;color:var(--ink);text-align:left}
+.w2-in .w2-c{cursor:default}
+.w2-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.w2-bins{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const C=[['Poor spring harvest, no grain in store',0,'The harvest failed, so the borrower cannot repay even if he wants to: this is risk, not a problem of commitment.'],['Grain in store, but the borrower moved to another island',1,'The grain is there; once he has left, not repaying simply has no consequences: this is a problem of commitment.'],['The borrower fell ill and could not work the fields',0,'Illness meant no harvest, so there is nothing to give: this is inability to repay.'],['The borrower thinks the lender will not pursue him',1,'The grain is there, and he has worked out that not repaying costs nothing: a typical case of unwillingness.'],['The borrower lent the grain on to someone else',1,'He diverted the grain owed in repayment; he could have repaid and did not: this is unwillingness.'],['A storm destroyed the whole island\'s harvest',0,'Everyone\'s harvest failed at once and no one can repay: this is risk, and risk that cannot be diversified away.']];
+  const $=id=>document.getElementById(id);let placed=[];
+  function draw(){$('w2-b0').innerHTML='';$('w2-b1').innerHTML='';$('w2-pool').innerHTML='';
+    C.forEach((c,i)=>{const b=`<button type="button" class="w2-c" data-i="${i}">${c[0]}</button>`;if(placed.includes(i))$('w2-b'+c[1]).insertAdjacentHTML('beforeend',b);else $('w2-pool').insertAdjacentHTML('beforeend',b);});
+    $('w2-pool').querySelectorAll('.w2-c').forEach(b=>b.addEventListener('click',()=>put(+b.dataset.i)));}
+  function put(i){if(!placed.includes(i))placed.push(i);draw();$('w2-msg').textContent=C[i][2];}
+  $('w2').addEventListener('anim-in',()=>{placed=[];draw();$('w2-msg').textContent='';C.forEach((_,i)=>setTimeout(()=>put(i),600+i*1100));});
+  draw();$('w2-msg').textContent='Click a situation below to sort it into a category.';
+})();
+</script>

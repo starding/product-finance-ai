@@ -1,0 +1,49 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">全部财富：金融资产与人力资本</p><p class="figsub">拖动年龄，看全部财富的构成；切换工作收入的性质，看金融资产中适合持有的股票比例怎样变化。</p></div><button class="replay" type="button" data-replay="hc">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="收入性质">
+      <button type="button" data-hc="s" aria-pressed="true">收入稳定，接近债券</button>
+      <button type="button" data-hc="c" aria-pressed="false">收入随经济起落，接近股票</button>
+    </div>
+    <div class="hc" id="hc" data-anim>
+      <div class="sl"><label for="hc-a">年龄 <b id="hc-av"></b></label><input id="hc-a" type="range" min="25" max="65" step="1" value="30"></div>
+      <div class="hc-w"><span>全部财富</span><div class="hc-t"><i id="hc-h" style="background:var(--blue)"></i><i id="hc-f" style="background:var(--accent)"></i></div></div>
+      <div class="legend"><span><i style="background:var(--blue)"></i>人力资本：未来工作收入的现值</span><span><i style="background:var(--accent)"></i>金融资产</span></div>
+      <svg viewBox="0 0 640 180" role="img" aria-label="金融资产中的股票比例随年龄变化"><g id="hc-g"></g></svg>
+      <p class="hc-msg" id="hc-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意模型：年收入为 1，65 岁退休，折现率 2%；每年储蓄收入的 15%，金融资产年增长 4%；全部财富中的股票目标为 60%，稳定收入的人力资本按 10% 视作股票，随经济起落的按 50% 视作股票。思路见 Bodie、Merton 与 Samuelson（1992），Viceira（2001）。</figcaption>
+</figure>
+<style>
+.hc-w{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:center;font-size:12.5px;color:var(--faint);margin:6px 0}
+.hc-t{display:flex;height:22px;border-radius:5px;overflow:hidden;background:var(--quote)}
+.hc-t i{display:block;height:100%;transition:width .4s}
+.hc svg{width:100%;height:auto;display:block;margin-top:6px}
+.hc-msg{font-size:14px;margin:4px 0 0;min-height:3.4em}
+@media (max-width:640px){.hc svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const H=a=>{let s=0;for(let k=1;k<=65-a;k++)s+=1/Math.pow(1.02,k);return s;};
+  const F=a=>{let f=.5;for(let k=25;k<a;k++)f=f*1.04+.15;return f;};
+  const S=(a,b)=>Math.max(0,Math.min(1,(.6*(F(a)+H(a))-b*H(a))/F(a)));
+  const B={s:.1,c:.5},X0=50,X1=620,YT=14,YB=150,x=a=>X0+(a-25)/40*(X1-X0),y=v=>YB-v*(YB-YT);
+  const $=id=>document.getElementById(id),sl=$('hc-a');let k='s';
+  const path=b=>{let d='';for(let a=25;a<=65;a++)d+=(a===25?'M':'L')+x(a).toFixed(1)+','+y(S(a,b)).toFixed(1);return d;};
+  function draw(){const a=+sl.value;let g=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`;
+    [0,.5,1].forEach(v=>g+=`<text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text>`);
+    [25,35,45,55,65].forEach(v=>g+=`<text x="${x(v)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${v} 岁</text>`);
+    ['s','c'].forEach(j=>g+=`<path d="${path(B[j])}" fill="none" stroke="${j==='s'?'var(--blue)':'var(--warm)'}" stroke-width="${j===k?3:1.5}" opacity="${j===k?1:.35}"/>`);
+    g+=`<text x="${X1}" y="${YT+4}" text-anchor="end" font-size="11" class="t-faint">金融资产中的股票比例</text>`;
+    const s=S(a,B[k]);g+=`<line x1="${x(a)}" y1="${YT}" x2="${x(a)}" y2="${YB}" class="s-faint" stroke-dasharray="3 3"/><circle cx="${x(a)}" cy="${y(s)}" r="6" fill="var(--ink)"/>`;
+    $('hc-g').innerHTML=g;
+    const h=H(a),f=F(a),t=h+f;$('hc-h').style.width=h/t*100+'%';$('hc-f').style.width=f/t*100+'%';$('hc-av').textContent=a+' 岁';
+    $('hc-msg').textContent=`${a} 岁时，人力资本约占全部财富的 ${(h/t*100).toFixed(0)}%。${k==='s'?'收入稳定时，人力资本像一笔债券':'收入随经济起落时，人力资本本身已经承担了不少股票风险'}，金融资产中适合持有的股票比例约为 ${(S(a,B[k])*100).toFixed(0)}%。`;}
+  function set(j){k=j;document.querySelectorAll('[data-hc]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.hc===j)));draw();}
+  document.querySelectorAll('[data-hc]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.hc)));
+  sl.addEventListener('input',draw);
+  $('hc').addEventListener('anim-in',()=>{let a=25;sl.value=a;draw();const id=setInterval(()=>{a+=1;sl.value=a;draw();if(a>=65){clearInterval(id);sl.value=30;draw();}},90);});
+  set('s');
+})();
+</script>

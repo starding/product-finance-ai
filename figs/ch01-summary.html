@@ -1,0 +1,26 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：围绕承诺设计产品</p><p class="figsub">三个要素各自对应的设计要求，以及代理人带来的新问题。</p></div><button class="replay" type="button" data-replay="sm">重播</button></div>
+    <div class="sm" id="sm" data-anim>
+      <div class="sm-core">承诺<span>谁承诺 · 承诺什么 · 何时落空</span></div>
+      <div class="sm-k" style="--i:0"><b>时间</b><p>期限与用钱时间匹配；按购买力衡量回报</p></div>
+      <div class="sm-k" style="--i:1"><b>风险</b><p>承诺的形状与承受能力匹配；不用平均数代表结果</p></div>
+      <div class="sm-k" style="--i:2"><b>信任</b><p>披露、托管与记录是产品功能；让过程可被检验，而不靠短期结果证明</p></div>
+      <div class="sm-ai" style="--i:3"><b>AI 代理：新的承诺方</b><p>它承诺做什么，凭什么可信，出了问题如何发现，同样用这三个要素回答</p></div>
+    </div>
+  </div>
+</figure>
+<style>
+.sm{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.sm-core{grid-column:1/-1;text-align:center;font-size:20px;font-weight:700;padding:14px;border-radius:12px;background:var(--ink);color:var(--bg);font-family:var(--serif)}
+.sm-core span{display:block;font-family:var(--sans);font-size:12px;font-weight:400;opacity:.75;margin-top:4px}
+.sm-k{position:relative;background:var(--quote);border-radius:10px;padding:12px;opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(.3s + var(--i)*.35s)}
+.sm-k::before{content:"";position:absolute;left:50%;top:-10px;width:2px;height:10px;background:var(--faint)}
+.sm-k b{font-size:15px;color:var(--accent)}
+.sm-k p,.sm-ai p{margin:4px 0 0;font-size:13px;line-height:1.6;color:var(--muted)}
+.sm-ai{grid-column:1/-1;border:1.5px dashed var(--warm);background:var(--warm-soft);border-radius:10px;padding:12px;opacity:0;transition:opacity .5s;transition-delay:1.7s}
+.sm-ai b{color:var(--warm);font-size:15px}
+.sm.in .sm-k{opacity:1;transform:none}
+.sm.in .sm-ai{opacity:1}
+@media (max-width:640px){.sm{grid-template-columns:1fr}.sm-k::before{display:none}}
+</style>

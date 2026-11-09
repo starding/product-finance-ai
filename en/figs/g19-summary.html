@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: what did not change</p><p class="figsub">Four conclusions, each tied to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="g19summary">Replay</button></div>
+    <div class="g19summary" id="g19summary" data-anim><div class="g19summary-c" style="--i:0"><em>Time</em><b>Fees can be saved, years cannot</b><p>When income and needs arrive does not change, and neither does the number of years accumulation takes.</p></div><div class="g19summary-c" style="--i:1"><em>Risk</em><b>What cannot be diversified must still be borne</b><p>Individual risk is diversified away almost for free; the risk the whole village shares is not reduced at all.</p></div><div class="g19summary-c warn" style="--i:2"><em>Compensation</em><b>No high return without bearing risk</b><p>Only risk that cannot be diversified earns compensation; an agent cannot put people above the line.</p></div><div class="g19summary-c warn" style="--i:3"><em>Irreversibility</em><b>The faster the execution, the more room to leave</b><p>Some losses cannot be undone; keeping options open has value and must be deliberately preserved in the design.</p></div></div>
+  </div>
+</figure>
+<style>
+.g19summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g19summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g19summary-c.warn{border-left-color:var(--warm)}
+.g19summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g19summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g19summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g19summary.in .g19summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g19summary{grid-template-columns:1fr}}
+</style>

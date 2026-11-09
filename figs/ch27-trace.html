@@ -1,0 +1,31 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">记录决定了责任能否分清</p><p class="figsub">一起事件：代理卖出了一笔超出约定比例的持仓。事后要回答六个问题。切换记录的完整程度，看能回答多少。</p></div><button class="replay" type="button" data-replay="tr">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="记录"><button type="button" data-tr="0" aria-pressed="true">只有成交记录</button><button type="button" data-tr="1" aria-pressed="false">每一次关键行动都有记录</button></div>
+    <div class="tr" id="tr" data-anim></div>
+    <p class="tr-msg" id="tr-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>示意。券商须保存的记录及其方式见美国证券交易委员会第 17a-4 条规则；对 AI 代理，记录还要覆盖输入、依据与授权。</figcaption>
+</figure>
+<style>
+.tr{display:grid;gap:5px}
+.tr-r{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:10px;align-items:center;font-size:12.5px;background:var(--quote);border-radius:8px;padding:7px 10px;opacity:0;transform:translateY(4px);transition:opacity .3s,transform .3s;transition-delay:calc(var(--i)*.12s)}
+.tr-r.on{opacity:1;transform:none}
+.tr-r span:last-child{border-radius:6px;padding:3px 8px}
+.tr-r .k{background:var(--accent-soft);color:var(--ink)} .tr-r .n{background:var(--surface);color:var(--faint);border:1px dashed var(--line)}
+.tr-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.tr-r{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const Q=[['卖出了什么、何时成交','卖出 1200 股，10:32 成交',1],['代理当时看到的价格与持仓比例','行情数据 10:31:58，持仓比例 38%（委托书上限 30%）',0],['依据委托书的哪一条','第 3 条：单一持仓超过 30% 时减仓至 30%',0],['为什么卖出的数量超过了需要','代理把“减至 30%”误读为“减少 30%”',0],['执行层是否做了检查','检查了品种与单笔金额，未检查调整后的比例（检查项缺失）',0],['是否通知了委托人','10:33 发送通知，10:40 委托人已读',0]];
+  const box=document.getElementById('tr');
+  function set(k){document.querySelectorAll('[data-tr]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.tr===k)));
+    box.innerHTML=Q.map(([q,a,base],i)=>{const ok=k||base;return `<div class="tr-r" style="--i:${i}"><span>${q}</span><span class="${ok?'k':'n'}">${ok?a:'无法还原'}</span></div>`;}).join('');
+    setTimeout(()=>box.querySelectorAll('.tr-r').forEach(e=>e.classList.add('on')),40);
+    document.getElementById('tr-msg').textContent=k?'六个问题都能回答：错误来自代理误读条款，执行层缺少一项检查。责任由平台承担，补偿有依据，检查项也可以补上。':'只有成交记录时，只知道卖出了什么，不知道为什么。责任无法分清，同样的错误也无从避免。';}
+  document.querySelectorAll('[data-tr]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.tr)));
+  box.addEventListener('anim-in',()=>{set(0);setTimeout(()=>set(1),2600);});
+  set(0);
+})();
+</script>

@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">只有分散不掉的风险才有补偿</p><p class="figsub">横轴是一种船股随全村船队起落的程度，纵轴是它的预期回报。直线上的点由市场定价；点选“高回报而不随船队起落”的那一点，看会发生什么。</p></div><button class="replay" type="button" data-replay="cp19">重播</button></div>
+    <div class="cp19" id="cp19" data-anim>
+      <svg viewBox="0 0 660 220" role="img" aria-label="系统风险与预期回报"><g id="cp19-g"></g></svg>
+      <div class="seg-btns" role="group" aria-label="情形">
+        <button type="button" data-cp19="0" aria-pressed="true">市场的定价</button>
+        <button type="button" data-cp19="1" aria-pressed="false">高回报而不随船队起落</button>
+      </div>
+      <p class="cp19-msg" id="cp19-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：无风险回报 2%，随船队起落程度为 1 的船股预期回报 7%（夏普，1964）。个别风险可以分散，不影响直线上的位置。</figcaption>
+</figure>
+<style>
+.cp19 svg{width:100%;height:auto;display:block}
+.cp19 circle{transition:cy .9s,cx .9s}
+.cp19-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cp19 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cp19'+id),X0=56,X1=628,YT=12,YB=186,x=b=>X0+b/2*(X1-X0),y=r=>YB-r/.14*(YB-YT),er=b=>.02+.05*b;
+  const P=[[.3,'公用的渡船'],[.8,'近海的货船'],[1,'全村船队'],[1.5,'远洋的商船'],[1.9,'借钱造的大船']];
+  function draw(k){let h=[0,.04,.08,.12].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text>`).join('')+[0,.5,1,1.5,2].map(b=>`<text x="${x(b)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${b}</text>`).join('')+`<text x="${X1}" y="${YB+30}" text-anchor="end" font-size="11" class="t-faint">随全村船队起落的程度 →</text>`;
+    h+=`<line x1="${x(0)}" x2="${x(2)}" y1="${y(er(0))}" y2="${y(er(2))}" stroke="var(--accent)" stroke-width="2.4"/>`;
+    P.forEach(([b,n])=>{h+=`<circle cx="${x(b)}" cy="${y(er(b))}" r="6" fill="var(--accent)"/><text x="${x(b)+8}" y="${y(er(b))+16}" font-size="11" class="t-faint">${n}</text>`;});
+    const yy=k?er(.2):.12;h+=`<circle id="cp19-o" cx="${x(.2)}" cy="${y(yy)}" r="8" fill="var(--warm)"/><text x="${x(.2)+10}" y="${y(yy)-8}" font-size="11" fill="var(--warm)">${k?'价格被抬高之后':'号称的回报 12%'}</text>`;
+    $('-g').innerHTML=h;
+    $('-msg').textContent=k?'这样的船股如果真的存在，所有书记员都会去买，价格立刻被抬高，回报随之降到直线上，只剩 3%。承诺高回报而没有风险的代理，要么在隐藏风险，要么在计算上出了错。':'直线上的每一点，回报的高低只取决于它随全村船队起落的程度；书记员能帮人选择站在直线上的哪一点，却不能让人站到直线上方。';}
+  const bs=[...document.querySelectorAll('[data-cp19]')];
+  function set(k){bs.forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.cp19===k)));draw(k);}
+  bs.forEach(b=>b.addEventListener('click',()=>set(+b.dataset.cp19)));
+  $('').addEventListener('anim-in',()=>{set(0);setTimeout(()=>set(1),2400);});
+  set(0);
+})();
+</script>

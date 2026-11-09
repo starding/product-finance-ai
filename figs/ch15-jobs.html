@@ -1,0 +1,54 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">同一只产品，不同的任务</p>
+    <p class="figsub">产品固定为一只股票指数基金。切换用户要完成的任务，看衡量它的尺子怎样改变。</p>
+    <div class="seg-btns" role="group" aria-label="任务">
+      <button type="button" data-jb="ret" aria-pressed="true">三十年后退休</button>
+      <button type="button" data-jb="home" aria-pressed="false">五年后付首付</button>
+      <button type="button" data-jb="fee" aria-pressed="false">三个月后交学费</button>
+      <button type="button" data-jb="emg" aria-pressed="false">留作应急</button>
+    </div>
+    <div class="jb" id="jb" data-anim>
+      <div class="jb-prod"><span>产品</span><b>股票指数基金</b><em>历史上曾出现一年内下跌超过 30% 的情形</em></div>
+      <div class="jb-grid">
+        <div><span>多久以后用钱</span><b id="jb-h"></b></div>
+        <div><span>能接受的最大损失</span><b id="jb-l"></b></div>
+        <div><span>什么算完成</span><b id="jb-d"></b></div>
+      </div>
+      <div class="jb-fit"><span>合适程度</span><div class="jb-bar"><i id="jb-bar"></i></div><b id="jb-v"></b></div>
+      <p class="jb-msg" id="jb-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意。“合适程度”只比较期限与可承受损失，不构成对任何产品的推荐。</figcaption>
+</figure>
+<style>
+.jb-prod{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;background:var(--quote);border-radius:8px;padding:8px 12px}
+.jb-prod span{font-size:12px;color:var(--faint)} .jb-prod b{font-size:15px} .jb-prod em{font-style:normal;font-size:12px;color:var(--muted)}
+.jb-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
+.jb-grid div{border:1.5px solid var(--line);border-radius:8px;padding:8px 12px}
+.jb-grid span{display:block;font-size:12px;color:var(--faint)}
+.jb-grid b{font-size:14px;line-height:1.5;display:block;margin-top:2px}
+.jb-fit{display:grid;grid-template-columns:auto 1fr 90px;gap:10px;align-items:center}
+.jb-bar{height:14px;background:var(--quote);border-radius:7px;overflow:hidden}
+.jb-bar i{display:block;height:100%;width:0;border-radius:7px;transition:width .6s ease,background .3s}
+.jb-fit span{font-size:12px;color:var(--faint)}
+.jb-fit b{font-size:14px;text-align:right}
+.jb-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.jb-grid{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const J={ret:['约 30 年','中途下跌 40% 也可以等待恢复','到退休时积累的购买力足够',92,'合适','期限很长，短期下跌有时间恢复，承担风险可以获得风险补偿。'],
+    home:['约 5 年','最多 15%，否则首付不够','五年后能拿出确定的金额',40,'部分合适','期限中等，可以配置一部分；越接近用钱时间，越应当降低风险。'],
+    fee:['3 个月','几乎不能有损失','到期时金额一分不少',6,'不合适','期限太短，一次下跌就无法按时交费；这项任务需要的是确定性，而不是收益。'],
+    emg:['随时可能','不能有损失，还要随时取出','需要时能立刻取出足够的钱',4,'不合适','应急资金要求随时可用、金额确定，价格波动的资产不能完成这项任务。']};
+  const $=id=>document.getElementById(id);
+  function set(k){document.querySelectorAll('[data-jb]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.jb===k)));
+    const [h,l,d,f,v,m]=J[k];$('jb-h').textContent=h;$('jb-l').textContent=l;$('jb-d').textContent=d;
+    const bar=$('jb-bar');bar.style.width='0';bar.style.background=f>60?'var(--accent)':f>20?'var(--gold)':'var(--warm)';
+    setTimeout(()=>bar.style.width=f+'%',40);$('jb-v').textContent=v;$('jb-msg').textContent=m;}
+  document.querySelectorAll('[data-jb]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.jb)));
+  $('jb').addEventListener('anim-in',()=>{const ks=['ret','home','fee','emg'];ks.forEach((k,i)=>setTimeout(()=>set(k),i*1600));setTimeout(()=>set('ret'),ks.length*1600);});
+  set('ret');
+})();
+</script>

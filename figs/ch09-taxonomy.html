@@ -1,0 +1,60 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">按交易动机划分的交易者</p><p class="figsub">点按任一类，查看他们为什么交易、从谁那里获利或输给谁。</p></div><button class="replay" type="button" data-replay="tx">重播</button></div>
+    <div class="tx" id="tx" data-anim>
+      <div class="tx-col u" style="--i:0"><h5>效用型<span>为交易以外的好处</span></h5>
+        <button data-k="inv">投资者与借款人</button><button data-k="exc">资产交换者</button><button data-k="hed">对冲者</button><button data-k="app">学徒交易者</button><button data-k="fun">以交易为乐者</button></div>
+      <div class="tx-col p" style="--i:1"><h5>盈利型<span>为交易本身的利润</span></h5>
+        <div class="tx-sub">投机者 · 知情交易者</div><button data-k="val">价值交易者</button><button data-k="new">新闻交易者</button>
+        <div class="tx-sub">投机者 · 寄生型</div><button data-k="par">抢先、跟价与情绪导向的交易者</button>
+        <div class="tx-sub">投机者 · 操纵者</div><button data-k="man" class="bad">市场操纵者</button>
+        <div class="tx-sub">流动性供给者</div><button data-k="dea">交易商</button><button data-k="arb">套利者</button></div>
+      <div class="tx-col f" style="--i:2"><h5>徒劳型<span>自以为能赚钱，平均赚不到</span><em>依据 1993 年工作论文</em></h5>
+        <button data-k="ine">低效交易者</button>
+        <div class="tx-sub">低效交易者中的一类</div><button data-k="pse">伪知情交易者</button></div>
+    </div>
+    <div class="tx-d" id="tx-d" aria-live="polite">点按任一类交易者。</div>
+  </div>
+  <figcaption>效用型与盈利型的主要类别依据 Harris（2015）。市场操纵者依据 Harris（1993），在该文中与寄生型并列，同属盈利型。徒劳型及其细分依据 Harris（1993）：徒劳型分为低效交易者与受害交易者（本图未列后者），伪知情交易者属于低效交易者；2015 年版不再单列徒劳型。学徒交易者在 1993 年论文中列为效用型。</figcaption>
+</figure>
+<style>
+.tx{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tx-col{border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:6px;opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.tx.in .tx-col{opacity:1;transform:none}
+.tx-col.u{background:rgba(47,95,158,.1)} .tx-col.p{background:var(--accent-soft)} .tx-col.f{background:var(--warm-soft)}
+.tx-col h5{margin:0 0 4px;font-size:16px}
+.tx-col h5 span{display:block;font-size:12px;font-weight:400;color:var(--muted)}
+.tx-col h5 em{font-style:normal;font-size:11px;font-weight:400;color:var(--faint)}
+.tx-sub{font-size:11px;color:var(--faint);margin-top:4px}
+.tx button{font:inherit;font-size:13px;text-align:left;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:6px 9px;cursor:pointer}
+.tx button:hover{border-color:var(--ink)}
+.tx button.sel{border-color:var(--ink);box-shadow:0 0 0 2px var(--line)}
+.tx button.bad{border-style:dashed;color:var(--warm)}
+.tx-d{margin-top:12px;font-size:14px;line-height:1.7;min-height:5.2em;background:var(--quote);border-radius:10px;padding:10px 14px}
+.tx-d dl{display:grid;grid-template-columns:76px 1fr;gap:2px 10px;margin:4px 0 0}
+.tx-d dt{font-size:12px;color:var(--faint);padding-top:3px}
+.tx-d dd{margin:0}
+@media (max-width:640px){.tx{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const D={
+    inv:['投资者与借款人','把今天的钱留到将来，或把将来的收入提前使用。','交易成本是跨期配置的代价；平均略输给盈利型。','为养老定期买入指数基金；为用钱卖出持仓。'],
+    exc:['资产交换者','需要换成另一种资产：换汇、变现、调仓。','为即时成交付出价差。','出国前换汇；赎回基金支付学费。'],
+    hed:['对冲者','降低已有的风险暴露。','平均付出一点代价，换来结果的确定性。','出口企业卖出远期外汇锁定收入。'],
+    app:['学徒交易者','为学会交易而交易。','学费交给更有经验的对手；学成者转为赢家，学不成者通常退出。','用小额资金练习交易。'],
+    fun:['以交易为乐者','交易本身带来乐趣。','为娱乐付费，但常常低估付出了多少。','偏好低价、高波动的“彩票型”股票。'],
+    val:['价值交易者','估计资产的真实价值，在价格偏离时买卖。','从价格偏离价值时与之交易的人那里获利；推动价格更有效。','研究财报后买入被低估的公司。'],
+    new:['新闻交易者','抢在价格完全反映新闻之前交易。','从反应更慢的人那里获利；速度决定成败。','公告发布后数秒内下单的机构。'],
+    par:['寄生型交易者','预判别人的订单，抢在其前面交易，或跟随大单。','从被预判者的交易成本中获利；不提供新信息，损害流动性。','察觉大额买单后抢先买入，再高价卖给它。'],
+    man:['市场操纵者','散布传言、虚假报单、囤积挤压等。','从被误导的交易者那里获利；为各国法律所禁止。','先买入，再散布利好传言后卖出。'],
+    dea:['交易商','同时报出买价与卖价，等待别人来成交。','从急于成交的人那里赚取买卖价差；提供流动性。','交易所的做市商。'],
+    arb:['套利者','在相关资产之间的价差偏离时同时买卖。','从造成价差的交易者那里获利；把流动性从一个市场传到另一个市场。','在两个交易所同时买入低价、卖出高价的同一资产。'],
+    pse:['伪知情交易者','低效交易者中的一类：以为掌握了有价值的信息，其实已反映在价格里或没有预测力。','输给真正知情的人与交易商，并承担交易成本。','看到推送新闻后追涨买入。'],
+    ine:['低效交易者','交易方式不当，付出不必要的成本。','把多付的价差与冲击成本留给交易商与寄生型交易者。','在流动性很差时用市价单大额成交。']
+  };
+  const d=document.getElementById('tx-d'), bs=[...document.querySelectorAll('#tx button')];
+  bs.forEach(b=>b.addEventListener('click',()=>{bs.forEach(x=>x.classList.toggle('sel',x===b));const v=D[b.dataset.k];
+    d.innerHTML=`<b>${v[0]}</b><dl><dt>为什么交易</dt><dd>${v[1]}</dd><dt>输赢</dt><dd>${v[2]}</dd><dt>例子</dt><dd>${v[3]}</dd></dl>`;}));
+})();
+</script>

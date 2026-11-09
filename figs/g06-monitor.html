@@ -1,0 +1,35 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">替存款人看着借款人</p><p class="figsub">拖动存粮的户数与种果园的户数，比较每户存粮的人各自去查看每片果园，与由粮仓统一查看所需的查看次数。</p></div><button class="replay" type="button" data-replay="mo">重播</button></div>
+    <div class="mo" id="mo" data-anim>
+      <div class="mo-b"><span>各自查看</span><div><i id="mo-a" style="background:var(--warm)"></i></div><b id="mo-av"></b></div>
+      <div class="mo-b"><span>粮仓统一查看</span><div><i id="mo-b" style="background:var(--accent)"></i></div><b id="mo-bv"></b></div>
+      <div class="mo-sl">
+        <div class="sl"><label for="mo-d">存粮的户数 <b id="mo-dv"></b></label><input id="mo-d" type="range" min="1" max="100" step="1" value="50"></div>
+        <div class="sl"><label for="mo-n">种果园的户数 <b id="mo-nv"></b></label><input id="mo-n" type="range" min="1" max="20" step="1" value="10"></div>
+      </div>
+      <p class="mo-msg" id="mo-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：每户存粮的人都把粮食分给每一片果园时，各自查看需要 存粮户数 × 果园数 次；由粮仓统一查看只需 果园数 次，存粮的人只需判断粮仓本身是否可靠（戴蒙德，1984）。</figcaption>
+</figure>
+<style>
+.mo-b{display:grid;grid-template-columns:7em 1fr 5em;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.mo-b div{height:18px;background:var(--quote);border-radius:4px;overflow:hidden}
+.mo-b i{display:block;height:100%;transition:width .4s}
+.mo-b b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.mo-sl{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.mo-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.mo-sl{grid-template-columns:1fr;gap:4px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  function draw(){const D=+$('mo-d').value,N=+$('mo-n').value,a=D*N,b=N,M=2000;
+    $('mo-a').style.width=Math.min(a,M)/M*100+'%';$('mo-b').style.width=Math.max(.5,b/M*100)+'%';$('mo-av').textContent=a+' 次';$('mo-bv').textContent=b+' 次';$('mo-dv').textContent=D+' 户';$('mo-nv').textContent=N+' 片';
+    $('mo-msg').textContent=D===1?'只有一户存粮时，由谁查看都一样。':`${D} 户各自查看 ${N} 片果园，共要 ${a} 次；由粮仓统一查看只需 ${b} 次。查看越费事，这种委托越有价值；查看一旦变得便宜，委托的理由也会随之改变。`;}
+  ['mo-d','mo-n'].forEach(k=>$(k).addEventListener('input',draw));
+  $('mo').addEventListener('anim-in',()=>{let v=1;$('mo-d').value=1;draw();const id=setInterval(()=>{v+=7;$('mo-d').value=Math.min(v,100);draw();if(v>=100)clearInterval(id);},150);});
+  draw();
+})();
+</script>

@@ -1,0 +1,35 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Confirmations should be rare and carry weight</p><p class="figsub">In a year there are 4 operations that cannot be undone, and 1 of them is in fact wrong. Switch between two ways of confirming, and see how many times a year he is asked to confirm, whether he reads carefully, and whether that one error is stopped.</p></div><button class="replay" type="button" data-replay="cf23">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Approach">
+      <button type="button" data-cf23="all" aria-pressed="true">Confirm everything, with only an "Agree" button</button>
+      <button type="button" data-cf23="key" aria-pressed="false">Confirm only irreversible steps, show consequences, delay large ones a day</button>
+    </div>
+    <div class="cf23" id="cf23" data-anim>
+      <div class="cf23-bars" id="cf23-b"></div>
+      <p class="cf23-msg" id="cf23-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: in a year he can read only about 12 confirmations carefully. When he does read carefully, a confirmation that sets out the consequences lets him spot the error 90% of the time, while one with only an "Agree" button does so only 30% of the time. During a one-day delay, the scribe's anomaly checks can stop half of the errors he missed (the value of keeping options open described by Arrow and Fisher, and by Henry).</figcaption>
+</figure>
+<style>
+.cf23-bars{display:grid;gap:12px;margin:6px 0 10px}
+.cf23-r{display:grid;grid-template-columns:11em 1fr 5.5em;gap:10px;align-items:center;font-size:12.5px}
+.cf23-r div{height:22px;background:var(--quote);border-radius:5px;overflow:hidden}
+.cf23-r i{display:block;height:100%;transition:width .4s}
+.cf23-r b{text-align:right;font-variant-numeric:tabular-nums}
+.cf23-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cf23-r{grid-template-columns:1fr 5.5em}.cf23-r span{grid-column:1/-1}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cf23'+id);
+  const S={all:{n:200,care:12/200,hit:.3,delay:0},key:{n:4,care:1,hit:.9,delay:.5}};
+  function set(k){document.querySelectorAll('[data-cf23]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.cf23===k)));const s=S[k],p=s.care*s.hit,stop=p+(1-p)*s.delay;
+    $('-b').innerHTML=[['Confirmations per year',s.n,200,'var(--blue)',s.n+' times'],['Share read carefully',s.care,1,'var(--gold)',Math.round(s.care*100)+'%'],['Chance the error is stopped',stop,1,'var(--accent)',Math.round(stop*100)+'%']].map(([a,v,m,c,t])=>`<div class="cf23-r"><span>${a}</span><div><i style="width:${Math.max(.5,v/m*100)}%;background:${c}"></i></div><b>${t}</b></div>`).join('');
+    $('-msg').textContent=k==='all'?'Confirming everything means 200 confirmations a year, and he reads only 6% of them carefully. Even when he does, an "Agree" button rarely helps him spot an error: that one error will almost certainly get through.':'Confirming only the 4 irreversible operations, he reads each one carefully. Setting out the consequences gives him a 90% chance of spotting the error, and the one-day delay adds another line of defence: that one error will almost certainly be stopped.';}
+  document.querySelectorAll('[data-cf23]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.cf23)));
+  $('').addEventListener('anim-in',()=>{set('all');setTimeout(()=>set('key'),2400);});
+  set('all');
+})();
+</script>

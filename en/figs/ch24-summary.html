@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: writing a promise that can be kept</p><p class="figsub">Four design requirements, each corresponding to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="ch24summary">Replay</button></div>
+    <div class="ch24summary" id="ch24summary" data-anim><div class="ch24summary-c" style="--i:0"><em>Three conditions</em><b>Promise only what can be provided, delivered and verified</b><p>Fees, execution, discipline, constraints and coverage can be promised; returns and direction cannot.</p></div><div class="ch24summary-c" style="--i:1"><em>Returns are a poor signal</em><b>Promise the process, and make process measures checkable</b><p>Write measures such as fees, allocation drift and accounting for each cycle into the promise, and publish them monthly.</p></div><div class="ch24summary-c warn" style="--i:2"><em>Net value is the value</em><b>State promises in terms of net value</b><p>Say what the user gets, pays and bears, not just the returns.</p></div><div class="ch24summary-c warn" style="--i:3"><em>Backtests mislead</em><b>When showing history, state the number of trials and out-of-sample results</b><p>Do not use selected backtests and short-term rankings to create expectations; write out, task by task, what is and is not promised.</p></div></div>
+  </div>
+</figure>
+<style>
+.ch24summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch24summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch24summary-c.warn{border-left-color:var(--warm)}
+.ch24summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch24summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch24summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch24summary.in .ch24summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch24summary{grid-template-columns:1fr}}
+</style>

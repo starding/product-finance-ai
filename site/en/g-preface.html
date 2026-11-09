@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The best way to understand financial products is to build them from zero</title>
+<meta name="description" content="Preface to Product × Finance × AI: Derived from Zero. Starting from a world without finance and adding one constraint at a time, the book derives how financial institutions and products arise; it then changes one parameter, the cost of agency, and runs the derivation again">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="g-preface">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="Contents">
+<div class="side-head"><a class="sidetitle" href="index.html">Product × Finance × AI<small>Financial Products in the Age of AI</small></a></div>
+<div class="side-view" role="group" aria-label="Way of reading"><a href="preface.html">Decomposition</a><a href="g-preface.html" class="on" aria-current="true">Derivation</a></div>
+<a class="side-about" href="index.html#about">About this book</a>
+<a class=" cur" href="g-preface.html" aria-current="page"><span class="n">Preface</span>The best way to understand financial products is to build them from zero</a>
+<a class="side-part" href="g-part1.html"><span class="pn">Part One</span>From 0 to 1: how a world without finance grows finance</a>
+<a class="" href="g-01.html"><span class="n">1</span>One person, one year&#x27;s harvest</a>
+<a class="" href="g-02.html"><span class="n">2</span>Two people, short of grain at different times</a>
+<a class="" href="g-03.html"><span class="n">3</span>What if a loan is not repaid</a>
+<a class="" href="g-04.html"><span class="n">4</span>Exchange among many</a>
+<a class="" href="g-05.html"><span class="n">5</span>Harvests good and bad</a>
+<a class="" href="g-06.html"><span class="n">6</span>Savers may need their grain at any time; borrowers need it for years</a>
+<a class="" href="g-07.html"><span class="n">7</span>No one household can pay for a ship</a>
+<a class="" href="g-08.html"><span class="n">8</span>Securities must be saleable</a>
+<a class="" href="g-09.html"><span class="n">9</span>Prices carry everyone&#x27;s information</a>
+<a class="" href="g-10.html"><span class="n">10</span>Ordinary people have neither the time nor the expertise</a>
+<a class="" href="g-11.html"><span class="n">11</span>Trustees may not do their duty</a>
+<a class="" href="g-12.html"><span class="n">12</span>The institutions are in place, and people still make mistakes</a>
+<a class="side-part" href="g-part2.html"><span class="pn">Part Two</span>Changing one parameter: when agency becomes almost free</a>
+<a class="" href="g-13.html"><span class="n">13</span>A new parameter: the cost of cognitive labour collapses</a>
+<a class="" href="g-14.html"><span class="n">14</span>Can everyone have a personal agent?</a>
+<a class="" href="g-15.html"><span class="n">15</span>Who guarantees an agent&#x27;s promises</a>
+<a class="" href="g-16.html"><span class="n">16</span>If everyone has an analyst</a>
+<a class="" href="g-17.html"><span class="n">17</span>Agents become the main market participants</a>
+<a class="" href="g-18.html"><span class="n">18</span>Can an agent correct human bias?</a>
+<a class="" href="g-19.html"><span class="n">19</span>What did not change</a>
+<a class="side-part" href="g-part3.html"><span class="pn">Part Three</span>Deriving a product in the new world</a>
+<a class="" href="g-20.html"><span class="n">20</span>One person and one sum of money</a>
+<a class="" href="g-21.html"><span class="n">21</span>The user is not present</a>
+<a class="" href="g-22.html"><span class="n">22</span>The user cannot see the process</a>
+<a class="" href="g-23.html"><span class="n">23</span>Agents make mistakes</a>
+<a class="" href="g-24.html"><span class="n">24</span>Trust takes time</a>
+<a class="side-app" href="g-epilogue.html"><span class="n">Epilogue</span>Back to the governing rule</a>
+<a class="side-app" href="method.html"><span class="n">Appendix</span>How this book was written</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="Open contents" title="Contents"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">Product × Finance × AI: Financial Products in the Age of AI</a><span>Preface</span><a class="langlink" href="../g-preface.html" hreflang="zh-CN">中文</a></header>
+
+<div class="chapno">Preface</div><h1>The best way to understand financial products is to build them from zero</h1>
+<h2 id="sec-1">1. Starting from a product list</h2>
+<p>Open the product catalogue of any financial institution and you will find deposits, loans, insurance, bonds, stocks, funds, investment advice and pensions. Memorizing them by type is not hard. The hard part is explaining why they look the way they do: why a deposit can be withdrawn at any time, why a fund's assets are held in custody by a different institution, why insurance requires a premium in advance and pays only after something goes wrong.</p>
+<p>When the physicist Richard Feynman died, his blackboard carried the sentence "What I cannot create, I do not understand." The best way to understand a set of institutions is to build it from zero. Arranged in the order in which they arise, these products stop being a list and become a chain: each one exists to solve a problem left by the one before.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">A list, or a chain</p><p class="figsub">The same twelve financial arrangements, arranged two ways. As a list they can only be memorized one by one; in the order in which they arise, each one answers a constraint.</p></div><button class="replay" type="button" data-replay="gz">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Arrangement">
+      <button type="button" data-gz="list" aria-pressed="true">Product list</button>
+      <button type="button" data-gz="chain" aria-pressed="false">In order of appearance</button>
+    </div>
+    <div class="gz" id="gz" data-anim></div>
+  </div>
+  <figcaption>The order is the logical order of the derivation, not historical dates; the number at the top right of each box is the corresponding chapter.</figcaption>
+</figure>
+<style>
+.gz{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.gz-c{position:relative;background:var(--quote);border-radius:10px;padding:10px 12px;opacity:0;transform:translateY(6px);transition:opacity .4s,transform .4s;transition-delay:calc(var(--i)*.06s)}
+.gz.in .gz-c{opacity:1;transform:none}
+.gz-c b{display:block;font-size:14px}
+.gz-c span{display:block;font-size:12px;color:var(--muted);line-height:1.5;margin-top:3px}
+.gz-c em{position:absolute;top:8px;right:10px;font-style:normal;font-size:11px;color:var(--faint)}
+.gz.chain .gz-c{border-left:3px solid var(--accent)}
+@media (max-width:640px){.gz{grid-template-columns:repeat(2,1fr)}}
+</style>
+<script>
+(function(){
+  const P=[['Saving','Income and spending come at different times'],['Deposits and loans','You are short today, I am short tomorrow'],['Collateral and guarantees','A loan may not be repaid'],['Accounts and payments','Barter needs a double coincidence of wants'],['Insurance','Future harvests may be good or bad'],['Deposits on demand','Savers want their money any time; borrowers want it for years'],['Stocks and bonds','No one person can bear the risk of a large project'],['Exchanges and brokers','Securities need to find buyers'],['Index funds','Prices are hard to predict'],['Funds and advisers','Ordinary people lack time and expertise'],['Custody and disclosure','Trustees may not do their duty'],['Regular investing and defaults','Even with institutions in place, people still make mistakes']];
+  const SH=[8,2,10,0,6,11,3,9,1,5,7,4];
+  const box=document.getElementById('gz');let mode='list';
+  function draw(){const idx=mode==='list'?SH:P.map((_,i)=>i);box.classList.toggle('chain',mode==='chain');
+    box.innerHTML=idx.map((i,k)=>`<div class="gz-c" style="--i:${k}"><b>${P[i][0]}</b>${mode==='chain'?`<span>Constraint: ${P[i][1]}</span><em>${i+1}</em>`:''}</div>`).join('');
+    box.classList.remove('in');void box.offsetWidth;box.classList.add('in');}
+  document.querySelectorAll('[data-gz]').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.gz;document.querySelectorAll('[data-gz]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  box.addEventListener('anim-in',()=>{mode='list';document.querySelectorAll('[data-gz]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.gz==='list')));draw();setTimeout(()=>{mode='chain';document.querySelectorAll('[data-gz]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.gz==='chain')));draw();},1800);});
+  draw();box.classList.remove('in');
+})();
+</script>
+
+<h2 id="sec-2">2. One governing rule</h2>
+<p><strong>Finance turns today's value into credible claims on the future. Every financial product is a way, under some constraint, to make such claims more accessible, more credible or cheaper.</strong></p>
+<p>Each of the three words has a specific meaning. Accessible means that people who could not make the exchange before now can, as when a young person without savings borrows to pay for school. Credible means that the promise is kept in the future, as when deposit insurance spares depositors the worry that their bank will fail. Cheaper means that the exchange costs less, as when an index fund lets ordinary people hold the whole market for a very low fee. Whether a product has value can be tested with these three words.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The governing rule: today's value, turned into credible claims on the future</p><p class="figsub">Choose a product to see in which of the three directions it mainly improves this exchange.</p></div><button class="replay" type="button" data-replay="gr">Replay</button></div>
+    <div class="gr" id="gr" data-anim>
+      <div class="gr-flow">
+        <div class="gr-box"><em>Today</em><b>Some value</b></div>
+        <div class="gr-arrow"><i></i><span>turned into</span></div>
+        <div class="gr-box"><em>Future</em><b>A claim</b><small>Collected at the agreed time and in the agreed circumstances</small></div>
+      </div>
+      <div class="gr-lev">
+        <div class="gr-l" data-l="0"><b>Accessible</b><span>People who could not make the exchange now can</span></div>
+        <div class="gr-l" data-l="1"><b>Credible</b><span>The promise is kept in the future</span></div>
+        <div class="gr-l" data-l="2"><b>Cheaper</b><span>The exchange costs less</span></div>
+      </div>
+      <div class="seg-btns gr-p" role="group" aria-label="Product">
+        <button type="button" data-gp="0" aria-pressed="false">Student loan</button>
+        <button type="button" data-gp="1" aria-pressed="false">Deposit insurance</button>
+        <button type="button" data-gp="2" aria-pressed="false">Index fund</button>
+        <button type="button" data-gp="3" aria-pressed="false">Asset custody</button>
+        <button type="button" data-gp="4" aria-pressed="false">Small regular investing</button>
+      </div>
+      <p class="gr-msg" id="gr-msg" aria-live="polite"></p>
+    </div>
+  </div>
+</figure>
+<style>
+.gr-flow{display:grid;grid-template-columns:1fr 90px 1fr;align-items:center;gap:8px}
+.gr-box{background:var(--quote);border-radius:10px;padding:12px;text-align:center}
+.gr-box em{display:block;font-style:normal;font-size:11px;color:var(--faint)} .gr-box b{font-size:16px} .gr-box small{display:block;font-size:11.5px;color:var(--muted);margin-top:2px}
+.gr-arrow{position:relative;text-align:center;font-size:12px;color:var(--muted)}
+.gr-arrow i{position:absolute;left:0;right:8px;top:50%;border-top:2px solid var(--accent);transform-origin:left;transform:scaleX(0);transition:transform .7s}
+.gr-arrow i::after{content:"";position:absolute;right:-8px;top:-6px;border:5px solid transparent;border-left:8px solid var(--accent)}
+.gr.in .gr-arrow i{transform:none}
+.gr-arrow span{position:relative;top:-14px;background:var(--card);padding:0 4px}
+.gr-lev{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.gr-l{border-radius:10px;padding:10px 12px;border:1px solid var(--line);transition:background .3s,border-color .3s}
+.gr-l b{display:block;font-size:15px} .gr-l span{font-size:12px;color:var(--muted)}
+.gr-l.on{background:var(--accent-soft);border-color:var(--accent)}
+.gr-p{margin-bottom:0}
+.gr-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.gr-flow{grid-template-columns:1fr 60px 1fr}.gr-lev{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const P=[[0,'Student loan: a young person without savings pledges future income and gets the money for school today. What improves is accessibility.'],
+    [1,'Deposit insurance: even if the bank fails, deposits up to the limit can be recovered. What improves is credibility.'],
+    [2,'Index fund: instead of picking individual stocks, it holds the whole market for a very low fee. What improves is cost.'],
+    [1,'Asset custody: the fund\'s assets are held at a different institution, so the manager cannot divert them at will. What improves is credibility.'],
+    [0,'Small regular investing: a few hundred a month buys a diversified portfolio, so people below the old minimums can take part. What improves is accessibility.']];
+  const ls=[...document.querySelectorAll('.gr-l')],msg=document.getElementById('gr-msg');
+  function set(k){document.querySelectorAll('[data-gp]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.gp===k)));
+    ls.forEach((l,i)=>l.classList.toggle('on',k>=0&&P[k][0]===i));msg.textContent=k>=0?P[k][1]:'Every financial product improves this exchange in at least one of the three directions.';}
+  document.querySelectorAll('[data-gp]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.gp)));
+  document.getElementById('gr').addEventListener('anim-in',()=>{set(-1);[0,1,2].forEach((k,i)=>setTimeout(()=>set(k),1000+i*2200));});
+  set(-1);
+})();
+</script>
+
+<h2 id="sec-3">3. The method: one constraint at a time</h2>
+<p>The derivation begins with one person, one plot of land and one year's harvest. Each chapter introduces just one new constraint. It first asks what happens without a solution, then looks at the mechanism that grows out of it. The mechanism solves the old problem and creates a new one, which becomes the constraint of the next chapter. Problems off the main line are marked as side branches and are not pursued.</p>
+<p>Economics textbooks often begin their reasoning with Robinson Crusoe on his island, taken from Defoe's 1719 novel. This book follows that practice but carries the derivation all the way to today's financial markets. The derivation is not history. Historically, institutions appeared in a tangled order across many places; the derivation keeps only the logical order, in which each step presupposes the one before.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">One step of the derivation: constraint, mechanism and new problem</p><p class="figsub">Each step first introduces a constraint, then sees what mechanism grows from it; the new problem the mechanism leaves becomes the constraint of the next step. Tap "Next step" to move the derivation forward.</p></div><button class="replay" type="button" data-replay="gl">Replay</button></div>
+    <div class="gl" id="gl" data-anim>
+      <div class="gl-row">
+        <div class="gl-c"><em>Constraint</em><b id="gl-k"></b></div>
+        <div class="gl-ar">→</div>
+        <div class="gl-c m"><em>Mechanism</em><b id="gl-m"></b></div>
+        <div class="gl-ar">→</div>
+        <div class="gl-c q"><em>New problem</em><b id="gl-q"></b></div>
+      </div>
+      <div class="gl-steps" id="gl-steps"></div>
+      <div class="gl-ctl"><button type="button" class="replay" id="gl-prev">Previous step</button><button type="button" class="replay" id="gl-next">Next step</button></div>
+    </div>
+  </div>
+  <figcaption>The first five steps as examples; the full derivation is in the chapters of Part One.</figcaption>
+</figure>
+<style>
+.gl-row{display:grid;grid-template-columns:1fr 22px 1fr 22px 1fr;align-items:stretch;gap:4px}
+.gl-c{background:var(--quote);border-radius:10px;padding:10px 12px;min-height:84px;transition:opacity .3s}
+.gl-c em{display:block;font-style:normal;font-size:11px;color:var(--faint);margin-bottom:3px}
+.gl-c b{font-size:14px;font-weight:500;line-height:1.55}
+.gl-c.m{background:var(--accent-soft)} .gl-c.q{background:var(--warm-soft)}
+.gl-ar{align-self:center;text-align:center;color:var(--faint)}
+.gl.fade .gl-c{opacity:.2}
+.gl-steps{display:flex;gap:6px;margin:12px 0 0;flex-wrap:wrap}
+.gl-steps span{font-size:12px;padding:3px 9px;border-radius:999px;background:var(--quote);color:var(--muted);cursor:pointer}
+.gl-steps span.on{background:var(--ink);color:var(--bg)}
+.gl-ctl{display:flex;gap:8px;margin-top:10px}
+@media (max-width:640px){.gl-row{grid-template-columns:1fr}.gl-ar{transform:rotate(90deg)}}
+</style>
+<script>
+(function(){
+  const S=[['One person: income and consumption do not come at the same time','Saving and storage','Stores spoil; when young or ill there is no income to save'],
+    ['Two people: you are short today, I am short tomorrow','Lending and interest','A loan may not be repaid'],
+    ['Promises may not be kept','Collateral, reputation and contracts','With many people, barter rarely matches up'],
+    ['Exchange needs a double coincidence of wants','Money and payment','Future harvests may be good or bad'],
+    ['The future state is uncertain','Insurance and diversification','Savers want to withdraw at any time; borrowers need the money for years']];
+  const $=id=>document.getElementById(id),box=$('gl');let k=0;
+  $('gl-steps').innerHTML=S.map((s,i)=>`<span data-i="${i}">Step ${i+1}</span>`).join('');
+  function set(i){k=(i+S.length)%S.length;box.classList.add('fade');setTimeout(()=>{$('gl-k').textContent=S[k][0];$('gl-m').textContent=S[k][1];$('gl-q').textContent=S[k][2];box.classList.remove('fade');},200);
+    document.querySelectorAll('#gl-steps span').forEach(s=>s.classList.toggle('on',+s.dataset.i===k));}
+  $('gl-next').addEventListener('click',()=>set(k+1));$('gl-prev').addEventListener('click',()=>set(k-1));
+  document.querySelectorAll('#gl-steps span').forEach(s=>s.addEventListener('click',()=>set(+s.dataset.i)));
+  box.addEventListener('anim-in',()=>{set(0);[1,2,3,4].forEach((i,j)=>setTimeout(()=>set(i),1800*(j+1)));});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-4">4. A civilization simulator</h2>
+<p>A simulator accompanies the whole book. In Chapter 1 the world contains one person and one year's harvest; each later chapter unlocks a rule: lending, commitment, money, insurance, banks, shares, markets. Readers can switch off any rule at any time and see what the world falls back to. All numbers in the simulator are illustrative. They show the direction and relative size of each mechanism and do not represent any real economy.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The Civilization Simulator: each chapter unlocks one rule</p><p class="figsub">Choose a rule to see what problem it solves and what the world falls back to when it is switched off. Grey rules are unlocked in later chapters.</p></div><button class="replay" type="button" data-replay="gs">Replay</button></div>
+    <div class="gs" id="gs" data-anim></div>
+    <p class="gs-msg" id="gs-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>Chapters already written can be opened; all numbers in the simulator are illustrative.</figcaption>
+</figure>
+<style>
+.gs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.gs-r{font:inherit;text-align:left;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--faint);border-radius:9px;padding:8px 10px;display:flex;flex-direction:column;gap:1px;opacity:0;transform:scale(.96);transition:opacity .35s,transform .35s,background .3s,border-color .3s;transition-delay:calc(var(--i)*.07s)}
+.gs.in .gs-r{opacity:1;transform:none}
+.gs-r em{font-style:normal;font-size:10.5px} .gs-r b{font-size:13.5px;font-weight:500}
+.gs-r.open{color:var(--ink);border-color:var(--accent);background:var(--accent-soft)}
+.gs-r.sel{box-shadow:0 0 0 2px var(--ink)}
+.gs-msg{font-size:14px;margin:12px 0 0;min-height:4.8em;line-height:1.7}
+@media (max-width:640px){.gs{grid-template-columns:repeat(2,1fr)}}
+</style>
+<script>
+(function(){
+  const R=[['Saving and seed','One person keeps today\'s grain for tomorrow, or sows it as seed. ','Without it, he eats well for a few months after the harvest and goes hungry the rest of the year.',1],
+    ['Lending','Two people who run short at different times lend to each other and agree on interest. ','Without it, each can only get through the lean months on storage that spoils.',1],
+    ['Commitment','Reputation, collateral and contracts make sure what is lent comes back. ','Without it, no one is willing to lend, and lending cannot happen.',1],
+    ['Money','Something everyone accepts serves as medium of exchange, unit of account and store of value. ','Without it, exchange must wait until each side happens to want what the other has, and the youngest generation has no way to provide for old age.',1],
+    ['Insurance','Many people pool together to share the bad harvests any of them may meet. ','Without it, one bad year can ruin a household.',1],
+    ['Bank','It turns many people\'s deposits, which may be withdrawn at any time, into loans that a few people use for a long time. ','Without it, savings sit idle and long-term projects cannot borrow.',1],
+    ['Shares','Many people put up money together, share the risk and divide what is left by their shares. ','Without it, no one takes on a large project such as building a ship.',1],
+    ['Market','Securities can be sold to others at any time, at prices set by buyers and sellers. ','Without it, shares once bought must be held to the end.',1],
+    ['Information in prices','Prices gather everyone\'s information and are hard to predict consistently. ','Without it, those with more information could win every time.',1],
+    ['Delegation','Money is handed to people with the time and expertise to manage it. ','Without it, everyone must do their own research and their own trading.',1],
+    ['Regulation & custody','Disclosure, custody and suitability constrain trustees and sellers. ','Without it, trustees could divert assets and sellers could hide risks.',1],
+    ['Defaults','Arrangements made in advance make up for people\'s decision biases. ','Without it, planned saving is often abandoned halfway.',1]];
+  const box=document.getElementById('gs'),msg=document.getElementById('gs-msg');
+  box.innerHTML=R.map((r,i)=>`<button type="button" class="gs-r${r[3]?' open':''}" data-i="${i}" style="--i:${i}"><em>Chapter ${i+1}${r[3]?'':' · locked'}</em><b>${r[0]}</b></button>`).join('');
+  const bs=[...box.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));const r=R[i];msg.innerHTML=`<b>${r[0]}</b>: ${r[1]}${r[2]}${r[3]?` <a href="g-${String(i+1).padStart(2,'0')}.html">Open the Chapter ${i+1} simulator →</a>`:''}`;}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  box.addEventListener('anim-in',()=>{[0,1,4,9].forEach((i,k)=>setTimeout(()=>set(i),900+k*2000));});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-5">5. Change one parameter and run it again</h2>
+<p>Part One derives the world as it is today: ordinary people hand their money to professional institutions, and disclosure, custody and regulation keep those institutions' promises credible. Every step has a cost. One of these is the cost of having someone else think and act on your behalf, that is, the cost of agency. Large language models and AI agents make this cost fall sharply.</p>
+<p>Part Two changes this parameter and reruns the steps of Part One that it affects: which institutions become redundant, and which become more important. Time, risk and irreversible consequences do not disappear as a result, and a separate chapter explains why. Part Three uses the same method, starting from one person and one sum of money and adding one user-side constraint at each step, to derive a financial product for the age of AI.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Change one parameter: the cost of agency</p><p class="figsub">Drag the slider to lower the cost of having someone think and act on your behalf from high to low, and see which of the twelve steps of Part One are affected.</p></div><button class="replay" type="button" data-replay="gm">Replay</button></div>
+    <div class="gm" id="gm" data-anim>
+      <div class="sl"><label for="gm-s">Cost of agency <b id="gm-v"></b></label><input id="gm-s" type="range" min="0" max="100" value="100"></div>
+      <div class="gm-steps" id="gm-steps"></div>
+      <div class="legend"><span><i style="background:var(--warm)"></i>Affected; rerun in Part Two</span><span><i style="background:var(--quote);border:1px solid var(--line)"></i>Not changed by this</span></div>
+      <p class="gm-msg" id="gm-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>The degree to which each step is affected is illustrative; the derivation itself is in Part Two.</figcaption>
+</figure>
+<style>
+.gm-steps{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin:12px 0 4px}
+.gm-c{border-radius:8px;padding:8px;background:var(--quote);font-size:12.5px;line-height:1.45;transition:background .4s,color .4s;min-height:58px}
+.gm-c em{display:block;font-style:normal;font-size:10.5px;color:var(--faint)}
+.gm-c.hit{background:var(--warm-soft);color:var(--warm)}
+.gm-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.gm-steps{grid-template-columns:repeat(3,1fr)}}
+</style>
+<script>
+(function(){
+  // 每一步：名称、受代理成本影响的门槛（代理成本低于此值时受影响；0 表示不受影响）
+  const S=[['Saving and seed',0],['Lending',0],['Commitment',55],['Money',0],['Insurance',0],['Bank',0],['Shares',0],['Market',40],['Information in prices',50],['Delegation',80],['Regulation & custody',60],['Defaults',70]];
+  const $=id=>document.getElementById(id),sl=$('gm-s');
+  $('gm-steps').innerHTML=S.map((s,i)=>`<div class="gm-c" data-i="${i}"><em>${i+1}</em>${s[0]}</div>`).join('');
+  const cs=[...document.querySelectorAll('.gm-c')];
+  function draw(){const v=+sl.value;$('gm-v').textContent=v>66?'high':v>33?'medium':'low';let n=0;
+    cs.forEach((c,i)=>{const hit=S[i][1]>0&&v<S[i][1];c.classList.toggle('hit',hit);if(hit)n++;});
+    $('gm-msg').textContent=n?`At this cost of agency, ${n} step${n>1?'s':''} must be derived again. Delegation is affected first, then human bias, regulation and commitment, then information in prices and the market. The basic problems of time, risk and saving are not affected.`:'When the cost of agency is high, the institutions derived in Part One are what we have today: ordinary people hand their money to a few professional institutions.';}
+  sl.addEventListener('input',draw);
+  $('gm').addEventListener('anim-in',()=>{let v=100;sl.value=v;draw();const id=setInterval(()=>{v-=4;sl.value=v;draw();if(v<=10)clearInterval(id);},90);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-6">6. Two ways of reading</h2>
+<p>The book also exists in a Decomposition version, which starts from four equations (for returns, for the outcome a user actually receives, for the amplification factor and for net value) and takes them apart term by term. Decomposition answers which terms make up an outcome and is suited to checking what a product lacks. Derivation answers why an institution arises and is suited to imagining new products when constraints change. The two versions are independent and can be read on their own.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">One question, two answers</p><p class="figsub">Taking "why are a fund's assets held in custody at another institution?" as the example, switch between the two ways of reading.</p></div></div>
+    <div class="seg-btns" role="group" aria-label="Way of reading">
+      <button type="button" data-tw="d" aria-pressed="false">Decomposition, term by term</button>
+      <button type="button" data-tw="g" aria-pressed="true">Derivation from zero</button>
+    </div>
+    <div class="tw" id="tw" data-anim></div>
+  </div>
+</figure>
+<style>
+.tw{display:grid;gap:6px}
+.tw-s{display:grid;grid-template-columns:84px 1fr;gap:10px;align-items:start;background:var(--quote);border-radius:9px;padding:9px 12px;font-size:13.5px;line-height:1.6;opacity:0;transform:translateX(-6px);transition:opacity .4s,transform .4s;transition-delay:calc(var(--i)*.25s)}
+.tw.in .tw-s{opacity:1;transform:none}
+.tw-s em{font-style:normal;color:var(--faint);font-size:12px;padding-top:2px}
+.tw-s.end{background:var(--accent-soft)}
+</style>
+<script>
+(function(){
+  const T={d:[['Equation','Realized return ＝ time compensation ＋ risk compensation ＋ information advantage － trading costs ＋ luck'],['Premise','All these returns rest on the premise that promises are kept'],['Unpack','One condition for keeping the promise is that the manager cannot misappropriate investors\' assets'],['Conclusion','Custody is one item in the premise of delivery: to check a product, see whether this item is in place']],
+    g:[['Step 7','Many people pool their money and hand it to one person to run'],['Step 10','Ordinary people have neither the time nor the expertise, so they hand their money to a professional manager'],['New problem','The manager controls other people\'s money and could misappropriate it, while the investors cannot see'],['Mechanism','The assets are held at another institution; the manager can only give instructions and cannot move the assets directly'],['Conclusion','Custody grows out of delegation: as long as someone manages money for others, it is needed']]};
+  const box=document.getElementById('tw');
+  function set(k){document.querySelectorAll('[data-tw]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.tw===k)));
+    box.innerHTML=T[k].map(([a,b],i)=>`<div class="tw-s${i===T[k].length-1?' end':''}" style="--i:${i}"><em>${a}</em><span>${b}</span></div>`).join('');box.classList.remove('in');void box.offsetWidth;box.classList.add('in');}
+  document.querySelectorAll('[data-tw]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.tw)));
+  set('g');box.classList.remove('in');
+})();
+</script>
+
+<h2 id="sec-7">Conventions</h2>
+<ul class="notes"><li>Numbers marked "Illustrative" only explain mechanisms and do not correspond to any real data.</li><li>Every number or conclusion attributed to research or an institution cites its source; claims without a reliable source are not used as evidence.</li><li>Each chapter ends with the problems that its step leaves open; these are the constraints of later chapters.</li></ul>
+<h2 id="sec-8">References</h2>
+<ul class="refs"><li>Defoe, D. (1719). <i>The Life and Strange Surprizing Adventures of Robinson Crusoe</i>. London: W. Taylor.</li><li>Caltech Archives. Richard Feynman's blackboard at the time of his death, 1988 (photograph). The original text on the blackboard reads "What I cannot create, I do not understand."</li></ul>
+<footer class="nav"><a href="index.html">← Cover</a><a href="g-part1.html">Part One: From 0 to 1: how a world without finance grows finance →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

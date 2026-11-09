@@ -1,0 +1,41 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">留种：今天少吃，来年多收</p><p class="figsub">从 12 份收成里留出一部分作种子。曲线是今年吃的与来年收的之间的取舍；拖动滑块，看最后一份种子还能带来多少增收。</p></div><button class="replay" type="button" data-replay="sd">重播</button></div>
+    <div class="sd" id="sd" data-anim>
+      <svg viewBox="0 0 640 250" role="img" aria-label="今年消费与来年收成的取舍"><g id="sd-ax"></g><path id="sd-c" class="sd-l"/><line id="sd-tan" class="sd-tan"/><circle id="sd-p" r="6" fill="var(--ink)"/></svg>
+      <div class="sl"><label for="sd-s">留作种子 <b id="sd-sv"></b></label><input id="sd-s" type="range" min="0" max="12" step="0.5" value="1"></div>
+      <div class="sd-out"><div><span>今年吃</span><b id="sd-now"></b></div><div><span>来年收成</span><b id="sd-next"></b></div><div><span>最后一份种子的回报</span><b id="sd-r"></b></div></div>
+      <p class="sd-msg" id="sd-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：来年收成 ＝ 12 ＋ 4 × √（种子份数）。地是有限的，种子越多，每多一份带来的增收越少；切线的斜率就是最后一份种子的回报。</figcaption>
+</figure>
+<style>
+.sd svg{width:100%;height:auto;display:block}
+.sd-l{fill:none;stroke:var(--accent);stroke-width:2.5}
+.sd-tan{stroke:var(--warm);stroke-width:1.6;stroke-dasharray:5 4}
+.sd-out{display:flex;gap:24px;flex-wrap:wrap;margin-top:8px}
+.sd-out div{display:flex;flex-direction:column} .sd-out span{font-size:12px;color:var(--faint)} .sd-out b{font-size:20px;font-variant-numeric:tabular-nums}
+.sd-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.sd svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),X0=56,X1=620,YB=210,YT=12,x=v=>X0+v/12*(X1-X0),y=v=>YB-(v-10)/18*(YB-YT);
+  const H=s=>12+4*Math.sqrt(s);
+  $('sd-ax').innerHTML=`<line x1="${X0}" x2="${X1}" y1="${YB}" y2="${YB}" class="s-faint"/>`+[0,3,6,9,12].map(v=>`<text x="${x(v)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${v}</text>`).join('')+
+    [12,16,20,24,28].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+
+    `<text x="${X1}" y="${YB-6}" text-anchor="end" font-size="11.5" class="t-muted">今年吃的份数 →</text><text x="${X0+6}" y="${YT+10}" font-size="11.5" class="t-muted">来年的收成</text>`;
+  let d='';for(let s=0;s<=12;s+=.05){const c=12-s;d+=(s?'L':'M')+x(c).toFixed(1)+','+y(H(s)).toFixed(1);}$('sd-c').setAttribute('d',d);
+  const sl=$('sd-s');
+  function draw(){const s=Math.max(+sl.value,.0001),c=12-s,h=H(s),m=2/Math.sqrt(s);
+    $('sd-p').setAttribute('cx',x(c));$('sd-p').setAttribute('cy',y(h));
+    const dx=2;$('sd-tan').setAttribute('x1',x(c-dx));$('sd-tan').setAttribute('y1',y(h+m*dx));$('sd-tan').setAttribute('x2',x(c+dx));$('sd-tan').setAttribute('y2',y(h-m*dx));
+    $('sd-sv').textContent=(+sl.value)+' 份';$('sd-now').textContent=c.toFixed(1)+' 份';$('sd-next').textContent=h.toFixed(1)+' 份';
+    const r=+sl.value?m-1:Infinity;$('sd-r').textContent=+sl.value?(r>=0?'+':'')+Math.round(r*100)+'%':'—';
+    $('sd-msg').textContent=+sl.value?`最后一份种子能换来 ${m.toFixed(2)} 份收成，回报 ${Math.round(r*100)}%。${r>0.2?'回报仍高，多留一些种子值得。':r>0?'回报已不高，是否再多留，取决于有多不愿意少吃今天这一份。':'再多留种已经得不偿失。'}`:'不留种子，来年只有 12 份；第一份种子的回报非常高。';}
+  sl.addEventListener('input',draw);
+  $('sd').addEventListener('anim-in',()=>{let v=0;sl.value=0;draw();const id=setInterval(()=>{v+=.5;sl.value=v;draw();if(v>=6)clearInterval(id);},260);});
+  draw();
+})();
+</script>

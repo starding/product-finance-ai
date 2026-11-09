@@ -1,0 +1,45 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">四种失灵，对应四类监管工具</p><p class="figsub">点按左侧一种失灵，看它在金融市场中的表现，以及针对它的监管工具。</p></div><button class="replay" type="button" data-replay="fl">重播</button></div>
+    <div class="fl" id="fl" data-anim>
+      <div class="fl-l">
+        <button data-k="info" style="--i:0"><b>信息不对称</b><span>卖方比买方知道得多</span></button>
+        <button data-k="agent" style="--i:1"><b>利益冲突</b><span>代理人有自己的利益</span></button>
+        <button data-k="ext" style="--i:2"><b>外部性与系统性风险</b><span>一家倒下，连累许多人</span></button>
+        <button data-k="weak" style="--i:3"><b>强弱不均</b><span>弱势一方缺乏选择</span></button>
+      </div>
+      <div class="fl-r">
+        <span data-t="disc">强制信息披露</span><span data-t="suit">适当性与了解客户</span><span data-t="best">以客户利益为先</span><span data-t="fee">限制特定收费方式</span><span data-t="ins">存款保险与投资者保护</span><span data-t="pru">资本与流动性监管</span><span data-t="enf">执法与投诉处理</span>
+      </div>
+    </div>
+    <p class="fl-d" id="fl-d" aria-live="polite">点按一种失灵。</p>
+  </div>
+  <figcaption>对应关系为本书的归纳，一种工具可能同时针对多种失灵。</figcaption>
+</figure>
+<style>
+.fl{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.fl-l{display:flex;flex-direction:column;gap:8px}
+.fl-l button{font:inherit;text-align:left;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;padding:10px 12px;cursor:pointer;display:flex;flex-direction:column;opacity:0;transform:translateX(-8px);transition:opacity .4s,transform .4s,border-color .2s;transition-delay:calc(var(--i)*.3s)}
+.fl.in .fl-l button{opacity:1;transform:none}
+.fl-l button b{font-size:14px}
+.fl-l button span{font-size:12px;color:var(--faint)}
+.fl-l button.sel{border-color:var(--warm);background:var(--warm-soft)}
+.fl-r{display:flex;flex-wrap:wrap;gap:8px;align-content:flex-start}
+.fl-r span{font-size:13px;border:1px solid var(--line);border-radius:999px;padding:6px 12px;color:var(--muted);transition:all .3s}
+.fl-r span.on{border-color:var(--accent);background:var(--accent-soft);color:var(--ink);font-weight:500}
+.fl-d{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.fl{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const M={
+    info:{t:['disc','suit'],m:'信息不对称：金融产品是信任品，买方难以判断质量。工具：强制披露，让信息可核验、可比较；适当性，让机构为“是否合适”承担判断责任。'},
+    agent:{t:['best','fee','disc'],m:'利益冲突：顾问与经纪人的收入取决于卖出了什么。工具：要求以客户利益为先，限制或禁止某些收费方式，并披露利益冲突。'},
+    ext:{t:['ins','pru'],m:'外部性与系统性风险：一家银行的挤兑会波及整个体系。工具：存款保险切断恐慌，资本与流动性监管约束机构冒险。'},
+    weak:{t:['suit','ins','enf'],m:'强弱不均：个人投资者缺乏信息、议价能力与选择。工具：适当性、投资者保护基金，以及执法与投诉处理渠道。'}
+  };
+  const bs=[...document.querySelectorAll('.fl-l button')], ts=[...document.querySelectorAll('.fl-r span')];
+  bs.forEach(b=>b.addEventListener('click',()=>{bs.forEach(x=>x.classList.toggle('sel',x===b));const m=M[b.dataset.k];ts.forEach(t=>t.classList.toggle('on',m.t.includes(t.dataset.t)));document.getElementById('fl-d').textContent=m.m;}));
+  document.getElementById('fl').addEventListener('anim-in',()=>{let k=0;const keys=['info','agent','ext','weak'];const id=setInterval(()=>{bs[k].click();if(++k>=4)clearInterval(id);},1300);});
+})();
+</script>

@@ -1,0 +1,31 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">可触及的范围随工具扩大</p><p class="figsub">每个方格代表美国全部工作任务的 1%。切换：只用大语言模型，或者加上建立在模型之上的软件与工具，有多少任务可以在质量不变的情况下明显加快。</p></div><button class="replay" type="button" data-replay="rc">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="条件">
+      <button type="button" data-rc="m" aria-pressed="true">只用模型</button>
+      <button type="button" data-rc="t" aria-pressed="false">模型加工具</button>
+    </div>
+    <div class="rc" id="rc" data-anim>
+      <div class="rc-g" id="rc-g"></div>
+      <p class="rc-msg" id="rc-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>数字来自 Eloundou、Manning、Mishkin 与 Rock（2023）预印本基于美国职业任务数据库的估计：只用模型约 15%，加上工具为 47%～56%，浅色方格表示区间。估计的是“可以被明显加快”，不等于已经被采用。2024 年发表于《科学》的版本改按岗位计算，采用了不同口径。</figcaption>
+</figure>
+<style>
+.rc-g{display:grid;grid-template-columns:repeat(20,1fr);gap:3px}
+.rc-g i{aspect-ratio:1;border-radius:3px;background:var(--quote);transition:background .25s;transition-delay:calc(var(--i)*5ms)}
+.rc-g i.on{background:var(--accent)} .rc-g i.rg{background:var(--accent-soft)}
+.rc-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const g=document.getElementById('rc-g');g.innerHTML=Array.from({length:100},(_,i)=>`<i style="--i:${i}"></i>`).join('');const cs=[...g.children];
+  function set(k){document.querySelectorAll('[data-rc]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.rc===k)));
+    const a=k==='m'?15:47,b=k==='m'?15:56;cs.forEach((c,i)=>c.className=i<a?'on':i<b?'rg':'');
+    document.getElementById('rc-msg').textContent=k==='m'?'只用模型时，约 15% 的任务可以明显加快：主要是写作、整理与查找信息这类结果本身就是信息的任务。':'加上检索、代码执行与各种业务软件之后，比例上升到约一半：工具把代理的作用范围从生成信息扩展到操作系统、提交表单与执行交易。';}
+  document.querySelectorAll('[data-rc]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.rc)));
+  document.getElementById('rc').addEventListener('anim-in',()=>{cs.forEach(c=>c.className='');setTimeout(()=>set('m'),100);setTimeout(()=>set('t'),2600);});
+  set('m');
+})();
+</script>

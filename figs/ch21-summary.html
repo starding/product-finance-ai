@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：用过程设计换取可靠性</p><p class="figsub">四条设计要求，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="ch21summary">重播</button></div>
+    <div class="ch21summary" id="ch21summary" data-anim><div class="ch21summary-c" style="--i:0"><em>三个来源缺一不可</em><b>让代理拿到上下文，并用工具算数与查数</b><p>数字从数据源与计算中得出，注明来源与截止时间；不靠模型凭记忆给出。</p></div><div class="ch21summary-c" style="--i:1"><em>误差随步骤累积</em><b>缩短每一段无人检查的过程</b><p>把长任务拆成可以核验的段落，每段结束时自动或由用户检查。</p></div><div class="ch21summary-c warn" style="--i:2"><em>能力边界参差不齐</em><b>标明适用范围，越界时降级</b><p>对代理已知做不好的任务明确说明，交给人或换成更保守的处理。</p></div><div class="ch21summary-c warn" style="--i:3"><em>没有把握时会猜</em><b>奖励说“不知道”</b><p>没有数据就说没有数据，不确定处单独标出；评测时对答错扣分。</p></div></div>
+  </div>
+</figure>
+<style>
+.ch21summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch21summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch21summary-c.warn{border-left-color:var(--warm)}
+.ch21summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch21summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch21summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch21summary.in .ch21summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch21summary{grid-template-columns:1fr}}
+</style>

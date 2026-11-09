@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Being able to do it does not mean it may be done on someone's behalf</p><p class="figsub">Twelve things grouped by whether they may be done on someone's behalf. Turn on "Financial tasks only" to see which steps in financial products must be left to the person.</p></div><button class="replay" type="button" data-replay="al">Replay</button></div>
+    <label class="al-chk"><input type="checkbox" id="al-x"> Financial tasks only</label>
+    <div class="al" id="al" data-anim></div>
+    <p class="al-msg" id="al-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>The four categories, experienced in person, decided in person, present in person and required by law, are this book's synthesis. Specific requirements for personal signature, identity verification and suitability assessment vary by jurisdiction; the figure illustrates the principle only.</figcaption>
+</figure>
+<style>
+.al-chk{display:flex;gap:6px;align-items:center;font-size:14px;margin-bottom:8px}
+.al-chk input{accent-color:var(--accent);width:16px;height:16px}
+.al{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.al-g{background:var(--quote);border-radius:10px;padding:8px;display:flex;flex-direction:column;gap:5px}
+.al-g>b{font-size:13px} .al-g>span{font-size:11px;color:var(--faint);margin-top:-3px;line-height:1.4}
+.al-g.ok{background:var(--accent-soft)}
+.al-i{font-size:12.5px;border-radius:7px;padding:5px 8px;background:var(--surface);border:1px solid var(--line);opacity:0;transform:translateY(6px);transition:opacity .35s,transform .35s;transition-delay:calc(var(--i)*.08s)}
+.al.in .al-i{opacity:1;transform:none}
+.al-i.f{border-color:var(--accent)}
+.al.fin .al-i:not(.f){opacity:.25}
+.al-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.al{grid-template-columns:1fr 1fr}}
+</style>
+<script>
+(function(){
+  const G=[['May be delegated','The agent can prepare and complete it',1,[['Write a research summary',1],['Compare the fees of several funds',1],['Organize a year of trade records',1]]],
+    ['Experienced in person','The value lies in experiencing it',0,[['Exercise',0],['Take a course',0],['Understand the risks one bears',1]]],
+    ['Decided in person','Must be decided by the person',0,[['Marry',0],['Decide how much to put into stocks',1]]],
+    ['Present in person','Requires the person to be present',0,[['Testify in court',0],['Identity checks for some account openings',1]]],
+    ['Required by law','The law requires the person to act',0,[['Sign a contract',0],['Answer a suitability questionnaire truthfully',1]]]];
+  let n=0;const box=document.getElementById('al');
+  box.innerHTML=G.map(([h,s,ok,items])=>`<div class="al-g${ok?' ok':''}"><b>${h}</b><span>${s}</span>${items.map(([t,f])=>`<div class="al-i${f?' f':''}" style="--i:${n++}">${t}</div>`).join('')}</div>`).join('');
+  const x=document.getElementById('al-x');
+  function r(){box.classList.toggle('fin',x.checked);document.getElementById('al-msg').textContent=x.checked?'In financial products, research, comparison and organizing can be handed to an agent; understanding the risks, deciding how much to invest, identity verification and the suitability questionnaire must be done by the person. An agent can execute trades, but authorization and confirmation are left to the person.':'Whether something may be delegated has nothing to do with the agent\'s ability: the value, responsibility or legal effect of these things requires that the person do them.';}
+  x.addEventListener('change',r);
+  box.addEventListener('anim-in',()=>{x.checked=false;r();setTimeout(()=>{x.checked=true;r();},2600);});
+  r();
+})();
+</script>

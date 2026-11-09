@@ -1,0 +1,36 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">评价指标里，平台的分量有多大</p>
+    <p class="figsub">代理的评价由两部分加权：用户的净价值，与平台的交易量和使用时长。拖动平台指标的权重，看代理的行为与用户的结果（示意）。</p>
+    <div class="ob" id="ob" data-anim>
+      <svg viewBox="0 0 640 200" role="img" aria-label="权重与结果"><g id="ob-ax"></g><path id="ob-u" class="ob-l u"/><path id="ob-p" class="ob-l p"/><line id="ob-c" class="ob-c"/></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>用户每年的净回报</span><span><i style="background:var(--blue)"></i>平台每年从该用户获得的收入</span></div>
+      <div class="sl"><label for="ob-w">平台指标的权重 <b id="ob-wv"></b></label><input id="ob-w" type="range" min="0" max="100" step="5" value="0"></div>
+      <div class="ob-out"><div><span>每月的交易建议</span><b id="ob-n"></b></div><div><span>用户的净回报</span><b id="ob-r"></b></div><div><span>平台的收入</span><b id="ob-q"></b></div></div>
+    </div>
+  </div>
+  <figcaption>示意模型：每增加一次交易建议，用户约有一半照做，每次交易的成本约占资产的 0.05%，平台获得其中一部分；交易本身不提高预期回报。只衡量一部分工作时代理会把精力转向被衡量的部分，见 Holmström 与 Milgrom（1991）。</figcaption>
+</figure>
+<style>
+.ob svg{width:100%;height:auto;display:block}
+.ob-l{fill:none;stroke-width:2.5} .ob-l.u{stroke:var(--accent)} .ob-l.p{stroke:var(--blue)}
+.ob-c{stroke:var(--ink);stroke-dasharray:3 3}
+.ob-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.ob-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.ob-out span{display:block;font-size:12px;color:var(--faint)} .ob-out b{font-size:19px;font-variant-numeric:tabular-nums}
+@media (max-width:640px){.ob-out{grid-template-columns:1fr}.ob svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const n=w=>1+w/100*11,cost=w=>n(w)*12*.5*.05,R=w=>6-cost(w),P=w=>.3+cost(w)*.4;
+  const X0=50,X1=620,YT=14,YB=170,x=w=>X0+w/100*(X1-X0),y=v=>YB-(v+.5)/7*(YB-YT);
+  const $=id=>document.getElementById(id),sl=$('ob-w');
+  $('ob-ax').innerHTML=`<line x1="${X0}" y1="${y(0)}" x2="${X1}" y2="${y(0)}" class="s-faint"/>`+[0,2,4,6].map(v=>`<text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}%</text>`).join('')+[0,50,100].map(w=>`<text x="${x(w)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${w}%</text>`).join('');
+  let a='',b='';for(let w=0;w<=100;w+=2){a+=(w?'L':'M')+x(w).toFixed(1)+','+y(R(w)).toFixed(1);b+=(w?'L':'M')+x(w).toFixed(1)+','+y(P(w)).toFixed(1);}$('ob-u').setAttribute('d',a);$('ob-p').setAttribute('d',b);
+  function r(){const w=+sl.value;$('ob-wv').textContent=w+'%';$('ob-c').setAttribute('x1',x(w));$('ob-c').setAttribute('x2',x(w));$('ob-c').setAttribute('y1',YT);$('ob-c').setAttribute('y2',YB);
+    $('ob-n').textContent=n(w).toFixed(0)+' 次';$('ob-r').textContent=R(w).toFixed(1)+'%';$('ob-q').textContent=P(w).toFixed(2)+'%';}
+  sl.addEventListener('input',r);
+  $('ob').addEventListener('anim-in',()=>{let w=0;sl.value=0;r();const id=setInterval(()=>{w+=5;sl.value=w;r();if(w>=100){clearInterval(id);setTimeout(()=>{sl.value=0;r();},700);}},110);});
+  r();
+})();
+</script>

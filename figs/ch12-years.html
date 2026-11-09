@@ -1,0 +1,35 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">要多少年，才能确认不是运气</p>
+    <p class="figsub">调节经理每年跑赢基准的幅度与跟踪误差（相对基准的波动），看需要多少年的业绩才能在统计上确认技能。</p>
+    <div class="yr" id="yr" data-anim>
+      <div class="yr-ctrl">
+        <div class="sl"><label for="yr-a">每年跑赢基准 <b id="yr-av"></b></label><input id="yr-a" type="range" min="0.5" max="5" step="0.5" value="2"></div>
+        <div class="sl"><label for="yr-t">跟踪误差 <b id="yr-tv"></b></label><input id="yr-t" type="range" min="2" max="12" step="1" value="6"></div>
+      </div>
+      <div class="yr-big"><span>需要的业绩年数（t 值达到 2）</span><b id="yr-n"></b></div>
+      <div class="yr-line" id="yr-line"></div>
+      <div class="yr-ref"><span>0</span><span>10 年</span><span>20 年</span><span>30 年</span><span>40 年</span><span>50 年以上</span></div>
+    </div>
+  </div>
+  <figcaption>按 t 值 ＝ 年均超额收益 ÷ 跟踪误差 × √年数 计算，所需年数 ＝（2 × 跟踪误差 ÷ 年均超额收益）²。假设超额收益每年独立、稳定不变。</figcaption>
+</figure>
+<style>
+.yr-ctrl{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.yr-big{background:var(--quote);border-radius:8px;padding:10px 14px;display:flex;justify-content:space-between;align-items:baseline}
+.yr-big span{font-size:13px;color:var(--muted)}
+.yr-big b{font-size:30px;font-variant-numeric:tabular-nums;color:var(--warm)}
+.yr-line{height:14px;border-radius:7px;background:linear-gradient(90deg,var(--accent),var(--warm));margin-top:12px;transform-origin:left;transition:transform .4s ease}
+.yr-ref{display:flex;justify-content:space-between;font-size:11px;color:var(--faint);margin-top:4px}
+@media (max-width:640px){.yr-ctrl{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const a=document.getElementById('yr-a'),t=document.getElementById('yr-t');
+  function r(){const A=+a.value,T=+t.value,n=Math.pow(2*T/A,2);
+    document.getElementById('yr-av').textContent=A+'%';document.getElementById('yr-tv').textContent=T+'%';
+    document.getElementById('yr-n').textContent=n>200?'200 年以上':Math.round(n)+' 年';
+    document.getElementById('yr-line').style.transform=`scaleX(${Math.min(1,n/50)})`;}
+  [a,t].forEach(e=>e.addEventListener('input',r)); r();
+})();
+</script>

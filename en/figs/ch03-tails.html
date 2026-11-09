@@ -1,0 +1,70 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">Extreme moves are more frequent than the normal distribution predicts</p>
+    <p class="figsub">The distribution of daily changes over 100,000 trading days (logarithmic vertical axis, so both tails are visible). The curve is a normal distribution with the same volatility. Choose a threshold and compare the number of days beyond it.</p>
+    <div class="presets" role="group" aria-label="Threshold">
+      <button type="button" data-k="3">Beyond 3 standard deviations</button><button type="button" data-k="4">Beyond 4 standard deviations</button><button type="button" data-k="5">Beyond 5 standard deviations</button>
+    </div>
+    <div class="tl" id="tl" data-anim>
+      <svg viewBox="0 0 640 230" role="img" aria-label="A fat-tailed distribution compared with the normal distribution">
+        <g id="tl-axis"></g>
+        <g id="tl-bars"></g>
+        <path id="tl-norm" class="tl-norm"/>
+        <rect id="tl-l" class="tl-zone" y="12" height="190"/><rect id="tl-r" class="tl-zone" y="12" height="190"/>
+      </svg>
+      <div class="tl-out">
+        <div><span>Expected under the normal distribution (per 10,000 days)</span><b id="tl-n"></b></div>
+        <div><span>Actually occurring in the fat-tailed distribution (per 10,000 days)</span><b id="tl-f"></b></div>
+        <div><span>Ratio</span><b id="tl-x"></b></div>
+      </div>
+    </div>
+  </div>
+  <figcaption>Simulated data. The fat-tailed series uses a t distribution with 3 degrees of freedom, scaled to the same standard deviation as the normal distribution. This is a common illustrative distribution for fat-tailed financial returns and is not an estimate for any particular market; in real markets the ratio varies by market and period. Mandelbrot (1963) was the first to point out systematically the fat tails of price changes.</figcaption>
+</figure>
+<style>
+.tl svg{width:100%;height:auto;display:block}
+#tl-bars rect{fill:var(--accent);opacity:.55;transform-box:fill-box;transform-origin:bottom;transform:scaleY(0);transition:transform .5s;transition-delay:calc(var(--k)*12ms)}
+.tl.in #tl-bars rect{transform:none}
+#tl-bars rect.far{fill:var(--warm);opacity:.85}
+.tl-norm{fill:none;stroke:var(--ink);stroke-width:1.6;stroke-dasharray:4 3}
+.tl-zone{fill:var(--warm-soft);transition:x .4s,width .4s}
+.tl-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.tl-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.tl-out span{display:block;font-size:12px;color:var(--faint)}
+.tl-out b{font-size:20px;font-variant-numeric:tabular-nums}
+#tl-x{color:var(--warm)}
+@media (max-width:640px){.tl-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const N=100000, X0=30, X1=620, Y0=202, Y1=14, R=7, B=56, bw=(X1-X0)/B;
+  const x=z=>X0+(z+R)/(2*R)*(X1-X0);
+  let seed=5; const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
+  const g=()=>{let u=0,v=0;while(!u)u=rnd();v=rnd();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);};
+  const sample=new Float64Array(N);
+  for(let i=0;i<N;i++){const zz=g(),c=g()**2+g()**2+g()**2;sample[i]=zz/Math.sqrt(c/3)/Math.sqrt(3);}
+  const bins=new Array(B).fill(0);for(const v of sample){const b=Math.floor((v+R)/(2*R)*B);if(b>=0&&b<B)bins[b]++;}
+  const lmax=Math.log10(N*0.3), y=c=>c<=0?Y0:Y0-Math.log10(c)/lmax*(Y0-Y1);
+  let a=`<line x1="${X0}" y1="${Y0}" x2="${X1}" y2="${Y0}" class="s-faint"/>`;
+  [-6,-4,-2,0,2,4,6].forEach(z=>a+=`<text x="${x(z)}" y="${Y0+16}" text-anchor="middle" font-size="11" class="t-faint">${z>0?'+':''}${z}σ</text>`);
+  [1,100,10000].forEach(c=>a+=`<line x1="${X0}" y1="${y(c)}" x2="${X1}" y2="${y(c)}" class="s-line"/><text x="${X0}" y="${y(c)-3}" font-size="10" class="t-faint">${c.toLocaleString('en-US')} ${c===1?'day':'days'}</text>`);
+  document.getElementById('tl-axis').innerHTML=a;
+  const erf=z=>{const t=1/(1+0.3275911*Math.abs(z));const r=1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-0.284496736)*t+0.254829592)*t*Math.exp(-z*z);return z>=0?r:-r;};
+  const Phi=z=>0.5*(1+erf(z/Math.SQRT2));
+  let d='';for(let i=0;i<=200;i++){const z=-R+i*(2*R/200);const c=N*(Phi(z+R/B)-Phi(z-R/B));d+=(i?'L':'M')+x(z).toFixed(1)+','+y(Math.max(c,0.3)).toFixed(1);}
+  document.getElementById('tl-norm').setAttribute('d',d);
+  const bars=document.getElementById('tl-bars');
+  function set(k){
+    document.querySelectorAll('[data-k]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.k===k)));
+    bars.innerHTML=bins.map((c,i)=>{const z0=-R+i*2*R/B, far=Math.abs(z0+R/B)>k;return c?`<rect class="${far?'far':''}" style="--k:${i}" x="${(X0+i*bw).toFixed(1)}" y="${y(c).toFixed(1)}" width="${(bw*0.9).toFixed(1)}" height="${(Y0-y(c)).toFixed(1)}"/>`:'';}).join('');
+    const L=document.getElementById('tl-l'),Rr=document.getElementById('tl-r');
+    L.setAttribute('x',X0);L.setAttribute('width',x(-k)-X0);Rr.setAttribute('x',x(k));Rr.setAttribute('width',X1-x(k));
+    const fn=10000*2*(1-Phi(k)); let cnt=0;for(const v of sample)if(Math.abs(v)>k)cnt++; const ff=cnt/N*10000;
+    document.getElementById('tl-n').textContent=fn<0.1?fn.toFixed(3):fn.toFixed(1);
+    document.getElementById('tl-f').textContent=ff.toFixed(1);
+    document.getElementById('tl-x').textContent=(ff/fn).toFixed(0)+'×';
+  }
+  document.querySelectorAll('[data-k]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.k)));
+  set(4);
+})();
+</script>

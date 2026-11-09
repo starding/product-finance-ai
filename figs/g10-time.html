@@ -1,0 +1,35 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">自己打理，还是请人打理</p><p class="figsub">拖动一户人家的家产与自己研究航运每周要花的时间，比较自己打理花掉的时间，与请人打理每年交的费用。</p></div><button class="replay" type="button" data-replay="tm">重播</button></div>
+    <div class="tm" id="tm" data-anim>
+      <div class="tm-b"><span>自己打理：花掉的时间折成粮食</span><div><i id="tm-s" style="background:var(--warm)"></i></div><b id="tm-sv"></b></div>
+      <div class="tm-b"><span>请人打理：每年的费用</span><div><i id="tm-f" style="background:var(--blue)"></i></div><b id="tm-fv"></b></div>
+      <div class="tm-sl">
+        <div class="sl"><label for="tm-w">家产 <b id="tm-wv"></b></label><input id="tm-w" type="range" min="20" max="1000" step="20" value="200"></div>
+        <div class="sl"><label for="tm-h">每周要花的时间 <b id="tm-hv"></b></label><input id="tm-h" type="range" min="0" max="10" step="0.5" value="3"></div>
+      </div>
+      <p class="tm-msg" id="tm-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：花在研究上的时间如果用来种地，每小时能多收 0.05 份粮食；请人打理每年交家产的 1.5% 作为费用。</figcaption>
+</figure>
+<style>
+.tm-b{display:grid;grid-template-columns:13em 1fr 4.5em;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.tm-b div{height:16px;background:var(--quote);border-radius:4px;overflow:hidden}
+.tm-b i{display:block;height:100%;transition:width .3s}
+.tm-b b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.tm-sl{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.tm-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.tm-b{grid-template-columns:1fr 4.5em}.tm-b span{grid-column:1/-1}.tm-sl{grid-template-columns:1fr;gap:4px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  function draw(){const w=+$('tm-w').value,h=+$('tm-h').value,s=h*52*.05,f=w*.015,M=Math.max(s,f,10);
+    $('tm-s').style.width=s/M*100+'%';$('tm-f').style.width=f/M*100+'%';$('tm-sv').textContent=s.toFixed(1)+' 份';$('tm-fv').textContent=f.toFixed(1)+' 份';$('tm-wv').textContent=w+' 份';$('tm-hv').textContent=h+' 小时';
+    $('tm-msg').textContent=h===0?'不花时间自己打理，等于放任不管：这本身也是一种选择，代价在于没有人照看。':s>f?`每周花 ${h} 小时，一年等于少收 ${s.toFixed(1)} 份粮食，比请人打理的费用 ${f.toFixed(1)} 份还多：家产不多的人家，请人打理更划算。`:`家产越多，费用越高：${w} 份家产一年要交 ${f.toFixed(1)} 份，超过了自己花时间的代价 ${s.toFixed(1)} 份。家产多的人家，要么自己打理，要么寻找收费更低的委托方式。`;}
+  ['tm-w','tm-h'].forEach(k=>$(k).addEventListener('input',draw));
+  $('tm').addEventListener('anim-in',()=>{let v=20;$('tm-w').value=v;draw();const id=setInterval(()=>{v+=40;$('tm-w').value=Math.min(v,1000);draw();if(v>=1000)clearInterval(id);},120);});
+  draw();
+})();
+</script>

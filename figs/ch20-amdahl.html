@@ -1,0 +1,41 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">适用比例决定上限</p>
+    <p class="figsub">拖动代理能承担的比例，并选择代理把这部分投入缩短多少倍，看整体的放大倍数。虚线是代理瞬间完成时的上限。</p>
+    <div class="am" id="am" data-anim>
+      <div class="seg-btns" role="group" aria-label="代理承担部分的加速">
+        <button type="button" data-am="2" aria-pressed="false">快 2 倍</button>
+        <button type="button" data-am="10" aria-pressed="true">快 10 倍</button>
+        <button type="button" data-am="100" aria-pressed="false">快 100 倍</button>
+      </div>
+      <svg viewBox="0 0 640 240" role="img" aria-label="适用比例与整体放大倍数"><g id="am-ax"></g><path id="am-cap" class="am-cap"/><path id="am-p" class="am-l"/><g id="am-ex"></g><circle id="am-d" r="6" fill="var(--ink)"/></svg>
+      <div class="sl"><label for="am-a">代理能承担的比例 <b id="am-av"></b></label><input id="am-a" type="range" min="0" max="95" step="1" value="30"></div>
+      <p class="am-msg" id="am-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>整体放大倍数 ＝ 1 ÷ [(1 − 适用比例) ＋ 适用比例 ÷ 加速倍数]，与 Amdahl（1967）的形式相同；纵轴为对数刻度。参照点：某电商客服中代理适用的会话约占 5.8%。</figcaption>
+</figure>
+<style>
+.am svg{width:100%;height:auto;display:block}
+.am-l{fill:none;stroke:var(--accent);stroke-width:2.5}
+.am-cap{fill:none;stroke:var(--faint);stroke-dasharray:4 4;stroke-width:1.5}
+.am-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.am svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const X0=56,X1=620,YT=14,YB=200,x=a=>X0+a*(X1-X0),ly=v=>YB-Math.log10(v)/Math.log10(25)*(YB-YT);
+  const M=(a,k)=>1/((1-a)+a/k);let k=10;const $=id=>document.getElementById(id),sl=$('am-a');
+  $('am-ax').innerHTML=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`+[1,2,5,10,20].map(v=>`<text x="${X0-6}" y="${ly(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v} 倍</text><line x1="${X0}" x2="${X1}" y1="${ly(v)}" y2="${ly(v)}" class="s-line"/>`).join('')+
+    [0,.25,.5,.75,.95].map(a=>`<text x="${x(a)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${Math.round(a*100)}%</text>`).join('');
+  let c='';for(let a=0;a<=.95;a+=.005)c+=(a?'L':'M')+x(a).toFixed(1)+','+ly(Math.min(25,1/(1-a))).toFixed(1);$('am-cap').setAttribute('d',c);
+  function draw(){let d='';for(let a=0;a<=.95;a+=.005)d+=(a?'L':'M')+x(a).toFixed(1)+','+ly(M(a,k)).toFixed(1);$('am-p').setAttribute('d',d);
+    $('am-ex').innerHTML=[[.058,'电商客服']].map(([a,n])=>`<circle cx="${x(a)}" cy="${ly(M(a,k))}" r="4" fill="var(--warm)"/><text x="${x(a)+6}" y="${ly(M(a,k))-8}" font-size="11" class="t-warm">${n}</text>`).join('');
+    const a=+sl.value/100,v=M(a,k);$('am-av').textContent=sl.value+'%';$('am-d').setAttribute('cx',x(a));$('am-d').setAttribute('cy',ly(v));
+    $('am-msg').textContent=`代理承担 ${sl.value}% 的工作、把这部分缩短 ${k} 倍时，整体放大 ${v.toFixed(2)} 倍；即使代理瞬间完成，上限也只有 ${(1/(1-a)).toFixed(2)} 倍。`;}
+  document.querySelectorAll('[data-am]').forEach(b=>b.addEventListener('click',()=>{k=+b.dataset.am;document.querySelectorAll('[data-am]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  sl.addEventListener('input',draw);
+  $('am').addEventListener('anim-in',()=>{let a=0;sl.value=0;draw();const id=setInterval(()=>{a+=5;sl.value=a;draw();if(a>=90){clearInterval(id);setTimeout(()=>{sl.value=30;draw();},600);}},120);});
+  draw();
+})();
+</script>

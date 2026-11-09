@@ -1,0 +1,30 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Spreading 5 portions across many ships</p><p class="figsub">Each household invests 5 portions in shipbuilding, split evenly across a number of ships, and whether each ship sinks is unrelated to the others. Drag the number of ships and see what the 5 portions may end up as.</p></div><button class="replay" type="button" data-replay="sr">Replay</button></div>
+    <div class="sr" id="sr" data-anim>
+      <svg viewBox="0 0 640 200" role="img" aria-label="Distribution of investment outcomes"><g id="sr-ax"></g><g id="sr-b"></g></svg>
+      <div class="sl"><label for="sr-k">Ships invested in <b id="sr-kv"></b></label><input id="sr-k" type="range" min="1" max="20" step="1" value="1"></div>
+      <p class="sr-msg" id="sr-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: each ship returns with a 70% chance, and on return is worth two and a half times what was put in; the bars show the probability of each outcome, computed exactly from the binomial distribution.</figcaption>
+</figure>
+<style>
+.sr svg{width:100%;height:auto;display:block}
+.sr-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.sr svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),X0=40,X1=630,YT=10,YB=170,x=v=>X0+v/12.5*(X1-X0),y=p=>YB-p/1*(YB-YT);
+  $('sr-ax').innerHTML=`<line x1="${X0}" x2="${X1}" y1="${YB}" y2="${YB}" class="s-faint"/>`+[0,2.5,5,7.5,10,12.5].map(v=>`<text x="${x(v)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${v}</text>`).join('')+`<text x="${X1}" y="${YB-6}" text-anchor="end" font-size="11" class="t-muted">What the 5 portions become</text>`+`<line x1="${x(5)}" x2="${x(5)}" y1="${YT}" y2="${YB}" class="s-faint" stroke-dasharray="3 4"/>`;
+  const C=(n,k)=>{let r=1;for(let i=0;i<k;i++)r=r*(n-i)/(i+1);return r;};
+  function draw(){const k=+$('sr-k').value;let h='',pl=0;
+    for(let s=0;s<=k;s++){const p=C(k,s)*Math.pow(.7,s)*Math.pow(.3,k-s),v=12.5*s/k;if(v<5)pl+=p;h+=`<rect x="${x(v)-6}" y="${y(p)}" width="12" height="${YB-y(p)}" rx="2" fill="${v<5?'var(--warm)':'var(--accent)'}"/>`;}
+    $('sr-b').innerHTML=h;$('sr-kv').textContent=k+(k===1?' ship':' ships');
+    $('sr-msg').textContent=k===1?'All on one ship: a 70% chance of 12.5 portions, a 30% chance of nothing at all.':`Spread across ${k} ships, the average outcome is unchanged at 8.75 portions, but the chance of losing everything falls to ${(Math.pow(.3,k)*100).toFixed(k>3?3:1)}%, and the chance of a loss is ${Math.round(pl*100)}%. Diversification does not lower the average gain; it lowers only the volatility.`;}
+  $('sr-k').addEventListener('input',draw);
+  $('sr').addEventListener('anim-in',()=>{const seq=[1,2,3,5,8,12,20];seq.forEach((v,i)=>setTimeout(()=>{$('sr-k').value=v;draw();},200+i*500));});
+  draw();
+})();
+</script>

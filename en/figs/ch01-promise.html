@@ -1,0 +1,110 @@
+<figure id="promisefig">
+  <div class="card">
+    <p class="figtitle">The same money, four promises</p>
+    <p class="figsub">Put 10,000 yuan into each of four promises and hold to maturity. Each promise is simulated over 4,000 possible futures; on the left are the promisor and the circumstances in which the promise fails.</p>
+    <div class="pf-ctrl">
+      <div class="sl"><label for="pf-t">Holding period <b id="pf-tv"></b></label><input id="pf-t" type="range" min="1" max="30" step="1" value="10"></div>
+      <label class="pf-chk"><input type="checkbox" id="pf-real"> In purchasing power (after inflation)</label>
+    </div>
+    <div id="pf-rows"></div>
+    <div class="legend pf-legend"><span><i class="pf-band"></i>Middle 90% of outcomes</span><span><i class="pf-dot"></i>Median</span><span><i class="pf-mean"></i>Mean</span><span><i class="pf-base"></i>Principal of 10,000 yuan</span></div>
+  </div>
+  <figcaption>Illustrative parameters that do not correspond to any real product: deposit rate 2% a year; government bond yield 3% a year, held to maturity; corporate bond coupon 5%, with an annual default probability of 1.5% and 40% of principal recovered on default, interest received and recoveries reinvested at 2%; stock index mean annual log return 5.5% and volatility 18%, before fees. Inflation fluctuates around 2.5% a year (standard deviation 1.2%). If government or corporate bonds are sold before maturity, their prices move with interest rates; the figure shows only hold-to-maturity outcomes.</figcaption>
+</figure>
+<style>
+.pf-ctrl{display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;margin-bottom:8px}
+.pf-chk{font-size:14px;display:flex;gap:6px;align-items:center;cursor:pointer;white-space:nowrap}
+.pf-chk input{accent-color:var(--accent);width:16px;height:16px}
+.pf-row{display:grid;grid-template-columns:170px 1fr;gap:16px;padding:14px 0;border-top:1px solid var(--line)}
+.pf-name{font-size:15px;font-weight:700}
+.pf-who{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+.pf-fail{font-size:12px;color:var(--warm);line-height:1.5;margin-top:2px}
+.pf-track{position:relative;height:30px;margin-top:2px}
+.pf-track .axis{position:absolute;left:0;right:0;top:15px;height:1px;background:var(--line)}
+.pf-track .band{position:absolute;top:8px;height:14px;border-radius:7px;background:var(--accent-soft);transition:left .3s,width .3s}
+.pf-track .band.risky{background:var(--warm-soft)}
+.pf-track .med{position:absolute;top:8px;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:var(--accent);transition:left .3s}
+.pf-track .med.risky{background:var(--warm)}
+.pf-track .mean{position:absolute;top:4px;width:2px;height:22px;margin-left:-1px;background:var(--ink);transition:left .3s}
+.pf-track .base{position:absolute;top:0;bottom:0;width:0;border-left:1.5px dashed var(--faint)}
+.pf-stats{font-size:13px;color:var(--muted);line-height:1.7;font-variant-numeric:tabular-nums}
+.pf-stats b{color:var(--ink)}
+.pf-stats .loss{color:var(--warm);font-weight:700}
+.pf-scale{display:flex;justify-content:space-between;font-size:11px;color:var(--faint);margin:6px 0 0 186px}
+.pf-legend .pf-band{background:var(--accent-soft);width:18px;border-radius:5px}
+.pf-legend .pf-dot{background:var(--accent);border-radius:50%}
+.pf-legend .pf-mean{background:var(--ink);width:2px}
+.pf-legend .pf-base{background:none;border-left:1.5px dashed var(--faint);width:0}
+@media (max-width:640px){
+  .pf-ctrl{grid-template-columns:1fr;gap:4px}
+  .pf-row{grid-template-columns:1fr;gap:6px}
+  .pf-scale{margin-left:0}
+}
+</style>
+<script>
+(function(){
+  const N=4000, P0=10000, MAXT=30;
+  const products=[
+    {key:'dep', name:'Bank deposit', who:'Promisor: the bank (deposit insurance covers up to a limit)', fail:'Fails if: the bank collapses and the amount exceeds the insurance limit', risky:false},
+    {key:'gov', name:'Government bond', who:'Promisor: the government; held to maturity', fail:'Fails if: the government defaults (very rare for local-currency debt)', risky:false},
+    {key:'corp',name:'Corporate bond', who:'Promisor: the issuing company', fail:'Fails if: the company cannot pay', risky:true},
+    {key:'eq',  name:'Stock index fund', who:'No fixed amount promised; shares in residual returns', fail:'Outcome depends on company performance and market pricing', risky:true},
+  ];
+  // Seeded random numbers so the result is the same every time the page opens
+  let seed=20261019;
+  const rnd=()=>{seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};
+  const gauss=()=>{let u=0,v=0;while(!u)u=rnd();while(!v)v=rnd();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);};
+  // Pre-simulate 30 years of annual paths, recording wealth at the end of each year
+  const sim={dep:[],gov:[],corp:[],eq:[],cpi:[]};
+  for(const k in sim) for(let t=0;t<=MAXT;t++) sim[k].push(new Float64Array(N));
+  for(let i=0;i<N;i++){
+    let eq=P0, cpi=1, coupons=0, principal=P0, alive=true;
+    for(let t=1;t<=MAXT;t++){
+      eq*=Math.exp(0.055+0.18*gauss());
+      cpi*=1+0.025+0.012*gauss();
+      if(alive){
+        if(rnd()<0.015){alive=false;principal=P0*0.4;coupons*=1.02;}
+        else coupons=coupons*1.02+P0*0.05;
+      } else {coupons*=1.02;principal*=1.02;}
+      sim.eq[t][i]=eq; sim.cpi[t][i]=cpi;
+      sim.corp[t][i]=coupons+principal;
+      sim.dep[t][i]=P0*Math.pow(1.02,t);
+      sim.gov[t][i]=P0*Math.pow(1.03,t);
+    }
+  }
+  const tEl=document.getElementById('pf-t'), rEl=document.getElementById('pf-real'), rows=document.getElementById('pf-rows');
+  rows.innerHTML=products.map(p=>`<div class="pf-row"><div><div class="pf-name">${p.name}</div><div class="pf-who">${p.who}</div><div class="pf-fail">${p.fail}</div></div><div><div class="pf-track" id="pf-tr-${p.key}"><div class="axis"></div><div class="band${p.risky?' risky':''}"></div><div class="base"></div><div class="mean"></div><div class="med${p.risky?' risky':''}"></div></div><div class="pf-stats" id="pf-st-${p.key}"></div></div></div>`).join('')+'<div class="pf-scale" id="pf-scale"></div>';
+  const fmt=v=>Math.round(v).toLocaleString('en-US');
+  const q=(arr,p)=>arr[Math.min(arr.length-1,Math.floor(p*arr.length))];
+  function render(){
+    const T=+tEl.value, real=rEl.checked;
+    document.getElementById('pf-tv').textContent=T+(T===1?' year':' years');
+    const stats={};
+    products.forEach(p=>{
+      const a=Array.from(sim[p.key][T],(v,i)=>real?v/sim.cpi[T][i]:v).sort((x,y)=>x-y);
+      const mean=a.reduce((s,v)=>s+v,0)/N;
+      const lossN=a.findIndex(v=>v>=P0-0.5); const loss=(lossN<0?N:lossN)/N;
+      stats[p.key]={lo:q(a,.05),med:q(a,.5),hi:q(a,.95),mean,loss};
+    });
+    const top=Math.max(...Object.values(stats).map(s=>s.hi));
+    const step=top>60000?20000:top>30000?10000:5000, max=Math.ceil(top/step)*step;
+    const X=v=>Math.max(0,Math.min(100,v/max*100))+'%';
+    products.forEach(p=>{
+      const s=stats[p.key], tr=document.getElementById('pf-tr-'+p.key);
+      const band=tr.querySelector('.band');
+      band.style.left=X(s.lo); band.style.width=Math.max(0,(s.hi-s.lo)/max*100)+'%';
+      tr.querySelector('.med').style.left=X(s.med);
+      const meanEl=tr.querySelector('.mean'); meanEl.style.left=X(s.mean); meanEl.style.display=p.risky?'block':'none';
+      tr.querySelector('.base').style.left=X(P0);
+      const lbl=real?'Probability purchasing power ends below principal':'Probability of ending below principal';
+      const lossTxt=s.loss<0.0005?lbl+' 0%':`${lbl} <span class="loss">${(s.loss*100).toFixed(s.loss<0.1?1:0)}%</span>`;
+      const spread=p.risky?`; in the worst 5% of cases, no more than ${fmt(s.lo)} yuan`:'';
+      document.getElementById('pf-st-'+p.key).innerHTML=`Median <b>${fmt(s.med)}</b> yuan${p.risky?', mean '+fmt(s.mean)+' yuan':''}${spread}; ${lossTxt}`;
+    });
+    let sc=''; for(let v=0;v<=max;v+=step) sc+=`<span>${v===0?'0':(v/1000)+'k'}</span>`;
+    document.getElementById('pf-scale').innerHTML=sc;
+  }
+  tEl.addEventListener('input',render); rEl.addEventListener('change',render);
+  render();
+})();
+</script>

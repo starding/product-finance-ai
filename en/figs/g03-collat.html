@@ -1,0 +1,33 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Collateral: safer, and it shuts some people out</p><p class="figsub">Each household borrows 4 portions and must repay 4.4 in spring. Drag the share of principal and interest the collateral must be worth, and see who can borrow and how much the lender loses on default.</p></div><button class="replay" type="button" data-replay="cl">Replay</button></div>
+    <div class="cl" id="cl" data-anim>
+      <div class="cl-hh" id="cl-hh"></div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Can borrow</span><span><i style="background:var(--quote);border:1px solid var(--line)"></i>Not enough collateral, cannot borrow</span></div>
+      <div class="sl"><label for="cl-r">Collateral must be worth at least this share of principal and interest: <b id="cl-rv"></b></label><input id="cl-r" type="range" min="0" max="150" step="10" value="100"></div>
+      <div class="cl-out"><div><span>Households that can borrow</span><b id="cl-n"></b></div><div><span>Of those, households for whom default pays</span><b id="cl-d"></b></div></div>
+      <p class="cl-msg" id="cl-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the 20 households own collateral worth from 0 to 9 portions; the number in each cell is the value of that household's collateral. When the collateral is worth less than the principal and interest owed, not repaying pays.</figcaption>
+</figure>
+<style>
+.cl-hh{display:grid;grid-template-columns:repeat(10,1fr);gap:5px}
+.cl-hh i{display:flex;align-items:center;justify-content:center;font-style:normal;font-size:11.5px;height:34px;border-radius:7px;transition:background .3s,color .3s}
+.cl-out{display:flex;gap:24px;flex-wrap:wrap;margin-top:10px}
+.cl-out div{display:flex;flex-direction:column} .cl-out span{font-size:12px;color:var(--faint)} .cl-out b{font-size:20px;font-variant-numeric:tabular-nums}
+.cl-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),W=[0,0,0,0.5,1,1,1.5,2,2.5,3,3,3.5,4,4.5,5,5.5,6,7,8,9],due=4.4;
+  $('cl-hh').innerHTML=W.map(w=>`<i>${w}</i>`).join('');const cs=[...$('cl-hh').children];
+  function draw(){const q=+$('cl-r').value/100,need=due*q;let n=0,bad=0;
+    W.forEach((w,i)=>{const ok=w>=need-1e-9;if(ok){n++;if(w<due)bad++;}cs[i].style.background=ok?'var(--accent)':'var(--quote)';cs[i].style.color=ok?'#fff':'var(--faint)';});
+    $('cl-rv').textContent=Math.round(q*100)+'%';$('cl-n').textContent=n;$('cl-d').textContent=bad;
+    $('cl-msg').textContent=q===0?'With no collateral required, everyone can borrow, but for those whose collateral is worth less than principal and interest, not repaying pays; the promise is not credible.':q<1?`Collateral must be worth ${Math.round(q*100)}% of principal and interest: ${n} households can borrow, of which ${bad} have collateral worth less than principal and interest and still have a motive not to repay.`:`Collateral must be worth at least the principal and interest: no one who borrows has a motive not to repay, and the promise is credible; but ${20-n} households cannot borrow because their collateral is not enough.`;}
+  $('cl-r').addEventListener('input',draw);
+  $('cl').addEventListener('anim-in',()=>{let v=0;$('cl-r').value=0;draw();const id=setInterval(()=>{v+=10;$('cl-r').value=v;draw();if(v>=100)clearInterval(id);},260);});
+  draw();
+})();
+</script>

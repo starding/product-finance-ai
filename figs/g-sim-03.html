@@ -1,0 +1,66 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">文明模拟器 · 第 3 章：守约的村子</p><p class="figsub">二十户春天收获的人每年向秋天收获的人借粮。选择让承诺可信的办法，调整守约者的比例与人们有多在乎将来，看二十年里借贷能否维持。</p></div><button class="replay" type="button" data-replay="cs3">重播</button></div>
+    <div class="cs-rules"><span class="on">储蓄</span><span class="on">留种</span><span class="on">借贷</span><span class="on">承诺</span><span class="lock">货币 · 第 4 章</span><span class="lock">保险 · 第 5 章</span></div>
+    <div class="seg-btns" role="group" aria-label="让承诺可信的办法">
+      <button type="button" data-cs3="none" aria-pressed="false">没有办法</button>
+      <button type="button" data-cs3="rep" aria-pressed="true">声誉</button>
+      <button type="button" data-cs3="col" aria-pressed="false">抵押</button>
+      <button type="button" data-cs3="both" aria-pressed="false">声誉＋抵押</button>
+    </div>
+    <div class="cs3" id="cs3" data-anim>
+      <svg viewBox="0 0 660 200" role="img" aria-label="二十年里每年的借贷"><g id="cs3-ax"></g><g id="cs3-b"></g></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>借到并按时还款</span><span><i style="background:var(--warm)"></i>借到但不还</span><span><i style="background:var(--quote);border:1px solid var(--line)"></i>借不到</span></div>
+      <div class="cs3-ctl">
+        <div class="sl"><label for="cs3-h">守约者的比例 <b id="cs3-hv"></b></label><input id="cs3-h" type="range" min="0" max="100" step="5" value="60"></div>
+        <div class="sl"><label for="cs3-d">在乎将来的程度 <b id="cs3-dv"></b></label><input id="cs3-d" type="range" min="50" max="95" step="5" value="85"></div>
+      </div>
+      <div class="cs3-out" id="cs3-out"></div>
+      <p class="cs3-msg" id="cs3-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意模型：每户每年借 4 份、春天还 4.4 份，每笔按时归还的借贷为双方带来共 1 份好处；不还时眼前多得 4 份。机会主义者只在不还更划算时不还：没有任何办法时总是不还；有声誉时，若失去的将来（在乎将来的程度 ÷（1 − 在乎将来的程度）× 1 份）小于 4 份就不还，且此后被全村拒绝；有抵押时，抵押物不低于本息就还。没有任何办法时，出借人按去年的还款比例决定是否继续出借，低于八成即停止。二十户中有 7 户的抵押物不低于本息。</figcaption>
+</figure>
+<style>
+.cs3 svg{width:100%;height:auto;display:block}
+.cs3-ctl{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px}
+.cs3-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cs3-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs3-out span{display:block;font-size:11.5px;color:var(--faint)} .cs3-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.cs3-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs3-ctl{grid-template-columns:1fr;gap:4px}.cs3-out{grid-template-columns:1fr}.cs3 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs3'+id),N=20,Y=20,DUE=4.4,G=4,W=[0,0,0,0.5,1,1,1.5,2,2.5,3,3,3.5,4,4.5,5,5.5,6,7,8,9];
+  const X0=40,X1=650,YT=10,YB=168,bw=(X1-X0)/Y,y=v=>YB-v/N*(YB-YT);let mode='rep';
+  $('-ax').innerHTML=[0,5,10,15,20].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+
+    [1,5,10,15,20].map(t=>`<text x="${X0+bw*(t-.5)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">第 ${t} 年</text>`).join('');
+  function sim(h,d){const honest=Array.from({length:N},(_,i)=>((i*7)%N)<Math.round(h*N)),col=W.map(w=>w>=DUE),bad=Array(N).fill(false);
+    const future=d/(1-d)*1,repRepays=future>=G;let belief=.9;const rows=[];
+    for(let t=0;t<Y;t++){let ok=0,def=0;
+      for(let i=0;i<N;i++){let can;
+        if(mode==='none')can=belief>=.8;else if(mode==='rep')can=!bad[i];else if(mode==='col')can=col[i];else can=!bad[i];
+        if(!can)continue;
+        let repay;if(honest[i])repay=true;else if(mode==='none')repay=false;else if(mode==='rep')repay=repRepays;else if(mode==='col')repay=true;else repay=col[i]||repRepays;
+        if(repay)ok++;else{def++;bad[i]=true;}}
+      if(mode==='none'&&ok+def>0)belief=ok/(ok+def);
+      rows.push([ok,def]);}
+    return rows;}
+  function draw(){const h=+$('-h').value/100,d=+$('-d').value/100,R=sim(h,d);
+    $('-hv').textContent=Math.round(h*100)+'%';$('-dv').textContent=(+(d*10).toFixed(1))+' 成';
+    $('-b').innerHTML=R.map(([ok,def],t)=>{const x=X0+bw*t+bw*.15,w=bw*.7;return `<rect x="${x}" y="${y(N)}" width="${w}" height="${YB-y(N)}" rx="2" fill="var(--quote)"/><rect x="${x}" y="${y(ok)}" width="${w}" height="${YB-y(ok)}" rx="2" fill="var(--accent)"/><rect x="${x}" y="${y(ok+def)}" width="${w}" height="${y(ok)-y(ok+def)}" fill="var(--warm)"/>`;}).join('');
+    const tot=R.reduce((a,r)=>a+r[0],0),defs=R.reduce((a,r)=>a+r[1],0),last=R[Y-1][0]+R[Y-1][1];
+    $('-out').innerHTML=[['借贷的好处实现了',Math.round(tot/(N*Y)*100)+'%'],['二十年里不还的户次',defs],['第 20 年能借到的户数',last]].map(([a,b])=>`<div><span>${a}</span><b>${b}</b></div>`).join('');
+    const fut=d/(1-d);let m='';
+    if(mode==='none')m=h>=.8?`守约者占 ${Math.round(h*100)}%，出借人勉强继续出借，但每年都有 ${Math.round((1-h)*N)} 户不还，损失由守约的人间接承担。`:`第一年就有 ${Math.round((1-h)*N)} 户不还，出借人从此不再出借：借贷完全停止，借贷的好处全部落空。`;
+    else if(mode==='rep')m=fut>=G?`借款人足够在乎将来，失去的将来（约 ${fut.toFixed(1)} 份）不小于眼前的 4 份：机会主义者也按时还款，借贷一直维持。`:`借款人不够在乎将来，机会主义者第一年不还，随即被全村拒绝；守约的人一直借得到。`;
+    else if(mode==='col')m=`只有抵押物足够的 7 户借得到，他们没有不还的动机；其余 13 户无论是否守约，始终借不到。`;
+    else m=fut>=G?'有抵押的人与在乎将来的人都按时还款：借贷几乎完全维持。':'有抵押的人始终还款；没有抵押、又不在乎将来的机会主义者第一年不还，随后被排除。';
+    $('-msg').textContent=m;}
+  document.querySelectorAll('[data-cs3]').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.cs3;document.querySelectorAll('[data-cs3]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  ['-h','-d'].forEach(k=>$(k).addEventListener('input',draw));
+  $('').addEventListener('anim-in',()=>{['none','rep','col','both'].forEach((k,i)=>setTimeout(()=>{mode=k;document.querySelectorAll('[data-cs3]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.cs3===k)));draw();},300+i*2400));});
+  draw();
+})();
+</script>

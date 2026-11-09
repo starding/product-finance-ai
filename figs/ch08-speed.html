@@ -1,0 +1,59 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">公开新闻多快进入价格</p><p class="figsub">新闻发布后，价格调整完成的比例。时间轴为分钟，对数刻度。</p></div><button class="replay" type="button" data-replay="sp">重播</button></div>
+    <div class="sp" id="sp" data-anim>
+      <svg viewBox="0 0 640 250" role="img" aria-label="新闻发布后价格调整完成比例随时间的变化">
+        <g id="sp-axis"></g>
+        <path id="sp-a" class="sp-l a"/><path id="sp-b" class="sp-l b"/>
+        <line id="sp-me" class="sp-me" y1="14" y2="214"/>
+        <text id="sp-mt" font-size="11" text-anchor="start" class="t-warm">个人读完新闻并下单（示意）</text>
+        <text id="sp-la" font-size="11" class="t-accent">1980 年代</text><text id="sp-lb" font-size="11" class="t-ink">2000 年前后</text>
+        <line id="sp-cur" class="sp-cur" y1="14" y2="214"/>
+      </svg>
+      <div class="sp-out">
+        <div><span>经过时间</span><b id="sp-t"></b></div>
+        <div><span>1980 年代的盈利公告</span><b id="sp-va" class="t-accent-c"></b></div>
+        <div><span>2000 年前后的电视点评</span><b id="sp-vb"></b></div>
+      </div>
+    </div>
+  </div>
+  <figcaption>示意曲线：1980 年代一组依据 Patell 与 Wolfson（1984），主要反应在几分钟到十几分钟内完成；2000 年前后一组依据 Busse 与 Green（2002）对正面点评的研究，约一分钟内被吸收。今天的交易速度更快。</figcaption>
+</figure>
+<style>
+.sp svg{width:100%;height:auto;display:block}
+.sp-l{fill:none;stroke-width:2.5}
+.sp-l.a{stroke:var(--accent)} .sp-l.b{stroke:var(--ink)}
+.sp-me{stroke:var(--warm);stroke-width:1.5;stroke-dasharray:4 3}
+.sp-cur{stroke:var(--faint);stroke-width:1}
+.sp-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px}
+.sp-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.sp-out span{display:block;font-size:12px;color:var(--faint)}
+.sp-out b{font-size:20px;font-variant-numeric:tabular-nums}
+#sp-va{color:var(--accent)}
+@media (max-width:640px){.sp-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const T0=0.05,T1=60,X0=50,X1=620,Y0=214,Y1=14;
+  const x=t=>X0+Math.log10(t/T0)/Math.log10(T1/T0)*(X1-X0), y=v=>Y0-v*(Y0-Y1);
+  const fa=t=>1-Math.exp(-t/5), fb=t=>1-Math.exp(-t/0.3);
+  let a=`<line x1="${X0}" y1="${Y0}" x2="${X1}" y2="${Y0}" class="s-faint"/>`;
+  [[0.1,'6 秒'],[0.5,'30 秒'],[1,'1 分钟'],[5,'5 分钟'],[15,'15 分钟'],[60,'1 小时']].forEach(([t,l])=>a+=`<line x1="${x(t)}" y1="${Y1}" x2="${x(t)}" y2="${Y0}" class="s-line"/><text x="${x(t)}" y="${Y0+16}" text-anchor="middle" font-size="11" class="t-faint">${l}</text>`);
+  [0.5,1].forEach(v=>a+=`<text x="${X0-8}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text>`);
+  document.getElementById('sp-axis').innerHTML=a;
+  const P=f=>{let d='';for(let i=0;i<=200;i++){const t=T0*Math.pow(T1/T0,i/200);d+=(d?'L':'M')+x(t).toFixed(1)+','+y(f(t)).toFixed(1);}return d;};
+  document.getElementById('sp-a').setAttribute('d',P(fa));
+  document.getElementById('sp-b').setAttribute('d',P(fb));
+  const me=document.getElementById('sp-me');me.setAttribute('x1',x(3));me.setAttribute('x2',x(3));
+  const mt=document.getElementById('sp-mt');mt.setAttribute('x',x(3)+6);mt.setAttribute('y',y(0.12));
+  const la=document.getElementById('sp-la');la.setAttribute('x',x(12)+6);la.setAttribute('y',y(fa(12))+16);
+  const lb=document.getElementById('sp-lb');lb.setAttribute('x',x(0.07));lb.setAttribute('y',y(0.9));
+  const cur=document.getElementById('sp-cur');
+  function at(t){cur.setAttribute('x1',x(t));cur.setAttribute('x2',x(t));
+    document.getElementById('sp-t').textContent=t<1?Math.round(t*60)+' 秒':t.toFixed(t<10?1:0)+' 分钟';
+    document.getElementById('sp-va').textContent=Math.round(fa(t)*100)+'%';
+    document.getElementById('sp-vb').textContent=Math.round(fb(t)*100)+'%';}
+  document.getElementById('sp').addEventListener('anim-in',()=>{let i=0;const id=setInterval(()=>{i++;at(T0*Math.pow(T1/T0,i/120));if(i>=120){clearInterval(id);at(3);}},30);});
+  at(3);
+})();
+</script>

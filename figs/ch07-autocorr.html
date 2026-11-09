@@ -1,0 +1,65 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">今天的涨跌，能不能说明明天</p>
+    <p class="figsub">每个点是一天：横轴为当天涨跌，纵轴为次日涨跌。点云若向右上倾斜，就可以用今天预测明天。</p>
+    <div class="seg-btns" role="group" aria-label="情形">
+      <button type="button" data-ac="0.02" aria-pressed="true">与实证一致：相关接近零</button>
+      <button type="button" data-ac="0.5" aria-pressed="false">假如可以预测：相关 0.5</button>
+    </div>
+    <div class="ac" id="ac" data-anim>
+      <svg viewBox="0 0 400 300" role="img" aria-label="当日与次日收益的散点图">
+        <g id="ac-axis"></g>
+        <g id="ac-pts"></g>
+        <line id="ac-fit" class="ac-fit"/>
+      </svg>
+      <div class="ac-side">
+        <div><span>相关系数</span><b id="ac-r"></b></div>
+        <div><span>按“今天涨、明天也涨”猜方向，猜中的比例</span><b id="ac-hit"></b></div>
+        <p id="ac-msg"></p>
+      </div>
+    </div>
+  </div>
+  <figcaption>模拟数据，600 个交易日，日波动率 1.2%。Kendall（1953）与 Fama（1965）在真实价格序列中测得的相邻日收益相关性接近零；Fama 与 Blume（1966）发现基于涨跌的过滤规则扣除成本后不优于买入并持有。</figcaption>
+</figure>
+<style>
+.ac{display:grid;grid-template-columns:minmax(0,1.3fr) 1fr;gap:16px;align-items:center}
+.ac svg{width:100%;height:auto;display:block}
+.ac-pt{fill:var(--accent);opacity:.45;transition:cy .8s ease}
+.ac-fit{stroke:var(--warm);stroke-width:2.5;transition:all .8s ease}
+.ac-side>div{background:var(--quote);border-radius:8px;padding:8px 12px;margin-bottom:8px}
+.ac-side span{display:block;font-size:12px;color:var(--faint)}
+.ac-side b{font-size:22px;font-variant-numeric:tabular-nums}
+.ac-side p{font-size:13px;margin:0;color:var(--muted)}
+@media (max-width:640px){.ac{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const N=600, C=200, H=150, S=1.2, sc=v=>v/4*130;
+  let seed=11; const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
+  const g=()=>{let u=0,v=0;while(!u)u=rnd();v=rnd();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);};
+  const a=Array.from({length:N},g), b=Array.from({length:N},g);
+  let ax=`<line x1="${C-140}" y1="${H}" x2="${C+140}" y2="${H}" class="s-faint"/><line x1="${C}" y1="${H-140}" x2="${C}" y2="${H+140}" class="s-faint"/>`;
+  ax+=`<text x="${C+140}" y="${H+28}" text-anchor="end" font-size="11" class="t-faint">当天涨跌</text><text x="${C+6}" y="${H-128}" font-size="11" class="t-faint">次日涨跌</text>`;
+  [-3,3].forEach(v=>{ax+=`<text x="${C+sc(v)}" y="${H+14}" text-anchor="middle" font-size="10" class="t-faint">${v>0?'+':''}${v}%</text><text x="${C-6}" y="${H-sc(v)+3}" text-anchor="end" font-size="10" class="t-faint">${v>0?'+':''}${v}%</text>`;});
+  document.getElementById('ac-axis').innerHTML=ax;
+  const pts=document.getElementById('ac-pts');
+  pts.innerHTML=a.map((v,i)=>`<circle class="ac-pt" r="2.4" cx="${(C+sc(Math.max(-4,Math.min(4,v*S)))).toFixed(1)}" cy="${H}"/>`).join('');
+  const circles=[...pts.children], btns=[...document.querySelectorAll('[data-ac]')];
+  function set(rho){
+    btns.forEach(x=>x.setAttribute('aria-pressed',String(+x.dataset.ac===rho)));
+    const t=a.map(v=>v*S), n=a.map((v,i)=>(rho*v+Math.sqrt(1-rho*rho)*b[i])*S);
+    circles.forEach((c,i)=>c.setAttribute('cy',(H-sc(Math.max(-4,Math.min(4,n[i])))).toFixed(1)));
+    const mt=t.reduce((s,v)=>s+v,0)/N, mn=n.reduce((s,v)=>s+v,0)/N;
+    let sxy=0,sxx=0,syy=0;for(let i=0;i<N;i++){sxy+=(t[i]-mt)*(n[i]-mn);sxx+=(t[i]-mt)**2;syy+=(n[i]-mn)**2;}
+    const r=sxy/Math.sqrt(sxx*syy), k=sxy/sxx;
+    const f=document.getElementById('ac-fit');f.setAttribute('x1',C-130);f.setAttribute('y1',H+sc(k*4));f.setAttribute('x2',C+130);f.setAttribute('y2',H-sc(k*4));
+    const hit=t.filter((v,i)=>Math.sign(v)===Math.sign(n[i])).length/N;
+    document.getElementById('ac-r').textContent=r.toFixed(2);
+    document.getElementById('ac-hit').textContent=(hit*100).toFixed(0)+'%';
+    document.getElementById('ac-msg').textContent=rho<0.1?'点云是一团圆形，拟合线几乎是水平的。按今天猜明天，命中率与抛硬币相差无几。':'点云明显向右上倾斜。如果市场真是这样，按今天涨跌交易就能稳定获利，而这样的获利机会会吸引交易，直到它消失。';
+  }
+  btns.forEach(x=>x.addEventListener('click',()=>set(+x.dataset.ac)));
+  document.getElementById('ac').addEventListener('anim-in',()=>set(0.02));
+  set(0.02);
+})();
+</script>

@@ -1,0 +1,40 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">保障强度：后果 × 验证难度</p>
+    <p class="figsub">横向是出了错后果有多严重，纵向是结果有多难验证。每一格标出保障等级。点按一项功能，查看它需要的保障。</p>
+    <div class="gd" id="gd" data-anim>
+      <div class="gd-h"><span></span><span>后果轻</span><span>后果中</span><span>后果重</span></div>
+      <div class="gd-row" data-r="0"><span class="gd-y">难以验证</span></div>
+      <div class="gd-row" data-r="1"><span class="gd-y">需要专业判断</span></div>
+      <div class="gd-row" data-r="2"><span class="gd-y">容易验证</span></div>
+    </div>
+    <div class="gd-d" id="gd-d">点按一项功能。</div>
+  </div>
+  <figcaption>示意分级。按严重程度、暴露频率与可控性确定安全完整性等级的思路见 ISO 26262（2018）。</figcaption>
+</figure>
+<style>
+.gd-h,.gd-row{display:grid;grid-template-columns:80px repeat(3,1fr);gap:6px}
+.gd-h span{font-size:11.5px;color:var(--faint);text-align:center}
+.gd-row{margin-top:6px}
+.gd-y{font-size:12px;color:var(--faint);align-self:center}
+.gd-c{border-radius:10px;padding:8px;min-height:84px;display:flex;flex-direction:column;gap:5px;background:color-mix(in srgb,var(--warm) var(--a),var(--quote))}
+.gd-c em{font-style:normal;font-size:11px;color:var(--muted)}
+.gd-i{font:inherit;text-align:left;font-size:12.5px;border:1px solid var(--line);border-radius:7px;padding:4px 8px;background:var(--surface);color:var(--ink);cursor:pointer;opacity:0;transform:translateY(5px);transition:opacity .3s,transform .3s;transition-delay:calc(var(--i)*.1s)}
+.gd.in .gd-i{opacity:1;transform:none}
+.gd-i.sel{border-color:var(--ink)}
+.gd-d{margin-top:10px;background:var(--quote);border-radius:10px;padding:10px 12px;font-size:13.5px;line-height:1.7;min-height:4.6em}
+.gd-d b{display:block}
+@media (max-width:640px){.gd-h,.gd-row{grid-template-columns:56px repeat(3,1fr)}.gd-i{font-size:11.5px}}
+</style>
+<script>
+(function(){
+  const LV=[[2,3,4],[2,3,4],[1,2,3]];
+  const P={1:'抽查：附来源与时点，定期随机抽查。',2:'评测集：上线前用足够大的评测集统计错误率，上线后监控。',3:'评测集加分层评测与人工审核：关键情形单独达标，新版本经审核后分级发布。',4:'形式化约束加全量检查：执行层逐笔强制边界，关键操作由本人确认，新版本先只运行不生效。'};
+  const F=[[2,0,'附来源的行情摘要'],[2,0,'查询一个历史数据'],[2,1,'组合收益计算'],[2,2,'到期与追保提醒'],[1,0,'解释一次波动'],[1,1,'研究一家公司'],[1,2,'再平衡方案'],[0,0,'市场情绪概述'],[0,1,'投资者画像描述'],[0,2,'授权范围内自动交易']];
+  const rows=[...document.querySelectorAll('.gd-row')];
+  rows.forEach((row,r)=>{for(let c=0;c<3;c++){const d=document.createElement('div');d.className='gd-c';d.style.setProperty('--a',(LV[r][c]*9)+'%');d.innerHTML=`<em>第 ${LV[r][c]} 级</em>`;d.dataset.lv=LV[r][c];row.appendChild(d);}});
+  let n=0;F.forEach(([r,c,t])=>{const cell=rows[r].querySelectorAll('.gd-c')[c],b=document.createElement('button');b.type='button';b.className='gd-i';b.style.setProperty('--i',n++);b.textContent=t;b.dataset.lv=cell.dataset.lv;cell.appendChild(b);});
+  const bs=[...document.querySelectorAll('.gd-i')];
+  bs.forEach(b=>b.addEventListener('click',()=>{bs.forEach(x=>x.classList.toggle('sel',x===b));document.getElementById('gd-d').innerHTML=`<b>${b.textContent}：第 ${b.dataset.lv} 级</b>${P[b.dataset.lv]}`;}));
+})();
+</script>

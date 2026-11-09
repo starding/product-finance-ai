@@ -1,0 +1,28 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">同一个问题，两种回答</p><p class="figsub">以“基金的资产为什么要放在另一家机构托管”为例，切换两种读法。</p></div></div>
+    <div class="seg-btns" role="group" aria-label="读法">
+      <button type="button" data-tw="d" aria-pressed="false">逐项分解</button>
+      <button type="button" data-tw="g" aria-pressed="true">从零推演</button>
+    </div>
+    <div class="tw" id="tw" data-anim></div>
+  </div>
+</figure>
+<style>
+.tw{display:grid;gap:6px}
+.tw-s{display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:start;background:var(--quote);border-radius:9px;padding:9px 12px;font-size:13.5px;line-height:1.6;opacity:0;transform:translateX(-6px);transition:opacity .4s,transform .4s;transition-delay:calc(var(--i)*.25s)}
+.tw.in .tw-s{opacity:1;transform:none}
+.tw-s em{font-style:normal;color:var(--faint);font-size:12px;padding-top:2px}
+.tw-s.end{background:var(--accent-soft)}
+</style>
+<script>
+(function(){
+  const T={d:[['式','实际回报 ＝ 时间补偿 ＋ 风险补偿 ＋ 信息优势 － 交易成本 ＋ 运气'],['前提','这些回报都以“承诺得到兑现”为前提'],['拆开','兑现的前提之一，是管理人不能挪用投资者的资产'],['结论','托管是兑现前提中的一项：检查一个产品，就看这一项是否具备']],
+    g:[['第 7 步','许多人共同出资，交给一个人经营'],['第 10 步','普通人没有时间也没有专长，把钱交给专业的管理人'],['新问题','管理人掌握着别人的钱，可能挪用，而出资人看不见'],['机制','把资产放在另一家机构，管理人只能下指令，不能直接动用'],['结论','托管是委托之后长出来的：只要还有人替别人管钱，就需要它']]};
+  const box=document.getElementById('tw');
+  function set(k){document.querySelectorAll('[data-tw]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.tw===k)));
+    box.innerHTML=T[k].map(([a,b],i)=>`<div class="tw-s${i===T[k].length-1?' end':''}" style="--i:${i}"><em>${a}</em><span>${b}</span></div>`).join('');box.classList.remove('in');void box.offsetWidth;box.classList.add('in');}
+  document.querySelectorAll('[data-tw]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.tw)));
+  set('g');box.classList.remove('in');
+})();
+</script>

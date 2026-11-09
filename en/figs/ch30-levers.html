@@ -1,0 +1,48 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Five designs, and the term each works on</p><p class="figsub">Will the user hand over a task at the "approve a plan" level? The belief must cross the threshold. Switch on the designs one at a time to see which term each changes, and where the belief and the threshold end up.</p></div><button class="replay" type="button" data-replay="lv">Replay</button></div>
+    <div class="lv-eq" id="lv-eq">
+      <span data-t="prior">Prior</span><em>→ updated by</em><span data-t="n">evidence seen</span><em>×</em><span data-t="lr">diagnostic power of each</span><em>, less</em><span data-t="fail">weight of mistakes</span><em>→ belief ≥</em><span data-t="th">threshold</span>
+    </div>
+    <div class="lv-sl" id="lv-sl"></div>
+    <div class="lv" id="lv" data-anim>
+      <div class="lv-bar"><div class="lv-t"><i id="lv-b"></i></div><span id="lv-th"></span></div>
+      <p class="lv-msg" id="lv-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative calculation: prior 30% (50% with institutional safeguards); over three months the user sees 6 pieces of process evidence (14 with designed presentation), each with a likelihood ratio of 1.15 (1.35 with third-party verification); one mistake occurs in that time, with a likelihood ratio of 1/20 (1/4 if disclosed proactively); threshold 85% (70% if leaving is easy).</figcaption>
+</figure>
+<style>
+.lv-eq{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:13.5px;margin:4px 0 10px}
+.lv-eq span{border:1.5px solid var(--line);border-radius:8px;padding:3px 9px;background:var(--surface);transition:all .3s}
+.lv-eq span.on{border-color:var(--accent);background:var(--accent-soft)}
+.lv-eq em{font-style:normal;color:var(--faint);font-size:12.5px}
+.lv-sl{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px;margin-bottom:10px}
+.lv-sl label{display:flex;gap:6px;align-items:center;font-size:13.5px;cursor:pointer}
+.lv-sl input{accent-color:var(--accent);width:16px;height:16px}
+.lv-bar{position:relative;margin-top:24px}
+.lv-t{height:20px;background:var(--quote);border-radius:10px;overflow:hidden}
+.lv-t i{display:block;height:100%;border-radius:10px;transition:width .6s ease,background .3s}
+.lv-bar span{position:absolute;top:-22px;transform:translateX(-50%);font-size:11.5px;color:var(--warm);white-space:nowrap;transition:left .6s}
+.lv-bar span::after{content:"";position:absolute;left:50%;top:16px;height:32px;border-left:2px dashed var(--warm)}
+.lv-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.lv-sl{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const S=[['prior','Borrow institutions: custody, regulation, audit'],['n','Make process evidence seen'],['lr','Have evidence verified by third parties'],['fail','Disclose mistakes first'],['th','Make leaving and withdrawing easy']];
+  document.getElementById('lv-sl').innerHTML=S.map(([k,n])=>`<label><input type="checkbox" data-lv="${k}"> ${n}</label>`).join('');
+  const cb=[...document.querySelectorAll('[data-lv]')],on=k=>document.querySelector(`[data-lv="${k}"]`).checked;
+  const lo=p=>Math.log(p/(1-p)),ex=l=>1/(1+Math.exp(-l));
+  function r(){const p0=on('prior')?.5:.3,n=on('n')?14:6,lr=on('lr')?1.35:1.15,f=on('fail')?1/4:1/20,th=on('th')?.7:.85;
+    const b=ex(lo(p0)+n*Math.log(lr)+Math.log(f));
+    document.querySelectorAll('.lv-eq span').forEach(s=>s.classList.toggle('on',on(s.dataset.t)));
+    const bar=document.getElementById('lv-b');bar.style.width=(b*100)+'%';bar.style.background=b>=th?'var(--accent)':'var(--gold)';
+    const t=document.getElementById('lv-th');t.style.left=(th*100)+'%';t.textContent='Threshold '+Math.round(th*100)+'%';
+    const k=cb.filter(c=>c.checked).length;
+    document.getElementById('lv-msg').textContent=`The belief is about ${(b*100).toFixed(0)}%. ${b>=th?'It crosses the threshold: the user is willing to hand over this task.':'It is still below the threshold: the user will not hand over this task yet.'}${k===0?' With no designs at all, evidence is scarce and weakly diagnostic, and a single mistake pulls the belief back to where it started.':''}`;}
+  cb.forEach(c=>c.addEventListener('change',r));
+  document.getElementById('lv').addEventListener('anim-in',()=>{cb.forEach(c=>c.checked=false);r();cb.forEach((c,i)=>setTimeout(()=>{c.checked=true;r();},1000*(i+1)));});
+  r();
+})();
+</script>

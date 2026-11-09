@@ -1,0 +1,52 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">金融体系的六项功能</p>
+    <p class="figsub">机构会变，功能相对稳定。选择一种创新，看它主要改善了哪几项功能。</p>
+    <div class="seg-btns" role="group" aria-label="创新">
+      <button type="button" data-fn="idx" aria-pressed="false">指数基金</button>
+      <button type="button" data-fn="etr" aria-pressed="false">电子交易与线上开户</button>
+      <button type="button" data-fn="rat" aria-pressed="false">信用评级与审计</button>
+      <button type="button" data-fn="ai" aria-pressed="false">AI 代理（有待检验）</button>
+    </div>
+    <div class="fn" id="fn">
+      <div class="fn-t" data-k="1"><b>1</b><strong>转移资源</strong><span>在时间、地域与行业之间</span></div>
+      <div class="fn-t" data-k="2"><b>2</b><strong>管理风险</strong><span>分散、对冲与转移</span></div>
+      <div class="fn-t" data-k="3"><b>3</b><strong>清算与支付</strong><span>让交易完成交收</span></div>
+      <div class="fn-t" data-k="4"><b>4</b><strong>汇集资金、分割所有权</strong><span>大额投资拆成小份额</span></div>
+      <div class="fn-t" data-k="5"><b>5</b><strong>提供价格信息</strong><span>帮助分散的决策者协调</span></div>
+      <div class="fn-t" data-k="6"><b>6</b><strong>处理信息不对称与激励</strong><span>让承诺可以被核查</span></div>
+    </div>
+    <p class="fn-msg" id="fn-msg" aria-live="polite">选择上方的一种创新。</p>
+  </div>
+  <figcaption>功能划分见 Merton 与 Bodie（1995）。各项创新与功能的对应是本书的归纳；AI 代理一项是有待检验的假设，以虚线表示。</figcaption>
+</figure>
+<style>
+.fn{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.fn-t{border:1.5px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:2px;transition:background .3s,border-color .3s,transform .3s,opacity .3s}
+.fn-t b{font-size:12px;color:var(--faint)}
+.fn-t strong{font-size:14px}
+.fn-t span{font-size:12px;color:var(--muted)}
+.fn.sel .fn-t{opacity:.45}
+.fn .fn-t.on{opacity:1;background:var(--accent-soft);border-color:var(--accent);transform:translateY(-2px)}
+.fn .fn-t.maybe{opacity:1;border-style:dashed;border-color:var(--warm);background:var(--warm-soft)}
+.fn-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.fn{grid-template-columns:repeat(2,1fr)}}
+</style>
+<script>
+(function(){
+  const M={
+    idx:{on:[2,4],msg:'指数基金让普通投资者用很低的成本持有整个市场，把分散风险（第 2 项）与分割所有权（第 4 项）做得更便宜。'},
+    etr:{on:[3,1],msg:'电子交易、电子化交收与线上开户降低了清算、支付与参与市场的成本（第 3 项），让更多人能够把资源投向资本市场（第 1 项）。'},
+    rat:{on:[6,5],msg:'评级与审计由专业机构集中核查承诺方的状况，缓解信息不对称（第 6 项），其结论也进入价格（第 5 项）。'},
+    ai:{maybe:[6,2,5],msg:'AI 代理可能降低核查与执行的成本（第 6 项），帮助用户维持分散与纪律（第 2 项），加快信息处理（第 5 项）。这些是有待检验的假设：核查成本是否真的下降，要看实测。'}
+  };
+  const fn=document.getElementById('fn'), btns=[...document.querySelectorAll('[data-fn]')];
+  btns.forEach(b=>b.addEventListener('click',()=>{
+    const m=M[b.dataset.fn];
+    btns.forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
+    fn.classList.add('sel');
+    fn.querySelectorAll('.fn-t').forEach(t=>{const k=+t.dataset.k;t.classList.toggle('on',(m.on||[]).includes(k));t.classList.toggle('maybe',(m.maybe||[]).includes(k));});
+    document.getElementById('fn-msg').textContent=m.msg;
+  }));
+})();
+</script>

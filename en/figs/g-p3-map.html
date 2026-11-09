@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Five constraints, five parts</p><p class="figsub">Each chapter adds one user-side constraint, and the product grows one part. Choose a chapter to see its constraint, the part that grows and the principles from the first two parts on which it rests.</p></div><button class="replay" type="button" data-replay="p3m">Replay</button></div>
+    <div class="p3m" id="p3m" data-anim>
+      <div class="p3m-g" id="p3m-g"></div>
+      <div class="p3m-d" id="p3m-d" aria-live="polite"></div>
+    </div>
+  </div>
+  <figcaption>"Basis" lists each chapter's principle cards; they include principles newly obtained as well as principles from the first two parts rerun in the product.</figcaption>
+</figure>
+<style>
+.p3m-g{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.p3m-c{font:inherit;cursor:pointer;text-align:left;background:var(--quote);border:1px solid transparent;border-radius:10px;padding:9px 10px;color:var(--ink);font-size:13px;line-height:1.45;opacity:0;transform:translateY(8px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.25s);position:relative}
+.p3m.in .p3m-c{opacity:1;transform:none}
+.p3m-c em{display:block;font-style:normal;font-size:11px;color:var(--faint)}
+.p3m-c b{display:block;font-size:14px;margin-top:2px;color:var(--accent)}
+.p3m-c.sel{border-color:var(--accent)}
+.p3m-d{margin-top:12px;display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:8px}
+.p3m-d div{background:var(--quote);border-radius:8px;padding:9px 11px;font-size:13.5px;line-height:1.55}
+.p3m-d span{display:block;font-size:11px;color:var(--faint)}
+@media (max-width:640px){.p3m-g{grid-template-columns:1fr 1fr}.p3m-d{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const S=[['Chapter 20','One person and one sum of money','The user has his own goals, horizon and capacity to bear losses','What to promise','Merton\'s portfolio choice; Human capital and life-cycle portfolios; Goal-based mental accounts'],
+    ['Chapter 21','The user is not present','Ongoing delegation needs an agreement made in advance','Mandate and authority','Incomplete contracts and residual control rights; Principle of least privilege; Formal and real authority'],
+    ['Chapter 22','The user cannot see the process','Asymmetric information','Process records and verifiable evidence','Unravelling in information disclosure; Costly state verification; A wealth of information creates a poverty of attention'],
+    ['Chapter 23','Agents make mistakes','Some consequences cannot be undone','Limits, confirmation and compensation','Swiss cheese model; Normal accidents; Irreversibility effect; The economic case for vicarious liability'],
+    ['Chapter 24','Trust takes time','The user has no prior view of a new agent','The path to trust','Three sources of trustworthiness; Signalling; Starting small; Building a reputation']];
+  const g=document.getElementById('p3m-g'),d=document.getElementById('p3m-d');
+  g.innerHTML=S.map((s,i)=>`<button type="button" class="p3m-c" style="--i:${i}"><em>${s[0]}</em>${s[1]}<b>${s[3]}</b></button>`).join('');const bs=[...g.children];
+  function set(i){const s=S[i];bs.forEach((b,j)=>b.classList.toggle('sel',j===i));d.innerHTML=`<div><span>Constraint</span>${s[2]}</div><div><span>Part that grows</span>${s[3]}</div><div><span>Basis</span>${s[4]}</div>`;}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('p3m').addEventListener('anim-in',()=>{[0,1,2,3,4].forEach((i,k)=>setTimeout(()=>set(i),1500+k*1700));});
+  set(0);
+})();
+</script>

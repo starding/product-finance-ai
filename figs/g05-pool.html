@@ -1,0 +1,32 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">一起扛：户数越多，各家的坏运气越能抵消</p><p class="figsub">各家的虫害互不相关。拖动加入公仓的户数，看平均到每户的收成怎样集中在 12 份附近。</p></div><button class="replay" type="button" data-replay="pl">重播</button></div>
+    <div class="pl" id="pl" data-anim>
+      <svg viewBox="0 0 640 200" role="img" aria-label="每户分到的收成的分布"><g id="pl-ax"></g><g id="pl-b"></g></svg>
+      <div class="sl"><label for="pl-n">加入公仓的户数 <b id="pl-nv"></b></label><input id="pl-n" type="range" min="1" max="50" step="1" value="1"></div>
+      <p class="pl-msg" id="pl-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：每户收成平均 12 份、波动约四成，各户互不相关；公仓把全部收成平均分给各户。柱子为两千年里每户分到的收成的分布，浅色区域为不足 9 份。</figcaption>
+</figure>
+<style>
+.pl svg{width:100%;height:auto;display:block}
+.pl-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.pl svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);let s=11;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};
+  const g=()=>{let u=0;while(!u)u=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r());};
+  const Z=Array.from({length:2000},()=>Array.from({length:50},()=>g()));
+  const X0=40,X1=630,YT=10,YB=170,lo=0,hi=24,nb=24,bw=(X1-X0)/nb,x=v=>X0+(v-lo)/(hi-lo)*(X1-X0);
+  $('pl-ax').innerHTML=`<rect x="${X0}" y="${YT}" width="${x(9)-X0}" height="${YB-YT}" fill="var(--warm-soft)"/><line x1="${X0}" x2="${X1}" y1="${YB}" y2="${YB}" class="s-faint"/>`+[0,6,9,12,18,24].map(v=>`<text x="${x(v)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${v}</text>`).join('')+`<text x="${X1}" y="${YB-6}" text-anchor="end" font-size="11" class="t-muted">每户分到的份数</text>`;
+  function draw(){const n=+$('pl-n').value,c=Array(nb).fill(0);let bad=0;
+    for(const row of Z){let m=0;for(let i=0;i<n;i++)m+=row[i];m/=n;const v=Math.max(0,12*(1+.4*m));if(v<9)bad++;c[Math.min(nb-1,Math.floor((v-lo)/(hi-lo)*nb))]++;}
+    const mx=Math.max(...c);$('pl-b').innerHTML=c.map((k,i)=>`<rect x="${X0+i*bw+1}" y="${YB-k/mx*(YB-YT-8)}" width="${bw-2}" height="${k/mx*(YB-YT-8)}" fill="var(--accent)" rx="1"/>`).join('');
+    $('pl-nv').textContent=n+' 户';$('pl-msg').textContent=n===1?`独自承担时，约 ${Math.round(bad/20)}% 的年份分到不足 9 份。`:`${n} 户一起分担，每户收成的波动缩小到原来的约 ${Math.round(100/Math.sqrt(n))}%，不足 9 份的年份降到 ${(bad/20).toFixed(1)}%。`;}
+  $('pl-n').addEventListener('input',draw);
+  $('pl').addEventListener('anim-in',()=>{const seq=[1,2,4,8,16,32,50];seq.forEach((v,i)=>setTimeout(()=>{$('pl-n').value=v;draw();},200+i*500));});
+  draw();
+})();
+</script>

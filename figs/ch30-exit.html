@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">退出越容易，开始越容易</p>
+    <p class="figsub">一千位潜在用户对一个代理的信念各不相同。拖动退出的难易程度：收回授权、导出记录、迁移资产与方案是否方便。看所需的门槛与愿意开始的用户比例。</p>
+    <div class="ex2" id="ex2" data-anim>
+      <svg viewBox="0 0 640 200" role="img" aria-label="信念分布与门槛"><g id="ex2-g"></g><line id="ex2-t" class="ex2-t"/><text id="ex2-tt" font-size="11" class="t-warm" text-anchor="middle"></text></svg>
+      <div class="sl"><label for="ex2-s">退出的难易 <b id="ex2-sv"></b></label><input id="ex2-s" type="range" min="0" max="10" step="1" value="7"></div>
+      <div class="ex2-out"><div><span>所需的门槛</span><b id="ex2-th"></b></div><div><span>愿意开始的用户</span><b id="ex2-n"></b></div></div>
+    </div>
+  </div>
+  <figcaption>示意：用户信念服从均值 60%、标准差 15% 的正态分布；门槛随退出成本线性上升。退出作为对组织的约束，见 Hirschman（1970）。</figcaption>
+</figure>
+<style>
+.ex2 svg{width:100%;height:auto;display:block}
+.ex2-t{stroke:var(--warm);stroke-width:2;stroke-dasharray:4 4}
+.ex2-out{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.ex2-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.ex2-out span{display:block;font-size:12px;color:var(--faint)} .ex2-out b{font-size:19px;font-variant-numeric:tabular-nums}
+@media (max-width:640px){.ex2 svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const X0=40,X1=620,YB=170,YT=20,x=p=>X0+p*(X1-X0),pdf=p=>Math.exp(-Math.pow((p-.6)/.15,2)/2);
+  const Phi=z=>{const t=1/(1+.2316419*Math.abs(z)),d=.3989423*Math.exp(-z*z/2),q=d*t*(.3193815+t*(-.3565638+t*(1.781478+t*(-1.821256+t*1.330274))));return z>0?1-q:q;};
+  const L=['很容易','很容易','很容易','较容易','较容易','中等','较困难','较困难','很困难','很困难','很困难'];
+  const $=id=>document.getElementById(id),sl=$('ex2-s');
+  function r(){const c=+sl.value/10,th=.45+.45*c,share=1-Phi((th-.6)/.15);
+    let g=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`;[0,.25,.5,.75,1].forEach(p=>g+=`<text x="${x(p)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${p*100}%</text>`);
+    let a=`M${x(0)},${YB}`,b=`M${x(th)},${YB}`;for(let p=0;p<=1;p+=.01){const yy=YB-pdf(p)*(YB-YT);a+=`L${x(p).toFixed(1)},${yy.toFixed(1)}`;if(p>=th)b+=`L${x(p).toFixed(1)},${yy.toFixed(1)}`;}
+    a+=`L${x(1)},${YB}Z`;b+=`L${x(1)},${YB}Z`;g+=`<path d="${a}" fill="var(--quote)" stroke="var(--faint)"/><path d="${b}" fill="var(--accent-soft)" stroke="var(--accent)"/><text x="${X0}" y="${YT-4}" font-size="11" class="t-faint">用户的信念分布</text>`;
+    $('ex2-g').innerHTML=g;$('ex2-t').setAttribute('x1',x(th));$('ex2-t').setAttribute('x2',x(th));$('ex2-t').setAttribute('y1',YT);$('ex2-t').setAttribute('y2',YB);$('ex2-tt').setAttribute('x',x(th));$('ex2-tt').setAttribute('y',YT+8);$('ex2-tt').textContent='门槛';
+    $('ex2-sv').textContent=L[+sl.value]||('第 '+sl.value+' 档');$('ex2-th').textContent=Math.round(th*100)+'%';$('ex2-n').textContent=Math.round(share*1000)+' 位';}
+  sl.addEventListener('input',r);
+  $('ex2').addEventListener('anim-in',()=>{let v=10;sl.value=v;r();const id=setInterval(()=>{v--;sl.value=v;r();if(v<=0){clearInterval(id);setTimeout(()=>{sl.value=7;r();},700);}},220);});
+  r();
+})();
+</script>

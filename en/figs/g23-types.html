@@ -1,0 +1,34 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Three kinds of mistake, three kinds of consequence</p><p class="figsub">Select a kind of mistake to see an example, whose fault it is, who bears the consequences, and how the records tell it apart.</p></div><button class="replay" type="button" data-replay="ty23">Replay</button></div>
+    <div class="ty23" id="ty23" data-anim>
+      <div class="ty23-g" id="ty23-g"></div>
+      <div class="ty23-d" id="ty23-d" aria-live="polite"></div>
+    </div>
+  </div>
+  <figcaption>Illustrative: the examples are fictional.</figcaption>
+</figure>
+<style>
+.ty23-g{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ty23-g button{font:inherit;cursor:pointer;text-align:left;border:1px solid transparent;border-radius:10px;padding:10px 12px;font-size:14px;color:var(--ink);background:var(--c);opacity:0;transform:translateY(6px);transition:opacity .35s,transform .35s,border-color .3s;transition-delay:calc(var(--i)*.2s)}
+.ty23.in .ty23-g button{opacity:1;transform:none}
+.ty23-g button.sel{border-color:var(--ink)}
+.ty23-g em{display:block;font-style:normal;font-size:11.5px;color:var(--faint)}
+.ty23-d{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.ty23-d div{background:var(--quote);border-radius:8px;padding:8px 10px;font-size:13px;line-height:1.55}
+.ty23-d span{display:block;font-size:11px;color:var(--faint)}
+@media (max-width:640px){.ty23-g{grid-template-columns:1fr}.ty23-d{grid-template-columns:1fr 1fr}}
+</style>
+<script>
+(function(){
+  const T=[['Execution error','The scribe\'s own fault','The agreement says sell 2 portions and it sells 20; grain meant for the house account goes into the retirement account.','The scribe\'s fault','The operator pays in full','The records show the amount or destination differs from the instruction','var(--warm-soft)'],
+    ['Overstepping','A breach of the agreement','It takes extra risk outside the boundaries of the agreement, or makes trades that conflict with his interests.','A breach of the agreement','The operator pays, and the penalties in the agreement apply','The records show the step cannot cite a clause of the agreement, or crossed a boundary','var(--warm-soft)'],
+    ['Misjudgement','A risk the agreement itself accepts','Exactly as the agreement says, it shifts the share of ship shares back before a storm, and the storm comes anyway.','No one is at fault','He bears it, as the agreement provides','The records show the step cites a clause of the agreement and the information at the time supported it','var(--accent-soft)']];
+  const g=document.getElementById('ty23-g'),d=document.getElementById('ty23-d');
+  g.innerHTML=T.map((t,i)=>`<button type="button" style="--i:${i};--c:${t[6]}"><em>${t[1]}</em>${t[0]}</button>`).join('');const bs=[...g.children];
+  function set(i){const t=T[i];bs.forEach((b,j)=>b.classList.toggle('sel',j===i));d.innerHTML=[['Example',t[2]],['Whose fault',t[3]],['Who bears the consequences',t[4]],['How the records tell',t[5]]].map(([a,b])=>`<div><span>${a}</span>${b}</div>`).join('');}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('ty23').addEventListener('anim-in',()=>{[0,1,2].forEach((i,k)=>setTimeout(()=>set(i),1000+k*2000));});
+  set(0);
+})();
+</script>

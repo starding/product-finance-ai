@@ -1,0 +1,21 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: what information products can offer</p><p class="figsub">Four design requirements, each tied to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="s03">Replay</button></div>
+    <div class="s03" id="s03" data-anim>
+      <div class="s03-c" style="--i:0"><em>Public information enters prices within minutes</em><b>Do not sell “knowing before the market”</b><p>By the time public news is pushed to users, the price has most likely reflected it; the speed race belongs to professional institutions, not individual investors.</p></div>
+      <div class="s03-c" style="--i:1"><em>Prices give the result, not the reason</em><b>Connect the news to the user’s own situation</b><p>Explaining how a piece of information relates to the user’s holdings, goals and agreement is worth more than reporting it first.</p></div>
+      <div class="s03-c warn" style="--i:2"><em>Strong-form efficiency does not hold</em><b>Hold the line on non-public information</b><p>AI must not obtain, infer or spread material non-public information; data sources and scope of use must be traceable.</p></div>
+      <div class="s03-c" style="--i:3"><em>Efficiency has a cost, and noise is inevitable</em><b>Help users avoid becoming “noise traders”</b><p>For frequent trading that chases news, show the costs and the evidence, so that users’ trades rest on their own goals.</p></div>
+    </div>
+  </div>
+</figure>
+<style>
+.s03{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.s03-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.s03-c.warn{border-left-color:var(--warm)}
+.s03-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.s03-c b{display:block;font-size:15px;margin:2px 0 4px}
+.s03-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.s03.in .s03-c{opacity:1;transform:none}
+@media (max-width:640px){.s03{grid-template-columns:1fr}}
+</style>

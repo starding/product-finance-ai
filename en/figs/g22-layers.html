@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">A record in three layers</p><p class="figsub">One year's records arranged in three layers. Select a layer to view it; any sentence in the first layer can be traced to its basis in the layer below.</p></div><button class="replay" type="button" data-replay="ly22">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Layer">
+      <button type="button" data-ly22="0" aria-pressed="true">One sentence</button>
+      <button type="button" data-ly22="1" aria-pressed="false">Key points</button>
+      <button type="button" data-ly22="2" aria-pressed="false">Full record</button>
+    </div>
+    <div class="ly22" id="ly22" data-anim>
+      <div class="ly22-d" id="ly22-d"></div>
+      <p class="ly22-msg" id="ly22-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the record entries are invented examples; "Full record" shows only the first few entries of 312 in total.</figcaption>
+</figure>
+<style>
+.ly22-d{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--bg);font-size:13.5px;line-height:1.75;min-height:9.5em}
+.ly22-d p{margin:0 0 6px}
+.ly22-d .k{display:grid;grid-template-columns:4.5em 1fr;gap:8px;padding:4px 0;border-bottom:1px dashed var(--line)}
+.ly22-d .k span{color:var(--faint);font-size:12px}
+.ly22-d mark{background:var(--warm-soft);color:var(--warm);border-radius:3px;padding:0 3px}
+.ly22-d .row{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--muted)}
+.ly22-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('ly22'+id);
+  const L=[`<p><b>This year all three accounts stayed within the agreed boundaries.</b></p><p>The house account moved closer to its target, with the likelihood of reaching it rising from 61% to 70%; the retirement account moved somewhat further away, from 84% to 79%, because of a storm.</p><p><mark>1 matter</mark> awaits your confirmation: whether to move into the village's new tax-free retirement account.</p>`,
+    `<div class="k"><span>Mar 2</span>After a storm the retirement account fell 22%, more than 15%, so per the agreement the scribe stopped to ask you; after you confirmed, the ship-share proportion was brought back from 74% to 80% per clause 3 of the agreement.</div><div class="k"><span>Jun 15</span>You changed jobs and your income rose; per clause 4 of the agreement, adjustments were paused and you were asked to confirm a new deposit rate, which you set at 22%.</div><div class="k"><span>Sep 1</span>The fleet raised its fees; annual fees rose to 0.28%, still below the 0.3% ceiling.</div><div class="k"><span>Nov 20</span><mark>Awaiting confirmation</mark>: whether to move the retirement account into the new tax-free account.</div>`,
+    `<div class="row">01-05 09:12  Deposit 0.017  Basis: clause 3  At the time: house 19.6% ship shares</div><div class="row">01-05 09:12  Buy safe holdings 0.014  Basis: clause 3</div><div class="row">02-05 09:10  Deposit 0.017  Basis: clause 3</div><div class="row">03-02 15:40  Sell safe holdings 0.21, buy ship shares 0.21  Basis: clause 3, confirmed by you on Mar 2  At the time: retirement ship shares 74%, agreed 80%</div><div class="row">… 312 entries in all, kept by a third party, unalterable</div>`];
+  const M=['For someone who looks once a year, this layer is enough: how far from the targets, whether any boundary was crossed, and what needs his decision.','For someone who wants to know why, these key points: the decisions that were large, irreversible or set off a trigger.','For someone who wants to dig deeper or check on his behalf, the full record; every entry states its basis and the figures at the time.'];
+  function set(k){document.querySelectorAll('[data-ly22]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.ly22===k)));$('-d').innerHTML=L[k];$('-msg').textContent=M[k];}
+  document.querySelectorAll('[data-ly22]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.ly22)));
+  $('').addEventListener('anim-in',()=>{[0,1,2].forEach((k,i)=>setTimeout(()=>set(k),300+i*2600));});
+  set(0);
+})();
+</script>

@@ -1,0 +1,45 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Four failures, four classes of regulatory tool</p><p class="figsub">Tap a failure on the left to see how it shows up in financial markets and which regulatory tools address it.</p></div><button class="replay" type="button" data-replay="fl">Replay</button></div>
+    <div class="fl" id="fl" data-anim>
+      <div class="fl-l">
+        <button data-k="info" style="--i:0"><b>Information asymmetry</b><span>Sellers know more than buyers</span></button>
+        <button data-k="agent" style="--i:1"><b>Conflicts of interest</b><span>Agents have interests of their own</span></button>
+        <button data-k="ext" style="--i:2"><b>Externalities and systemic risk</b><span>One failure drags down many</span></button>
+        <button data-k="weak" style="--i:3"><b>Unequal strength</b><span>The weaker party lacks choice</span></button>
+      </div>
+      <div class="fl-r">
+        <span data-t="disc">Mandatory disclosure</span><span data-t="suit">Suitability and know-your-client</span><span data-t="best">Client's interest first</span><span data-t="fee">Limits on certain fees</span><span data-t="ins">Deposit insurance and investor protection</span><span data-t="pru">Capital and liquidity rules</span><span data-t="enf">Enforcement and complaints</span>
+      </div>
+    </div>
+    <p class="fl-d" id="fl-d" aria-live="polite">Tap a failure.</p>
+  </div>
+  <figcaption>The mapping is this book's own summary; one tool may address several failures at once.</figcaption>
+</figure>
+<style>
+.fl{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.fl-l{display:flex;flex-direction:column;gap:8px}
+.fl-l button{font:inherit;text-align:left;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;padding:10px 12px;cursor:pointer;display:flex;flex-direction:column;opacity:0;transform:translateX(-8px);transition:opacity .4s,transform .4s,border-color .2s;transition-delay:calc(var(--i)*.3s)}
+.fl.in .fl-l button{opacity:1;transform:none}
+.fl-l button b{font-size:14px}
+.fl-l button span{font-size:12px;color:var(--faint)}
+.fl-l button.sel{border-color:var(--warm);background:var(--warm-soft)}
+.fl-r{display:flex;flex-wrap:wrap;gap:8px;align-content:flex-start}
+.fl-r span{font-size:13px;border:1px solid var(--line);border-radius:999px;padding:6px 12px;color:var(--muted);transition:all .3s}
+.fl-r span.on{border-color:var(--accent);background:var(--accent-soft);color:var(--ink);font-weight:500}
+.fl-d{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.fl{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const M={
+    info:{t:['disc','suit'],m:'Information asymmetry: financial products are credence goods, and buyers find it hard to judge their quality. Tools: mandatory disclosure, which makes information verifiable and comparable; and suitability, which makes the institution responsible for judging whether a product fits.'},
+    agent:{t:['best','fee','disc'],m:'Conflicts of interest: the income of advisers and brokers depends on what they sell. Tools: requiring that the client\'s interest come first, limiting or banning certain forms of compensation, and disclosing conflicts.'},
+    ext:{t:['ins','pru'],m:'Externalities and systemic risk: a run on one bank can spread through the whole system. Tools: deposit insurance cuts off the panic, and capital and liquidity rules constrain institutions\' risk taking.'},
+    weak:{t:['suit','ins','enf'],m:'Unequal strength: individual investors lack information, bargaining power and choice. Tools: suitability, investor protection funds, and channels for enforcement and complaints.'}
+  };
+  const bs=[...document.querySelectorAll('.fl-l button')], ts=[...document.querySelectorAll('.fl-r span')];
+  bs.forEach(b=>b.addEventListener('click',()=>{bs.forEach(x=>x.classList.toggle('sel',x===b));const m=M[b.dataset.k];ts.forEach(t=>t.classList.toggle('on',m.t.includes(t.dataset.t)));document.getElementById('fl-d').textContent=m.m;}));
+  document.getElementById('fl').addEventListener('anim-in',()=>{let k=0;const keys=['info','agent','ext','weak'];const id=setInterval(()=>{bs[k].click();if(++k>=4)clearInterval(id);},1300);});
+})();
+</script>

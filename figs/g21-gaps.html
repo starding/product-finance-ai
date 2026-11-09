@@ -1,0 +1,31 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">写不到的情形，由谁决定</p><p class="figsub">十年里可能遇到的八件事。约定只写了目标、边界与平时的规则。勾选“写明剩余的决定权”，看写不到的事怎样处理。</p></div><button class="replay" type="button" data-replay="gp21">重播</button></div>
+    <div class="gp21" id="gp21" data-anim>
+      <div class="gp21-g" id="gp21-g"></div>
+      <div class="cs-sw"><label><input type="checkbox" id="gp21-c"> 写明剩余的决定权：可挽回的按约定的精神处理并告知，不可挽回的等他回来</label></div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>约定写到了</span><span><i style="background:var(--blue)"></i>写不到，书记员按约定的精神处理并告知</span><span><i style="background:var(--faint)"></i>写不到，等他回来</span><span><i style="background:var(--warm)"></i>写不到，书记员自作主张</span></div>
+      <p class="gp21-msg" id="gp21-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：八件事为虚构的例子。</figcaption>
+</figure>
+<style>
+.gp21-g{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
+.gp21-c{border-radius:8px;padding:7px 10px;font-size:13px;line-height:1.5;background:var(--quote);border-left:4px solid var(--c);transition:border-color .3s}
+.gp21-c em{display:block;font-style:normal;font-size:11.5px;color:var(--faint)}
+.gp21-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.gp21-g{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('gp21'+id);
+  const E=[['每月按时存入',1,1],['船股偏离约定比例两成',1,1],['风暴后养老账户跌了三成',1,1],['村里新出一种免税的养老账户',0,1],['常用的船队改了航线、费用上涨',0,1],['他的远房亲戚来借一大笔粮',0,0],['盖房的地价突然翻倍',0,0],['他想把养老的钱提前取出',0,0]];
+  function draw(){const c=$('-c').checked;let n={w:0,a:0,u:0,s:0};
+    $('-g').innerHTML=E.map(([t,cov,rev])=>{let col,lab;if(cov){col='var(--accent)';lab='约定写到了';n.w++;}else if(!c){col='var(--warm)';lab='书记员自作主张';n.s++;}else if(rev){col='var(--blue)';lab='按约定的精神处理，并告知他';n.a++;}else{col='var(--faint)';lab='等他回来决定';n.u++;}return `<div class="gp21-c" style="--c:${col}"><em>${lab}</em>${t}</div>`;}).join('');
+    $('-msg').textContent=c?`写明剩余的决定权之后：${n.a} 件可挽回的事由书记员按约定的精神处理并告知，${n.u} 件不可挽回的事等他回来。写不到的事没有减少，可每件都有了归属。`:`约定写到了 ${n.w} 件；写不到的 ${n.s} 件，书记员只能自作主张，其中有借粮、取钱这样做了就收不回的事。`;}
+  $('-c').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{$('-c').checked=false;draw();setTimeout(()=>{$('-c').checked=true;draw();},2200);});
+  draw();
+})();
+</script>

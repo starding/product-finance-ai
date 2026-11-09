@@ -1,0 +1,78 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">维持两倍杠杆：一步一步看</p><p class="figsub">自有 100 美元，借 100 美元，共 200 美元买入。标的第一天涨 10%，第二天跌 10%。</p></div><button class="replay" type="button" id="lf-step">下一步</button></div>
+    <div class="lf" id="lf" data-anim>
+      <div class="lf-tbl" id="lf-tbl"></div>
+      <p class="lf-msg" id="lf-msg" aria-live="polite"></p>
+    </div>
+    <div class="lf2">
+      <p class="figtitle" style="margin-top:18px">换一种走势，偏差的方向会变</p>
+      <div class="seg-btns" role="group" aria-label="走势">
+        <button type="button" data-mk="chop" aria-pressed="true">来回震荡</button>
+        <button type="button" data-mk="up" aria-pressed="false">单边上涨</button>
+        <button type="button" data-mk="down" aria-pressed="false">单边下跌</button>
+      </div>
+      <div class="sl"><label for="lf-k">每日杠杆倍数 <b id="lf-kv"></b></label><input id="lf-k" type="range" min="1" max="3" step="0.5" value="2"></div>
+      <svg viewBox="0 0 640 210" role="img" aria-label="杠杆产品净值与按倍数推算的净值">
+        <g id="lf-axis"></g><path id="lf-naive" class="lf-l naive"/><path id="lf-act" class="lf-l act"/>
+      </svg>
+      <div class="legend"><span><i style="background:var(--faint)"></i>按“标的累计涨跌 × 倍数”推算</span><span><i style="background:var(--warm)"></i>每日维持固定杠杆的实际净值</span></div>
+      <p class="lf-msg" id="lf-msg2" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>第一部分的数字取自作者公开发表的文章（2024-12-28）。第二部分为示意模拟：60 个交易日，不计借款利息与管理费。路径依赖的系统分析见 Cheng 与 Madhavan（2009）、Avellaneda 与 Zhang（2010）。</figcaption>
+</figure>
+<style>
+.lf-tbl{display:grid;grid-template-columns:120px repeat(4,1fr);gap:4px;font-size:13px;font-variant-numeric:tabular-nums}
+.lf-tbl div{padding:6px 8px;border-radius:6px;background:var(--quote);opacity:.25;transition:opacity .4s,background .4s}
+.lf-tbl div.h{background:transparent;color:var(--faint);font-size:12px;opacity:1}
+.lf-tbl div.on{opacity:1}
+.lf-tbl div.buy{background:var(--warm-soft)} .lf-tbl div.sell{background:var(--accent-soft)}
+.lf-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+.lf2 svg{width:100%;height:auto;display:block}
+.lf-l{fill:none;stroke-width:2.2}
+.lf-l.naive{stroke:var(--faint);stroke-dasharray:5 4} .lf-l.act{stroke:var(--warm);stroke-width:2.6}
+@media (max-width:640px){.lf-tbl{grid-template-columns:88px repeat(4,1fr);font-size:12px}}
+</style>
+<script>
+(function(){
+  // 第一部分：逐步表
+  const R=[['步骤','持仓','自有','借款','杠杆'],
+    ['开始','200','100','100','2.00'],
+    ['第一天涨 10%','220','120','100','1.83'],
+    ['借 20 再买入（追涨）','240','120','120','2.00','buy'],
+    ['第二天跌 10%','216','96','120','2.25'],
+    ['卖 24 还债（杀跌）','192','96','96','2.00','sell']];
+  const M=['开始：自有 100 美元，借 100 美元，持仓 200 美元，杠杆 2 倍。','标的涨 10%，持仓 220 美元，其中自有 120 美元，杠杆降到约 1.83 倍。','为了回到 2 倍，再借 20 美元买入：这是在高位加仓。','标的跌 10%，持仓亏 24 美元，全部由自有资金承担：自有降到 96 美元，杠杆升到 2.25 倍。','为了回到 2 倍，卖出 24 美元持仓还债：这是在低位减仓。两天下来标的只跌了 1%，按两倍应亏 2%，实际亏了 4%。'];
+  const tbl=document.getElementById('lf-tbl');
+  tbl.innerHTML=R.map((r,i)=>r.slice(0,5).map(c=>`<div class="${i===0?'h':''} ${r[5]||''}" data-r="${i}">${c}</div>`).join('')).join('');
+  let step=0;
+  const show=k=>{step=k;tbl.querySelectorAll('div[data-r]').forEach(d=>{const r=+d.dataset.r;d.classList.toggle('on',r>0&&r<=k+1);});document.getElementById('lf-msg').textContent=M[k];};
+  document.getElementById('lf-step').addEventListener('click',()=>show((step+1)%5));
+  let timer; document.getElementById('lf').addEventListener('anim-in',()=>{clearInterval(timer);show(0);let k=0;timer=setInterval(()=>{k++;show(k);if(k>=4)clearInterval(timer);},1600);});
+  show(0);
+  // 第二部分：不同走势下的偏差
+  const N=60,X0=50,X1=620,YT=14,YB=184,x=t=>X0+t/N*(X1-X0);
+  let seed=21; const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
+  const g=()=>{let u=0,v=0;while(!u)u=rnd();v=rnd();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);};
+  const noise=Array.from({length:N},g);
+  const MK={chop:t=>(t%2?-0.03:0.03)+0.004*noise[t],up:t=>0.01+0.006*noise[t],down:t=>-0.01+0.006*noise[t]};
+  let mk='chop'; const kEl=document.getElementById('lf-k');
+  function sim(){
+    const k=+kEl.value; document.getElementById('lf-kv').textContent=k+' 倍';
+    document.querySelectorAll('[data-mk]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mk===mk)));
+    let u=1,a=1; const NA=[1],AC=[1];
+    for(let t=0;t<N;t++){const r=MK[mk](t);u*=1+r;a*=1+k*r;NA.push(Math.max(0.01,1+k*(u-1)));AC.push(a);}
+    const all=NA.concat(AC), lo=Math.min(...all)*0.95, hi=Math.max(...all)*1.05, y=v=>YB-(v-lo)/(hi-lo)*(YB-YT);
+    let ax=`<line x1="${X0}" y1="${y(1)}" x2="${X1}" y2="${y(1)}" class="s-line"/><text x="${X0-8}" y="${y(1)+4}" text-anchor="end" font-size="11" class="t-faint">100</text>`;
+    [0,20,40,60].forEach(t=>ax+=`<text x="${x(t)}" y="${YB+18}" text-anchor="middle" font-size="11" class="t-faint">第 ${t} 天</text>`);
+    document.getElementById('lf-axis').innerHTML=ax;
+    const P=arr=>'M'+arr.map((v,t)=>`${x(t).toFixed(1)},${y(v).toFixed(1)}`).join('L');
+    document.getElementById('lf-naive').setAttribute('d',P(NA));document.getElementById('lf-act').setAttribute('d',P(AC));
+    const dev=(AC[N]-NA[N])*100;
+    document.getElementById('lf-msg2').textContent=k===1?'不加杠杆时，两条线重合，没有偏差。':`60 天后，实际净值 ${(AC[N]*100).toFixed(0)}，按倍数推算 ${(NA[N]*100).toFixed(0)}，偏差 ${dev>0?'+':''}${dev.toFixed(0)}。${mk==='chop'?'来回震荡时，每天追涨杀跌，偏差不利。':'单边趋势中，追涨杀跌反而顺势加码，偏差有利。'}`;
+  }
+  document.querySelectorAll('[data-mk]').forEach(b=>b.addEventListener('click',()=>{mk=b.dataset.mk;sim();}));
+  kEl.addEventListener('input',sim); sim();
+})();
+</script>

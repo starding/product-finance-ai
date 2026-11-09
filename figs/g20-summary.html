@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：一个人和一笔钱</p><p class="figsub">四条结论，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="g20summary">重播</button></div>
+    <div class="g20summary" id="g20summary" data-anim><div class="g20summary-c" style="--i:0"><em>目标</em><b>先记下他要什么</b><p>每件事的金额、期限，以及晚了少了会怎样。</p></div><div class="g20summary-c" style="--i:1"><em>默顿比例与人力资本</em><b>该冒多少险</b><p>取决于补偿、起落与厌恶程度；未来的收成也是一份家产。</p></div><div class="g20summary-c warn" style="--i:2"><em>按目标分账</em><b>每个目标一本账</b><p>每本账按自己的期限选配置，风险是到期时差得太多的可能。</p></div><div class="g20summary-c warn" style="--i:3"><em>承诺</em><b>承诺过程，不承诺结果</b><p>配置、执行、费用与风险边界可以核对；结果是一个分布。</p></div></div>
+  </div>
+</figure>
+<style>
+.g20summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g20summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g20summary-c.warn{border-left-color:var(--warm)}
+.g20summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g20summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g20summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g20summary.in .g20summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g20summary{grid-template-columns:1fr}}
+</style>

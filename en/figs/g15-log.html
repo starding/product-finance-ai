@@ -1,0 +1,42 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Who keeps the record</p><p class="figsub">In one month a scribe did twelve things for a household, two of which broke the agreement. Switch among three situations and see what the principal can find out.</p></div><button class="replay" type="button" data-replay="lg15">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Situation">
+      <button type="button" data-lg15="result" aria-pressed="true">Month-end result only</button>
+      <button type="button" data-lg15="self" aria-pressed="false">Scribe keeps its own record</button>
+      <button type="button" data-lg15="third" aria-pressed="false">Third party keeps it, unalterable</button>
+    </div>
+    <div class="lg15" id="lg15" data-anim>
+      <ol class="lg15-l" id="lg15-l"></ol>
+      <div class="lg15-res" id="lg15-r"></div>
+      <p class="lg15-msg" id="lg15-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the twelve items and the two breaches are a made-up example. "Kept by a third party" means that once written, the record is handed to a party with no connection to the scribe, and no party can alter it.</figcaption>
+</figure>
+<style>
+.lg15-l{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:3px;font-size:13px}
+.lg15-l li{display:grid;grid-template-columns:3.8em 1fr auto;gap:8px;padding:4px 8px;border-radius:6px;background:var(--quote);opacity:0;transform:translateX(-6px);transition:opacity .35s,transform .35s,background .3s;transition-delay:calc(var(--i)*.08s)}
+.lg15.in .lg15-l li{opacity:1;transform:none}
+.lg15-l li span{color:var(--faint)} .lg15-l li em{font-style:normal;font-size:12px}
+.lg15-l li.bad{background:var(--warm-soft)} .lg15-l li.bad em{color:var(--warm)}
+.lg15-l li.hid{color:var(--faint)} .lg15-l li.hid b{text-decoration:line-through}
+.lg15-l.blur li{filter:blur(3px)}
+.lg15-res{margin-top:10px;background:var(--quote);border-radius:8px;padding:9px 11px;font-size:13.5px}
+.lg15-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('lg15'+id);let mode='result';
+  const E=[['Day 1','Read the reports on four ships',0],['Day 3','Bought 2 ship shares as agreed',0],['Day 5','Checked the grain stored in the granary',0],['Day 8','Bought 6 ship shares, above the agreed limit of 3 a month',1],['Day 10','Reminded the principal of next month\'s tax',0],['Day 12','Sold 1 ship share as agreed',0],['Day 15','Kept the accounts',0],['Day 18','Sold a ship share to a household under the operator\'s own name, below the market price',1],['Day 20','Read the new reports',0],['Day 23','Adjusted next month\'s plan',0],['Day 26','Kept the accounts',0],['Day 30','Produced the month-end report',0]];
+  function draw(){const l=$('-l');l.classList.toggle('blur',mode==='result');
+    l.innerHTML=E.map(([d,t,b],i)=>{const hid=mode==='self'&&b;return `<li style="--i:${i}" class="${mode==='third'&&b?'bad':''}${hid?' hid':''}"><span>${d}</span><b>${hid?(i===3?'Bought 3 ship shares':'Sold 1 ship share at the market price'):t}</b><em>${mode==='third'&&b?'Broke the agreement':''}</em></li>`;}).join('');
+    $('-r').textContent={result:'Month-end report: the value of the ship shares fell 2% this month. The principal sees only this one number and cannot tell whether the years were bad or the scribe did something wrong.',self:'The record the scribe keeps itself: every item is there, and all appear to follow the agreement. But because the scribe keeps the record, the two breaches have been rewritten.',third:'The record kept by a third party: all twelve items are listed, and another scribe finds the two breaches by comparison within seconds: on day 8 it exceeded the purchase limit, and on day 18 it sold a ship share cheaply to a household connected to the operator.'}[mode];
+    $('-msg').textContent={result:'Seeing only the result, the principal cannot judge, and so cannot hold anyone to account.',self:'A record kept by the scribe itself is like accounts kept by the manager himself: it can erase its own mistakes.',third:'Once written, the record is kept by a party with no connection to the scribe and cannot be altered. Checking changes from guesswork into comparison, and holding someone responsible has a basis.'}[mode];}
+  const bs=[...document.querySelectorAll('[data-lg15]')];
+  function set(m){mode=m;bs.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lg15===m)));draw();}
+  bs.forEach(b=>b.addEventListener('click',()=>set(b.dataset.lg15)));
+  $('').addEventListener('anim-in',()=>{['result','self','third'].forEach((m,i)=>setTimeout(()=>set(m),300+i*2600));});
+  draw();
+})();
+</script>

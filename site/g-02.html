@@ -1,0 +1,561 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>两个人，缺的时间不同</title>
+<meta name="description" content="《产品×金融×AI：从零推演》第 2 章：岛上来了第二个人，两人缺粮的时间不同，于是有了借贷；借出就是不会损耗的储藏，利息是时间的价格，它介于出借人的其他选择与借款人的处境之间">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="g-02">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="全书目录">
+<div class="side-head"><a class="sidetitle" href="index.html">产品×金融×AI<small>AI 时代的金融产品</small></a></div>
+<div class="side-view" role="group" aria-label="阅读方式"><a href="preface.html">分解式</a><a href="g-preface.html" class="on" aria-current="true">生成式</a></div>
+<a class="side-about" href="index.html#about">关于本书</a>
+<a class="" href="g-preface.html"><span class="n">序</span>理解金融产品最好的方法，是从零造一个</a>
+<a class="side-part" href="g-part1.html"><span class="pn">第一部分</span>从 0 到 1：一个没有金融的世界如何长出金融</a>
+<a class="" href="g-01.html"><span class="n">1</span>一个人，一年的收成</a>
+<a class=" cur" href="g-02.html" aria-current="page"><span class="n">2</span>两个人，缺的时间不同</a>
+<a class="" href="g-03.html"><span class="n">3</span>借了不还怎么办</a>
+<a class="" href="g-04.html"><span class="n">4</span>很多人一起交换</a>
+<a class="" href="g-05.html"><span class="n">5</span>收成好坏不定</a>
+<a class="" href="g-06.html"><span class="n">6</span>存的人要随时取，借的人要长期用</a>
+<a class="" href="g-07.html"><span class="n">7</span>一个人出不起一艘船的钱</a>
+<a class="" href="g-08.html"><span class="n">8</span>证券要能卖出去</a>
+<a class="" href="g-09.html"><span class="n">9</span>价格里有所有人的信息</a>
+<a class="" href="g-10.html"><span class="n">10</span>普通人没有时间也没有专长</a>
+<a class="" href="g-11.html"><span class="n">11</span>受托人可能不尽责</a>
+<a class="" href="g-12.html"><span class="n">12</span>制度齐备，人仍会犯错</a>
+<a class="side-part" href="g-part2.html"><span class="pn">第二部分</span>改变一个参数：当代理变得几乎免费</a>
+<a class="" href="g-13.html"><span class="n">13</span>新参数：认知劳动的成本骤降</a>
+<a class="" href="g-14.html"><span class="n">14</span>人人都能有专属代理人吗</a>
+<a class="" href="g-15.html"><span class="n">15</span>谁来为代理人的承诺担保</a>
+<a class="" href="g-16.html"><span class="n">16</span>如果人人都有分析师</a>
+<a class="" href="g-17.html"><span class="n">17</span>代理人成为市场的主要参与者</a>
+<a class="" href="g-18.html"><span class="n">18</span>代理人能否矫正人的偏差</a>
+<a class="" href="g-19.html"><span class="n">19</span>没有改变的东西</a>
+<a class="side-part" href="g-part3.html"><span class="pn">第三部分</span>在新的世界里推演一个产品</a>
+<a class="" href="g-20.html"><span class="n">20</span>一个人和一笔钱</a>
+<a class="" href="g-21.html"><span class="n">21</span>用户不在场</a>
+<a class="" href="g-22.html"><span class="n">22</span>用户看不见过程</a>
+<a class="" href="g-23.html"><span class="n">23</span>代理会出错</a>
+<a class="" href="g-24.html"><span class="n">24</span>信任需要时间</a>
+<a class="side-app" href="g-epilogue.html"><span class="n">结语</span>回到总则</a>
+<a class="side-app" href="method.html"><span class="n">附录</span>本书的写法</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="展开目录" title="目录"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">产品×金融×AI：AI 时代的金融产品</a><span>第一部分　从 0 到 1</span><a class="langlink" href="en/g-02.html" hreflang="en">English</a></header>
+
+<div class="chapno">第 2 章</div><h1>两个人，缺的时间不同<small>借贷与利息</small></h1>
+<blockquote><p>只要岛上有第二个人，而他缺粮的时间与我不同，储藏就不再是把粮食留到明天的唯一办法：我把今天吃不完的借给他，他在自己收获之后还给我。借出的粮食不会在仓里腐坏，借贷因此对双方都有利。两人缺粮的时间越错开，好处越大；时间完全相同，借贷就帮不上忙。利息是时间的价格，它介于出借人愿意接受的最低回报与借款人愿意支付的最高代价之间。</p></blockquote>
+<h2 id="sec-1">一、第二个人，缺的时间不同</h2>
+<p>岛上来了第二个人。他种的是另一种作物，春天收获；我仍在秋天收获。秋天我仓里满、他仓里空，春天正好反过来。</p>
+<p>如果各自储藏，两人的粮食都要在仓里放上一整年，一路损耗。如果秋天我把吃不完的一部分借给他，春天他用自己的收成还给我，那么这部分粮食在借出的半年里被他吃掉，而不是在我的仓里腐坏；我在春天收回的，是他新收的粮食。对我而言，借出就是一种不会损耗的储藏。</p>
+<p><strong>今天的对应。</strong>发薪日之前手头紧、发薪日之后有结余，是同一件事在一个人身上的样子；把许多人放在一起，总有人此刻有结余、有人此刻缺钱。季节性经营的商户更典型：旺季收款、淡季付租金与工资，需要的正是错开时间的借贷。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">借出，就是不会损耗的储藏</p><p class="figsub">我秋天收获 12 份，他春天收获 12 份。打开或关掉借贷，看两人仓里的粮食和一年里损耗掉的数量。</p></div><button class="replay" type="button" data-replay="tw2">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="借贷">
+      <button type="button" data-tw2="0" aria-pressed="true">各自储藏</button>
+      <button type="button" data-tw2="1" aria-pressed="false">秋借春还、春借秋还</button>
+    </div>
+    <div class="tw2" id="tw2" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="两人每月的库存"><g id="tw2-ax"></g><path id="tw2-a" class="tw2-a"/><path id="tw2-b" class="tw2-b"/><g id="tw2-l"></g></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>我的仓（秋天收获）</span><span><i style="background:var(--warm)"></i>他的仓（春天收获）</span></div>
+      <div class="sl"><label for="tw2-d">每月损耗 <b id="tw2-dv"></b></label><input id="tw2-d" type="range" min="0" max="5" step="0.5" value="3"></div>
+      <div class="tw2-out"><div><span>两人一年共损耗</span><b id="tw2-lost"></b></div><div><span>每人每月能吃</span><b id="tw2-c"></b></div></div>
+      <p class="tw2-msg" id="tw2-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：每人每月吃一样多。借贷时，刚收获的一方供两人吃半年，另一方在自己收获后还上，粮食最多只在仓里放六个月。</figcaption>
+</figure>
+<style>
+.tw2 svg{width:100%;height:auto;display:block}
+.tw2-a{fill:none;stroke:var(--accent);stroke-width:2.4}
+.tw2-b{fill:none;stroke:var(--warm);stroke-width:2.4}
+.tw2-out{display:flex;gap:24px;flex-wrap:wrap;margin-top:8px}
+.tw2-out div{display:flex;flex-direction:column} .tw2-out span{font-size:12px;color:var(--faint)} .tw2-out b{font-size:20px;font-variant-numeric:tabular-nums}
+.tw2-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.tw2 svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),X0=40,X1=630,YB=176,YT=12,x=t=>X0+t/12*(X1-X0),y=v=>YB-v/12*(YB-YT);
+  const MN=['秋','','','冬','','','春','','','夏','','',''];
+  $('tw2-ax').innerHTML=[0,4,8,12].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+
+    MN.map((m,i)=>`<text x="${x(i)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${m||''}</text>`).join('');
+  let lend=0;const sl=$('tw2-d');
+  function draw(){const d=+sl.value/100,k=1-d;let S12=0;for(let t=0;t<12;t++)S12+=Math.pow(k,-t);let S6=0;for(let t=0;t<6;t++)S6+=Math.pow(k,-t);
+    const c=lend?6/S6:12/S12,lost=24-24*c;
+    // 稳态库存：各自储藏时，每人收获后 12 个月吃完；借贷时，收获方供两人吃 6 个月
+    const st=(h)=>{const r=[];let s=0;for(let t=0;t<=24;t++){const tt=((t-h)%12+12)%12;if(tt===0&&t<24)s+=12;r.push(s);const out=lend?(tt<6?2*c:0):c;s=Math.max(0,(s-out)*k);}return r.slice(12,25);};
+    const A=st(0),B=st(6);
+    const path=r=>r.map((v,i)=>(i?'L':'M')+x(i).toFixed(1)+','+y(v).toFixed(1)).join('');
+    $('tw2-a').setAttribute('d',path(A));$('tw2-b').setAttribute('d',path(B));
+    $('tw2-dv').textContent=(d*100).toFixed(1)+'%';$('tw2-lost').textContent=lost.toFixed(1)+' 份';$('tw2-c').textContent=c.toFixed(2)+' 份';
+    $('tw2-msg').textContent=d===0?'没有损耗时，借不借都一样。':lend?`粮食最多在仓里放六个月，两人一年只损耗 ${lost.toFixed(1)} 份，每人每月能吃 ${c.toFixed(2)} 份。`:`粮食要在仓里放一整年，两人一年损耗 ${lost.toFixed(1)} 份，每人每月只能吃 ${c.toFixed(2)} 份。`;}
+  document.querySelectorAll('[data-tw2]').forEach(b=>b.addEventListener('click',()=>{lend=+b.dataset.tw2;document.querySelectorAll('[data-tw2]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  sl.addEventListener('input',draw);
+  $('tw2').addEventListener('anim-in',()=>{lend=0;document.querySelectorAll('[data-tw2]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.tw2==='0')));draw();setTimeout(()=>{lend=1;document.querySelectorAll('[data-tw2]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.tw2==='1')));draw();},2400);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-2">二、借贷对双方都有利</h2>
+<p>秋天，我手上有 12 份粮食，再吃一份带来的满足已经不多；他手上只剩 1 份，多吃一份的满足很大。春天的情形恰好相反。把一份粮食从我的秋天挪到他的秋天，再从他的春天挪回我的春天，两个人的满足都增加了。这与一个人平滑消费的道理相同，只是平滑跨越了两个人。</p>
+<p>借多少、还多少，需要两人商定。还得太少，出借的一方不如自己储藏；还得太多，借款的一方不如不借。在这两个界限之间，任何一个约定都让双方比不借更好。</p>
+<p><strong>今天的对应。</strong>存款人是秋天收获的我，借款人是春天收获的他。存款人把暂时用不上的钱交出去，借款人提前用上将来的收入。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">借贷让双方都更好</p><p class="figsub">秋天我借给他若干份粮食，春天他连本带息还我。拖动借出的数量与利率，看两人的满足感各自比不借时多了还是少了。</p></div><button class="replay" type="button" data-replay="gn">重播</button></div>
+    <div class="gn" id="gn" data-anim>
+      <div class="gn-bars">
+        <div class="gn-b"><span>我（出借）</span><div class="gn-t"><i id="gn-a"></i></div><b id="gn-av"></b></div>
+        <div class="gn-b"><span>他（借入）</span><div class="gn-t"><i id="gn-b"></i></div><b id="gn-bv"></b></div>
+      </div>
+      <div class="gn-band"><div class="gn-ax" id="gn-ax"></div><div class="gn-ok" id="gn-ok"></div><i class="gn-r" id="gn-r"></i></div>
+      <div class="gn-sl">
+        <div class="sl"><label for="gn-l">秋天借出 <b id="gn-lv"></b></label><input id="gn-l" type="range" min="1" max="8" step="0.5" value="6"></div>
+        <div class="sl"><label for="gn-i">利率（半年） <b id="gn-iv"></b></label><input id="gn-i" type="range" min="-20" max="60" step="1" value="10"></div>
+      </div>
+      <p class="gn-msg" id="gn-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：我秋天有 12 份、春天没有，自己储藏半年损耗 5%（一年约一成）；他秋天只剩 1 份、春天有 12 份。满足感按每半年吃到份数的对数计算，比较对象是不借时各自最好的安排。绿色区间内的利率让双方都更好。</figcaption>
+</figure>
+<style>
+.gn-bars{display:grid;gap:8px}
+.gn-b{display:grid;grid-template-columns:6.5em 1fr 4.5em;gap:10px;align-items:center;font-size:13px}
+.gn-t{position:relative;height:16px;background:var(--quote);border-radius:4px}
+.gn-t::before{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;border-left:1px solid var(--faint)}
+.gn-t i{position:absolute;top:0;height:100%;border-radius:4px;transition:left .3s,width .3s,background .3s}
+.gn-b b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.gn-band{position:relative;height:40px;margin:18px 0 6px}
+.gn-ax{position:absolute;left:0;right:0;top:18px;border-top:1px solid var(--line)}
+.gn-ax span{position:absolute;top:6px;transform:translateX(-50%);font-size:10.5px;color:var(--faint)}
+.gn-ok{position:absolute;top:12px;height:12px;background:var(--accent-soft);border:1px solid var(--accent);border-radius:4px;transition:left .3s,width .3s}
+.gn-r{position:absolute;top:6px;width:3px;height:24px;margin-left:-1.5px;background:var(--ink);border-radius:2px;transition:left .2s}
+.gn-sl{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:10px}
+.gn-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.gn-sl{grid-template-columns:1fr;gap:4px}}
+</style>
+<script>
+(function(){
+  const pc=v=>(v<0?'−':'')+Math.abs(Math.round(v*100))+'%',$=id=>document.getElementById(id),a=0.95,U0a=Math.log(6)+Math.log(6*a),U0b=Math.log(1)+Math.log(12),R0=-20,R1=60,px=r=>(r-R0)/(R1-R0)*100;
+  const Ua=(L,r)=>Math.log(12-L)+Math.log(L*(1+r)),Ub=(L,r)=>{const rest=12-L*(1+r);return rest<=0?-99:Math.log(1+L)+Math.log(rest);};
+  function root(f,lo,hi){for(let i=0;i<50;i++){const m=(lo+hi)/2;if(f(m)>0)hi=m;else lo=m;}return (lo+hi)/2;}
+  $('gn-ax').innerHTML=[-20,0,20,40,60].map(v=>`<span style="left:${px(v)}%">${v<0?'−'+(-v):v}%</span>`).join('');
+  function bar(el,d){const w=Math.min(50,Math.abs(d)/1.0*50);el.style.left=(d>=0?50:50-w)+'%';el.style.width=w+'%';el.style.background=d>=0?'var(--accent)':'var(--warm)';}
+  function draw(){const L=+$('gn-l').value,r=+$('gn-i').value/100;
+    const da=Ua(L,r)-U0a,db=Math.max(-3,Ub(L,r)-U0b);
+    bar($('gn-a'),da);bar($('gn-b'),db);$('gn-av').textContent=(da>=0?'+':'')+da.toFixed(2);$('gn-bv').textContent=(db>=0?'+':'')+db.toFixed(2);
+    const rmin=root(x=>Ua(L,x)-U0a,-0.99,3),rmax=root(x=>-(Ub(L,x)-U0b),-0.99,(12/L)-1-1e-6);
+    const lo=Math.max(R0,rmin*100),hi=Math.min(R1,rmax*100);$('gn-ok').style.left=px(lo)+'%';$('gn-ok').style.width=Math.max(0,px(hi)-px(lo))+'%';$('gn-r').style.left=px(r*100)+'%';
+    $('gn-lv').textContent=L+' 份';$('gn-iv').textContent=pc(r);
+    $('gn-msg').textContent=rmin>rmax?`借出 ${L} 份时，没有一个利率能让双方都更好。`:da>=0&&db>=0?`借出 ${L} 份、利率 ${pc(r)}：双方都比不借更好。利率在 ${pc(rmin)} 到 ${pc(rmax)} 之间都可以，具体落在哪里，取决于两人怎样商定。`:da<0?`利率低于 ${pc(rmin)}，我不如自己储藏；注意这个下限是负的，因为储藏本身会损耗。`:`利率高于 ${pc(rmax)}，他还完之后剩下的太少，不如不借。`;}
+  ['gn-l','gn-i'].forEach(k=>$(k).addEventListener('input',draw));
+  $('gn').addEventListener('anim-in',()=>{let v=-20;$('gn-i').value=v;draw();const id=setInterval(()=>{v+=4;$('gn-i').value=v;draw();if(v>=56){clearInterval(id);setTimeout(()=>{$('gn-i').value=10;draw();},700);}},160);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-3">三、利息：时间的价格</h2>
+<p>借一份、还多于一份，多出的部分就是利息，它是今天的粮食用明天的粮食来表示的价格。利率不是任意定的，它有一个下限和一个上限。下限由出借人的其他选择决定：如果自己储藏每年要损耗一成，那么即使收回的比借出的少一点，也比储藏划算，利率甚至可以是负的；如果还可以留作种子，下限就是种子的回报。上限由借款人的处境决定：越是急需，愿意付出的就越多。两人之所以谈得拢，是因为同一份粮食在同一时刻对两人的价值不同：秋天的一份粮食，对仓里空空的他比对仓里满满的我更值钱；他愿意用春天的更多粮食来换，我也乐意接受。</p>
+<aside class="principle"><p class="pr-k">推演至此，得到一条原理</p><p class="pr-n">现在物品与将来物品的价值差</p><p class="pr-c"><span><em>学科</em>经济学 › 资本与利息理论</span><span><em>类型</em>理论</span></p><p class="pr-s">同种同量的物品，今天的一般比将来的更值钱；原因之一是人在不同时刻的需要与供给不同，眼前匮乏、将来充裕的人尤其看重今天的物品。利息就是这一价值差的体现。</p><dl><div><dt>在学科中的位置</dt><dd>原书称“现在物品一般比同种同量的将来物品更值钱”这一命题是其利息理论的核心；此书是《资本与利息》的第二卷，第一卷（1884）是对此前各种利息学说的历史考察与批判</dd></div><div><dt>回应的约束</dt><dd>两人缺粮的时间不同</dd></div><div><dt>成立的前提</dt><dd>人在不同时刻的匮乏程度不同；借出的粮食将来能够收回</dd></div><div><dt>提出者</dt><dd>庞巴维克，1889，《资本实证论》；书中给出三个原因，另两个是人们往往低估将来的需要，以及今天的物品可以投入生产</dd></div><div><dt>留下的问题</dt><dd>借出的粮食收不回来时，这一价值差无从实现；储藏有损耗时，出借人愿意接受的利率可以低于零</dd></div></dl></aside>
+<p>把借贷与利息写进规则的历史很长。汉穆拉比法典为谷物借贷规定的利率上限是每年三分之一，为白银借贷规定的是五分之一（霍默与西拉，2005）。法典没有说明两者为何不同。</p>
+<p><strong>今天的对应。</strong>存款利率与贷款利率，分别落在这两个界限附近：存款利率要高于储户把钱放在别处的回报，贷款利率不能高于借款人的承受能力。法律至今仍对借贷利率设有上限，例如最高人民法院 2020 年修订的民间借贷司法解释，以一年期贷款市场报价利率的四倍为司法保护的上限。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">利率的下限与上限</p><p class="figsub">出借人的其他选择决定下限，借款人的处境决定上限。切换出借人手上的选择，拖动借款人有多急需，看可以成交的利率区间。</p></div><button class="replay" type="button" data-replay="rt">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="出借人的其他选择">
+      <button type="button" data-rt="store" aria-pressed="true">只能储藏</button>
+      <button type="button" data-rt="seed" aria-pressed="false">还可以留种</button>
+    </div>
+    <div class="rt" id="rt" data-anim>
+      <div class="rt-band"><div class="rt-ax" id="rt-ax"></div><div class="rt-zone" id="rt-z"></div><div class="rt-mk lo" id="rt-lo"><span></span></div><div class="rt-mk hi" id="rt-hi"><span></span></div></div>
+      <div class="sl"><label for="rt-u">借款人有多急需 <b id="rt-uv"></b></label><input id="rt-u" type="range" min="0" max="100" value="50"></div>
+      <p class="rt-msg" id="rt-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：储藏一年损耗一成；留种的回报为 25%；急需程度越高，借款人愿意付出的最高利率越高。</figcaption>
+</figure>
+<style>
+.rt-band{position:relative;height:96px;margin:6px 0 8px}
+.rt-ax{position:absolute;left:0;right:0;top:56px;border-top:1px solid var(--line)}
+.rt-ax span{position:absolute;top:6px;transform:translateX(-50%);font-size:10.5px;color:var(--faint)}
+.rt-zone{position:absolute;top:44px;height:24px;background:var(--accent-soft);border-radius:4px;transition:left .4s,width .4s}
+.rt-mk{position:absolute;top:30px;height:52px;border-left:2px solid var(--ink);transition:left .4s}
+.rt-mk span{position:absolute;top:-28px;white-space:nowrap;font-size:12px;transform:translateX(-50%)}
+.rt-mk.hi{border-color:var(--warm)} .rt-mk.hi span{color:var(--warm)}
+.rt-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),R0=-20,R1=100,px=r=>(r-R0)/(R1-R0)*100;let alt='store';
+  $('rt-ax').innerHTML=[-20,0,20,40,60,80,100].map(v=>`<span style="left:${px(v)}%">${v<0?'−'+(-v):v}%</span>`).join('');
+  function draw(){const u=+$('rt-u').value,lo=alt==='store'?-10:25,hi=-5+u*1.0;
+    $('rt-uv').textContent=u<30?'不太急':u<70?'比较急':'非常急';
+    $('rt-lo').style.left=px(lo)+'%';$('rt-lo').querySelector('span').textContent=`下限 ${lo<0?'−'+(-lo):lo}%`;
+    $('rt-hi').style.left=px(Math.min(hi,R1))+'%';$('rt-hi').querySelector('span').textContent=`上限 ${Math.round(hi)}%`;
+    $('rt-z').style.left=px(lo)+'%';$('rt-z').style.width=Math.max(0,px(Math.min(hi,R1))-px(lo))+'%';
+    $('rt-msg').textContent=hi<lo?'借款人愿意付出的最高利率低于出借人的下限：这笔借贷不会发生。':alt==='store'?`出借人只能储藏时，借出去哪怕收回少一点也比储藏划算，下限是 −10%。可以成交的区间是 −10% 到 ${Math.round(hi)}%。`:`出借人还可以留种，种子有 25% 的回报，借出的利率至少要有 25%。可以成交的区间是 25% 到 ${Math.round(hi)}%。`;}
+  document.querySelectorAll('[data-rt]').forEach(b=>b.addEventListener('click',()=>{alt=b.dataset.rt;document.querySelectorAll('[data-rt]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  $('rt-u').addEventListener('input',draw);
+  $('rt').addEventListener('anim-in',()=>{let v=0;$('rt-u').value=0;draw();const id=setInterval(()=>{v+=5;$('rt-u').value=v;draw();if(v>=80)clearInterval(id);},150);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-4">四、两个人的一年：文明模拟器第二版</h2>
+<p>模拟器加入了第二个人与借贷这条规则。两人各自一年收获 12 份，可以调整两人收获时间相差的月数。相差六个月时，借贷让粮食在仓里放的时间最短，两人都多吃；相差为零时，两人同时缺粮，借贷帮不上任何忙。借贷的好处，正来自本章引入的那个约束：缺的时间不同。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">文明模拟器 · 第 2 章：两个人的一年</p><p class="figsub">两人各自一年收获 12 份。拖动两人收获时间相差的月数，打开或关掉借贷，看每人每月能吃多少、一年损耗多少。</p></div><button class="replay" type="button" data-replay="cs2">重播</button></div>
+    <div class="cs-rules"><span class="on">储蓄</span><span class="on">留种</span><span class="on">借贷</span><span class="lock">承诺 · 第 3 章</span><span class="lock">货币 · 第 4 章</span></div>
+    <div class="cs2" id="cs2" data-anim>
+      <svg viewBox="0 0 660 220" role="img" aria-label="两人仓里粮食的变化"><g id="cs2-ax"></g><path id="cs2-a" class="cs2-a"/><path id="cs2-b" class="cs2-b"/><path id="cs2-p" class="cs2-p"/></svg>
+      <div class="legend" id="cs2-lg"></div>
+      <div class="cs2-ctl">
+        <div class="sl"><label for="cs2-o">两人收获相差 <b id="cs2-ov"></b></label><input id="cs2-o" type="range" min="0" max="6" step="1" value="6"></div>
+        <div class="sl"><label for="cs2-d">每月损耗 <b id="cs2-dv"></b></label><input id="cs2-d" type="range" min="0" max="5" step="0.5" value="3"></div>
+      </div>
+      <div class="cs-sw"><label><input type="checkbox" id="cs2-lend" checked> 规则：借贷</label></div>
+      <div class="cs2-out" id="cs2-out"></div>
+      <p class="cs2-msg" id="cs2-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意模型：两人收成相同、每人每月吃一样多，按年循环的稳定状态计算。借贷时，谁仓里有粮就先供两人吃，另一方收获后还上；收成相同、错开对称时，两人互为出借人，利息相互抵消，利率不影响结果。</figcaption>
+</figure>
+<style>
+.cs2 svg{width:100%;height:auto;display:block}
+.cs2-a{fill:none;stroke:var(--accent);stroke-width:2.2}
+.cs2-b{fill:none;stroke:var(--warm);stroke-width:2.2}
+.cs2-p{fill:var(--faint);fill-opacity:.16;stroke:none}
+.cs2-ctl{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px}
+.cs2-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cs2-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs2-out span{display:block;font-size:11.5px;color:var(--faint)} .cs2-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.cs2-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs2-ctl{grid-template-columns:1fr;gap:4px}.cs2-out{grid-template-columns:1fr}.cs2 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs2'+id),X0=40,X1=630,YT=12,YB=186,x=t=>X0+t/12*(X1-X0),y=v=>YB-Math.min(v,24)/24*(YB-YT);
+  // 稳定状态：从第 0 个月开始循环多年，取最后一年的库存；harv 为各自收获的月份
+  function cycle(harv,c,d,pool){const k=1-d,n=harv.length;let s=Array(n).fill(0),ok=true,rec=[],lost=0;
+    for(let yr=0;yr<30;yr++){for(let m=0;m<12;m++){harv.forEach((h,i)=>{if(h===m)s[i]+=12;});
+      if(yr===29)rec.push(s.slice());
+      if(pool){let need=c*n,tot=s.reduce((a,b)=>a+b,0);if(tot<need-1e-9){if(yr>2)ok=false;s=s.map(()=>0);}else{ // 先用仓里粮食多的一方供两人吃
+          const ord=s.map((v,i)=>[v,i]).sort((a,b)=>b[0]-a[0]);for(const [,i] of ord){const u=Math.min(s[i],need);s[i]-=u;need-=u;}}}
+      else s=s.map(v=>{if(v<c-1e-9){if(yr>2)ok=false;return 0;}return v-c;});
+      const l=s.reduce((a,b)=>a+b,0)*d;if(yr===29)lost+=l;s=s.map(v=>v*k);}}
+    rec.push(s.slice());return {ok,rec,lost};}
+  function best(harv,d,pool){let lo=0,hi=1.2;for(let i=0;i<40;i++){const m=(lo+hi)/2;if(cycle(harv,m,d,pool).ok)lo=m;else hi=m;}return lo;}
+  $('-lg').innerHTML='<span><i style="background:var(--accent)"></i>我的仓</span><span><i style="background:var(--warm)"></i>他的仓</span><span><i style="background:var(--faint);opacity:.4"></i>两仓合计</span>';
+  $('-ax').innerHTML=[0,6,12,18,24].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+
+    Array.from({length:13},(_,i)=>`<text x="${x(i)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${i===0?'我收获':i}</text>`).join('');
+  function draw(){const o=+$('-o').value,d=+$('-d').value/100,pool=$('-lend').checked,harv=[0,o];
+    const c=best(harv,d,pool),r=cycle(harv,c,d,pool),self=best([0],d,false);
+    const pa=r.rec.map((s,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(s[0]).toFixed(1)).join(''),pb=r.rec.map((s,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(s[1]).toFixed(1)).join('');
+    const pp='M'+x(0)+','+YB+r.rec.map((s,t)=>'L'+x(t).toFixed(1)+','+y(s[0]+s[1]).toFixed(1)).join('')+'L'+x(12)+','+YB+'Z';
+    $('-a').setAttribute('d',pa);$('-b').setAttribute('d',pb);$('-p').setAttribute('d',pp);
+    $('-ov').textContent=o+' 个月';$('-dv').textContent=(d*100).toFixed(1)+'%';
+    $('-out').innerHTML=[['每人每月能吃',c.toFixed(2)+' 份'],['两人一年共损耗',r.lost.toFixed(1)+' 份'],['比各自储藏多吃',(c>self+1e-6?'+'+((c/self-1)*100).toFixed(0)+'%':'0%')]].map(([a,b])=>`<div><span>${a}</span><b>${b}</b></div>`).join('');
+    $('-msg').textContent=!pool?`没有借贷，各自的粮食都要在仓里放满一年，两人一年共损耗 ${r.lost.toFixed(1)} 份。`:d===0?'没有损耗时，借不借都一样：借贷的好处来自少损耗。':o===0?'两人同一个月收获，缺粮的时间完全相同，借贷帮不上忙。借贷的前提，正是缺的时间不同。':`两人收获相差 ${o} 个月，借贷让粮食在仓里放的时间缩短，每人每月多吃 ${((c/self-1)*100).toFixed(0)}%。相差六个月时好处最大。`;}
+  ['-o','-d','-lend'].forEach(k=>$(k).addEventListener('input',draw));
+  $('').addEventListener('anim-in',()=>{let v=0;$('-o').value=0;draw();const id=setInterval(()=>{v++;$('-o').value=v;draw();if(v>=6)clearInterval(id);},500);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-5">五、这一步留下的问题</h2>
+<p>借贷让两个人都过得更好，也带来了新的问题：</p>
+<ol><li><strong>借出去的粮食可能收不回来。</strong>我借给他的是今天的粮食，换回的只是一个关于将来的承诺。他可能不还，也可能还不起。</li><li><strong>找到合适的对方并不容易。</strong>两个人时，彼此缺什么、什么时候缺一目了然；人一多，就需要一种办法让需要彼此对上。</li><li><strong>年老的问题仍未解决。</strong>季节的错开可以靠借贷化解，一生的错开却要求对方几十年后仍有收入；最年轻的一代找不到更年轻的人来借。</li><li><strong>利率由谁来定。</strong>两个人之间的利率靠商量；人一多，利率就要由许多人的出借与借入共同决定。</li></ol>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">这一步留下的问题</p><p class="figsub">借贷带来的四个新问题，各自成为后面一章的约束。点选一个问题，看它隐含的假设。</p></div><button class="replay" type="button" data-replay="nx2">重播</button></div>
+    <div class="nx" id="nx2" data-anim>
+      <div class="nx-src"><b>两个人</b><span>借贷与利息</span></div>
+      <div class="nx-list" id="nx2-l"></div>
+    </div>
+    <p class="nx-msg" id="nx2-msg" aria-live="polite"></p>
+  </div>
+</figure>
+<style>
+.nx{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:center}
+.nx-src{background:var(--ink);color:var(--bg);border-radius:10px;padding:14px 10px;text-align:center}
+.nx-src b{display:block;font-size:16px} .nx-src span{font-size:12px;opacity:.75}
+.nx-list{display:grid;gap:6px}
+.nx-i{font:inherit;text-align:left;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:9px 12px;color:var(--ink);opacity:0;transform:translateX(-8px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.3s)}
+.nx.in .nx-i{opacity:1;transform:none}
+.nx-i span{font-size:13.5px} .nx-i em{font-style:normal;font-size:11.5px;color:var(--faint);white-space:nowrap}
+.nx-i.sel{border-color:var(--accent)}
+.nx-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.nx{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const Q=[['借出去的粮食可能收不回来','第 3 章 承诺','隐含的假设：借款人总会按约定还本付息。借出的是今天的粮食，换回的只是一个关于将来的承诺。'],
+    ['找到合适的对方并不容易','第 4 章 货币','隐含的假设：两个人彼此的需要一目了然。人一多，需要一种办法让需要彼此对上。'],
+    ['年老的问题仍未解决','第 4 章 货币','隐含的假设：对方几十年后仍有收入。最年轻的一代找不到更年轻的人来借。'],
+    ['利率由谁来定','第 8 章 市场','隐含的假设：利率由两个人商量决定。人一多，利率要由许多人的出借与借入共同决定。']];
+  const l=document.getElementById('nx2-l'),msg=document.getElementById('nx2-msg');
+  l.innerHTML=Q.map((q,i)=>`<button type="button" class="nx-i" style="--i:${i}" data-i="${i}"><span>${q[0]}</span><em>→ ${q[1]}</em></button>`).join('');
+  const bs=[...l.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));msg.textContent=Q[i][2];}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('nx2').addEventListener('anim-in',()=>{[0,1,2,3].forEach((i,k)=>setTimeout(()=>set(i),1600+k*1800));});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-6">六、对产品的含义</h2>
+<p>存款与贷款，本质上是本章两个人之间那笔交易的放大。由此得到三条含义。第一，借贷的价值来自需要的时间错开：一个借贷产品服务的，是用户的现金流与别人的现金流在时间上的互补。第二，存款的回报来自借款人将来的收入，一个承诺只有在对方将来仍有收入时才可能兑现。第三，利率有下限也有上限，下限是储蓄者的其他选择，上限是借款人的处境；一个产品给出的利率，要放在这两个界限之间来看。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：两个人之间的金融</p><p class="figsub">四条结论，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="g02summary">重播</button></div>
+    <div class="g02summary" id="g02summary" data-anim><div class="g02summary-c" style="--i:0"><em>借贷</em><b>借出就是不会损耗的储藏</b><p>缺的时间不同的两个人互相借用，粮食不必在仓里腐坏。</p></div><div class="g02summary-c" style="--i:1"><em>约束</em><b>好处来自时间错开</b><p>两人同时缺粮，借贷帮不上忙；错开半年，好处最大。</p></div><div class="g02summary-c warn" style="--i:2"><em>利息</em><b>时间的价格有上下限</b><p>下限是出借人的其他选择，上限是借款人的处境；储藏会损耗时，下限可以为负。</p></div><div class="g02summary-c warn" style="--i:3"><em>承诺</em><b>借贷要求对方将来能还</b><p>借出的是今天的粮食，换回的是关于将来的承诺，它可能落空。</p></div></div>
+  </div>
+</figure>
+<style>
+.g02summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g02summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g02summary-c.warn{border-left-color:var(--warm)}
+.g02summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g02summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g02summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g02summary.in .g02summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g02summary{grid-template-columns:1fr}}
+</style>
+
+<h2 id="sec-7">参考文献</h2>
+<ul class="refs"><li>Böhm-Bawerk, E. von (1884). <i>Kapital und Kapitalzins. Erste Abtheilung: Geschichte und Kritik der Kapitalzins-Theorieen</i>. Innsbruck: Wagner.</li><li>Böhm-Bawerk, E. von (1891). <i>The Positive Theory of Capital</i> (W. Smart, Trans.). London: Macmillan. (Original work published 1889)</li><li>Homer, S., &amp; Sylla, R. (2005). <i>A History of Interest Rates</i> (4th ed.). Hoboken: John Wiley &amp; Sons.</li><li>最高人民法院（2020）。《最高人民法院关于审理民间借贷案件适用法律若干问题的规定》（2020 年第二次修正）。</li></ul>
+<footer class="nav"><a href="g-01.html">← 第 1 章　一个人，一年的收成</a><a href="g-03.html">第 3 章　借了不还怎么办 →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

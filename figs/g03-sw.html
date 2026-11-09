@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">利率越高，来借的人越可能不还</p><p class="figsub">村里七成是稳健的借款人，三成是冒险的借款人。拖动利率，看谁还愿意来借，以及出借人每借出 1 份平均能收回多少。</p></div><button class="replay" type="button" data-replay="sw">重播</button></div>
+    <div class="sw" id="sw" data-anim>
+      <svg viewBox="0 0 640 220" role="img" aria-label="利率与出借人的预期收益"><g id="sw-ax"></g><path id="sw-c" class="sw-c"/><circle id="sw-p" r="6" fill="var(--ink)"/></svg>
+      <div class="sw-who"><span id="sw-s">稳健的借款人</span><span id="sw-r">冒险的借款人</span></div>
+      <div class="sl"><label for="sw-i">利率 <b id="sw-iv"></b></label><input id="sw-i" type="range" min="0" max="100" step="2" value="20"></div>
+      <p class="sw-msg" id="sw-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：稳健的借款人一定还款，但利率高于 30% 就不愿再借；冒险的借款人只有一半能还，却愿意承受最高 100% 的利率。纵轴为出借人每借出 1 份的平均净收益。</figcaption>
+</figure>
+<style>
+.sw svg{width:100%;height:auto;display:block}
+.sw-c{fill:none;stroke:var(--accent);stroke-width:2.5}
+.sw-who{display:flex;gap:8px;margin:6px 0 10px}
+.sw-who span{font-size:12.5px;padding:4px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent);transition:opacity .3s}
+.sw-who span.out{opacity:.3;text-decoration:line-through}
+.sw-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.sw svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),X0=50,X1=630,YT=12,YB=186,x=r=>X0+r*(X1-X0),y=v=>YB-(v+.4)/.6*(YB-YT);
+  const E=r=>r<=.3+1e-9?(.7+.3*.5)*(1+r)-1:.5*(1+r)-1;
+  $('sw-ax').innerHTML=[-.4,-.2,0,.2].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="${v===0?'s-faint':'s-line'}"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v>0?'+':v<0?'−':''}${Math.abs(Math.round(v*100))}%</text>`).join('')+
+    [0,.2,.4,.6,.8,1].map(r=>`<text x="${x(r)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${Math.round(r*100)}%</text>`).join('');
+  let d='';for(let r=0;r<=1.0001;r+=.005){d+=(r?'L':'M')+x(r).toFixed(1)+','+y(E(r)).toFixed(1);}$('sw-c').setAttribute('d',d);
+  function draw(){const r=+$('sw-i').value/100,e=E(r);$('sw-p').setAttribute('cx',x(r));$('sw-p').setAttribute('cy',y(e));$('sw-iv').textContent=Math.round(r*100)+'%';
+    $('sw-s').classList.toggle('out',r>.3);
+    const pc=v=>(v<0?'−':'+')+Math.abs(v*100).toFixed(1)+'%';
+    $('sw-msg').textContent=r<=.3?`利率 ${Math.round(r*100)}%：两类人都来借，出借人每借出 1 份平均净收益 ${pc(e)}。利率在 30% 时最高。`:`利率超过 30%，稳健的借款人退出，只剩下一半会违约的冒险者，平均净收益跌到 ${pc(e)}。提价不但没有弥补违约，反而招来更多违约。`;}
+  $('sw-i').addEventListener('input',draw);
+  $('sw').addEventListener('anim-in',()=>{let v=0;$('sw-i').value=0;draw();const id=setInterval(()=>{v+=4;$('sw-i').value=v;draw();if(v>=80)clearInterval(id);},150);});
+  draw();
+})();
+</script>

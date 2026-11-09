@@ -1,0 +1,42 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Which gates do an individual investor's common tasks pass?</p><p class="figsub">Each row is a kind of task and the three columns are the three gates. The bar is the approximate share an agent can take on. Select a row for an explanation.</p></div><button class="replay" type="button" data-replay="fn">Replay</button></div>
+    <div class="fn" id="fn" data-anim>
+      <div class="fn-h"><span>Task</span><span>Reach</span><span>Allowed</span><span>Worth it</span><span>Share agent can take on</span></div>
+      <div id="fn-rows"></div>
+    </div>
+    <p class="fn-msg" id="fn-msg" aria-live="polite">Select a row.</p>
+  </div>
+  <figcaption>Illustrative judgement. "Partly" means the agent can prepare and execute, but key steps need the person's authorization or confirmation, or a conclusion the person must reach.</figcaption>
+</figure>
+<style>
+.fn-h,.fn-r{display:grid;grid-template-columns:minmax(0,1.4fr) 64px 64px 64px minmax(0,1.3fr);gap:8px;align-items:center}
+.fn-h{font-size:11.5px;color:var(--faint);padding:0 8px 4px}
+.fn-r{font:inherit;width:100%;text-align:left;background:var(--quote);border:1.5px solid transparent;border-radius:8px;padding:6px 8px;margin-bottom:4px;color:var(--ink);cursor:pointer;font-size:13px}
+.fn-r.sel{border-color:var(--ink)}
+.fn-r i{font-style:normal;font-size:11.5px;border-radius:5px;padding:2px 0;text-align:center}
+.fn-r i.y{background:var(--accent-soft);color:var(--accent)} .fn-r i.p{background:rgba(160,120,24,.15);color:var(--gold)} .fn-r i.n{background:var(--surface);color:var(--faint)}
+.fn-t{height:12px;background:var(--surface);border-radius:6px;overflow:hidden}
+.fn-t b{display:block;height:100%;width:0;background:var(--accent);border-radius:6px;transition:width .6s ease;transition-delay:calc(var(--i)*.1s)}
+.fn-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.fn-h,.fn-r{grid-template-columns:minmax(0,1fr) 52px 52px 52px}.fn-h span:last-child,.fn-t{display:none}}
+</style>
+<script>
+(function(){
+  const Y='y',P='p',N='n',L={y:'Yes',p:'Partly',n:'Moderate'};
+  const R=[['Look up a figure',Y,Y,P,95,'The result is information and can be handed over entirely; but each lookup saves little, so the value shows only when it happens often.'],
+    ['Explain an event',Y,Y,P,90,'The agent can give a well-grounded explanation; the understanding itself still happens in the person.'],
+    ['Research a company or a view',Y,Y,Y,75,'Gathering material, organizing data and drafting analysis can all be handed over; judgements and conclusions need the person\'s endorsement.'],
+    ['Screen and compare',Y,Y,Y,85,'When the criteria are clear, this can be handed over almost entirely.'],
+    ['Ongoing tracking',Y,Y,Y,90,'It recurs, and one clear explanation serves for a long time, making it the task most worth handing over.'],
+    ['Plan and place orders',Y,P,Y,55,'The agent can draft the plan, calculate and submit, but the person must confirm before an order is placed and decides how much to invest.'],
+    ['Manage a portfolio to goals',Y,P,Y,60,'The agent can carry out adjustments; the person sets the goals, constraints and scope of authority, and anything beyond that scope needs the person\'s approval.'],
+    ['Review',Y,P,P,50,'The agent can organize the facts and break down the causes; the lessons drawn must be the person\'s own.']];
+  document.getElementById('fn-rows').innerHTML=R.map(([n,a,b,c,s],i)=>`<button type="button" class="fn-r" data-i="${i}"><span>${n}</span><i class="${a}">${L[a]}</i><i class="${b}">${L[b]}</i><i class="${c}">${c==='y'?'Yes':'If frequent'}</i><div class="fn-t"><b style="--i:${i}" data-w="${s}"></b></div></button>`).join('');
+  const rs=[...document.querySelectorAll('.fn-r')],bs=[...document.querySelectorAll('.fn-t b')];
+  rs.forEach((r,i)=>r.addEventListener('click',()=>{rs.forEach(x=>x.classList.toggle('sel',x===r));document.getElementById('fn-msg').textContent=R[i][0]+': '+R[i][5];}));
+  const fill=()=>bs.forEach(b=>b.style.width=b.dataset.w+'%');
+  document.getElementById('fn').addEventListener('anim-in',()=>{bs.forEach(b=>b.style.width='0');setTimeout(fill,60);});
+  fill();
+})();
+</script>

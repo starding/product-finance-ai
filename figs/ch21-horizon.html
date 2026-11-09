@@ -1,0 +1,49 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">代理能独立完成多长的任务</p><p class="figsub">纵轴是任务由人类专业人员完成所需的时间（对数刻度）。曲线是代理能以一定把握完成的任务时长随时间的变化，虚线是按旧速度的外推。切换把握程度，并对照三类金融任务的长度。</p></div><button class="replay" type="button" data-replay="hz">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="把握程度">
+      <button type="button" data-hz="50" aria-pressed="true">五成把握</button>
+      <button type="button" data-hz="80" aria-pressed="false">八成把握</button>
+    </div>
+    <div class="hz" id="hz" data-anim>
+      <svg viewBox="0 0 640 250" role="img" aria-label="时间跨度的增长"><g id="hz-ax"></g><path id="hz-p" class="hz-l"/><path id="hz-f" class="hz-f"/><g id="hz-pts"></g></svg>
+      <p class="hz-msg" id="hz-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>实线与圆点为 METR 的时间跨度测量（任务集 v1.1，取各时点表现最好的模型），方法见 Kwa 等（2025）。五成把握的时间跨度在 2019—2025 年约每 7 个月翻一番，2023 年以来加快到约每 4 个月翻一番。虚线是自 2025 年初（约 1 小时）按每 7 个月翻一番的外推，2026 年的测量值已高于这条线。八成把握的时间跨度约为五成把握的四分之一至十分之一；超过 16 小时的测量值可靠性较低（METR，2026）。</figcaption>
+</figure>
+<style>
+.hz svg{width:100%;height:auto;display:block}
+.hz-l{fill:none;stroke:var(--accent);stroke-width:2.5}
+.hz-f{fill:none;stroke:var(--accent);stroke-width:2;stroke-dasharray:5 4}
+.hz-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.hz svg text{font-size:17px}}
+</style>
+<script>
+(function(){
+  const X0=70,X1=600,YT=14,YB=210,t0=2019,t1=2027,x=t=>X0+(t-t0)/(t1-t0)*(X1-X0);
+  const lmin=Math.log10(1/60),lmax=Math.log10(60*24*5),y=m=>YB-(Math.log10(m)-lmin)/(lmax-lmin)*(YB-YT);
+  // METR 时间跨度 v1.1 中各时点表现最好的模型：[发布时间, 五成把握分钟数, 八成把握分钟数]
+  const P=[[2019.12,0.0538,0.0128],[2020.41,0.144,0.0562],[2022.20,0.599,0.255],[2023.20,3.99,0.89],[2023.85,4.04,0.783],[2024.36,6.99,1.27],[2024.47,11.4,1.67],[2024.70,20.3,4.42],[2024.81,20.5,2.6],[2024.93,38.8,7.09],[2025.15,60.4,12.1],[2025.29,120,30],[2025.60,203,38.3],[2025.88,224,54.1],[2025.90,293,49.4],[2025.94,352,66],[2026.10,719,69.9],[2026.26,1045,186]];
+  const V=(r,k)=>k==='50'?r[1]:r[2];
+  // 虚线：自 2025 年初按每 7 个月翻一番的外推
+  const H=(t,k)=>(k==='50'?60.4:12.1)*Math.pow(2,(t-2025.15)*12/7);
+  const $=id=>document.getElementById(id);
+  const T=[[1,'查一个数据：约 1 分钟'],[240,'研究一家公司：约半天'],[60*24*3,'一次季度复盘：约三个工作日']];
+  let a=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`;
+  [[1/60,'1 秒'],[1,'1 分钟'],[60,'1 小时'],[60*24,'1 天']].forEach(([m,l])=>a+=`<text x="${X0-6}" y="${y(m)+4}" text-anchor="end" font-size="11" class="t-faint">${l}</text><line x1="${X0}" x2="${X1}" y1="${y(m)}" y2="${y(m)}" class="s-line"/>`);
+  [2019,2021,2023,2025,2027].forEach(t=>a+=`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${t}</text>`);
+  T.forEach(([m,l])=>a+=`<line x1="${X0}" x2="${X1}" y1="${y(m)}" y2="${y(m)}" stroke="var(--gold)" stroke-dasharray="2 3"/><text x="${X0+4}" y="${y(m)-4}" font-size="11" fill="var(--gold)">${l}</text>`);
+  $('hz-ax').innerHTML=a;
+  function set(k){document.querySelectorAll('[data-hz]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.hz===k)));
+    const pts=P.filter(r=>V(r,k)>=1/60);
+    let d='',f='',c='';pts.forEach(r=>{d+=(d?'L':'M')+x(r[0]).toFixed(1)+','+y(V(r,k)).toFixed(1);c+=`<circle cx="${x(r[0]).toFixed(1)}" cy="${y(V(r,k)).toFixed(1)}" r="3" fill="var(--accent)"/>`;});
+    for(let t=2025.15;t<=2026.8;t+=.05)f+=(f?'L':'M')+x(t).toFixed(1)+','+y(Math.min(H(t,k),60*24*5)).toFixed(1);
+    $('hz-p').setAttribute('d',d);$('hz-f').setAttribute('d',f);$('hz-pts').innerHTML=c;
+    const fmt=m=>m>=60?(m/60).toFixed(1)+' 小时':m.toFixed(0)+' 分钟';
+    $('hz-msg').textContent=k==='50'?`2026 年 4 月的测量值约为 ${fmt(V(P[P.length-1],k))}（超过 16 小时，可靠性较低），按每 7 个月翻一番外推同一时点只有约 ${fmt(H(2026.26,k))}；但只有一半把握的任务，交出去之后仍需逐项检查。`:`以八成把握计，2026 年上半年的测量值约为 ${fmt(V(P[P.length-2],k))}～${fmt(V(P[P.length-1],k))}：研究一家公司约需半天，仍长于这一长度，一次完整的季度复盘更远在其上。`;}
+  document.querySelectorAll('[data-hz]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.hz)));
+  $('hz').addEventListener('anim-in',()=>{set('50');setTimeout(()=>set('80'),2600);});
+  set('50');
+})();
+</script>

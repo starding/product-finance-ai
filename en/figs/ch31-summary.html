@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Book summary: designing financial products under three sets of constraints</p><p class="figsub">Four layers of design, each corresponding to a part of net value.</p></div><button class="replay" type="button" data-replay="ch31summary">Replay</button></div>
+    <div class="ch31summary" id="ch31summary" data-anim><div class="ch31summary-c" style="--i:0"><em>Value layer</em><b>Promise value that can be delivered and verified</b><p>Measure by net value, and place value in cost, discipline, behaviour and access.</p></div><div class="ch31summary-c" style="--i:1"><em>Contract layer</em><b>Agree authority according to consequences</b><p>Write instructions as a mandate, have the principal take the irreversible step, and put income and goals on the user's side.</p></div><div class="ch31summary-c warn" style="--i:2"><em>Implementation layer</em><b>Make implementation open to checking</b><p>Start with tasks that are easy to check, shorten unchecked stretches, keep point-in-time records, and keep assurance proportionate to risk.</p></div><div class="ch31summary-c warn" style="--i:3"><em>Trust</em><b>Earn proportionate trust with diagnostic evidence</b><p>Make evidence seen and hard to fake, disclose mistakes first, put defaults on the user's side, invite rather than lecture, and make leaving easy.</p></div></div>
+  </div>
+</figure>
+<style>
+.ch31summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch31summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch31summary-c.warn{border-left-color:var(--warm)}
+.ch31summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch31summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch31summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch31summary.in .ch31summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch31summary{grid-template-columns:1fr}}
+</style>

@@ -1,0 +1,38 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">每增加一条约束，可选的组合就少一些</p>
+    <p class="figsub">每个圆点是一个候选组合，横轴是风险，纵轴是预期回报（示意）。逐条勾选委托人的约束，看剩下哪些组合。</p>
+    <div class="cs-sl" id="cs-sl"></div>
+    <div class="cs" id="cs" data-anim>
+      <svg viewBox="0 0 640 230" role="img" aria-label="候选组合与约束"><g id="cs-ax"></g><g id="cs-pts"></g></svg>
+      <p class="cs-msg" id="cs-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意。五类约束参照投资政策说明书的通行分类（Maginn 等，2007）。</figcaption>
+</figure>
+<style>
+.cs-sl{display:flex;flex-wrap:wrap;gap:6px 14px;margin-bottom:6px}
+.cs-sl label{display:flex;gap:6px;align-items:center;font-size:13.5px;cursor:pointer}
+.cs-sl input{accent-color:var(--accent);width:16px;height:16px}
+.cs svg{width:100%;height:auto;display:block}
+.cs-p{transition:opacity .4s}
+.cs-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  let s=5;const rnd=()=>{s=(s*9301+49297)%233280;return s/233280;};
+  const P=Array.from({length:70},()=>{const r=2+rnd()*26,ret=1+r*.28+(rnd()-.5)*3;return {r,ret,cash:rnd()*40,turn:rnd(),deriv:rnd()<.18,sector:rnd()<.2};});
+  const C=[['流动性：至少 10% 随时可取',p=>p.cash>=10],['期限：五年后用钱，波动不超过 18%',p=>p.r<=18],['税务：不频繁换手',p=>p.turn<.7],['法律与监管：不用杠杆与衍生品',p=>!p.deriv],['个人偏好：不持有烟草公司',p=>!p.sector]];
+  const box=document.getElementById('cs-sl');box.innerHTML=C.map(([n],i)=>`<label><input type="checkbox" data-cs="${i}"> ${n}</label>`).join('');
+  const X0=50,X1=620,YT=14,YB=200,x=v=>X0+v/30*(X1-X0),y=v=>YB-v/11*(YB-YT);
+  document.getElementById('cs-ax').innerHTML=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/><line x1="${X0}" y1="${YT}" x2="${X0}" y2="${YB}" class="s-faint"/><text x="${X1}" y="${YB+16}" text-anchor="end" font-size="11" class="t-faint">风险 →</text><text x="${X0+6}" y="${YT+8}" font-size="11" class="t-faint">预期回报</text>`;
+  document.getElementById('cs-pts').innerHTML=P.map((p,i)=>`<circle class="cs-p" data-i="${i}" cx="${x(p.r)}" cy="${y(Math.max(.3,p.ret))}" r="5" fill="var(--accent)"/>`).join('');
+  const dots=[...document.querySelectorAll('.cs-p')],cb=[...document.querySelectorAll('[data-cs]')];
+  function r(){let n=0;P.forEach((p,i)=>{const ok=cb.every((c,j)=>!c.checked||C[j][1](p));dots[i].style.opacity=ok?1:.1;if(ok)n++;});
+    const k=cb.filter(c=>c.checked).length;document.getElementById('cs-msg').textContent=k===0?'没有约束时，70 个候选组合都可以选择，代理可能选中任何一个。':`加入 ${k} 条约束后，剩下 ${n} 个组合。${k===5?'剩下的每一个，都不会让委托人在事后发现“这不是我想要的”。':''}`;}
+  cb.forEach(c=>c.addEventListener('change',r));
+  document.getElementById('cs').addEventListener('anim-in',()=>{cb.forEach(c=>c.checked=false);r();cb.forEach((c,i)=>setTimeout(()=>{c.checked=true;r();},900*(i+1)));});
+  r();
+})();
+</script>

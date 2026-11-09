@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：没有改变的东西</p><p class="figsub">四条结论，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="g19summary">重播</button></div>
+    <div class="g19summary" id="g19summary" data-anim><div class="g19summary-c" style="--i:0"><em>时间</em><b>省得下费用，省不下年数</b><p>收入与需要到来的时刻不变，积累所需的年数也不变。</p></div><div class="g19summary-c" style="--i:1"><em>风险</em><b>分散不掉的仍要承担</b><p>个别风险几乎免费地分散掉，全村共同的风险一分不少。</p></div><div class="g19summary-c warn" style="--i:2"><em>补偿</em><b>没有不承担风险的高回报</b><p>只有分散不掉的风险才有补偿，代理不能让人站到直线上方。</p></div><div class="g19summary-c warn" style="--i:3"><em>不可逆</em><b>执行越快，越要留余地</b><p>有些损失挽回不了；保留选择的余地有价值，要在设计中刻意保留。</p></div></div>
+  </div>
+</figure>
+<style>
+.g19summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g19summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g19summary-c.warn{border-left-color:var(--warm)}
+.g19summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g19summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g19summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g19summary.in .g19summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g19summary{grid-template-columns:1fr}}
+</style>

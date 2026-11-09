@@ -1,0 +1,46 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">Which one is a real stock price?</p>
+    <p class="figsub">Of the four price charts below, pick the one that looks as if it came from a real stock.</p>
+    <div class="gu" id="gu"></div>
+    <p class="gu-msg" id="gu-msg" aria-live="polite"></p>
+    <button type="button" class="replay" id="gu-new">New set</button>
+  </div>
+  <figcaption>Modelled on Roberts (1959), who simulated weekly changes; this figure uses daily ones. Each chart starts at 100, each day’s change is drawn independently at random with a standard deviation of about 1.2%, over 250 trading days.</figcaption>
+</figure>
+<style>
+.gu{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.gu button{font:inherit;text-align:left;background:var(--surface);border:1.5px solid var(--line);border-radius:10px;padding:10px;cursor:pointer;color:var(--ink)}
+.gu button:hover{border-color:var(--accent)}
+.gu button svg{width:100%;height:auto;display:block}
+.gu button span{font-size:12px;color:var(--faint)}
+.gu polyline{fill:none;stroke:var(--ink);stroke-width:1.4;stroke-linejoin:round}
+.gu.done button{cursor:default}
+.gu.done polyline{stroke:var(--warm)}
+.gu.done button.pick{border-color:var(--warm);box-shadow:0 0 0 3px var(--warm-soft)}
+.gu-tag{display:none;font-size:12px;color:var(--warm);font-weight:700}
+.gu.done .gu-tag{display:inline}
+.gu-msg{font-size:14px;margin:12px 0 8px;min-height:1.7em}
+</style>
+<script>
+(function(){
+  const box=document.getElementById('gu'), msg=document.getElementById('gu-msg');
+  const gauss=()=>{let u=0,v=0;while(!u)u=Math.random();v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);};
+  function make(){
+    box.classList.remove('done'); msg.textContent='';
+    box.innerHTML=['A','B','C','D'].map(n=>{
+      let p=100,pts=[p];for(let i=0;i<250;i++){p*=Math.exp(0.0002+0.012*gauss());pts.push(p);}
+      const mn=Math.min(...pts),mx=Math.max(...pts);
+      const d=pts.map((v,i)=>`${(i/250*300).toFixed(1)},${(8+(1-(v-mn)/(mx-mn))*104).toFixed(1)}`).join(' ');
+      return `<button type="button"><svg viewBox="0 0 300 120" aria-hidden="true"><polyline points="${d}"/></svg><span>Chart ${n}</span> <span class="gu-tag">Randomly generated</span></button>`;
+    }).join('');
+    box.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
+      if(box.classList.contains('done'))return;
+      b.classList.add('pick'); box.classList.add('done');
+      msg.textContent='All four charts were generated from random numbers; none comes from a real stock. Random series also produce trends, reversals and “patterns”.';
+    }));
+  }
+  document.getElementById('gu-new').addEventListener('click',make);
+  make();
+})();
+</script>

@@ -1,0 +1,36 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Liquidity has a price</p><p class="figsub">Two ships have the same prospects, but their shares have different spreads. Drag the spread and the number of times a year holders trade, and see how much extra return the hard-to-sell ship must offer before buyers will hold it.</p></div><button class="replay" type="button" data-replay="pm8">Replay</button></div>
+    <div class="pm8" id="pm8" data-anim>
+      <div class="pm8-b"><span>Easy-to-sell ship</span><div><i id="pm8-a" style="background:var(--accent)"></i></div><b id="pm8-av"></b></div>
+      <div class="pm8-b"><span>Hard-to-sell ship</span><div><i id="pm8-c" style="background:var(--warm)"></i></div><b id="pm8-cv"></b></div>
+      <div class="pm8-sl">
+        <div class="sl"><label for="pm8-s">Spread on the hard-to-sell ship <b id="pm8-sv"></b></label><input id="pm8-s" type="range" min="0" max="10" step="0.5" value="2"></div>
+        <div class="sl"><label for="pm8-t">Holder trades per year <b id="pm8-tv"></b></label><input id="pm8-t" type="range" min="0" max="20" step="1" value="3"></div>
+      </div>
+      <p class="pm8-msg" id="pm8-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the easy-to-sell ship’s spread is taken as 0.2%, and the two ships are in balance when their returns after trading costs are equal; the extra return required each year is roughly spread × trades per year. Amihud and Mendelson (1986) also show that the longer an investor’s holding period, the better suited they are to holding hard-to-sell assets.</figcaption>
+</figure>
+<style>
+.pm8-b{display:grid;grid-template-columns:9em 1fr 4.5em;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.pm8-b div{height:18px;background:var(--quote);border-radius:4px;overflow:hidden}
+.pm8-b i{display:block;height:100%;transition:width .3s}
+.pm8-b b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.pm8-sl{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.pm8-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.pm8-sl{grid-template-columns:1fr;gap:4px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),tv=[.1,.2,.5,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,18,20],base=5;
+  function draw(){const s=+$('pm8-s').value/100,t=tv[+$('pm8-t').value],ra=base+.002*t*100,rc=base+s*t*100;
+    $('pm8-a').style.width=Math.min(100,ra/30*100)+'%';$('pm8-c').style.width=Math.min(100,rc/30*100)+'%';$('pm8-av').textContent=ra.toFixed(1)+'%';$('pm8-cv').textContent=rc.toFixed(1)+'%';
+    $('pm8-sv').textContent=(s*100).toFixed(1)+'%';$('pm8-tv').textContent=(t<1?t.toFixed(1):t)+(t===1?' time':' times');
+    $('pm8-msg').textContent=`With a spread of ${(s*100).toFixed(1)}% and ${t<1?t.toFixed(1):t} trade${t===1?'':'s'} a year, the hard-to-sell ship must offer about ${(rc-ra).toFixed(1)} percentage points more return a year.${t<=1?' Holders rarely trade, so poor liquidity costs them almost nothing: long-term holders can “sell” liquidity and collect this compensation.':' The more often holders trade, the higher the cost of poor liquidity.'}`;}
+  ['pm8-s','pm8-t'].forEach(k=>$(k).addEventListener('input',draw));
+  $('pm8').addEventListener('anim-in',()=>{let v=0;$('pm8-t').value=v;draw();const id=setInterval(()=>{v++;$('pm8-t').value=v;draw();if(v>=8){clearInterval(id);setTimeout(()=>{$('pm8-t').value=3;draw();},600);}},250);});
+  draw();
+})();
+</script>

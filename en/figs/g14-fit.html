@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">From one arrangement to one for each household</p><p class="figsub">Each of forty households has its own best share in ship shares (dots), depending on age, whether its income is stable and whether it will need a large sum in a few years. The short bars show the share actually received. Switch among three arrangements to see the average gap.</p></div><button class="replay" type="button" data-replay="ft14">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Arrangement">
+      <button type="button" data-ft14="one" aria-pressed="true">One for all</button>
+      <button type="button" data-ft14="age" aria-pressed="false">Tiered by age</button>
+      <button type="button" data-ft14="own" aria-pressed="false">Personal to each household</button>
+    </div>
+    <div class="ft14" id="ft14" data-anim>
+      <svg viewBox="0 0 660 220" role="img" aria-label="Best share and actual share"><g id="ft14-g"></g></svg>
+      <div class="legend"><span><i style="background:var(--accent);border-radius:50%"></i>Best share</span><span><i style="background:var(--ink)"></i>Share actually received</span><span><i style="background:var(--warm)"></i>Gap</span></div>
+      <p class="ft14-msg" id="ft14-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: forty households arranged from youngest to oldest. The best share falls with age and moves up or down with each household's income and spending plans; "tiered by age" takes the average within each of four age bands.</figcaption>
+</figure>
+<style>
+.ft14 svg{width:100%;height:auto;display:block}
+.ft14-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.ft14 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('ft14'+id);let s=1415;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};
+  const N=40,I=Array.from({length:N},(_,i)=>Math.max(.05,Math.min(.95,.9-.6*i/(N-1)+(r()-.5)*.45)));
+  const X0=50,X1=628,YT=12,YB=180,x=i=>X0+(i+.5)/N*(X1-X0),y=v=>YB-v*(YB-YT);let mode='one';
+  const avg=a=>a.reduce((p,q)=>p+q,0)/a.length;
+  function given(){if(mode==='own')return I.slice();if(mode==='one'){const m=avg(I);return I.map(()=>m);}return I.map((_,i)=>{const k=Math.floor(i/10);return avg(I.slice(k*10,k*10+10));});}
+  function draw(){const G=given();let h=[0,.25,.5,.75,1].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text>`).join('')+`<text x="${X0}" y="${YB+16}" font-size="11" class="t-faint">Younger</text><text x="${X1}" y="${YB+16}" text-anchor="end" font-size="11" class="t-faint">Older</text>`;
+    I.forEach((v,i)=>{h+=`<line x1="${x(i)}" x2="${x(i)}" y1="${y(v)}" y2="${y(G[i])}" stroke="var(--warm)" stroke-width="2"/><line x1="${x(i)-6}" x2="${x(i)+6}" y1="${y(G[i])}" y2="${y(G[i])}" stroke="var(--ink)" stroke-width="2"/><circle cx="${x(i)}" cy="${y(v)}" r="4.2" fill="var(--accent)"/>`;});
+    $('-g').innerHTML=h;const dev=avg(I.map((v,i)=>Math.abs(v-G[i])))*100;
+    $('-msg').textContent={one:`One for all: every household gets the same share, with an average gap of ${dev.toFixed(0)} percentage points; the young are too cautious and the old take too much risk.`,age:`Tiered by age: the average gap falls to ${dev.toFixed(0)} percentage points, but households in the same age band with different incomes and spending plans still get the same arrangement.`,own:'Personal to each household: every household gets its own best share. In the past, only households that could afford a steward had arrangements like this.'}[mode];}
+  const bs=[...document.querySelectorAll('[data-ft14]')];
+  function set(m){mode=m;bs.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.ft14===m)));draw();}
+  bs.forEach(b=>b.addEventListener('click',()=>set(b.dataset.ft14)));
+  $('').addEventListener('anim-in',()=>{['one','age','own'].forEach((m,i)=>setTimeout(()=>set(m),300+i*2200));});
+  draw();
+})();
+</script>

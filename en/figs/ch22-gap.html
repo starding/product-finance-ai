@@ -1,0 +1,40 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Tasks cheaper to check than to produce are the best to hand over</p><p class="figsub">The horizontal axis is the time to do the task oneself; the vertical axis is the time to check a finished result (both logarithmic). Below the diagonal, checking is cheaper than producing. Select an item for an explanation.</p></div><button class="replay" type="button" data-replay="gp">Replay</button></div>
+    <div class="gp" id="gp" data-anim>
+      <svg viewBox="0 0 640 300" role="img" aria-label="Cost of producing and cost of checking"><g id="gp-ax"></g><g id="gp-pts"></g></svg>
+      <p class="gp-msg" id="gp-msg" aria-live="polite">Select an item.</p>
+    </div>
+  </div>
+  <figcaption>Illustrative positions showing relative relationships. On the gap in difficulty between verifying and solving, see Cook (1971).</figcaption>
+</figure>
+<style>
+.gp svg{width:100%;height:auto;display:block}
+.gp-p{cursor:pointer;opacity:0;transition:opacity .4s;transition-delay:calc(var(--i)*.15s)}
+.gp.in .gp-p{opacity:1}
+.gp-p.sel circle{stroke:var(--ink);stroke-width:2.5}
+.gp-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.gp svg text{font-size:17px}}
+</style>
+<script>
+(function(){
+  const T=[['Solve a sudoku',40,1,'Finding the answer takes repeated trial, while checking takes one pass through each row and column: checking is dozens of times cheaper than producing.'],
+    ['Port code (with tests)',240,10,'Automated tests and compilation give a verdict within minutes; this is the kind of task with the highest amplification factor for an agent.'],
+    ['Compute annualized return',15,3,'It can be checked by recomputing with a program or another method, provided the data sources are clear.'],
+    ['Look up a figure (sourced)',3,1,'Opening the source to compare is enough; without a source, checking means looking it up again.'],
+    ['Translate a filing',60,20,'Reading it through to check still takes a fair amount of time, but much less than translating again.'],
+    ['Write a research summary',120,45,'Facts and citations must be checked one by one, and the choice of what to include must be judged.'],
+    ['Judge a research conclusion',180,170,'Checking amounts almost to redoing the research: verifying is no cheaper than producing.'],
+    ['Judge an investment',120,600,'The result is affected by luck and takes a long time to emerge; it can hardly be checked in the short run, which makes checking dearer than producing.']];
+  const X0=70,X1=610,YT=22,YB=256,lo=Math.log10(.8),hi=Math.log10(800),x=v=>X0+(Math.log10(v)-lo)/(hi-lo)*(X1-X0),y=v=>YB-(Math.log10(v)-lo)/(hi-lo)*(YB-YT);
+  const $=id=>document.getElementById(id);
+  let a=`<path d="M${x(.8)},${y(.8)}L${x(800)},${y(800)}L${x(800)},${y(.8)}Z" fill="var(--accent-soft)" opacity=".6"/><line x1="${x(.8)}" y1="${y(.8)}" x2="${x(800)}" y2="${y(800)}" stroke="var(--faint)" stroke-dasharray="4 4"/>`+
+    `<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/><line x1="${X0}" y1="${YT}" x2="${X0}" y2="${YB}" class="s-faint"/>`;
+  [[1,'1 min'],[10,'10 min'],[60,'1 hr'],[600,'10 hr']].forEach(([v,l])=>{a+=`<text x="${x(v)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${l}</text><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${l}</text>`;});
+  a+=`<text x="${X1}" y="${YB+32}" text-anchor="end" font-size="11" class="t-faint">Time to do it oneself →</text><text x="${X0}" y="${YT-2}" font-size="11" class="t-faint">Time to check</text>`;
+  $('gp-ax').innerHTML=a;
+  $('gp-pts').innerHTML=T.map(([n,g,c],i)=>{const r=c/g,col=r<.2?'var(--accent)':r<.6?'var(--gold)':'var(--warm)',left=g>=100;const up=i===3;return `<g class="gp-p" data-i="${i}" style="--i:${i}"><circle cx="${x(g)}" cy="${y(c)}" r="7" fill="${col}"/><text x="${up?x(g):x(g)+(left?-11:11)}" y="${up?y(c)-12:y(c)+4}" text-anchor="${up?'middle':left?'end':'start'}" font-size="12" class="t-ink">${n}</text></g>`;}).join('');
+  const ps=[...document.querySelectorAll('.gp-p')];
+  ps.forEach((p,i)=>p.addEventListener('click',()=>{ps.forEach(q=>q.classList.toggle('sel',q===p));$('gp-msg').textContent=T[i][0]+': '+T[i][3];}));
+})();
+</script>

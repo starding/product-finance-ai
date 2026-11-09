@@ -1,0 +1,32 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Borrowing to build a ship: how high must the rate be for lenders to break even?</p><p class="figsub">The captain has no grain of his own and borrows 100 portions from the village to build the ship. Drag the interest rate and see the expected gain of the lenders and of the captain.</p></div><button class="replay" type="button" data-replay="db">Replay</button></div>
+    <div class="db" id="db" data-anim>
+      <div class="db-b"><span>Lenders’ expected net gain</span><div class="db-t"><i id="db-a"></i></div><b id="db-av"></b></div>
+      <div class="db-b"><span>Captain’s expected gain</span><div class="db-t"><i id="db-c"></i></div><b id="db-cv"></b></div>
+      <div class="sl"><label for="db-r">Interest rate <b id="db-rv"></b></label><input id="db-r" type="range" min="0" max="150" step="5" value="10"></div>
+      <p class="db-msg" id="db-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: if the ship returns (70%), the cargo is worth 250 portions; principal and interest are repaid first and the rest goes to the captain. If it sinks (30%), the captain has nothing and the lenders recover nothing.</figcaption>
+</figure>
+<style>
+.db-b{display:grid;grid-template-columns:9em 1fr 4.5em;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.db-t{position:relative;height:16px;background:var(--quote);border-radius:4px}
+.db-t::before{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;border-left:1px solid var(--faint)}
+.db-t i{position:absolute;top:0;height:100%;border-radius:4px;transition:left .3s,width .3s}
+.db-b b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.db-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  function bar(el,v,M){const w=Math.min(50,Math.abs(v)/M*50);el.style.left=(v>=0?50:50-w)+'%';el.style.width=w+'%';el.style.background=v>=0?'var(--accent)':'var(--warm)';}
+  function draw(){const r=+$('db-r').value/100,rep=Math.min(250,100*(1+r)),lend=.7*rep-100,cap=.7*(250-rep);
+    bar($('db-a'),lend,80);bar($('db-c'),cap,80);$('db-av').textContent=(lend>=0?'+':'−')+Math.abs(lend).toFixed(0);$('db-cv').textContent=cap.toFixed(0);$('db-rv').textContent=Math.round(r*100)+'%';
+    $('db-msg').textContent=lend<0?`At ${Math.round(r*100)}%: lenders face a 30% chance of losing everything and an expected loss of ${Math.abs(lend).toFixed(0)} portions, so they will not lend. The rate must reach at least about 43% just to break even.`:cap<20?`At ${Math.round(r*100)}%: lenders no longer lose, but even if the voyage succeeds the captain is left with little, so it is not worth the risk.`:`At ${Math.round(r*100)}%: lenders just about break even, and the captain keeps something if the voyage succeeds. But a 30% chance of losing everything deters most lenders.`;}
+  $('db-r').addEventListener('input',draw);
+  $('db').addEventListener('anim-in',()=>{let v=0;$('db-r').value=0;draw();const id=setInterval(()=>{v+=5;$('db-r').value=v;draw();if(v>=120)clearInterval(id);},150);});
+  draw();
+})();
+</script>

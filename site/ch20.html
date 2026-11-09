@@ -1,0 +1,851 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>哪些事务能交给 AI</title>
+<meta name="description" content="《产品×金融×AI：AI 时代的金融产品》第 20 章：交出去的是一个问题、一件事还是一项持续的责任；一件事能否交给 AI，取决于代理能否触及、是否允许代办、是否值得交出；代理具备的条件决定适用比例，适用比例决定整体放大倍数的上限">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="ch20">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="全书目录">
+<div class="side-head"><a class="sidetitle" href="index.html">产品×金融×AI<small>AI 时代的金融产品</small></a></div>
+<div class="side-view" role="group" aria-label="阅读方式"><a href="preface.html" class="on" aria-current="true">分解式</a><a href="g-preface.html">生成式</a></div>
+<a class="side-about" href="index.html#about">关于本书</a>
+<a class="" href="preface.html"><span class="n">序</span>为什么金融产品在 AI 时代需要重新学</a>
+<a class="side-part" href="part1.html"><span class="pn">第一部分</span>市场：收益与风险从何而来</a>
+<a class="" href="ch01.html"><span class="n">1</span>金融产品卖的是什么</a>
+<a class="" href="ch02.html"><span class="n">2</span>利率与期限</a>
+<a class="" href="ch03.html"><span class="n">3</span>风险长什么样</a>
+<a class="" href="ch04.html"><span class="n">4</span>分散：哪些风险有补偿</a>
+<a class="" href="ch05.html"><span class="n">5</span>复利与波动拖累</a>
+<a class="" href="ch06.html"><span class="n">6</span>因子：风险补偿可以分解</a>
+<a class="" href="ch07.html"><span class="n">7</span>价格为什么难以预测</a>
+<a class="" href="ch08.html"><span class="n">8</span>信息如何进入价格</a>
+<a class="" href="ch09.html"><span class="n">9</span>市场里的交易者</a>
+<a class="" href="ch10.html"><span class="n">10</span>流动性与买卖价差</a>
+<a class="" href="ch11.html"><span class="n">11</span>订单、规则与市场结构</a>
+<a class="" href="ch12.html"><span class="n">12</span>主动管理的算术</a>
+<a class="" href="ch13.html"><span class="n">13</span>承诺如何被兑现</a>
+<a class="" href="ch14.html"><span class="n">14</span>监管为何存在</a>
+<a class="side-part" href="part2.html"><span class="pn">第二部分</span>用户：人要什么、能承受什么</a>
+<a class="" href="ch15.html"><span class="n">15</span>用户要完成的任务</a>
+<a class="" href="ch16.html"><span class="n">16</span>用户如何做决定</a>
+<a class="" href="ch17.html"><span class="n">17</span>用户能承受什么</a>
+<a class="" href="ch18.html"><span class="n">18</span>用户如何判断与信任</a>
+<a class="side-part" href="part3.html"><span class="pn">第三部分</span>AI：代理能替人做多少</a>
+<a class="" href="ch19.html"><span class="n">19</span>放大倍数：理论与实测</a>
+<a class=" cur" href="ch20.html" aria-current="page"><span class="n">20</span>哪些事务能交给 AI</a>
+<a class="" href="ch21.html"><span class="n">21</span>能力从哪里来、在哪里失效</a>
+<a class="" href="ch22.html"><span class="n">22</span>可验证性：核对的成本</a>
+<a class="" href="ch23.html"><span class="n">23</span>金融场景的特殊约束</a>
+<a class="side-part" href="part4.html"><span class="pn">第四部分</span>设计：在三组约束下设计金融产品</a>
+<a class="" href="ch24.html"><span class="n">24</span>承诺什么</a>
+<a class="" href="ch25.html"><span class="n">25</span>委托参数：交代的目标与约束</a>
+<a class="" href="ch26.html"><span class="n">26</span>授权与不可逆敞口</a>
+<a class="" href="ch27.html"><span class="n">27</span>责任与利益冲突</a>
+<a class="" href="ch28.html"><span class="n">28</span>能力装配与过程可见</a>
+<a class="" href="ch29.html"><span class="n">29</span>保障强度</a>
+<a class="" href="ch30.html"><span class="n">30</span>信任如何建立</a>
+<a class="" href="ch31.html"><span class="n">31</span>设计原则</a>
+<a class="side-app" href="estimates.html"><span class="n">附录</span>作者估算的方法与数据</a>
+<a class="side-app" href="method.html"><span class="n">附录</span>本书的写法</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="展开目录" title="目录"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">产品×金融×AI：AI 时代的金融产品</a><span>第三部分　AI：代理能替人做多少</span><a class="langlink" href="en/ch20.html" hreflang="en">English</a></header>
+
+<div class="chapno">第 20 章</div><h1>哪些事务能交给 AI<small>适用范围决定放大倍数的上限</small></h1>
+<blockquote><p>一件事能否交给 AI 代理，要过三道关。第一，代理能否触及：事务的结果落在信息与权利义务上，代理可以直接作用；落在人的身体与物理世界上，代理只能间接帮忙。第二，是否允许代办：有些事必须本人亲历、亲自决定或亲自到场，法律也会要求本人作出。第三，是否值得交出：交代一件事有固定的成本，只做一次的小事不值得。通过三道关的部分占整件事的比例，决定了放大倍数的上限：代理只能完成三成的工作时，即使这三成瞬间完成，整体也只快了四成多。这个比例不是事务固有的属性，而由代理具备的条件决定：只凭对话材料、接入数据与工具、能到现场操作，上限依次升高。</p></blockquote>
+<h2 id="sec-1">一、交出去的是什么：一个问题、一件事、一项持续的责任</h2>
+<p>交给代理的东西有三种尺度。第一种是一个问题：委托人提问，代理回答，双方同时在场，一次往往只有几分钟；代理只在被提问时工作，此后不会再发生任何事。第二种是一件有交付物的事：委托人交代目标后离开，代理运行几分钟到几小时，完成后委托人回来验收。第三种是一项持续的责任，例如长期照看一组资产：到了约定的时间或外部发生变化时，代理检查、记录，必要时报告，前后可达数月乃至数年。协同工作研究用同时与异时区分协作方式（约翰森，1988）：会议与电话是同时协作，邮件与共享文档是异时协作。三种尺度依次是同时、有边界的异时与持续的异时。</p>
+<p>尺度变大，委托人最稀缺的资源也随之变化。交出一个问题，稀缺的是等待的时间，回答要快；交出一件事，稀缺的是信任，交出去要能办成；交出一项持续的责任，大多数接触由代理发起，稀缺的是委托人的注意力。持续的异时因此带来三项要求：打扰要分层，大多数检查只记录、不打扰；过去要能核查，记录写明当时的状态与依据；将来要可见，委托人提前知道什么时候必须作出决定。三种尺度逐层包含：一项责任之内有许多件事，一件事之内有许多个问题。尺度更大并不更高级，一次查询不需要长期关系，只有需要长期照看、按条件回来的事才需要。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">交出去的东西有三种尺度</p><p class="figsub">点选一种尺度，看时间关系、代理自己的时间、留下什么，以及委托人最稀缺的资源。三种尺度逐层包含。</p></div><button class="replay" type="button" data-replay="sc">重播</button></div>
+    <div class="sc" id="sc" data-anim>
+      <div class="sc-nest" aria-hidden="true">
+        <div class="sc-box b2" data-sc="2"><span>一项持续的责任</span>
+          <div class="sc-box b1" data-sc="1"><span>一件有交付物的事</span>
+            <div class="sc-box b0" data-sc="0"><span>一个问题</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="sc-side">
+        <div class="seg-btns" role="group" aria-label="尺度">
+          <button type="button" data-scb="0" aria-pressed="false">一个问题</button>
+          <button type="button" data-scb="1" aria-pressed="false">一件事</button>
+          <button type="button" data-scb="2" aria-pressed="true">一项持续的责任</button>
+        </div>
+        <dl class="sc-d" id="sc-d" aria-live="polite"></dl>
+      </div>
+    </div>
+    <div class="sc-req" id="sc-req"><b>持续的异时带来的三项要求</b>
+      <span><em>打扰要分层</em>代理醒来的次数远多于委托人愿意被打扰的次数，大多数检查只记录、不打扰</span>
+      <span><em>过去要能核查</em>委托人多不在场，事后核查依靠记录，记录要写明当时的状态与依据</span>
+      <span><em>将来要可见</em>委托人提前知道什么时候必须决定，哪些事落在同一天</span>
+    </div>
+  </div>
+  <figcaption>同时与异时的划分见 Johansen（1988）的协作时间—空间矩阵；三种尺度与三项要求为作者的归纳。</figcaption>
+</figure>
+<style>
+.sc{display:grid;grid-template-columns:minmax(200px,40%) 1fr;gap:18px;align-items:start}
+.sc-box{border-radius:12px;padding:26px 10px 10px;position:relative;transition:background .4s,box-shadow .4s,opacity .5s,transform .5s;opacity:0;transform:scale(.94)}
+.sc.in .sc-box{opacity:1;transform:none}
+.sc-box>span{position:absolute;top:6px;left:10px;font-size:12px;color:var(--muted)}
+.sc-box.b2{background:var(--quote);min-height:210px;transition-delay:.0s}
+.sc-box.b1{background:var(--surface);min-height:150px;transition-delay:.25s}
+.sc-box.b0{background:var(--quote);min-height:70px;transition-delay:.5s}
+.sc-box.on{box-shadow:0 0 0 2px var(--accent)} .sc-box.on>span{color:var(--accent);font-weight:600}
+.sc-d{display:grid;grid-template-columns:7.2em 1fr;gap:6px 12px;margin:0;font-size:13.5px;line-height:1.6}
+.sc-d dt{color:var(--faint);font-size:12px;padding-top:2px} .sc-d dd{margin:0}
+.sc-req{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px;transition:opacity .4s}
+.sc-req b{grid-column:1/-1;font-size:13px}
+.sc-req span{background:var(--accent-soft);border-radius:8px;padding:8px 10px;font-size:12.5px;line-height:1.55;color:var(--muted)}
+.sc-req em{display:block;font-style:normal;font-weight:600;color:var(--ink);font-size:13.5px}
+.sc-req.dim{opacity:.35}
+@media (max-width:640px){.sc{grid-template-columns:1fr}.sc-box.b2{min-height:170px}.sc-req{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const K=['交出去的','时间关系','时间跨度','代理自己的时间','完成后留下什么','最稀缺的资源'];
+  const D=[['一个问题：回答我','同时：委托人在场等待','秒到分钟','没有：只在被提问时工作','一份回答','委托人等待的时间：回答要快'],
+    ['一件有交付物的事：替我完成它','有边界的异时：交代之后离开，完成时回来验收','分钟到数小时','运行期间有，完成即停止','交付物，以及做事的规则与配置','委托人的信任：交出去能不能办成'],
+    ['一项持续的责任：持续照看它','持续的异时：双方各有自己的时间，间歇接触','数周到数年，直到委托结束','有：大多数时候休眠，到约定的时间或外部发生变化时醒来','目标、触发条件、授权与履约记录','委托人的注意力：什么时候值得打扰']];
+  const d=document.getElementById('sc-d'),req=document.getElementById('sc-req');
+  function set(k){document.querySelectorAll('[data-scb]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.scb===k)));
+    document.querySelectorAll('.sc-box').forEach(b=>b.classList.toggle('on',+b.dataset.sc===k));
+    d.innerHTML=K.map((x,i)=>`<dt>${x}</dt><dd>${D[k][i]}</dd>`).join('');req.classList.toggle('dim',k!==2);}
+  document.querySelectorAll('[data-scb]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.scb)));
+  document.getElementById('sc').addEventListener('anim-in',()=>{[0,1,2].forEach((k,i)=>setTimeout(()=>set(k),600+i*1800));});
+  set(2);
+})();
+</script>
+
+<h2 id="sec-2">二、人类事务的五类：结果落在哪里</h2>
+<p>区分事务的一个简明方法，是看它的结果最终改变了什么。按这个标准，人类事务可以分为五类：改变本人的身心，例如锻炼与学习；改变他人的身心与关系，例如照护与谈判；改变物与环境，例如做饭与修理；改变信息，例如写报告与做分析；改变权利与义务，例如签约、转账与下单。奥托尔、利维与默南（2003）按“常规与非常规、认知与手工”划分工作任务，用来解释计算机替代了哪些工作；按结果落在哪里来分，则更直接地回答代理能否作用于这件事。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">按结果落在哪里，人类事务分为五类</p><p class="figsub">点按一类，查看例子，以及 AI 代理能否直接改变这类事务的结果。</p></div><button class="replay" type="button" data-replay="fv">重播</button></div>
+    <div class="fv" id="fv" data-anim></div>
+    <p class="fv-msg" id="fv-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>本书的分类：按事务的结果最终改变了什么来划分。与 Autor、Levy 与 Murnane（2003）按“常规与非常规、认知与手工”的划分互为补充。</figcaption>
+</figure>
+<style>
+.fv{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.fv-c{font:inherit;text-align:left;border:1.5px solid var(--line);border-radius:10px;padding:10px;background:var(--surface);color:var(--ink);cursor:pointer;display:flex;flex-direction:column;gap:4px;opacity:0;transform:translateY(8px);transition:opacity .4s,transform .4s,border-color .2s;transition-delay:calc(var(--i)*.15s)}
+.fv.in .fv-c{opacity:1;transform:none}
+.fv-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.fv-c b{font-size:14.5px}
+.fv-c span{font-size:12px;color:var(--muted);line-height:1.5}
+.fv-c i{font-style:normal;font-size:11.5px;border-radius:5px;padding:2px 6px;margin-top:auto;align-self:flex-start}
+.fv-c.d i{background:var(--accent-soft);color:var(--accent)}
+.fv-c.n i{background:var(--quote);color:var(--faint)}
+.fv-c.d{background:color-mix(in srgb,var(--accent) 6%,var(--surface))}
+.fv-c.sel{border-color:var(--ink)}
+.fv-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.fv{grid-template-columns:1fr 1fr}}
+</style>
+<script>
+(function(){
+  const T=[['本人的身心','锻炼、学习、休息、治疗',0,'结果落在本人身上：代理可以安排计划、讲解知识，但锻炼与学习只能由本人完成。'],
+    ['他人的身心与关系','照护、教育孩子、谈判、维系关系',0,'结果落在他人与关系上：代理可以准备材料、起草消息，关系本身仍要由人来经营。'],
+    ['物与环境','做饭、修理、搬运、种植',0,'结果落在物理世界：没有身体的代理只能给出建议与清单，具身的机器人仍在早期。'],
+    ['信息','写报告、做分析、查资料、翻译',1,'结果本身就是信息：代理可以直接完成，这是当前适用比例最高的一类。'],
+    ['权利与义务','签约、转账、下单、报税',1,'结果是权利与义务的变化：借助工具，代理可以替人提交与执行，但往往需要本人授权。']];
+  const box=document.getElementById('fv');
+  box.innerHTML=T.map(([n,e,d],i)=>`<button type="button" class="fv-c ${d?'d':'n'}" style="--i:${i}" data-i="${i}"><em>第 ${i+1} 类</em><b>${n}</b><span>${e}</span><i>${d?'代理可以直接作用':'代理只能间接帮忙'}</i></button>`).join('');
+  const bs=[...box.children],m=document.getElementById('fv-msg');
+  const sel=i=>{bs.forEach((b,j)=>b.classList.toggle('sel',j===i));m.textContent=T[i][3];};
+  bs.forEach((b,i)=>b.addEventListener('click',()=>sel(i)));sel(3);
+})();
+</script>
+
+<h2 id="sec-3">三、第一道关：代理能否触及</h2>
+<p>大语言模型的输入与输出都是信息，加上工具之后，还可以替人提交表单、调用接口、执行交易，即改变权利与义务。改变身体与物理世界的事务，它只能间接参与：给出建议、生成清单、安排日程。埃隆杜等人（2023）逐项评估了美国职业的工作任务，估计约 80% 的就业者至少有一成任务可以被大语言模型明显加快，约 19% 的就业者有一半以上的任务如此；把可调用的工具考虑在内，可被明显加快的任务比例进一步上升。可触及的范围，随工具的增加而扩大。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">可触及的范围随工具扩大</p><p class="figsub">每个方格代表美国全部工作任务的 1%。切换：只用大语言模型，或者加上建立在模型之上的软件与工具，有多少任务可以在质量不变的情况下明显加快。</p></div><button class="replay" type="button" data-replay="rc">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="条件">
+      <button type="button" data-rc="m" aria-pressed="true">只用模型</button>
+      <button type="button" data-rc="t" aria-pressed="false">模型加工具</button>
+    </div>
+    <div class="rc" id="rc" data-anim>
+      <div class="rc-g" id="rc-g"></div>
+      <p class="rc-msg" id="rc-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>数字来自 Eloundou、Manning、Mishkin 与 Rock（2023）预印本基于美国职业任务数据库的估计：只用模型约 15%，加上工具为 47%～56%，浅色方格表示区间。估计的是“可以被明显加快”，不等于已经被采用。2024 年发表于《科学》的版本改按岗位计算，采用了不同口径。</figcaption>
+</figure>
+<style>
+.rc-g{display:grid;grid-template-columns:repeat(20,1fr);gap:3px}
+.rc-g i{aspect-ratio:1;border-radius:3px;background:var(--quote);transition:background .25s;transition-delay:calc(var(--i)*5ms)}
+.rc-g i.on{background:var(--accent)} .rc-g i.rg{background:var(--accent-soft)}
+.rc-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const g=document.getElementById('rc-g');g.innerHTML=Array.from({length:100},(_,i)=>`<i style="--i:${i}"></i>`).join('');const cs=[...g.children];
+  function set(k){document.querySelectorAll('[data-rc]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.rc===k)));
+    const a=k==='m'?15:47,b=k==='m'?15:56;cs.forEach((c,i)=>c.className=i<a?'on':i<b?'rg':'');
+    document.getElementById('rc-msg').textContent=k==='m'?'只用模型时，约 15% 的任务可以明显加快：主要是写作、整理与查找信息这类结果本身就是信息的任务。':'加上检索、代码执行与各种业务软件之后，比例上升到约一半：工具把代理的作用范围从生成信息扩展到操作系统、提交表单与执行交易。';}
+  document.querySelectorAll('[data-rc]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.rc)));
+  document.getElementById('rc').addEventListener('anim-in',()=>{cs.forEach(c=>c.className='');setTimeout(()=>set('m'),100);setTimeout(()=>set('t'),2600);});
+  set('m');
+})();
+</script>
+
+<h2 id="sec-4">四、适用比例决定上限</h2>
+<p>一件事中只要有一部分代理做不了，这部分就仍由委托人完成。设代理能承担的比例为 a，它把这部分的投入缩短为原来的 1/k，整体的放大倍数就是 1 ÷ [(1 − a) + a ÷ k]。这与计算机体系结构中的阿姆达尔定律（1967）同一形式：无论 k 多大，放大倍数都不会超过 1 ÷ (1 − a)。代理能承担三成工作时，上限约为 1.4 倍；承担九成时，上限是 10 倍。提高适用比例，往往比提高代理的速度重要得多。</p>
+<figure>
+  <div class="card">
+    <p class="figtitle">适用比例决定上限</p>
+    <p class="figsub">拖动代理能承担的比例，并选择代理把这部分投入缩短多少倍，看整体的放大倍数。虚线是代理瞬间完成时的上限。</p>
+    <div class="am" id="am" data-anim>
+      <div class="seg-btns" role="group" aria-label="代理承担部分的加速">
+        <button type="button" data-am="2" aria-pressed="false">快 2 倍</button>
+        <button type="button" data-am="10" aria-pressed="true">快 10 倍</button>
+        <button type="button" data-am="100" aria-pressed="false">快 100 倍</button>
+      </div>
+      <svg viewBox="0 0 640 240" role="img" aria-label="适用比例与整体放大倍数"><g id="am-ax"></g><path id="am-cap" class="am-cap"/><path id="am-p" class="am-l"/><g id="am-ex"></g><circle id="am-d" r="6" fill="var(--ink)"/></svg>
+      <div class="sl"><label for="am-a">代理能承担的比例 <b id="am-av"></b></label><input id="am-a" type="range" min="0" max="95" step="1" value="30"></div>
+      <p class="am-msg" id="am-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>整体放大倍数 ＝ 1 ÷ [(1 − 适用比例) ＋ 适用比例 ÷ 加速倍数]，与 Amdahl（1967）的形式相同；纵轴为对数刻度。参照点：某电商客服中代理适用的会话约占 5.8%。</figcaption>
+</figure>
+<style>
+.am svg{width:100%;height:auto;display:block}
+.am-l{fill:none;stroke:var(--accent);stroke-width:2.5}
+.am-cap{fill:none;stroke:var(--faint);stroke-dasharray:4 4;stroke-width:1.5}
+.am-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.am svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const X0=56,X1=620,YT=14,YB=200,x=a=>X0+a*(X1-X0),ly=v=>YB-Math.log10(v)/Math.log10(25)*(YB-YT);
+  const M=(a,k)=>1/((1-a)+a/k);let k=10;const $=id=>document.getElementById(id),sl=$('am-a');
+  $('am-ax').innerHTML=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`+[1,2,5,10,20].map(v=>`<text x="${X0-6}" y="${ly(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v} 倍</text><line x1="${X0}" x2="${X1}" y1="${ly(v)}" y2="${ly(v)}" class="s-line"/>`).join('')+
+    [0,.25,.5,.75,.95].map(a=>`<text x="${x(a)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${Math.round(a*100)}%</text>`).join('');
+  let c='';for(let a=0;a<=.95;a+=.005)c+=(a?'L':'M')+x(a).toFixed(1)+','+ly(Math.min(25,1/(1-a))).toFixed(1);$('am-cap').setAttribute('d',c);
+  function draw(){let d='';for(let a=0;a<=.95;a+=.005)d+=(a?'L':'M')+x(a).toFixed(1)+','+ly(M(a,k)).toFixed(1);$('am-p').setAttribute('d',d);
+    $('am-ex').innerHTML=[[.058,'电商客服']].map(([a,n])=>`<circle cx="${x(a)}" cy="${ly(M(a,k))}" r="4" fill="var(--warm)"/><text x="${x(a)+6}" y="${ly(M(a,k))-8}" font-size="11" class="t-warm">${n}</text>`).join('');
+    const a=+sl.value/100,v=M(a,k);$('am-av').textContent=sl.value+'%';$('am-d').setAttribute('cx',x(a));$('am-d').setAttribute('cy',ly(v));
+    $('am-msg').textContent=`代理承担 ${sl.value}% 的工作、把这部分缩短 ${k} 倍时，整体放大 ${v.toFixed(2)} 倍；即使代理瞬间完成，上限也只有 ${(1/(1-a)).toFixed(2)} 倍。`;}
+  document.querySelectorAll('[data-am]').forEach(b=>b.addEventListener('click',()=>{k=+b.dataset.am;document.querySelectorAll('[data-am]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  sl.addEventListener('input',draw);
+  $('am').addEventListener('anim-in',()=>{let a=0;sl.value=0;draw();const id=setInterval(()=>{a+=5;sl.value=a;draw();if(a>=90){clearInterval(id);setTimeout(()=>{sl.value=30;draw();},600);}},120);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-5">五、条件决定可达份额</h2>
+<p>一份工作中代理够得着的时间比例，称为可达份额。它由代理具备的条件决定，可以分为三档：只凭对话中给出的材料作答的对话模型，下文称 Chat；接入委托人与组织的数据和系统、能执行代码、能对外办理事务的代理，下文称 Agent；在此之上能到现场感知与操作的具身代理。此外，许多事务还需要准入：授权、牌照与资产的托管，决定代理够得着的部分能否合法执行。</p>
+<p>作者用美国职业信息网络（O*NET）的工作活动数据与欧盟各行业的就业结构，估算了三档条件下各行业与职业的可达份额与上限（作者估算）。只有 Chat 时，各行业的可达份额为 6%～21%，整份工作的上限只有 1.1～1.3 倍。成为 Agent 后升至 22%～45%，全部行业平均 36%，上限 1.55 倍；金融、专业服务与信息通信提升最多，上限约 1.8 倍。建筑、农林牧渔与家庭自用生产中，体力与操作约占工作时间的一半，数字代理的上限只有 1.3 倍左右；具备具身能力后升至 2.7～2.8 倍，反超知识密集行业。知识密集行业的天花板来自另一处：与他人沟通、协调与说服约占三成，本人的判断与决定也难以交出，具身能力对它们帮助有限。职业之间差异更大：会计与客服代表在 Agent 条件下的上限约 2.8 倍，律师与总经理约 1.7 倍，建筑工人与客房清洁员只有约 1.1 倍。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">条件决定上限：Chat、Agent 与具身 Agent（作者估算）</p><p class="figsub">每行三个点是三档条件下整份工作的放大倍数上限。切换行业与典型职业，点选一档提升，看哪些行业受益最多。</p></div><button class="replay" type="button" data-replay="tr">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="范围">
+      <button type="button" data-trv="ind" aria-pressed="true">行业</button>
+      <button type="button" data-trv="occ" aria-pressed="false">典型职业</button>
+    </div>
+    <div class="seg-btns tr-hl" role="group" aria-label="提升">
+      <button type="button" data-trh="" aria-pressed="true">三档</button>
+      <button type="button" data-trh="1" aria-pressed="false">补上数据与工具</button>
+      <button type="button" data-trh="2" aria-pressed="false">再补具身</button>
+    </div>
+    <div class="legend"><span><i style="background:var(--faint)"></i>Chat：只凭对话材料</span><span><i style="background:var(--accent)"></i>Agent：接入数据与系统，可执行、可对外办理</span><span><i style="background:var(--warm)"></i>具身 Agent：再能到现场操作</span></div>
+    <div class="tr" id="tr" data-anim></div>
+    <p class="tr-msg" id="tr-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>作者估算：O*NET 31.0 的 332 项中间工作活动由两位编码者独立判定三档条件下的可达比例，行业按欧盟 27 国 2024 年的职业构成加权；上限 ＝ 1 ÷（1 − 可达份额）。方法与数据见<a href="estimates.html">附录：作者估算的方法与数据</a>。</figcaption>
+</figure>
+<style>
+.tr{display:grid;gap:2px;margin-top:10px}
+.tr-r{display:grid;grid-template-columns:9.5em 1fr;gap:10px;align-items:center;font-size:12.5px;padding:3px 0}
+.tr-r.tot{font-weight:600;border-top:1px solid var(--line);padding-top:6px;margin-top:2px}
+.tr-t{position:relative;height:16px}
+.tr-t::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:1px dashed var(--line)}
+.tr-seg{position:absolute;top:calc(50% - 2px);height:4px;border-radius:2px;transition:left .6s,width .6s,opacity .3s}
+.tr-dot{position:absolute;top:calc(50% - 5px);width:10px;height:10px;margin-left:-5px;border-radius:50%;transition:left .6s,opacity .3s}
+.tr-ax{position:relative;height:16px;font-size:10.5px;color:var(--faint)}
+.tr-ax span{position:absolute;transform:translateX(-50%)}
+.tr-r .v{position:absolute;right:0;top:-1px;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;background:var(--card);padding-left:4px}
+.tr-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.tr-r{grid-template-columns:7em 1fr;font-size:11.5px}}
+</style>
+<script>
+(function(){
+  const D={ind:/*DATA:ind*/[["金融保险",0.1965,0.4547,0.5869,{"4d":0.41,"2":0.285,"5":0.048,"1":0.04,"4s":0.078,"3":0.139}],["专业、科学与技术服务",0.2053,0.4433,0.5624,{"4d":0.414,"2":0.295,"5":0.043,"1":0.05,"4s":0.079,"3":0.12}],["信息与通信",0.2076,0.4405,0.554,{"4d":0.414,"2":0.3,"5":0.042,"1":0.053,"4s":0.08,"3":0.112}],["教育",0.2046,0.4282,0.5506,{"4d":0.402,"2":0.306,"5":0.041,"1":0.056,"4s":0.077,"3":0.118}],["公共管理与社会保障",0.1696,0.4118,0.5928,{"4d":0.352,"2":0.279,"5":0.046,"1":0.037,"4s":0.087,"3":0.199}],["文体娱乐",0.1742,0.4077,0.5806,{"4d":0.355,"2":0.28,"5":0.042,"1":0.041,"4s":0.091,"3":0.192}],["房地产",0.1661,0.4069,0.5898,{"4d":0.345,"2":0.27,"5":0.042,"1":0.034,"4s":0.097,"3":0.211}],["卫生与社会工作",0.169,0.3939,0.5722,{"4d":0.337,"2":0.292,"5":0.039,"1":0.042,"4s":0.096,"3":0.194}],["电力、燃气与热力",0.1637,0.3895,0.5975,{"4d":0.342,"2":0.239,"5":0.038,"1":0.037,"4s":0.096,"3":0.248}],["其他服务",0.1328,0.3538,0.5916,{"4d":0.266,"2":0.29,"5":0.044,"1":0.034,"4s":0.104,"3":0.263}],["批发与零售",0.1244,0.3431,0.5994,{"4d":0.252,"2":0.275,"5":0.044,"1":0.031,"4s":0.105,"3":0.292}],["交通运输与仓储",0.1111,0.3395,0.6492,{"4d":0.247,"2":0.196,"5":0.033,"1":0.024,"4s":0.122,"3":0.378}],["住宿与餐饮",0.1089,0.3198,0.5933,{"4d":0.213,"2":0.295,"5":0.047,"1":0.03,"4s":0.105,"3":0.309}],["制造",0.1156,0.3125,0.6239,{"4d":0.246,"2":0.182,"5":0.028,"1":0.03,"4s":0.122,"3":0.392}],["采矿",0.109,0.31,0.6292,{"4d":0.231,"2":0.183,"5":0.024,"1":0.03,"4s":0.134,"3":0.398}],["供水、污水与废物处理",0.1112,0.3087,0.6285,{"4d":0.238,"2":0.184,"5":0.028,"1":0.028,"4s":0.115,"3":0.406}],["行政与支持服务",0.109,0.3076,0.6216,{"4d":0.23,"2":0.212,"5":0.034,"1":0.028,"4s":0.106,"3":0.39}],["建筑",0.0936,0.2634,0.6331,{"4d":0.204,"2":0.137,"5":0.024,"1":0.026,"4s":0.126,"3":0.483}],["农林牧渔",0.0587,0.2239,0.642,{"4d":0.126,"2":0.133,"5":0.014,"1":0.019,"4s":0.171,"3":0.537}],["家庭雇工与自用生产",0.0633,0.2161,0.6236,{"4d":0.125,"2":0.191,"5":0.024,"1":0.026,"4s":0.114,"3":0.52}],["全部行业",0.1419,0.3565,0.5986,{"4d":0.291,"2":0.246,"5":0.037,"1":0.035,"4s":0.105,"3":0.286}]]/*END*/,occ:/*DATA:occ*/[["会计与审计",0.2487,0.6406,0.6686,{"4d":0.68,"2":0.204,"4s":0.028,"5":0.088}],["客户服务代表",0.2471,0.6383,0.695,{"2":0.565,"4d":0.327,"5":0.108}],["软件开发人员",0.2621,0.5571,0.5681,{"4d":0.562,"2":0.438}],["小学教师",0.2551,0.4383,0.5241,{"4d":0.534,"3":0.094,"2":0.328,"1":0.04,"5":0.004}],["律师",0.234,0.4016,0.4038,{"4d":0.373,"5":0.142,"2":0.485}],["总经理与运营经理",0.1653,0.4021,0.4288,{"2":0.521,"4d":0.328,"5":0.079,"1":0.072}],["零售销售人员",0.1778,0.4505,0.644,{"4d":0.315,"2":0.33,"1":0.049,"5":0.083,"4s":0.054,"3":0.17}],["注册护士",0.0984,0.3105,0.4186,{"4d":0.224,"4s":0.169,"2":0.408,"1":0.048,"5":0.054,"3":0.098}],["重型卡车司机",0.0717,0.2936,0.6788,{"3":0.489,"4s":0.127,"4d":0.234,"5":0.072,"2":0.061,"1":0.017}],["电工",0.0894,0.2296,0.5879,{"3":0.468,"4s":0.231,"2":0.082,"1":0.034,"4d":0.166,"5":0.019}],["餐厅厨师",0.0468,0.1584,0.6848,{"4s":0.215,"3":0.585,"4d":0.119,"5":0.021,"2":0.059}],["客房清洁员",0.0162,0.127,0.7359,{"3":0.767,"4s":0.196,"4d":0.037}],["建筑工人",0.0133,0.0954,0.6401,{"3":0.822,"4d":0.044,"2":0.076,"4s":0.059}]]/*END*/};
+  const MAX={ind:3,occ:4},C=['var(--faint)','var(--accent)','var(--warm)'];let view='ind',hl='';
+  const box=document.getElementById('tr'),msg=document.getElementById('tr-msg'),cap=p=>1/(1-p);
+  const M={ind:{'':'只凭对话材料，各行业的上限只有 1.1～1.3 倍；接入数据与工具后，全部行业平均升到 1.55 倍；再具备具身能力，升到约 2.5 倍。',
+      '1':'补上数据与工具，金融、专业服务、信息通信与教育提升最多，上限约 1.75～1.83 倍；建筑、农林牧渔与家庭自用生产只升到 1.3 倍左右。',
+      '2':'再补具身能力，实体生产行业提升 1.4～1.5 倍，升到 2.7～2.8 倍，反超知识密集行业；后者只多约 0.5 倍，天花板来自与人沟通和本人的决定。'},
+    occ:{'':'职业之间差异更大：会计与客服代表在 Agent 条件下约 2.8 倍，律师与总经理约 1.7 倍，建筑工人与客房清洁员只有约 1.1 倍。',
+      '1':'补上数据与工具，信息处理占比高的职业提升最多：会计与审计从 1.3 倍升到 2.8 倍。',
+      '2':'再补具身能力，客房清洁、厨师与卡车司机升幅最大；律师与总经理几乎不变。'}};
+  function draw(){const rows=D[view].slice().sort((a,b)=>(b[0]==='全部行业')?-1:(a[0]==='全部行业')?1:b[2]-a[2]),mx=MAX[view],x=v=>(Math.min(v,mx)-1)/(mx-1)*92;
+    let h=`<div class="tr-r"><span></span><div class="tr-ax">${[1,1.5,2,2.5,3,3.5,4].filter(v=>v<=mx).map(v=>`<span style="left:${x(v)}%">${v} 倍</span>`).join('')}</div></div>`;
+    h+=rows.map(r=>{const v=[1,2,3].map(i=>cap(r[i]));const tot=r[0]==='全部行业';
+      const seg=(a,b,c,on)=>`<i class="tr-seg" style="left:${x(v[a])}%;width:${x(v[b])-x(v[a])}%;background:${c};opacity:${on?1:.18}"></i>`;
+      const dots=v.map((u,i)=>`<i class="tr-dot" style="left:${x(u)}%;background:${C[i]};opacity:${!hl||+hl===i||+hl-1===i?1:.25}"></i>`).join('');
+      const lab=hl?`+${(v[+hl]-v[+hl-1]).toFixed(2)}`:`${v[1].toFixed(2)} 倍`;
+      return `<div class="tr-r${tot?' tot':''}"><span>${r[0]}</span><div class="tr-t">${seg(0,1,'var(--accent)',hl!=='2')}${seg(1,2,'var(--warm)',hl!=='1')}${dots}<span class="v">${lab}</span></div></div>`;}).join('');
+    box.innerHTML=h;msg.textContent=M[view][hl];}
+  document.querySelectorAll('[data-trv]').forEach(b=>b.addEventListener('click',()=>{view=b.dataset.trv;document.querySelectorAll('[data-trv]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  document.querySelectorAll('[data-trh]').forEach(b=>b.addEventListener('click',()=>{hl=b.dataset.trh;document.querySelectorAll('[data-trh]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  box.addEventListener('anim-in',()=>{['1','2',''].forEach((k,i)=>setTimeout(()=>{hl=k;document.querySelectorAll('[data-trh]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.trh===k)));draw();},300+i*2600));});
+  draw();
+})();
+</script>
+
+<h2 id="sec-6">六、值得做、也有条件做的事务</h2>
+<p>把 332 项工作活动放在两条轴上：横轴是这项活动占全部工作时间的比重，回答值不值得做；纵轴是 Agent 可承担的比例，回答有没有条件做（作者估算）。值得做、也有条件做的 54 项活动合计约占工作时间的 31%，以记录、文书、信息提供与沟通为主，例如维护运营记录、为顾客提供信息、制作视觉设计。值得做但条件不足的 66 项约占 38%：一类是清洁、搬运、保养等体力操作，缺的是具身能力；另一类是指挥组织运营、监督他人工作，须本人在场或亲自作出。</p>
+<p>有条件但单项规模小的 92 项约占 13%，与金融相关的活动大多在这里：分析经营与财务数据、分析市场与行业状况的可达比例约 83%，监控财务数据与活动约 75%。它们在有偿工作中只集中于少数职业，单项占比不高；对管理自己资产的个人而言，却是主要的投入。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">值不值得做 × 有没有条件做：332 项工作活动（作者估算）</p><p class="figsub">每个点是一项工作活动：横轴是它占全部工作时间的比重，纵轴是代理可承担的比例。切换条件，看各区域的占比怎样变化；点选一个点查看名称与取值。</p></div><button class="replay" type="button" data-replay="iw">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="条件">
+      <button type="button" data-iwt="3" aria-pressed="false">Chat</button>
+      <button type="button" data-iwt="4" aria-pressed="true">Agent</button>
+      <button type="button" data-iwt="5" aria-pressed="false">具身 Agent</button>
+    </div>
+    <div class="iw" id="iw" data-anim>
+      <svg viewBox="0 0 660 430" role="img" aria-label="工作活动的价值与可达比例散点图"><g id="iw-bg"></g><g id="iw-p"></g><g id="iw-lab"></g></svg>
+    </div>
+    <div class="legend" id="iw-lg"></div>
+    <p class="iw-msg" id="iw-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>作者估算：O*NET 31.0 各职业的任务按（重要度 − 1）× 频次加权，归入 332 项中间工作活动，再按欧盟 27 国 2024 年的就业结构折算为工作时间占比；可达比例为两位编码者独立判定的平均，点的上下位置略加错开以免重叠。粗边框为与金融相关的 10 项活动。方法与数据见<a href="estimates.html">附录：作者估算的方法与数据</a>。</figcaption>
+</figure>
+<style>
+.iw svg{width:100%;height:auto;display:block}
+.iw-pt{cursor:pointer;transition:cy .6s ease}
+.iw-pt.sel{stroke:var(--ink);stroke-width:2.2}
+.iw-q{font-size:12px;font-weight:600}
+.iw-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.iw svg text{font-size:16px}.iw-q{font-size:15px}}
+</style>
+<script>
+(function(){
+  const D=/*DATA:iwa*/[["研读艺术作品细节","1",0.1432,0.375,0.625,0.625,1.0,2.0,0,"1.2 认知"],["阅读文件资料以指导工作","1",0.9072,0.25,0.5,0.5,1.0,3.0,0,"1.2 认知"],["调查刑事或法律事务","4",0.4576,0.1,0.25,0.5,3.0,2.0,0,"4.1 描述性信息"],["从实物或电子来源收集信息","4",0.3824,0.5,0.75,0.825,1.0,3.0,0,"4.1 描述性信息"],["查阅法律资料与公共记录","4",0.1201,0.5,0.75,0.75,2.0,2.0,0,"4.1 描述性信息"],["收集运营与开发活动数据","4",0.1568,0.175,0.5,0.75,1.0,3.0,0,"4.1 描述性信息"],["获取商品或服务信息","4",0.042,0.5,0.75,0.75,1.0,3.0,0,"4.1 描述性信息"],["研究地球科学问题","4",0.0591,0.25,0.5,0.75,1.5,1.5,0,"4.1 描述性信息"],["研究组织行为、流程与绩效","4",0.0527,0.25,0.5,0.5,1.5,2.0,0,"4.1 描述性信息"],["调查工业与开发活动的环境影响","4",0.2102,0.25,0.5,0.75,2.5,2.0,0,"4.1 描述性信息"],["采集新闻素材","4",0.0206,0.25,0.5,0.5,2.0,3.0,0,"4.1 描述性信息"],["收集患者或客户信息","4",0.3118,0.1,0.5,0.5,2.5,3.0,0,"4.1 描述性信息"],["研究农业生产方法","4",0.0981,0.25,0.5,0.75,1.5,1.5,0,"4.1 描述性信息"],["收集消费者需求与意见","4",0.3575,0.375,0.75,0.75,1.5,2.0,0,"4.1 描述性信息"],["调查个人背景与行为","4",0.1032,0.25,0.5,0.75,3.0,2.0,0,"4.1 描述性信息"],["研究生物与生态现象","4",0.2004,0.175,0.375,0.625,1.5,1.5,0,"4.1 描述性信息"],["取得正式文件或许可","5",0.0864,0.1,0.5,0.5,2.0,3.0,0,"5.3 资格与权限"],["研究历史与社会问题","4",0.0935,0.375,0.625,0.75,1.0,2.0,0,"4.1 描述性信息"],["研究医疗卫生问题","4",0.0873,0.375,0.625,0.625,1.5,1.5,0,"4.1 描述性信息"],["研究技术设计与应用","4",0.2433,0.375,0.625,0.625,1.5,2.0,0,"4.1 描述性信息"],["调查事故与事件","4",0.0652,0.1,0.25,0.5,2.5,2.0,0,"4.1 描述性信息"],["调查组织或运营问题","4",0.0821,0.175,0.5,0.75,2.0,2.5,0,"4.1 描述性信息"],["访谈相关人员获取信息","4",0.4312,0.1,0.25,0.25,2.0,2.5,0,"4.1 描述性信息"],["监控设备运行","4",0.6431,0.05,0.5,0.75,3.0,3.0,0,"4.1 描述性信息"],["监控运营以确保绩效达标","4",0.7287,0.05,0.625,0.825,2.5,3.0,0,"4.1 描述性信息"],["监控财务数据与活动","4",0.1764,0.1,0.75,0.75,2.5,3.0,1,"4.1 描述性信息"],["监控交通状况","4",0.0185,0.0,0.625,0.75,3.0,3.0,0,"4.1 描述性信息"],["监测人或动物的健康状况","4",0.4409,0.0,0.375,0.5,4.0,3.0,0,"4.1 描述性信息"],["监督个人行为与表现","4",0.383,0.1,0.5,0.5,2.0,2.0,0,"4.1 描述性信息"],["监控工作场所与设施安全","4",0.5473,0.0,0.5,0.75,4.0,3.0,0,"4.1 描述性信息"],["监测外部事务、趋势与事件","4",0.131,0.625,0.825,0.825,1.5,2.0,0,"4.1 描述性信息"],["监测环境状况","4",0.1714,0.0,0.375,0.75,2.5,3.0,0,"4.1 描述性信息"],["监控计算机与信息系统运行","4",0.0909,0.1,0.825,0.825,3.0,3.0,0,"4.1 描述性信息"],["监督运营合规","4",0.5112,0.1,0.375,0.625,3.0,2.0,0,"4.1 描述性信息"],["标记材料或物品以便识别","3",0.3705,0.0,0.0,0.75,1.0,4.0,0,"3.2 人造物与人居空间"],["识别业务与组织发展机会","4",0.2357,0.375,0.625,0.625,1.5,1.0,0,"4.1 描述性信息"],["实施诊断检查评估患者健康","4",0.3834,0.0,0.1,0.375,3.0,3.0,0,"4.1 描述性信息"],["评估绿色技术与工艺","4",0.083,0.1,0.25,0.5,1.5,2.5,0,"4.1 描述性信息"],["测试材料或产品特性","4",0.3138,0.1,0.25,0.625,2.5,3.0,0,"4.1 描述性信息"],["检查车辆","4",0.2723,0.0,0.1,0.625,3.5,3.0,0,"4.1 描述性信息"],["检查设施或设备","4",0.6848,0.0,0.175,0.625,3.0,3.0,0,"4.1 描述性信息"],["检验完工成果或成品","4",0.6797,0.0,0.175,0.625,2.5,3.0,0,"4.1 描述性信息"],["检查商用与生产系统设备","4",0.8243,0.0,0.25,0.625,3.0,3.0,0,"4.1 描述性信息"],["测试计算机与信息系统性能","4",0.1369,0.25,0.825,0.825,1.5,4.0,0,"4.1 描述性信息"],["检查人或动物的健康与体征","4",0.3066,0.0,0.1,0.375,3.0,2.0,0,"4.1 描述性信息"],["检验材料或产品的性状","4",0.3267,0.0,0.25,0.625,2.0,3.0,0,"4.1 描述性信息"],["检测场地或材料的环境危害","4",0.0511,0.0,0.175,0.625,3.0,3.0,0,"4.1 描述性信息"],["测试设备或系统性能","4",0.5852,0.0,0.25,0.625,2.0,3.5,0,"4.1 描述性信息"],["测量材料、产品或设备的物理参数","4",1.0833,0.05,0.175,0.75,1.5,4.0,0,"4.1 描述性信息"],["估算项目开发或运营成本","4",0.26,0.375,0.625,0.625,2.5,1.5,0,"4.1 描述性信息"],["计算财务数据","4",0.2308,0.5,0.825,0.825,2.0,4.0,0,"4.1 描述性信息"],["评估土地或房产特征","4",0.2132,0.1,0.25,0.625,2.5,3.0,0,"4.1 描述性信息"],["测量患者或客户身体尺寸","4",0.0285,0.0,0.05,0.375,1.0,4.0,0,"4.1 描述性信息"],["评估个人或社区的生活与社会需求","4",0.0553,0.1,0.25,0.375,2.5,2.0,0,"4.1 描述性信息"],["评估项目、做法与流程","4",0.1745,0.25,0.625,0.625,1.5,1.0,0,"4.1 描述性信息"],["评估学生能力、需求与表现","4",0.4531,0.375,0.625,0.625,2.0,2.0,0,"4.1 描述性信息"],["评估人员能力与绩效","4",0.3012,0.1,0.25,0.25,2.5,2.0,0,"4.1 描述性信息"],["评估生产投入与产出","4",0.319,0.0,0.175,0.625,2.0,3.0,0,"4.1 描述性信息"],["评估患者病情与治疗方案","4",0.2126,0.1,0.25,0.375,3.5,2.0,0,"4.1 描述性信息"],["评估产品或技术的性能与价值","4",0.217,0.375,0.625,0.625,2.0,2.0,0,"4.1 描述性信息"],["评审学术成果","4",0.0131,0.25,0.25,0.25,1.5,2.0,0,"4.1 描述性信息"],["评估金融资产、房产等资源状况","4",0.1326,0.175,0.5,0.625,2.5,2.0,1,"4.1 描述性信息"],["评估项目可行性","4",0.0469,0.375,0.625,0.625,2.5,1.0,0,"4.1 描述性信息"],["评估数据质量与准确性","4",0.7086,0.25,0.825,0.825,1.0,3.5,0,"4.1 描述性信息"],["分拣材料或产品","3",0.3473,0.0,0.0,0.825,1.0,4.0,0,"3.2 人造物与人居空间"],["汇编记录、文件与数据","4",0.5324,0.25,0.825,0.825,1.0,3.5,0,"4.1 描述性信息"],["核对财务数据","4",0.1823,0.175,0.75,0.825,2.0,4.0,0,"4.1 描述性信息"],["核验个人信息","4",0.1651,0.1,0.625,0.75,2.5,3.0,0,"4.1 描述性信息"],["审查材料文件的准确性与合规性","4",0.4721,0.5,0.75,0.75,2.5,2.0,0,"4.1 描述性信息"],["评估环保合规情况","4",0.0816,0.175,0.5,0.75,2.5,2.0,0,"4.1 描述性信息"],["审计财务活动、运营与系统","4",0.1995,0.25,0.75,0.75,3.0,2.0,0,"4.1 描述性信息"],["执行医疗安全规程保护医患","2",0.0767,0.0,0.0,0.375,4.0,3.0,0,"2.1 他人福祉"],["分析环境与地理空间数据","4",0.1926,0.375,0.625,0.825,1.5,2.5,0,"4.1 描述性信息"],["分析市场与行业状况","4",0.1726,0.625,0.825,0.825,2.0,1.0,1,"4.1 描述性信息"],["分析经营与财务风险","4",0.0645,0.375,0.625,0.625,2.5,1.0,1,"4.1 描述性信息"],["运用数学方法分析科学数据","4",0.132,0.625,0.825,0.825,1.5,3.0,0,"4.1 描述性信息"],["评审设计规格与技术数据","4",0.2855,0.375,0.625,0.625,2.5,2.0,0,"4.1 描述性信息"],["分析健康与医疗数据","4",0.404,0.375,0.625,0.625,2.5,2.0,0,"4.1 描述性信息"],["分析数据以改进运营","4",0.6562,0.375,0.825,0.825,1.5,2.0,0,"4.1 描述性信息"],["研究法律、判例等法律资料","4",0.0308,0.625,0.825,0.825,2.5,2.0,0,"4.1 描述性信息"],["评估法规与政策的影响","4",0.0692,0.5,0.75,0.75,1.5,1.5,0,"4.1 描述性信息"],["分析生物与化学物质及数据","4",0.3229,0.05,0.25,0.625,3.0,3.0,0,"4.1 描述性信息"],["分析经营与财务数据","4",0.2671,0.375,0.825,0.825,1.5,2.5,1,"4.1 描述性信息"],["分析系统或设备性能","4",0.1818,0.375,0.825,0.825,1.5,3.0,0,"4.1 描述性信息"],["确定商品或服务的价值与价格","4",0.4919,0.375,0.625,0.625,2.5,2.5,0,"4.1 描述性信息"],["诊断系统或设备故障","4",0.0858,0.175,0.375,0.625,2.0,3.0,0,"4.1 描述性信息"],["批准业务活动或交易","5",0.1031,0.0,0.1,0.1,4.0,3.5,0,"5.3 资格与权限"],["确定作业方法与流程","4",0.3998,0.175,0.375,0.375,2.5,2.0,0,"4.2 指令性信息"],["作出法律裁决","5",0.0422,0.0,0.0,0.0,4.0,2.0,0,"5.2 负担"],["诊断疾病与健康问题","4",0.1538,0.1,0.25,0.25,3.5,2.0,0,"4.1 描述性信息"],["编辑文字材料","4",0.0918,0.75,0.825,0.825,1.0,3.5,0,"4.3 表达性内容"],["确定项目或运营的资源需求","4",0.3537,0.375,0.625,0.625,2.0,2.0,0,"4.1 描述性信息"],["实施流程与程序","2",0.193,0.05,0.25,0.375,2.5,2.0,0,"2.3 他人的认知与意愿"],["选择项目所需材料与设备","4",0.5691,0.175,0.375,0.375,2.0,2.5,0,"4.2 指令性信息"],["剪辑音视频","4",0.1175,0.625,0.825,0.825,1.0,4.0,0,"4.3 表达性内容"],["制定护理与治疗方案","4",0.3296,0.25,0.5,0.5,3.5,2.0,0,"4.2 指令性信息"],["设计计算机系统与应用","4",0.3523,0.625,0.825,0.825,2.0,4.0,0,"4.2 指令性信息"],["制定经营与营销计划","4",0.1671,0.175,0.375,0.375,2.5,1.0,0,"4.2 指令性信息"],["研发菜谱与菜单","4",0.0818,0.375,0.375,0.625,1.0,3.5,0,"4.2 指令性信息"],["制定安全标准、政策与规程","5",0.1265,0.375,0.625,0.625,3.0,2.0,0,"5.4 集体规则"],["设计数据库","4",0.113,0.625,0.825,0.825,2.0,4.0,0,"4.2 指令性信息"],["制定自然资源管理与保护计划","4",0.1266,0.375,0.625,0.625,2.5,1.0,0,"4.2 指令性信息"],["制定财务规划与商业计划","4",0.0492,0.375,0.625,0.625,3.0,1.0,1,"4.2 指令性信息"],["制定健康评估方法与项目","4",0.0249,0.375,0.625,0.625,2.0,1.5,0,"4.2 指令性信息"],["制作营销与宣传材料","4",0.1386,0.625,0.825,0.825,2.0,3.5,0,"4.3 表达性内容"],["设计材料或器件","4",0.1047,0.375,0.625,0.825,2.0,2.5,0,"4.2 指令性信息"],["制定教育项目与计划","4",0.5389,0.375,0.625,0.625,2.0,1.0,0,"4.2 指令性信息"],["制定环境问题治理方案","4",0.1127,0.25,0.5,0.625,2.5,1.0,0,"4.2 指令性信息"],["制定公共卫生与社区健康项目","4",0.0662,0.375,0.625,0.625,2.5,1.0,0,"4.2 指令性信息"],["制作视觉设计与展示","4",0.8946,0.625,0.825,0.825,1.0,4.0,0,"4.3 表达性内容"],["制定应急预案","4",0.0671,0.5,0.75,0.75,3.0,1.0,0,"4.2 指令性信息"],["制定可持续经营政策","4",0.1088,0.375,0.625,0.625,1.5,1.0,0,"4.2 指令性信息"],["创作新闻、娱乐与艺术内容","4",0.069,0.5,0.75,0.75,2.0,2.0,0,"4.3 表达性内容"],["制定研究计划与方法","4",0.1888,0.5,0.75,0.75,1.5,2.0,0,"4.2 指令性信息"],["创作艺术设计与表演","4",0.2536,0.25,0.375,0.5,1.0,3.0,0,"4.3 表达性内容"],["构建科学或数学理论与模型","4",0.0877,0.375,0.625,0.625,1.0,1.0,0,"4.1 描述性信息"],["制定组织或项目目标","5",0.1277,0.1,0.25,0.25,2.0,1.0,0,"5.4 集体规则"],["跟进专业领域最新知识","1",1.2511,0.175,0.25,0.25,1.0,2.0,0,"1.2 认知"],["制定组织政策、制度与流程","5",0.2741,0.375,0.625,0.625,2.5,1.0,0,"5.4 集体规则"],["起草法律法规","4",0.0047,0.5,0.75,0.75,2.5,2.0,0,"4.2 指令性信息"],["编排服务或设施日程","4",0.0935,0.375,0.825,0.825,1.0,4.0,0,"4.2 指令性信息"],["安排运营作业计划","4",0.2441,0.25,0.75,0.75,2.0,3.5,0,"4.2 指令性信息"],["安排预约","5",0.2764,0.1,0.9,0.9,1.0,4.0,0,"5.2 负担"],["策划活动与项目","4",0.131,0.375,0.625,0.625,2.0,3.0,0,"4.2 指令性信息"],["规划工作安排","4",0.3235,0.25,0.5,0.625,2.0,2.5,0,"4.2 指令性信息"],["配制混合物或溶液","3",0.4931,0.0,0.0,0.75,2.0,3.0,0,"3.2 人造物与人居空间"],["防护人员财产免受火灾水灾等威胁","3",0.091,0.0,0.05,0.5,4.0,3.0,0,"3.2 人造物与人居空间"],["清洁工具、设备与场地","3",2.1905,0.0,0.0,0.75,1.0,4.0,0,"3.2 人造物与人居空间"],["在作业区搭设防护设施","3",0.128,0.0,0.0,0.75,2.0,4.0,0,"3.2 人造物与人居空间"],["处置废弃物","3",0.4832,0.0,0.0,0.625,3.0,3.0,0,"3.2 人造物与人居空间"],["装载货物、材料或设备","3",0.8042,0.0,0.0,0.75,2.0,3.5,0,"3.2 人造物与人居空间"],["从事一般施工或开采作业","3",0.7642,0.0,0.0,0.5,3.0,3.0,0,"3.2 人造物与人居空间"],["清洁工件、成品等物件","3",0.2953,0.0,0.05,0.75,1.5,4.0,0,"3.2 人造物与人居空间"],["清洁消毒医疗器械与设施","3",0.188,0.0,0.05,0.75,4.0,3.0,0,"3.2 人造物与人居空间"],["搬运材料、设备与物资","3",0.932,0.0,0.0,0.75,2.0,3.0,0,"3.2 人造物与人居空间"],["维护安全与治安","3",0.4882,0.0,0.1,0.375,4.0,3.0,0,"3.2 人造物与人居空间"],["陪同引导他人","2",0.1643,0.0,0.1,0.5,2.0,3.0,0,"2.1 他人福祉"],["接送患者或客户","2",0.0873,0.0,0.0,0.5,4.0,3.0,0,"2.1 他人福祉"],["攀爬设备或构筑物","3",0.0817,0.0,0.0,0.5,4.0,3.0,0,"3.2 人造物与人居空间"],["提供餐饮服务","3",0.2181,0.0,0.0,0.625,1.5,3.5,0,"3.2 人造物与人居空间"],["从事体育运动与竞技表演","1",0.1974,0.0,0.0,0.0,2.0,4.0,0,"1.1 身体"],["从事农业生产","3",0.2444,0.0,0.0,0.75,2.0,3.0,0,"3.1 非人生物"],["建造构筑物","3",0.8349,0.0,0.0,0.5,3.0,3.0,0,"3.2 人造物与人居空间"],["制造装置或部件","3",0.1634,0.0,0.175,0.75,2.0,3.5,0,"3.2 人造物与人居空间"],["制作装饰品与装饰部件","3",0.1147,0.0,0.0,0.5,1.0,4.0,0,"3.2 人造物与人居空间"],["屠宰加工动物","3",0.0748,0.0,0.0,0.75,3.0,3.0,0,"3.1 非人生物"],["在地层或材料上钻孔","3",0.1547,0.0,0.1,0.75,3.0,3.0,0,"3.3 自然物与环境"],["修剪造型头发","2",0.0753,0.0,0.0,0.5,2.0,4.0,0,"2.1 他人福祉"],["布置教室、教学材料与设备","3",0.1245,0.0,0.0,0.75,1.0,4.0,0,"3.2 人造物与人居空间"],["施用防护剂或涂层","3",0.516,0.0,0.0,0.75,2.5,3.0,0,"3.2 人造物与人居空间"],["连接设备部件与供给管线","3",0.2725,0.0,0.0,0.625,3.0,3.5,0,"3.2 人造物与人居空间"],["焊接零件","3",0.1698,0.0,0.05,0.75,3.0,3.0,0,"3.2 人造物与人居空间"],["组装产品或工装","3",0.2722,0.0,0.0,0.75,1.0,4.0,0,"3.2 人造物与人居空间"],["补充货架物资","3",0.4237,0.0,0.0,0.9,1.0,4.0,0,"3.2 人造物与人居空间"],["采集环境或生物样本","3",0.2858,0.0,0.0,0.5,3.0,3.0,0,"3.3 自然物与环境"],["填补缝隙与缺陷","3",0.1884,0.0,0.0,0.75,1.5,3.5,0,"3.2 人造物与人居空间"],["从生产设备上取下工件","3",0.1726,0.0,0.0,0.9,1.5,4.0,0,"3.2 人造物与人居空间"],["定位待装配的材料与部件","3",0.5089,0.0,0.0,0.75,2.0,4.0,0,"3.2 人造物与人居空间"],["包装物品","3",0.3384,0.0,0.0,0.9,1.0,4.0,0,"3.2 人造物与人居空间"],["安装管道系统","3",0.1489,0.0,0.0,0.5,3.0,3.0,0,"3.2 人造物与人居空间"],["狩猎","3",0.0618,0.0,0.05,0.375,4.0,3.0,0,"3.1 非人生物"],["施作装饰面层","3",0.1096,0.0,0.0,0.5,2.0,4.0,0,"3.2 人造物与人居空间"],["安装调试设备","3",0.3621,0.0,0.0,0.75,2.5,3.5,0,"3.2 人造物与人居空间"],["制备检测样品","3",0.2894,0.0,0.05,0.75,2.0,3.0,0,"3.1 非人生物"],["采集产品或材料样品","3",0.0821,0.0,0.0,0.75,2.0,3.0,0,"3.2 人造物与人居空间"],["制作食品饮料","3",0.6643,0.0,0.0,0.75,2.0,4.0,0,"3.2 人造物与人居空间"],["组装设备或部件","3",0.5646,0.0,0.0,0.75,2.0,3.5,0,"3.2 人造物与人居空间"],["缝制服装与织物","3",0.1444,0.0,0.0,0.75,1.5,4.0,0,"3.2 人造物与人居空间"],["将工件或材料装上设备","3",0.3794,0.0,0.0,0.825,2.0,4.0,0,"3.2 人造物与人居空间"],["加工材料成形","3",0.1117,0.0,0.0,0.625,2.0,4.0,0,"3.2 人造物与人居空间"],["布置陈列与装饰","3",0.2759,0.0,0.0,0.625,1.0,4.0,0,"3.2 人造物与人居空间"],["调校设备以确保性能","3",0.7894,0.0,0.25,0.75,2.0,4.0,0,"3.2 人造物与人居空间"],["训练动物","3",0.0786,0.0,0.0,0.25,2.0,1.0,0,"3.1 非人生物"],["准备医疗设备与诊疗区","3",0.1562,0.0,0.0,0.75,3.0,3.5,0,"3.2 人造物与人居空间"],["切割材料","3",0.581,0.0,0.0,0.75,2.0,4.0,0,"3.2 人造物与人居空间"],["预处理工业原料","3",0.2312,0.0,0.0,0.625,4.0,3.0,0,"3.2 人造物与人居空间"],["砍伐树木与植被","3",0.2399,0.0,0.0,0.5,4.0,3.0,0,"3.1 非人生物"],["打磨物体表面","3",0.3048,0.0,0.0,0.75,2.0,4.0,0,"3.2 人造物与人居空间"],["安装能源与供暖设备","3",0.0726,0.0,0.0,0.5,3.0,3.0,0,"3.2 人造物与人居空间"],["制作医疗器具","3",0.1533,0.0,0.1,0.5,3.0,3.0,0,"3.2 人造物与人居空间"],["指挥车辆交通","2",0.095,0.0,0.175,0.75,4.0,3.0,0,"2.3 他人的认知与意愿"],["拆卸设备","3",0.2539,0.0,0.0,0.75,2.0,3.0,0,"3.2 人造物与人居空间"],["安装商用或生产设备","3",0.2748,0.0,0.0,0.5,3.0,3.0,0,"3.2 人造物与人居空间"],["为皮肤或头发施用护理用品","2",0.3491,0.0,0.0,0.5,2.0,4.0,0,"2.1 他人福祉"],["定位工具或设备","3",0.2669,0.0,0.0,0.75,2.0,4.0,0,"3.2 人造物与人居空间"],["照管船只","3",0.0157,0.0,0.0,0.625,2.5,3.0,0,"3.2 人造物与人居空间"],["调校医疗设备","3",0.0665,0.0,0.0,0.5,3.0,3.0,0,"3.2 人造物与人居空间"],["雕刻物品","3",0.0496,0.0,0.25,0.825,2.0,4.0,0,"3.2 人造物与人居空间"],["遗体防腐处理","2",0.0684,0.0,0.0,0.5,3.0,3.0,0,"2.1 他人福祉"],["操作办公设备","3",0.1903,0.0,0.375,0.9,1.0,4.0,0,"3.2 人造物与人居空间"],["操作泵送设备","3",0.2211,0.0,0.5,0.75,3.0,3.0,0,"3.2 人造物与人居空间"],["操作施工与挖掘机械","3",0.3103,0.0,0.1,0.625,4.0,3.0,0,"3.2 人造物与人居空间"],["操作医疗设备","4",0.4038,0.05,0.25,0.5,3.5,3.0,0,"4.1 描述性信息"],["操作音视频设备","4",0.3339,0.0,0.5,0.75,2.0,3.0,0,"4.3 表达性内容"],["操作工业生产设备","3",0.5131,0.0,0.5,0.75,3.0,3.0,0,"3.2 人造物与人居空间"],["操作能源生产与输配设备","3",0.1849,0.0,0.5,0.75,4.0,3.0,0,"3.2 人造物与人居空间"],["操作起重搬运设备","3",0.334,0.0,0.1,0.75,4.0,3.0,0,"3.2 人造物与人居空间"],["操作实验室与野外设备","3",0.0976,0.0,0.25,0.75,2.0,3.0,0,"3.2 人造物与人居空间"],["操作通信设备与系统","2",0.2568,0.0,0.5,0.75,2.0,3.0,0,"2.3 他人的认知与意愿"],["操作农林机械","3",0.5407,0.0,0.25,0.75,3.0,3.0,0,"3.1 非人生物"],["操作切割与研磨设备","3",0.2298,0.0,0.175,0.75,3.0,3.0,0,"3.2 人造物与人居空间"],["驾驶交通工具","3",0.74,0.0,0.05,0.75,4.0,3.0,0,"3.2 人造物与人居空间"],["为计算机或生产设备编程","4",0.2405,0.5,0.75,0.9,2.5,4.0,0,"4.2 指令性信息"],["实施信息系统安全措施","4",0.1234,0.175,0.75,0.75,3.0,2.0,0,"4.2 指令性信息"],["搭建计算机系统与网络","4",0.1024,0.1,0.5,0.75,2.0,4.0,0,"4.2 指令性信息"],["解决计算机故障","4",0.0772,0.25,0.75,0.9,2.0,4.0,0,"4.2 指令性信息"],["操作计算机及计算机化设备","4",0.176,0.1,0.75,0.825,1.0,4.0,0,"4.1 描述性信息"],["处理数字与在线数据","4",0.6609,0.175,0.825,0.9,1.0,4.0,0,"4.1 描述性信息"],["制定产品或作业的技术规格","4",0.1566,0.5,0.75,0.75,2.5,2.0,0,"4.2 指令性信息"],["设计建筑与设施","4",0.1049,0.5,0.75,0.75,3.5,2.0,0,"4.2 指令性信息"],["设计工业系统与设备","4",0.1399,0.5,0.75,0.75,3.0,2.0,0,"4.2 指令性信息"],["构建系统、流程或产品模型","4",0.1333,0.5,0.75,0.75,1.5,2.5,0,"4.2 指令性信息"],["设计电气与电子系统","4",0.1408,0.5,0.75,0.75,3.0,2.0,0,"4.2 指令性信息"],["制定作业与技术规程","4",0.5042,0.5,0.75,0.75,2.0,2.0,0,"4.2 指令性信息"],["维护设施与设备","3",0.21,0.0,0.1,0.75,2.0,3.0,0,"3.2 人造物与人居空间"],["修复工件或产品","3",0.0921,0.0,0.0,0.5,2.0,4.0,0,"3.2 人造物与人居空间"],["维修工具与设备","3",0.3018,0.0,0.05,0.5,2.0,4.0,0,"3.2 人造物与人居空间"],["维修车辆部件","3",0.1308,0.0,0.0,0.5,3.0,3.0,0,"3.2 人造物与人居空间"],["保养车辆","3",0.1927,0.0,0.1,0.625,3.0,3.0,0,"3.2 人造物与人居空间"],["维护医疗设备与器械","3",0.2086,0.0,0.1,0.5,3.0,3.0,0,"3.2 人造物与人居空间"],["保养工具与机械设备","3",0.8849,0.0,0.0,0.625,2.0,3.0,0,"3.2 人造物与人居空间"],["维修电气与电子设备","3",0.1572,0.0,0.0,0.625,3.0,3.5,0,"3.2 人造物与人居空间"],["维护电子与计算机设备","3",0.2682,0.05,0.25,0.625,2.0,4.0,0,"3.2 人造物与人居空间"],["编制财务文件、报告与预算","4",0.2116,0.5,0.825,0.825,2.5,3.5,0,"4.1 描述性信息"],["记录法律事务信息","4",0.3303,0.5,0.75,0.75,3.0,2.5,0,"4.1 描述性信息"],["展示研究或技术成果","4",0.5688,0.5,0.625,0.625,2.0,2.0,0,"4.1 描述性信息"],["记录环境状况","4",0.0261,0.05,0.5,0.825,1.0,3.0,0,"4.1 描述性信息"],["拍摄图像与音视频","4",0.0764,0.0,0.25,0.75,1.5,4.0,0,"4.1 描述性信息"],["编写健康医疗文书","4",0.2894,0.25,0.75,0.75,3.0,3.0,0,"4.1 描述性信息"],["撰写提案与资助申请","4",0.1848,0.5,0.75,0.75,2.0,2.0,0,"4.2 指令性信息"],["维护运营记录","4",2.9042,0.25,0.75,0.825,1.0,3.0,0,"4.1 描述性信息"],["编写技术设计与流程文档","4",0.3003,0.5,0.75,0.75,1.0,3.0,0,"4.2 指令性信息"],["维护销售与财务记录","4",0.4339,0.25,0.9,0.9,2.0,3.0,0,"4.1 描述性信息"],["维护健康医疗档案","4",0.6969,0.25,0.825,0.825,3.0,3.0,0,"4.1 描述性信息"],["编写说明与教学材料","4",0.4856,0.75,0.75,0.75,1.0,2.5,0,"4.2 指令性信息"],["准备合同、申请与许可文件","4",0.5658,0.5,0.75,0.75,3.5,3.0,0,"4.2 指令性信息"],["起草法律与监管文件","4",0.3603,0.5,0.75,0.75,3.0,2.0,0,"4.1 描述性信息"],["编写运营与作业报告","4",0.3759,0.375,0.75,0.75,1.0,3.0,0,"4.1 描述性信息"],["撰写艺术或商业文稿","4",0.1806,0.625,0.625,0.625,1.0,2.0,0,"4.3 表达性内容"],["讲解产品或服务的技术细节","2",0.3657,0.25,0.5,0.5,2.0,2.5,0,"2.3 他人的认知与意愿"],["解释法规、政策与流程","2",0.6977,0.375,0.625,0.625,2.0,2.0,0,"2.3 他人的认知与意愿"],["提供翻译与文化解读","2",0.0609,0.5,0.75,0.75,2.0,2.0,0,"2.3 他人的认知与意愿"],["讲解财务信息","2",0.1026,0.25,0.5,0.5,2.5,2.0,1,"2.3 他人的认知与意愿"],["向患者及家属解释医疗信息","2",0.2726,0.1,0.25,0.25,3.0,2.0,0,"2.3 他人的认知与意愿"],["传播环境与可持续发展信息","2",0.0762,0.375,0.5,0.5,1.5,2.0,0,"2.3 他人的认知与意愿"],["协助科研人员开展项目与研究","4",0.1013,0.25,0.5,0.75,1.5,2.0,0,"4.1 描述性信息"],["沟通运营计划与活动","2",1.3355,0.1,0.5,0.5,2.0,3.0,0,"2.3 他人的认知与意愿"],["与医护人员会商患者诊疗","2",0.537,0.05,0.25,0.25,3.5,3.0,0,"2.3 他人的认知与意愿"],["沟通经营策略","2",0.1747,0.1,0.25,0.25,2.0,2.0,0,"2.3 他人的认知与意愿"],["合作开发教育项目","4",0.0975,0.175,0.25,0.25,1.5,1.5,0,"4.2 指令性信息"],["通报紧急情况与问题","2",0.4786,0.05,0.625,0.75,4.0,3.0,0,"2.3 他人的认知与意愿"],["沟通规格与项目细节","2",0.4634,0.1,0.5,0.5,2.0,3.0,0,"2.3 他人的认知与意愿"],["与当事人及法律人员商讨法律事务","2",0.0749,0.1,0.25,0.25,3.0,2.0,0,"2.3 他人的认知与意愿"],["与客户确认需求与订单规格","4",0.2639,0.175,0.5,0.5,2.0,3.0,0,"4.2 指令性信息"],["在法律程序中陈述信息","2",0.1197,0.0,0.1,0.1,4.0,2.0,0,"2.3 他人的认知与意愿"],["为公众提供信息与帮助","2",0.3599,0.375,0.625,0.75,2.0,2.5,0,"2.3 他人的认知与意愿"],["为宾客与顾客提供信息","2",1.0503,0.25,0.5,0.75,1.0,3.0,0,"2.3 他人的认知与意愿"],["建立专业关系与人脉","2",0.1796,0.0,0.1,0.1,3.0,1.0,0,"2.2 关系与声誉"],["协助他人获取其他服务与资源","2",0.3294,0.25,0.5,0.5,1.5,3.0,0,"2.1 他人福祉"],["实施治疗性疗法","2",0.3101,0.05,0.1,0.25,3.0,1.0,0,"2.1 他人福祉"],["提供基础医疗护理","2",0.4721,0.0,0.0,0.375,4.0,3.0,0,"2.1 他人福祉"],["照料动植物","3",0.2837,0.0,0.05,0.625,2.0,3.0,0,"3.1 非人生物"],["处置危机与紧急事件","2",0.1039,0.0,0.1,0.25,4.0,3.0,0,"2.1 他人福祉"],["为患者适配辅助器具","2",0.033,0.0,0.05,0.375,2.0,3.5,0,"2.1 他人福祉"],["实施紧急医疗救护","2",0.2058,0.0,0.0,0.25,4.0,3.0,0,"2.1 他人福祉"],["协助他人办理文书手续","4",0.066,0.375,0.75,0.75,2.0,4.0,0,"4.1 描述性信息"],["照护有特殊需要的人","2",0.4309,0.0,0.0,0.25,3.0,3.0,0,"2.1 他人福祉"],["为顾客、驾车人等提供一般协助","2",0.5646,0.05,0.175,0.5,1.0,3.0,0,"2.1 他人福祉"],["协助医护人员实施医疗操作","2",0.4649,0.0,0.0,0.375,4.0,3.0,0,"2.1 他人福祉"],["治疗伤病","2",0.4267,0.0,0.1,0.25,4.0,2.0,0,"2.1 他人福祉"],["维护个人或社区权益","2",0.0224,0.1,0.25,0.25,2.0,1.0,0,"2.3 他人的认知与意愿"],["销售产品或服务","5",0.4237,0.1,0.5,0.5,3.0,3.0,0,"5.1 归属"],["推广产品、服务或项目","2",0.5909,0.25,0.5,0.625,2.0,2.5,0,"2.3 他人的认知与意愿"],["调解纠纷","2",0.0785,0.05,0.1,0.1,3.0,2.0,0,"2.3 他人的认知与意愿"],["谈判合同与协议","5",0.3621,0.05,0.25,0.25,4.0,2.0,0,"5.2 负担"],["解决人事或运营问题","2",0.1095,0.1,0.25,0.25,3.0,2.0,0,"2.3 他人的认知与意愿"],["进行文艺表演","2",0.2533,0.0,0.0,0.1,2.0,3.0,0,"2.3 他人的认知与意愿"],["主持娱乐与博彩活动","2",0.1659,0.0,0.25,0.5,2.0,4.0,0,"2.3 他人的认知与意愿"],["处理客户问题与咨询","2",0.578,0.25,0.75,0.75,2.0,3.0,0,"2.2 关系与声誉"],["与他人协调解决问题","2",0.2648,0.1,0.25,0.25,2.0,3.0,0,"2.3 他人的认知与意愿"],["发出信号协调作业","2",0.1634,0.0,0.25,0.5,4.0,3.0,0,"2.3 他人的认知与意愿"],["与客户、机构及组织协调工作","2",0.3276,0.1,0.5,0.5,2.5,3.0,0,"2.3 他人的认知与意愿"],["协调文艺与娱乐活动","4",0.2203,0.05,0.175,0.175,2.0,2.0,0,"4.3 表达性内容"],["组织团体与公共活动","2",0.1775,0.1,0.25,0.5,2.0,3.0,0,"2.3 他人的认知与意愿"],["分派工作任务","4",0.3132,0.25,0.75,0.75,2.0,3.0,0,"4.2 指令性信息"],["协调合规事务","2",0.0708,0.1,0.5,0.5,3.0,2.0,0,"2.3 他人的认知与意愿"],["为他人提供支持与鼓励","2",0.2574,0.05,0.1,0.1,2.0,1.0,0,"2.1 他人福祉"],["教授生活技能","2",0.2195,0.1,0.1,0.25,2.0,1.0,0,"2.1 他人福祉"],["讲授学科或职业课程","2",0.735,0.25,0.25,0.25,2.0,1.0,0,"2.1 他人福祉"],["讲授安全规程与标准","2",0.0625,0.25,0.5,0.5,3.0,1.0,0,"2.1 他人福祉"],["培训作业流程","2",0.9,0.175,0.5,0.5,2.0,1.5,0,"2.1 他人福祉"],["培训设备或产品使用","2",0.2927,0.1,0.25,0.5,2.5,3.0,0,"2.1 他人福祉"],["开展健康医疗培训","2",0.6093,0.1,0.25,0.25,2.5,1.5,0,"2.1 他人福祉"],["监督人员工作","2",1.3487,0.0,0.1,0.1,3.0,2.0,0,"2.3 他人的认知与意愿"],["参与组织委员会工作","5",0.1456,0.0,0.05,0.05,1.5,2.0,0,"5.4 集体规则"],["管理农林生产","2",0.1664,0.05,0.175,0.25,3.0,1.0,0,"2.3 他人的认知与意愿"],["监管矫正机构活动","2",0.0469,0.0,0.1,0.25,4.0,3.0,0,"2.3 他人的认知与意愿"],["指导科学技术工作","2",0.2538,0.05,0.175,0.175,2.5,2.0,0,"2.3 他人的认知与意愿"],["管理人力资源工作","2",0.1388,0.1,0.375,0.375,2.5,2.0,0,"2.3 他人的认知与意愿"],["管理控制系统与质量控制","2",0.0972,0.1,0.25,0.25,3.5,3.0,0,"2.3 他人的认知与意愿"],["管理预算与财务","5",0.3427,0.05,0.25,0.25,3.0,2.5,1,"5.1 归属"],["指挥施工与开采作业","2",0.2037,0.0,0.1,0.175,4.0,3.0,0,"2.3 他人的认知与意愿"],["指挥组织运营","2",1.9871,0.05,0.175,0.175,3.0,2.0,0,"2.3 他人的认知与意愿"],["指挥安全保卫工作","2",0.1428,0.0,0.175,0.25,4.0,2.0,0,"2.3 他人的认知与意愿"],["主持法律事务工作","2",0.1252,0.0,0.1,0.1,3.5,2.0,0,"2.3 他人的认知与意愿"],["担任教练指导他人","2",0.0393,0.1,0.175,0.175,1.5,1.0,0,"2.1 他人福祉"],["为患者提供医疗建议","2",0.26,0.1,0.25,0.25,3.0,2.0,0,"2.3 他人的认知与意愿"],["提供产品或服务建议","2",0.2969,0.25,0.5,0.5,2.0,3.0,0,"2.3 他人的认知与意愿"],["提供环保与可持续发展建议","2",0.1216,0.25,0.375,0.375,1.5,1.5,0,"2.3 他人的认知与意愿"],["提供技术设计与使用建议","2",0.2304,0.25,0.625,0.625,2.0,2.5,0,"2.3 他人的认知与意愿"],["提供经营与运营建议","2",0.5402,0.175,0.375,0.375,2.5,1.5,0,"2.3 他人的认知与意愿"],["就医疗卫生问题提供咨询","2",0.1553,0.1,0.25,0.25,3.0,2.0,0,"2.3 他人的认知与意愿"],["提供教育与职业建议","2",0.5756,0.175,0.375,0.375,2.5,1.0,0,"2.3 他人的认知与意愿"],["提供法律与合规建议","2",0.1451,0.1,0.25,0.25,3.0,2.0,0,"2.3 他人的认知与意愿"],["提供职业健康与安全建议","2",0.0836,0.1,0.25,0.375,3.0,2.0,0,"2.3 他人的认知与意愿"],["为他人提供个人事务辅导","2",0.2456,0.05,0.1,0.1,3.0,1.0,0,"2.1 他人福祉"],["提供财务建议","2",0.0903,0.1,0.25,0.25,3.0,1.0,1,"2.3 他人的认知与意愿"],["处理行政与文书事务","4",0.7215,0.25,0.75,0.9,1.0,4.0,0,"4.1 描述性信息"],["办理法院及法律行政事务","5",0.0365,0.0,0.175,0.25,2.5,3.0,0,"5.2 负担"],["执行金融交易","5",0.8592,0.0,0.5,0.75,4.0,4.0,1,"5.1 归属"],["签发证件与文件","5",0.0831,0.0,0.5,0.5,3.0,4.0,0,"5.3 资格与权限"],["处理货运与邮件","3",0.3151,0.0,0.1,0.75,2.0,3.0,0,"3.2 人造物与人居空间"],["处理法证与法律证据","3",0.0741,0.0,0.05,0.5,4.0,3.0,0,"3.2 人造物与人居空间"],["招聘人员","5",0.276,0.05,0.25,0.25,3.0,1.0,0,"5.2 负担"],["开展人力资源工作","5",0.1138,0.175,0.625,0.625,2.0,3.0,0,"5.2 负担"],["补充材料、设备与产品库存","3",0.4437,0.0,0.25,0.75,2.0,3.0,0,"3.2 人造物与人居空间"],["开具检查与治疗项目","4",0.0584,0.0,0.1,0.1,2.5,3.0,0,"4.2 指令性信息"],["分发材料与物资","3",0.3526,0.0,0.1,0.75,1.0,3.0,0,"3.2 人造物与人居空间"],["收取费用与款项","5",0.3363,0.0,0.5,0.75,2.5,4.0,0,"5.1 归属"],["采购商品或服务","5",0.7371,0.0,0.5,0.5,3.0,4.0,0,"5.1 归属"],["开具治疗处方与器具","5",0.2065,0.0,0.1,0.1,4.0,2.0,0,"5.3 资格与权限"],["监控资源与库存","4",0.3428,0.05,0.5,0.75,1.0,3.0,0,"4.1 描述性信息"]]/*END*/;
+  const MEN={'1':['本人身心','#8a5a9e'],'2':['他人身心与关系','var(--warm)'],'3':['物与环境','var(--gray-mark)'],'4':['信息','var(--accent)'],'5':['权利与义务','var(--blue)']};
+  const X0=60,X1=648,Y0=12,Y1=392,SMIN=.003,SMAX=4,XM=.3;let t=4,sel=-1;
+  const lx=v=>X0+(Math.log10(Math.max(v,SMIN))-Math.log10(SMIN))/(Math.log10(SMAX)-Math.log10(SMIN))*(X1-X0),ly=v=>Y1-6-v/.95*(Y1-Y0-12);
+  const jit=i=>(((i*2654435761)>>>0)%1000/1000-.5)*12;
+  const $=id=>document.getElementById(id);
+  $('iw-lg').innerHTML=Object.values(MEN).map(([n,c])=>`<span><i style="background:${c}"></i>${n}</span>`).join('')+'<span><i style="background:transparent;border:1.5px solid var(--ink);border-radius:50%"></i>与金融相关</span>';
+  const xm=lx(XM),ym=ly(.5);
+  $('iw-bg').innerHTML=`<rect x="${X0}" y="${Y0}" width="${X1-X0}" height="${Y1-Y0}" fill="var(--quote)"/>`+
+    `<rect x="${xm}" y="${Y0}" width="${X1-xm}" height="${ym-Y0}" fill="var(--accent-soft)"/><rect x="${xm}" y="${ym}" width="${X1-xm}" height="${Y1-ym}" fill="var(--warm-soft)"/>`+
+    `<line x1="${xm}" x2="${xm}" y1="${Y0}" y2="${Y1}" class="s-faint"/><line x1="${X0}" x2="${X1}" y1="${ym}" y2="${ym}" class="s-faint"/>`+
+    [.01,.1,1].map(v=>`<text x="${lx(v)}" y="${Y1+16}" text-anchor="middle" font-size="11" class="t-faint">${v}%</text>`).join('')+
+    [0,.25,.5,.75].map(v=>`<text x="${X0-6}" y="${ly(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text>`).join('')+
+    `<text x="${(X0+X1)/2}" y="${Y1+34}" text-anchor="middle" font-size="12" class="t-muted">占全部工作时间的比重（对数刻度）→</text>`+
+    `<text x="14" y="${(Y0+Y1)/2}" text-anchor="middle" font-size="12" class="t-muted" transform="rotate(-90 14 ${(Y0+Y1)/2})">代理可承担的比例 →</text>`;
+  const Q=[['tr','值得做，也有条件做',xm+8,Y0+18,'start'],['br','值得做，但条件不足',xm+8,Y1-10,'start'],['tl','有条件，但单项规模小',X0+8,Y0+18,'start'],['bl','规模小，条件也不足',X0+8,Y1-10,'start']];
+  const order=D.map((d,i)=>i).sort((a,b)=>D[a][8]-D[b][8]);
+  $('iw-p').innerHTML=order.map(i=>{const d=D[i];return `<circle class="iw-pt" data-i="${i}" cx="${lx(d[2]).toFixed(1)}" cy="${(ly(d[t])+jit(i)).toFixed(1)}" r="${d[8]?5:3.4}" fill="${MEN[d[1]][1]}" fill-opacity="${d[8]?.95:.6}" stroke="${d[8]?'var(--ink)':'none'}" stroke-width="1.4"><title>${d[0]}</title></circle>`;}).join('');
+  const pts=[...document.querySelectorAll('.iw-pt')];
+  const names={3:'Chat',4:'Agent',5:'具身 Agent'};
+  function quads(){const s={tr:[0,0],br:[0,0],tl:[0,0],bl:[0,0]};D.forEach(d=>{const k=(d[t]>=.5?'t':'b')+(d[2]>=XM?'r':'l');s[k][0]++;s[k][1]+=d[2];});return s;}
+  function draw(){pts.forEach(p=>{const i=+p.dataset.i;p.setAttribute('cy',(ly(D[i][t])+jit(i)).toFixed(1));});
+    const s=quads();$('iw-lab').innerHTML=Q.map(([k,n,x,y,a])=>`<text x="${x}" y="${y}" text-anchor="${a}" class="iw-q t-ink">${n}<tspan class="t-muted" font-weight="400"> ${s[k][0]} 项 · ${Math.round(s[k][1])}%</tspan></text>`).join('');
+    if(sel<0){$('iw-msg').textContent=`${names[t]} 条件下：值得做、也有条件做的活动约占工作时间的 ${Math.round(s.tr[1])}%；值得做但条件不足的约占 ${Math.round(s.br[1])}%。`;} else show(sel);}
+  function show(i){sel=i;pts.forEach(p=>p.classList.toggle('sel',+p.dataset.i===i));const d=D[i];
+    $('iw-msg').textContent=`${d[0]}（${MEN[d[1]][0]}，${d[9]}）：约占全部工作时间的 ${d[2]>=.01?d[2].toFixed(2):d[2].toFixed(3)}%；代理可承担的比例 Chat ${Math.round(d[3]*100)}% · Agent ${Math.round(d[4]*100)}% · 具身 Agent ${Math.round(d[5]*100)}%。`;}
+  pts.forEach(p=>p.addEventListener('click',()=>show(+p.dataset.i)));
+  document.querySelectorAll('[data-iwt]').forEach(b=>b.addEventListener('click',()=>{t=+b.dataset.iwt;document.querySelectorAll('[data-iwt]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  $('iw').addEventListener('anim-in',()=>{sel=-1;pts.forEach(p=>p.classList.remove('sel'));[3,4,5,4].forEach((k,j)=>setTimeout(()=>{t=k;document.querySelectorAll('[data-iwt]').forEach(x=>x.setAttribute('aria-pressed',String(+x.dataset.iwt===k)));draw();},200+j*2200));});
+  draw();
+})();
+</script>
+
+<h2 id="sec-7">七、第二道关：是否允许代办</h2>
+<p>能做到，不等于可以代办。有些事的价值在于本人亲历：锻炼、学习与陪伴，代办便失去了意义。有些事必须由本人决定：结婚、投票，以及在财务上作出重大承诺。有些事要求本人在场：出庭作证、面签。还有一些事由法律规定须本人作出：签署具有法律效力的文件，在开户与适当性评估中如实回答问题，确认已经理解产品的风险。在金融产品里，代理可以准备、解释与执行，但授权、确认与对风险的知悉，必须留给本人。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">能做到，不等于可以代办</p><p class="figsub">十二件事按是否允许代办分组。打开“只看金融事务”，看在金融产品里哪些环节必须留给本人。</p></div><button class="replay" type="button" data-replay="al">重播</button></div>
+    <label class="al-chk"><input type="checkbox" id="al-x"> 只看金融事务</label>
+    <div class="al" id="al" data-anim></div>
+    <p class="al-msg" id="al-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>“亲历、亲定、亲在、法定本人”四类为本书的归纳。各地对本人签署、身份核验与适当性评估的具体要求不同，图中只示意原则。</figcaption>
+</figure>
+<style>
+.al-chk{display:flex;gap:6px;align-items:center;font-size:14px;margin-bottom:8px}
+.al-chk input{accent-color:var(--accent);width:16px;height:16px}
+.al{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.al-g{background:var(--quote);border-radius:10px;padding:8px;display:flex;flex-direction:column;gap:5px}
+.al-g>b{font-size:13px} .al-g>span{font-size:11px;color:var(--faint);margin-top:-3px;line-height:1.4}
+.al-g.ok{background:var(--accent-soft)}
+.al-i{font-size:12.5px;border-radius:7px;padding:5px 8px;background:var(--surface);border:1px solid var(--line);opacity:0;transform:translateY(6px);transition:opacity .35s,transform .35s;transition-delay:calc(var(--i)*.08s)}
+.al.in .al-i{opacity:1;transform:none}
+.al-i.f{border-color:var(--accent)}
+.al.fin .al-i:not(.f){opacity:.25}
+.al-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.al{grid-template-columns:1fr 1fr}}
+</style>
+<script>
+(function(){
+  const G=[['可以代办','代理可以准备与完成',1,[['写一份研究摘要',1],['比较几只基金的费用',1],['整理一年的交易记录',1]]],
+    ['亲历','价值在于本人经历',0,[['锻炼身体',0],['学习一门课程',0],['理解自己承担的风险',1]]],
+    ['亲定','必须由本人决定',0,[['结婚',0],['决定把多少钱投入股市',1]]],
+    ['亲在','要求本人在场',0,[['出庭作证',0],['部分开户的身份核验',1]]],
+    ['法定本人','法律要求本人作出',0,[['签署合同',0],['如实回答适当性问卷',1]]]];
+  let n=0;const box=document.getElementById('al');
+  box.innerHTML=G.map(([h,s,ok,items])=>`<div class="al-g${ok?' ok':''}"><b>${h}</b><span>${s}</span>${items.map(([t,f])=>`<div class="al-i${f?' f':''}" style="--i:${n++}">${t}</div>`).join('')}</div>`).join('');
+  const x=document.getElementById('al-x');
+  function r(){box.classList.toggle('fin',x.checked);document.getElementById('al-msg').textContent=x.checked?'在金融产品里，研究、比较与整理可以交给代理；对风险的理解、投入多少的决定、身份核验与适当性问卷，必须由本人完成。代理能够执行交易，但授权与确认留给本人。':'能否代办与代理的能力无关：这些事的价值、责任或法律效力，要求它们由本人完成。';}
+  x.addEventListener('change',r);
+  box.addEventListener('anim-in',()=>{x.checked=false;r();setTimeout(()=>{x.checked=true;r();},2600);});
+  r();
+})();
+</script>
+
+<h2 id="sec-8">八、第三道关：是否值得交出</h2>
+<p>把一件事交给别人，要先付出一笔固定的成本：说清目标与约束，提供必要的信息，确认对方理解了。科斯（1937）用交易成本解释企业为什么存在：当通过市场交代一件事的成本高于在内部完成的成本时，人们选择自己做。交给代理也是如此。只做一次的小事，说明的成本可能比自己做还高；反复发生的事，一次说清可以多次使用，固定成本被分摊。持续性的任务，因此是最值得交出的一类。</p>
+<figure>
+  <div class="card">
+    <p class="figtitle">交代一件事的固定成本</p>
+    <p class="figsub">第一次交给代理，要先花时间说清目标、约束与所需信息；此后每做一次，都比自己做节省一些时间。拖动参数，看做多少次之后才开始划算。</p>
+    <div class="wt" id="wt" data-anim>
+      <svg viewBox="0 0 640 220" role="img" aria-label="累计节省的时间"><g id="wt-ax"></g><path id="wt-p" class="wt-l"/><circle id="wt-be" r="6" fill="var(--ink)"/><text id="wt-bt" font-size="12" class="t-ink" text-anchor="middle"></text></svg>
+      <div class="wt-sl">
+        <div class="sl"><label for="wt-c">第一次说清楚要花 <b id="wt-cv"></b></label><input id="wt-c" type="range" min="10" max="120" step="5" value="60"></div>
+        <div class="sl"><label for="wt-s">此后每次节省 <b id="wt-sv"></b></label><input id="wt-s" type="range" min="2" max="40" step="1" value="8"></div>
+      </div>
+      <p class="wt-msg" id="wt-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意计算：累计节省 ＝ 每次节省 × 次数 － 第一次说清楚的成本。交易成本解释组织边界的思路见 Coase（1937）。</figcaption>
+</figure>
+<style>
+.wt svg{width:100%;height:auto;display:block}
+.wt-l{fill:none;stroke:var(--accent);stroke-width:2.5}
+.wt-sl{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.wt-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.wt-sl{grid-template-columns:1fr}.wt svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const N=30,X0=56,X1=620,YT=14,YB=190,x=n=>X0+n/N*(X1-X0),Y={min:-120,max:600},y=v=>YT+(Y.max-v)/(Y.max-Y.min)*(YB-YT);
+  const $=id=>document.getElementById(id),c=$('wt-c'),s=$('wt-s');
+  const axis=()=>{$('wt-ax').innerHTML=`<line x1="${X0}" y1="${y(0)}" x2="${X1}" y2="${y(0)}" class="s-faint"/>`+[0,10,20,30].map(n=>`<text x="${x(n)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${n} 次</text>`).join('')+
+    [0,Math.round(Y.max/2/50)*50].map(v=>`<text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+`<text x="${X0}" y="${YT-2}" font-size="11" class="t-faint">累计节省（分钟）</text>`;};
+  function r(){const C=+c.value,S=+s.value;Y.min=-C*1.15;Y.max=Math.max(100,S*N-C)*1.1;axis();$('wt-cv').textContent=C+' 分钟';$('wt-sv').textContent=S+' 分钟';
+    let d='';for(let n=0;n<=N;n++)d+=(n?'L':'M')+x(n).toFixed(1)+','+y(S*n-C).toFixed(1);$('wt-p').setAttribute('d',d);
+    const be=C/S;const show=be<=N;$('wt-be').setAttribute('opacity',show?1:0);$('wt-be').setAttribute('cx',x(Math.min(be,N)));$('wt-be').setAttribute('cy',y(0));
+    $('wt-bt').setAttribute('x',x(Math.min(be,N)));$('wt-bt').setAttribute('y',y(0)-12);$('wt-bt').textContent=show?'第 '+Math.ceil(be)+' 次起划算':'';
+    $('wt-msg').textContent=be<=1?'第一次就划算：说明的成本低于一次节省的时间。':be<=N?`要做到第 ${Math.ceil(be)} 次才开始划算。只做一两次的小事，自己做更省事；反复发生的事，一次说清，此后持续受益。`:`三十次之内都不划算：这件事要么太少发生，要么交代起来太费事。`;}
+  c.addEventListener('input',r);s.addEventListener('input',r);
+  $('wt').addEventListener('anim-in',()=>{let v=40;s.value=v;r();const id=setInterval(()=>{v-=2;s.value=v;r();if(v<=8)clearInterval(id);},150);});
+  r();
+})();
+</script>
+
+<h2 id="sec-9">九、金融事务落在哪里</h2>
+<p>用三道关检查个人投资者的常见事务：查数据、解释一件事、研究一家公司、筛选与比较，结果都落在信息上，代理可以触及，也允许代办，适用比例很高；持续跟踪反复发生，最值得交出。制定计划并下单、按目标管理组合，会改变权利与义务，代理能够执行，但每一步都需要本人的授权与确认。复盘的结果落在本人的认知上，代理可以整理事实与拆解原因，结论却要本人形成。适用比例最高的，恰恰是对长期结果影响较小的信息类事务；影响最大的配置与执行，正是需要授权的部分。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">个人投资者的常见事务，过了哪几道关</p><p class="figsub">每一行是一类事务，三列是三道关。条形是代理大致能承担的比例。点按一行查看说明。</p></div><button class="replay" type="button" data-replay="fn">重播</button></div>
+    <div class="fn" id="fn" data-anim>
+      <div class="fn-h"><span>事务</span><span>能触及</span><span>允许代办</span><span>值得交出</span><span>代理能承担的比例</span></div>
+      <div id="fn-rows"></div>
+    </div>
+    <p class="fn-msg" id="fn-msg" aria-live="polite">点按一行。</p>
+  </div>
+  <figcaption>示意判断。“部分”表示代理可以准备与执行，但关键环节需要本人授权、确认或形成结论。</figcaption>
+</figure>
+<style>
+.fn-h,.fn-r{display:grid;grid-template-columns:minmax(0,1.4fr) 60px 60px 60px minmax(0,1.3fr);gap:8px;align-items:center}
+.fn-h{font-size:11.5px;color:var(--faint);padding:0 8px 4px}
+.fn-r{font:inherit;width:100%;text-align:left;background:var(--quote);border:1.5px solid transparent;border-radius:8px;padding:6px 8px;margin-bottom:4px;color:var(--ink);cursor:pointer;font-size:13px}
+.fn-r.sel{border-color:var(--ink)}
+.fn-r i{font-style:normal;font-size:11.5px;border-radius:5px;padding:2px 0;text-align:center}
+.fn-r i.y{background:var(--accent-soft);color:var(--accent)} .fn-r i.p{background:rgba(160,120,24,.15);color:var(--gold)} .fn-r i.n{background:var(--surface);color:var(--faint)}
+.fn-t{height:12px;background:var(--surface);border-radius:6px;overflow:hidden}
+.fn-t b{display:block;height:100%;width:0;background:var(--accent);border-radius:6px;transition:width .6s ease;transition-delay:calc(var(--i)*.1s)}
+.fn-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.fn-h,.fn-r{grid-template-columns:minmax(0,1fr) 40px 40px 40px}.fn-h span:last-child,.fn-t{display:none}}
+</style>
+<script>
+(function(){
+  const Y='y',P='p',N='n',L={y:'能',p:'部分',n:'一般'};
+  const R=[['查一个数据',Y,Y,P,95,'结果是信息，可以完全交出；但单次节省很少，频繁发生才显出价值。'],
+    ['解释一件事',Y,Y,P,90,'代理可以给出有依据的解释；理解本身仍发生在本人身上。'],
+    ['研究公司或观点',Y,Y,Y,75,'收集材料、整理数据与起草分析都可以交出；判断与结论需要本人认可。'],
+    ['筛选与比较',Y,Y,Y,85,'条件清楚时几乎可以完全交出。'],
+    ['持续跟踪',Y,Y,Y,90,'反复发生，一次说清可以长期使用，是最值得交出的事务。'],
+    ['制定计划并下单',Y,P,Y,55,'代理可以拟定计划、计算与提交，但下单前需要本人确认，投入多少由本人决定。'],
+    ['按目标管理组合',Y,P,Y,60,'调整可以由代理执行，目标、约束与授权范围由本人设定，越出范围要请示。'],
+    ['复盘',Y,P,P,50,'代理可以整理事实、拆解原因；从中得出的教训要由本人形成。']];
+  document.getElementById('fn-rows').innerHTML=R.map(([n,a,b,c,s],i)=>`<button type="button" class="fn-r" data-i="${i}"><span>${n}</span><i class="${a}">${L[a]}</i><i class="${b}">${L[b]}</i><i class="${c}">${c==='y'?'值得':'看频率'}</i><div class="fn-t"><b style="--i:${i}" data-w="${s}"></b></div></button>`).join('');
+  const rs=[...document.querySelectorAll('.fn-r')],bs=[...document.querySelectorAll('.fn-t b')];
+  rs.forEach((r,i)=>r.addEventListener('click',()=>{rs.forEach(x=>x.classList.toggle('sel',x===r));document.getElementById('fn-msg').textContent=R[i][0]+'：'+R[i][5];}));
+  const fill=()=>bs.forEach(b=>b.style.width=b.dataset.w+'%');
+  document.getElementById('fn').addEventListener('anim-in',()=>{bs.forEach(b=>b.style.width='0');setTimeout(fill,60);});
+  fill();
+})();
+</script>
+
+<h2 id="sec-10">十、金融从业者：离信息近，还是离客户与决定近</h2>
+<p>在金融保险行业内部，上限的高低取决于职业离处理信息近，还是离决定权利义务、面对客户近（作者估算）。审核、记录与分析类职业，如信用分析师、银行柜员与量化分析师，上限约 3～3.7 倍；直接决定资产处分或面对客户的职业，如基金经理、理财顾问、精算师与核保员，只有 1.6～1.9 倍。即使具备具身能力，后者的上限也变化很小：限制来自授权与信任，而不是工具。任务层面，证券经纪人的「记录交易」「监测市场或持仓」「报告持仓与交易结果」可交给 Agent 的比例为 0.82～0.90，「报价买卖」「议定价格」只有 0.25；基金经理的「为基金选定投资」「选择或指令交易」只有 0.18～0.25。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">金融保险行业：26 个职业的工作构成与上限（作者估算）</p><p class="figsub">左侧是工作时间按事务类别的构成，右侧是 Agent 条件下整份工作的放大倍数上限。切换排序，看上限的高低与什么有关。</p></div><button class="replay" type="button" data-replay="fo">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="排序">
+      <button type="button" data-fos="g" aria-pressed="true">按子行业</button>
+      <button type="button" data-fos="c" aria-pressed="false">按上限</button>
+    </div>
+    <div class="legend" id="fo-lg"></div>
+    <div class="fo" id="fo" data-anim></div>
+    <p class="fo-msg">审核、记录与分析类职业上限约 3～3.7 倍；直接决定资产处分或面对客户的职业，如基金经理、理财顾问、精算师与核保员，只有 1.6～1.9 倍。</p>
+  </div>
+  <figcaption>作者估算：O*NET 31.0 中 26 个金融保险职业的任务按（重要度 − 1）× 频次加权；金融与投资分析师、金融风险专员没有任务评分，按任务等权计算。方法与数据见<a href="estimates.html">附录：作者估算的方法与数据</a>。</figcaption>
+</figure>
+<style>
+.fo{display:grid;gap:2px;margin-top:8px}
+.fo-h{font-size:12px;color:var(--faint);margin:8px 0 2px}
+.fo-r{display:grid;grid-template-columns:9em 1fr 92px;gap:10px;align-items:center;font-size:12.5px}
+.fo-bar{display:flex;height:12px;border-radius:3px;overflow:hidden;background:var(--quote)}
+.fo-bar i{display:block;height:100%;transform-origin:left;transform:scaleX(0);transition:transform .6s}
+.fo.in .fo-bar i{transform:none}
+.fo-c{position:relative;height:12px}
+.fo-c i{position:absolute;left:0;top:0;height:100%;border-radius:3px;background:var(--accent);transition:width .7s}
+.fo-c span{position:absolute;right:0;top:-2px;font-size:11.5px;font-variant-numeric:tabular-nums;background:var(--card);padding-left:3px}
+.fo-msg{font-size:14px;margin:10px 0 0}
+@media (max-width:640px){.fo-r{grid-template-columns:6.8em 1fr 70px;font-size:11.5px}}
+</style>
+<script>
+(function(){
+  const D=/*DATA:fin*/[["银行与信贷","贷款专员",0.5288,{"2":0.321,"4d":0.493,"5":0.133,"1":0.053}],["银行与信贷","信用分析师",0.7323,{"4d":0.838,"2":0.12,"5":0.042}],["银行与信贷","信贷咨询师",0.5499,{"4d":0.496,"2":0.463,"5":0.041}],["银行与信贷","贷款面谈与经办员",0.651,{"2":0.252,"4d":0.605,"5":0.144}],["银行与信贷","授信审核员",0.6652,{"4d":0.721,"2":0.167,"3":0.065,"5":0.047}],["银行与信贷","银行柜员",0.6908,{"4d":0.591,"5":0.263,"2":0.139,"3":0.007}],["银行与信贷","账款催收员",0.5488,{"4d":0.291,"2":0.383,"5":0.306,"3":0.02}],["证券与资产管理","投资基金经理",0.4716,{"5":0.278,"4d":0.4,"2":0.205,"4s":0.05,"1":0.066}],["证券与资产管理","金融与投资分析师",0.5635,{"2":0.346,"4d":0.577,"5":0.038,"1":0.038}],["证券与资产管理","金融量化分析师",0.6769,{"4d":0.774,"2":0.226}],["证券与资产管理","金融风险专员",0.6304,{"4d":0.75,"2":0.217,"1":0.033}],["证券与资产管理","个人理财顾问",0.4428,{"2":0.668,"4d":0.285,"5":0.047}],["证券与资产管理","经纪人",0.5812,{"5":0.135,"4d":0.504,"2":0.361}],["证券与资产管理","证券经纪业务文员",0.6569,{"2":0.245,"4d":0.693,"3":0.061}],["保险","精算师",0.3844,{"4d":0.228,"5":0.397,"2":0.303,"1":0.073}],["保险","核保员",0.449,{"4d":0.465,"5":0.364,"2":0.171}],["保险","保险销售代理",0.5294,{"2":0.469,"4d":0.349,"5":0.059,"1":0.081,"4s":0.043}],["保险","理赔调查员",0.5004,{"4d":0.429,"4s":0.137,"5":0.077,"2":0.357}],["保险","车险定损员",0.5624,{"4d":0.785,"4s":0.164,"2":0.051}],["保险","理赔与保单处理文员",0.646,{"4d":0.626,"3":0.059,"2":0.214,"5":0.101}],["各子行业共有的职能","财务经理",0.5319,{"2":0.312,"4d":0.555,"5":0.133}],["各子行业共有的职能","合规专员",0.4505,{"2":0.31,"4d":0.286,"5":0.324,"4s":0.078,"1":0.003}],["各子行业共有的职能","反欺诈调查与分析师",0.4919,{"4d":0.454,"2":0.193,"4s":0.223,"5":0.045,"1":0.064,"3":0.021}],["各子行业共有的职能","会计与审计",0.6406,{"4d":0.68,"5":0.088,"4s":0.028,"2":0.204}],["各子行业共有的职能","客户服务代表",0.6383,{"2":0.565,"4d":0.327,"5":0.108}],["各子行业共有的职能","软件开发人员",0.5571,{"4d":0.562,"2":0.438}]]/*END*/;
+  const G=[['4d','信息·数字可得','var(--accent)'],['4s','信息·须现场感知','var(--accent-soft)'],['2','他人身心与关系','var(--warm)'],['5','权利与义务','var(--blue)'],['1','本人判断与决定','#8a5a9e'],['3','物与环境','var(--gray-mark)']];
+  document.getElementById('fo-lg').innerHTML=G.map(([k,n,c])=>`<span><i style="background:${c}"></i>${n}</span>`).join('');
+  const box=document.getElementById('fo'),cap=p=>1/(1-p),x=v=>(v-1)/3*100;
+  function row(d){const tot=Object.values(d[3]).reduce((a,b)=>a+b,0),c=cap(d[2]);
+    return `<div class="fo-r"><span>${d[1]}</span><div class="fo-bar">${G.map(([k,,col])=>`<i style="width:${(d[3][k]||0)/tot*100}%;background:${col}"></i>`).join('')}</div><div class="fo-c"><i style="width:${x(c)*.62}%"></i><span>${c.toFixed(1)} 倍</span></div></div>`;}
+  function draw(s){document.querySelectorAll('[data-fos]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.fos===s)));
+    if(s==='c'){box.innerHTML=D.slice().sort((a,b)=>b[2]-a[2]).map(row).join('');return;}
+    const gs=[...new Set(D.map(d=>d[0]))];box.innerHTML=gs.map(g=>`<div class="fo-h">${g}</div>`+D.filter(d=>d[0]===g).sort((a,b)=>b[2]-a[2]).map(row).join('')).join('');}
+  document.querySelectorAll('[data-fos]').forEach(b=>b.addEventListener('click',()=>draw(b.dataset.fos)));
+  draw('g');
+})();
+</script>
+
+<h2 id="sec-11">十一、投资者本人：持续监测决定整体</h2>
+<p>投资者管理自己的资产，每件投资事务都能对应到某个从业者的一项任务：持续监测对应经纪人的「监测市场或持仓」，研究对应基金经理的「开展公司与行业研究」，复盘对应「报告持仓与交易结果」。按作者假设的各事务年投入时间，用从业者任务的可达比例折算，配置型投资者的整体上限约 3.8 倍，交易者约 4.8 倍；同一口径下，基金经理、理财顾问与经纪人只有 1.8～2.4 倍（作者估算）。</p>
+<p>个人投资者高于从业者，原因在于委托人就是本人。理财顾问约三分之二的工作时间用于与客户沟通、解释方案与推荐产品，这部分代理很难接手；投资者管理自己的资产时，这部分工作不存在，投入几乎全是看行情、研究、做计划与复盘。其中持续监测占比最大：在作者的假设下，配置型投资者约 43%、交易者约 73% 的投资投入花在持续监测上。以交易者为例，监测提速 10 倍、其余事务提速 2 倍时，整体约 4.8 倍；反过来只有约 2.6 倍。持续监测也是从业者任务中代理最能接手的一类，前提是代理能按约定的条件持续在线运行。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">投资者本人：持续监测决定整体（作者估算）</p><p class="figsub">上方是一年投资投入按事务的构成；下方调整持续监测与其余事务各提速多少倍，看整体的放大倍数。</p></div><button class="replay" type="button" data-replay="iv">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="投资者类型">
+      <button type="button" data-ivg="配置型投资者" aria-pressed="false">配置型投资者</button>
+      <button type="button" data-ivg="交易者" aria-pressed="true">交易者</button>
+    </div>
+    <div class="iv" id="iv" data-anim>
+      <div class="iv-bar" id="iv-bar"></div>
+      <div class="iv-list" id="iv-list"></div>
+      <div class="iv-sl">
+        <div class="sl"><label for="iv-m">持续监测提速 <b id="iv-mv"></b></label><input id="iv-m" type="range" min="1" max="20" step="1" value="10"></div>
+        <div class="sl"><label for="iv-o">其余事务提速 <b id="iv-ov"></b></label><input id="iv-o" type="range" min="1" max="20" step="1" value="2"></div>
+      </div>
+      <div class="iv-out"><span>整体放大倍数</span><b id="iv-x"></b><span id="iv-x2"></span></div>
+      <div class="iv-cmp" id="iv-cmp"></div>
+    </div>
+  </div>
+  <figcaption>作者估算：各事务一年投入的小时数为作者对典型个人投资者的假设；每件事务对应到 O*NET 中从业者的一项任务，按该任务的 Agent 可达比例折算上限。方法与数据见<a href="estimates.html">附录：作者估算的方法与数据</a>。</figcaption>
+</figure>
+<style>
+.iv-bar{display:flex;height:22px;border-radius:5px;overflow:hidden;background:var(--quote)}
+.iv-bar i{display:block;height:100%;border-right:1px solid var(--card);transition:width .6s}
+.iv-list{display:grid;grid-template-columns:repeat(2,1fr);gap:2px 16px;margin:8px 0 12px;font-size:12px;color:var(--muted)}
+.iv-list span b{color:var(--ink);font-weight:500;font-variant-numeric:tabular-nums;margin-left:4px}
+.iv-list i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px}
+.iv-sl{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.iv-out{display:flex;align-items:baseline;gap:10px;margin-top:10px;flex-wrap:wrap}
+.iv-out span{font-size:12.5px;color:var(--faint)} .iv-out b{font-size:26px;font-variant-numeric:tabular-nums}
+.iv-cmp{display:grid;gap:4px;margin-top:12px}
+.iv-ch{font-size:12px;color:var(--faint);margin:0 0 2px}
+.iv-cr{display:grid;grid-template-columns:11em 1fr 56px;gap:10px;align-items:center;font-size:12.5px}
+.iv-cr div{height:10px;background:var(--quote);border-radius:3px;overflow:hidden}
+.iv-cr div i{display:block;height:100%;border-radius:3px;transition:width .6s}
+.iv-cr b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+@media (max-width:640px){.iv-list{grid-template-columns:1fr}.iv-sl{grid-template-columns:1fr;gap:4px}.iv-cr{grid-template-columns:8.5em 1fr 48px;font-size:11.5px}}
+</style>
+<script>
+(function(){
+  const D=/*DATA:inv*/[["配置型投资者","确定目标、期限与可承受损失","1",0.0069,0.25],["配置型投资者","持续监测标的与组合","4d",0.4324,0.75],["配置型投资者","目标导向的组合管理","5",0.0553,0.25],["配置型投资者","公司与观点研究","4d",0.1291,0.825],["配置型投资者","制定交易计划","4d",0.0415,0.625],["配置型投资者","提交订单","5",0.0005,0.25],["配置型投资者","交易复盘","4d",0.0507,0.825],["配置型投资者","事件解读","4d",0.083,0.825],["配置型投资者","标的筛选与比较","4d",0.0415,0.625],["配置型投资者","建立新的分析方法","4d",0.1107,0.825],["配置型投资者","接入新的数据来源","4d",0.0015,0.75],["配置型投资者","数据查询","4d",0.033,0.825],["配置型投资者","分享研究成果","2",0.0138,0.825],["交易者","确定交易规则与风险上限","1",0.0022,0.4375],["交易者","交易时段按条件持续监测","4d",0.7286,0.825],["交易者","下单前核对成本与风险","4d",0.0431,0.725],["交易者","提交订单","5",0.0022,0.25],["交易者","风险事件处置","5",0.0141,0.625],["交易者","制定交易计划（每周约 2 次）","4d",0.1137,0.625],["交易者","交易复盘（按月）","4d",0.0962,0.825]]/*END*/;
+  const C={'1':'#8a5a9e','2':'var(--warm)','4d':'var(--accent)','5':'var(--blue)'};
+  const $=id=>document.getElementById(id);let g='交易者';
+  const isMon=a=>/监测|盯盘/.test(a);
+  function rows(){return D.filter(d=>d[0]===g);}
+  function draw(){const R=rows(),mon=R.filter(d=>isMon(d[1])).reduce((a,d)=>a+d[3],0);
+    $('iv-bar').innerHTML=R.map(d=>`<i style="width:${d[3]*100}%;background:${C[d[2]]};opacity:${isMon(d[1])?1:.55}" title="${d[1]}"></i>`).join('');
+    $('iv-list').innerHTML=R.slice().sort((a,b)=>b[3]-a[3]).map(d=>`<span><i style="background:${C[d[2]]}"></i>${d[1]}<b>${(d[3]*100).toFixed(d[3]<.01?1:0)}%</b></span>`).join('');
+    const m=+$('iv-m').value,o=+$('iv-o').value,x=1/(mon/m+(1-mon)/o);
+    $('iv-mv').textContent=m+' 倍';$('iv-ov').textContent=o+' 倍';$('iv-x').textContent=x.toFixed(1)+' 倍';
+    $('iv-x2').textContent=`持续监测约占投入的 ${Math.round(mon*100)}%`;
+    const onet=1/R.reduce((a,d)=>a+d[3]*(1-d[4]),0);
+    const P=[[`${g}（按从业者任务折算）`,onet,'var(--accent)'],['经纪人',2.39,'var(--faint)'],['投资基金经理',1.89,'var(--faint)'],['个人理财顾问',1.79,'var(--faint)']];
+    $('iv-cmp').innerHTML='<p class="iv-ch">Agent 条件下整体的上限：投资者本人与从业者</p>'+P.map(([n,v,c])=>`<div class="iv-cr"><span>${n}</span><div><i style="width:${(v-1)/5*100}%;background:${c}"></i></div><b>${v.toFixed(1)} 倍</b></div>`).join('');}
+  document.querySelectorAll('[data-ivg]').forEach(b=>b.addEventListener('click',()=>{g=b.dataset.ivg;document.querySelectorAll('[data-ivg]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  ['iv-m','iv-o'].forEach(id=>$(id).addEventListener('input',draw));
+  $('iv').addEventListener('anim-in',()=>{const s=[[10,2],[2,10],[10,2]];s.forEach(([m,o],i)=>setTimeout(()=>{$('iv-m').value=m;$('iv-o').value=o;draw();},300+i*2200));});
+  draw();
+})();
+</script>
+
+<h2 id="sec-12">十二、对产品设计的含义</h2>
+<p>先看交出去的是哪一种尺度，再找适用比例高、反复发生的事务，补齐代理需要的数据、工具与准入，并在需要授权的环节把确认留给本人。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：先找能交出去的部分</p><p class="figsub">六条设计要求，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="ch20summary">重播</button></div>
+    <div class="ch20summary" id="ch20summary" data-anim><div class="ch20summary-c" style="--i:0"><em>交出去的尺度</em><b>持续的责任要有自己的组织方式</b><p>打扰分层、过去可以核查、将来可以预见；一次查询不需要长期关系。</p></div><div class="ch20summary-c" style="--i:1"><em>结果落在哪里</em><b>从信息与权利义务类事务做起</b><p>代理能直接改变这两类事务的结果；涉及身体与物理世界的事务，只作辅助。</p></div><div class="ch20summary-c" style="--i:2"><em>适用比例决定上限</em><b>扩大代理能完整承担的范围</b><p>把一件事中代理做不了的环节逐一补齐，比继续提高生成速度更能提高整体倍数。</p></div><div class="ch20summary-c" style="--i:3"><em>条件决定可达份额</em><b>补齐数据、工具与准入</b><p>账户与成交数据是上下文，交易通道是工具，牌照与托管是准入；持续监测是投资者投入最多、代理最能接手的部分。</p></div><div class="ch20summary-c warn" style="--i:4"><em>能做到不等于可以代办</em><b>把授权、确认与知悉留给本人</b><p>代理准备与执行；投入多少、是否下单、是否理解风险，由本人作出并留下记录。</p></div><div class="ch20summary-c warn" style="--i:5"><em>交代有固定成本</em><b>优先承接反复发生的事务</b><p>让一次说清的目标与约束可以长期使用，持续跟踪类任务最值得交出。</p></div></div>
+  </div>
+</figure>
+<style>
+.ch20summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch20summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.25s)}
+.ch20summary-c.warn{border-left-color:var(--warm)}
+.ch20summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch20summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch20summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch20summary.in .ch20summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch20summary{grid-template-columns:1fr}}
+</style>
+
+<h2 id="sec-13">口径与局限</h2>
+<ul class="notes"><li>行业、职业与投资者的数字均为作者估算：332 项工作活动由两位编码者按同一口径独立判定，编码者为两个互不参照的大语言模型实例，作者制定口径并审阅汇总结果，未逐项人工复核。</li><li>可达比例按代理能完整、正确履行的理论前提判定，不按今天的可靠性打折。</li><li>O*NET 没有任务时长，任务的重要度与频次只是时间占比的代理；美国的职业口径与欧盟的就业结构混用。</li><li>投资者各事务的年投入时间是作者对典型个人投资者的假设。</li></ul>
+<h2 id="sec-14">参考文献</h2>
+<ul class="refs"><li>Autor, D. H., Levy, F., &amp; Murnane, R. J. (2003). The skill content of recent technological change: An empirical exploration. <i>Quarterly Journal of Economics</i>, 118(4), 1279–1333.</li><li>Eloundou, T., Manning, S., Mishkin, P., &amp; Rock, D. (2023). GPTs are GPTs: An early look at the labor market impact potential of large language models. arXiv:2303.10130.</li><li>Amdahl, G. M. (1967). Validity of the single processor approach to achieving large scale computing capabilities. <i>AFIPS Conference Proceedings</i>, 30, 483–485.</li><li>Johansen, R. (1988). <i>Groupware: Computer support for business teams</i>. New York: Free Press.</li><li>National Center for O*NET Development. O*NET 31.0 Database. https://www.onetcenter.org/database.html</li><li>Eurostat. Employment by sex, occupation and economic activity (from 2008 onwards, NACE Rev. 2), lfsa_eisn2.</li><li>Coase, R. H. (1937). The nature of the firm. <i>Economica</i>, 4(16), 386–405.</li></ul>
+<footer class="nav"><a href="ch19.html">← 第 19 章　放大倍数：理论与实测</a><a href="ch21.html">第 21 章　能力从哪里来、在哪里失效 →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

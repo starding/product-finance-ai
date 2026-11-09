@@ -1,0 +1,42 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">收获一次，吃饭十二个月</p><p class="figsub">秋天收获 12 份粮食，每月吃 1 份刚好够。切换两种吃法：吃掉的总量一样，分配在时间上不同。</p></div><button class="replay" type="button" data-replay="hv">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="吃法">
+      <button type="button" data-hv="free" aria-pressed="true">想吃多少吃多少</button>
+      <button type="button" data-hv="even" aria-pressed="false">平均分到每个月</button>
+    </div>
+    <div class="hv" id="hv" data-anim>
+      <svg viewBox="0 0 640 220" role="img" aria-label="每月的消费与库存"><g id="hv-ax"></g><g id="hv-b"></g><path id="hv-st" class="hv-st"/></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>当月吃掉</span><span><i style="background:var(--warm)"></i>挨饿的月份</span><span><i style="background:var(--faint)"></i>仓里剩下的粮食</span></div>
+      <p class="hv-msg" id="hv-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：“想吃多少吃多少”按每月最多吃 3 份计算。</figcaption>
+</figure>
+<style>
+.hv svg{width:100%;height:auto;display:block}
+.hv-st{fill:none;stroke:var(--faint);stroke-width:1.8;stroke-dasharray:4 3}
+.hv-b rect{transition:height .5s,y .5s}
+.hv-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.hv svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const M=['秋','','','冬','','','春','','','夏','',''],X0=40,X1=630,YB=186,YT=14,W=(X1-X0)/12,y=v=>YB-v/12*(YB-YT);
+  const $=id=>document.getElementById(id);
+  $('hv-ax').innerHTML=[0,3,6,9,12].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+
+    `<line x1="${X0}" x2="${X1}" y1="${y(1)}" y2="${y(1)}" stroke="var(--warm)" stroke-dasharray="3 3"/><text x="${X1}" y="${y(1)-5}" text-anchor="end" font-size="11" class="t-warm">够吃的线：1 份</text>`+
+    M.map((m,i)=>`<text x="${X0+W*i+W/2}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${m||i+1}</text>`).join('');
+  $('hv-b').innerHTML=M.map((_,i)=>`<rect x="${X0+W*i+W*.2}" width="${W*.6}" y="${YB}" height="0" rx="2"/>`).join('');
+  const rs=[...document.querySelectorAll('#hv-b rect')];
+  function plan(k){let s=12;const c=[],st=[];for(let i=0;i<12;i++){const e=k==='free'?Math.min(3,s):Math.min(1,s);c.push(e);s-=e;st.push(s);}return [c,st];}
+  function set(k){document.querySelectorAll('[data-hv]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.hv===k)));
+    const [c,st]=plan(k);let hungry=0;
+    rs.forEach((r,i)=>{const v=c[i],h=v<1;if(h)hungry++;const hh=h?Math.max(3,(YB-y(Math.max(v,.12)))):YB-y(v);r.setAttribute('y',YB-hh);r.setAttribute('height',hh);r.setAttribute('fill',h?'var(--warm)':'var(--accent)');});
+    $('hv-st').setAttribute('d','M'+X0+','+y(12)+st.map((v,i)=>'L'+(X0+W*(i+1))+','+y(v)).join(''));
+    $('hv-msg').textContent=k==='free'?`前四个月每月吃 3 份，之后 ${hungry} 个月仓里空空，只能挨饿。`:'每个月吃 1 份，十二个月都够，没有一个月挨饿。吃掉的总量同样是 12 份。';}
+  document.querySelectorAll('[data-hv]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.hv)));
+  $('hv').addEventListener('anim-in',()=>{set('free');setTimeout(()=>set('even'),2600);});
+  set('free');
+})();
+</script>

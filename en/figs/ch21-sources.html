@@ -1,0 +1,42 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">Three sources of capability</p>
+    <p class="figsub">Task: compare the fees and maximum drawdowns of two funds over the past three years. Tick or untick the three sources and see how the agent's result changes.</p>
+    <div class="sr" id="sr" data-anim>
+      <div class="sr-in">
+        <label class="sr-k" style="--c:var(--accent)"><input type="checkbox" data-sr="m" checked><b>Model</b><span>Understands the question, organizes the steps, writes the conclusion</span></label>
+        <label class="sr-k" style="--c:var(--blue)"><input type="checkbox" data-sr="c" checked><b>Context</b><span>Which two funds, and which period matters</span></label>
+        <label class="sr-k" style="--c:var(--gold)"><input type="checkbox" data-sr="t" checked><b>Tools</b><span>Query the latest net asset values, calculate drawdowns precisely</span></label>
+      </div>
+      <div class="sr-out" id="sr-out"><em id="sr-st"></em><p id="sr-tx"></p></div>
+    </div>
+  </div>
+  <figcaption>Illustrative. On the effect of tools on calculation and factual errors, see Schick et al. (2023) and Gao et al. (2023).</figcaption>
+</figure>
+<style>
+.sr-in{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.sr-k{display:flex;flex-direction:column;gap:3px;border:1.5px solid var(--line);border-top:3px solid var(--c);border-radius:10px;padding:8px 10px;cursor:pointer;background:var(--surface);transition:opacity .3s}
+.sr-k input{accent-color:var(--c);width:16px;height:16px}
+.sr-k b{font-size:14px} .sr-k span{font-size:12px;color:var(--muted);line-height:1.5}
+.sr-k:has(input:not(:checked)){opacity:.45}
+.sr-out{margin-top:10px;border-radius:10px;padding:12px 14px;background:var(--quote);border-left:3px solid var(--accent);min-height:6.4em;transition:border-color .3s}
+.sr-out.bad{border-left-color:var(--warm)}
+.sr-out em{display:block;font-style:normal;font-size:12px;color:var(--faint);margin-bottom:4px}
+.sr-out p{margin:0;font-size:14px;line-height:1.7}
+@media (max-width:640px){.sr-in{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=s=>document.querySelector(s);
+  function r(){const m=$('[data-sr=m]').checked,c=$('[data-sr=c]').checked,t=$('[data-sr=t]').checked;let st,tx,ok=false;
+    if(!m){st='Cannot be done';tx='Without a model, nothing understands the question, plans the steps or puts the conclusion together; data and tools are only raw material.';}
+    else if(!c&&!t){st='Generalities, untrustworthy numbers';tx='"Funds with lower fees tend to do better over the long run, and drawdown reflects risk..." Without knowing which two funds are being compared, and without data, it can only state general principles or make up a few plausible-looking numbers.';}
+    else if(!c){st='Accurate data, but the wrong question';tx='The agent found data but does not know which two funds the principal means or which period matters, so it has to make assumptions, and the result may be irrelevant to the need.';}
+    else if(!t){st='Right funds, numbers possibly from memory';tx='The agent knows what to compare but cannot look up the latest net asset values or calculate drawdowns precisely: the fees and drawdowns it gives may be out of date or even wrong, and they look just as certain.';}
+    else{st='Ready to deliver';tx='Fees and maximum drawdowns of the two funds over the past three years side by side, with data sources and cut-off dates noted and a calculation that can be rechecked.';ok=true;}
+    $('#sr-st').textContent=st;$('#sr-tx').textContent=tx;$('#sr-out').classList.toggle('bad',!ok);}
+  document.querySelectorAll('[data-sr]').forEach(i=>i.addEventListener('change',r));
+  $('#sr').addEventListener('anim-in',()=>{const seq=[['t',false],['c',false],['t',true],['c',true]];seq.forEach(([k,v],i)=>setTimeout(()=>{$('[data-sr='+k+']').checked=v;r();},900+i*1800));});
+  r();
+})();
+</script>

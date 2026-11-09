@@ -1,0 +1,33 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Bearing it alone: how large a reserve is enough</p><p class="figsub">A household wants to eat 12 portions a year, and its harvest fluctuates at random. Drag the reserve it keeps year-round to see the share of years of hunger over a thousand years, and how much grain the reserve wastes through spoilage each year.</p></div><button class="replay" type="button" data-replay="bf">Replay</button></div>
+    <div class="bf" id="bf" data-anim>
+      <div class="bf-b"><span>Years of hunger</span><div><i id="bf-h" style="background:var(--warm)"></i></div><b id="bf-hv"></b></div>
+      <div class="bf-b"><span>Spoiled each year</span><div><i id="bf-l" style="background:var(--gold)"></i></div><b id="bf-lv"></b></div>
+      <div class="sl"><label for="bf-s">Reserve kept year-round <b id="bf-sv"></b></label><input id="bf-s" type="range" min="0" max="24" step="2" value="0"></div>
+      <p class="bf-msg" id="bf-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the harvest averages 12 portions with swings of about 40%; 10% of the reserve spoils each year, and it is topped up to the set level in good years; a year with less than 9 portions eaten counts as hunger. Computed on one fixed set of random harvests over a thousand years.</figcaption>
+</figure>
+<style>
+.bf-b{display:grid;grid-template-columns:7.5em 1fr 6em;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.bf-b div{height:16px;background:var(--quote);border-radius:4px;overflow:hidden}
+.bf-b i{display:block;height:100%;transition:width .3s}
+.bf-b b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.bf-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);let s=7;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};
+  const g=()=>{let u=0;while(!u)u=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r());};
+  const H=Array.from({length:1000},()=>Math.max(0,12*(1+.4*g())));
+  function run(B){let st=B,hungry=0,lost=0;for(const h of H){let have=h+st,c=Math.min(12,have);if(c<9)hungry++;have-=c;st=Math.min(B,have);lost+=st*.1;st*=.9;}return [hungry/H.length,lost/H.length];}
+  function draw(){const B=+$('bf-s').value,[h,l]=run(B);$('bf-h').style.width=h/.3*100+'%';$('bf-l').style.width=l/2.4*100+'%';
+    $('bf-hv').textContent=Math.round(h*100)+'%';$('bf-lv').textContent=l.toFixed(1)+' portions';$('bf-sv').textContent=B+' portions';
+    $('bf-msg').textContent=B===0?`With no reserve, the household goes hungry about one year in every ${Math.round(1/h)}.`:`Keeping a reserve of ${B} portions year-round cuts the years of hunger to ${Math.round(h*100)}%, at the cost of about ${l.toFixed(1)} portions wasted through spoilage each year.${h>.02?' However large the reserve, hunger is still possible when bad years come one after another.':''}`;}
+  $('bf-s').addEventListener('input',draw);
+  $('bf').addEventListener('anim-in',()=>{let v=0;$('bf-s').value=0;draw();const id=setInterval(()=>{v+=2;$('bf-s').value=v;draw();if(v>=24)clearInterval(id);},260);});
+  draw();
+})();
+</script>

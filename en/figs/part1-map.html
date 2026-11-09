@@ -1,0 +1,82 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The decomposition of returns and the structure of Part One</p><p class="figsub">Each column is one term of the equation: above, its return and its risk; below, the chapters that derive it. Tap a term for an explanation; finished chapters can be clicked to open.</p></div><button class="replay" type="button" data-replay="pm6">Replay</button></div>
+    <div class="pm6-wrap"><div class="pm6" id="pm6" data-anim>
+      <div class="pm6-col" data-k="time" style="--i:0">
+        <button class="pm6-term" type="button"><em>＋</em><b>Time compensation</b><span>Available to everyone</span></button>
+        <div class="pm6-rr"><p><i>Return</i>Interest</p><p><i>Risk</i>Inflation, maturity mismatch</p></div>
+        <div class="pm6-ch"><span class="pm6-pn">Section One</span><a href="ch02.html"><em>2</em>Interest rates and maturity</a></div>
+      </div>
+      <div class="pm6-col" data-k="risk" style="--i:1">
+        <button class="pm6-term" type="button"><em>＋</em><b>Risk compensation</b><span>Available to everyone, at the cost of bearing risk</span></button>
+        <div class="pm6-rr"><p><i>Return</i>Risk premium, factors</p><p><i>Risk</i>Volatility, drawdowns, fat tails</p></div>
+        <div class="pm6-ch"><span class="pm6-pn">Section Two</span><a href="ch03.html"><em>3</em>What risk looks like</a><a href="ch04.html"><em>4</em>Diversification</a><a href="ch05.html"><em>5</em>Compounding and volatility drag</a><a href="ch06.html"><em>6</em>Factors</a></div>
+      </div>
+      <div class="pm6-col" data-k="info" style="--i:2">
+        <button class="pm6-term" type="button"><em>＋</em><b>Information advantage</b><span>Zero-sum</span></button>
+        <div class="pm6-rr"><p><i>Return</i>Excess return</p><p><i>Risk</i>Adverse selection, false confidence in being informed</p></div>
+        <div class="pm6-ch"><span class="pm6-pn">Section Three</span><a href="ch07.html"><em>7</em>Why prices are hard to predict</a><a href="ch08.html"><em>8</em>How information enters prices</a><a href="ch09.html"><em>9</em>Traders in the market</a></div>
+      </div>
+      <div class="pm6-col" data-k="cost" style="--i:3">
+        <button class="pm6-term" type="button"><em>－</em><b>Trading costs</b><span>Negative-sum</span></button>
+        <div class="pm6-rr"><p><i>Return</i>None</p><p><i>Risk</i>Liquidity, execution</p></div>
+        <div class="pm6-ch"><span class="pm6-pn">Section Four</span><a href="ch10.html"><em>10</em>Liquidity and the bid-ask spread</a><a href="ch11.html"><em>11</em>Orders, rules and market structure</a></div>
+      </div>
+      <div class="pm6-col" data-k="luck" style="--i:4">
+        <button class="pm6-term" type="button"><em>＋</em><b>Luck</b><span>Averages to zero over the long run</span></button>
+        <div class="pm6-rr"><p><i>Return</i>Short-term results</p><p><i>Risk</i>Dispersion of outcomes</p></div>
+        <div class="pm6-ch"><span class="pm6-pn">Section Five</span><a href="ch12.html"><em>12</em>The arithmetic of active management</a></div>
+      </div>
+      <div class="pm6-keep" data-k="keep" style="--i:5">
+        <button class="pm6-term" type="button"><b>Premise: promises kept</b><span>Secured by institutions</span></button>
+        <div class="pm6-rr"><p><i>Risk</i>Counterparty risk, institutional risk</p></div>
+        <div class="pm6-ch"><span class="pm6-pn">Section Six</span><a href="ch13.html"><em>13</em>How promises are kept</a><a href="ch14.html"><em>14</em>Why regulation exists</a></div>
+      </div>
+    </div></div>
+    <p class="pm6-d" id="pm6-d" aria-live="polite">Tap a term in the equation.</p>
+  </div>
+  <figcaption>Chapter 1, "What financial products sell", is the opening and explains what returns are returns on.</figcaption>
+</figure>
+<style>
+.pm6-wrap{overflow-x:auto}
+.pm6{display:grid;grid-template-columns:repeat(5,minmax(118px,1fr));gap:8px;min-width:620px}
+.pm6-col,.pm6-keep{display:flex;flex-direction:column;gap:6px;opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.25s)}
+.pm6.in .pm6-col,.pm6.in .pm6-keep{opacity:1;transform:none}
+.pm6-keep{grid-column:1/-1;flex-direction:row;align-items:center;flex-wrap:wrap;gap:10px;border-top:1px dashed var(--line);padding-top:8px}
+.pm6-term{font:inherit;text-align:left;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;padding:8px 10px;cursor:pointer;display:flex;flex-direction:column;gap:1px}
+.pm6-term em{font-style:normal;font-size:18px;font-weight:700;color:var(--faint);line-height:1}
+.pm6-term b{font-size:15px}
+.pm6-term span{font-size:11px;color:var(--faint)}
+.pm6-col[data-k="time"] .pm6-term,.pm6-col[data-k="risk"] .pm6-term{background:var(--accent-soft)}
+.pm6-col[data-k="info"] .pm6-term{background:rgba(47,95,158,.12)}
+.pm6-col[data-k="cost"] .pm6-term{background:var(--warm-soft)}
+.pm6-col[data-k="luck"] .pm6-term{background:var(--quote)}
+.pm6-keep .pm6-term{background:rgba(160,120,24,.12)}
+.pm6-term.sel{border-color:var(--ink)}
+.pm6-rr{font-size:11.5px;color:var(--muted);line-height:1.5;padding:0 2px}
+.pm6-rr p{margin:0}
+.pm6-rr i{font-style:normal;color:var(--faint);margin-right:6px}
+.pm6-ch{display:flex;flex-direction:column;gap:4px}
+.pm6-keep .pm6-ch{flex-direction:row;flex-wrap:wrap;align-items:center}
+.pm6-pn{font-size:11px;color:var(--faint)}
+.pm6-ch a,.pm6-ch .todo{font-size:12.5px;border-radius:7px;padding:5px 8px;text-decoration:none;line-height:1.35;display:block}
+.pm6-ch a{background:var(--surface);border:1px solid var(--accent);color:var(--ink)}
+.pm6-ch a:hover{background:var(--accent-soft)}
+.pm6-ch .todo{background:var(--quote);color:var(--faint);border:1px solid transparent}
+.pm6-ch em{font-style:normal;color:var(--faint);margin-right:6px;font-variant-numeric:tabular-nums}
+.pm6-d{font-size:14px;margin:12px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const D={
+    time:'Time compensation: holding today\'s money until the future deserves compensation in itself. It is available to everyone, but must be measured in purchasing power and matched to when the money is needed.',
+    risk:'Risk compensation: only by bearing risk that cannot be diversified away does one earn an extra return over the long run, the risk premium. It is available to everyone, at the cost of enduring volatility, drawdowns and extreme outcomes.',
+    info:'Information advantage: the extra gained by knowing more than others. What one side gains, another must lose, so in aggregate it is zero-sum; competition steadily uses it up.',
+    cost:'Trading costs: spreads, market impact and fees of all kinds. All traders bear them together, which makes trading negative-sum in aggregate.',
+    luck:'Luck: the main source of short-term results, averaging to zero over the long run. Judging any result begins with separating luck from skill.',
+    keep:'The premise of delivery: every term above depends on promises being kept, which is secured by institutions such as disclosure, segregated custody, central counterparties and regulation.'
+  };
+  const d=document.getElementById('pm6-d'), bs=[...document.querySelectorAll('#pm6 .pm6-term')];
+  bs.forEach(b=>b.addEventListener('click',()=>{bs.forEach(x=>x.classList.toggle('sel',x===b));d.textContent=D[b.closest('[data-k]').dataset.k];}));
+})();
+</script>

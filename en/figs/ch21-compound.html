@@ -1,0 +1,42 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">Every step is reliable, but the whole may not be</p>
+    <p class="figsub">Adjust the accuracy of each step and the number of steps, and see the probability that the whole task is entirely correct. Turn on checkpoints: verify every 10 steps, and 90% of errors are found and corrected.</p>
+    <div class="cp" id="cp" data-anim>
+      <svg viewBox="0 0 640 220" role="img" aria-label="Number of steps and overall success rate"><g id="cp-ax"></g><path id="cp-a" class="cp-l a"/><path id="cp-b" class="cp-l b"/><circle id="cp-d" r="6" fill="var(--ink)"/></svg>
+      <div class="cp-sl">
+        <div class="sl"><label for="cp-p">Accuracy per step <b id="cp-pv"></b></label><input id="cp-p" type="range" min="90" max="99.9" step="0.1" value="99"></div>
+        <div class="sl"><label for="cp-n">Number of steps <b id="cp-nv"></b></label><input id="cp-n" type="range" min="1" max="200" step="1" value="100"></div>
+      </div>
+      <label class="cp-chk"><input type="checkbox" id="cp-x"> A checkpoint every 10 steps</label>
+      <div class="legend"><span><i style="background:var(--warm)"></i>No checkpoints</span><span><i style="background:var(--accent)"></i>With checkpoints</span></div>
+      <p class="cp-msg" id="cp-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative calculation. Without checkpoints, overall success rate = per-step accuracy to the power n. With checkpoints, every 10 steps form a segment; an error in a segment has a 90% chance of being found and corrected, and the segments are multiplied together (a partial segment counts in proportion).</figcaption>
+</figure>
+<style>
+.cp svg{width:100%;height:auto;display:block}
+.cp-l{fill:none;stroke-width:2.5} .cp-l.a{stroke:var(--warm)} .cp-l.b{stroke:var(--accent);transition:opacity .3s}
+.cp-sl{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cp-chk{display:flex;gap:6px;align-items:center;font-size:14px;margin:4px 0}
+.cp-chk input{accent-color:var(--accent);width:16px;height:16px}
+.cp-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.cp-sl{grid-template-columns:1fr}.cp svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const X0=50,X1=620,YT=14,YB=190,x=n=>X0+(n-1)/199*(X1-X0),y=v=>YB-v*(YB-YT);
+  const A=(p,n)=>Math.pow(p,n),B=(p,n)=>{const s=Math.pow(p,10),seg=s+(1-s)*.9;return Math.pow(seg,n/10);};
+  const $=id=>document.getElementById(id),pp=$('cp-p'),nn=$('cp-n'),cx=$('cp-x');
+  $('cp-ax').innerHTML=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`+[0,.5,1].map(v=>`<text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text>`).join('')+[1,50,100,150,200].map(n=>`<text x="${x(n)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${n} ${n===1?'step':'steps'}</text>`).join('');
+  function r(){const p=+pp.value/100,n=+nn.value,on=cx.checked;let a='',b='';for(let k=1;k<=200;k++){a+=(k>1?'L':'M')+x(k).toFixed(1)+','+y(A(p,k)).toFixed(1);b+=(k>1?'L':'M')+x(k).toFixed(1)+','+y(B(p,k)).toFixed(1);}
+    $('cp-a').setAttribute('d',a);$('cp-b').setAttribute('d',b);$('cp-b').style.opacity=on?1:0;
+    const v=on?B(p,n):A(p,n);$('cp-d').setAttribute('cx',x(n));$('cp-d').setAttribute('cy',y(v));
+    $('cp-pv').textContent=(p*100).toFixed(1)+'%';$('cp-nv').textContent=n+(n===1?' step':' steps');
+    $('cp-msg').textContent=`With ${(p*100).toFixed(1)}% accuracy per step and ${n} step${n===1?'':'s'} in all, the probability that the whole task is entirely correct${on?' with checkpoints':''} is about ${(v*100).toFixed(0)}%. `+(on?'Checkpoints stop an error within one segment instead of letting it pass all the way down.':(v<.5?'In more than half of cases, the principal has to find and fix at least one error.':''));}
+  [pp,nn].forEach(e=>e.addEventListener('input',r));cx.addEventListener('change',r);
+  $('cp').addEventListener('anim-in',()=>{cx.checked=false;let n=1;nn.value=1;r();const id=setInterval(()=>{n+=6;nn.value=n;r();if(n>=100){clearInterval(id);setTimeout(()=>{cx.checked=true;r();},900);}},90);});
+  r();
+})();
+</script>

@@ -1,0 +1,36 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The five parts of an agreement</p><p class="figsub">Select a part of the agreement to see what the villager's agreement says and what happens without it.</p></div><button class="replay" type="button" data-replay="pa21">Replay</button></div>
+    <div class="pa21" id="pa21" data-anim>
+      <div class="pa21-t" id="pa21-t"></div>
+      <div class="pa21-d" id="pa21-d" aria-live="polite"></div>
+    </div>
+  </div>
+  <figcaption>Illustrative: the contents of the agreement are invented examples.</figcaption>
+</figure>
+<style>
+.pa21-t{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.pa21-t button{font:inherit;cursor:pointer;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:8px 6px;font-size:13px;color:var(--ink);opacity:0;transform:translateY(6px);transition:opacity .35s,transform .35s,border-color .3s;transition-delay:calc(var(--i)*.15s)}
+.pa21.in .pa21-t button{opacity:1;transform:none}
+.pa21-t button.sel{border-color:var(--accent);color:var(--accent)}
+.pa21-d{display:grid;grid-template-columns:1.3fr 1fr;gap:8px;margin-top:10px}
+.pa21-d div{border-radius:9px;padding:10px 12px;font-size:13.5px;line-height:1.65}
+.pa21-d div:first-child{background:var(--bg);border:1px solid var(--line)} .pa21-d div:last-child{background:var(--warm-soft)}
+.pa21-d span{display:block;font-size:11.5px;color:var(--faint)}
+@media (max-width:640px){.pa21-t{grid-template-columns:repeat(3,1fr)}.pa21-d{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const P=[['Goals','Emergency account holds half a year of income; house account reaches 1.2 years of income in five years; retirement account reaches eight years of income at age 60.','The scribe does not know where to go and can only chase "high returns", which may not be what he wants.'],
+    ['Boundaries','Ship shares no more than 20% of the house account and up to 100% of the retirement account; if any account falls more than 15% in a year, stop and ask him; fees no more than 0.3% a year; no products leveraged with borrowed money.','The scribe does not know where it must not go, and one large deviation could wreck a goal.'],
+    ['Rules','Deposit 20% after each monthly pay; check once a quarter, and bring holdings back if they deviate from the agreed proportion by more than five percentage points.','Every small everyday matter needs a request, and he soon stops replying.'],
+    ['Exceptions','For a matter the agreement does not cover whose effects cannot be undone, wait for his return; when his income, family or goals change, pause adjustments and come back to ask him.','In cases the agreement does not cover, the scribe can only decide on its own.'],
+    ['Term and revocation','The agreement is reviewed once a year; he can revoke all or part of the authority at any time, after which the scribe may view the accounts but not place orders.','Once set, the agreement cannot be taken back, and he loses final control.']];
+  const t=document.getElementById('pa21-t'),d=document.getElementById('pa21-d');
+  t.innerHTML=P.map((p,i)=>`<button type="button" style="--i:${i}">${p[0]}</button>`).join('');const bs=[...t.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));d.innerHTML=`<div><span>His agreement says</span>${P[i][1]}</div><div><span>Without it</span>${P[i][2]}</div>`;}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('pa21').addEventListener('anim-in',()=>{[0,1,2,3,4].forEach((i,k)=>setTimeout(()=>set(i),1200+k*1800));});
+  set(0);
+})();
+</script>

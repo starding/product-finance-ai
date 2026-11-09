@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Fees compound year after year</p><p class="figsub">Two identical sums of 100 portions both earn the fleet's average return of 6% a year; only the fees differ. Drag the two fees and the number of years held to see how far apart they end up.</p></div><button class="replay" type="button" data-replay="ps">Replay</button></div>
+    <div class="ps" id="ps" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="Growth of wealth under two fee levels"><g id="ps-ax"></g><path id="ps-a" class="ps-a"/><path id="ps-b" class="ps-b"/></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Hold everything in proportion</span><span><i style="background:var(--warm)"></i>Active picking</span></div>
+      <div class="ps-sl">
+        <div class="sl"><label for="ps-f1">Fee for holding in proportion <b id="ps-f1v"></b></label><input id="ps-f1" type="range" min="0" max="1" step="0.05" value="0.1"></div>
+        <div class="sl"><label for="ps-f2">Fee for active picking <b id="ps-f2v"></b></label><input id="ps-f2" type="range" min="0.5" max="3" step="0.1" value="1.5"></div>
+        <div class="sl"><label for="ps-t">Years held <b id="ps-tv"></b></label><input id="ps-t" type="range" min="5" max="40" step="1" value="30"></div>
+      </div>
+      <p class="ps-msg" id="ps-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: assumes that active picking earns the average return before fees; Sharpe's (1991) arithmetic shows this holds for active investors as a group.</figcaption>
+</figure>
+<style>
+.ps svg{width:100%;height:auto;display:block}
+.ps-a{fill:none;stroke:var(--accent);stroke-width:2.5}
+.ps-b{fill:none;stroke:var(--warm);stroke-width:2.5}
+.ps-sl{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.ps-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.ps-sl{grid-template-columns:1fr;gap:4px}.ps svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),X0=46,X1=630,YT=12,YB=178;
+  function draw(){const f1=+$('ps-f1').value/100,f2=+$('ps-f2').value/100,T=+$('ps-t').value,A=t=>100*Math.pow(1.06-f1,t),B=t=>100*Math.pow(1.06-f2,t),M=A(T)*1.08,x=t=>X0+t/T*(X1-X0),y=v=>YB-v/M*(YB-YT);
+    $('ps-ax').innerHTML=[0,.25,.5,.75,1].map(k=>{const v=Math.round(M*k/50)*50;return `<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`;}).join('')+[0,.25,.5,.75,1].map(k=>`<text x="${x(T*k)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">Year ${Math.round(T*k)}</text>`).join('');
+    let pa='',pb='';for(let t=0;t<=T;t+=T/100){pa+=(t?'L':'M')+x(t).toFixed(1)+','+y(A(t)).toFixed(1);pb+=(t?'L':'M')+x(t).toFixed(1)+','+y(B(t)).toFixed(1);}$('ps-a').setAttribute('d',pa);$('ps-b').setAttribute('d',pb);
+    $('ps-f1v').textContent=(f1*100).toFixed(2)+'%';$('ps-f2v').textContent=(f2*100).toFixed(1)+'%';$('ps-tv').textContent=T+' years';
+    const a=A(T),b=B(T);$('ps-msg').textContent=`After ${T} years, 100 portions held in proportion grow to ${Math.round(a)} portions, while actively picked they grow to ${Math.round(b)}, ${Math.round((1-b/a)*100)}% less. A gap of only ${((f2-f1)*100).toFixed(1)} percentage points a year compounds into a difference this large.`;}
+  ['ps-f1','ps-f2','ps-t'].forEach(k=>$(k).addEventListener('input',draw));
+  $('ps').addEventListener('anim-in',()=>{let v=5;$('ps-t').value=5;draw();const id=setInterval(()=>{v+=1;$('ps-t').value=v;draw();if(v>=40)clearInterval(id);},80);});
+  draw();
+})();
+</script>

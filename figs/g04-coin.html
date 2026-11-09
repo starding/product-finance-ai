@@ -1,0 +1,31 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">双重巧合：物产越多，越难对上</p><p class="figsub">拖动岛上物产的种类数，比较直接以物换物与先换成货币两种情形下，平均要遇到多少人才能完成一次交换。</p></div><button class="replay" type="button" data-replay="cn">重播</button></div>
+    <div class="cn" id="cn" data-anim>
+      <div class="cn-b"><span>以物换物</span><div><i id="cn-a" style="background:var(--warm)"></i></div><b id="cn-av"></b></div>
+      <div class="cn-b"><span>先换成货币</span><div><i id="cn-m" style="background:var(--accent)"></i></div><b id="cn-mv"></b></div>
+      <div class="sl"><label for="cn-k">物产的种类 <b id="cn-kv"></b></label><input id="cn-k" type="range" min="2" max="12" step="1" value="6"></div>
+      <p class="cn-msg" id="cn-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：每人只有一种物产，想要另一种；随机遇到的人恰好有我要的东西的概率为 1 ÷（种类数 − 1）。以物换物还要求对方恰好要我有的东西，概率相乘；先换成货币时，卖出与买入各只需对上一半，共两步。</figcaption>
+</figure>
+<style>
+.cn-b{display:grid;grid-template-columns:7em 1fr 5.5em;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.cn-b div{height:18px;background:var(--quote);border-radius:4px;overflow:hidden}
+.cn-b i{display:block;height:100%;transition:width .4s}
+.cn-b b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.cn-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  function draw(){const k=+$('cn-k').value,p=1/(k-1),barter=1/(p*p),money=2/p,M=121;
+    $('cn-a').style.width=Math.min(barter,M)/M*100+'%';$('cn-m').style.width=Math.min(money,M)/M*100+'%';
+    $('cn-av').textContent=Math.round(barter)+' 人';$('cn-mv').textContent=Math.round(money)+' 人';$('cn-kv').textContent=k+' 种';
+    $('cn-msg').textContent=k===2?'只有两种物产时，遇到的人一定恰好需要彼此，以物换物最直接。':`${k} 种物产时，以物换物平均要遇到 ${Math.round(barter)} 人才能对上；先卖出换成货币、再用货币买入，只需遇到约 ${Math.round(money)} 人。种类越多，差距越大。`;}
+  $('cn-k').addEventListener('input',draw);
+  $('cn').addEventListener('anim-in',()=>{let v=2;$('cn-k').value=2;draw();const id=setInterval(()=>{v++;$('cn-k').value=v;draw();if(v>=12)clearInterval(id);},350);});
+  draw();
+})();
+</script>

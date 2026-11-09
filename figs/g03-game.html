@@ -1,0 +1,36 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">从还款的那一刻往回推</p><p class="figsub">出借人先决定借不借，借款人到春天再决定还不还。切换“只打一次交道”与“年年打交道”，看借款人在还款那一刻的得失，以及出借人事先的选择。</p></div><button class="replay" type="button" data-replay="gm3">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="交往">
+      <button type="button" data-gm3="once" aria-pressed="true">只打一次交道</button>
+      <button type="button" data-gm3="rep" aria-pressed="false">年年打交道</button>
+    </div>
+    <div class="gm3" id="gm3" data-anim>
+      <svg viewBox="0 0 640 230" role="img" aria-label="借贷的博弈树"><g id="gm3-t"></g></svg>
+      <p class="gm3-msg" id="gm3-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：括号内为（出借人，借款人）相对于不借的得失，以份计。年年打交道时，不还的一方此后再也借不到，失去今后每年借贷带来的好处，这里按 5 份计。</figcaption>
+</figure>
+<style>
+.gm3 svg{width:100%;height:auto;display:block}
+.gm3-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.gm3 svg text{font-size:17px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  function node(x,y,t){return `<circle cx="${x}" cy="${y}" r="7" fill="var(--ink)"/><text x="${x}" y="${y-14}" text-anchor="middle" font-size="12.5" class="t-ink">${t}</text>`;}
+  function edge(x1,y1,x2,y2,lab,on){return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${on?'var(--accent)':'var(--line)'}" stroke-width="${on?3.5:2}"/><text x="${(x1+x2)/2+(x2>x1?8:-8)}" y="${(y1+y2)/2}" text-anchor="${x2>x1?'start':'end'}" font-size="12" class="${on?'t-accent':'t-muted'}">${lab}</text>`;}
+  function leaf(x,y,a,b,on){return `<rect x="${x-58}" y="${y}" width="116" height="34" rx="8" fill="${on?'var(--accent-soft)':'var(--quote)'}"/><text x="${x}" y="${y+22}" text-anchor="middle" font-size="13" class="t-ink">（${a}，${b}）</text>`;}
+  function set(k){document.querySelectorAll('[data-gm3]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.gm3===k)));
+    const rep=k==='rep',defB=rep?'4 − 5 ＝ −1':'＋4',repay=rep;
+    let h=node(320,34,'出借人：借不借？')+edge(320,34,150,110,'不借',!repay)+edge(320,34,470,110,'借',repay)+leaf(150,116,0,0,!repay)+node(470,110,'借款人：还不还？')+
+      edge(470,110,370,180,'还',repay)+edge(470,110,570,180,'不还',!repay)+leaf(370,184,'＋1','＋1',repay)+leaf(570,184,'−3',defB,false);
+    $('gm3-t').innerHTML=h;
+    $('gm3-msg').textContent=rep?'年年打交道时，不还虽然眼前多得 4 份，却失去今后每年的借贷，合计少 1 份：还款更划算。出借人预见到这一点，于是借出，双方各多得 1 份。':'只打一次交道时，到了春天，不还多得 4 份、还款只得 1 份，借款人会选择不还。出借人预见到这一点，秋天就不借，双方都得 0：本可以各多得 1 份的借贷没有发生。';}
+  document.querySelectorAll('[data-gm3]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.gm3)));
+  $('gm3').addEventListener('anim-in',()=>{set('once');setTimeout(()=>set('rep'),3200);});
+  set('once');
+})();
+</script>

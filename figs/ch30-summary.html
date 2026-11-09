@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：在信念更新的每一项上设计</p><p class="figsub">四条设计要求，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="ch30summary">重播</button></div>
+    <div class="ch30summary" id="ch30summary" data-anim><div class="ch30summary-c" style="--i:0"><em>先验与门槛</em><b>借用制度，从赌注小的事务开始</b><p>说明托管、监管与审计；先提供查数据、提醒等低门槛事务，让证据在使用中积累。</p></div><div class="ch30summary-c" style="--i:1"><em>证据要被看见</em><b>每周期简短交代，关键时刻主动呈现</b><p>不把记录藏在后台，也不用大量消息淹没用户。</p></div><div class="ch30summary-c warn" style="--i:2"><em>证据要难以伪造</em><b>让用户点开原始数据与第三方记录</b><p>托管对账单、成交记录与审计报告的诊断力远高于产品的自述。</p></div><div class="ch30summary-c warn" style="--i:3"><em>失误与退出</em><b>抢先说明失误，让退出与收回容易</b><p>建立发现、停止、通知、说明、补救的流程；随时可收回授权、导出记录与迁移。</p></div></div>
+  </div>
+</figure>
+<style>
+.ch30summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch30summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch30summary-c.warn{border-left-color:var(--warm)}
+.ch30summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch30summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch30summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch30summary.in .ch30summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch30summary{grid-template-columns:1fr}}
+</style>

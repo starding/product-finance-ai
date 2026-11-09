@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：把交代写成委托书</p><p class="figsub">四条设计要求，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="ch25summary">重播</button></div>
+    <div class="ch25summary" id="ch25summary" data-anim><div class="ch25summary-c" style="--i:0"><em>一句话不够</em><b>把委托书做成产品中的对象</b><p>目标、约束、例外规则与有效期逐项可见、可改，代理的每一步可以追溯到其中一条。</p></div><div class="ch25summary-c" style="--i:1"><em>衡量方式决定行为</em><b>目标同时写明回报、风险、基准与期限</b><p>把“稳健”这类愿望翻译成可以检查的指标，并请委托人确认。</p></div><div class="ch25summary-c warn" style="--i:2"><em>可度量的目标会被钻空子</em><b>目标配上覆盖尾部的风险约束</b><p>用压力情景检查策略，不只看是否跑赢基准。</p></div><div class="ch25summary-c warn" style="--i:3"><em>委托写不全、会过期</em><b>默认保守处理并请示，按事件复核</b><p>没有写到的情形暂停并提出方案；收入、家庭或目标变化时提醒复核。</p></div></div>
+  </div>
+</figure>
+<style>
+.ch25summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch25summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch25summary-c.warn{border-left-color:var(--warm)}
+.ch25summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch25summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch25summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch25summary.in .ch25summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch25summary{grid-template-columns:1fr}}
+</style>

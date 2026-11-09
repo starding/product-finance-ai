@@ -1,0 +1,32 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">书记员能省下费用，省不下年数</p><p class="figsub">每年存下收入的 12%，船股每年平均收益 6%。拖动储蓄的年数，比较付 1.5% 费用与 0.2% 费用两种情形，看存款相当于几年的收入。</p></div><button class="replay" type="button" data-replay="tm19">重播</button></div>
+    <div class="tm19" id="tm19" data-anim>
+      <svg viewBox="0 0 660 210" role="img" aria-label="储蓄年数与存款"><g id="tm19-g"></g></svg>
+      <div class="legend"><span><i style="background:var(--faint)"></i>费用 1.5%</span><span><i style="background:var(--accent)"></i>费用 0.2%（书记员）</span></div>
+      <div class="sl"><label for="tm19-n">储蓄的年数 <b id="tm19-nv"></b></label><input id="tm19-n" type="range" min="5" max="40" step="1" value="30"></div>
+      <p class="tm19-msg" id="tm19-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：每年年初存入收入的 12%，按扣除费用后的收益复利增长。</figcaption>
+</figure>
+<style>
+.tm19 svg{width:100%;height:auto;display:block}
+.tm19-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.tm19 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('tm19'+id),T=40,X0=50,X1=628,YT=12,YB=178,x=t=>X0+t/T*(X1-X0);
+  const W=(n,f)=>{let w=0;for(let t=0;t<n;t++)w=(w+.12)*(1+.06-f);return w;};
+  function draw(){const n=+$('-n').value,mx=W(T,.002)*1.05,y=v=>YB-v/mx*(YB-YT);$('-nv').textContent=n+' 年';
+    let h=[0,5,10,15,20].filter(v=>v<mx).map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v} 年</text>`).join('')+[0,10,20,30,40].map(t=>`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">第 ${t} 年</text>`).join('');
+    for(const [f,c,wd] of [[.015,'var(--faint)',2],[.002,'var(--accent)',2.8]]){let d='';for(let t=0;t<=T;t++)d+=(t?'L':'M')+x(t).toFixed(1)+','+y(W(t,f)).toFixed(1);h+=`<path d="${d}" fill="none" stroke="${c}" stroke-width="${wd}"/>`;}
+    h+=`<line x1="${x(n)}" x2="${x(n)}" y1="${YT}" y2="${YB}" stroke="var(--ink)" stroke-dasharray="4 4"/>`;
+    $('-g').innerHTML=h;const a=W(n,.015),b=W(n,.002),need=[...Array(41).keys()].find(t=>W(t,.002)>=W(30,.015));
+    $('-msg').textContent=`存 ${n} 年：费用 1.5% 时相当于 ${a.toFixed(1)} 年的收入，费用 0.2% 时 ${b.toFixed(1)} 年。省下的费用让同样的年数多存了 ${((b/a-1)*100).toFixed(0)}%；可是要达到高费用下存 30 年的结果，低费用也仍要存 ${need} 年。`;}
+  $('-n').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{let v=5;$('-n').value=5;draw();const id=setInterval(()=>{v+=1;$('-n').value=v;draw();if(v>=40)clearInterval(id);},80);});
+  draw();
+})();
+</script>

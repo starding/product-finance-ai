@@ -1,0 +1,21 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：让用户看见交易的真实成本</p><p class="figsub">四条设计要求，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="s05">重播</button></div>
+    <div class="s05" id="s05" data-anim>
+      <div class="s05-c" style="--i:0"><em>大单会吃掉多档报价</em><b>下单前展示预估成交均价</b><p>按当前订单簿估算成交均价与相对中间价的成本，而不只显示最新价。</p></div>
+      <div class="s05-c" style="--i:1"><em>价差是即时成交的价格</em><b>不急的交易，帮用户耐心成交</b><p>提供限价与分批成交，让不急于成交的用户少付价差，并说明可能无法成交的风险。</p></div>
+      <div class="s05-c" style="--i:2"><em>流动性有价格</em><b>把交易频率与价差放在一起算</b><p>对流动性差的资产，提示频繁买卖每年会付出多少成本。</p></div>
+      <div class="s05-c warn" style="--i:3"><em>流动性会突然消失</em><b>在动荡与非常规时段提示风险</b><p>开盘、收盘前后、盘前盘后及剧烈波动时提示价差与深度；说明止损单触发后可能以远差于预期的价格成交。</p></div>
+    </div>
+  </div>
+</figure>
+<style>
+.s05{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.s05-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.s05-c.warn{border-left-color:var(--warm)}
+.s05-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.s05-c b{display:block;font-size:15px;margin:2px 0 4px}
+.s05-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.s05.in .s05-c{opacity:1;transform:none}
+@media (max-width:640px){.s05{grid-template-columns:1fr}}
+</style>

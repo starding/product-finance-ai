@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Can everyone have a personal agent?</title>
+<meta name="description" content="&quot;Product × Finance × AI: Derived from Zero&quot;, Chapter 14. Rerunning the step of delegation. In the past only the wealthiest households could afford a steward, because every principal carried a fixed cost. The scribes make the cognitive labour in that cost almost free, the threshold falls, and standardized products can become arrangements made for each household. But the cost of checking and bearing responsibility remains, and the poorest households are still shut out; of the agency costs, only monitoring falls clearly; and a free agent works for whoever pays it.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="g-14">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="Contents">
+<div class="side-head"><a class="sidetitle" href="index.html">Product × Finance × AI<small>Financial Products in the Age of AI</small></a></div>
+<div class="side-view" role="group" aria-label="Way of reading"><a href="preface.html">Decomposition</a><a href="g-preface.html" class="on" aria-current="true">Derivation</a></div>
+<a class="side-about" href="index.html#about">About this book</a>
+<a class="" href="g-preface.html"><span class="n">Preface</span>The best way to understand financial products is to build them from zero</a>
+<a class="side-part" href="g-part1.html"><span class="pn">Part One</span>From 0 to 1: how a world without finance grows finance</a>
+<a class="" href="g-01.html"><span class="n">1</span>One person, one year&#x27;s harvest</a>
+<a class="" href="g-02.html"><span class="n">2</span>Two people, short of grain at different times</a>
+<a class="" href="g-03.html"><span class="n">3</span>What if a loan is not repaid</a>
+<a class="" href="g-04.html"><span class="n">4</span>Exchange among many</a>
+<a class="" href="g-05.html"><span class="n">5</span>Harvests good and bad</a>
+<a class="" href="g-06.html"><span class="n">6</span>Savers may need their grain at any time; borrowers need it for years</a>
+<a class="" href="g-07.html"><span class="n">7</span>No one household can pay for a ship</a>
+<a class="" href="g-08.html"><span class="n">8</span>Securities must be saleable</a>
+<a class="" href="g-09.html"><span class="n">9</span>Prices carry everyone&#x27;s information</a>
+<a class="" href="g-10.html"><span class="n">10</span>Ordinary people have neither the time nor the expertise</a>
+<a class="" href="g-11.html"><span class="n">11</span>Trustees may not do their duty</a>
+<a class="" href="g-12.html"><span class="n">12</span>The institutions are in place, and people still make mistakes</a>
+<a class="side-part" href="g-part2.html"><span class="pn">Part Two</span>Changing one parameter: when agency becomes almost free</a>
+<a class="" href="g-13.html"><span class="n">13</span>A new parameter: the cost of cognitive labour collapses</a>
+<a class=" cur" href="g-14.html" aria-current="page"><span class="n">14</span>Can everyone have a personal agent?</a>
+<a class="" href="g-15.html"><span class="n">15</span>Who guarantees an agent&#x27;s promises</a>
+<a class="" href="g-16.html"><span class="n">16</span>If everyone has an analyst</a>
+<a class="" href="g-17.html"><span class="n">17</span>Agents become the main market participants</a>
+<a class="" href="g-18.html"><span class="n">18</span>Can an agent correct human bias?</a>
+<a class="" href="g-19.html"><span class="n">19</span>What did not change</a>
+<a class="side-part" href="g-part3.html"><span class="pn">Part Three</span>Deriving a product in the new world</a>
+<a class="" href="g-20.html"><span class="n">20</span>One person and one sum of money</a>
+<a class="" href="g-21.html"><span class="n">21</span>The user is not present</a>
+<a class="" href="g-22.html"><span class="n">22</span>The user cannot see the process</a>
+<a class="" href="g-23.html"><span class="n">23</span>Agents make mistakes</a>
+<a class="" href="g-24.html"><span class="n">24</span>Trust takes time</a>
+<a class="side-app" href="g-epilogue.html"><span class="n">Epilogue</span>Back to the governing rule</a>
+<a class="side-app" href="method.html"><span class="n">Appendix</span>How this book was written</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="Open contents" title="Contents"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">Product × Finance × AI: Financial Products in the Age of AI</a><span>Part Two  Changing one parameter</span><a class="langlink" href="../g-14.html" hreflang="zh-CN">中文</a></header>
+
+<div class="chapno">Chapter 14</div><h1>Can everyone have a personal agent?<small>How the boundary of delegation moves</small></h1>
+<blockquote><p>In the past, only the few households with the most property could afford a dedicated steward. A steward had to learn each household's harvest, debts and intentions, and then choose ships, keep the accounts and make adjustments on schedule for it. This labour had to be done afresh for every household, and households with little property could not pay for it. Most people could only buy a standardized arrangement, such as simply holding a proportional share of all the ship shares. Once the scribes arrived, this labour cost almost nothing, the threshold fell, and standardized arrangements could become arrangements made for each household. Yet the cost of checking and bearing responsibility remains, and the poorest households are still shut out; of the agency costs, only monitoring falls clearly; and an agent that charges its principal nothing will sooner or later work for whoever does pay it.</p></blockquote>
+<h2 id="sec-1">1. Stewards used to belong only to the wealthy</h2>
+<p>On the island, the efficiency of farming, weaving and shipbuilding rises year after year, and grain and cloth grow ever cheaper. A steward's work, however, has not become any faster: getting to know a household, and choosing and checking on its behalf, takes as much time now as it did a hundred years ago. As wages rise in other trades, nobody would be willing to work as a steward unless stewards' pay rose too; so stewards' pay rises as well, and hiring a steward becomes ever more expensive relative to buying a bolt of cloth. The steward has not got worse; other things have simply become cheaper.</p>
+<aside class="principle"><p class="pr-k">Derived so far: a principle</p><p class="pr-n">Cost disease</p><p class="pr-c"><span><em>Discipline</em>Economics › Economic growth and service-sector economics</span><span><em>Type</em>Theoretical model (two-sector model)</span></p><p class="pr-s">When productivity in one trade stagnates while productivity in other trades keeps rising, wages in the first trade must still rise with the general level, so its relative price keeps climbing.</p><dl><div><dt>Standing in the field</dt><dd>Named after its proposer and commonly called "Baumol's cost disease"; the original used it to explain the fiscal difficulties of urban public services, and it has since often been used to explain the long-run rise in the prices of services such as education and health care</dd></div><div><dt>Constraint it answers</dt><dd>One-to-one services must be provided household by household, and the labour cannot be saved</dd></div><div><dt>Premises</dt><dd>The labour a service requires does not fall with technological progress; wages in different trades follow one another</dd></div><div><dt>Proposed by</dt><dd>Baumol, 1967, using education, health care and live performance as examples</dd></div><div><dt>Open question</dt><dd>Can the labour of checking and bearing responsibility also become cheaper?</dd></div><div><dt>After the rerun</dt><dd>The scribes make the productivity of the cognitive labour in a steward's work leap upward, so that part no longer meets the premise of "stagnant productivity"; the part that is checking and bearing responsibility still meets it</dd></div></dl></aside>
+<p>In rerunning the step of delegation, only one thing changes: the scribes make the cognitive labour in a steward's work almost free.</p>
+<p><strong>Today's counterpart.</strong> One-to-one wealth management services usually set a high minimum investment and mainly serve clients with substantial assets.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Why hiring a steward keeps getting more expensive</p><p class="figsub">The efficiency of weaving rises 3% a year, a steward's efficiency stays the same, and wages on both sides rise together. The vertical axis shows a year of a steward's services measured against bolts of cloth. Tick "the scribes arrive" to see what happens after year 30.</p></div><button class="replay" type="button" data-replay="bm14">Replay</button></div>
+    <div class="bm14" id="bm14" data-anim>
+      <svg viewBox="0 0 660 210" role="img" aria-label="Price of a steward relative to cloth"><g id="bm14-g"></g></svg>
+      <div class="cs-sw"><label><input type="checkbox" id="bm14-c"> The scribes arrive: from year 30, the cognitive labour that makes up 80% of a steward's work becomes almost free</label></div>
+      <p class="bm14-msg" id="bm14-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: Baumol's (1967) two-sector model. The steward's relative price = (1 + 3%) to the power t; after the scribes arrive, the labour a steward needs falls to 20% of what it was, and the remaining checking and bearing responsibility continue at the old efficiency.</figcaption>
+</figure>
+<style>
+.bm14 svg{width:100%;height:auto;display:block}
+.bm14-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.bm14 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('bm14'+id),T=50,X0=50,X1=628,YT=12,YB=180,x=t=>X0+t/T*(X1-X0);
+  function draw(n){const c=$('-c').checked,N=n===undefined?T:n,P=[];for(let t=0;t<=T;t++)P.push(Math.pow(1.03,t)*(c&&t>=30?.2:1));
+    const mx=5,y=v=>YB-v/mx*(YB-YT);
+    let h=[0,1,2,3,4,5].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}×</text>`).join('')+[0,10,20,30,40,50].map(t=>`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">Year ${t}</text>`).join('');
+    if(c)h+=`<line x1="${x(30)}" x2="${x(30)}" y1="${YT}" y2="${YB}" stroke="var(--warm)" stroke-dasharray="4 4"/><text x="${x(30)+6}" y="${YT+12}" font-size="11" fill="var(--warm)">Scribes arrive</text>`;
+    h+=`<path d="${P.slice(0,N+1).map((v,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(v).toFixed(1)).join('')}" fill="none" stroke="var(--accent)" stroke-width="2.6"/>`;
+    $('-g').innerHTML=h;
+    $('-msg').textContent=c?`In year 29, a year of a steward's services costs as much as ${P[29].toFixed(1)} bolts of cloth; after the scribes arrive, it falls to ${P[30].toFixed(1)} bolts. But the remaining checking and bearing responsibility still do not get faster, and by year 50 it climbs back to ${P[50].toFixed(1)} bolts.`:`After fifty years, a year of a steward's services costs as much as ${P[50].toFixed(1)} bolts of cloth: the steward has not got worse; other things have simply become cheaper.`;}
+  $('-c').addEventListener('input',()=>draw());
+  $('').addEventListener('anim-in',()=>{$('-c').checked=false;let n=0;const id=setInterval(()=>{n+=1;draw(n);if(n>=T){clearInterval(id);setTimeout(()=>{$('-c').checked=true;draw();},1200);}},40);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-2">2. The threshold: a fixed cost divided by wealth</h2>
+<p>A large part of a steward's cost does not depend on how much property a household has. Whether a household has a hundred portions or a thousand, learning its circumstances and keeping and checking its accounts take about the same labour. Divide this fixed cost by the household's property and you get the cost of delegation as a share of its property; the less property, the higher the share. Delegation pays only when this share is lower than the benefit delegation brings. Every household compares three approaches: managing on its own, buying a standardized arrangement, or hiring a personal steward; it chooses whichever has the lowest total cost. Once the cognitive labour within the fixed cost becomes cheaper, the cost of a personal steward falls, and households that could previously only manage on their own or buy a standardized product can now afford a personal arrangement.</p>
+<aside class="principle"><p class="pr-k">Derived so far: a principle</p><p class="pr-n">Transaction costs and the boundary of the firm</p><p class="pr-c"><span><em>Discipline</em>Economics › New institutional economics (transaction cost economics)</span><span><em>Type</em>Theory</span></p><p class="pr-s">Whether a task is done oneself, handed to the market or handed to an organization depends on the relative costs of the different approaches; when the cost of one approach falls, the boundary moves towards it.</p><dl><div><dt>Standing in the field</dt><dd>The paper posed the question "why do firms exist" and answered it with the cost of using the market; Coase received the 1991 Nobel Memorial Prize in Economic Sciences "for his discovery and clarification of the significance of transaction costs and property rights for the institutional structure and functioning of the economy"</dd></div><div><dt>Constraint it answers</dt><dd>Attention and expertise are scarce, and delegation itself has a cost</dd></div><div><dt>Premises</dt><dd>The costs of the different approaches can be compared; part of the cost does not depend on scale</dd></div><div><dt>Proposed by</dt><dd>Coase, 1937</dd></div><div><dt>Open question</dt><dd>If the cost of checking and bearing responsibility does not fall, how can the households with the least property get delegation?</dd></div><div><dt>After the rerun</dt><dd>The cognitive-labour part of the fixed cost of delegation almost disappears, and the boundary moves towards personal delegation; the part that is checking and bearing responsibility stays the same and determines where the boundary stops moving</dd></div></dl></aside>
+<p>Reher and Sokolinski (2024) studied a large US robo-adviser that cut its minimum investment from US$5,000 to US$500. Participation by middle-income investors rose clearly, but participation by the poorest investors did not. The threshold came down, but not far enough for everyone to clear it.</p>
+<p><strong>Today's counterpart.</strong> Robo-advisers offer portfolios allocated by questionnaire and rebalanced automatically, with relatively low minimum investments and fees.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The threshold: a fixed cost divided by property</p><p class="figsub">A year's cost of delegation as a share of property falls as property grows; delegation pays only where it lies below the benefit delegation brings (dashed line). Drag the price of cognitive labour to see where the threshold moves.</p></div><button class="replay" type="button" data-replay="th14">Replay</button></div>
+    <div class="th14" id="th14" data-anim>
+      <svg viewBox="0 0 660 220" role="img" aria-label="Cost of delegation as a share of property"><g id="th14-g"></g></svg>
+      <div class="sl"><label for="th14-a">Price of cognitive labour <b id="th14-av"></b></label><input id="th14-a" type="range" min="0" max="2" step="0.1" value="0"></div>
+      <p class="th14-msg" id="th14-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: fixed cost = 3 portions × the price of cognitive labour + 0.3 portions for checking and bearing responsibility; the benefit of delegation is 1.3% of property. The horizontal axis is property in portions, on a logarithmic scale.</figcaption>
+</figure>
+<style>
+.th14 svg{width:100%;height:auto;display:block}
+.th14-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.th14 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('th14'+id),X0=50,X1=628,YT=12,YB=180,L0=1,L1=4,x=w=>X0+(Math.log10(w)-L0)/(L1-L0)*(X1-X0),mx=6,y=v=>YB-Math.min(v,mx)/mx*(YB-YT),B=1.3;
+  function draw(){const ls=+$('-a').value,a=Math.pow(10,-ls),F=3*a+.3,th=F/B*100;$('-av').textContent=a>=.1?Math.round(a*100)+'%':(a*100).toFixed(1)+'%';
+    let h=[0,2,4,6].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}%</text>`).join('')+[10,100,1000,10000].map(w=>`<text x="${x(w)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${w.toLocaleString('en-US')}</text>`).join('');
+    h+=`<rect x="${x(Math.max(10,Math.min(1e4,th)))}" y="${YT}" width="${X1-x(Math.max(10,Math.min(1e4,th)))}" height="${YB-YT}" fill="var(--accent)" opacity=".08"/>`;
+    h+=`<line x1="${X0}" x2="${X1}" y1="${y(B)}" y2="${y(B)}" stroke="var(--warm)" stroke-dasharray="5 4"/><text x="${X1}" y="${y(B)-6}" text-anchor="end" font-size="11" fill="var(--warm)">Benefit of delegation 1.3%</text>`;
+    let d='';for(let l=L0;l<=L1+1e-9;l+=.02){const w=Math.pow(10,l);d+=(d?'L':'M')+x(w).toFixed(1)+','+y(F/w*100).toFixed(1);}
+    const fl=.3/B*100;
+    h+=`<path d="${d}" fill="none" stroke="var(--accent)" stroke-width="2.6"/>`;
+    if(th>=10&&th<=1e4)h+=`<line x1="${x(th)}" x2="${x(th)}" y1="${y(B)}" y2="${YB}" stroke="var(--accent)"/><text x="${x(th)+6}" y="${YB-8}" font-size="11">Threshold ${Math.round(th)} portions</text>`;
+    $('-g').innerHTML=h;
+    $('-msg').textContent=ls===0?`With cognitive labour at its original price, the fixed cost is 3.3 portions, and delegation pays only for households with more than ${Math.round(th)} portions of property.`:`With the price of cognitive labour down to ${a>=.1?Math.round(a*100):(a*100).toFixed(1)}%, the fixed cost is ${F.toFixed(2)} portions and the threshold falls to ${Math.round(th)} portions. However cheap cognitive labour becomes, the threshold will not fall below ${Math.round(fl)} portions: that floor is set by the 0.3 portions of checking and bearing responsibility.`;}
+  $('-a').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{let v=0;$('-a').value=0;draw();const id=setInterval(()=>{v+=.1;$('-a').value=v.toFixed(1);draw();if(v>=2)clearInterval(id);},150);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-3">3. From standardized to personal</h2>
+<p>Households that cannot afford a steward can only accept arrangements designed for the majority: one portfolio, one default rate, one path that adjusts with age. These arrangements suit the average household but do not necessarily suit any particular one. If someone in the family has an unstable income, or the household will need a large sum in a few years, the right arrangement differs from the average one. The scribes can work things out for each household separately, so standardized arrangements can become personal ones.</p>
+<p>D'Acunto, Prabhala and Rossi (2019) studied a portfolio optimization tool introduced by a large Indian brokerage. Investors who were under-diversified before using it came to hold more stocks, and their portfolios became less volatile and earned better returns. Investors who were already well diversified came to hold fewer stocks and traded more often. Users' biases, such as the disposition effect, trend chasing and the rank effect, also declined.</p>
+<p><strong>Today's counterpart.</strong> Target-date funds are tiered by age; questionnaire-based portfolios are tiered by risk level; finer-grained personal allocation used to be found only in private banking.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">From one arrangement to one for each household</p><p class="figsub">Each of forty households has its own best share in ship shares (dots), depending on age, whether its income is stable and whether it will need a large sum in a few years. The short bars show the share actually received. Switch among three arrangements to see the average gap.</p></div><button class="replay" type="button" data-replay="ft14">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Arrangement">
+      <button type="button" data-ft14="one" aria-pressed="true">One for all</button>
+      <button type="button" data-ft14="age" aria-pressed="false">Tiered by age</button>
+      <button type="button" data-ft14="own" aria-pressed="false">Personal to each household</button>
+    </div>
+    <div class="ft14" id="ft14" data-anim>
+      <svg viewBox="0 0 660 220" role="img" aria-label="Best share and actual share"><g id="ft14-g"></g></svg>
+      <div class="legend"><span><i style="background:var(--accent);border-radius:50%"></i>Best share</span><span><i style="background:var(--ink)"></i>Share actually received</span><span><i style="background:var(--warm)"></i>Gap</span></div>
+      <p class="ft14-msg" id="ft14-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: forty households arranged from youngest to oldest. The best share falls with age and moves up or down with each household's income and spending plans; "tiered by age" takes the average within each of four age bands.</figcaption>
+</figure>
+<style>
+.ft14 svg{width:100%;height:auto;display:block}
+.ft14-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.ft14 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('ft14'+id);let s=1415;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};
+  const N=40,I=Array.from({length:N},(_,i)=>Math.max(.05,Math.min(.95,.9-.6*i/(N-1)+(r()-.5)*.45)));
+  const X0=50,X1=628,YT=12,YB=180,x=i=>X0+(i+.5)/N*(X1-X0),y=v=>YB-v*(YB-YT);let mode='one';
+  const avg=a=>a.reduce((p,q)=>p+q,0)/a.length;
+  function given(){if(mode==='own')return I.slice();if(mode==='one'){const m=avg(I);return I.map(()=>m);}return I.map((_,i)=>{const k=Math.floor(i/10);return avg(I.slice(k*10,k*10+10));});}
+  function draw(){const G=given();let h=[0,.25,.5,.75,1].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text>`).join('')+`<text x="${X0}" y="${YB+16}" font-size="11" class="t-faint">Younger</text><text x="${X1}" y="${YB+16}" text-anchor="end" font-size="11" class="t-faint">Older</text>`;
+    I.forEach((v,i)=>{h+=`<line x1="${x(i)}" x2="${x(i)}" y1="${y(v)}" y2="${y(G[i])}" stroke="var(--warm)" stroke-width="2"/><line x1="${x(i)-6}" x2="${x(i)+6}" y1="${y(G[i])}" y2="${y(G[i])}" stroke="var(--ink)" stroke-width="2"/><circle cx="${x(i)}" cy="${y(v)}" r="4.2" fill="var(--accent)"/>`;});
+    $('-g').innerHTML=h;const dev=avg(I.map((v,i)=>Math.abs(v-G[i])))*100;
+    $('-msg').textContent={one:`One for all: every household gets the same share, with an average gap of ${dev.toFixed(0)} percentage points; the young are too cautious and the old take too much risk.`,age:`Tiered by age: the average gap falls to ${dev.toFixed(0)} percentage points, but households in the same age band with different incomes and spending plans still get the same arrangement.`,own:'Personal to each household: every household gets its own best share. In the past, only households that could afford a steward had arrangements like this.'}[mode];}
+  const bs=[...document.querySelectorAll('[data-ft14]')];
+  function set(m){mode=m;bs.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.ft14===m)));draw();}
+  bs.forEach(b=>b.addEventListener('click',()=>set(b.dataset.ft14)));
+  $('').addEventListener('anim-in',()=>{['one','age','own'].forEach((m,i)=>setTimeout(()=>set(m),300+i*2200));});
+  draw();
+})();
+</script>
+
+<h2 id="sec-4">4. Which agency cost falls</h2>
+<p>What a principal pays for delegation can be divided into three components: the monitoring cost of keeping watch on the manager; the bonding cost the manager incurs to make the principal trust them; and the residual loss caused by diverging interests that remains after monitoring and bonding. The scribes affect the three differently. The cost of monitoring falls clearly: a principal can have their own scribe check, transaction by transaction, what the manager did. The cost of bonding hardly changes: a scribe has no property to pledge, and whoever guarantees it is still the person behind it. The residual loss depends on whom the scribe works for.</p>
+<aside class="principle"><p class="pr-k">Rerun: a principle re-examined</p><p class="pr-n">The three components of agency costs</p><p class="pr-c"><span><em>Discipline</em>Finance › Corporate finance (agency theory)</span><span><em>Type</em>Theory</span></p><p class="pr-s">Agency costs consist of three components, the principal's monitoring costs, the agent's bonding costs and the residual loss, and the principal chooses monitoring and bonding so as to minimize their sum.</p><dl><div><dt>Standing in the field</dt><dd>Framed the relationship between shareholders and managers as an agency relationship and gave a definition of agency costs; contract theory, which studies incentives and contracts, earned Hart and Holmström the Nobel Memorial Prize in Economic Sciences in 2016</dd></div><div><dt>Constraint it answers</dt><dd>The agent's interests differ from the principal's, and the agent's actions cannot be fully observed</dd></div><div><dt>Premises</dt><dd>Both monitoring and bonding consume resources; interests cannot be fully aligned</dd></div><div><dt>Proposed by</dt><dd>Jensen and Meckling, 1976</dd></div><div><dt>Open question</dt><dd>Who guarantees an agent that has no property to pledge?</dd></div><div><dt>After the rerun</dt><dd>Monitoring costs fall clearly with the price of cognitive labour; bonding costs stay the same; the residual loss depends on whom the scribe works for, and may fall or may rise</dd></div></dl></aside>
+<p><strong>Today's counterpart.</strong> Tools for reconciliation, fee comparison and holdings analysis have greatly lowered the cost of checking on fiduciaries; liability for compensation and licensing obligations still rest with the institutions.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">How much each of the three agency costs falls</p><p class="figsub">Following Jensen and Meckling (1976), agency costs consist of monitoring costs, bonding costs and the residual loss. Drag the price of cognitive labour, then switch whom the scribe works for.</p></div><button class="replay" type="button" data-replay="ag14">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Whom the scribe works for">
+      <button type="button" data-ag14="p" aria-pressed="true">Scribe works for the principal</button>
+      <button type="button" data-ag14="s" aria-pressed="false">Scribe works for the seller</button>
+    </div>
+    <div class="ag14" id="ag14" data-anim>
+      <div class="ag14-g" id="ag14-g"></div>
+      <div class="sl"><label for="ag14-a">Price of cognitive labour <b id="ag14-av"></b></label><input id="ag14-a" type="range" min="0" max="100" step="5" value="100"></div>
+      <p class="ag14-msg" id="ag14-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the three components start at 40, 25 and 35. Monitoring costs are 90% cognitive labour; bonding costs are not cognitive labour at all. When the scribe works for the principal, the residual loss falls by up to half as monitoring tightens; when it works for the seller, the residual loss rises instead.</figcaption>
+</figure>
+<style>
+.ag14-g{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;align-items:end;height:200px;margin:6px 0 10px}
+.ag14-c{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;font-size:12.5px}
+.ag14-c div{width:64%;display:flex;flex-direction:column;justify-content:flex-end;height:150px;position:relative}
+.ag14-c i{display:block;width:100%;border-radius:6px 6px 0 0;transition:height .6s}
+.ag14-c i.old{position:absolute;bottom:0;left:0;border:1.5px dashed var(--faint);background:transparent}
+.ag14-c b{font-variant-numeric:tabular-nums;margin:4px 0 2px}
+.ag14-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('ag14'+id);let who='p';
+  const B=[['Monitoring costs',40,'var(--accent)'],['Bonding costs',25,'var(--warm)'],['Residual loss',35,'var(--ink)']];
+  function draw(){const a=+$('-a').value/100;$('-av').textContent=Math.round(a*100)+'%';
+    const m=40*(.9*a+.1),b=25,res=who==='p'?35*(.5+.5*a):35*(1+.6*(1-a)),V=[m,b,res],tot=m+b+res;
+    $('-g').innerHTML=B.map(([n,v,c],i)=>`<div class="ag14-c"><div><i class="old" style="height:${v*1.5}%"></i><i style="height:${V[i]*1.5}%;background:${c}"></i></div><b>${V[i].toFixed(0)}</b><span>${n}</span></div>`).join('');
+    $('-msg').textContent=a===1&&who==='p'?'With cognitive labour at its original price: monitoring costs 40, bonding costs 25, residual loss 35, for a total of 100.':who==='p'?`With the price of cognitive labour down to ${Math.round(a*100)}%, monitoring costs fall from 40 to ${m.toFixed(0)}, and the residual loss falls with them to ${res.toFixed(0)}; bonding costs remain 25. Total agency costs fall from 100 to ${tot.toFixed(0)}.`:`When the scribe works for the seller, monitoring costs fall just the same, but the residual loss rises to ${res.toFixed(0)}, because the one making decisions for the principal is precisely the party whose interests differ from the principal's. Total: ${tot.toFixed(0)}.`;}
+  const bs=[...document.querySelectorAll('[data-ag14]')];
+  function set(w){who=w;bs.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.ag14===w)));draw();}
+  bs.forEach(b=>b.addEventListener('click',()=>set(b.dataset.ag14)));$('-a').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{set('p');let v=100;$('-a').value=100;draw();const id=setInterval(()=>{v-=5;$('-a').value=v;draw();if(v<=5){clearInterval(id);setTimeout(()=>set('s'),1400);}},90);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-5">5. It works for whoever pays it</h2>
+<p>An agent that charges its principal nothing must be paid from somewhere else. If its pay comes from those selling ship shares, as a commission on each sale, it has reason to recommend the ship shares with the highest commission rather than those best suited to the principal. Sellers then compete on this basis too: not over whose ship shares are better, but over who pays the recommender a higher commission. The principal pays nothing directly, but pays more through higher fees.</p>
+<aside class="principle"><p class="pr-k">Derived so far: a principle</p><p class="pr-n">Commissions and biased advice</p><p class="pr-c"><span><em>Discipline</em>Economics › Industrial organization and financial intermediation</span><span><em>Type</em>Theoretical model</span></p><p class="pr-s">When an adviser's pay comes from the seller, recommendations respond to the incentives the seller offers, and sellers turn to competing through commissions; rules such as mandatory disclosure and caps on commissions sometimes have unintended consequences.</p><dl><div><dt>Standing in the field</dt><dd>Analyses intermediaries' commissions in retail finance and medical services within a framework of asymmetric information, and evaluates the effects of common policies such as mandatory disclosure and commission caps</dd></div><div><dt>Constraint it answers</dt><dd>Principals rely on intermediaries to choose among specialized products</dd></div><div><dt>Premises</dt><dd>Principals cannot see clearly which products are good or bad; intermediaries are paid by sellers</dd></div><div><dt>Proposed by</dt><dd>Inderst and Ottaviani, 2012, using retail financial products and medical services as examples</dd></div><div><dt>Open question</dt><dd>How can an agent be paid by the principal without the threshold rising again?</dd></div><div><dt>After the rerun</dt><dd>The scribes make a personal agent cheap, but they do not change this: who pays the agent determines whose interests it considers first</dd></div></dl></aside>
+<p><strong>Today's counterpart.</strong> Rules published by the UK Financial Services Authority in 2010 provide that from 31 December 2012 investment advisers may no longer receive commissions paid by product providers for recommending their products; advisers set their own charges and agree them with clients.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">It works for whoever pays it</p><p class="figsub">The market offers three kinds of ship shares: a low-fee whole-market portfolio, a mid-fee portfolio, and a high-fee portfolio that pays the recommender the largest commission. Switch where the agent's pay comes from to see what a hundred principals are recommended and how much more they pay each year.</p></div><button class="replay" type="button" data-replay="wh14">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Source of pay">
+      <button type="button" data-wh14="0" aria-pressed="true">Principal pays an annual fee</button>
+      <button type="button" data-wh14="1" aria-pressed="false">Seller pays commission per sale</button>
+      <button type="button" data-wh14="2" aria-pressed="false">Free, earns from recommendations</button>
+    </div>
+    <div class="wh14" id="wh14" data-anim>
+      <div class="wh14-g" id="wh14-g"></div>
+      <div class="wh14-out" id="wh14-out"></div>
+      <p class="wh14-msg" id="wh14-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the three kinds of ship shares carry annual fees of 0.1%, 0.8% and 1.8%, and pay the recommender commissions of 0, 0.3% and 1.0%; when the principal pays an annual fee, the agent charges 0.3% a year. The shares recommended are set according to the agent's income, for illustration (following the line of analysis in Inderst and Ottaviani, 2012).</figcaption>
+</figure>
+<style>
+.wh14-g{display:grid;grid-template-columns:repeat(20,1fr);gap:3px;max-width:520px}
+.wh14-g i{aspect-ratio:1;border-radius:50%;transition:background .4s;transition-delay:calc(var(--i)*6ms)}
+.wh14-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.wh14-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.wh14-out span{display:block;font-size:11.5px;color:var(--faint)} .wh14-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.wh14-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.wh14-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('wh14'+id),F=[.1,.8,1.8],C=['var(--accent)','var(--faint)','var(--warm)'];
+  const S=[[80,15,5,.3,'The principal pays directly, and the agent\'s income does not depend on what it recommends, so it mostly recommends the lowest-fee portfolio.'],[20,30,50,0,'The agent\'s income comes from commissions, so its recommendations lean towards the highest-commission portfolio: the principal pays nothing directly, but pays more through higher fees.'],[10,25,65,0,'An agent that appears to be free earns all its income from recommendations, and its recommendations concentrate most heavily on the highest-fee portfolio.']];
+  $('-g').innerHTML=Array.from({length:100},(_,i)=>`<i style="--i:${i}"></i>`).join('');const cs=[...$('-g').children];
+  function set(k){document.querySelectorAll('[data-wh14]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.wh14===k)));const [a,b,c,fee,msg]=S[k];
+    cs.forEach((x,i)=>x.style.background=C[i<a?0:i<a+b?1:2]);const cost=(a*F[0]+b*F[1]+c*F[2])/100+fee;
+    $('-out').innerHTML=[['Recommended the lowest-fee portfolio',a+' people'],['Recommended the highest-fee portfolio',c+' people'],['Average paid by principals each year',cost.toFixed(2)+'%']].map(([x,v])=>`<div><span>${x}</span><b>${v}</b></div>`).join('');$('-msg').textContent=msg;}
+  document.querySelectorAll('[data-wh14]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.wh14)));
+  $('').addEventListener('anim-in',()=>{[0,1,2].forEach((k,i)=>setTimeout(()=>set(k),300+i*2200));});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-6">6. A village where everyone has a steward: Civilization Simulator, version 14</h2>
+<p>The simulator unlocks "Personal agent". Forty households can manage on their own, simply hold a proportional share of everything, or hire a personal agent. A personal agent charges a fixed annual fee plus a percentage fee. The cognitive-labour part falls with the price of cognitive labour, while the part for checking and bearing responsibility stays the same. It can tailor arrangements to each household and helps people make fewer mistakes of chasing gains and selling into losses. Drag the price of cognitive labour to see what each household chooses and what property each has after twenty years; then have the agent paid by sellers instead, and see what happens.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Civilization Simulator · Chapter 14: A village where everyone has a steward</p><p class="figsub">Forty households are arranged from least to most property. Each chooses to manage on its own, simply hold a proportional share of everything, or hire a personal agent, picking whichever costs least each year. Drag the price of cognitive labour to see who can afford a personal agent and how many times its starting property each household has after twenty years; then have the agent paid by sellers instead.</p></div><button class="replay" type="button" data-replay="cs14">Replay</button></div>
+    <div class="cs-rules"><span class="on">Delegation</span><span class="on">Regulation &amp; custody</span><span class="on">Defaults</span><span class="on">Parameter: price of cognitive labour</span><span class="on">Personal agent</span><span class="lock">Guaranteeing agents · Ch. 15</span></div>
+    <div class="cs14" id="cs14" data-anim>
+      <div class="cs14-strip" id="cs14-s"></div>
+      <div class="cs14-ax"><span>Least property</span><span>Most property</span></div>
+      <div class="legend"><span><i style="background:var(--faint)"></i>Manage on its own</span><span><i style="background:var(--quote);border:1px solid var(--line)"></i>Hold a share of everything</span><span><i style="background:var(--accent)"></i>Personal agent</span><span><i style="background:var(--warm)"></i>Agent paid by sellers</span></div>
+      <div class="sl"><label for="cs14-a">Price of cognitive labour <b id="cs14-av"></b></label><input id="cs14-a" type="range" min="0" max="2" step="0.1" value="0"></div>
+      <div class="cs-sw"><label><input type="checkbox" id="cs14-k"> The agent charges the principal nothing; sellers pay it a commission on each sale</label></div>
+      <button type="button" class="replay" id="cs14-re">Another run of years</button>
+      <div class="cs14-out" id="cs14-out"></div>
+      <p class="cs14-msg" id="cs14-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model: the fleets return 6% a year on average with 15% volatility. Each year's cost is measured as a percentage of property. Managing on one's own costs 1.8% (mistakes in trading and judgement); one household in five is skilled at it and loses only 0.5%. Holding a share of everything costs 1.5% (a 0.1% fee, plus 1.4% from chasing gains, selling into losses and an ill-fitting arrangement). A personal agent costs the fixed fee ÷ property + a percentage fee + 0.2% in residual mistakes, where the fixed fee is 3 portions × the price of cognitive labour + 0.3 portions for checking and bearing responsibility, and the percentage fee is 0.8% × the price of cognitive labour + 0.1%. When sellers pay, the cost the principal sees is only 0.2%, but the principal actually pays 2% more for the high-fee ship shares it is steered towards.</figcaption>
+</figure>
+<style>
+.cs14-strip{display:grid;grid-template-columns:repeat(40,1fr);gap:2px;align-items:end;height:110px}
+.cs14-strip i{display:block;border-radius:2px 2px 0 0;background:var(--quote);border:1px solid var(--line);transition:background .35s}
+.cs14-strip i.self{background:var(--faint);border-color:var(--faint)}
+.cs14-strip i.agent{background:var(--accent);border-color:var(--accent)}
+.cs14-strip i.kick{background:var(--warm);border-color:var(--warm)}
+.cs14-ax{display:flex;justify-content:space-between;font-size:11.5px;color:var(--faint);margin:4px 0 6px}
+.cs14-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cs14-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs14-out span{display:block;font-size:11.5px;color:var(--faint)} .cs14-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.cs14-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs14-strip{gap:1px;height:90px}.cs14-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs14'+id);let seed=1414;
+  let s0=1414;const r0=()=>{s0=(s0*16807)%2147483647;return s0/2147483647;};const g0=()=>{let u=0;while(!u)u=r0();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r0());};
+  const W0=Array.from({length:40},()=>Math.max(8,Math.round(100*Math.exp(1.1*g0())))).sort((a,b)=>a-b),SK=W0.map((_,i)=>i%5===3);
+  function choose(i,a,kick){const self=SK[i]?.5:1.8,idx=1.5,F=3*a+.3,fee=.8*a+.1,beh=.2,seen=kick?beh:F/W0[i]*100+fee+beh,act=kick?beh+2:seen;
+    const best=Math.min(self,idx,seen);return best===seen?[kick?'kick':'agent',act]:best===self?['self',self]:['idx',idx];}
+  function sim(a,kick){let s=seed;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};const g=()=>{let u=0;while(!u)u=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r());};
+    const M=[];for(let t=0;t<20;t++)M.push(.06+.15*g());const C=W0.map((_,i)=>choose(i,a,kick)),W=W0.slice(),I=W0.slice();
+    for(let i=0;i<40;i++)for(let t=0;t<20;t++){W[i]*=Math.max(.05,1+M[t]-C[i][1]/100+(C[i][0]==='self'?.05*g():0));I[i]*=1+M[t]-.015;}
+    const R=W.map((w,i)=>w/W0[i]),med=a=>a.slice().sort((x,y)=>x-y)[Math.floor(a.length/2)];
+    return {C,bot:med(R.slice(0,20)),top:med(R.slice(20)),idx:I[0]/W0[0]};}
+  function draw(){const ls=+$('-a').value,a=Math.pow(10,-ls),kick=$('-k').checked,S=sim(a,kick),mx=Math.log(W0[39]);
+    $('-av').textContent=a>=.1?Math.round(a*100)+'%':(a*100).toFixed(1)+'%';
+    $('-s').innerHTML=S.C.map((c,i)=>`<i class="${c[0]}" style="height:${12+Math.log(W0[i])/mx*88}%" title="Property: ${W0[i]} portions"></i>`).join('');
+    const n=S.C.filter(c=>c[0]==='agent'||c[0]==='kick').length,first=S.C.findIndex(c=>c[0]==='agent');
+    $('-out').innerHTML=[['Households with a personal agent',n],['Poorer half: property after 20 years vs start',S.bot.toFixed(2)+'×'],['Richer half: property after 20 years vs start',S.top.toFixed(2)+'×']].map(([x,v])=>`<div><span>${x}</span><b>${v}</b></div>`).join('');
+    $('-msg').textContent=kick?`The agent appears to cost nothing, and all ${n} households hire it; but it recommends the ship shares with the highest commission, so each household actually pays 2% more a year. After twenty years the poorer half has only ${S.bot.toFixed(2)} times its starting property, worse than the ${S.idx.toFixed(2)} times from simply holding a share of everything.`:ls===0?`With cognitive labour at its original price, a personal agent's fixed fee is about 3.3 portions, and only the ${n} households with the most property can afford one; the rest simply hold a share of everything or manage on their own.`:`With the price of cognitive labour down to ${a>=.1?Math.round(a*100):(a*100).toFixed(1)}%, ${n} households can afford a personal agent`+(first>0?`; every household with more than ${W0[first]} portions of property that is not skilled at managing on its own will hire one, while poorer households are still kept out by the 0.3 portions of checking and bearing responsibility`:'')+`. After twenty years, the richer half has ${S.top.toFixed(2)} times its starting property and the poorer half ${S.bot.toFixed(2)} times.`;}
+  ['-a','-k'].forEach(k=>$(k).addEventListener('input',draw));$('-re').addEventListener('click',()=>{seed=(seed*48271)%2147483647;draw();});
+  $('').addEventListener('anim-in',()=>{$('-k').checked=false;let v=0;$('-a').value=0;draw();const id=setInterval(()=>{v+=.1;$('-a').value=v.toFixed(1);draw();if(v>=2){clearInterval(id);setTimeout(()=>{$('-k').checked=true;draw();},1500);}},160);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-7">7. What this step leaves open</h2>
+<p>Personal agents have become cheap, but several questions remain unresolved:</p>
+<ol><li><strong>Guarantees.</strong> The scribes have no property to pledge and no accumulated reputation. When one does something wrong, who pays compensation?</li><li><strong>Checking.</strong> A principal can have their own scribe check on the manager, but who checks the principal's own scribe?</li><li><strong>The poorest households.</strong> The fixed cost of checking and bearing responsibility remains, and the households with the least property still cannot clear the threshold.</li><li><strong>When everyone has an agent.</strong> When every household has a scribe reading reports and choosing ship shares for it, how will information advantages change?</li></ol>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">What this step leaves open</p><p class="figsub">Four questions still unresolved once personal agents become cheap. Select a question to see the assumption behind it.</p></div><button class="replay" type="button" data-replay="nx14">Replay</button></div>
+    <div class="nx" id="nx14" data-anim>
+      <div class="nx-src"><b>Personal agents</b><span>The threshold for delegation falls</span></div>
+      <div class="nx-list" id="nx14-l"></div>
+    </div>
+    <p class="nx-msg" id="nx14-msg" aria-live="polite"></p>
+  </div>
+</figure>
+<style>
+.nx{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:center}
+.nx-src{background:var(--ink);color:var(--bg);border-radius:10px;padding:14px 10px;text-align:center}
+.nx-src b{display:block;font-size:16px} .nx-src span{font-size:12px;opacity:.75}
+.nx-list{display:grid;gap:6px}
+.nx-i{font:inherit;text-align:left;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:9px 12px;color:var(--ink);opacity:0;transform:translateX(-8px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.3s)}
+.nx.in .nx-i{opacity:1;transform:none}
+.nx-i span{font-size:13.5px} .nx-i em{font-style:normal;font-size:11.5px;color:var(--faint);white-space:nowrap}
+.nx-i.sel{border-color:var(--accent)}
+.nx-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.nx{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const Q=[['Guarantees','Chapter 15','The assumption: when an agent does something wrong, someone is able to pay compensation. The scribes have no property to pledge and no accumulated reputation. On whom does the duty to compensate fall?'],
+    ['Checking','Chapter 15','The assumption: the principal\'s own scribe is reliable. It has checked the manager; who checks it?'],
+    ['The poorest households','Chapter 19','The assumption: the threshold can keep falling. The fixed cost of checking and bearing responsibility remains, and the households with the least property still cannot clear the threshold.'],
+    ['When everyone has an agent','Chapter 16','The assumption: only a few people have someone reading reports for them. When everyone has a scribe, information advantages will wear away faster.']];
+  const l=document.getElementById('nx14-l'),msg=document.getElementById('nx14-msg');
+  l.innerHTML=Q.map((q,i)=>`<button type="button" class="nx-i" style="--i:${i}" data-i="${i}"><span>${q[0]}</span><em>→ ${q[1]}</em></button>`).join('');
+  const bs=[...l.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));msg.textContent=Q[i][2];}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('nx14').addEventListener('anim-in',()=>{[0,1,2,3].forEach((i,k)=>setTimeout(()=>set(i),1600+k*1800));});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-8">8. Implications for products</h2>
+<p>Robo-advisers and wealth assistants built on large models are both pushing the boundary of delegation. Three implications follow. First, the threshold depends on the part of the fixed cost that cannot be brought down. To make delegation affordable for more people, the cost of checking and bearing responsibility must be lowered too, not only the cost of research and advice. Second, the value of a personal arrangement lies in fitting each household, not in looking cleverer; a product should state clearly what it has done for this household that differs from a standardized arrangement. Third, how an agent is paid determines whose side it is on. An agent that charges users directly, with transparent fees, deserves more trust than one that appears to be free.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: how the boundary of delegation moves</p><p class="figsub">Four conclusions, each tied to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="g14summary">Replay</button></div>
+    <div class="g14summary" id="g14summary" data-anim><div class="g14summary-c" style="--i:0"><em>Threshold</em><b>A fixed cost divided by property</b><p>As cognitive labour gets cheaper, the threshold falls; checking and bearing responsibility set its floor.</p></div><div class="g14summary-c" style="--i:1"><em>Personal</em><b>From one arrangement to one for each household</b><p>Tailoring that once belonged only to the wealthy can reach many more households.</p></div><div class="g14summary-c warn" style="--i:2"><em>Agency costs</em><b>Monitoring falls; bonding does not</b><p>Of the three agency costs, only monitoring falls clearly with the price of cognitive labour.</p></div><div class="g14summary-c warn" style="--i:3"><em>Allegiance</em><b>It works for whoever pays it</b><p>An agent that appears free may leave the principal paying more.</p></div></div>
+  </div>
+</figure>
+<style>
+.g14summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g14summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g14summary-c.warn{border-left-color:var(--warm)}
+.g14summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g14summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g14summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g14summary.in .g14summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g14summary{grid-template-columns:1fr}}
+</style>
+
+<h2 id="sec-9">References</h2>
+<ul class="refs"><li>Baumol, W. J. (1967). Macroeconomics of unbalanced growth: The anatomy of urban crisis. <i>American Economic Review</i>, 57(3), 415–426.</li><li>Coase, R. H. (1937). The nature of the firm. <i>Economica</i>, 4(16), 386–405.</li><li>D'Acunto, F., Prabhala, N., &amp; Rossi, A. G. (2019). The promises and pitfalls of robo-advising. <i>Review of Financial Studies</i>, 32(5), 1983–2020.</li><li>Financial Services Authority (2010). <i>Distribution of Retail Investments: Delivering the RDR</i>. Policy Statement PS10/6.</li><li>Inderst, R., &amp; Ottaviani, M. (2012). Competition through commissions and kickbacks. <i>American Economic Review</i>, 102(2), 780–809.</li><li>Jensen, M. C., &amp; Meckling, W. H. (1976). Theory of the firm: Managerial behavior, agency costs and ownership structure. <i>Journal of Financial Economics</i>, 3(4), 305–360.</li><li>Nobel Prize Outreach. <i>The Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel 1991</i>. NobelPrize.org.</li><li>Reher, M., &amp; Sokolinski, S. (2024). Robo advisors and access to wealth management. <i>Journal of Financial Economics</i>, 155, 103829.</li></ul>
+<footer class="nav"><a href="g-13.html">← Chapter 13: A new parameter: the cost of cognitive labour collapses</a><a href="g-15.html">Chapter 15: Who guarantees an agent's promises →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

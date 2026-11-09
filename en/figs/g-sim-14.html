@@ -1,0 +1,53 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Civilization Simulator · Chapter 14: A village where everyone has a steward</p><p class="figsub">Forty households are arranged from least to most property. Each chooses to manage on its own, simply hold a proportional share of everything, or hire a personal agent, picking whichever costs least each year. Drag the price of cognitive labour to see who can afford a personal agent and how many times its starting property each household has after twenty years; then have the agent paid by sellers instead.</p></div><button class="replay" type="button" data-replay="cs14">Replay</button></div>
+    <div class="cs-rules"><span class="on">Delegation</span><span class="on">Regulation &amp; custody</span><span class="on">Defaults</span><span class="on">Parameter: price of cognitive labour</span><span class="on">Personal agent</span><span class="lock">Guaranteeing agents · Ch. 15</span></div>
+    <div class="cs14" id="cs14" data-anim>
+      <div class="cs14-strip" id="cs14-s"></div>
+      <div class="cs14-ax"><span>Least property</span><span>Most property</span></div>
+      <div class="legend"><span><i style="background:var(--faint)"></i>Manage on its own</span><span><i style="background:var(--quote);border:1px solid var(--line)"></i>Hold a share of everything</span><span><i style="background:var(--accent)"></i>Personal agent</span><span><i style="background:var(--warm)"></i>Agent paid by sellers</span></div>
+      <div class="sl"><label for="cs14-a">Price of cognitive labour <b id="cs14-av"></b></label><input id="cs14-a" type="range" min="0" max="2" step="0.1" value="0"></div>
+      <div class="cs-sw"><label><input type="checkbox" id="cs14-k"> The agent charges the principal nothing; sellers pay it a commission on each sale</label></div>
+      <button type="button" class="replay" id="cs14-re">Another run of years</button>
+      <div class="cs14-out" id="cs14-out"></div>
+      <p class="cs14-msg" id="cs14-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model: the fleets return 6% a year on average with 15% volatility. Each year's cost is measured as a percentage of property. Managing on one's own costs 1.8% (mistakes in trading and judgement); one household in five is skilled at it and loses only 0.5%. Holding a share of everything costs 1.5% (a 0.1% fee, plus 1.4% from chasing gains, selling into losses and an ill-fitting arrangement). A personal agent costs the fixed fee ÷ property + a percentage fee + 0.2% in residual mistakes, where the fixed fee is 3 portions × the price of cognitive labour + 0.3 portions for checking and bearing responsibility, and the percentage fee is 0.8% × the price of cognitive labour + 0.1%. When sellers pay, the cost the principal sees is only 0.2%, but the principal actually pays 2% more for the high-fee ship shares it is steered towards.</figcaption>
+</figure>
+<style>
+.cs14-strip{display:grid;grid-template-columns:repeat(40,1fr);gap:2px;align-items:end;height:110px}
+.cs14-strip i{display:block;border-radius:2px 2px 0 0;background:var(--quote);border:1px solid var(--line);transition:background .35s}
+.cs14-strip i.self{background:var(--faint);border-color:var(--faint)}
+.cs14-strip i.agent{background:var(--accent);border-color:var(--accent)}
+.cs14-strip i.kick{background:var(--warm);border-color:var(--warm)}
+.cs14-ax{display:flex;justify-content:space-between;font-size:11.5px;color:var(--faint);margin:4px 0 6px}
+.cs14-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cs14-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs14-out span{display:block;font-size:11.5px;color:var(--faint)} .cs14-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.cs14-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs14-strip{gap:1px;height:90px}.cs14-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs14'+id);let seed=1414;
+  let s0=1414;const r0=()=>{s0=(s0*16807)%2147483647;return s0/2147483647;};const g0=()=>{let u=0;while(!u)u=r0();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r0());};
+  const W0=Array.from({length:40},()=>Math.max(8,Math.round(100*Math.exp(1.1*g0())))).sort((a,b)=>a-b),SK=W0.map((_,i)=>i%5===3);
+  function choose(i,a,kick){const self=SK[i]?.5:1.8,idx=1.5,F=3*a+.3,fee=.8*a+.1,beh=.2,seen=kick?beh:F/W0[i]*100+fee+beh,act=kick?beh+2:seen;
+    const best=Math.min(self,idx,seen);return best===seen?[kick?'kick':'agent',act]:best===self?['self',self]:['idx',idx];}
+  function sim(a,kick){let s=seed;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};const g=()=>{let u=0;while(!u)u=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r());};
+    const M=[];for(let t=0;t<20;t++)M.push(.06+.15*g());const C=W0.map((_,i)=>choose(i,a,kick)),W=W0.slice(),I=W0.slice();
+    for(let i=0;i<40;i++)for(let t=0;t<20;t++){W[i]*=Math.max(.05,1+M[t]-C[i][1]/100+(C[i][0]==='self'?.05*g():0));I[i]*=1+M[t]-.015;}
+    const R=W.map((w,i)=>w/W0[i]),med=a=>a.slice().sort((x,y)=>x-y)[Math.floor(a.length/2)];
+    return {C,bot:med(R.slice(0,20)),top:med(R.slice(20)),idx:I[0]/W0[0]};}
+  function draw(){const ls=+$('-a').value,a=Math.pow(10,-ls),kick=$('-k').checked,S=sim(a,kick),mx=Math.log(W0[39]);
+    $('-av').textContent=a>=.1?Math.round(a*100)+'%':(a*100).toFixed(1)+'%';
+    $('-s').innerHTML=S.C.map((c,i)=>`<i class="${c[0]}" style="height:${12+Math.log(W0[i])/mx*88}%" title="Property: ${W0[i]} portions"></i>`).join('');
+    const n=S.C.filter(c=>c[0]==='agent'||c[0]==='kick').length,first=S.C.findIndex(c=>c[0]==='agent');
+    $('-out').innerHTML=[['Households with a personal agent',n],['Poorer half: property after 20 years vs start',S.bot.toFixed(2)+'×'],['Richer half: property after 20 years vs start',S.top.toFixed(2)+'×']].map(([x,v])=>`<div><span>${x}</span><b>${v}</b></div>`).join('');
+    $('-msg').textContent=kick?`The agent appears to cost nothing, and all ${n} households hire it; but it recommends the ship shares with the highest commission, so each household actually pays 2% more a year. After twenty years the poorer half has only ${S.bot.toFixed(2)} times its starting property, worse than the ${S.idx.toFixed(2)} times from simply holding a share of everything.`:ls===0?`With cognitive labour at its original price, a personal agent's fixed fee is about 3.3 portions, and only the ${n} households with the most property can afford one; the rest simply hold a share of everything or manage on their own.`:`With the price of cognitive labour down to ${a>=.1?Math.round(a*100):(a*100).toFixed(1)}%, ${n} households can afford a personal agent`+(first>0?`; every household with more than ${W0[first]} portions of property that is not skilled at managing on its own will hire one, while poorer households are still kept out by the 0.3 portions of checking and bearing responsibility`:'')+`. After twenty years, the richer half has ${S.top.toFixed(2)} times its starting property and the poorer half ${S.bot.toFixed(2)} times.`;}
+  ['-a','-k'].forEach(k=>$(k).addEventListener('input',draw));$('-re').addEventListener('click',()=>{seed=(seed*48271)%2147483647;draw();});
+  $('').addEventListener('anim-in',()=>{$('-k').checked=false;let v=0;$('-a').value=0;draw();const id=setInterval(()=>{v+=.1;$('-a').value=v.toFixed(1);draw();if(v>=2){clearInterval(id);setTimeout(()=>{$('-k').checked=true;draw();},1500);}},160);});
+  draw();
+})();
+</script>

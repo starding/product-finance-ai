@@ -1,0 +1,608 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>很多人一起交换</title>
+<meta name="description" content="《产品×金融×AI：从零推演》第 4 章：人一多，彼此需要的东西与时间很难恰好对上。一种人人都接受的东西让交换只需对上一半，也让最年轻的一代有了养老的办法；货币本质上是一种记录，它的价值靠信念与发行的纪律维持">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="g-04">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="全书目录">
+<div class="side-head"><a class="sidetitle" href="index.html">产品×金融×AI<small>AI 时代的金融产品</small></a></div>
+<div class="side-view" role="group" aria-label="阅读方式"><a href="preface.html">分解式</a><a href="g-preface.html" class="on" aria-current="true">生成式</a></div>
+<a class="side-about" href="index.html#about">关于本书</a>
+<a class="" href="g-preface.html"><span class="n">序</span>理解金融产品最好的方法，是从零造一个</a>
+<a class="side-part" href="g-part1.html"><span class="pn">第一部分</span>从 0 到 1：一个没有金融的世界如何长出金融</a>
+<a class="" href="g-01.html"><span class="n">1</span>一个人，一年的收成</a>
+<a class="" href="g-02.html"><span class="n">2</span>两个人，缺的时间不同</a>
+<a class="" href="g-03.html"><span class="n">3</span>借了不还怎么办</a>
+<a class=" cur" href="g-04.html" aria-current="page"><span class="n">4</span>很多人一起交换</a>
+<a class="" href="g-05.html"><span class="n">5</span>收成好坏不定</a>
+<a class="" href="g-06.html"><span class="n">6</span>存的人要随时取，借的人要长期用</a>
+<a class="" href="g-07.html"><span class="n">7</span>一个人出不起一艘船的钱</a>
+<a class="" href="g-08.html"><span class="n">8</span>证券要能卖出去</a>
+<a class="" href="g-09.html"><span class="n">9</span>价格里有所有人的信息</a>
+<a class="" href="g-10.html"><span class="n">10</span>普通人没有时间也没有专长</a>
+<a class="" href="g-11.html"><span class="n">11</span>受托人可能不尽责</a>
+<a class="" href="g-12.html"><span class="n">12</span>制度齐备，人仍会犯错</a>
+<a class="side-part" href="g-part2.html"><span class="pn">第二部分</span>改变一个参数：当代理变得几乎免费</a>
+<a class="" href="g-13.html"><span class="n">13</span>新参数：认知劳动的成本骤降</a>
+<a class="" href="g-14.html"><span class="n">14</span>人人都能有专属代理人吗</a>
+<a class="" href="g-15.html"><span class="n">15</span>谁来为代理人的承诺担保</a>
+<a class="" href="g-16.html"><span class="n">16</span>如果人人都有分析师</a>
+<a class="" href="g-17.html"><span class="n">17</span>代理人成为市场的主要参与者</a>
+<a class="" href="g-18.html"><span class="n">18</span>代理人能否矫正人的偏差</a>
+<a class="" href="g-19.html"><span class="n">19</span>没有改变的东西</a>
+<a class="side-part" href="g-part3.html"><span class="pn">第三部分</span>在新的世界里推演一个产品</a>
+<a class="" href="g-20.html"><span class="n">20</span>一个人和一笔钱</a>
+<a class="" href="g-21.html"><span class="n">21</span>用户不在场</a>
+<a class="" href="g-22.html"><span class="n">22</span>用户看不见过程</a>
+<a class="" href="g-23.html"><span class="n">23</span>代理会出错</a>
+<a class="" href="g-24.html"><span class="n">24</span>信任需要时间</a>
+<a class="side-app" href="g-epilogue.html"><span class="n">结语</span>回到总则</a>
+<a class="side-app" href="method.html"><span class="n">附录</span>本书的写法</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="展开目录" title="目录"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">产品×金融×AI：AI 时代的金融产品</a><span>第一部分　从 0 到 1</span><a class="langlink" href="en/g-04.html" hreflang="en">English</a></header>
+
+<div class="chapno">第 4 章</div><h1>很多人一起交换<small>货币</small></h1>
+<blockquote><p>人一多，交换就遇到一个困难：我有粮想换盐，必须恰好找到一个有盐又想要粮的人。这种需要的双重巧合不只发生在东西上，也发生在时间上：年轻人想把今天的收成留到年老时用，却找不到一个能在几十年后还他的人。一种人人都接受的东西解决了这两个困难：交换只需对上一半，储蓄也不必等一个具体的借款人。货币本质上是一种记录，记下谁为别人付出过；它的价值靠人们相信下一个人也会接受，也靠发行的纪律。</p></blockquote>
+<h2 id="sec-1">一、人一多，需要很难对上</h2>
+<p>岛上的人家多了，物产也多了：有人种粮，有人晒盐，有人织布，有人打鱼。我有粮，想要盐；遇到的晒盐人却想要布。只有当对方恰好有我要的、又恰好要我有的，交换才能直接完成。物产的种类越多，随便遇到一个人恰好对上的机会就越小。杰文斯（1875）把这种处境称为需要的双重巧合，并指出它很少发生。</p>
+<p>需要说明的是，这是逻辑上的推演，而不是历史。人类学家指出，历史上找不到一个先靠纯粹的物物交换、再从中产生货币的社会（汉弗莱，1985；格雷伯，2011）；熟人之间更常见的是记账与赊欠。这与把货币看作一种记录的看法是一致的：货币与记账，本来就是同一件事的两种形式。</p>
+<p><strong>今天的对应。</strong>二手物品很少直接以物换物，因为找到恰好需要彼此物品的人太难；先卖出、再买入，就是用货币把一次交换拆成两次。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">双重巧合：物产越多，越难对上</p><p class="figsub">拖动岛上物产的种类数，比较直接以物换物与先换成货币两种情形下，平均要遇到多少人才能完成一次交换。</p></div><button class="replay" type="button" data-replay="cn">重播</button></div>
+    <div class="cn" id="cn" data-anim>
+      <div class="cn-b"><span>以物换物</span><div><i id="cn-a" style="background:var(--warm)"></i></div><b id="cn-av"></b></div>
+      <div class="cn-b"><span>先换成货币</span><div><i id="cn-m" style="background:var(--accent)"></i></div><b id="cn-mv"></b></div>
+      <div class="sl"><label for="cn-k">物产的种类 <b id="cn-kv"></b></label><input id="cn-k" type="range" min="2" max="12" step="1" value="6"></div>
+      <p class="cn-msg" id="cn-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：每人只有一种物产，想要另一种；随机遇到的人恰好有我要的东西的概率为 1 ÷（种类数 − 1）。以物换物还要求对方恰好要我有的东西，概率相乘；先换成货币时，卖出与买入各只需对上一半，共两步。</figcaption>
+</figure>
+<style>
+.cn-b{display:grid;grid-template-columns:7em 1fr 5.5em;gap:10px;align-items:center;font-size:13px;margin:8px 0}
+.cn-b div{height:18px;background:var(--quote);border-radius:4px;overflow:hidden}
+.cn-b i{display:block;height:100%;transition:width .4s}
+.cn-b b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}
+.cn-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  function draw(){const k=+$('cn-k').value,p=1/(k-1),barter=1/(p*p),money=2/p,M=121;
+    $('cn-a').style.width=Math.min(barter,M)/M*100+'%';$('cn-m').style.width=Math.min(money,M)/M*100+'%';
+    $('cn-av').textContent=Math.round(barter)+' 人';$('cn-mv').textContent=Math.round(money)+' 人';$('cn-kv').textContent=k+' 种';
+    $('cn-msg').textContent=k===2?'只有两种物产时，遇到的人一定恰好需要彼此，以物换物最直接。':`${k} 种物产时，以物换物平均要遇到 ${Math.round(barter)} 人才能对上；先卖出换成货币、再用货币买入，只需遇到约 ${Math.round(money)} 人。种类越多，差距越大。`;}
+  $('cn-k').addEventListener('input',draw);
+  $('cn').addEventListener('anim-in',()=>{let v=2;$('cn-k').value=2;draw();const id=setInterval(()=>{v++;$('cn-k').value=v;draw();if(v>=12)clearInterval(id);},350);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-2">二、一种人人都接受的东西</h2>
+<p>假如有一种东西，人人都愿意先收下，再拿去换自己真正想要的东西，那么交换只需对上一半：对方有我要的就行，不必同时要我有的。这种东西不必由谁指定。岛上的人会发现，有些东西比别的更容易转手：盐耐存、易分，鱼几天就臭了。拿粮换盐的人即使自己用不了那么多盐，也知道之后能拿盐换到别的东西；于是收盐的人越来越多，盐也就越来越容易转手。哪种东西最后胜出，既取决于它本身是否耐存、易分、难以伪造，也取决于人们相信别人会不会接受它：只要人人都相信别人会收贝壳，贝壳就能流通，哪怕它本身没有用处；一旦人们不再相信，贝壳就只是贝壳。</p>
+<aside class="principle"><p class="pr-k">推演至此，得到一条原理</p><p class="pr-n">交换媒介的自发产生</p><p class="pr-c"><span><em>学科</em>经济学 › 货币经济学（搜寻模型）</span><span><em>类型</em>理论模型</span></p><p class="pr-s">最容易转手的物品被越来越多的人接受，越多人接受就越容易转手，最后成为通用的交换媒介；哪种物品胜出，既取决于它本身的性质，也取决于人们的信念。</p><dl><div><dt>在学科中的位置</dt><dd>清泷与赖特的模型通称“清泷—赖特模型”，在人们随机相遇、只能一对一交换的经济中，让交换媒介从模型内部产生；原文的结论之一是，本身没有用处的法定货币也可以在均衡中流通</dd></div><div><dt>回应的约束</dt><dd>人一多，彼此需要的东西很难恰好对上</dd></div><div><dt>成立的前提</dt><dd>人们各自专门生产、彼此随机相遇；物品的耐存程度不同；人们对别人是否接受某种物品形成共同的信念</dd></div><div><dt>提出者</dt><dd>门格尔，1892，提出货币从最容易转手的物品中自发产生；清泷与赖特，1989，给出形式化的模型</dd></div><div><dt>留下的问题</dt><dd>同一种物品在一种信念下是货币，在另一种信念下就不是；信念由什么维持</dd></div></dl></aside>
+<p><strong>今天的对应。</strong>一种支付方式接受的商户越多，愿意用它的人就越多；用的人越多，接受它的商户也越多。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">哪种东西会成为货币</p><p class="figsub">岛上有三种东西可以充当交换的媒介。越多人接受的东西越容易转手，于是有更多人接受它。切换最初的信念，看最后谁成为货币。</p></div><button class="replay" type="button" data-replay="em">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="最初的信念">
+      <button type="button" data-em="0" aria-pressed="true">起初三者差不多</button>
+      <button type="button" data-em="1" aria-pressed="false">起初更多人收盐</button>
+      <button type="button" data-em="2" aria-pressed="false">起初更多人收粮</button>
+    </div>
+    <div class="em" id="em" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="三种东西被接受的比例"><g id="em-ax"></g><g id="em-l"></g></svg>
+      <div class="legend" id="em-lg"></div>
+      <p class="em-msg" id="em-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：每一轮，人们按别人接受的比例与东西本身是否耐存，调整自己愿意收下什么。贝壳耐存、易分、难以伪造；盐耐存但会受潮；粮食会腐坏。</figcaption>
+</figure>
+<style>
+.em svg{width:100%;height:auto;display:block}
+.em-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.em svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),G=[['贝壳',1.0,'var(--accent)'],['盐',.95,'var(--gold)'],['粮食',.8,'var(--warm)']];
+  const S0=[[.32,.34,.34],[.22,.56,.22],[.2,.2,.6]],X0=40,X1=630,YT=12,YB=180,T=30,x=t=>X0+t/T*(X1-X0),y=v=>YB-v*(YB-YT);
+  $('em-lg').innerHTML=G.map(g=>`<span><i style="background:${g[2]}"></i>${g[0]}</span>`).join('');
+  $('em-ax').innerHTML=[0,.5,1].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text>`).join('')+[0,10,20,30].map(t=>`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">第 ${t} 轮</text>`).join('');
+  function run(k){let s=S0[k].slice();const P=[s.slice()];for(let t=0;t<T;t++){const w=s.map((v,i)=>Math.pow(v,1.6)*G[i][1]);const z=w.reduce((a,b)=>a+b,0);s=s.map((v,i)=>.6*v+.4*w[i]/z);P.push(s.slice());}return P;}
+  function set(k){document.querySelectorAll('[data-em]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.em===k)));const P=run(k);
+    $('em-l').innerHTML=G.map((g,i)=>`<path d="${P.map((s,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(s[i]).toFixed(1)).join('')}" fill="none" stroke="${g[2]}" stroke-width="2.5"/>`).join('');
+    const end=P[T],w=end.indexOf(Math.max(...end));
+    $('em-msg').textContent=k===0?`起初三者差不多时，最耐存的${G[w][0]}逐渐胜出：东西本身的性质起了作用。`:`起初更多人收${G[k][0]}，最后胜出的是${G[w][0]}：${w===k?'信念先占了优势，即使它不是最耐存的东西。':'东西本身的性质压过了最初的信念。'}`;}
+  document.querySelectorAll('[data-em]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.em)));
+  $('em').addEventListener('anim-in',()=>{[0,1,2].forEach((k,i)=>setTimeout(()=>set(k),300+i*2400));});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-3">三、记账单位：一把共同的尺子</h2>
+<p>货币还有另一个用处：用同一种东西表示所有物品的价值。没有货币时，每两种物品之间都要有一个兑换比例，十种物品就有四十五个比例要记；有了货币，只需要十个价格。杰文斯（1875）把货币的用途归纳为四项：交换的媒介、价值的共同尺度、延期支付的标准与价值的储藏。</p>
+<p><strong>今天的对应。</strong>价格标签、账户余额与财务报表，都以同一种货币为单位，才可以相互比较与加总。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">一把共同的尺子</p><p class="figsub">拖动物产的种类数。没有记账单位时，每两种物品之间都要记一个兑换比例；有了货币，每种物品只需一个价格。</p></div><button class="replay" type="button" data-replay="un">重播</button></div>
+    <div class="un" id="un" data-anim>
+      <div class="un-grid"><div><b>没有记账单位</b><div class="un-dots" id="un-a"></div><span id="un-av"></span></div><div><b>以货币为单位</b><div class="un-dots" id="un-m"></div><span id="un-mv"></span></div></div>
+      <div class="sl"><label for="un-k">物产的种类 <b id="un-kv"></b></label><input id="un-k" type="range" min="2" max="20" step="1" value="10"></div>
+    </div>
+  </div>
+  <figcaption>没有记账单位时，比例的个数为 种类数 ×（种类数 − 1）÷ 2；以货币为单位时，每种物品各有一个价格，价格的个数等于物品的种类数（货币本身不在其中）。</figcaption>
+</figure>
+<style>
+.un-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.un-grid>div{background:var(--quote);border-radius:10px;padding:10px 12px}
+.un-grid b{font-size:14px} .un-grid span{display:block;font-size:13px;margin-top:6px;font-variant-numeric:tabular-nums}
+.un-dots{display:flex;flex-wrap:wrap;gap:2px;margin-top:8px;min-height:60px;align-content:flex-start}
+.un-dots i{width:7px;height:7px;border-radius:2px;background:var(--warm)}
+#un-m i{background:var(--accent)}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  function draw(){const k=+$('un-k').value,a=k*(k-1)/2,m=k;$('un-kv').textContent=k+' 种';
+    $('un-a').innerHTML='<i></i>'.repeat(a);$('un-m').innerHTML='<i></i>'.repeat(m);
+    $('un-av').textContent=`要记 ${a} 个兑换比例`;$('un-mv').textContent=`只需 ${m} 个价格`;}
+  $('un-k').addEventListener('input',draw);
+  $('un').addEventListener('anim-in',()=>{let v=2;$('un-k').value=2;draw();const id=setInterval(()=>{v++;$('un-k').value=v;draw();if(v>=20)clearInterval(id);},180);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-4">四、货币是一种记录</h2>
+<p>再看一次交换：我把粮给了晒盐人，他给我几枚贝壳。贝壳本身不能吃，它记下的是一件事：我曾经为别人付出过粮食，因此有权从别人那里取回等值的东西。设想全村有一本完整的账本，记下每个人为别人付出过多少、从别人那里取走过多少；晒盐人只要翻开账本，看到我付出的多于取走的，就会愿意给我盐。这本账本能做到的，贝壳都能做到；贝壳能做到的，账本也都能做到。贝壳的好处在于便宜：不必让每个人都知道全村的往来，只要看对方手里有多少贝壳。</p>
+<aside class="principle"><p class="pr-k">推演至此，得到一条原理</p><p class="pr-n">货币即记忆</p><p class="pr-c"><span><em>学科</em>经济学 › 货币经济学</span><span><em>类型</em>理论模型</span></p><p class="pr-s">在人们不能作出可信承诺的环境中，凡是借助货币能够实现的交换安排，借助一份记下所有人往来历史的完整记录也能实现；货币是这种记录的一种简便形式。</p><dl><div><dt>在学科中的位置</dt><dd>论文题为《货币即记忆》，主要命题是货币能实现的安排，记忆都能实现；反过来不一定成立，在某些环境中记忆能实现的安排，货币实现不了</dd></div><div><dt>回应的约束</dt><dd>人一多，彼此难以记住谁为谁付出过</dd></div><div><dt>成立的前提</dt><dd>人们无法作出可信承诺；记录完整，每个人都能看到交往对象过去的全部往来</dd></div><div><dt>提出者</dt><dd>柯切拉科塔，1998</dd></div><div><dt>留下的问题</dt><dd>完整的记录由谁保管，如何防止篡改；记录不完整时，货币与记录孰优孰劣</dd></div></dl></aside>
+<p>这与守约的声誉是同一件事的两面。声誉是关于一个人是否守约的记录，货币是关于一个人为别人付出了多少的记录。记录越便宜、越可靠，就有越多的交换可以靠记录完成。</p>
+<p><strong>今天的对应。</strong>今天的大部分货币已经不是实物，而是银行账户里的数字，即一条条记录。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">货币与账本：同一件事的两种记法</p><p class="figsub">三户人家轮流为下一户付出：种粮的给晒盐的粮，晒盐的给织布的盐，织布的给种粮的布。点“下一步”，比较两种记法。</p></div><button class="replay" type="button" data-replay="mm">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="记法">
+      <button type="button" data-mm="coin" aria-pressed="true">用货币</button>
+      <button type="button" data-mm="book" aria-pressed="false">用全村共享的账本</button>
+    </div>
+    <div class="mm" id="mm" data-anim>
+      <div class="mm-h" id="mm-h"></div>
+      <div class="mm-ctl"><button type="button" class="replay" id="mm-next">下一步</button><span id="mm-step"></span></div>
+      <p class="mm-msg" id="mm-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>柯切拉科塔（1998）证明，在不能作出可信承诺的环境中，货币能实现的交换安排，完整的账本也能实现；货币是一种简便的记录。</figcaption>
+</figure>
+<style>
+.mm-h{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mm-p{background:var(--quote);border-radius:10px;padding:10px 12px;min-height:92px;transition:box-shadow .3s}
+.mm-p.on{box-shadow:0 0 0 2px var(--accent)}
+.mm-p b{font-size:14px;display:block} .mm-p span{font-size:12.5px;color:var(--muted);display:block;margin-top:4px;line-height:1.55}
+.mm-p i{display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--gold);margin-right:3px;vertical-align:-1px}
+.mm-ctl{display:flex;align-items:center;gap:10px;margin-top:10px;font-size:12.5px;color:var(--faint)}
+.mm-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.mm-h{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),P=['种粮的','晒盐的','织布的'],GD=['粮','盐','布'];let mode='coin',k=0;
+  const S=[['种粮的给晒盐的粮'],['晒盐的给织布的盐'],['织布的给种粮的布']];
+  function draw(){const coins=[1,0,0],book=[];
+    for(let s=0;s<k;s++){const a=s%3,b=(s+1)%3;if(mode==='coin'){coins[b]-=1;coins[a]+=1;}book.push(`${P[a]}为${P[b]}付出${GD[a]}`);}
+    // 货币：最初种粮的手里没有贝壳，晒盐的拿一枚贝壳换粮
+    const c=[0,1,0];for(let s=0;s<k;s++){const a=s%3,b=(s+1)%3;c[b]-=1;c[a]+=1;}
+    $('mm-h').innerHTML=P.map((p,i)=>`<div class="mm-p${k>0&&((k-1)%3===i||(k%3)===i)?' on':''}"><b>${p}</b><span>${mode==='coin'?(c[i]>0?'<i></i>'.repeat(c[i])+` 手里有 ${c[i]} 枚贝壳`:'手里没有贝壳'):'账本：'+(book.filter(x=>x.startsWith(p)).length)+' 次付出，'+(book.filter(x=>x.includes('为'+p)).length)+' 次得到'}</span></div>`).join('');
+    $('mm-step').textContent=k?`第 ${k} 步：${S[(k-1)%3][0]}`:'尚未开始';
+    $('mm-msg').textContent=mode==='coin'?'一枚贝壳在三户之间流转：谁手里有贝壳，就说明他为别人付出过、还没有得到回报。不需要任何人记住全村的往来。':'全村共享一本账，记下谁为谁付出过。只要人人看得到、改不了，账本能做到贝壳能做到的一切，还能记下更多细节。';}
+  document.querySelectorAll('[data-mm]').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.mm;document.querySelectorAll('[data-mm]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  $('mm-next').addEventListener('click',()=>{k=k>=6?0:k+1;draw();});
+  $('mm').addEventListener('anim-in',()=>{k=0;draw();[1,2,3].forEach((s,i)=>setTimeout(()=>{k=s;draw();},800+i*1300));});
+  draw();
+})();
+</script>
+
+<h2 id="sec-5">五、跨越一生：最后一代人的养老</h2>
+<p>借贷要求对方将来仍有收入，可是最年轻的一代找不到更年轻的人来借。货币可以解决这个问题。年轻人把收成卖给老年人，换回货币；等自己年老，再用货币向下一代年轻人买粮。每一代人都不必找到一个具体的借款人，只要相信下一代会接受货币。同样的结果也可以靠一种约定实现，连货币都不需要：每一代年轻人供养当时的老年人，等自己年老时再由下一代供养。</p>
+<aside class="principle"><p class="pr-k">推演至此，得到一条原理</p><p class="pr-n">世代交叠模型中的货币</p><p class="pr-c"><span><em>学科</em>经济学 › 宏观经济学（世代交叠模型）</span><span><em>类型</em>理论模型</span></p><p class="pr-s">各代人前后交叠、年轻时有收入而年老时没有，又找不到能在将来偿还的借款人时，一种被各代人相继接受的货币，或者一种每代年轻人供养当时老年人的社会约定，可以让每一代人在年老时都有饭吃，各代都比各自储藏过得更好。</p><dl><div><dt>在学科中的位置</dt><dd>通称“世代交叠模型”；论文题为《含或不含货币这一社会设计的利息的精确消费借贷模型》，模型中各代各自决策的竞争均衡可以不是最优，引入货币或社会约定能使各代都过得更好</dd></div><div><dt>回应的约束</dt><dd>年老时没有收成，最年轻的一代找不到更年轻的人来借</dd></div><div><dt>成立的前提</dt><dd>世代不断交叠，没有最后一代；每一代都相信下一代会接受货币或遵守约定</dd></div><div><dt>提出者</dt><dd>萨缪尔森，1958</dd></div><div><dt>留下的问题</dt><dd>信念一旦动摇，链条从最后一环崩解；人口与收入增长放缓时，这一约定能给每一代多少</dd></div></dl></aside>
+<p>这一安排的弱点也在这里：它完全依赖信念。如果人们认为下一代不会接受货币，货币今天就一文不值，链条从最后一环开始崩解。</p>
+<p>文明模拟器第四版把这条链算了出来。我 20 岁开始耕种，第二个人比我小二十岁。有了借贷，我晚年的存粮可以借给正在耕种的第二个人，不再损耗；可轮到他年老时，岛上没有更年轻的人，他只能靠会损耗的储藏。加入第三个人，问题只是推后一代：只要人的寿命有限，总有一代人无人可借。打开货币，并且人们相信下一代会接受，最年轻的一代也能养老；关掉这份信念，一切退回只靠借贷与储藏的样子。</p>
+<p><strong>今天的对应。</strong>现收现付的养老金，就是萨缪尔森所说的社会约定：今天在职的人缴费，支付今天退休的人。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">文明模拟器 · 第 4 章：两代人与货币</p><p class="figsub">我 20 岁时开始耕种，第二个人比我小二十岁。借贷只能在活着的人之间进行；打开货币，看最年轻的一代能否不靠具体的借款人养老。</p></div><button class="replay" type="button" data-replay="cs4">重播</button></div>
+    <div class="cs-rules"><span class="on">储蓄</span><span class="on">留种</span><span class="on">借贷</span><span class="on">承诺</span><span class="on">货币</span><span class="lock">保险 · 第 5 章</span></div>
+    <div class="cs4" id="cs4" data-anim>
+      <svg viewBox="0 0 660 240" role="img" aria-label="三个人一生每月吃到的粮食"><g id="cs4-ax"></g><g id="cs4-l"></g></svg>
+      <div class="legend" id="cs4-lg"></div>
+      <div class="cs4-ctl">
+        <div class="sl"><label for="cs4-d">每月损耗 <b id="cs4-dv"></b></label><input id="cs4-d" type="range" min="0" max="2" step="0.1" value="1"></div>
+        <div class="sl"><label for="cs4-r">借贷年利率 <b id="cs4-rv"></b></label><input id="cs4-r" type="range" min="-3" max="3" step="0.5" value="0"></div>
+      </div>
+      <div class="cs-sw"><label><input type="checkbox" id="cs4-lend" checked> 规则：借贷</label><label><input type="checkbox" id="cs4-c"> 加入第三个人（比第二个人小二十岁）</label><label><input type="checkbox" id="cs4-m"> 规则：货币</label><label><input type="checkbox" id="cs4-b" checked> 人们相信下一代会接受货币</label></div>
+      <div class="cs4-out" id="cs4-out"></div>
+      <p class="cs4-msg" id="cs4-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意模型：按年计算，每人 20～59 岁每年收获并扣除种子后余 15 份，60 岁后无收成，活到 80 岁；每人“为一生打算”，满足感按对数计算。只有当一个更年轻的人在还款时仍在耕种，存粮才能借出，按约定利率收回；否则只能储藏、按损耗缩水。打开货币且人们相信下一代会接受时，存下的可以换成货币，价值不损耗（假设物价稳定）。假设借款人用借来的粮食或种子生产，足以按约定还本付息。</figcaption>
+</figure>
+<style>
+.cs4 svg{width:100%;height:auto;display:block}
+.cs4-ctl{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px}
+.cs4-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cs4-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs4-out span{display:block;font-size:11.5px;color:var(--faint)} .cs4-out b{font-size:16px;font-variant-numeric:tabular-nums}
+.cs4-out div.off{opacity:.35}
+.cs4-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs4-ctl{grid-template-columns:1fr;gap:4px}.cs4-out{grid-template-columns:1fr}.cs4 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs4'+id),P=[['我',0,'var(--accent)'],['第二个人',20,'var(--warm)'],['第三个人',40,'var(--blue)']];
+  const X0=40,X1=640,YT=12,YB=206,T=100,x=t=>X0+t/T*(X1-X0),yc=v=>YB-Math.min(v,2)/2*(YB-YT);
+  $('-lg').innerHTML=P.map(p=>`<span><i style="background:${p[2]}"></i>${p[0]}</span>`).join('')+'<span><i style="background:var(--warm-soft)"></i>每月低于 0.6 份即挨饿</span>';
+  // 某人在第 t 年（日历年）存下的粮食，下一年的回报
+  function ret(o,i,t){const kids=P.slice(i+1,o.n);const ok=o.lend&&kids.some(q=>{const age=t+1-q[1]+20;return age>=20&&age<60;});let R=ok?o.r:-o.D;if(o.money&&o.belief)R=Math.max(R,0);return R;}
+  function plan(o,i){const b=P[i][1],c=[];let W=0;
+    for(let k=0;k<60;k++){const t=b+k;
+      // 每年重新求：此后按欧拉路径 c_{s+1}=c_s·(1+R_s)，财富不为负的最大起点
+      let lo=0,hi=60;for(let it=0;it<40;it++){const m=(lo+hi)/2;let w=W,cc=m,ok=true;
+        for(let s=k;s<60;s++){const y=s<40?15:0;if(w+y<cc-1e-9){ok=false;break;}const R=ret(o,i,b+s);w=(w+y-cc)*(1+R);cc=cc*(1+R);}
+        if(ok)lo=m;else hi=m;}
+      const y=k<40?15:0,ck=lo;c.push(ck);W=(W+y-ck)*(1+ret(o,i,t));}
+    return c;}
+  function draw(){const d=+$('-d').value/100,o={D:1-Math.pow(1-d,12),r:+$('-r').value/100,lend:$('-lend').checked,n:$('-c').checked?3:2,money:$('-m').checked,belief:$('-b').checked};
+    $('-dv').textContent=(d*100).toFixed(1)+'%';$('-rv').textContent=(o.r<0?'−':'')+Math.abs(o.r*100).toFixed(1)+'%';
+    let ax=`<rect x="${X0}" y="${yc(.6)}" width="${X1-X0}" height="${YB-yc(.6)}" fill="var(--warm-soft)"/>`+[0,.5,1,1.5,2].map(v=>`<line x1="${X0}" x2="${X1}" y1="${yc(v)}" y2="${yc(v)}" class="s-line"/><text x="${X0-6}" y="${yc(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+
+      [0,20,40,60,80,100].map(t=>`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">第 ${t} 年</text>`).join('');
+    $('-ax').innerHTML=ax;
+    const res=P.map((p,i)=>i<o.n?plan(o,i):null);let L='';
+    res.forEach((c,i)=>{if(!c)return;const b=P[i][1];L+=`<path d="${c.map((v,k)=>(k?'L':'M')+x(b+k+.5).toFixed(1)+','+yc(v/12).toFixed(1)).join('')}" fill="none" stroke="${P[i][2]}" stroke-width="2.2"/>`+
+      `<line x1="${x(b+40)}" x2="${x(b+40)}" y1="${YB-6}" y2="${YB}" stroke="${P[i][2]}" stroke-width="2"/>`;});
+    $('-l').innerHTML=L;
+    const st=res.map(c=>c?[c.slice(40).reduce((a,v)=>a+v,0)/20/12,c.filter(v=>v/12<.6).length*12]:null);
+    $('-out').innerHTML=P.map((p,i)=>`<div class="${st[i]?'':'off'}"><span>${p[0]}：60 岁后每月吃 / 挨饿月数</span><b>${st[i]?st[i][0].toFixed(2)+' 份 / '+st[i][1]:'—'}</b></div>`).join('');
+    const [a,b,c3]=st;
+    const last=st[o.n-1];
+    $('-msg').textContent=o.money&&o.belief?`有了货币，年轻人把余粮卖给老年人换成货币，年老时再用货币向下一代买粮：最年轻的一代 60 岁后每月也能吃 ${last[0].toFixed(2)} 份，不再需要找到一个具体的借款人。前提是人们相信下一代会接受货币。`:
+      o.money?`人们不再相信下一代会接受货币，货币今天就一文不值：一切退回到只靠借贷与储藏的样子，最年轻的一代 60 岁后每月只能吃 ${last[0].toFixed(2)} 份。`:
+      !o.lend?`没有借贷，每个人都只能靠会损耗的储藏养老：60 岁后每月只能吃 ${a[0].toFixed(2)} 份，与独自生活时一样。`:
+      o.n===2?`有了借贷，我 40 岁以后的存粮借给正在耕种的第二个人，不再损耗：60 岁后每月吃 ${a[0].toFixed(2)} 份。可是轮到第二个人年老时，我已经不在，岛上没有更年轻的人，他 60 岁后每月只能吃 ${b[0].toFixed(2)} 份。`:
+      `加入第三个人，第二个人的晚年也有了着落（每月 ${b[0].toFixed(2)} 份）；但第三个人又成了最后一代，60 岁后每月只能吃 ${c3[0].toFixed(2)} 份。只要人的寿命有限，总有一代人无人可借。`;}
+  ['-d','-r','-lend','-c','-m','-b'].forEach(k=>$(k).addEventListener('input',draw));
+  $('').addEventListener('anim-in',()=>{const s=[[true,false,false],[true,true,false],[true,true,true]];s.forEach(([l,c,m],i)=>setTimeout(()=>{$('-lend').checked=l;$('-c').checked=c;$('-m').checked=m;$('-b').checked=true;draw();},300+i*2800));});
+  draw();
+})();
+</script>
+
+<h2 id="sec-6">六、货币的代价：信念与发行的纪律</h2>
+<p>货币的价值来自人们相信它能换到东西，也来自它的数量有限。如果发行的人可以随意增加货币，而岛上的物产没有相应增加，同样多的货币能换到的东西就会变少，即物价上涨。对持有货币的人来说，物价上涨就像仓里腐坏的粮食：储藏的东西在缩水。费雪（1911）用交换方程刻画了货币数量与物价的关系：在流通速度与交易量不变时，货币数量增加，物价同比例上升。</p>
+<p><strong>今天的对应。</strong>通货膨胀侵蚀现金的购买力，央行独立性与通胀目标，都是为了维持发行的纪律。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">发行的纪律：货币多了，东西没多</p><p class="figsub">拖动每年新增货币的速度，看二十年里物价与 100 单位现金的购买力。岛上的物产每年增长 2%。</p></div><button class="replay" type="button" data-replay="is">重播</button></div>
+    <div class="is" id="is" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="物价与购买力"><g id="is-ax"></g><path id="is-p" class="is-p"/><path id="is-v" class="is-v"/></svg>
+      <div class="legend"><span><i style="background:var(--warm)"></i>物价（第 0 年为 100）</span><span><i style="background:var(--accent)"></i>100 单位现金的购买力</span></div>
+      <div class="sl"><label for="is-g">每年新增货币 <b id="is-gv"></b></label><input id="is-g" type="range" min="0" max="15" step="0.5" value="2"></div>
+      <p class="is-msg" id="is-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：按费雪（1911）的交换方程，假设货币的流通速度不变，物价的年增长率约等于货币增长率减去物产增长率。</figcaption>
+</figure>
+<style>
+.is svg{width:100%;height:auto;display:block}
+.is-p{fill:none;stroke:var(--warm);stroke-width:2.4}
+.is-v{fill:none;stroke:var(--accent);stroke-width:2.4}
+.is-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.is svg text{font-size:16px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),X0=46,X1=630,YT=12,YB=180,x=t=>X0+t/20*(X1-X0),ly=v=>YB-(Math.log(v)-Math.log(20))/(Math.log(600)-Math.log(20))*(YB-YT);
+  $('is-ax').innerHTML=[25,50,100,200,400].map(v=>`<line x1="${X0}" x2="${X1}" y1="${ly(v)}" y2="${ly(v)}" class="s-line"/><text x="${X0-6}" y="${ly(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+[0,5,10,15,20].map(t=>`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">第 ${t} 年</text>`).join('');
+  function draw(){const g=+$('is-g').value/100,pi=(1+g)/1.02-1;let p='',v='';for(let t=0;t<=20;t++){const P=100*Math.pow(1+pi,t);p+=(t?'L':'M')+x(t)+','+ly(Math.max(P,20)).toFixed(1);v+=(t?'L':'M')+x(t)+','+ly(Math.max(1e4/P,20)).toFixed(1);}
+    $('is-p').setAttribute('d',p);$('is-v').setAttribute('d',v);$('is-gv').textContent=(g*100).toFixed(1)+'%';
+    const P20=100*Math.pow(1+pi,20);$('is-msg').textContent=Math.abs(pi)<.0005?'新增货币与物产同步增长，物价稳定，现金的购买力不变。':pi>0?`物价每年上涨约 ${(pi*100).toFixed(1)}%，二十年后 100 单位现金只能买到原来 ${Math.round(1e4/P20)} 单位的东西：持有货币，就像储藏会腐坏的粮食。`:`货币增长慢于物产，物价每年下降约 ${(-pi*100).toFixed(1)}%，现金的购买力上升；但物价持续下跌会让人推迟消费与借贷，同样有代价。`;}
+  $('is-g').addEventListener('input',draw);
+  $('is').addEventListener('anim-in',()=>{let v=2;$('is-g').value=v;draw();const id=setInterval(()=>{v+=.5;$('is-g').value=v;draw();if(v>=12)clearInterval(id);},150);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-7">七、这一步留下的问题</h2>
+<p>有了货币，交换与储蓄都容易多了，但还有几个问题没有解决：</p>
+<ol><li><strong>收成好坏不定。</strong>货币让储蓄更方便，却不能消除歉收；一次荒年，仍可能让一户人家破产。</li><li><strong>期限不匹配。</strong>存钱的人希望随时能取，开荒、种果园的人需要借很多年，两者如何对上？</li><li><strong>货币的价值依赖信念与发行者。</strong>谁来保证发行的纪律，谁来保证账本不被篡改？</li><li><strong>价格由谁来定。</strong>有了统一的尺子，价格仍要由许多人的买卖共同决定。</li></ol>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">这一步留下的问题</p><p class="figsub">有了货币之后仍未解决的四个问题。点选一个问题，看它隐含的假设。</p></div><button class="replay" type="button" data-replay="nx4">重播</button></div>
+    <div class="nx" id="nx4" data-anim>
+      <div class="nx-src"><b>有了货币</b><span>交换、记账与储藏</span></div>
+      <div class="nx-list" id="nx4-l"></div>
+    </div>
+    <p class="nx-msg" id="nx4-msg" aria-live="polite"></p>
+  </div>
+</figure>
+<style>
+.nx{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:center}
+.nx-src{background:var(--ink);color:var(--bg);border-radius:10px;padding:14px 10px;text-align:center}
+.nx-src b{display:block;font-size:16px} .nx-src span{font-size:12px;opacity:.75}
+.nx-list{display:grid;gap:6px}
+.nx-i{font:inherit;text-align:left;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:9px 12px;color:var(--ink);opacity:0;transform:translateX(-8px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.3s)}
+.nx.in .nx-i{opacity:1;transform:none}
+.nx-i span{font-size:13.5px} .nx-i em{font-style:normal;font-size:11.5px;color:var(--faint);white-space:nowrap}
+.nx-i.sel{border-color:var(--accent)}
+.nx-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.nx{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const Q=[['收成好坏不定','第 5 章 保险','隐含的假设：收成总会如约到来。货币让储蓄更方便，却不能消除歉收。'],
+    ['期限不匹配','第 6 章 银行','隐含的假设：存的人与借的人对时间的要求一致。存的人要随时取，开荒的人要借很多年。'],
+    ['货币的价值依赖信念与发行者','第 11 章 监管与托管','隐含的假设：发行有纪律、账本不会被篡改。谁来保证？'],
+    ['价格由谁来定','第 8 章 市场','隐含的假设：有了尺子就有价格。价格仍要由许多人的买卖共同决定。']];
+  const l=document.getElementById('nx4-l'),msg=document.getElementById('nx4-msg');
+  l.innerHTML=Q.map((q,i)=>`<button type="button" class="nx-i" style="--i:${i}" data-i="${i}"><span>${q[0]}</span><em>→ ${q[1]}</em></button>`).join('');
+  const bs=[...l.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));msg.textContent=Q[i][2];}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('nx4').addEventListener('anim-in',()=>{[0,1,2,3].forEach((i,k)=>setTimeout(()=>set(i),1600+k*1800));});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-8">八、对产品的含义</h2>
+<p>账户、支付与现金管理产品，都建立在本章的机制上。由此得到三条含义。第一，支付与账户的价值来自网络：接受的人越多越有用，反过来也越难被替代。第二，货币与账户余额本质上是记录，记录的可靠程度决定了它的价值；保管记录、防止篡改，是这类产品的核心责任。第三，持有货币并非没有风险：发行失去纪律时，现金会像腐坏的粮食一样缩水；为用户安排储蓄时，要考虑购买力，而不只是数额。</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：货币</p><p class="figsub">四条结论，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="g04summary">重播</button></div>
+    <div class="g04summary" id="g04summary" data-anim><div class="g04summary-c" style="--i:0"><em>交换的媒介</em><b>交换只需对上一半</b><p>一种人人都接受的东西，让交换不再需要双重巧合。</p></div><div class="g04summary-c" style="--i:1"><em>记账单位</em><b>一把共同的尺子</b><p>十种物品要记四十五个比例，有了货币只需十个价格。</p></div><div class="g04summary-c warn" style="--i:2"><em>记录</em><b>货币是一种简便的记录</b><p>它记下谁为别人付出过；记录越可靠，越多交换可以靠记录完成。</p></div><div class="g04summary-c warn" style="--i:3"><em>信念与纪律</em><b>价值靠信念与发行的纪律</b><p>人们不再相信下一个人会接受，或者发行失去纪律，货币就会贬值。</p></div></div>
+  </div>
+</figure>
+<style>
+.g04summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g04summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g04summary-c.warn{border-left-color:var(--warm)}
+.g04summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g04summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g04summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g04summary.in .g04summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g04summary{grid-template-columns:1fr}}
+</style>
+
+<h2 id="sec-9">参考文献</h2>
+<ul class="refs"><li>Fisher, I. (1911). <i>The Purchasing Power of Money</i>. New York: Macmillan.</li><li>Graeber, D. (2011). <i>Debt: The First 5,000 Years</i>. Brooklyn: Melville House.</li><li>Humphrey, C. (1985). Barter and economic disintegration. <i>Man</i>, 20(1), 48–72.</li><li>Jevons, W. S. (1875). <i>Money and the Mechanism of Exchange</i>. London: Henry S. King.</li><li>Kiyotaki, N., &amp; Wright, R. (1989). On money as a medium of exchange. <i>Journal of Political Economy</i>, 97(4), 927–954.</li><li>Kocherlakota, N. R. (1998). Money is memory. <i>Journal of Economic Theory</i>, 81(2), 232–251.</li><li>Menger, C. (1892). On the origin of money (C. A. Foley, Trans.). <i>Economic Journal</i>, 2(6), 239–255.</li><li>Samuelson, P. A. (1958). An exact consumption-loan model of interest with or without the social contrivance of money. <i>Journal of Political Economy</i>, 66(6), 467–482.</li></ul>
+<footer class="nav"><a href="g-03.html">← 第 3 章　借了不还怎么办</a><a href="g-05.html">第 5 章　收成好坏不定 →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

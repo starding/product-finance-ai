@@ -1,0 +1,66 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Civilization Simulator · Chapter 4: Two generations and money</p><p class="figsub">I begin farming at 20, and the second person is twenty years younger than I am. Lending can take place only among the living; turn on money and see whether the youngest generation can provide for old age without a particular borrower.</p></div><button class="replay" type="button" data-replay="cs4">Replay</button></div>
+    <div class="cs-rules"><span class="on">Saving</span><span class="on">Seed</span><span class="on">Lending</span><span class="on">Commitment</span><span class="on">Money</span><span class="lock">Insurance · Ch. 5</span></div>
+    <div class="cs4" id="cs4" data-anim>
+      <svg viewBox="0 0 660 240" role="img" aria-label="Monthly food over the lifetimes of three people"><g id="cs4-ax"></g><g id="cs4-l"></g></svg>
+      <div class="legend" id="cs4-lg"></div>
+      <div class="cs4-ctl">
+        <div class="sl"><label for="cs4-d">Monthly spoilage <b id="cs4-dv"></b></label><input id="cs4-d" type="range" min="0" max="2" step="0.1" value="1"></div>
+        <div class="sl"><label for="cs4-r">Annual interest rate on loans <b id="cs4-rv"></b></label><input id="cs4-r" type="range" min="-3" max="3" step="0.5" value="0"></div>
+      </div>
+      <div class="cs-sw"><label><input type="checkbox" id="cs4-lend" checked> Rule: Lending</label><label><input type="checkbox" id="cs4-c"> Add a third person (twenty years younger than the second)</label><label><input type="checkbox" id="cs4-m"> Rule: Money</label><label><input type="checkbox" id="cs4-b" checked> People believe the next generation will accept money</label></div>
+      <div class="cs4-out" id="cs4-out"></div>
+      <p class="cs4-msg" id="cs4-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model, computed by year: from age 20 to 59 each person harvests 15 portions a year net of seed; after 60 there is no harvest, and each lives to 80. Each person plans over a whole lifetime, with satisfaction measured logarithmically. Stored grain can be lent, and recovered at the agreed rate, only if a younger person is still farming when repayment is due; otherwise it can only be stored, shrinking with spoilage. With money turned on and people believing the next generation will accept it, savings can be turned into money, which does not lose value (assuming stable prices). Borrowers are assumed to produce enough with the grain or seed they borrow to repay principal and interest as agreed.</figcaption>
+</figure>
+<style>
+.cs4 svg{width:100%;height:auto;display:block}
+.cs4-ctl{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px}
+.cs4-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cs4-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs4-out span{display:block;font-size:11.5px;color:var(--faint)} .cs4-out b{font-size:16px;font-variant-numeric:tabular-nums}
+.cs4-out div.off{opacity:.35}
+.cs4-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs4-ctl{grid-template-columns:1fr;gap:4px}.cs4-out{grid-template-columns:1fr}.cs4 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs4'+id),P=[['Me',0,'var(--accent)'],['Second person',20,'var(--warm)'],['Third person',40,'var(--blue)']];
+  const X0=40,X1=640,YT=12,YB=206,T=100,x=t=>X0+t/T*(X1-X0),yc=v=>YB-Math.min(v,2)/2*(YB-YT);
+  $('-lg').innerHTML=P.map(p=>`<span><i style="background:${p[2]}"></i>${p[0]}</span>`).join('')+'<span><i style="background:var(--warm-soft)"></i>Below 0.6 portions a month means hunger</span>';
+  // Return next year on grain a person stores in calendar year t
+  function ret(o,i,t){const kids=P.slice(i+1,o.n);const ok=o.lend&&kids.some(q=>{const age=t+1-q[1]+20;return age>=20&&age<60;});let R=ok?o.r:-o.D;if(o.money&&o.belief)R=Math.max(R,0);return R;}
+  function plan(o,i){const b=P[i][1],c=[];let W=0;
+    for(let k=0;k<60;k++){const t=b+k;
+      // Re-solve each year: along the Euler path c_{s+1}=c_s·(1+R_s), the largest starting point that keeps wealth non-negative
+      let lo=0,hi=60;for(let it=0;it<40;it++){const m=(lo+hi)/2;let w=W,cc=m,ok=true;
+        for(let s=k;s<60;s++){const y=s<40?15:0;if(w+y<cc-1e-9){ok=false;break;}const R=ret(o,i,b+s);w=(w+y-cc)*(1+R);cc=cc*(1+R);}
+        if(ok)lo=m;else hi=m;}
+      const y=k<40?15:0,ck=lo;c.push(ck);W=(W+y-ck)*(1+ret(o,i,t));}
+    return c;}
+  function draw(){const d=+$('-d').value/100,o={D:1-Math.pow(1-d,12),r:+$('-r').value/100,lend:$('-lend').checked,n:$('-c').checked?3:2,money:$('-m').checked,belief:$('-b').checked};
+    $('-dv').textContent=(d*100).toFixed(1)+'%';$('-rv').textContent=(o.r<0?'−':'')+Math.abs(o.r*100).toFixed(1)+'%';
+    let ax=`<rect x="${X0}" y="${yc(.6)}" width="${X1-X0}" height="${YB-yc(.6)}" fill="var(--warm-soft)"/>`+[0,.5,1,1.5,2].map(v=>`<line x1="${X0}" x2="${X1}" y1="${yc(v)}" y2="${yc(v)}" class="s-line"/><text x="${X0-6}" y="${yc(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+
+      [0,20,40,60,80,100].map(t=>`<text x="${x(t)}" y="${YB+16}" text-anchor="${t===100?'end':'middle'}" font-size="11" class="t-faint">Year ${t}</text>`).join('');
+    $('-ax').innerHTML=ax;
+    const res=P.map((p,i)=>i<o.n?plan(o,i):null);let L='';
+    res.forEach((c,i)=>{if(!c)return;const b=P[i][1];L+=`<path d="${c.map((v,k)=>(k?'L':'M')+x(b+k+.5).toFixed(1)+','+yc(v/12).toFixed(1)).join('')}" fill="none" stroke="${P[i][2]}" stroke-width="2.2"/>`+
+      `<line x1="${x(b+40)}" x2="${x(b+40)}" y1="${YB-6}" y2="${YB}" stroke="${P[i][2]}" stroke-width="2"/>`;});
+    $('-l').innerHTML=L;
+    const st=res.map(c=>c?[c.slice(40).reduce((a,v)=>a+v,0)/20/12,c.filter(v=>v/12<.6).length*12]:null);
+    $('-out').innerHTML=P.map((p,i)=>`<div class="${st[i]?'':'off'}"><span>${p[0]}: monthly food after 60 / months hungry</span><b>${st[i]?st[i][0].toFixed(2)+' portions / '+st[i][1]:'—'}</b></div>`).join('');
+    const [a,b,c3]=st;
+    const last=st[o.n-1];
+    $('-msg').textContent=o.money&&o.belief?`With money, the young sell surplus grain to the old for money and, when old themselves, use the money to buy grain from the next generation: even the youngest generation eats ${last[0].toFixed(2)} portions a month after 60, with no need to find a particular borrower. The premise is that people believe the next generation will accept money.`:
+      o.money?`People no longer believe the next generation will accept money, so money is worthless today: everything falls back to relying on lending and storage alone, and the youngest generation eats only ${last[0].toFixed(2)} portions a month after 60.`:
+      !o.lend?`Without lending, everyone must rely on storage that spoils for old age: after 60 each eats only ${a[0].toFixed(2)} portions a month, the same as living alone.`:
+      o.n===2?`With lending, the grain I store after 40 is lent to the second person while he is farming and no longer spoils: after 60 I eat ${a[0].toFixed(2)} portions a month. But when the second person grows old, I am gone and there is no one younger on the island; after 60 he eats only ${b[0].toFixed(2)} portions a month.`:
+      `Adding a third person provides for the second person's old age (${b[0].toFixed(2)} portions a month); but the third person becomes the last generation and eats only ${c3[0].toFixed(2)} portions a month after 60. As long as lives are finite, there is always a generation with no one to lend to.`;}
+  ['-d','-r','-lend','-c','-m','-b'].forEach(k=>$(k).addEventListener('input',draw));
+  $('').addEventListener('anim-in',()=>{const s=[[true,false,false],[true,true,false],[true,true,true]];s.forEach(([l,c,m],i)=>setTimeout(()=>{$('-lend').checked=l;$('-c').checked=c;$('-m').checked=m;$('-b').checked=true;draw();},300+i*2800));});
+  draw();
+})();
+</script>

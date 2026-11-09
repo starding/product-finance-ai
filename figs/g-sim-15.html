@@ -1,0 +1,49 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">文明模拟器 · 第 15 章：有担保的书记员</p><p class="figsub">四十户人家把船股交给书记员打理，书记员由十位运营者部署。分别打开或关掉三条规则，调整不可靠运营者的比例，看二十年里愿意委托的人家，以及出错的损失中有多少无人赔付。</p></div><button class="replay" type="button" data-replay="cs15">重播</button></div>
+    <div class="cs-rules"><span class="on">监管与托管</span><span class="on">参数：认知劳动的价格</span><span class="on">专属代理</span><span class="on">代理的担保</span><span class="lock">人人都有分析师 · 第 16 章</span></div>
+    <div class="cs15" id="cs15" data-anim>
+      <svg viewBox="0 0 660 210" role="img" aria-label="愿意委托的人家比例"><g id="cs15-ax"></g><path id="cs15-p" class="cs15-p"/></svg>
+      <div class="legend"><span><i style="background:var(--accent)"></i>愿意委托的人家</span></div>
+      <div class="cs-sw"><label><input type="checkbox" id="cs15-l"> 规则：运营者担责并投保</label><label><input type="checkbox" id="cs15-r"> 规则：第三方保存、不可修改的记录</label><label><input type="checkbox" id="cs15-c"> 规则：权限上限与确认</label></div>
+      <div class="sl"><label for="cs15-q">不可靠的运营者 <b id="cs15-qv"></b></label><input id="cs15-q" type="range" min="0" max="60" step="10" value="30"></div>
+      <button type="button" class="replay" id="cs15-re">换一组年景</button>
+      <div class="cs15-out" id="cs15-out"></div>
+      <p class="cs15-msg" id="cs15-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意模型：每户每年由书记员做 20 件事。可靠运营者的书记员每件出错的概率为 2.5%，不可靠的为 5%；运营者担责时会加强检查，出错的概率减半。每次出错损失家产的 1.5%，有权限上限时最多 0.2%。没有可核对的记录时，委托人只能发现三成的错误，有记录时能发现九成五；发现的错误中，运营者担责并投保时全部赔付，否则可靠的运营者出于名声只赔一部分（没有记录时两成，有记录时一半），不可靠的运营者一概不赔。起初八成人家愿意委托，每有无人赔付的损失，愿意委托的人家减少，平静的年份缓慢恢复。</figcaption>
+</figure>
+<style>
+.cs15 svg{width:100%;height:auto;display:block}
+.cs15-p{fill:none;stroke:var(--accent);stroke-width:2.6}
+.cs15-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cs15-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs15-out span{display:block;font-size:11.5px;color:var(--faint)} .cs15-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.cs15-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs15-out{grid-template-columns:1fr}.cs15 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs15'+id),Y=20,N=40,OP=10;let seed=1515;
+  const X0=44,X1=628,YT=10,YB=176,x=t=>X0+t/Y*(X1-X0),y=v=>YB-v*(YB-YT);
+  function sim(q,lia,log,cap){let s=seed;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};
+    const nB=Math.round(q*OP);let P=.8;const Ps=[P];let unc=0,tot=0,det=0,errs=0,uy=0;
+    for(let t=0;t<Y;t++){const users=Math.round(P*N);let uncY=0;uy+=users;
+      for(let i=0;i<users;i++){const bad=(i%OP)<nB,e=(bad?.05:.025)*(lia?.5:1);
+        for(let a=0;a<20;a++){if(r()<e){errs++;const L=cap?.002:.015;tot+=L;const d=r()<(log?.95:.3);if(d)det++;
+          const comp=d?(lia?1:(bad?0:(log?.5:.2))):0;uncY+=L*(1-comp);unc+=L*(1-comp);}}}
+      P=Math.max(.05,Math.min(.95,P+.06*(.9-P)-12*(users?uncY/users:0)));Ps.push(P);}
+    return {Ps,tot:uy?tot/uy:0,unc:uy?unc/uy:0,det:errs?det/errs:0};}
+  function draw(){const q=+$('-q').value/100,l=$('-l').checked,rc=$('-r').checked,c=$('-c').checked,S=sim(q,l,rc,c);$('-qv').textContent=Math.round(q*100)+'%';
+    $('-ax').innerHTML=[0,.25,.5,.75,1].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v*100}%</text>`).join('')+[0,5,10,15,20].map(t=>`<text x="${x(t)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">第 ${t} 年</text>`).join('');
+    $('-p').setAttribute('d',S.Ps.map((v,t)=>(t?'L':'M')+x(t).toFixed(1)+','+y(v).toFixed(1)).join(''));
+    const end=Math.round(S.Ps[Y]*100),pc=v=>(v*100).toFixed(2)+'%';
+    $('-out').innerHTML=[['第 20 年愿意委托的人家',end+'%'],['出错的损失（占家产/年）',pc(S.tot)],['其中无人赔付',pc(S.unc)]].map(([a,v])=>`<div><span>${a}</span><b>${v}</b></div>`).join('');
+    const n=[l,rc,c].filter(Boolean).length;
+    $('-msg').textContent=n===0?`三条规则都关：书记员出了错，委托人多半发现不了，发现了也常常没人赔，愿意委托的人家降到 ${end}%。`:n===3?`三条都在：运营者为出错买单因而加强检查，记录让错误几乎都被发现，权限上限让每次出错的损失很小。愿意委托的人家升到 ${end}%。`:`${l?'运营者担责，出错少了，发现的错误都有人赔':'没有人担责，发现了错误也常常无人赔'}；${rc?'有记录，错误几乎都能发现':'没有记录，多数错误发现不了，担责也就落不了地'}；${c?'有权限上限，每次出错的损失很小':'没有权限上限，一次出错就可能损失不小'}。愿意委托的人家为 ${end}%。`;}
+  ['-l','-r','-c','-q'].forEach(k=>$(k).addEventListener('input',draw));$('-re').addEventListener('click',()=>{seed=(seed*48271)%2147483647;draw();});
+  $('').addEventListener('anim-in',()=>{[[0,0,0],[1,0,0],[1,1,0],[1,1,1]].forEach(([a,b,d],i)=>setTimeout(()=>{$('-l').checked=!!a;$('-r').checked=!!b;$('-c').checked=!!d;draw();},300+i*2200));});
+  draw();
+})();
+</script>

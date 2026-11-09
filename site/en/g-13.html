@@ -1,0 +1,661 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A new parameter: the cost of cognitive labour collapses</title>
+<meta name="description" content="&quot;Product × Finance × AI: Derived from Zero&quot;, Chapter 13. A group of scribes arrives on the island who can read, calculate and write, and who ask almost nothing in return. The price of cognitive labour collapses, but the parts of a delegation&#x27;s cost that go to checking and bearing responsibility do not fall with it. The scribes&#x27; abilities have an uneven edge, and the overall amplification factor is limited by the slowest step.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --surface:#ffffff; --card:#fafaf9; --ink:#1f1f1e; --muted:#5d5d5a; --faint:#8f8f8b; --line:#ebebe7;
+  --accent:#1f6f5c; --accent-soft:rgba(31,111,92,.14); --warm:#c0531c; --warm-soft:rgba(192,83,28,.12);
+  --blue:#2f5f9e; --gold:#a07818;
+  --gray-mark:#9b9b97; --quote:#f1f1ee;
+  --sans:"PingFang SC","Noto Sans SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif; --serif:var(--sans);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+    --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+    --blue:#7ea8e0; --gold:#d6b04e;
+    --gray-mark:#8a8a86; --quote:#232427;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121314; --surface:#1a1b1d; --card:#17181a; --ink:#ececea; --muted:#b2b2ae; --faint:#85857f; --line:#2c2d30;
+  --accent:#5fbf9f; --accent-soft:rgba(95,191,159,.2); --warm:#f08a52; --warm-soft:rgba(240,138,82,.18);
+  --blue:#7ea8e0; --gold:#d6b04e;
+  --gray-mark:#8a8a86; --quote:#232427;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 96px}
+header.book{font-family:var(--sans);font-size:13px;color:var(--faint);padding:28px 0 0;letter-spacing:.04em;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header.book a{color:inherit;text-decoration:none}
+.chapno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:64px 0 8px;letter-spacing:.12em}
+h1{font-size:34px;line-height:1.3;margin:0 0 24px;font-weight:600;letter-spacing:-.01em}
+h1 small{display:block;font-size:20px;font-weight:400;color:var(--muted);margin-top:8px}
+h2{font-size:22px;margin:64px 0 16px;line-height:1.5;font-weight:600}
+h3{font-size:18px;margin:40px 0 12px;font-weight:600}
+p{margin:0 0 1.1em}
+strong{font-weight:600}
+blockquote{border-left:2px solid var(--ink);background:none;padding:2px 0 2px 18px;margin:32px 0 40px;font-size:16.5px;color:var(--muted)}
+blockquote p:last-child{margin:0}
+.formula{font-family:var(--sans);text-align:center;background:var(--card);border:none;border-radius:10px;padding:18px 12px;margin:24px 0;font-size:16px;line-height:1.7}
+.formula .den{color:var(--accent)}
+.formula .bar{display:block;width:min(420px,90%);height:1px;background:var(--ink);margin:6px auto}
+ol,ul{padding-left:1.4em;margin:0 0 1.2em}
+li{margin:.35em 0}
+table{width:100%;border-collapse:collapse;font-family:var(--sans);font-size:14px;line-height:1.6;margin:20px 0 28px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+.tablewrap{overflow-x:auto}
+figure{margin:40px 0;font-family:var(--sans)}
+figure .card{background:var(--card);border:none;border-radius:14px;padding:20px}
+figcaption{font-size:13px;color:var(--faint);line-height:1.7;margin-top:10px}
+.figtitle{font-size:15px;font-weight:600;margin:0 0 4px}
+.figsub{font-size:13px;color:var(--muted);margin:0 0 16px}
+.notes{font-family:var(--sans);font-size:14px;color:var(--muted);line-height:1.8}
+.refs{font-family:var(--sans);font-size:13px;color:var(--muted);line-height:1.7;padding-left:1.2em}
+.refs li{margin:.4em 0;word-break:break-word}
+footer.nav{font-family:var(--sans);font-size:14px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);margin-top:64px;padding-top:20px;color:var(--faint)}
+footer.nav a{color:var(--muted);text-decoration:none}
+footer.nav a:hover{color:var(--accent)}
+.stamp{font-family:var(--sans);font-size:12px;color:var(--faint)}
+/* 部分页 */
+.partno{font-family:var(--sans);font-size:14px;color:var(--accent);margin:96px 0 8px;letter-spacing:.16em}
+/* 目录页 */
+.toc{font-family:var(--sans);font-size:15px;line-height:1.7}
+.toc h2{font-family:var(--sans);font-size:20px;margin:48px 0 8px}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc li{display:grid;grid-template-columns:72px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.toc li .no{color:var(--faint)}
+.toc li a{color:var(--ink);text-decoration:none}
+.toc li a:hover{color:var(--accent)}
+.toc li.todo span:last-child{color:var(--faint)}
+.toc li .tag{font-size:12px;color:var(--accent);margin-left:8px}
+/* 通用交互控件 */
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.presets button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sl{margin-bottom:16px}
+.sl label{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.sl label b{font-variant-numeric:tabular-nums}
+.sl .hint{font-size:12px;color:var(--faint);line-height:1.5;margin-top:2px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+@media (max-width:640px){
+  body{font-size:16px}
+  h1{font-size:28px} h2{font-size:21px;margin-top:48px}
+  figure .card{padding:16px 14px}
+  .toc li{grid-template-columns:60px 1fr}
+}
+/* 侧边栏目录：宽屏常驻，窄屏收为抽屉 */
+.sidetoggle{position:fixed;top:22px;left:16px;z-index:30;width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:left .25s ease,color .2s,border-color .2s,background .2s}
+.sidetoggle:hover{color:var(--ink);border-color:var(--faint)}
+.sidetoggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.sidetoggle .chev{transition:transform .25s ease;transform-origin:12px 10px}
+.sidetoggle.is-open .chev{transform:scaleX(-1)}
+.side-head{padding-right:44px;position:sticky;top:-24px;margin-top:-24px;padding-top:24px;background:var(--bg);z-index:2}
+@media (max-width:831px){header.book{padding-left:44px}}
+header.book{align-items:center}
+header.book .booklink{flex:1}
+@media (max-width:759px){header.book{flex-wrap:nowrap}header.book>span{display:none}header.book .booklink{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+.side{position:fixed;top:0;left:0;bottom:0;width:280px;overflow-y:auto;background:var(--bg);border-right:1px solid var(--line);padding:24px 14px 64px;font-family:var(--sans);font-size:14px;line-height:1.5;z-index:20;transform:translateX(-100%);transition:transform .25s ease;overscroll-behavior:contain;scrollbar-width:none}
+.side::-webkit-scrollbar{display:none}
+body.nav-open .side{transform:none;box-shadow:0 0 40px rgba(0,0,0,.18)}
+.scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:15}
+body.nav-open .scrim{display:block}
+.side a{display:block;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px}
+.side a:hover{background:var(--quote);color:var(--ink)}
+.side a.cur{background:var(--accent-soft);color:var(--accent);font-weight:500}
+.side .n{display:inline-block;min-width:28px;color:var(--faint);font-variant-numeric:tabular-nums}
+.side a.cur .n{color:var(--accent)}
+.side a:has(> .n){display:flex}
+.side a > .n{flex:none}
+.side a.side-part{margin-top:18px;color:var(--ink);font-weight:600;font-size:13.5px}
+.side a.side-part .pn{display:block;font-size:11.5px;font-weight:400;color:var(--faint);letter-spacing:.04em;margin-bottom:1px}
+.side a.side-part.cur{font-weight:600}
+.side a.side-app{margin-top:18px}
+.side a.side-app .n{min-width:40px}
+.side .todo{display:flex;color:var(--faint);opacity:.75;padding:6px 10px}
+.side .todo.side-part{display:block;margin-top:18px;font-size:13.5px;font-weight:600}
+.side .todo .n{flex:none}
+.side a.side-other{margin-top:22px;padding-top:12px;border-top:1px solid var(--line);border-radius:0;font-size:13px;color:var(--accent)}
+.side .sidetitle{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);padding:4px 10px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:0}
+.side .sidetitle small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:2px}
+.side .sidetitle:hover,.side .sidetitle.cur{background:none;color:var(--ink)}
+/* 侧边栏顶部与收起按钮 */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.side-head .sidetitle{border-bottom:none;margin-bottom:0;flex:1}
+@media (min-width:760px){
+  body{padding-left:280px;transition:padding-left .25s ease}
+  .side{transform:none;transition:transform .25s ease}
+  .scrim,body.nav-open .scrim{display:none}
+  header.book .booklink{visibility:hidden}
+  body.side-collapsed{padding-left:0}
+  body.side-collapsed .side{transform:translateX(-100%)}
+  body.side-collapsed header.book .booklink{visibility:visible}
+}
+/* 侧栏打开时，切换按钮移到侧栏顶部右侧 */
+body.nav-open .sidetoggle{left:232px;border-color:transparent;background:transparent}
+@media (min-width:760px){body:not(.side-collapsed) .sidetoggle{left:232px;border-color:transparent;background:transparent}}
+.side a.side-about{margin-top:4px}
+.side-view{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;margin:4px 0 10px;background:var(--quote);border-radius:9px}
+.side .side-view a{text-align:center;padding:5px 8px;font-size:13px;border-radius:7px;color:var(--muted)}
+.side .side-view a.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+/* 封面下方「关于本书」 */
+.about{padding-top:8px}
+.startbtn{display:inline-block;font-family:var(--sans);font-size:15px;background:var(--ink);color:var(--bg);text-decoration:none;padding:10px 22px;border-radius:999px;margin-top:8px}
+.startbtn:hover{background:var(--accent);color:#fff}
+/* 动画与可视化公共样式 */
+.figbar{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.replay{font:inherit;font-size:12px;border:1px solid var(--line);background:transparent;color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.replay:hover{color:var(--accent);border-color:var(--accent)}
+.seg-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.seg-btns button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+.seg-btns button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+svg text{font-family:var(--sans)}
+.t-ink{fill:var(--ink)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-accent{fill:var(--accent)} .t-warm{fill:var(--warm)}
+.s-line{stroke:var(--line)} .s-faint{stroke:var(--faint)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;transition-delay:0s!important}
+}
+/* 侧边栏中的篇名 */
+/* 章首：本章在回报等式中的位置 */
+.eqstrip{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--sans);font-size:12.5px;margin:-8px 0 20px;padding:10px 12px;background:var(--quote);border-radius:10px}
+.eqstrip .lbl{color:var(--faint);margin-right:2px}
+.eqstrip a,.eqstrip span:not(.lbl):not(.keep){color:var(--muted);text-decoration:none;padding:2px 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.eqstrip a:hover{border-color:var(--accent);color:var(--accent)}
+.eqstrip .cur{background:var(--ink)!important;color:var(--bg)!important;border-color:var(--ink)!important;font-weight:500}
+.eqstrip .keep{flex-basis:100%;font-size:12px}
+.eqstrip .keep a,.eqstrip .keep span{border-style:dashed}
+
+/* 文明模拟器公共样式 */
+.cs-rules{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.cs-rules span{font-size:12px;padding:3px 10px;border-radius:999px}
+.cs-rules .on{background:var(--accent-soft);color:var(--accent)}
+.cs-rules .lock{border:1px dashed var(--line);color:var(--faint)}
+.cs-sw{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.cs-sw input{accent-color:var(--accent);margin-right:5px;vertical-align:-1px}
+
+/* 原理卡：推演走完时宣告一条原理 */
+.principle{margin:28px 0;padding:16px 18px 14px;border-radius:12px;background:var(--accent-soft);border-left:4px solid var(--accent);font-family:var(--sans)}
+.principle .pr-k{margin:0;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+.principle .pr-n{margin:2px 0 6px;font-size:19px;font-weight:600;line-height:1.4}
+.principle .pr-c{margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}
+.principle .pr-c span{font-size:12.5px;line-height:1.5;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.principle .pr-c em{font-style:normal;color:var(--faint);margin-right:6px}
+.principle .pr-s{margin:0 0 10px;font-size:16px;line-height:1.75}
+.principle dl{margin:0;display:grid;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.principle dl div{display:grid;grid-template-columns:7.4em 1fr;gap:10px;font-size:14px;line-height:1.6}
+.principle dt{color:var(--muted)} .principle dd{margin:0}
+@media (max-width:640px){.principle dl div{grid-template-columns:1fr;gap:0}.principle dt{font-size:12px}}
+/* 中英切换：页眉右侧与封面顶部各一个链接；英文页行距略收 */
+header.book .langlink{flex:none;border:1px solid var(--line);border-radius:999px;padding:1px 10px;font-size:12px;letter-spacing:0;color:var(--muted);white-space:nowrap}
+header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
+.hero-lang{margin-left:auto;color:rgba(241,239,230,.82);text-decoration:none;border:1px solid rgba(241,239,230,.3);border-radius:999px;padding:4px 12px;letter-spacing:.02em;font-size:12.5px}
+.hero-lang:hover{border-color:#f1efe6;color:#f1efe6}
+html[lang=en] body{line-height:1.7}
+html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
+</style>
+</head>
+<body data-page="g-13">
+<script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
+<nav class="side" id="sidenav" aria-label="Contents">
+<div class="side-head"><a class="sidetitle" href="index.html">Product × Finance × AI<small>Financial Products in the Age of AI</small></a></div>
+<div class="side-view" role="group" aria-label="Way of reading"><a href="preface.html">Decomposition</a><a href="g-preface.html" class="on" aria-current="true">Derivation</a></div>
+<a class="side-about" href="index.html#about">About this book</a>
+<a class="" href="g-preface.html"><span class="n">Preface</span>The best way to understand financial products is to build them from zero</a>
+<a class="side-part" href="g-part1.html"><span class="pn">Part One</span>From 0 to 1: how a world without finance grows finance</a>
+<a class="" href="g-01.html"><span class="n">1</span>One person, one year&#x27;s harvest</a>
+<a class="" href="g-02.html"><span class="n">2</span>Two people, short of grain at different times</a>
+<a class="" href="g-03.html"><span class="n">3</span>What if a loan is not repaid</a>
+<a class="" href="g-04.html"><span class="n">4</span>Exchange among many</a>
+<a class="" href="g-05.html"><span class="n">5</span>Harvests good and bad</a>
+<a class="" href="g-06.html"><span class="n">6</span>Savers may need their grain at any time; borrowers need it for years</a>
+<a class="" href="g-07.html"><span class="n">7</span>No one household can pay for a ship</a>
+<a class="" href="g-08.html"><span class="n">8</span>Securities must be saleable</a>
+<a class="" href="g-09.html"><span class="n">9</span>Prices carry everyone&#x27;s information</a>
+<a class="" href="g-10.html"><span class="n">10</span>Ordinary people have neither the time nor the expertise</a>
+<a class="" href="g-11.html"><span class="n">11</span>Trustees may not do their duty</a>
+<a class="" href="g-12.html"><span class="n">12</span>The institutions are in place, and people still make mistakes</a>
+<a class="side-part" href="g-part2.html"><span class="pn">Part Two</span>Changing one parameter: when agency becomes almost free</a>
+<a class=" cur" href="g-13.html" aria-current="page"><span class="n">13</span>A new parameter: the cost of cognitive labour collapses</a>
+<a class="" href="g-14.html"><span class="n">14</span>Can everyone have a personal agent?</a>
+<a class="" href="g-15.html"><span class="n">15</span>Who guarantees an agent&#x27;s promises</a>
+<a class="" href="g-16.html"><span class="n">16</span>If everyone has an analyst</a>
+<a class="" href="g-17.html"><span class="n">17</span>Agents become the main market participants</a>
+<a class="" href="g-18.html"><span class="n">18</span>Can an agent correct human bias?</a>
+<a class="" href="g-19.html"><span class="n">19</span>What did not change</a>
+<a class="side-part" href="g-part3.html"><span class="pn">Part Three</span>Deriving a product in the new world</a>
+<a class="" href="g-20.html"><span class="n">20</span>One person and one sum of money</a>
+<a class="" href="g-21.html"><span class="n">21</span>The user is not present</a>
+<a class="" href="g-22.html"><span class="n">22</span>The user cannot see the process</a>
+<a class="" href="g-23.html"><span class="n">23</span>Agents make mistakes</a>
+<a class="" href="g-24.html"><span class="n">24</span>Trust takes time</a>
+<a class="side-app" href="g-epilogue.html"><span class="n">Epilogue</span>Back to the governing rule</a>
+<a class="side-app" href="method.html"><span class="n">Appendix</span>How this book was written</a>
+</nav>
+<button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="Open contents" title="Contents"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
+<div class="scrim" data-close></div>
+<div class="wrap">
+<header class="book"><a class="booklink" href="index.html">Product × Finance × AI: Financial Products in the Age of AI</a><span>Part Two  Changing one parameter</span><a class="langlink" href="../g-13.html" hreflang="zh-CN">中文</a></header>
+
+<div class="chapno">Chapter 13</div><h1>A new parameter: the cost of cognitive labour collapses<small>Which part of the cost falls</small></h1>
+<blockquote><p>A group of scribes has arrived on the island. They can read every fleet's report, work out every household's accounts and draft every letter; they ask almost nothing in return and never tire. The price of having someone read, calculate and write on your behalf has suddenly fallen to a few hundredths of what it was, or less. But the cost of a delegation is not made up only of this kind of labour. Someone still has to check whether the scribe got it right, and someone has to bear responsibility when things go wrong, while the scribes themselves have neither property to pledge nor a name built up over years. Their abilities are also uneven: some tasks that look hard they do very well, while some that look easy they get wrong. Once the cost of cognitive labour collapses, which part of the cost has actually fallen?</p></blockquote>
+<h2 id="sec-1">1. Scribes arrive on the island</h2>
+<p>Up to this point, every institution on the island has depended on one kind of labour. Fleet managers gather news and compare ships; custodians check accounts; those selling ship shares find out what buyers can bear; those designing defaults estimate what most people want. All of this is the labour of reading, calculating, judging and writing. Until now only people could do it, and it was expensive.</p>
+<p>Now a group of scribes has arrived on the island, and they do this work for almost nothing. There is one new constraint: the price of cognitive labour collapses, and everything else stays the same.</p>
+<p><strong>Today's counterpart.</strong> Stanford's <i>AI Index Report 2025</i> estimates that the price of calling a large model at a given level of performance fell from about US$20 per million tokens in November 2022 to about US$0.07 in October 2024, a drop of more than 280-fold.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The same capability, more than 280 times cheaper</p><p class="figsub">The price per million tokens of calling a large model at a given level of performance. The vertical axis is logarithmic. Drag the budget to see how many reports the same money could read at the two dates.</p></div><button class="replay" type="button" data-replay="pr13">Replay</button></div>
+    <div class="pr13" id="pr13" data-anim>
+      <svg viewBox="0 0 660 210" role="img" aria-label="The fall in the price of calling large models"><g id="pr13-g"></g></svg>
+      <div class="sl"><label for="pr13-b">Budget <b id="pr13-bv"></b></label><input id="pr13-b" type="range" min="1" max="100" step="1" value="20"></div>
+      <div class="pr13-out" id="pr13-out"></div>
+    </div>
+  </div>
+  <figcaption>Data: Stanford University, <i>AI Index Report 2025</i>, benchmarked at an MMLU score of about 64.8%: about US$20 in November 2022 and about US$0.07 in October 2024 (per million tokens). "One report" is taken as about 20,000 tokens, for illustration.</figcaption>
+</figure>
+<style>
+.pr13 svg{width:100%;height:auto;display:block}
+.pr13-out{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.pr13-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.pr13-out span{display:block;font-size:11.5px;color:var(--faint)} .pr13-out b{font-size:18px;font-variant-numeric:tabular-nums}
+@media (max-width:640px){.pr13-out{grid-template-columns:1fr}.pr13 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('pr13'+id),P=[['Nov 2022',20],['Oct 2024',.07]],X0=70,YT=16,YB=176;
+  const y=v=>YB-(Math.log10(v)+2)/(Math.log10(100)+2)*(YB-YT);
+  function draw(k){const b=+$('-b').value;$('-bv').textContent='US$'+b;
+    let h=[.01,.1,1,10,100].map(v=>`<line x1="${X0}" x2="640" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">$${v}</text>`).join('');
+    P.forEach(([n,v],i)=>{const cx=200+i*260,vv=k===undefined||k>i?v:100;h+=`<rect x="${cx-50}" y="${y(vv)}" width="100" height="${YB-y(vv)}" fill="${i?'var(--accent)':'var(--faint)'}" style="transition:y .8s,height .8s"/><text x="${cx}" y="${y(vv)-6}" text-anchor="middle" font-size="13">US$${v}</text><text x="${cx}" y="${YB+20}" text-anchor="middle" font-size="12" class="t-faint">${n}</text>`;});
+    $('-g').innerHTML=h;const n=v=>Math.floor(b/(v*.02));
+    $('-out').innerHTML=[['Reports readable in Nov 2022',n(20).toLocaleString('en-US')],['Reports readable in Oct 2024',n(.07).toLocaleString('en-US')]].map(([a,c])=>`<div><span>${a}</span><b>${c}</b></div>`).join('');}
+  $('-b').addEventListener('input',()=>draw());
+  $('').addEventListener('anim-in',()=>{draw(1);setTimeout(()=>draw(),900);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-2">2. What the cost of a delegation is made of</h2>
+<p>When a principal hires a fleet manager to look after ship shares, what the principal pays for is not just the manager's time spent studying ships. Broken down, the cost has roughly five parts: research and comparison; drafting and judgement; carrying out instructions; checking what the manager did; and bearing responsibility when something goes wrong. The first three are mainly cognitive labour. Part of the checking can be handed to scribes, but whoever signs off at the end still has to look for themselves. Bearing responsibility requires someone with property that can pay compensation and a reputation that can be lost.</p>
+<p>The scribes make the first three parts almost free, but the last two do not fall with them. The cheaper cognitive labour becomes, the larger the share of a delegation's cost that goes to checking and bearing responsibility.</p>
+<p><strong>Today's counterpart.</strong> In investment advisory services, research reports and portfolio recommendations can be generated by software, but suitability judgements made for clients, reconciliation and liability for compensation still rest with licensed firms and staff.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Which parts of a delegation's cost fall</p><p class="figsub">The cost of a delegation broken into five parts. Drag the price of cognitive labour: research, drafting and execution fall almost in step with it, checking falls only in part, and responsibility does not fall at all.</p></div><button class="replay" type="button" data-replay="st13">Replay</button></div>
+    <div class="st13" id="st13" data-anim>
+      <div class="st13-bars" id="st13-b"></div>
+      <div class="sl"><label for="st13-a">Price of cognitive labour <b id="st13-av"></b></label><input id="st13-a" type="range" min="0" max="100" step="5" value="100"></div>
+      <p class="st13-msg" id="st13-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: the original cost is 100, with the five parts accounting for 30, 20, 15, 20 and 15; research, drafting and execution are entirely cognitive labour, checking is half cognitive labour, and bearing responsibility is none.</figcaption>
+</figure>
+<style>
+.st13-bars{display:grid;gap:10px;margin-bottom:6px}
+.st13-r{display:grid;grid-template-columns:4.5em 1fr 3.5em;gap:10px;align-items:center;font-size:12.5px}
+.st13-r>div{display:flex;height:26px;border-radius:6px;overflow:hidden;background:var(--quote)}
+.st13-r i{display:block;height:100%;transition:width .6s;font-style:normal;color:var(--bg);font-size:11px;line-height:26px;text-align:center;white-space:nowrap;overflow:hidden}
+.st13-r b{text-align:right;font-variant-numeric:tabular-nums}
+.st13-lg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--muted);margin:4px 0 8px}
+.st13-lg span{display:flex;gap:5px;align-items:center}.st13-lg i{width:11px;height:11px;border-radius:3px}
+.st13-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('st13'+id);
+  const B=[['Research',30,1,'#2f6f5e'],['Drafting/judgement',20,1,'#4f8f7c'],['Execution',15,1,'#7fb3a2'],['Checking',20,.5,'#c98a4b'],['Responsibility',15,0,'#a4552d']];
+  function draw(){const a=+$('-a').value/100;$('-av').textContent=Math.round(a*100)+'%';
+    const now=B.map(([n,v,c])=>v*(c*a+(1-c))),tot=now.reduce((x,y)=>x+y,0);
+    const row=(lab,vals,t)=>`<div class="st13-r"><span>${lab}</span><div>${vals.map((v,i)=>`<i style="width:${v}%;background:${B[i][3]}" title="${B[i][0]}">${v>=8?B[i][0]:''}</i>`).join('')}</div><b>${t.toFixed(0)}</b></div>`;
+    $('-b').innerHTML=row('Before',B.map(b=>b[1]),100)+row('Now',now,tot)+`<div class="st13-lg">${B.map(b=>`<span><i style="background:${b[3]}"></i>${b[0]}</span>`).join('')}</div>`;
+    const share=(now[3]+now[4])/tot;
+    $('-msg').textContent=a===1?'With the price of cognitive labour unchanged, research, drafting and execution make up over 60% of the cost.':`With the price of cognitive labour down to ${Math.round(a*100)}%, the total cost falls from 100 to ${tot.toFixed(0)}; the share of checking and bearing responsibility in the total rises from 35% to ${Math.round(share*100)}%. However cheap the scribes become, they cannot push the cost below this floor of ${Math.round(B[3][1]*.5+B[4][1])}.`;}
+  $('-a').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{let v=100;$('-a').value=100;draw();const id=setInterval(()=>{v-=5;$('-a').value=v;draw();if(v<=0)clearInterval(id);},120);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-3">3. Evidence from experiments</h2>
+<p>How much can the scribes actually save? Several recent experiments give preliminary answers. Noy and Zhang (2023) had 453 college-educated professionals complete writing tasks from their own occupations, randomly allowing half of them to use a conversational large model: average time taken fell by 40% and quality rose by 18%. Brynjolfsson, Li and Raymond (2025) studied 5,172 customer-support agents who gained access to an AI assistant in stages: issues resolved per hour rose by 15% on average, with large differences between individuals. The earlier working paper reported that novices and lower-skilled workers improved by about 34%, while the most experienced saw almost no improvement.</p>
+<p><strong>Today's counterpart.</strong> These experiments mostly involve short, self-contained tasks, unlike delegation that lasts for years. They show the cost of single pieces of cognitive labour, not the cost of a complete service.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Three experiments: how much was saved</p><p class="figsub">Select a study to see its subjects, method and main results.</p></div><button class="replay" type="button" data-replay="ex13">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Study">
+      <button type="button" data-ex13="0" aria-pressed="true">Writing tasks</button>
+      <button type="button" data-ex13="1" aria-pressed="false">Customer support</button>
+      <button type="button" data-ex13="2" aria-pressed="false">Consulting tasks</button>
+    </div>
+    <div class="ex13" id="ex13" data-anim>
+      <p class="ex13-who" id="ex13-who"></p>
+      <div class="ex13-bars" id="ex13-b"></div>
+      <p class="ex13-msg" id="ex13-msg"></p>
+    </div>
+  </div>
+  <figcaption>Data: Noy and Zhang (2023, <i>Science</i>); Brynjolfsson, Li and Raymond (2025, <i>Quarterly Journal of Economics</i>; the improvement for novices comes from the 2023 working paper); Dell'Acqua et al. (2023, Harvard Business School working paper). Bar lengths follow each study's own percentages; the measures in different studies are not directly comparable.</figcaption>
+</figure>
+<style>
+.ex13-who{font-size:13px;color:var(--muted);margin:4px 0 10px}
+.ex13-bars{display:grid;gap:8px}
+.ex13-r{display:grid;grid-template-columns:10.5em 1fr;gap:10px;align-items:center;font-size:12.5px}
+.ex13-r div{position:relative;height:22px}
+.ex13-r i{position:absolute;top:0;height:100%;border-radius:4px;background:var(--accent);transition:width .7s}
+.ex13-r i.neg{background:var(--warm)}
+.ex13-r em{position:absolute;top:2px;font-style:normal;font-size:12px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.ex13-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.ex13-r{grid-template-columns:1fr;gap:2px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('ex13'+id);
+  const S=[['453 college-educated professionals completed writing tasks from their own occupations; half were randomly allowed to use a conversational large model.',[['Time taken reduced',40],['Quality improved',18]],'On short, self-contained writing tasks, both time and quality improved clearly, and the gaps between people narrowed.'],
+    ['5,172 customer-support agents gained access to an AI assistant in stages; issues resolved per hour were compared before and after.',[['Average improvement',15],['Novices and lower-skilled (working paper)',34]],'The gains went mainly to the less experienced: the assistant passed the practices of experienced agents on to novices; the most experienced saw almost no improvement.'],
+    ['758 consultants completed a set of tasks within the large model\'s capabilities and one task outside them.',[['Within range: more tasks done',12.2],['Within range: faster',25.1],['Within range: higher quality',40],['Outside range: change in correct answers',-19]],'Within its range of capability, everything improved; on a task that looked similar but lay outside that range, users were more likely to get it wrong.']];
+  function set(k){document.querySelectorAll('[data-ex13]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.ex13===k)));const s=S[k];$('-who').textContent=s[0];
+    $('-b').innerHTML=s[1].map(([n,v])=>`<div class="ex13-r"><span>${n}</span><div><i class="${v<0?'neg':''}" style="left:${v<0?0:0}%;width:0"></i><em></em></div></div>`).join('');
+    requestAnimationFrame(()=>[...$('-b').children].forEach((r,i)=>{const v=s[1][i][1],w=Math.abs(v)*1.6;const bar=r.querySelector('i'),t=r.querySelector('em');bar.style.width=w+'%';t.style.left=`calc(${w}% + 6px)`;t.textContent=(v<0?'−'+(-v)+' percentage points':(k===2&&i===2?'over 40%':v+'%'));}));
+    $('-msg').textContent=s[2];}
+  document.querySelectorAll('[data-ex13]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.ex13)));
+  $('').addEventListener('anim-in',()=>{[0,1,2].forEach((k,i)=>setTimeout(()=>set(k),200+i*2600));});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-4">4. An uneven edge</h2>
+<p>The scribes' abilities do not vary neatly with how hard a task is. Dell'Acqua et al. (2023) ran an experiment at a consulting firm. On tasks within the large model's capabilities, consultants using it completed 12.2% more tasks, worked 25.1% faster and produced work more than 40% higher in quality. On a task that looked similarly difficult but lay outside its capabilities, consultants using it were about 19 percentage points less likely to give the correct answer. The authors call this irregular boundary of capability the "jagged technological frontier".</p>
+<p>An uneven edge means that whether to check cannot be decided by how hard a task looks. The most dangerous tasks are precisely those that look easy but which the scribe gets wrong.</p>
+<p><strong>Today's counterpart.</strong> A large model may perform well on complex reasoning yet make mistakes on simple counting or on citing sources, and it states its errors with the same confidence as its correct answers.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">An uneven edge: what to check</p><p class="figsub">Twenty-four tasks are arranged from left to right by how hard they look. Green ones the scribe gets right; orange ones it gets wrong. Choose a division of labour to see the time spent and the errors that slip through.</p></div><button class="replay" type="button" data-replay="jg13">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Division of labour">
+      <button type="button" data-jg13="self" aria-pressed="false">Do everything yourself</button>
+      <button type="button" data-jg13="trust" aria-pressed="true">Hand everything to the scribe</button>
+      <button type="button" data-jg13="hard" aria-pressed="false">Check only the hard-looking ones</button>
+      <button type="button" data-jg13="all" aria-pressed="false">Hand to the scribe, check each one</button>
+    </div>
+    <div class="jg13" id="jg13" data-anim>
+      <div class="jg13-row" id="jg13-r"></div>
+      <div class="jg13-ax"><span>Looks easy</span><span>Looks hard</span></div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Scribe gets it right</span><span><i style="background:var(--warm)"></i>Scribe gets it wrong</span><span><i style="outline:2px solid var(--ink);outline-offset:-2px;background:transparent"></i>Checked by a person</span><span><i style="background:var(--warm);opacity:.35"></i>Error slips through</span></div>
+      <div class="jg13-out" id="jg13-out"></div>
+      <p class="jg13-msg" id="jg13-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: a person takes 1 hour to do a task, the scribe takes almost no time, a person takes 0.3 hours to check one task, and redoing a task after finding an error takes 1 hour. Which tasks go wrong is fixed in advance and only weakly related to how hard they look (what Dell'Acqua et al., 2023, call the "jagged technological frontier").</figcaption>
+</figure>
+<style>
+.jg13-row{display:grid;grid-template-columns:repeat(24,1fr);gap:3px;align-items:end;height:90px}
+.jg13-row i{display:block;border-radius:3px;background:var(--accent);transition:opacity .4s,outline-color .3s;outline:2px solid transparent;outline-offset:1px}
+.jg13-row i.bad{background:var(--warm)}
+.jg13-row i.chk{outline-color:var(--ink)}
+.jg13-row i.miss{opacity:.35}
+.jg13-row i.self{background:var(--faint)}
+.jg13-ax{display:flex;justify-content:space-between;font-size:11.5px;color:var(--faint);margin:4px 0 6px}
+.jg13-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.jg13-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.jg13-out span{display:block;font-size:11.5px;color:var(--faint)} .jg13-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.jg13-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.jg13-row{gap:2px}.jg13-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('jg13'+id);
+  // 1 means the scribe gets it wrong; only weakly related to difficulty
+  const BAD=[0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1];
+  let mode='trust';
+  function draw(){let hrs=0,miss=0,chk=0;
+    $('-r').innerHTML=BAD.map((b,i)=>{const h=30+i*2.5;let c=b?'bad':'';
+      if(mode==='self'){hrs+=1;c='self';}
+      else{const check=mode==='all'||(mode==='hard'&&i>=16);if(check){hrs+=.3;chk++;c+=' chk';if(b)hrs+=1;}else if(b){miss++;c+=' miss';}}
+      return `<i class="${c}" style="height:${h}px"></i>`;}).join('');
+    $('-out').innerHTML=[['Time spent',hrs.toFixed(1)+' hours'],['Tasks checked by a person',(mode==='self'?24:chk)],['Errors that slip through',miss]].map(([a,v])=>`<div><span>${a}</span><b>${v}</b></div>`).join('');
+    $('-msg').textContent={self:'Doing everything yourself lets no errors through, but takes 24 hours.',trust:`Handing everything to the scribe takes almost no time, but ${miss} errors go out unchanged, and the wrong answers look just like the right ones.`,hard:`Checking only the eight hard-looking tasks takes ${hrs.toFixed(1)} hours and still lets ${miss} errors through: they occur precisely in the tasks that look easy.`,all:`Checking each task finds and redoes every error, taking ${hrs.toFixed(1)} hours in all, about ${Math.round((1-hrs/24)*100)}% less than doing everything yourself. The ceiling on the saving is set by the cost of checking.`}[mode];}
+  const bs=[...document.querySelectorAll('[data-jg13]')];
+  function set(m){mode=m;bs.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.jg13===m)));draw();}
+  bs.forEach(b=>b.addEventListener('click',()=>set(b.dataset.jg13)));
+  $('').addEventListener('anim-in',()=>{['self','trust','hard','all'].forEach((m,i)=>setTimeout(()=>set(m),300+i*2200));});
+  draw();
+})();
+</script>
+
+<h2 id="sec-5">5. The weakest stave: the slowest step sets the limit</h2>
+<p>Even if the scribes make one part of the work a hundred times faster, the whole job does not become a hundred times faster. Suppose a delegation used to take ten days: nine for reading, calculating and drafting, one for checking and signing. The scribes cut the nine days to a hundredth of their former length, but checking and signing still take a day, so the whole job goes from ten days to about 1.1 days, a little over nine times faster. Even if the nine days were cut to zero, the whole job could be at most ten times faster. The one day that cannot be sped up sets the ceiling for the whole.</p>
+<aside class="principle"><p class="pr-k">Derived so far: a principle</p><p class="pr-n">Amdahl's law</p><p class="pr-c"><span><em>Discipline</em>Computer science › Computer architecture (parallel computing)</span><span><em>Type</em>Law</span></p><p class="pr-s">When only part of a job can be sped up, the overall speed-up is limited by the part that cannot: if the part that cannot be sped up is a fraction s of the whole, then however much faster the rest becomes, the whole can be at most 1/s times faster.</p><dl><div><dt>Standing in the field</dt><dd>Named after its proposer and commonly called "Amdahl's law"; the original is a three-page conference paper with no formula, which estimated in words the speed limit that sequential data-management overhead places on parallel processing</dd></div><div><dt>Constraint it answers</dt><dd>Only part of the work can be sped up</dd></div><div><dt>Premises</dt><dd>The work can be divided into a part that can be sped up and a part that cannot; the two parts must be done one after the other; the total amount of work is fixed</dd></div><div><dt>Proposed by</dt><dd>Amdahl, 1967, in a discussion of the prospects for multiprocessor parallel computing</dd></div><div><dt>Open question</dt><dd>Can the part that cannot be sped up be made smaller by redesigning the process?</dd></div><div><dt>After the rerun</dt><dd>With cognitive labour almost free, the speed-up of reading, calculating and drafting is in effect pushed towards infinity, so the overall ceiling is set entirely by the share taken up by checking, bearing responsibility and waiting</dd></div></dl></aside>
+<p>For delegation, the parts that cannot be sped up are exactly checking, bearing responsibility, and waiting itself: grain is still harvested once a year, and ships still sail for months. With the cost of cognitive labour collapsing, the overall amplification factor depends on whether these steps can change as well.</p>
+<p><strong>Today's counterpart.</strong> An investment recommendation can be generated in seconds, but account opening, suitability assessment, the arrival of funds and trade settlement each still have their own procedures and timelines.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The slowest step sets the limit</p><p class="figsub">Part of a job can be handed to the scribes and sped up; the rest (checking, bearing responsibility, waiting) keeps its pace. Drag the two sliders to see how many times faster the whole job becomes.</p></div><button class="replay" type="button" data-replay="am13">Replay</button></div>
+    <div class="am13" id="am13" data-anim>
+      <svg viewBox="0 0 660 220" role="img" aria-label="Overall speed-up"><g id="am13-g"></g></svg>
+      <div class="am13-ctl">
+        <div class="sl"><label for="am13-p">Share that can be sped up <b id="am13-pv"></b></label><input id="am13-p" type="range" min="10" max="99" step="1" value="80"></div>
+        <div class="sl"><label for="am13-s">Speed-up of that share <b id="am13-sv"></b></label><input id="am13-s" type="range" min="0" max="3" step="0.1" value="2"></div>
+      </div>
+      <p class="am13-msg" id="am13-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Overall speed-up = 1 ÷ [(1 − p) + p ÷ s], where p is the share that can be sped up and s is the speed-up of that share (Amdahl, 1967). The horizontal axis is s, on a logarithmic scale; the dashed line is the ceiling 1 ÷ (1 − p) as s goes to infinity.</figcaption>
+</figure>
+<style>
+.am13 svg{width:100%;height:auto;display:block}
+.am13-ctl{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.am13-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.am13-ctl{grid-template-columns:1fr;gap:4px}.am13 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('am13'+id),X0=50,X1=630,YT=12,YB=180,x=l=>X0+l/3*(X1-X0);
+  const sp=(p,s)=>1/((1-p)+p/s);
+  function draw(){const p=+$('-p').value/100,ls=+$('-s').value,s=Math.pow(10,ls),cap=1/(1-p),mx=Math.max(10,Math.ceil(cap/10)*10),y=v=>YB-(v-1)/(mx-1)*(YB-YT);
+    $('-pv').textContent=Math.round(p*100)+'%';$('-sv').textContent=s<10?s.toFixed(1)+'×':Math.round(s)+'×';
+    let h=[1,mx/2,mx].map(v=>`<line x1="${X0}" x2="${X1}" y1="${y(v)}" y2="${y(v)}" class="s-line"/><text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${Math.round(v)}×</text>`).join('')
+      +[0,1,2,3].map(l=>`<text x="${x(l)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${Math.pow(10,l)}×</text>`).join('');
+    h+=`<line x1="${X0}" x2="${X1}" y1="${y(cap)}" y2="${y(cap)}" stroke="var(--warm)" stroke-dasharray="5 4"/><text x="${X1}" y="${y(cap)-6}" text-anchor="end" font-size="11" fill="var(--warm)">Ceiling ${cap.toFixed(1)}×</text>`;
+    let d='';for(let l=0;l<=3.001;l+=.05)d+=(l?'L':'M')+x(l).toFixed(1)+','+y(sp(p,Math.pow(10,l))).toFixed(1);
+    const now=sp(p,s);h+=`<path d="${d}" fill="none" stroke="var(--accent)" stroke-width="2.6"/><circle cx="${x(ls)}" cy="${y(now)}" r="6" fill="var(--accent)"/>`;
+    $('-g').innerHTML=h;
+    $('-msg').textContent=`The share that can be sped up is ${Math.round(p*100)}%, and it is now ${s<10?s.toFixed(1):Math.round(s)} times faster, yet the whole job is only ${now.toFixed(1)} times faster; even if that share became infinitely fast, the whole could be at most ${cap.toFixed(1)} times faster. The only way past the ceiling is to shorten the remaining ${Math.round((1-p)*100)}%.`;}
+  ['-p','-s'].forEach(k=>$(k).addEventListener('input',draw));
+  $('').addEventListener('anim-in',()=>{let v=0;$('-s').value=0;draw();const id=setInterval(()=>{v+=.1;$('-s').value=v.toFixed(1);draw();if(v>=3)clearInterval(id);},70);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-6">6. The reachable share</h2>
+<p>What proportion of all work can the scribes do? Eloundou, Manning, Mishkin and Rock assessed the tasks of each US occupation one by one. Their 2023 preprint estimated that about 80% of workers have at least 10% of their tasks affected by large models, and about 19% of workers have at least half of their tasks affected. The version formally published in 2024 uses a different measure that distinguishes two cases. With a large model used only through a simple interface, occupations with more than half their tasks affected make up about 1.8%; counting the software and tools built on top of large models, the figure rises to more than 46%. The reachable share therefore depends mainly on what is built around the large model, not only on the model itself. The authors also note that being affected is not the same as being replaced, and that being technically feasible is not the same as being adopted.</p>
+<p><strong>Today's counterpart.</strong> In finance, research, customer service, compliance review and report writing are all jobs whose tasks are highly exposed to large models.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The reachable share depends on what is built around the model</p><p class="figsub">A hundred cells stand for a hundred occupations. Switch between the two measures to see how many occupations have more than half their tasks affected by large models.</p></div><button class="replay" type="button" data-replay="rc13">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Measure">
+      <button type="button" data-rc13="0" aria-pressed="true">Large model with a simple interface only</button>
+      <button type="button" data-rc13="1" aria-pressed="false">Plus software built on large models</button>
+    </div>
+    <div class="rc13" id="rc13" data-anim>
+      <div class="rc13-g" id="rc13-g"></div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>More than half of tasks affected</span><span><i style="background:var(--quote);border:1px solid var(--line)"></i>Others</span></div>
+      <p class="rc13-msg" id="rc13-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Data: Eloundou, Manning, Mishkin and Rock (2024, <i>Science</i>): about 1.8% and more than 46%. Cells are rounded to the nearest percentage, so 1.8% is drawn as 2 cells. Being affected is not the same as being replaced.</figcaption>
+</figure>
+<style>
+.rc13-g{display:grid;grid-template-columns:repeat(20,1fr);gap:4px;max-width:480px}
+.rc13-g i{aspect-ratio:1;border-radius:3px;background:var(--quote);border:1px solid var(--line);transition:background .3s;transition-delay:calc(var(--i)*8ms)}
+.rc13-g i.on{background:var(--accent);border-color:var(--accent)}
+.rc13-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('rc13'+id),V=[2,46];
+  $('-g').innerHTML=Array.from({length:100},(_,i)=>`<i style="--i:${i}"></i>`).join('');const cs=[...$('-g').children];
+  function set(k){document.querySelectorAll('[data-rc13]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.rc13===k)));cs.forEach((c,i)=>c.classList.toggle('on',i<V[k]));
+    $('-msg').textContent=k?'Counting the software and tools built on large models, occupations with more than half their tasks affected rise to more than 46%: scribes need ledgers, spreadsheets and channels before they can truly take over the work.':'With a large model used only through a simple interface, occupations with more than half their tasks affected make up about 1.8%: being able to read and write is not yet the same as being able to take over a complete job.';}
+  document.querySelectorAll('[data-rc13]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.rc13)));
+  $('').addEventListener('anim-in',()=>{set(0);setTimeout(()=>set(1),2200);});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-7">7. A village where cognitive labour is cheap: Civilization Simulator, version 13</h2>
+<p>The simulator adds a new parameter: "the price of cognitive labour". Each year, forty households have four money-related tasks: keeping and reconciling accounts, research and selection, monitoring managers, and adjusting to plan. Each task is partly cognitive labour and partly checking and bearing responsibility. A household does a task only when its benefit exceeds its cost. Drag the price of cognitive labour to see how many households, and how many tasks, become affordable; then hand checking to the scribes as well, and see what happens.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Civilization Simulator · Chapter 13: A village where cognitive labour is cheap</p><p class="figsub">Forty households are arranged from least to most property, and each has four money-related tasks a year. A task is done only when its benefit exceeds its cost. Drag the price of cognitive labour to see which tasks become affordable; then hand checking to the scribes as well, and see what happens.</p></div><button class="replay" type="button" data-replay="cs13">Replay</button></div>
+    <div class="cs-rules"><span class="on">Delegation</span><span class="on">Regulation &amp; custody</span><span class="on">Defaults</span><span class="on">Parameter: price of cognitive labour</span><span class="lock">Personal agent · Ch. 14</span></div>
+    <div class="cs13" id="cs13" data-anim>
+      <div class="cs13-grid" id="cs13-g"></div>
+      <div class="cs13-ax"><span>Least property</span><span>Most property</span></div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Affordable</span><span><i style="background:var(--quote);border:1px solid var(--line)"></i>Not affordable</span><span><i style="background:var(--warm)"></i>Scribe erred, nobody noticed</span></div>
+      <div class="sl"><label for="cs13-a">Price of cognitive labour <b id="cs13-av"></b></label><input id="cs13-a" type="range" min="0" max="2" step="0.1" value="0"></div>
+      <div class="cs-sw"><label><input type="checkbox" id="cs13-c"> Hand checking to the scribes too (no person checks or bears responsibility)</label></div>
+      <button type="button" class="replay" id="cs13-re">Another run of years</button>
+      <div class="cs13-out" id="cs13-out"></div>
+      <p class="cs13-msg" id="cs13-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative model: median property is about 100 portions, the least a dozen or so, the most over a thousand. The four tasks bring benefits of 0.3%, 1%, 0.6% and 0.8% of property and require 2, 10, 4 and 3 hours of labour, of which cognitive labour accounts for 80%, 90%, 50% and 70%, the rest being checking and bearing responsibility; human labour costs 1 portion per hour. The price of cognitive labour is given as a percentage of its original level. When checking is also handed to the scribes, all labour is charged at the price of cognitive labour, but each task has an 8% chance of an error nobody notices, with a loss of twice the task's benefit; each household decides whether to do a task based on its expected gain or loss.</figcaption>
+</figure>
+<style>
+.cs13-grid{display:grid;gap:4px}
+.cs13-row{display:grid;grid-template-columns:6.5em 1fr;gap:8px;align-items:center;font-size:12px;color:var(--muted)}
+.cs13-row div{display:grid;grid-template-columns:repeat(40,1fr);gap:2px}
+.cs13-row i{height:16px;border-radius:2px;background:var(--quote);border:1px solid var(--line);transition:background .3s}
+.cs13-row i.on{background:var(--accent);border-color:var(--accent)}
+.cs13-row i.err{background:var(--warm);border-color:var(--warm)}
+.cs13-ax{display:flex;justify-content:space-between;font-size:11.5px;color:var(--faint);margin:4px 0 6px 7.2em}
+.cs13-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.cs13-out div{background:var(--quote);border-radius:8px;padding:8px 10px}
+.cs13-out span{display:block;font-size:11.5px;color:var(--faint)} .cs13-out b{font-size:18px;font-variant-numeric:tabular-nums}
+.cs13-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.cs13-row{grid-template-columns:1fr;gap:2px}.cs13-row div{gap:1px}.cs13-row i{height:12px}.cs13-ax{margin-left:0}.cs13-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('cs13'+id);let seed=1313;
+  const T=[['Bookkeeping',.003,2,.8],['Research',.01,10,.9],['Monitoring',.006,4,.5],['Adjusting',.008,3,.7]];
+  let s0=1313;const r0=()=>{s0=(s0*16807)%2147483647;return s0/2147483647;};const g0=()=>{let u=0;while(!u)u=r0();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r0());};
+  const W=Array.from({length:40},()=>Math.round(100*Math.exp(1.1*g0()))).sort((a,b)=>a-b);
+  function sim(a,chk){let s=seed;const r=()=>{s=(s*16807)%2147483647;return s/2147483647;};
+    const G=T.map(()=>[]);let done=0,all=0,net=0,err=0,lost=0;
+    W.forEach(w=>{let n=0;T.forEach(([nm,v,h,c],k)=>{const cost=chk?h*a:h*(c*a+(1-c)),e=chk?.08:0,ev=v*w*(1-2*e)-cost;let st=0;
+      if(ev>0){st=1;done++;n++;net+=v*w-cost;if(chk&&r()<e){st=2;err++;lost+=2*v*w;net-=2*v*w;}}G[k].push(st);});if(n===4)all++;});
+    return {G,done,all,net,err,lost};}
+  function draw(){const ls=+$('-a').value,a=Math.pow(10,-ls),chk=$('-c').checked,S=sim(a,chk);
+    $('-av').textContent=a>=.1?Math.round(a*100)+'%':(a*100).toFixed(1)+'%';
+    $('-g').innerHTML=T.map((t,k)=>`<div class="cs13-row"><span>${t[0]}</span><div>${S.G[k].map(st=>`<i class="${st===1?'on':st===2?'err':''}"></i>`).join('')}</div></div>`).join('');
+    $('-out').innerHTML=[['Affordable tasks',S.done+' / 160'],['Households affording all four',S.all],[chk?'Errors nobody noticed':'Village net gain for the year',chk?S.err+', loss '+S.lost.toFixed(0)+' portions':S.net.toFixed(0)+' portions']].map(([x,v])=>`<div><span>${x}</span><b>${v}</b></div>`).join('');
+    const fix=T.reduce((x,[n,v,h,c])=>x+h*(1-c),0);
+    $('-msg').textContent=chk?`With checking handed to the scribes too, the cost is almost zero: ${S.done} tasks become affordable, and households doing all four rise to ${S.all}. But ${S.err} errors go unnoticed, with a loss of ${S.lost.toFixed(0)} portions, and nobody is responsible for them.`:ls===0?'With cognitive labour at its original price, only households with much property can afford research and monitoring; for households with little, even bookkeeping does not pay.':`With the price of cognitive labour down to ${a>=.1?Math.round(a*100):(a*100).toFixed(1)}%, affordable tasks rise to ${S.done}, but soon stop rising: across its four tasks each household still faces ${fix.toFixed(1)} hours of checking and bearing responsibility, and households with little property still cannot afford research and monitoring.`;}
+  ['-a','-c'].forEach(k=>$(k).addEventListener('input',draw));$('-re').addEventListener('click',()=>{seed=(seed*48271)%2147483647;draw();});
+  $('').addEventListener('anim-in',()=>{$('-c').checked=false;let v=0;$('-a').value=0;draw();const id=setInterval(()=>{v+=.1;$('-a').value=v.toFixed(1);draw();if(v>=2){clearInterval(id);setTimeout(()=>{$('-c').checked=true;draw();},1500);}},160);});
+  draw();
+})();
+</script>
+
+<h2 id="sec-8">8. What this step leaves open</h2>
+<p>The price of cognitive labour has collapsed, but checking and bearing responsibility have not fallen with it, and the scribes' capabilities have an uneven edge. The earlier steps therefore have to be derived again:</p>
+<ol><li><strong>The boundary of delegation.</strong> Once research and comparison are almost free, can households without much wealth also afford a personal agent?</li><li><strong>Commitment and guarantees.</strong> The scribes have no property to pledge and no accumulated reputation. Who will guarantee their actions, and how can what they did be checked?</li><li><strong>Competition over information.</strong> When everyone has a scribe reading reports for them, information advantages will be worn away faster. Where will new asymmetries appear?</li><li><strong>Participants in the market.</strong> When scribes place orders directly, execution is cheaper, but will they all make the same decisions at the same time?</li><li><strong>Human bias.</strong> Can scribes help people keep to their plans, and will they also be used to exploit people's biases?</li><li><strong>What does not change.</strong> Time, risk and irreversible losses do not disappear because of the scribes.</li></ol>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">What this step leaves open</p><p class="figsub">Six questions to be derived again. Select a question to see the assumption behind it.</p></div><button class="replay" type="button" data-replay="nx13">Replay</button></div>
+    <div class="nx" id="nx13" data-anim>
+      <div class="nx-src"><b>Scribes</b><span>The price of cognitive labour collapses</span></div>
+      <div class="nx-list" id="nx13-l"></div>
+    </div>
+    <p class="nx-msg" id="nx13-msg" aria-live="polite"></p>
+  </div>
+</figure>
+<style>
+.nx{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:center}
+.nx-src{background:var(--ink);color:var(--bg);border-radius:10px;padding:14px 10px;text-align:center}
+.nx-src b{display:block;font-size:16px} .nx-src span{font-size:12px;opacity:.75}
+.nx-list{display:grid;gap:6px}
+.nx-i{font:inherit;text-align:left;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:9px 12px;color:var(--ink);opacity:0;transform:translateX(-8px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.3s)}
+.nx.in .nx-i{opacity:1;transform:none}
+.nx-i span{font-size:13.5px} .nx-i em{font-style:normal;font-size:11.5px;color:var(--faint);white-space:nowrap}
+.nx-i.sel{border-color:var(--accent)}
+.nx-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+@media (max-width:640px){.nx{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const Q=[['The boundary of delegation','Chapter 14','The assumption: the cost of delegation is mainly the labour of research and comparison. If so, households without much wealth should also be able to afford a personal agent; if checking and bearing responsibility are the larger part, the boundary moves only a little.'],
+    ['Commitment and guarantees','Chapter 15','The assumption: whoever does the work has property to pledge and a reputation to lose. The scribes have neither. Who will guarantee their actions, and how can what they did be checked?'],
+    ['Competition over information','Chapter 16','The assumption: information advantages exist because few people read reports and do analysis. When everyone has a scribe, advantages wear away faster, and new asymmetries appear elsewhere.'],
+    ['Participants in the market','Chapter 17','The assumption: buying and selling are done by many people each making their own judgement. When scribes place orders directly and resemble one another, will they all make the same decisions at the same time?'],
+    ['Human bias','Chapter 18','The assumption: defaults can only be designed for the majority. Scribes can adjust for each household at any moment, but the same ability can also be used to exploit people\'s biases.'],
+    ['What does not change','Chapter 19','The assumption: new technology can solve every problem. Time, risk and irreversible losses do not disappear because of the scribes.']];
+  const l=document.getElementById('nx13-l'),msg=document.getElementById('nx13-msg');
+  l.innerHTML=Q.map((q,i)=>`<button type="button" class="nx-i" style="--i:${i}" data-i="${i}"><span>${q[0]}</span><em>→ ${q[1]}</em></button>`).join('');
+  const bs=[...l.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));msg.textContent=Q[i][2];}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('nx13').addEventListener('anim-in',()=>{[0,1,2,3,4,5].forEach((i,k)=>setTimeout(()=>set(i),1600+k*1800));});
+  set(0);
+})();
+</script>
+
+<h2 id="sec-9">9. Implications for products</h2>
+<p>Financial products built on large models today all stand at the start of this change in a parameter. Three implications follow. First, to judge a product's value, look at which part of the cost it lowers. If it lowers only the cost of research and drafting while the cost of checking and bearing responsibility stays the same, the improvement users get has a ceiling. Second, because the edge of capability is uneven, checking cannot be allocated by how hard a task is; it must be allocated by the consequences of an error and by how far the result can be checked. Third, the overall amplification factor depends on the slowest step; a product must redesign account opening, authorization, settlement and checking together, rather than only making one step faster.</p>
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: the cost of cognitive labour collapses</p><p class="figsub">Four conclusions, each tied to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="g13summary">Replay</button></div>
+    <div class="g13summary" id="g13summary" data-anim><div class="g13summary-c" style="--i:0"><em>Price</em><b>Cognitive labour is almost free</b><p>The price of reading, calculating and writing falls to a few hundredths of what it was; everything else stays the same.</p></div><div class="g13summary-c" style="--i:1"><em>Composition</em><b>Checking and bearing responsibility do not fall</b><p>The cheaper cognitive labour becomes, the larger the share of a delegation's cost taken by checking and bearing responsibility.</p></div><div class="g13summary-c warn" style="--i:2"><em>Edge</em><b>Abilities are uneven; checking cannot follow difficulty alone</b><p>The most dangerous tasks are those that look easy but which the scribe gets wrong.</p></div><div class="g13summary-c warn" style="--i:3"><em>Weakest stave</em><b>The slowest step sets the limit</b><p>Speeding up only what can be sped up leaves a ceiling on the overall factor; the reachable share depends on what is built around the model.</p></div></div>
+  </div>
+</figure>
+<style>
+.g13summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g13summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g13summary-c.warn{border-left-color:var(--warm)}
+.g13summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g13summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g13summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g13summary.in .g13summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g13summary{grid-template-columns:1fr}}
+</style>
+
+<h2 id="sec-10">References</h2>
+<ul class="refs"><li>Amdahl, G. M. (1967). Validity of the single processor approach to achieving large scale computing capabilities. <i>AFIPS Conference Proceedings</i>, 30, 483–485.</li><li>Brynjolfsson, E., Li, D., &amp; Raymond, L. R. (2023). Generative AI at work. NBER Working Paper No. 31161.</li><li>Brynjolfsson, E., Li, D., &amp; Raymond, L. (2025). Generative AI at work. <i>Quarterly Journal of Economics</i>, 140(2), 889–942.</li><li>Dell'Acqua, F., McFowland, E., III, Mollick, E. R., Lifshitz-Assaf, H., Kellogg, K. C., Rajendran, S., Krayer, L., Candelon, F., &amp; Lakhani, K. R. (2023). Navigating the jagged technological frontier: Field experimental evidence of the effects of AI on knowledge worker productivity and quality. Harvard Business School Working Paper No. 24-013.</li><li>Eloundou, T., Manning, S., Mishkin, P., &amp; Rock, D. (2023). GPTs are GPTs: An early look at the labor market impact potential of large language models. arXiv:2303.10130.</li><li>Eloundou, T., Manning, S., Mishkin, P., &amp; Rock, D. (2024). GPTs are GPTs: Labor market impact potential of LLMs. <i>Science</i>. https://doi.org/10.1126/science.adj0998</li><li>Noy, S., &amp; Zhang, W. (2023). Experimental evidence on the productivity effects of generative artificial intelligence. <i>Science</i>, 381(6654), 187–192.</li><li>Stanford Institute for Human-Centered Artificial Intelligence (2025). <i>Artificial Intelligence Index Report 2025</i>. Stanford University.</li></ul>
+<footer class="nav"><a href="g-part2.html">← Part Two: Changing one parameter: when agency becomes almost free</a><a href="g-14.html">Chapter 14: Can everyone have a personal agent? →</a></footer>
+</div>
+<script>
+(function(){
+  // 目录：宽度 ≥760px 时与正文同层并排，展开时把正文推向右侧，可收起与重新固定，状态记在本机；手机宽度时为抽屉
+  const b=document.body, tg=document.querySelector('.sidetoggle'), wide=matchMedia('(min-width:760px)');
+  const save=v=>{try{localStorage.setItem('book-side',v)}catch(e){}};
+  const isOpen=()=>wide.matches?!b.classList.contains('side-collapsed'):b.classList.contains('nav-open');
+  const sync=()=>{const o=isOpen();tg.setAttribute('aria-expanded',String(o));tg.setAttribute('aria-label',o?(document.documentElement.lang==='en'?'Close contents':'收起目录'):(document.documentElement.lang==='en'?'Open contents':'展开目录'));tg.classList.toggle('is-open',o);};
+  const setOpen=o=>{b.classList.toggle('nav-open',o);sync();};
+  const setCollapsed=c=>{b.classList.toggle('side-collapsed',c);save(c?'c':'o');sync();};
+  tg.addEventListener('click',()=>{if(wide.matches)setCollapsed(isOpen());else setOpen(!isOpen());});
+  document.querySelectorAll('[data-close], .side a').forEach(el=>el.addEventListener('click',()=>{if(!wide.matches)setOpen(false);}));
+  wide.addEventListener('change',sync);sync();
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!wide.matches)setOpen(false);});
+  // 动画：带 data-anim 的元素进入视野时加上 in 并派发 anim-in；data-replay 按钮重播
+  const fire=t=>{t.classList.remove('in');void t.offsetWidth;t.classList.add('in');t.dispatchEvent(new Event('anim-in'));};
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fire(e.target);io.unobserve(e.target);}}),{threshold:.3});
+    document.querySelectorAll('[data-anim]').forEach(el=>io.observe(el));
+  } else document.querySelectorAll('[data-anim]').forEach(fire);
+  document.querySelectorAll('[data-replay]').forEach(x=>x.addEventListener('click',()=>fire(document.getElementById(x.dataset.replay))));
+  const side=document.querySelector('.side'), cur=side.querySelector('a.cur:not(.sidetitle)'); if(cur) side.scrollTop=cur.offsetTop-side.clientHeight/3;
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">沉默成了坏消息</p><p class="figsub">十位书记员的守约程度从 1 到 10 分不等，各自决定是否公开可核对的记录。委托人把不公开的书记员一律按他们的平均分对待。点“下一轮”，看谁会公开。</p></div><button class="replay" type="button" data-replay="ur22">重播</button></div>
+    <div class="ur22" id="ur22" data-anim>
+      <div class="ur22-g" id="ur22-g"></div>
+      <div class="ur22-ctl"><button type="button" class="replay" id="ur22-n">下一轮</button><button type="button" class="replay" id="ur22-r">从头开始</button><label class="cs-sw"><input type="checkbox" id="ur22-s"> 委托人对沉默不够怀疑（按 7 分对待）</label></div>
+      <p class="ur22-msg" id="ur22-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：书记员在自己的分数高于委托人对“不公开者”的估计时选择公开（格罗斯曼，1981；米尔格罗姆，1981 的解开过程）。“不够怀疑”时，委托人固定按 7 分对待不公开者，对应金、卢卡与马丁（2021）实验中接收方怀疑不足的情形。</figcaption>
+</figure>
+<style>
+.ur22-g{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;margin:6px 0}
+.ur22-g div{border-radius:8px;padding:8px 2px;text-align:center;font-size:13px;background:var(--quote);transition:background .4s,color .4s}
+.ur22-g div b{display:block;font-size:16px}
+.ur22-g div.d{background:var(--accent);color:var(--bg)}
+.ur22-ctl{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:6px}
+.ur22-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('ur22'+id);let D=new Set(),round=0;
+  const est=()=>{if($('-s').checked)return 7;const u=[...Array(10).keys()].map(i=>i+1).filter(v=>!D.has(v));return u.length?u.reduce((a,b)=>a+b,0)/u.length:0;};
+  function draw(){const e=est();$('-g').innerHTML=[...Array(10).keys()].map(i=>{const v=10-i;return `<div class="${D.has(v)?'d':''}"><b>${v}</b>${D.has(v)?'公开':'不公开'}</div>`;}).join('');
+    $('-msg').textContent=round===0?`起初谁也不公开，委托人只能把所有人按平均 ${e.toFixed(1)} 分对待。`:D.size>=9&&!$('-s').checked?`第 ${round} 轮：除了最差的一位，所有书记员都公开了；不公开的那一位，委托人一眼就知道它是谁。沉默成了坏消息。`:`第 ${round} 轮：已有 ${D.size} 位公开，委托人对不公开者的估计降到 ${e.toFixed(1)} 分。`+($('-s').checked?'委托人对沉默不够怀疑，分数在 7 分以下的书记员没有理由公开，解开停了下来。':'分数高于这一估计的书记员，下一轮也会公开。');}
+  function step(){const e=est();for(let v=1;v<=10;v++)if(v>e)D.add(v);round++;draw();}
+  $('-n').addEventListener('click',step);$('-r').addEventListener('click',()=>{D=new Set();round=0;draw();});$('-s').addEventListener('input',()=>{D=new Set();round=0;draw();});
+  $('').addEventListener('anim-in',()=>{D=new Set();round=0;$('-s').checked=false;draw();[1,2,3,4,5].forEach((k,i)=>setTimeout(step,900+i*1100));});
+  draw();
+})();
+</script>

@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：按后果分配权力</p><p class="figsub">四条设计要求，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="ch26summary">重播</button></div>
+    <div class="ch26summary" id="ch26summary" data-anim><div class="ch26summary-c" style="--i:0"><em>授权是一级级的阶梯</em><b>让用户看到并选择每类操作的级别</b><p>信息、起草、逐笔、方案、限时否决与范围内自主，按操作分别设定，而不是一个总开关。</p></div><div class="ch26summary-c" style="--i:1"><em>可逆性决定上限</em><b>不可逆、无上限的操作留在逐笔确认</b><p>卖出持仓、转出资金、接受要约与行权，由本人确认；可撤回的小事可以交给代理。</p></div><div class="ch26summary-c warn" style="--i:2"><em>不可逆敞口要按时照看</em><b>在截止时刻之前提醒，并说明选项</b><p>期权到期、追加保证金、供股截止等，提前多次提醒；改变持仓的一步由本人完成。</p></div><div class="ch26summary-c warn" style="--i:3"><em>边界要在执行层强制</em><b>独立检查，授权随记录升降</b><p>品种、金额、合计与权限逐笔检查并留记录；越权、版本更新与情况变化时降级，并可一键收回。</p></div></div>
+  </div>
+</figure>
+<style>
+.ch26summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch26summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch26summary-c.warn{border-left-color:var(--warm)}
+.ch26summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch26summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch26summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch26summary.in .ch26summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch26summary{grid-template-columns:1fr}}
+</style>

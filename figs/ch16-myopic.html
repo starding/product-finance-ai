@@ -1,0 +1,47 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">查看得越频繁，股票显得越不值得持有</p>
+    <p class="figsub">同一个股票组合，长期收益为正。拖动查看账户的频率，看每次查看时亏损的概率，以及按损失厌恶计算的感受。</p>
+    <div class="mo" id="mo" data-anim>
+      <svg viewBox="0 0 640 220" role="img" aria-label="查看频率与感受到的价值">
+        <g id="mo-ax"></g><path id="mo-p" class="mo-l"/><circle id="mo-d" r="6" fill="var(--ink)"/>
+      </svg>
+      <div class="sl"><label for="mo-s">查看频率 <b id="mo-sv"></b></label><input id="mo-s" type="range" min="0" max="7" step="1" value="0"></div>
+      <div class="mo-out"><div><span>每次查看时处于亏损的概率</span><b id="mo-pl"></b></div><div><span>按损失厌恶计算的感受（每年）</span><b id="mo-u"></b></div></div>
+      <p class="mo-msg" id="mo-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意计算：年化预期收益 7%、波动 16%，各期收益服从正态分布；感受＝期望收益中的正向部分 － 2.25 × 负向部分，再折算为每年；纵轴为对数刻度。思路来自 Benartzi 与 Thaler（1995）的短视损失厌恶；实验证据见 Gneezy 与 Potters（1997）。</figcaption>
+</figure>
+<style>
+.mo svg{width:100%;height:auto;display:block}
+.mo-l{fill:none;stroke:var(--accent);stroke-width:2.5}
+.mo-out{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.mo-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.mo-out span{display:block;font-size:12px;color:var(--faint)} .mo-out b{font-size:19px;font-variant-numeric:tabular-nums}
+.mo-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.mo-out{grid-template-columns:1fr}}
+@media (max-width:640px){.mo svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const F=[['每天',1/250],['每周',1/52],['每月',1/12],['每季度',1/4],['每半年',1/2],['每年',1],['每两年',2],['每五年',5]];
+  const m=.07,s=.16,Phi=z=>{const t=1/(1+.2316419*Math.abs(z)),d=.3989423*Math.exp(-z*z/2),p=d*t*(.3193815+t*(-.3565638+t*(1.781478+t*(-1.821256+t*1.330274))));return z>0?1-p:p;},phi=z=>.3989423*Math.exp(-z*z/2);
+  const calc=t=>{const M=m*t,S=s*Math.sqrt(t),z=M/S,ep=M*Phi(z)+S*phi(z),en=ep-M;return {pl:Phi(-z),u:(ep-2.25*en)/t};};
+  const R=F.map(([n,t])=>calc(t));
+  const L=u=>Math.sign(u)*Math.log10(1+Math.abs(u)*100),lmin=Math.min(...R.map(r=>L(r.u))),lmax=Math.max(...R.map(r=>L(r.u))),X0=60,X1=610,YT=16,YB=180,x=i=>X0+i/7*(X1-X0),y=u=>YT+(lmax-L(u))/(lmax-lmin)*(YB-YT);
+  const $=id=>document.getElementById(id);
+  let a=`<line x1="${X0}" y1="${y(0)}" x2="${X1}" y2="${y(0)}" class="s-faint"/><text x="${X0-6}" y="${y(0)+4}" text-anchor="end" font-size="11" class="t-faint">0</text>`+
+    `<text x="${X0-6}" y="${YT+8}" text-anchor="end" font-size="11" class="t-accent">值得</text><text x="${X0-6}" y="${YB}" text-anchor="end" font-size="11" class="t-warm">不值得</text>`;
+  F.forEach(([n],i)=>a+=`<text x="${x(i)}" y="${YB+28}" text-anchor="middle" font-size="11" class="t-faint">${n}</text>`);
+  $('mo-ax').innerHTML=a;
+  $('mo-p').setAttribute('d',R.map((r,i)=>(i?'L':'M')+x(i).toFixed(1)+','+y(r.u).toFixed(1)).join(''));
+  const sl=$('mo-s');
+  function r(){const i=+sl.value,q=R[i];$('mo-sv').textContent=F[i][0];$('mo-d').setAttribute('cx',x(i));$('mo-d').setAttribute('cy',y(q.u));$('mo-d').setAttribute('fill',q.u>=0?'var(--accent)':'var(--warm)');
+    $('mo-pl').textContent=(q.pl*100).toFixed(0)+'%';$('mo-u').textContent=(q.u>=0?'＋':'－')+Math.abs(q.u*100).toFixed(1);
+    $('mo-msg').textContent=q.u<0?`${F[i][0]}查看一次，约 ${(q.pl*100).toFixed(0)}% 的时候看到的是亏损。按两倍左右的分量计入亏损，持有股票的感受是负的：同一个组合，显得风险太大。`:`${F[i][0]}查看一次，看到亏损的概率降到约 ${(q.pl*100).toFixed(0)}%，持有股票的感受转为正值。组合本身没有变，变的是评估的频率。`;}
+  sl.addEventListener('input',r);
+  $('mo').addEventListener('anim-in',()=>{let i=0;sl.value=0;r();const id=setInterval(()=>{i++;sl.value=i;r();if(i>=7)clearInterval(id);},500);});
+  r();
+})();
+</script>

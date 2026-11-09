@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: making implementation checkable</p><p class="figsub">Four design requirements, each corresponding to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="ch28summary">Replay</button></div>
+    <div class="ch28summary" id="ch28summary" data-anim><div class="ch28summary-c" style="--i:0"><em>Getting it done and getting it right</em><b>Build general and finance-specific capabilities separately</b><p>Data, calculation, constraint checks, trading interfaces and compliance checks decide whether the result is right, and need evaluating on their own.</p></div><div class="ch28summary-c" style="--i:1"><em>Two ways of organizing</em><b>Choose on-the-spot assembly or a fixed workflow by task</b><p>Tasks with fixed paths that serve many people become evaluated fixed workflows that the agent can call.</p></div><div class="ch28summary-c warn" style="--i:2"><em>The relationship needs a home</em><b>Store the mandate, portfolio and records as long-lived objects</b><p>Keep every piece of data and every decision point in time, and review with what was known at the time.</p></div><div class="ch28summary-c warn" style="--i:3"><em>The process must be visible and replayable</em><b>Show waiting, blocked and in-progress items on a task panel</b><p>Keep inputs, clauses and model versions; replay to test before changing versions, and tell the user of differences.</p></div></div>
+  </div>
+</figure>
+<style>
+.ch28summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch28summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch28summary-c.warn{border-left-color:var(--warm)}
+.ch28summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch28summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch28summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch28summary.in .ch28summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch28summary{grid-template-columns:1fr}}
+</style>

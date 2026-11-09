@@ -1,0 +1,41 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Returns alone, or net value</p><p class="figsub">Product A advertises higher returns and requires the user to watch the market daily and make frequent decisions; Product B has ordinary returns, takes almost none of the user's time, and its risk stays within a range agreed in advance. Switch the basis of comparison.</p></div><button class="replay" type="button" data-replay="nv">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Basis of comparison">
+      <button type="button" data-nv="r" aria-pressed="true">Returns only</button>
+      <button type="button" data-nv="n" aria-pressed="false">Net value</button>
+    </div>
+    <div class="nv" id="nv" data-anim></div>
+    <p class="nv-msg" id="nv-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>Illustrative numbers, in percentage points of assets per year. "The user's effort" covers fees, trading costs and time converted into money; "risk borne" is converted from the expected loss from exceeding the user's tolerance and abandoning the plan in a downturn. For an estimate of the social cost of active investing, see French (2008).</figcaption>
+</figure>
+<style>
+.nv{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.nv-c{background:var(--quote);border-radius:10px;padding:10px 12px}
+.nv-c>b{font-size:14px;display:block;margin-bottom:6px}
+.nv-r{display:grid;grid-template-columns:90px 1fr 46px;gap:8px;align-items:center;font-size:12.5px;margin:5px 0;transition:opacity .3s}
+.nv-r span{color:var(--faint)}
+.nv-t{height:14px;background:var(--surface);border-radius:7px;overflow:hidden}
+.nv-t i{display:block;height:100%;width:0;border-radius:7px;transition:width .6s ease}
+.nv-r em{font-style:normal;text-align:right;font-variant-numeric:tabular-nums}
+.nv-r.tot{border-top:1px dashed var(--line);padding-top:6px;font-weight:700}
+.nv.ro .nv-r.x{opacity:.15}
+.nv-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.nv{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const P=[['Product A',9,[1.5,2.5],3],['Product B',7,[.4,.2],.5]];
+  const box=document.getElementById('nv');
+  box.innerHTML=P.map(([n,r,[f,t],k],i)=>{const net=r-f-t-k;const row=(l,v,c,x)=>`<div class="nv-r ${x}"><span>${l}</span><div class="nv-t"><i data-w="${Math.abs(v)/10*100}" style="background:${c}"></i></div><em>${v>0&&x!=='tot'?'':''}${v.toFixed(1)}</em></div>`;
+    return `<div class="nv-c"><b>${n}</b>${row('Return',r,'var(--accent)','')}${row('− Fees, trading',f,'var(--gold)','x')}${row('− User\'s time',t,'var(--gold)','x')}${row('− Risk borne',k,'var(--warm)','x')}${row('= Net value',net,'var(--ink)','x tot')}</div>`;}).join('');
+  const is=[...box.querySelectorAll('.nv-t i')];
+  function set(k){document.querySelectorAll('[data-nv]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.nv===k)));box.classList.toggle('ro',k==='r');
+    is.forEach(e=>{e.style.width='0';setTimeout(()=>e.style.width=e.dataset.w+'%',40);});
+    document.getElementById('nv-msg').textContent=k==='r'?'On returns alone, A earns 2 percentage points a year more than B.':'Once fees, the user\'s time and the risk borne are counted, A\'s net value is only 2.0 against B\'s 5.9: the product advertising higher returns actually gives the user less.';}
+  document.querySelectorAll('[data-nv]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.nv)));
+  box.addEventListener('anim-in',()=>{set('r');setTimeout(()=>set('n'),2400);});
+  set('r');
+})();
+</script>

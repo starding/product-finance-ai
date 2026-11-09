@@ -1,0 +1,41 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">信任太少与信任错位，都有代价</p>
+    <p class="figsub">拖动信任程度。信任太少时，用户只把小部分钱投入市场；信任超出受托人的实际可信程度时，用户不再比较费用，愿意支付更高的管理费。看 30 年后 100 万元的结果。</p>
+    <div class="ct" id="ct" data-anim>
+      <svg viewBox="0 0 640 220" role="img" aria-label="信任程度与 30 年结果"><g id="ct-ax"></g><path id="ct-p" class="ct-l"/><circle id="ct-d" r="6" fill="var(--ink)"/></svg>
+      <div class="sl"><label for="ct-s">信任程度 <b id="ct-sv"></b></label><input id="ct-s" type="range" min="0" max="100" step="5" value="15"></div>
+      <div class="ct-out"><div><span>投入市场的比例</span><b id="ct-p1"></b></div><div><span>每年支付的费用</span><b id="ct-p2"></b></div><div><span>30 年后（万元）</span><b id="ct-p3"></b></div></div>
+      <p class="ct-msg" id="ct-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意计算：未投入的部分按每年 1% 增长，投入的部分扣费前每年 6%；信任程度为 50 时恰与受托人的可信程度相符。信任与参与见 Guiso、Sapienza 与 Zingales（2008）；信任与费用见 Gennaioli、Shleifer 与 Vishny（2015）。</figcaption>
+</figure>
+<style>
+.ct svg{width:100%;height:auto;display:block}
+.ct-l{fill:none;stroke:var(--accent);stroke-width:2.5}
+.ct-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.ct-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.ct-out span{display:block;font-size:12px;color:var(--faint)} .ct-out b{font-size:19px;font-variant-numeric:tabular-nums}
+.ct-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.ct-out{grid-template-columns:1fr}.ct svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const p=t=>Math.min(1,.1+.9*t/50),f=t=>.4+Math.max(0,t-50)/50*1.8,W=t=>100*((1-p(t))*Math.pow(1.01,30)+p(t)*Math.pow(1+.06-f(t)/100,30));
+  const vals=[];for(let t=0;t<=100;t++)vals.push(W(t));const mx=Math.max(...vals),mn=Math.min(...vals);
+  const X0=60,X1=620,YT=20,YB=180,x=t=>X0+t/100*(X1-X0),y=v=>YT+(mx-v)/(mx-mn)*(YB-YT);
+  const $=id=>document.getElementById(id);
+  $('ct-ax').innerHTML=`<rect x="${x(0)}" y="${YT-8}" width="${x(40)-x(0)}" height="${YB-YT+8}" fill="var(--warm-soft)" opacity=".5"/><rect x="${x(60)}" y="${YT-8}" width="${x(100)-x(60)}" height="${YB-YT+8}" fill="var(--warm-soft)" opacity=".5"/>`+
+    `<text x="${x(20)}" y="${YB+18}" text-anchor="middle" font-size="11" class="t-warm">信任太少</text><text x="${x(50)}" y="${YB+18}" text-anchor="middle" font-size="11" class="t-accent">相称</text><text x="${x(80)}" y="${YB+18}" text-anchor="middle" font-size="11" class="t-warm">信任错位</text>`+
+    `<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`+[mn,mx].map(v=>`<text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v.toFixed(0)}</text>`).join('');
+  let d='';vals.forEach((v,t)=>d+=(t?'L':'M')+x(t).toFixed(1)+','+y(v).toFixed(1));$('ct-p').setAttribute('d',d);
+  const sl=$('ct-s');
+  function r(){const t=+sl.value;$('ct-sv').textContent=t;$('ct-d').setAttribute('cx',x(t));$('ct-d').setAttribute('cy',y(W(t)));
+    $('ct-p1').textContent=(p(t)*100).toFixed(0)+'%';$('ct-p2').textContent=f(t).toFixed(1)+'%';$('ct-p3').textContent=W(t).toFixed(0);
+    $('ct-msg').textContent=t<40?'信任太少：大部分钱留在低收益的存款里，放弃了长期的风险补偿。':t>60?'信任错位：用户不再比较费用，每年多付的管理费在 30 年里吞掉了相当一部分回报。':'信任与受托人的可信程度大致相称：既参与了市场，也没有为信任多付钱。';}
+  sl.addEventListener('input',r);
+  $('ct').addEventListener('anim-in',()=>{let t=0;sl.value=0;r();const id=setInterval(()=>{t+=5;sl.value=t;r();if(t>=100){clearInterval(id);setTimeout(()=>{sl.value=50;r();},600);}},150);});
+  r();
+})();
+</script>

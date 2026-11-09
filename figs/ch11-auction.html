@@ -1,0 +1,59 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">集合竞价：让成交量最大的那个价格</p><p class="figsub">绿色为各价位上愿意买入的累计数量，橙色为愿意卖出的累计数量。两条线交叉处，成交量最大。</p></div><button class="replay" type="button" data-replay="au">重播</button></div>
+    <div class="au" id="au" data-anim>
+      <svg viewBox="0 0 640 250" role="img" aria-label="集合竞价的买卖累计曲线与成交量">
+        <g id="au-axis"></g>
+        <path id="au-d" class="au-l d"/><path id="au-s" class="au-l s"/>
+        <g id="au-vol"></g>
+        <line id="au-px" class="au-px" y1="14" y2="230"/>
+      </svg>
+      <div class="au-ctrl"><button type="button" class="replay" id="au-add">加入一笔 1,500 股的市价买单</button><button type="button" class="replay" id="au-reset">还原</button></div>
+      <div class="au-out"><div><span>成交价</span><b id="au-p"></b></div><div><span>成交量</span><b id="au-v"></b></div></div>
+    </div>
+  </div>
+  <figcaption>示例订单。每个价位的成交量等于该价位上买量与卖量中较小的一个；成交价取成交量最大的价位（实际规则还会在成交量相同时比较未成交量与参考价）。</figcaption>
+</figure>
+<style>
+.au svg{width:100%;height:auto;display:block}
+.au-l{fill:none;stroke-width:2.5}
+.au-l.d{stroke:var(--accent)} .au-l.s{stroke:var(--warm)}
+#au-vol rect{fill:var(--gray-mark);opacity:.35}
+#au-vol rect.max{fill:var(--ink);opacity:.8}
+.au-px{stroke:var(--ink);stroke-dasharray:3 3}
+.au-ctrl{display:flex;gap:8px;margin:6px 0}
+.au-out{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.au-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.au-out span{display:block;font-size:12px;color:var(--faint)}
+.au-out b{font-size:20px;font-variant-numeric:tabular-nums}
+</style>
+<script>
+(function(){
+  const PR=[];for(let p=9.80;p<=10.2001;p+=0.04)PR.push(+p.toFixed(2));
+  const BUY0=[[10.20,300],[10.12,500],[10.08,800],[10.04,600],[10.00,900],[9.96,700],[9.92,800],[9.84,600]];
+  const SELL=[[9.80,400],[9.88,600],[9.92,700],[9.96,800],[10.00,700],[10.04,900],[10.12,800],[10.20,600]];
+  let BUY=BUY0.slice();
+  const X0=60,X1=620,YB=200,YT=14,x=p=>X0+(p-9.78)/(10.22-9.78)*(X1-X0), MAXQ=7000, y=q=>YB-q/MAXQ*(YB-YT);
+  let a=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`;
+  PR.forEach((p,i)=>{if(i%2===0)a+=`<text x="${x(p)}" y="${YB+16}" text-anchor="middle" font-size="10.5" class="t-faint">${p.toFixed(2)}</text>`;});
+  [2000,4000,6000].forEach(q=>a+=`<line x1="${X0}" y1="${y(q)}" x2="${X1}" y2="${y(q)}" class="s-line"/><text x="${X0-6}" y="${y(q)+4}" text-anchor="end" font-size="10.5" class="t-faint">${q}</text>`);
+  a+=`<text x="${X1}" y="${YB+32}" text-anchor="end" font-size="11" class="t-faint">价格</text>`;
+  document.getElementById('au-axis').innerHTML=a;
+  function calc(anim){
+    const D=PR.map(p=>BUY.filter(([l])=>l>=p).reduce((s,o)=>s+o[1],0)), S=PR.map(p=>SELL.filter(([l])=>l<=p).reduce((s,o)=>s+o[1],0));
+    const V=PR.map((p,i)=>Math.min(D[i],S[i])); let k=0;V.forEach((v,i)=>{if(v>V[k])k=i;});
+    const step=arr=>'M'+arr.map((q,i)=>`${x(PR[i]-0.02).toFixed(1)},${y(q).toFixed(1)}L${x(PR[i]+0.02).toFixed(1)},${y(q).toFixed(1)}`).join('L');
+    document.getElementById('au-d').setAttribute('d',step(D)); document.getElementById('au-s').setAttribute('d',step(S));
+    const w=(x(10.0)-x(9.96))*0.6;
+    document.getElementById('au-vol').innerHTML=V.map((v,i)=>`<rect class="${i===k?'max':''}" x="${x(PR[i])-w/2}" y="${y(v)}" width="${w}" height="${YB-y(v)}"/>`).join('');
+    const px=document.getElementById('au-px');px.setAttribute('x1',x(PR[k]));px.setAttribute('x2',x(PR[k]));
+    document.getElementById('au-p').textContent=PR[k].toFixed(2);
+    document.getElementById('au-v').textContent=V[k].toLocaleString()+' 股';
+    if(anim)['au-d','au-s'].forEach(id=>{const el=document.getElementById(id),L=el.getTotalLength();el.style.transition='none';el.style.strokeDasharray=L;el.style.strokeDashoffset=L;el.getBoundingClientRect();el.style.transition='stroke-dashoffset 1.4s ease';el.style.strokeDashoffset=0;});
+  }
+  document.getElementById('au-add').addEventListener('click',()=>{BUY=BUY0.concat([[99,1500]]);calc(false);});
+  document.getElementById('au-reset').addEventListener('click',()=>{BUY=BUY0.slice();calc(false);});
+  document.getElementById('au').addEventListener('anim-in',()=>calc(true));
+  calc(false);
+})();
+</script>

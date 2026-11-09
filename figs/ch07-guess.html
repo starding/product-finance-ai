@@ -1,0 +1,46 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">哪一张是真实的股价</p>
+    <p class="figsub">下面四张走势图中，选出看起来来自真实股票的一张。</p>
+    <div class="gu" id="gu"></div>
+    <p class="gu-msg" id="gu-msg" aria-live="polite"></p>
+    <button type="button" class="replay" id="gu-new">换一组</button>
+  </div>
+  <figcaption>仿照 Roberts（1959）的做法（原文按周模拟，本图改为按日）：每张图从 100 起步，每天的涨跌幅独立地随机抽取，标准差约 1.2%，共 250 个交易日。</figcaption>
+</figure>
+<style>
+.gu{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.gu button{font:inherit;text-align:left;background:var(--surface);border:1.5px solid var(--line);border-radius:10px;padding:10px;cursor:pointer;color:var(--ink)}
+.gu button:hover{border-color:var(--accent)}
+.gu button svg{width:100%;height:auto;display:block}
+.gu button span{font-size:12px;color:var(--faint)}
+.gu polyline{fill:none;stroke:var(--ink);stroke-width:1.4;stroke-linejoin:round}
+.gu.done button{cursor:default}
+.gu.done polyline{stroke:var(--warm)}
+.gu.done button.pick{border-color:var(--warm);box-shadow:0 0 0 3px var(--warm-soft)}
+.gu-tag{display:none;font-size:12px;color:var(--warm);font-weight:700}
+.gu.done .gu-tag{display:inline}
+.gu-msg{font-size:14px;margin:12px 0 8px;min-height:1.7em}
+</style>
+<script>
+(function(){
+  const box=document.getElementById('gu'), msg=document.getElementById('gu-msg');
+  const gauss=()=>{let u=0,v=0;while(!u)u=Math.random();v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);};
+  function make(){
+    box.classList.remove('done'); msg.textContent='';
+    box.innerHTML=['甲','乙','丙','丁'].map(n=>{
+      let p=100,pts=[p];for(let i=0;i<250;i++){p*=Math.exp(0.0002+0.012*gauss());pts.push(p);}
+      const mn=Math.min(...pts),mx=Math.max(...pts);
+      const d=pts.map((v,i)=>`${(i/250*300).toFixed(1)},${(8+(1-(v-mn)/(mx-mn))*104).toFixed(1)}`).join(' ');
+      return `<button type="button"><svg viewBox="0 0 300 120" aria-hidden="true"><polyline points="${d}"/></svg><span>走势${n}</span> <span class="gu-tag">随机生成</span></button>`;
+    }).join('');
+    box.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
+      if(box.classList.contains('done'))return;
+      b.classList.add('pick'); box.classList.add('done');
+      msg.textContent='四张图全部由随机数生成，没有一张来自真实股票。随机序列同样会出现趋势、反转与“形态”。';
+    }));
+  }
+  document.getElementById('gu-new').addEventListener('click',make);
+  make();
+})();
+</script>

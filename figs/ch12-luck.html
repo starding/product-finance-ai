@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">1,000 位毫无技能的经理</p><p class="figsub">每人每年跑赢市场的概率都是一半，全凭运气。逐年看，还有多少人保持“连续跑赢”的记录。</p></div><button class="replay" type="button" id="lk-run">重新模拟</button></div>
+    <div class="lk" id="lk" data-anim>
+      <div class="lk-grid" id="lk-g"></div>
+      <div class="lk-out">
+        <div><span>已过去的年数</span><b id="lk-y">0</b></div>
+        <div><span>连续跑赢的经理</span><b id="lk-n">1,000</b></div>
+        <div><span>按概率预计</span><b id="lk-e">1,000</b></div>
+      </div>
+      <p class="lk-msg" id="lk-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意模拟。业绩能否延续的实证见 Carhart（1997）：过去的好业绩几乎不能预测未来的好业绩。</figcaption>
+</figure>
+<style>
+.lk-grid{display:grid;grid-template-columns:repeat(50,1fr);gap:2px}
+.lk-grid i{aspect-ratio:1;border-radius:1px;background:var(--accent);transition:background .3s,opacity .3s}
+.lk-grid i.out{background:var(--line);opacity:.6}
+.lk-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.lk-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.lk-out span{display:block;font-size:12px;color:var(--faint)}
+.lk-out b{font-size:20px;font-variant-numeric:tabular-nums}
+.lk-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.lk-grid{grid-template-columns:repeat(25,1fr)}.lk-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const N=1000,g=document.getElementById('lk-g');g.innerHTML='<i></i>'.repeat(N);const cs=[...g.children];
+  let timer;
+  function run(){clearInterval(timer);let alive=cs.map(()=>true),y=0;cs.forEach(c=>c.classList.remove('out'));
+    const upd=()=>{const n=alive.filter(Boolean).length;document.getElementById('lk-y').textContent=y;document.getElementById('lk-n').textContent=n.toLocaleString();document.getElementById('lk-e').textContent=Math.round(N/Math.pow(2,y)).toLocaleString();
+      document.getElementById('lk-msg').textContent=y===0?'':y<5?`第 ${y} 年过后，仍有 ${n} 人保持连续跑赢。`:`五年后仍有 ${n} 人连续五年跑赢市场。事后看，他们的记录无可挑剔；但第六年，他们跑赢的概率仍然只有一半。`;};
+    upd();
+    timer=setInterval(()=>{y++;alive=alive.map((a,i)=>{if(!a)return false;const w=Math.random()<0.5;if(!w)cs[i].classList.add('out');return w;});upd();if(y>=5)clearInterval(timer);},900);}
+  document.getElementById('lk-run').addEventListener('click',run);
+  document.getElementById('lk').addEventListener('anim-in',run);
+})();
+</script>

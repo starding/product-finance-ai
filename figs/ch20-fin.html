@@ -1,0 +1,42 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">个人投资者的常见事务，过了哪几道关</p><p class="figsub">每一行是一类事务，三列是三道关。条形是代理大致能承担的比例。点按一行查看说明。</p></div><button class="replay" type="button" data-replay="fn">重播</button></div>
+    <div class="fn" id="fn" data-anim>
+      <div class="fn-h"><span>事务</span><span>能触及</span><span>允许代办</span><span>值得交出</span><span>代理能承担的比例</span></div>
+      <div id="fn-rows"></div>
+    </div>
+    <p class="fn-msg" id="fn-msg" aria-live="polite">点按一行。</p>
+  </div>
+  <figcaption>示意判断。“部分”表示代理可以准备与执行，但关键环节需要本人授权、确认或形成结论。</figcaption>
+</figure>
+<style>
+.fn-h,.fn-r{display:grid;grid-template-columns:minmax(0,1.4fr) 60px 60px 60px minmax(0,1.3fr);gap:8px;align-items:center}
+.fn-h{font-size:11.5px;color:var(--faint);padding:0 8px 4px}
+.fn-r{font:inherit;width:100%;text-align:left;background:var(--quote);border:1.5px solid transparent;border-radius:8px;padding:6px 8px;margin-bottom:4px;color:var(--ink);cursor:pointer;font-size:13px}
+.fn-r.sel{border-color:var(--ink)}
+.fn-r i{font-style:normal;font-size:11.5px;border-radius:5px;padding:2px 0;text-align:center}
+.fn-r i.y{background:var(--accent-soft);color:var(--accent)} .fn-r i.p{background:rgba(160,120,24,.15);color:var(--gold)} .fn-r i.n{background:var(--surface);color:var(--faint)}
+.fn-t{height:12px;background:var(--surface);border-radius:6px;overflow:hidden}
+.fn-t b{display:block;height:100%;width:0;background:var(--accent);border-radius:6px;transition:width .6s ease;transition-delay:calc(var(--i)*.1s)}
+.fn-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.fn-h,.fn-r{grid-template-columns:minmax(0,1fr) 40px 40px 40px}.fn-h span:last-child,.fn-t{display:none}}
+</style>
+<script>
+(function(){
+  const Y='y',P='p',N='n',L={y:'能',p:'部分',n:'一般'};
+  const R=[['查一个数据',Y,Y,P,95,'结果是信息，可以完全交出；但单次节省很少，频繁发生才显出价值。'],
+    ['解释一件事',Y,Y,P,90,'代理可以给出有依据的解释；理解本身仍发生在本人身上。'],
+    ['研究公司或观点',Y,Y,Y,75,'收集材料、整理数据与起草分析都可以交出；判断与结论需要本人认可。'],
+    ['筛选与比较',Y,Y,Y,85,'条件清楚时几乎可以完全交出。'],
+    ['持续跟踪',Y,Y,Y,90,'反复发生，一次说清可以长期使用，是最值得交出的事务。'],
+    ['制定计划并下单',Y,P,Y,55,'代理可以拟定计划、计算与提交，但下单前需要本人确认，投入多少由本人决定。'],
+    ['按目标管理组合',Y,P,Y,60,'调整可以由代理执行，目标、约束与授权范围由本人设定，越出范围要请示。'],
+    ['复盘',Y,P,P,50,'代理可以整理事实、拆解原因；从中得出的教训要由本人形成。']];
+  document.getElementById('fn-rows').innerHTML=R.map(([n,a,b,c,s],i)=>`<button type="button" class="fn-r" data-i="${i}"><span>${n}</span><i class="${a}">${L[a]}</i><i class="${b}">${L[b]}</i><i class="${c}">${c==='y'?'值得':'看频率'}</i><div class="fn-t"><b style="--i:${i}" data-w="${s}"></b></div></button>`).join('');
+  const rs=[...document.querySelectorAll('.fn-r')],bs=[...document.querySelectorAll('.fn-t b')];
+  rs.forEach((r,i)=>r.addEventListener('click',()=>{rs.forEach(x=>x.classList.toggle('sel',x===r));document.getElementById('fn-msg').textContent=R[i][0]+'：'+R[i][5];}));
+  const fill=()=>bs.forEach(b=>b.style.width=b.dataset.w+'%');
+  document.getElementById('fn').addEventListener('anim-in',()=>{bs.forEach(b=>b.style.width='0');setTimeout(fill,60);});
+  fill();
+})();
+</script>

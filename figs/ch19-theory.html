@@ -1,0 +1,52 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">理论区间是怎么算出来的</p><p class="figsub">以一张中等规模的开发工单为例，假设代理从不出错，委托人只需说明与核对。</p></div><button class="replay" type="button" data-replay="th">重播</button></div>
+    <div class="th" id="th" data-anim>
+      <svg viewBox="0 0 640 210" role="img" aria-label="自己完成与交给代理两种投入的区间，以及两端配对得到的倍数">
+        <g id="th-axis"></g>
+        <text x="16" y="62" font-size="13" font-weight="700" class="t-ink">自己完成</text>
+        <text x="16" y="78" font-size="11" class="t-faint">半天到三天</text>
+        <rect id="th-self" y="56" height="18" rx="9" class="th-self"/>
+        <text x="16" y="152" font-size="13" font-weight="700" class="t-ink">交给代理后</text>
+        <text x="16" y="168" font-size="11" class="t-faint">说明＋审阅＋确认</text>
+        <rect id="th-del" y="146" height="18" rx="9" class="th-del"/>
+        <line id="th-lo" class="th-pair lo"/>
+        <line id="th-hi" class="th-pair hi"/>
+        <g class="th-lab lo"><rect id="th-lob" width="132" height="24" rx="12"/><text id="th-lot" font-size="12" text-anchor="middle">下限 240 ÷ 120 ＝ 2 倍</text></g>
+        <g class="th-lab hi"><rect id="th-hib" width="140" height="24" rx="12"/><text id="th-hit" font-size="12" text-anchor="middle">上限 1440 ÷ 40 ＝ 36 倍</text></g>
+      </svg>
+    </div>
+  </div>
+  <figcaption>横轴为委托人投入的分钟数，对数刻度。下限由自己完成的最少投入配对交给代理后的最多投入，上限反之。其他委托类型的理论区间按同样方法估算。</figcaption>
+</figure>
+<style>
+.th svg{width:100%;height:auto;display:block}
+.th-self{fill:var(--gray-mark);opacity:.55}
+.th-del{fill:var(--accent);opacity:.45}
+.th-pair{stroke-width:1.6;stroke-dasharray:700;stroke-dashoffset:700;transition:stroke-dashoffset .9s ease}
+.th-pair.lo{stroke:var(--warm);transition-delay:.4s}
+.th-pair.hi{stroke:var(--accent);transition-delay:1.6s}
+.th.in .th-pair{stroke-dashoffset:0}
+.th-lab{opacity:0;transition:opacity .4s}
+.th-lab.lo{transition-delay:1.2s} .th-lab.hi{transition-delay:2.4s}
+.th.in .th-lab{opacity:1}
+.th-lab rect{fill:var(--surface);stroke-width:1.2}
+.th-lab.lo rect{stroke:var(--warm)} .th-lab.hi rect{stroke:var(--accent)}
+.th-lab text{fill:var(--ink)}
+</style>
+<script>
+(function(){
+  const X0=130,X1=620,lo=10,hi=3000,x=v=>X0+Math.log10(v/lo)/Math.log10(hi/lo)*(X1-X0);
+  let a=`<line x1="${X0}" y1="110" x2="${X1}" y2="110" class="s-line"/>`;
+  [[10,'10 分钟'],[30,'30 分钟'],[60,'1 小时'],[240,'4 小时'],[480,'8 小时'],[1440,'24 小时']].forEach(([v,l])=>a+=`<line x1="${x(v)}" y1="20" x2="${x(v)}" y2="190" class="s-line"/><text x="${x(v)}" y="204" text-anchor="middle" font-size="10.5" class="t-faint">${l}</text>`);
+  document.getElementById('th-axis').innerHTML=a;
+  const set=(id,attrs)=>{const e=document.getElementById(id);for(const k in attrs)e.setAttribute(k,attrs[k]);};
+  set('th-self',{x:x(240),width:x(1440)-x(240)});
+  set('th-del',{x:x(40),width:x(120)-x(40)});
+  set('th-lo',{x1:x(240),y1:74,x2:x(120),y2:146});
+  set('th-hi',{x1:x(1440),y1:74,x2:x(40),y2:146});
+  const lx=(x(240)+x(120))/2, hx=(x(1440)+x(40))/2;
+  set('th-lob',{x:lx-150,y:98}); set('th-lot',{x:lx-84,y:114});
+  set('th-hib',{x:hx+30,y:98}); set('th-hit',{x:hx+100,y:114});
+})();
+</script>

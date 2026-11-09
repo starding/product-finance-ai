@@ -1,0 +1,43 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">Scoring rules decide whether an agent guesses</p>
+    <p class="figsub">The agent has some confidence about a question. Choose a scoring rule, drag the level of confidence, and compare the expected score of answering with that of saying "I don't know".</p>
+    <div class="gs2" id="gs2" data-anim>
+      <div class="seg-btns" role="group" aria-label="Scoring rule">
+        <button type="button" data-gs="0" aria-pressed="true">Count correct only</button>
+        <button type="button" data-gs="1" aria-pressed="false">Wrong: −1 point</button>
+        <button type="button" data-gs="3" aria-pressed="false">Wrong: −3 points</button>
+      </div>
+      <svg viewBox="0 0 640 210" role="img" aria-label="Confidence and expected score"><g id="gs-ax"></g><path id="gs-a" class="gs-l"/><line id="gs-z" class="gs-z"/><line id="gs-t" class="gs-t"/><text id="gs-tt" font-size="11" class="t-warm" text-anchor="middle"></text><circle id="gs-d" r="6" fill="var(--ink)"/></svg>
+      <div class="sl"><label for="gs-p">Agent's confidence <b id="gs-pv"></b></label><input id="gs-p" type="range" min="0" max="100" step="1" value="30"></div>
+      <p class="gs-msg" id="gs-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>A correct answer scores 1 point and "I don't know" scores 0. When a wrong answer costs c points, answering is worthwhile only if confidence exceeds c ÷ (1 + c). The approach follows Kalai et al. (2025).</figcaption>
+</figure>
+<style>
+.gs2 svg{width:100%;height:auto;display:block}
+.gs-l{fill:none;stroke:var(--accent);stroke-width:2.5}
+.gs-z{stroke:var(--faint);stroke-width:2}
+.gs-t{stroke:var(--warm);stroke-dasharray:3 3}
+.gs-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.gs2 svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const X0=56,X1=620,YT=14,YB=180,vmin=-3,vmax=1,x=p=>X0+p*(X1-X0),y=v=>YT+(vmax-v)/(vmax-vmin)*(YB-YT);
+  const $=id=>document.getElementById(id),sl=$('gs-p');let c=0;
+  $('gs-ax').innerHTML=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`+[1,0,-1,-2,-3].map(v=>`<text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+[0,.25,.5,.75,1].map(p=>`<text x="${x(p)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${p*100}%</text>`).join('')+`<text x="${X1}" y="${y(0)-6}" text-anchor="end" font-size="11" class="t-faint">Saying "I don't know": 0 points</text><text x="${X0+6}" y="${YT+8}" font-size="11" class="t-accent">Expected score of answering</text>`;
+  $('gs-z').setAttribute('x1',X0);$('gs-z').setAttribute('x2',X1);$('gs-z').setAttribute('y1',y(0));$('gs-z').setAttribute('y2',y(0));
+  function r(){const p=+sl.value/100,E=q=>q-(1-q)*c;$('gs-a').setAttribute('d',`M${x(0)},${y(E(0))}L${x(1)},${y(E(1))}`);
+    const th=c/(1+c);$('gs-t').setAttribute('x1',x(th));$('gs-t').setAttribute('x2',x(th));$('gs-t').setAttribute('y1',YT);$('gs-t').setAttribute('y2',YB);$('gs-t').style.opacity=c?1:0;
+    $('gs-tt').setAttribute('x',x(th));$('gs-tt').setAttribute('y',YB-6);$('gs-tt').textContent=c?'Threshold for answering '+Math.round(th*100)+'%':'';
+    $('gs-d').setAttribute('cx',x(p));$('gs-d').setAttribute('cy',y(E(p)));$('gs-pv').textContent=sl.value+'%';
+    const ans=E(p)>0||(c===0&&p>0);
+    $('gs-msg').textContent=c===0?`When only correct answers count, the expected score of answering is ${E(p).toFixed(2)}, never below the 0 points for "I don't know": however low the confidence, guessing is the best choice. Trained and evaluated under such a rule, an agent learns to guess.`:`When a wrong answer costs ${c} point${c===1?'':'s'}, answering with ${sl.value}% confidence has an expected score of ${E(p).toFixed(2)}: ${ans?'above 0, so it should answer.':'below 0, so "I don\'t know" is better.'}`;}
+  document.querySelectorAll('[data-gs]').forEach(b=>b.addEventListener('click',()=>{c=+b.dataset.gs;document.querySelectorAll('[data-gs]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));r();}));
+  sl.addEventListener('input',r);
+  $('gs2').addEventListener('anim-in',()=>{[0,1,3].forEach((v,i)=>setTimeout(()=>document.querySelector(`[data-gs="${v}"]`).click(),i*2000));});
+  r();
+})();
+</script>

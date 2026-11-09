@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">Reversibility and loss caps set the ceiling on authority</p>
+    <p class="figsub">Across: whether an error can be undone. Down: whether the loss is capped. Each cell shows the highest level of authority that can be granted. Tap an operation for an explanation.</p>
+    <div class="rv2" id="rv2" data-anim>
+      <div class="rv2-h"><span></span><span>Can be undone</span><span>Can be remedied</span><span>Cannot be undone</span></div>
+      <div class="rv2-row"><span class="rv2-y">Small, capped loss</span><div class="rv2-c" data-lv="6"></div><div class="rv2-c" data-lv="5"></div><div class="rv2-c" data-lv="4"></div></div>
+      <div class="rv2-row"><span class="rv2-y">Loss may be large</span><div class="rv2-c" data-lv="4"></div><div class="rv2-c" data-lv="3"></div><div class="rv2-c" data-lv="3"></div></div>
+    </div>
+    <p class="rv2-msg" id="rv2-msg" aria-live="polite">Tap an operation.</p>
+  </div>
+  <figcaption>Illustrative judgments. The levels follow the six-level ladder of authority: 3 is confirm each trade, 4 is approve a plan, 5 is time-limited veto, 6 is autonomous within scope. Where a particular operation belongs also depends on the amount and the state of the account.</figcaption>
+</figure>
+<style>
+.rv2-h,.rv2-row{display:grid;grid-template-columns:90px repeat(3,minmax(0,1fr));gap:6px}
+.rv2-h span{font-size:11.5px;color:var(--faint);text-align:center}
+.rv2-row{margin-top:6px}
+.rv2-y{font-size:12px;color:var(--faint);align-self:center}
+.rv2-c{background:var(--quote);border-radius:10px;padding:8px;min-height:110px;display:flex;flex-direction:column;gap:5px;position:relative}
+.rv2-c::before{content:"Up to level " attr(data-lv);font-size:11px;color:var(--faint)}
+.rv2-c[data-lv="6"],.rv2-c[data-lv="5"]{background:var(--accent-soft)}
+.rv2-c[data-lv="3"]{background:var(--warm-soft)}
+.rv2-i{font:inherit;text-align:left;font-size:12.5px;border:1px solid var(--line);border-radius:7px;padding:4px 8px;background:var(--surface);color:var(--ink);cursor:pointer;opacity:0;transform:translateY(5px);transition:opacity .3s,transform .3s;transition-delay:calc(var(--i)*.1s)}
+.rv2.in .rv2-i{opacity:1;transform:none}
+.rv2-i.sel{border-color:var(--ink)}
+.rv2-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.rv2-h,.rv2-row{grid-template-columns:56px repeat(3,minmax(0,1fr))}.rv2-i{font-size:11.5px}}
+.rv2-row>*{min-width:0;overflow-wrap:anywhere}
+</style>
+<script>
+(function(){
+  const A=[[0,0,'Produce a summary','If wrong, it can be rewritten; there are no financial consequences, so it can be done autonomously.'],[0,0,'Set a price alert','Can be changed back at any time; autonomy is fine.'],[0,1,'Small scheduled investment','Each instalment is limited and can be corrected next period; suits a time-limited veto.'],[0,2,'Cancel an unfilled order','The cancellation cannot be undone, but the loss is limited; it can be executed within a plan.'],
+    [1,0,'Change the account\'s alert and notification rules','A wrong change can be reverted, but it may make the user miss important events; plan approval is advisable.'],[1,1,'Rebalance to the agreed weights','Can be adjusted back next time, but a single amount may be large; per-trade confirmation or plan approval is advisable.'],[1,2,'Sell a holding','Cannot be undone once filled, and the loss may be large; each trade must be confirmed.'],[1,2,'Transfer funds out','Cannot be undone; must be confirmed by the person.'],[1,2,'Accept a takeover offer or exercise an option','Irrevocable once submitted; must be confirmed by the person.']];
+  const cells=[...document.querySelectorAll('.rv2-c')];let n=0;
+  A.forEach(([r,c,t,d])=>{const b=document.createElement('button');b.type='button';b.className='rv2-i';b.style.setProperty('--i',n++);b.textContent=t;b.dataset.d=d;cells[r*3+c].appendChild(b);});
+  const bs=[...document.querySelectorAll('.rv2-i')];
+  bs.forEach(b=>b.addEventListener('click',()=>{bs.forEach(x=>x.classList.toggle('sel',x===b));document.getElementById('rv2-msg').textContent=b.textContent+': '+b.dataset.d;}));
+})();
+</script>

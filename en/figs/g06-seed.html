@@ -1,0 +1,41 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Lending lets seed flow to land where it yields more</p><p class="figsub">I have 9 portions of seed; he has none. Drag the amount of seed lent to him and watch the extra harvest from the last portion on each plot, and the island’s total harvest.</p></div><button class="replay" type="button" data-replay="sd6">Replay</button></div>
+    <div class="sd6" id="sd6" data-anim>
+      <div class="sd6-plots">
+        <div class="sd6-p"><b>My land</b><div class="sd6-seeds" id="sd6-a"></div><span id="sd6-am"></span></div>
+        <div class="sd6-p"><b>His land</b><div class="sd6-seeds" id="sd6-b"></div><span id="sd6-bm"></span></div>
+      </div>
+      <div class="sl"><label for="sd6-l">Seed lent to him <b id="sd6-lv"></b></label><input id="sd6-l" type="range" min="0" max="9" step="0.5" value="0"></div>
+      <div class="sd6-out"><div><span>Combined extra harvest</span><b id="sd6-t"></b></div><div><span>Gain over not lending</span><b id="sd6-g"></b></div></div>
+      <p class="sd6-msg" id="sd6-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative: extra harvest on each plot = 4 × √(portions of seed); both plots are equally fertile. The total harvest is greatest when the last portion of seed adds the same on both plots.</figcaption>
+</figure>
+<style>
+.sd6-plots{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sd6-p{background:var(--quote);border-radius:10px;padding:10px 12px}
+.sd6-p b{font-size:14px} .sd6-p span{display:block;font-size:12.5px;color:var(--muted);margin-top:6px;min-height:2.6em}
+.sd6-seeds{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;min-height:44px}
+.sd6-seeds i{width:16px;height:16px;border-radius:50%;background:var(--gold);display:block}
+.sd6-seeds i.h{clip-path:inset(0 50% 0 0)}
+.sd6-out{display:flex;gap:24px;flex-wrap:wrap;margin-top:8px}
+.sd6-out div{display:flex;flex-direction:column} .sd6-out span{font-size:12px;color:var(--faint)} .sd6-out b{font-size:20px;font-variant-numeric:tabular-nums}
+.sd6-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById(id),G=s=>4*Math.sqrt(s),M=s=>s>0?2/Math.sqrt(s):Infinity,base=G(9);
+  const dots=n=>Array.from({length:Math.ceil(n)},(_,i)=>`<i class="${i+1>n?'h':''}"></i>`).join('');
+  function draw(){const L=+$('sd6-l').value,a=9-L,b=L,tot=G(a)+G(b);
+    $('sd6-a').innerHTML=dots(a);$('sd6-b').innerHTML=dots(b);$('sd6-lv').textContent=L+' portions';
+    $('sd6-am').textContent=`${a} sown, adding ${G(a).toFixed(1)}; the last portion adds ${a?M(a).toFixed(2):'—'}`;
+    $('sd6-bm').textContent=b?`${b} sown, adding ${G(b).toFixed(1)}; the last portion adds ${M(b).toFixed(2)}`:'No seed; the land lies idle';
+    $('sd6-t').textContent=tot.toFixed(1)+' portions';$('sd6-g').textContent='+'+(tot-base).toFixed(1)+' portions';
+    $('sd6-msg').textContent=L===0?'All the seed is on my land, where the last few portions add almost nothing, while his land lies idle.':L===4.5?'Half on each: the last portion adds the same on both plots, and the total harvest is greatest. He pays me part of his extra harvest as interest, and both of us are better off.':L<4.5?'A portion of seed still adds more on his land than on mine; lend him more and the total harvest keeps rising.':'Too much has been lent: the last portion now adds less on his land than on mine, and the total harvest starts to fall.';}
+  $('sd6-l').addEventListener('input',draw);
+  $('sd6').addEventListener('anim-in',()=>{let v=0;$('sd6-l').value=0;draw();const id=setInterval(()=>{v+=.5;$('sd6-l').value=v;draw();if(v>=4.5)clearInterval(id);},280);});
+  draw();
+})();
+</script>

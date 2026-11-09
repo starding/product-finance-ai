@@ -1,0 +1,41 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">Too little trust and misplaced trust both have a cost</p>
+    <p class="figsub">Drag the level of trust. With too little trust, the user puts only a small share of the money into the market; with trust beyond the trustee's actual trustworthiness, the user stops comparing fees and is willing to pay a higher management fee. See what 1 million yuan becomes after 30 years.</p>
+    <div class="ct" id="ct" data-anim>
+      <svg viewBox="0 0 640 220" role="img" aria-label="Level of trust and the result after 30 years"><g id="ct-ax"></g><path id="ct-p" class="ct-l"/><circle id="ct-d" r="6" fill="var(--ink)"/></svg>
+      <div class="sl"><label for="ct-s">Level of trust <b id="ct-sv"></b></label><input id="ct-s" type="range" min="0" max="100" step="5" value="15"></div>
+      <div class="ct-out"><div><span>Share put into the market</span><b id="ct-p1"></b></div><div><span>Fees paid each year</span><b id="ct-p2"></b></div><div><span>After 30 years (million yuan)</span><b id="ct-p3"></b></div></div>
+      <p class="ct-msg" id="ct-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative calculation: the part not invested grows at 1% a year, the invested part at 6% a year before fees; a trust level of 50 exactly matches the trustee's trustworthiness. On trust and participation, see Guiso, Sapienza and Zingales (2008); on trust and fees, Gennaioli, Shleifer and Vishny (2015).</figcaption>
+</figure>
+<style>
+.ct svg{width:100%;height:auto;display:block}
+.ct-l{fill:none;stroke:var(--accent);stroke-width:2.5}
+.ct-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.ct-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.ct-out span{display:block;font-size:12px;color:var(--faint)} .ct-out b{font-size:19px;font-variant-numeric:tabular-nums}
+.ct-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.ct-out{grid-template-columns:1fr}.ct svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const p=t=>Math.min(1,.1+.9*t/50),f=t=>.4+Math.max(0,t-50)/50*1.8,W=t=>100*((1-p(t))*Math.pow(1.01,30)+p(t)*Math.pow(1+.06-f(t)/100,30));
+  const vals=[];for(let t=0;t<=100;t++)vals.push(W(t));const mx=Math.max(...vals),mn=Math.min(...vals);
+  const X0=60,X1=620,YT=20,YB=180,x=t=>X0+t/100*(X1-X0),y=v=>YT+(mx-v)/(mx-mn)*(YB-YT);
+  const $=id=>document.getElementById(id);
+  $('ct-ax').innerHTML=`<rect x="${x(0)}" y="${YT-8}" width="${x(40)-x(0)}" height="${YB-YT+8}" fill="var(--warm-soft)" opacity=".5"/><rect x="${x(60)}" y="${YT-8}" width="${x(100)-x(60)}" height="${YB-YT+8}" fill="var(--warm-soft)" opacity=".5"/>`+
+    `<text x="${x(20)}" y="${YB+18}" text-anchor="middle" font-size="11" class="t-warm">Too little trust</text><text x="${x(50)}" y="${YB+18}" text-anchor="middle" font-size="11" class="t-accent">In proportion</text><text x="${x(80)}" y="${YB+18}" text-anchor="middle" font-size="11" class="t-warm">Misplaced trust</text>`+
+    `<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`+[mn,mx].map(v=>`<text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${(v/100).toFixed(2)}m</text>`).join('');
+  let d='';vals.forEach((v,t)=>d+=(t?'L':'M')+x(t).toFixed(1)+','+y(v).toFixed(1));$('ct-p').setAttribute('d',d);
+  const sl=$('ct-s');
+  function r(){const t=+sl.value;$('ct-sv').textContent=t;$('ct-d').setAttribute('cx',x(t));$('ct-d').setAttribute('cy',y(W(t)));
+    $('ct-p1').textContent=(p(t)*100).toFixed(0)+'%';$('ct-p2').textContent=f(t).toFixed(1)+'%';$('ct-p3').textContent=(W(t)/100).toFixed(2);
+    $('ct-msg').textContent=t<40?'Too little trust: most of the money stays in low-yield deposits, giving up the long-run risk compensation.':t>60?'Misplaced trust: the user no longer compares fees, and the extra management fee paid each year eats a sizeable part of the return over 30 years.':'Trust roughly in proportion to the trustee\'s trustworthiness: the user takes part in the market without paying extra for trust.';}
+  sl.addEventListener('input',r);
+  $('ct').addEventListener('anim-in',()=>{let t=0;sl.value=0;r();const id=setInterval(()=>{t+=5;sl.value=t;r();if(t>=100){clearInterval(id);setTimeout(()=>{sl.value=50;r();},600);}},150);});
+  r();
+})();
+</script>

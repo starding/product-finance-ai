@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：把复合收益讲清楚</p><p class="figsub">四条设计要求，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="ch05summary">重播</button></div>
+    <div class="ch05summary" id="ch05summary" data-anim><div class="ch05summary-c" style="--i:0"><em>投资者拿到的是复合收益</em><b>展示复合收益，而不只是平均收益</b><p>历史业绩用年化复合收益表示；平均收益与复合收益差距较大时，说明原因。</p></div><div class="ch05summary-c warn" style="--i:1"><em>回撤与恢复不对称</em><b>同时展示最大回撤与恢复所需涨幅</b><p>让用户在买入前就知道，一次 50% 的回撤需要翻倍才能回本。</p></div><div class="ch05summary-c" style="--i:2"><em>多数人的结果低于平均数</em><b>长期产品用中位数与区间说明预期</b><p>不要只用平均情形介绍长期结果，应展示典型结果与较差情形。</p></div><div class="ch05summary-c warn" style="--i:3"><em>固定杠杆在震荡中产生不利偏差</em><b>杠杆产品讲清每日再平衡的机制</b><p>说明持有超过一天时结果会偏离“倍数”，偏差方向取决于走势形态，而不是简单的“损耗”。</p></div></div>
+  </div>
+</figure>
+<style>
+.ch05summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch05summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch05summary-c.warn{border-left-color:var(--warm)}
+.ch05summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch05summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch05summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch05summary.in .ch05summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch05summary{grid-template-columns:1fr}}
+</style>

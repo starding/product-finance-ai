@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: shares</p><p class="figsub">Four conclusions, each tied to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="g07summary">Replay</button></div>
+    <div class="g07summary" id="g07summary" data-anim><div class="g07summary-c" style="--i:0"><em>Shares</em><b>Success and failure shared by holding</b><p>Ventures whose outcomes lie far apart do not suit lending; they suit many people investing together and sharing the losses.</p></div><div class="g07summary-c" style="--i:1"><em>Diversification</em><b>Spread the money across many ships</b><p>The average gain is unchanged and volatility falls sharply; staking everything on one ship means bearing avoidable risk.</p></div><div class="g07summary-c warn" style="--i:2"><em>Limited liability</em><b>Lose at most what you put in</b><p>Investors need not care about others’ wealth, and shares can be transferred; part of the risk is shifted to creditors.</p></div><div class="g07summary-c warn" style="--i:3"><em>Debt and equity</em><b>Two ways of dividing the same proceeds</b><p>Debts are paid first and the rest goes to shareholders; the split does not change what the ship itself is worth.</p></div></div>
+  </div>
+</figure>
+<style>
+.g07summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g07summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g07summary-c.warn{border-left-color:var(--warm)}
+.g07summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g07summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g07summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g07summary.in .g07summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g07summary{grid-template-columns:1fr}}
+</style>

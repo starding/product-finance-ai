@@ -1,0 +1,50 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">三种强度的有效市场</p>
+    <p class="figsub">内圈的信息包含于外圈。点按任一层，查看它如何检验、结论如何。</p>
+    <div class="fm" id="fm" data-anim>
+      <svg viewBox="0 0 320 300" role="img" aria-label="弱式、半强式、强式有效的包含关系">
+        <g class="fm-r" data-f="strong" style="--i:2"><circle cx="160" cy="150" r="140"/><text x="160" y="34" text-anchor="middle" font-size="13" font-weight="700">强式：全部信息</text><text x="160" y="52" text-anchor="middle" font-size="11">含未公开的内部信息</text></g>
+        <g class="fm-r" data-f="semi" style="--i:1"><circle cx="160" cy="168" r="100"/><text x="160" y="96" text-anchor="middle" font-size="13" font-weight="700">半强式：公开信息</text><text x="160" y="114" text-anchor="middle" font-size="11">财报、公告、新闻</text></g>
+        <g class="fm-r" data-f="weak" style="--i:0"><circle cx="160" cy="194" r="58"/><text x="160" y="190" text-anchor="middle" font-size="13" font-weight="700">弱式</text><text x="160" y="208" text-anchor="middle" font-size="11">历史价格与成交量</text></g>
+      </svg>
+      <div class="fm-panel" id="fm-panel" aria-live="polite"></div>
+    </div>
+  </div>
+  <figcaption>分类见 Fama（1970）。检验结论为文献的主流看法。</figcaption>
+</figure>
+<style>
+.fm{display:grid;grid-template-columns:minmax(0,1fr) 1.1fr;gap:18px;align-items:center}
+.fm svg{width:100%;max-width:340px;height:auto;display:block;margin:0 auto}
+.fm-r{cursor:pointer;opacity:0;transform-box:fill-box;transform-origin:center;transform:scale(.85);transition:opacity .5s,transform .5s;transition-delay:calc(var(--i)*.35s)}
+.fm.in .fm-r{opacity:1;transform:none}
+.fm-r circle{fill:var(--surface);stroke:var(--line);stroke-width:1.5;transition:fill .3s,stroke .3s}
+.fm-r[data-f="weak"] circle,.fm-r[data-f="semi"] circle{fill:var(--accent-soft)}
+.fm-r[data-f="strong"] circle{fill:var(--warm-soft)}
+.fm-r.sel circle{stroke:var(--ink);stroke-width:2.5}
+.fm-r text{fill:var(--ink);pointer-events:none}
+.fm-panel{font-size:14px;line-height:1.7}
+.fm-panel h4{margin:0 0 6px;font-size:16px}
+.fm-panel dl{display:grid;grid-template-columns:72px 1fr;gap:4px 10px;margin:0}
+.fm-panel dt{color:var(--faint);font-size:12px;padding-top:3px}
+.fm-panel dd{margin:0}
+.fm-badge{display:inline-block;font-size:12px;padding:1px 10px;border-radius:999px;margin-left:8px;vertical-align:2px}
+.fm-badge.ok{background:var(--accent-soft);color:var(--accent)}
+.fm-badge.no{background:var(--warm-soft);color:var(--warm)}
+@media (max-width:640px){.fm{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const D={
+    weak:{t:'弱式有效',b:['大体成立','ok'],test:'凭历史价格能否预测未来收益：相邻收益的相关性、技术分析规则的收益。',ev:'相关性接近零；过滤规则扣除成本后不优于买入并持有（Fama 1965；Fama 与 Blume 1966）。动量等少数规律存在，但幅度小且在发表后减弱。'},
+    semi:{t:'半强式有效',b:['大体成立','ok'],test:'事件研究：公告前后的超额收益是否在公告后继续出现可获利的规律。',ev:'拆股与盈利信息大多在公告前后迅速反映（Fama 等 1969；Ball 与 Brown 1968）；盈余公告后漂移是重要例外（Bernard 与 Thomas 1989）。'},
+    strong:{t:'强式有效',b:['不成立','no'],test:'掌握未公开信息的人能否获得超额收益。',ev:'公司内部人士交易自家股票获得超额收益（Jaffe 1974）；并购目标在公告前已明显上涨（Keown 与 Pinkerton 1981）。这正是禁止内幕交易的依据。'}
+  };
+  const panel=document.getElementById('fm-panel'), rs=[...document.querySelectorAll('.fm-r')];
+  function show(f){rs.forEach(r=>r.classList.toggle('sel',r.dataset.f===f));const d=D[f];
+    panel.innerHTML=`<h4>${d.t}<span class="fm-badge ${d.b[1]}">${d.b[0]}</span></h4><dl><dt>怎么检验</dt><dd>${d.test}</dd><dt>证据</dt><dd>${d.ev}</dd></dl>`;}
+  rs.forEach(r=>r.addEventListener('click',()=>show(r.dataset.f)));
+  document.getElementById('fm').addEventListener('anim-in',()=>{let k=0;const seq=['weak','semi','strong'];const t=setInterval(()=>{show(seq[k]);if(++k>=3)clearInterval(t);},1500);});
+  show('weak');
+})();
+</script>

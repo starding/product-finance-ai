@@ -1,0 +1,31 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">The reachable range widens with tools</p><p class="figsub">Each square is 1% of all US work tasks. Switch between a large language model alone and the model plus software and tools built on it, to see how many tasks could be sped up substantially at the same quality.</p></div><button class="replay" type="button" data-replay="rc">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Condition">
+      <button type="button" data-rc="m" aria-pressed="true">Model only</button>
+      <button type="button" data-rc="t" aria-pressed="false">Model plus tools</button>
+    </div>
+    <div class="rc" id="rc" data-anim>
+      <div class="rc-g" id="rc-g"></div>
+      <p class="rc-msg" id="rc-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Figures are estimates from the preprint by Eloundou, Manning, Mishkin and Rock (2023), based on the US occupational task database: about 15% with the model alone and 47% to 56% with tools added; light squares show the range. The estimate is of what "could be sped up substantially", not of what has been adopted. The version published in <i>Science</i> in 2024 counts by job instead and uses a different basis.</figcaption>
+</figure>
+<style>
+.rc-g{display:grid;grid-template-columns:repeat(20,1fr);gap:3px}
+.rc-g i{aspect-ratio:1;border-radius:3px;background:var(--quote);transition:background .25s;transition-delay:calc(var(--i)*5ms)}
+.rc-g i.on{background:var(--accent)} .rc-g i.rg{background:var(--accent-soft)}
+.rc-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const g=document.getElementById('rc-g');g.innerHTML=Array.from({length:100},(_,i)=>`<i style="--i:${i}"></i>`).join('');const cs=[...g.children];
+  function set(k){document.querySelectorAll('[data-rc]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.rc===k)));
+    const a=k==='m'?15:47,b=k==='m'?15:56;cs.forEach((c,i)=>c.className=i<a?'on':i<b?'rg':'');
+    document.getElementById('rc-msg').textContent=k==='m'?'With the model alone, about 15% of tasks could be sped up substantially, mainly writing, organizing and finding information: tasks whose result is itself information.':'With search, code execution and business software added, the share rises to about half: tools extend the agent\'s reach from producing information to operating systems, submitting forms and executing transactions.';}
+  document.querySelectorAll('[data-rc]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.rc)));
+  document.getElementById('rc').addEventListener('anim-in',()=>{cs.forEach(c=>c.className='');setTimeout(()=>set('m'),100);setTimeout(()=>set('t'),2600);});
+  set('m');
+})();
+</script>

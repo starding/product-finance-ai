@@ -1,0 +1,40 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Summary of Part Four: what each of the four layers answers</p><p class="figsub">Switch views: each layer's conclusion, its design requirements, and how to test whether they are met.</p></div><button class="replay" type="button" data-replay="rc4">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="View">
+      <button type="button" data-rv4="c" aria-pressed="true">Conclusions</button>
+      <button type="button" data-rv4="p" aria-pressed="false">Design requirements</button>
+      <button type="button" data-rv4="a" aria-pressed="false">How to test</button>
+    </div>
+    <div class="rc4" id="rc4" data-anim></div>
+  </div>
+  <figcaption>Each row corresponds to one term of the decomposition.</figcaption>
+</figure>
+<style>
+.rc4{display:grid;gap:6px}
+.rc4-r{display:grid;grid-template-columns:150px 1fr;gap:12px;align-items:center;padding:10px 12px;border-radius:10px;background:var(--quote);opacity:0;transform:translateY(6px);transition:opacity .4s,transform .4s;transition-delay:calc(var(--i)*.15s)}
+.rc4.in .rc4-r{opacity:1;transform:none}
+.rc4-r b{font-size:14px;display:block}
+.rc4-r em{font-style:normal;font-size:11px;color:var(--faint)}
+.rc4-r p{margin:0;font-size:13.5px;line-height:1.6}
+.rc4-r.keep{background:rgba(160,120,24,.1)}
+.rc4-r .sign{display:inline-block;min-width:18px;margin-right:4px;font-size:11px;color:var(--faint);font-weight:700}
+@media (max-width:640px){.rc4-r{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const R=[
+    ['','Value layer','24',{c:'Promise only value the market can provide, the product can deliver and the user can verify; measure it by net value.',p:'Promise a process, not short-term returns; write out by task what is and is not promised; when showing a backtest, state how many attempts were made.',a:'Every promise has an indicator that can be looked up and a way of checking it.'}],
+    ['','Contract layer','25–27',{c:'Instructions must be written as a mandate; authority is allocated by reversibility; the agent\'s income and goals must be aligned with the user\'s.',p:'Pair goals with risk constraints and default rules; irreversible steps are confirmed by the user, with the boundary enforced at the execution layer; handle conflicts structurally, and let liability follow control.',a:'The share of out-of-bounds instructions that are blocked; independent audits of bias in recommendations; every error traceable to a responsible party.'}],
+    ['','Implementation layer','28–29',{c:'General capability determines whether the job gets done, finance-specific capability whether it is done right; the process must be visible and replayable; assurance must be proportionate to risk.',p:'Choose on-the-spot assembly or a fixed workflow by task; long-lived objects and point-in-time records; layered evaluation, monitoring and staged release.',a:'Key scenarios pass on their own; automatic alerts when indicators cross thresholds; any single decision can be replayed.'}],
+    ['Premise','Trust','30',{c:'Trust must be designed into every term of belief updating: the prior, the visibility of evidence, diagnostic power, the weight of failures, and the threshold.',p:'Start small; make process evidence visible; third-party verification; disclose failures before anyone else does; make exit easy.',a:'Whether the user\'s trust matches how trustworthy the product actually is, with neither misuse nor disuse.'}],
+    ['Summary','Design principles','31',{c:'Twelve principles, each traced back to a constraint from the market, the user or AI.',p:'Base trade-offs on consequences and verifiability: the heavier the consequences, the more weight on confirmation, alerts, transparency and assurance.',a:'Review every design with twelve questions.'}]
+  ];
+  const box=document.getElementById('rc4');
+  function set(v){document.querySelectorAll('[data-rv4]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.rv4===v)));
+    box.innerHTML=R.map(([s,n,ch,t],i)=>`<div class="rc4-r${n==='Trust'||n==='Design principles'?' keep':''}" style="--i:${i}"><div><b><span class="sign">${s}</span>${n}</b><em>Ch. ${ch}</em></div><p>${t[v]}</p></div>`).join('');
+    box.classList.remove('in');void box.offsetWidth;box.classList.add('in');}
+  document.querySelectorAll('[data-rv4]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.rv4)));
+  set('c'); box.classList.remove('in');
+})();
+</script>

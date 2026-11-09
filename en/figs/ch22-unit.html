@@ -1,0 +1,42 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">What is shown decides how long checking takes</p><p class="figsub">The agent has completed "compare the fees and drawdowns of two funds over the last three years". Switch the form of display to compare the time needed to read it and the number of items that can be verified on their own.</p></div><button class="replay" type="button" data-replay="un">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Form of display">
+      <button type="button" data-un="cot" aria-pressed="true">Show reasoning</button>
+      <button type="button" data-un="act" aria-pressed="false">Show key actions and evidence</button>
+    </div>
+    <div class="un" id="un" data-anim>
+      <div class="un-box" id="un-box"></div>
+      <div class="un-out"><div><span>Time to read</span><b id="un-t"></b></div><div><span>Items verifiable on their own</span><b id="un-n"></b></div></div>
+      <p class="un-msg" id="un-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative. On reasoning text that may not reflect what a model actually relied on, see Turpin, Michael, Perez and Bowman (2023).</figcaption>
+</figure>
+<style>
+.un-box{background:var(--quote);border-radius:10px;padding:10px 12px;height:220px;overflow:hidden;position:relative}
+.un-box .ln{height:7px;border-radius:4px;background:var(--line);margin:6px 0}
+.un-box.cot::after{content:"";position:absolute;left:0;right:0;bottom:0;height:50px;background:linear-gradient(transparent,var(--quote))}
+.un-a{display:grid;grid-template-columns:64px 1fr auto;gap:8px;align-items:center;font-size:12.5px;padding:5px 0;border-bottom:1px dashed var(--line);opacity:0;transform:translateY(4px);transition:opacity .3s,transform .3s;transition-delay:calc(var(--i)*.15s)}
+.un-a.on{opacity:1;transform:none}
+.un-a em{font-style:normal;font-size:11px;color:var(--faint)}
+.un-a i{font-style:normal;font-size:11px;color:var(--accent);border:1px solid var(--accent);border-radius:10px;padding:1px 7px;white-space:nowrap}
+.un-out{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.un-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.un-out span{display:block;font-size:12px;color:var(--faint)} .un-out b{font-size:19px}
+.un-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const A=[['Query','Fund A management and custody fees, 2023–2025','Prospectus'],['Query','Fund B fees for the same period','Prospectus'],['Query','Daily NAV of both funds, to end of last month','NAV data'],['Compute','Fund A maximum drawdown −18.4% (illustrative)','Calculation'],['Compute','Fund B maximum drawdown −23.1% (illustrative)','Calculation'],['Conclusion','Fund A\'s annual fees are 0.6 percentage points lower, and its drawdown is smaller','Based on 1–5']];
+  const $=id=>document.getElementById(id),box=$('un-box');
+  function set(k){document.querySelectorAll('[data-un]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.un===k)));
+    if(k==='cot'){box.className='un-box cot';box.innerHTML=Array.from({length:22},(_,i)=>`<div class="ln" style="width:${60+((i*37)%40)}%"></div>`).join('');$('un-t').textContent='About 12 min';$('un-n').textContent='0 items';
+      $('un-msg').textContent='A reasoning trace several thousand words long: it takes over ten minutes to read, the figures it mentions are scattered throughout and cannot be opened and checked one by one, and the text may not be what the agent actually relied on.';}
+    else{box.className='un-box';box.innerHTML=A.map(([a,b,c],i)=>`<div class="un-a" style="--i:${i}"><em>${a}</em><span>${b}</span><i>${c}</i></div>`).join('');setTimeout(()=>box.querySelectorAll('.un-a').forEach(e=>e.classList.add('on')),40);
+      $('un-t').textContent='About 2 min';$('un-n').textContent='6 items';$('un-msg').textContent='Six key actions, each with its source: the checker can open just the few relevant to the conclusion and confirm within minutes whether it holds up.';}}
+  document.querySelectorAll('[data-un]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.un)));
+  $('un').addEventListener('anim-in',()=>{set('cot');setTimeout(()=>set('act'),2600);});
+  set('cot');
+})();
+</script>

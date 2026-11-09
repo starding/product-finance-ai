@@ -1,0 +1,32 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">下跌引发下跌</p><p class="figsub">一次 2% 的初始下跌之后，书记员的亏损、收紧的保证金与减仓规则会带来新的卖出。拖动借钱买入的程度，看每一轮新增的下跌，以及最终的跌幅。</p></div><button class="replay" type="button" data-replay="sr17">重播</button></div>
+    <div class="sr17" id="sr17" data-anim>
+      <div class="sr17-loop"><span>价格下跌</span><b>→</b><span>书记员亏损</span><b>→</b><span>保证金收紧、规则要求减仓</span><b>→</b><span>卖出</span><b>↺</b></div>
+      <svg viewBox="0 0 660 170" role="img" aria-label="每一轮的下跌"><g id="sr17-g"></g></svg>
+      <div class="sl"><label for="sr17-l">借钱买入的程度（杠杆） <b id="sr17-lv"></b></label><input id="sr17-l" type="range" min="1" max="6" step="0.5" value="2"></div>
+      <p class="sr17-msg" id="sr17-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意：每一轮的下跌引起的卖出，使下一轮再下跌这一轮的 k 倍，k ＝ 0.15 × 杠杆；k 小于 1 时总跌幅为 2% ÷（1 － k），k 不小于 1 时螺旋不会自行停止，图中只画前十轮（布伦纳迈尔与佩德森，2009 所说的流动性螺旋的简化）。</figcaption>
+</figure>
+<style>
+.sr17-loop{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12.5px;margin:4px 0 8px}
+.sr17-loop span{background:var(--quote);border-radius:999px;padding:3px 10px} .sr17-loop b{color:var(--warm)}
+.sr17 svg{width:100%;height:auto;display:block}
+.sr17-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.sr17 svg text{font-size:15px}}
+</style>
+<script>
+(function(){
+  const $=id=>document.getElementById('sr17'+id),X0=50,X1=628,YT=10,YB=140;
+  function draw(){const L=+$('-l').value,k=.15*L,R=[];let d=2;for(let i=0;i<10;i++){R.push(d);d*=k;}const tot=R.reduce((a,b)=>a+b,0),mx=Math.max(2,...R),bw=(X1-X0)/10;$('-lv').textContent=L.toFixed(1)+' 倍';
+    let h=`<line x1="${X0}" x2="${X1}" y1="${YB}" y2="${YB}" class="s-line"/>`;
+    R.forEach((v,i)=>{const hh=v/mx*(YB-YT);h+=`<rect x="${X0+i*bw+6}" y="${YB-hh}" width="${bw-12}" height="${hh}" fill="${i?'var(--warm)':'var(--faint)'}"/><text x="${X0+i*bw+bw/2}" y="${YB-hh-4}" text-anchor="middle" font-size="11">${v<10?v.toFixed(1):Math.round(v)}%</text><text x="${X0+i*bw+bw/2}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">第 ${i+1} 轮</text>`;});
+    $('-g').innerHTML=h;
+    $('-msg').textContent=k<1?`杠杆 ${L.toFixed(1)} 倍：每一轮的下跌引出下一轮 ${Math.round(k*100)}% 的下跌，最初的 2% 最终放大为约 ${(2/(1-k)).toFixed(1)}%。`:`杠杆 ${L.toFixed(1)} 倍：每一轮的下跌引出不小于它自己的下一轮，螺旋不会自行停止，前十轮已累计跌了 ${Math.min(100,tot).toFixed(0)}%。只有外力（暂停、有资金的买方）才能打断它。`;}
+  $('-l').addEventListener('input',draw);
+  $('').addEventListener('anim-in',()=>{let v=1;$('-l').value=1;draw();const id=setInterval(()=>{v+=.5;$('-l').value=v;draw();if(v>=6.5)clearInterval(id);},400);});
+  draw();
+})();
+</script>

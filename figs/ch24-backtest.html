@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">尝试得越多，最好的回测越好看</p><p class="figsub">每个策略都没有真正的优势。在同一段十年历史上尝试若干个策略，挑出回测最好的一个，再看它在之后五年的表现。拖动尝试的数量。</p></div><button class="replay" type="button" id="bt-re">重新抽样</button></div>
+    <div class="bt" id="bt" data-anim>
+      <svg viewBox="0 0 640 220" role="img" aria-label="回测与样本外夏普比率"><g id="bt-ax"></g><g id="bt-pts"></g></svg>
+      <div class="sl"><label for="bt-n">尝试的策略数 <b id="bt-nv"></b></label><input id="bt-n" type="range" min="0" max="6" step="1" value="3"></div>
+      <div class="bt-out"><div><span>最好的回测夏普比率</span><b id="bt-in"></b></div><div><span>它在之后五年的夏普比率</span><b id="bt-out"></b></div></div>
+      <p class="bt-msg" id="bt-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意模拟：每个策略的真实夏普比率为 0，十年回测的估计误差约为 0.32，之后五年约为 0.45。回测过度拟合见 Bailey、Borwein、López de Prado 与 Zhu（2014）；假设业绩展示的监管要求见美国证券交易委员会（2020）。</figcaption>
+</figure>
+<style>
+.bt svg{width:100%;height:auto;display:block}
+.bt-out{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.bt-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.bt-out span{display:block;font-size:12px;color:var(--faint)} .bt-out b{font-size:19px;font-variant-numeric:tabular-nums}
+.bt-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.bt svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const NS=[1,3,10,30,100,300,1000],X0=56,X1=620,YT=14,YB=180,y=v=>YB-(v+1.5)/3*(YB-YT);
+  const $=id=>document.getElementById(id),sl=$('bt-n');let seed=11;
+  const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;},rn=()=>{let u=rnd()||1e-9,v=rnd();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);};
+  let S=[],O=0;
+  function draw(){S=Array.from({length:1000},()=>.32*rn());O=.45*rn();}
+  $('bt-ax').innerHTML=`<line x1="${X0}" y1="${y(0)}" x2="${X1}" y2="${y(0)}" class="s-faint"/>`+[-1,0,1].map(v=>`<text x="${X0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}</text>`).join('')+`<text x="${X0+150}" y="${YB+18}" text-anchor="middle" font-size="11" class="t-faint">回测（十年）</text><text x="${X0+450}" y="${YB+18}" text-anchor="middle" font-size="11" class="t-faint">挑出的策略之后五年</text><line x1="${X0+330}" y1="${YT}" x2="${X0+330}" y2="${YB}" class="s-line"/><text x="${X0}" y="${YT-2}" font-size="11" class="t-faint">夏普比率</text>`;
+  function r(){const n=NS[+sl.value],sub=S.slice(0,n);let bi=0;sub.forEach((v,i)=>{if(v>sub[bi])bi=i;});const best=sub[bi];
+    const show=sub.slice(0,300);let g=show.map((v,i)=>`<circle cx="${X0+20+((i*53)%280)}" cy="${y(Math.max(-1.45,Math.min(1.45,v)))}" r="${i===bi?6:2.6}" fill="${i===bi?'var(--accent)':'var(--faint)'}" opacity="${i===bi?1:.55}"/>`).join('');
+    if(bi>=300)g+=`<circle cx="${X0+160}" cy="${y(Math.min(1.45,best))}" r="6" fill="var(--accent)"/>`;
+    const bx=bi<300?X0+20+((bi*53)%280):X0+160;g+=`<line x1="${bx}" y1="${y(Math.min(1.45,best))}" x2="${X0+450}" y2="${y(O)}" stroke="var(--accent)" stroke-dasharray="4 3"/><circle cx="${X0+450}" cy="${y(O)}" r="6" fill="var(--warm)"/>`;
+    $('bt-pts').innerHTML=g;$('bt-nv').textContent=n+' 个';$('bt-in').textContent=best.toFixed(2);$('bt-out').textContent=O.toFixed(2);
+    $('bt-msg').textContent=n===1?'只尝试一个策略时，回测结果大致反映了它没有优势这一事实。':`尝试 ${n} 个之后，最好的回测夏普比率达到 ${best.toFixed(2)}，看起来相当出色；但它之后五年的表现与任何一个随机策略没有区别。尝试的数量越多，最好的回测越具误导性。`;}
+  sl.addEventListener('input',r);$('bt-re').addEventListener('click',()=>{draw();r();});
+  $('bt').addEventListener('anim-in',()=>{let k=0;sl.value=0;r();const id=setInterval(()=>{k++;sl.value=k;r();if(k>=6)clearInterval(id);},600);});
+  draw();r();
+})();
+</script>

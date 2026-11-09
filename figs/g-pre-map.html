@@ -1,0 +1,35 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">改变一个参数：代理成本</p><p class="figsub">拖动滑块，把请人代为思考与操作的成本从高调到低，看第一部分的十二步中哪些会受到影响。</p></div><button class="replay" type="button" data-replay="gm">重播</button></div>
+    <div class="gm" id="gm" data-anim>
+      <div class="sl"><label for="gm-s">代理成本 <b id="gm-v"></b></label><input id="gm-s" type="range" min="0" max="100" value="100"></div>
+      <div class="gm-steps" id="gm-steps"></div>
+      <div class="legend"><span><i style="background:var(--warm)"></i>受影响，第二部分重跑</span><span><i style="background:var(--quote);border:1px solid var(--line)"></i>不因此改变</span></div>
+      <p class="gm-msg" id="gm-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>每一步受影响的程度为示意，具体推演见第二部分。</figcaption>
+</figure>
+<style>
+.gm-steps{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin:12px 0 4px}
+.gm-c{border-radius:8px;padding:8px;background:var(--quote);font-size:12.5px;line-height:1.45;transition:background .4s,color .4s;min-height:58px}
+.gm-c em{display:block;font-style:normal;font-size:10.5px;color:var(--faint)}
+.gm-c.hit{background:var(--warm-soft);color:var(--warm)}
+.gm-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.gm-steps{grid-template-columns:repeat(3,1fr)}}
+</style>
+<script>
+(function(){
+  // 每一步：名称、受代理成本影响的门槛（代理成本低于此值时受影响；0 表示不受影响）
+  const S=[['储蓄与留种',0],['借贷',0],['承诺',55],['货币',0],['保险',0],['银行',0],['股份',0],['市场',40],['价格中的信息',50],['委托',80],['监管与托管',60],['默认选项',70]];
+  const $=id=>document.getElementById(id),sl=$('gm-s');
+  $('gm-steps').innerHTML=S.map((s,i)=>`<div class="gm-c" data-i="${i}"><em>${i+1}</em>${s[0]}</div>`).join('');
+  const cs=[...document.querySelectorAll('.gm-c')];
+  function draw(){const v=+sl.value;$('gm-v').textContent=v>66?'高':v>33?'中':'低';let n=0;
+    cs.forEach((c,i)=>{const hit=S[i][1]>0&&v<S[i][1];c.classList.toggle('hit',hit);if(hit)n++;});
+    $('gm-msg').textContent=n?`代理成本降到这一水平，有 ${n} 步需要重新推演：最先受影响的是委托，其次是人的偏差、监管与承诺、价格中的信息与市场。时间、风险与储蓄的基本问题不受影响。`:'代理成本很高时，第一部分推演出的制度就是今天的样子：普通人把钱交给少数专业机构。';}
+  sl.addEventListener('input',draw);
+  $('gm').addEventListener('anim-in',()=>{let v=100;sl.value=v;draw();const id=setInterval(()=>{v-=4;sl.value=v;draw();if(v<=10)clearInterval(id);},90);});
+  draw();
+})();
+</script>

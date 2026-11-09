@@ -1,0 +1,50 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">Three strengths of market efficiency</p>
+    <p class="figsub">The information in each inner ring is contained in the outer one. Tap any ring to see how it is tested and what the tests found.</p>
+    <div class="fm" id="fm" data-anim>
+      <svg viewBox="0 0 320 300" role="img" aria-label="How weak, semi-strong and strong efficiency nest">
+        <g class="fm-r" data-f="strong" style="--i:2"><circle cx="160" cy="150" r="140"/><text x="160" y="34" text-anchor="middle" font-size="13" font-weight="700">Strong: all info</text><text x="160" y="52" text-anchor="middle" font-size="11">incl. non-public inside info</text></g>
+        <g class="fm-r" data-f="semi" style="--i:1"><circle cx="160" cy="168" r="100"/><text x="160" y="96" text-anchor="middle" font-size="13" font-weight="700">Semi-strong</text><text x="160" y="114" text-anchor="middle" font-size="11">public: reports, news</text></g>
+        <g class="fm-r" data-f="weak" style="--i:0"><circle cx="160" cy="194" r="58"/><text x="160" y="190" text-anchor="middle" font-size="13" font-weight="700">Weak</text><text x="160" y="208" text-anchor="middle" font-size="11">past prices, volume</text></g>
+      </svg>
+      <div class="fm-panel" id="fm-panel" aria-live="polite"></div>
+    </div>
+  </div>
+  <figcaption>Classification from Fama (1970). The test results reflect the prevailing view in the literature.</figcaption>
+</figure>
+<style>
+.fm{display:grid;grid-template-columns:minmax(0,1fr) 1.1fr;gap:18px;align-items:center}
+.fm svg{width:100%;max-width:340px;height:auto;display:block;margin:0 auto}
+.fm-r{cursor:pointer;opacity:0;transform-box:fill-box;transform-origin:center;transform:scale(.85);transition:opacity .5s,transform .5s;transition-delay:calc(var(--i)*.35s)}
+.fm.in .fm-r{opacity:1;transform:none}
+.fm-r circle{fill:var(--surface);stroke:var(--line);stroke-width:1.5;transition:fill .3s,stroke .3s}
+.fm-r[data-f="weak"] circle,.fm-r[data-f="semi"] circle{fill:var(--accent-soft)}
+.fm-r[data-f="strong"] circle{fill:var(--warm-soft)}
+.fm-r.sel circle{stroke:var(--ink);stroke-width:2.5}
+.fm-r text{fill:var(--ink);pointer-events:none}
+.fm-panel{font-size:14px;line-height:1.7}
+.fm-panel h4{margin:0 0 6px;font-size:16px}
+.fm-panel dl{display:grid;grid-template-columns:72px 1fr;gap:4px 10px;margin:0}
+.fm-panel dt{color:var(--faint);font-size:12px;padding-top:3px}
+.fm-panel dd{margin:0}
+.fm-badge{display:inline-block;font-size:12px;padding:1px 10px;border-radius:999px;margin-left:8px;vertical-align:2px}
+.fm-badge.ok{background:var(--accent-soft);color:var(--accent)}
+.fm-badge.no{background:var(--warm-soft);color:var(--warm)}
+@media (max-width:640px){.fm{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const D={
+    weak:{t:'Weak-form efficiency',b:['Broadly holds','ok'],test:'Whether past prices can predict future returns: correlations between successive returns, and the returns of technical trading rules.',ev:'Correlations are close to zero; filter rules do no better than buy-and-hold after costs (Fama 1965; Fama and Blume 1966). A few patterns such as momentum exist, but they are small and weaken after publication.'},
+    semi:{t:'Semi-strong-form efficiency',b:['Broadly holds','ok'],test:'Event studies: whether excess returns around announcements continue to show profitable patterns after the announcement.',ev:'Information from stock splits and earnings is mostly reflected quickly around the announcement (Fama et al. 1969; Ball and Brown 1968); post-earnings-announcement drift is an important exception (Bernard and Thomas 1989).'},
+    strong:{t:'Strong-form efficiency',b:['Does not hold','no'],test:'Whether people with non-public information can earn excess returns.',ev:'Company insiders earn excess returns trading their own company’s stock (Jaffe 1974); takeover targets rise markedly before the announcement (Keown and Pinkerton 1981). This is the basis for banning insider trading.'}
+  };
+  const panel=document.getElementById('fm-panel'), rs=[...document.querySelectorAll('.fm-r')];
+  function show(f){rs.forEach(r=>r.classList.toggle('sel',r.dataset.f===f));const d=D[f];
+    panel.innerHTML=`<h4>${d.t}<span class="fm-badge ${d.b[1]}">${d.b[0]}</span></h4><dl><dt>How tested</dt><dd>${d.test}</dd><dt>Evidence</dt><dd>${d.ev}</dd></dl>`;}
+  rs.forEach(r=>r.addEventListener('click',()=>show(r.dataset.f)));
+  document.getElementById('fm').addEventListener('anim-in',()=>{let k=0;const seq=['weak','semi','strong'];const t=setInterval(()=>{show(seq[k]);if(++k>=3)clearInterval(t);},1500);});
+  show('weak');
+})();
+</script>

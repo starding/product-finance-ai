@@ -1,0 +1,39 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">能做到，不等于可以代办</p><p class="figsub">十二件事按是否允许代办分组。打开“只看金融事务”，看在金融产品里哪些环节必须留给本人。</p></div><button class="replay" type="button" data-replay="al">重播</button></div>
+    <label class="al-chk"><input type="checkbox" id="al-x"> 只看金融事务</label>
+    <div class="al" id="al" data-anim></div>
+    <p class="al-msg" id="al-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>“亲历、亲定、亲在、法定本人”四类为本书的归纳。各地对本人签署、身份核验与适当性评估的具体要求不同，图中只示意原则。</figcaption>
+</figure>
+<style>
+.al-chk{display:flex;gap:6px;align-items:center;font-size:14px;margin-bottom:8px}
+.al-chk input{accent-color:var(--accent);width:16px;height:16px}
+.al{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.al-g{background:var(--quote);border-radius:10px;padding:8px;display:flex;flex-direction:column;gap:5px}
+.al-g>b{font-size:13px} .al-g>span{font-size:11px;color:var(--faint);margin-top:-3px;line-height:1.4}
+.al-g.ok{background:var(--accent-soft)}
+.al-i{font-size:12.5px;border-radius:7px;padding:5px 8px;background:var(--surface);border:1px solid var(--line);opacity:0;transform:translateY(6px);transition:opacity .35s,transform .35s;transition-delay:calc(var(--i)*.08s)}
+.al.in .al-i{opacity:1;transform:none}
+.al-i.f{border-color:var(--accent)}
+.al.fin .al-i:not(.f){opacity:.25}
+.al-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.al{grid-template-columns:1fr 1fr}}
+</style>
+<script>
+(function(){
+  const G=[['可以代办','代理可以准备与完成',1,[['写一份研究摘要',1],['比较几只基金的费用',1],['整理一年的交易记录',1]]],
+    ['亲历','价值在于本人经历',0,[['锻炼身体',0],['学习一门课程',0],['理解自己承担的风险',1]]],
+    ['亲定','必须由本人决定',0,[['结婚',0],['决定把多少钱投入股市',1]]],
+    ['亲在','要求本人在场',0,[['出庭作证',0],['部分开户的身份核验',1]]],
+    ['法定本人','法律要求本人作出',0,[['签署合同',0],['如实回答适当性问卷',1]]]];
+  let n=0;const box=document.getElementById('al');
+  box.innerHTML=G.map(([h,s,ok,items])=>`<div class="al-g${ok?' ok':''}"><b>${h}</b><span>${s}</span>${items.map(([t,f])=>`<div class="al-i${f?' f':''}" style="--i:${n++}">${t}</div>`).join('')}</div>`).join('');
+  const x=document.getElementById('al-x');
+  function r(){box.classList.toggle('fin',x.checked);document.getElementById('al-msg').textContent=x.checked?'在金融产品里，研究、比较与整理可以交给代理；对风险的理解、投入多少的决定、身份核验与适当性问卷，必须由本人完成。代理能够执行交易，但授权与确认留给本人。':'能否代办与代理的能力无关：这些事的价值、责任或法律效力，要求它们由本人完成。';}
+  x.addEventListener('change',r);
+  box.addEventListener('anim-in',()=>{x.checked=false;r();setTimeout(()=>{x.checked=true;r();},2600);});
+  r();
+})();
+</script>

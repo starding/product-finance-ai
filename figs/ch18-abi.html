@@ -1,0 +1,44 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">值得信任的三个因素</p><p class="figsub">选择一位受托人，或自己调节能力、善意与正直三个因素，看是否值得托付一笔养老金。</p></div><button class="replay" type="button" data-replay="ab">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="受托人">
+      <button type="button" data-ab="0" aria-pressed="true">能干的推销员</button>
+      <button type="button" data-ab="1" aria-pressed="false">热心的朋友</button>
+      <button type="button" data-ab="2" aria-pressed="false">尽责的顾问</button>
+    </div>
+    <div class="ab" id="ab" data-anim>
+      <div class="ab-s" id="ab-s"></div>
+      <div class="ab-out"><span>可以托付的程度</span><div class="ab-t"><i id="ab-bar"></i></div><b id="ab-v"></b></div>
+      <p class="ab-msg" id="ab-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>三因素依据 Mayer、Davis 与 Schoorman（1995）。“可以托付的程度”按三者相乘计算，为示意：任何一个因素很低，整体都很低。</figcaption>
+</figure>
+<style>
+.ab-s{display:grid;gap:4px}
+.ab-s .sl label span{font-size:12px;color:var(--faint);margin-left:6px}
+.ab-out{display:grid;grid-template-columns:auto 1fr 50px;gap:10px;align-items:center;margin-top:10px;font-size:13px}
+.ab-out>span{color:var(--faint);font-size:12px}
+.ab-t{height:16px;background:var(--quote);border-radius:8px;overflow:hidden}
+.ab-t i{display:block;height:100%;width:0;border-radius:8px;transition:width .5s,background .3s}
+.ab-out b{text-align:right;font-variant-numeric:tabular-nums}
+.ab-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const F=[['ab','能力','有没有完成这件事的本领'],['be','善意','是否在乎委托人的利益'],['in','正直','是否言行一致、遵守原则']];
+  const P=[[9,2,6,'专业能力很强，但收入来自销售：善意很低，推荐什么取决于卖什么赚得多。'],[2,9,9,'真心为委托人着想，也很可靠，但缺乏专业能力：好意无法转化为好的结果。'],[8,8,9,'三个因素都高：有本领、在乎委托人、言行一致。这样的受托人才值得托付。']];
+  const box=document.getElementById('ab-s');
+  box.innerHTML=F.map(([k,n,d])=>`<div class="sl"><label for="ab-${k}"><span style="color:var(--ink);font-size:inherit;margin:0">${n}：${d}</span><b id="ab-${k}v"></b></label><input id="ab-${k}" type="range" min="0" max="10" step="1" value="5"></div>`).join('');
+  let msg='';
+  function r(){const v=F.map(([k])=>+document.getElementById('ab-'+k).value);F.forEach(([k],i)=>document.getElementById('ab-'+k+'v').textContent=v[i]);
+    const t=v[0]*v[1]*v[2]/10,bar=document.getElementById('ab-bar');bar.style.width=t+'%';bar.style.background=t>=50?'var(--accent)':t>=20?'var(--gold)':'var(--warm)';
+    document.getElementById('ab-v').textContent=t.toFixed(0);const lo=F[v.indexOf(Math.min(...v))][1];
+    document.getElementById('ab-msg').textContent=msg||(t>=50?'三个因素都足够高，可以托付。':`${lo}是最弱的一环，拉低了整体：三个因素缺一不可。`);msg='';}
+  function set(i){document.querySelectorAll('[data-ab]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.ab===i)));F.forEach(([k],j)=>document.getElementById('ab-'+k).value=P[i][j]);msg=P[i][3];r();}
+  F.forEach(([k])=>document.getElementById('ab-'+k).addEventListener('input',()=>{document.querySelectorAll('[data-ab]').forEach(b=>b.setAttribute('aria-pressed','false'));r();}));
+  document.querySelectorAll('[data-ab]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.ab)));
+  document.getElementById('ab').addEventListener('anim-in',()=>{[0,1,2].forEach(i=>setTimeout(()=>set(i),i*2200));});
+  set(0);
+})();
+</script>

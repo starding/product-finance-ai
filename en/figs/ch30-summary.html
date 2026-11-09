@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: designing on every term of belief updating</p><p class="figsub">Four design requirements, each corresponding to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="ch30summary">Replay</button></div>
+    <div class="ch30summary" id="ch30summary" data-anim><div class="ch30summary-c" style="--i:0"><em>Prior and threshold</em><b>Borrow institutions and begin with low-stakes tasks</b><p>Explain custody, regulation and audit; offer low-threshold tasks such as looking up data and reminders first, so that evidence builds up through use.</p></div><div class="ch30summary-c" style="--i:1"><em>Evidence must be seen</em><b>A brief account each period, proactive display at key moments</b><p>Do not hide records in the back end, and do not drown the user in messages.</p></div><div class="ch30summary-c warn" style="--i:2"><em>Evidence must be hard to fake</em><b>Let users open the raw data and third-party records</b><p>Custodian statements, execution records and audit reports are far more diagnostic than the product's own word.</p></div><div class="ch30summary-c warn" style="--i:3"><em>Mistakes and exit</em><b>Disclose mistakes first; make leaving and withdrawing easy</b><p>Set up a procedure to detect, stop, notify, explain and remedy; allow authority to be withdrawn, records exported and assets moved at any time.</p></div></div>
+  </div>
+</figure>
+<style>
+.ch30summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch30summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch30summary-c.warn{border-left-color:var(--warm)}
+.ch30summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch30summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch30summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch30summary.in .ch30summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch30summary{grid-template-columns:1fr}}
+</style>

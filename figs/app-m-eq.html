@@ -1,0 +1,30 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">分解式的四个等式</p><p class="figsub">点选一个等式，看它如何满足选择等式的三条标准。</p></div></div>
+    <div class="me" id="me" data-anim></div>
+    <div class="me-crit" id="me-c"></div>
+  </div>
+</figure>
+<style>
+.me{display:grid;gap:6px}
+.me-r{font:inherit;text-align:left;cursor:pointer;background:var(--quote);border:1px solid transparent;border-radius:9px;padding:9px 12px;color:var(--ink);font-size:13.5px;line-height:1.55}
+.me-r em{font-style:normal;font-size:11.5px;color:var(--faint);margin-right:8px}
+.me-r.sel{border-color:var(--accent)}
+.me-crit{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.me-crit div{background:var(--accent-soft);border-radius:8px;padding:8px 10px;font-size:12.5px;line-height:1.55}
+.me-crit b{display:block;font-size:13px}
+@media (max-width:640px){.me-crit{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const E=[['第一部分','实际回报 ＝ 时间补偿 ＋ 风险补偿 ＋ 信息优势 － 交易成本 ＋ 运气','回报可以从账户中算出','五项分别来自等待、承担风险、知道得更多、交易的摩擦与偶然','每一项都有回报，也有对应的风险'],
+    ['第二部分','用户实际得到的结果 ＝ 任务要求的结果 － 决策偏差造成的损失','结果可以与当初的目标比较','要求与偏差是两件不同的事','任务给出收益，偏差带来损失'],
+    ['第三部分','放大倍数 ＝ 自己完成的投入 ÷（不适用的部分 ＋ 说明与核对 ＋ 出错后的返工）','投入可以按时间计量','分母三项分别取决于事务、可验证性与可靠性','省下的时间，与核对和返工的代价'],
+    ['第四部分','净价值 ＝ 结果 － 用户的投入 － 用户承担的风险','三项都可以逐一估计','结果、投入与风险互不重叠','结果是收益，投入与风险是代价']];
+  const box=document.getElementById('me'),c=document.getElementById('me-c');
+  box.innerHTML=E.map((e,i)=>`<button type="button" class="me-r" data-i="${i}"><em>${e[0]}</em>${e[1]}</button>`).join('');
+  const bs=[...box.children];
+  function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));c.innerHTML=[['可以观测',E[i][2]],['互斥而完整',E[i][3]],['两面都写',E[i][4]]].map(([a,b])=>`<div><b>${a}</b>${b}</div>`).join('');}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));set(0);
+})();
+</script>

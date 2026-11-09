@@ -1,0 +1,45 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">披露为什么会层层展开，又为什么会中断</p><p class="figsub">10 家卖方，产品质量从 1 到 10。买方对不披露的卖方，按“不披露者的平均质量”估价；质量高于这个估价的卖方就愿意披露。</p></div><button class="replay" type="button" id="ur-run">重新演示</button></div>
+    <div class="seg-btns" role="group" aria-label="披露能否核验">
+      <button type="button" data-ur="1" aria-pressed="true">披露的内容可以核验</button>
+      <button type="button" data-ur="0" aria-pressed="false">披露的内容无法核验</button>
+    </div>
+    <div class="ur" id="ur" data-anim>
+      <div class="ur-row" id="ur-row"></div>
+      <div class="ur-out"><div><span>轮次</span><b id="ur-r">0</b></div><div><span>买方对不披露者的估价</span><b id="ur-p"></b></div><div><span>已披露的卖方</span><b id="ur-n"></b></div></div>
+      <p class="ur-msg" id="ur-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>按 Grossman（1981）与 Milgrom（1981）的思路简化。无法核验时，人人都可以自称高质量，披露变成无从验证的说法，买方只能忽略它。</figcaption>
+</figure>
+<style>
+.ur-row{display:grid;grid-template-columns:repeat(10,1fr);gap:6px}
+.ur-row div{border:1.5px dashed var(--line);border-radius:8px;padding:8px 0;text-align:center;font-size:13px;font-variant-numeric:tabular-nums;color:var(--muted);transition:all .4s}
+.ur-row div b{display:block;font-size:16px;color:var(--ink)}
+.ur-row div.dis{border-style:solid;border-color:var(--accent);background:var(--accent-soft)}
+.ur-row div.claim{border-style:solid;border-color:var(--warm);background:var(--warm-soft)}
+.ur-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.ur-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.ur-out span{display:block;font-size:12px;color:var(--faint)}
+.ur-out b{font-size:19px;font-variant-numeric:tabular-nums}
+.ur-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.ur-row{grid-template-columns:repeat(5,1fr)}.ur-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const row=document.getElementById('ur-row');row.innerHTML=Array.from({length:10},(_,i)=>`<div><b>${i+1}</b>质量</div>`).join('');
+  const cs=[...row.children]; let ver=1, timer;
+  function run(){clearInterval(timer);cs.forEach(c=>c.className='');let dis=new Array(10).fill(false),r=0;
+    const upd=p=>{document.getElementById('ur-r').textContent=r;document.getElementById('ur-p').textContent=p.toFixed(1);document.getElementById('ur-n').textContent=dis.filter(Boolean).length+' 家';};
+    if(!ver){cs.forEach(c=>c.classList.add('claim'));r=1;upd(5.5);document.getElementById('ur-msg').textContent='每家卖方都声称自己质量很高，但买方无法核验，只能把所有人都按平均质量 5.5 估价。好产品无法与坏产品区分开，信息拆解没有发生。';return;}
+    upd(5.5);document.getElementById('ur-msg').textContent='开始时没有人披露，买方按平均质量 5.5 估价。';
+    timer=setInterval(()=>{const nd=[...Array(10).keys()].filter(i=>!dis[i]);const p=nd.reduce((s,i)=>s+i+1,0)/nd.length;let moved=false;nd.forEach(i=>{if(i+1>p){dis[i]=true;cs[i].classList.add('dis');moved=true;}});r++;
+      const nd2=[...Array(10).keys()].filter(i=>!dis[i]);const p2=nd2.reduce((s,i)=>s+i+1,0)/nd2.length;upd(p2);
+      document.getElementById('ur-msg').textContent=moved?`质量高于 ${p.toFixed(1)} 的卖方选择披露。剩下不披露的卖方平均质量降到 ${p2.toFixed(1)}，买方的估价随之下降，又有一批卖方值得披露。`:'';
+      if(!moved||nd2.length<=1){clearInterval(timer);document.getElementById('ur-msg').textContent='层层展开之后，除质量最低的一家外，所有卖方都披露了。只要披露可以核验，买方就能把好产品与坏产品区分开。';}},1300);}
+  document.querySelectorAll('[data-ur]').forEach(b=>b.addEventListener('click',()=>{ver=+b.dataset.ur;document.querySelectorAll('[data-ur]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));run();}));
+  document.getElementById('ur-run').addEventListener('click',run);
+  document.getElementById('ur').addEventListener('anim-in',run);
+})();
+</script>

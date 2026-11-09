@@ -1,0 +1,69 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">Direction does not cluster; volatility does</p>
+    <p class="figsub">Above: daily changes over 500 trading days. Below: the size of each daily change, ignoring direction. Switch to the comparison to see how a real market differs from one with constant volatility.</p>
+    <div class="seg-btns" role="group" aria-label="Scenario">
+      <button type="button" data-vc="g" aria-pressed="true">Volatility clusters (consistent with evidence)</button>
+      <button type="button" data-vc="i" aria-pressed="false">Comparison: constant volatility</button>
+    </div>
+    <div class="vc" id="vc" data-anim>
+      <svg viewBox="0 0 640 250" role="img" aria-label="Daily changes and their size">
+        <text x="6" y="16" font-size="11" class="t-faint">Daily change</text>
+        <line x1="40" y1="70" x2="636" y2="70" class="s-line"/>
+        <g id="vc-r"></g>
+        <text x="6" y="148" font-size="11" class="t-faint">Size of change</text>
+        <line x1="40" y1="240" x2="636" y2="240" class="s-line"/>
+        <g id="vc-a"></g>
+      </svg>
+      <div class="vc-out">
+        <div><span>Correlation of changes on consecutive days</span><b id="vc-c1"></b><em>Direction: almost unpredictable</em></div>
+        <div><span>Correlation of the size of changes on consecutive days</span><b id="vc-c2"></b><em id="vc-e2"></em></div>
+      </div>
+    </div>
+  </div>
+  <figcaption>Simulated data. The "volatility clusters" series is generated following Engle's (1982) autoregressive conditional heteroscedasticity approach and its common extension GARCH(1,1) (Bollerslev 1986): today's volatility depends on yesterday's volatility and the size of yesterday's change. Both series have the same average daily volatility of about 1.2%. Mandelbrot (1963) was the first to describe how "large changes tend to be followed by large changes".</figcaption>
+</figure>
+<style>
+.vc svg{width:100%;height:auto;display:block}
+.vc-r rect{fill:var(--accent)} .vc-r rect.n{fill:var(--warm)}
+#vc-r rect,#vc-a rect{transform-box:fill-box;transform-origin:bottom;transform:scaleY(0);transition:transform .25s}
+#vc-r rect.n{transform-origin:top}
+.vc.in #vc-r rect,.vc.in #vc-a rect{transform:none;transition-delay:calc(var(--k)*3ms)}
+#vc-r rect{fill:var(--accent)} #vc-r rect.n{fill:var(--warm)} #vc-a rect{fill:var(--ink);opacity:.65}
+.vc-out{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.vc-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.vc-out span{display:block;font-size:12px;color:var(--faint)}
+.vc-out b{font-size:22px;font-variant-numeric:tabular-nums;margin-right:8px}
+.vc-out em{font-style:normal;font-size:12px;color:var(--muted)}
+@media (max-width:640px){.vc-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const N=500, X0=40, X1=636, w=(X1-X0)/N;
+  let seed=29; const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
+  const g=()=>{let u=0,v=0;while(!u)u=rnd();v=rnd();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);};
+  const z=Array.from({length:N},g);
+  const LV=0.012**2, al=0.09, be=0.9, om=LV*(1-al-be);
+  const gar=[];let s2=LV, prev=0;for(let i=0;i<N;i++){s2=om+al*prev*prev+be*s2;const r=Math.sqrt(s2)*z[i];gar.push(r);prev=r;}
+  const iid=z.map(v=>v*0.012);
+  const corr=(a,b)=>{const n=a.length,ma=a.reduce((s,v)=>s+v,0)/n,mb=b.reduce((s,v)=>s+v,0)/n;let sab=0,saa=0,sbb=0;for(let i=0;i<n;i++){sab+=(a[i]-ma)*(b[i]-mb);saa+=(a[i]-ma)**2;sbb+=(b[i]-mb)**2;}return sab/Math.sqrt(saa*sbb);};
+  const btns=[...document.querySelectorAll('[data-vc]')], vc=document.getElementById('vc');
+  function draw(k){
+    const r=k==='g'?gar:iid, mx=0.05;
+    let R='',A='';
+    r.forEach((v,i)=>{const h=Math.min(1,Math.abs(v)/mx)*50, x=(X0+i*w).toFixed(1);
+      R+=v>=0?`<rect style="--k:${i}" x="${x}" y="${(70-h).toFixed(1)}" width="${(w*0.8).toFixed(2)}" height="${h.toFixed(1)}"/>`:`<rect class="n" style="--k:${i}" x="${x}" y="70" width="${(w*0.8).toFixed(2)}" height="${h.toFixed(1)}"/>`;
+      const ha=Math.min(1,Math.abs(v)/mx)*86;A+=`<rect style="--k:${i}" x="${x}" y="${(240-ha).toFixed(1)}" width="${(w*0.8).toFixed(2)}" height="${ha.toFixed(1)}"/>`;});
+    document.getElementById('vc-r').innerHTML=R; document.getElementById('vc-a').innerHTML=A;
+    const c1=corr(r.slice(0,-1),r.slice(1)), ab=r.map(Math.abs), c2=corr(ab.slice(0,-1),ab.slice(1));
+    document.getElementById('vc-c1').textContent=c1.toFixed(2);
+    document.getElementById('vc-c2').textContent=c2.toFixed(2);
+    document.getElementById('vc-e2').textContent=k==='g'?'Size: clearly predictable':'Size: equally unpredictable';
+    btns.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.vc===k)));
+    vc.classList.remove('in');void vc.offsetWidth;vc.classList.add('in');
+  }
+  btns.forEach(b=>b.addEventListener('click',()=>draw(b.dataset.vc)));
+  vc.addEventListener('anim-in',()=>{});
+  draw('g'); vc.classList.remove('in');
+})();
+</script>

@@ -1,0 +1,41 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">The applicable share sets the ceiling</p>
+    <p class="figsub">Drag the share the agent can take on and choose how many times it shortens that effort, to see the overall amplification factor. The dashed line is the ceiling if the agent finished instantly.</p>
+    <div class="am" id="am" data-anim>
+      <div class="seg-btns" role="group" aria-label="Speed-up of the agent's share">
+        <button type="button" data-am="2" aria-pressed="false">2× faster</button>
+        <button type="button" data-am="10" aria-pressed="true">10× faster</button>
+        <button type="button" data-am="100" aria-pressed="false">100× faster</button>
+      </div>
+      <svg viewBox="0 0 640 240" role="img" aria-label="Applicable share and overall amplification factor"><g id="am-ax"></g><path id="am-cap" class="am-cap"/><path id="am-p" class="am-l"/><g id="am-ex"></g><circle id="am-d" r="6" fill="var(--ink)"/></svg>
+      <div class="sl"><label for="am-a">Share the agent can take on <b id="am-av"></b></label><input id="am-a" type="range" min="0" max="95" step="1" value="30"></div>
+      <p class="am-msg" id="am-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Overall amplification factor = 1 ÷ [(1 − applicable share) + applicable share ÷ speed-up], the same form as Amdahl (1967); the vertical axis is logarithmic. Reference point: in one e-commerce customer service operation, about 5.8% of conversations were suitable for the agent.</figcaption>
+</figure>
+<style>
+.am svg{width:100%;height:auto;display:block}
+.am-l{fill:none;stroke:var(--accent);stroke-width:2.5}
+.am-cap{fill:none;stroke:var(--faint);stroke-dasharray:4 4;stroke-width:1.5}
+.am-msg{font-size:14px;margin:6px 0 0;min-height:3.4em}
+@media (max-width:640px){.am svg text{font-size:18px}}
+</style>
+<script>
+(function(){
+  const X0=56,X1=620,YT=14,YB=200,x=a=>X0+a*(X1-X0),ly=v=>YB-Math.log10(v)/Math.log10(25)*(YB-YT);
+  const M=(a,k)=>1/((1-a)+a/k);let k=10;const $=id=>document.getElementById(id),sl=$('am-a');
+  $('am-ax').innerHTML=`<line x1="${X0}" y1="${YB}" x2="${X1}" y2="${YB}" class="s-faint"/>`+[1,2,5,10,20].map(v=>`<text x="${X0-6}" y="${ly(v)+4}" text-anchor="end" font-size="11" class="t-faint">${v}×</text><line x1="${X0}" x2="${X1}" y1="${ly(v)}" y2="${ly(v)}" class="s-line"/>`).join('')+
+    [0,.25,.5,.75,.95].map(a=>`<text x="${x(a)}" y="${YB+16}" text-anchor="middle" font-size="11" class="t-faint">${Math.round(a*100)}%</text>`).join('');
+  let c='';for(let a=0;a<=.95;a+=.005)c+=(a?'L':'M')+x(a).toFixed(1)+','+ly(Math.min(25,1/(1-a))).toFixed(1);$('am-cap').setAttribute('d',c);
+  function draw(){let d='';for(let a=0;a<=.95;a+=.005)d+=(a?'L':'M')+x(a).toFixed(1)+','+ly(M(a,k)).toFixed(1);$('am-p').setAttribute('d',d);
+    $('am-ex').innerHTML=[[.058,'E-commerce support']].map(([a,n])=>`<circle cx="${x(a)}" cy="${ly(M(a,k))}" r="4" fill="var(--warm)"/><text x="${x(a)+6}" y="${ly(M(a,k))-8}" font-size="11" class="t-warm">${n}</text>`).join('');
+    const a=+sl.value/100,v=M(a,k);$('am-av').textContent=sl.value+'%';$('am-d').setAttribute('cx',x(a));$('am-d').setAttribute('cy',ly(v));
+    $('am-msg').textContent=`When the agent takes on ${sl.value}% of the work and does that part ${k} times faster, the overall amplification is ${v.toFixed(2)}×; even if the agent finished instantly, the ceiling would be only ${(1/(1-a)).toFixed(2)}×.`;}
+  document.querySelectorAll('[data-am]').forEach(b=>b.addEventListener('click',()=>{k=+b.dataset.am;document.querySelectorAll('[data-am]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
+  sl.addEventListener('input',draw);
+  $('am').addEventListener('anim-in',()=>{let a=0;sl.value=0;draw();const id=setInterval(()=>{a+=5;sl.value=a;draw();if(a>=90){clearInterval(id);setTimeout(()=>{sl.value=30;draw();},600);}},120);});
+  draw();
+})();
+</script>

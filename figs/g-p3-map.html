@@ -1,0 +1,37 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">五个约束，五个部分</p><p class="figsub">每一章加一个用户一侧的约束，产品长出一个部分。点选一章，看它的约束、长出的部分，以及依据的前两部分原理。</p></div><button class="replay" type="button" data-replay="p3m">重播</button></div>
+    <div class="p3m" id="p3m" data-anim>
+      <div class="p3m-g" id="p3m-g"></div>
+      <div class="p3m-d" id="p3m-d" aria-live="polite"></div>
+    </div>
+  </div>
+  <figcaption>“依据”列出的是各章的原理卡，其中既有新得到的原理，也有前两部分原理在产品中的重跑。</figcaption>
+</figure>
+<style>
+.p3m-g{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.p3m-c{font:inherit;cursor:pointer;text-align:left;background:var(--quote);border:1px solid transparent;border-radius:10px;padding:9px 10px;color:var(--ink);font-size:13px;line-height:1.45;opacity:0;transform:translateY(8px);transition:opacity .4s,transform .4s,border-color .3s;transition-delay:calc(var(--i)*.25s);position:relative}
+.p3m.in .p3m-c{opacity:1;transform:none}
+.p3m-c em{display:block;font-style:normal;font-size:11px;color:var(--faint)}
+.p3m-c b{display:block;font-size:14px;margin-top:2px;color:var(--accent)}
+.p3m-c.sel{border-color:var(--accent)}
+.p3m-d{margin-top:12px;display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:8px}
+.p3m-d div{background:var(--quote);border-radius:8px;padding:9px 11px;font-size:13.5px;line-height:1.55}
+.p3m-d span{display:block;font-size:11px;color:var(--faint)}
+@media (max-width:640px){.p3m-g{grid-template-columns:1fr 1fr}.p3m-d{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const S=[['第 20 章','一个人和一笔钱','用户有自己的目标、期限与承受能力','承诺什么','默顿的组合选择；人力资本与生命周期组合；按目标分账的组合'],
+    ['第 21 章','用户不在场','持续的委托需要事先约定','委托参数与授权','不完全契约与剩余控制权；最小权限原则；正式权威与实际权威'],
+    ['第 22 章','用户看不见过程','信息不对称','过程记录与可核对的证据','信息披露的解开效应；有成本的状态核查；信息丰富导致注意力贫乏'],
+    ['第 23 章','代理会出错','有些后果不可挽回','上限、确认与赔付','瑞士奶酪模型；正常事故；不可逆性效应；替代责任的经济理由'],
+    ['第 24 章','信任需要时间','用户对新的代理没有先验','信任的建立路径','信任的三个来源；信号传递；从小处开始；声誉的建立']];
+  const g=document.getElementById('p3m-g'),d=document.getElementById('p3m-d');
+  g.innerHTML=S.map((s,i)=>`<button type="button" class="p3m-c" style="--i:${i}"><em>${s[0]}</em>${s[1]}<b>${s[3]}</b></button>`).join('');const bs=[...g.children];
+  function set(i){const s=S[i];bs.forEach((b,j)=>b.classList.toggle('sel',j===i));d.innerHTML=`<div><span>约束</span>${s[2]}</div><div><span>长出的部分</span>${s[3]}</div><div><span>依据</span>${s[4]}</div>`;}
+  bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));
+  document.getElementById('p3m').addEventListener('anim-in',()=>{[0,1,2,3,4].forEach((i,k)=>setTimeout(()=>set(i),1500+k*1700));});
+  set(0);
+})();
+</script>

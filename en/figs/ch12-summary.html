@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Chapter summary: narrowing the distance between theory and reality</p><p class="figsub">Four design requirements, each tied to one mechanism in this chapter.</p></div><button class="replay" type="button" data-replay="ch12summary">Replay</button></div>
+    <div class="ch12summary" id="ch12summary" data-anim><div class="ch12summary-c" style="--i:0"><em>Active management as a whole underperforms</em><b>Make a low-cost diversified portfolio the default</b><p>After fees, most active funds have negative true excess returns. An active product should state how much more it charges than a low-cost benchmark, and how much excess return it needs to cover that.</p></div><div class="ch12summary-c warn" style="--i:1"><em>Short-term performance is mostly luck</em><b>Do not recommend products by short-term rankings</b><p>Performance displays should cover a long enough period, compare against a benchmark, show the information ratio, and say whether the result can be statistically distinguished from luck.</p></div><div class="ch12summary-c warn" style="--i:2"><em>Investors receive their own return</em><b>Also show the user's own dollar-weighted return</b><p>Let users see how much chasing rises and fleeing falls has cost them, not just the product's return.</p></div><div class="ch12summary-c" style="--i:3"><em>Sticking with it matters more than theoretical return</em><b>Recommend methods by the drawdown the user can bear</b><p>Test a plan against the user's real tolerance: a plan that will be abandoned halfway is worthless, however high its theoretical return.</p></div></div>
+  </div>
+</figure>
+<style>
+.ch12summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.ch12summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.ch12summary-c.warn{border-left-color:var(--warm)}
+.ch12summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.ch12summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.ch12summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.ch12summary.in .ch12summary-c{opacity:1;transform:none}
+@media (max-width:640px){.ch12summary{grid-template-columns:1fr}}
+</style>

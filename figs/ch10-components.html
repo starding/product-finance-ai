@@ -1,0 +1,44 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">价差由三部分构成</p>
+    <p class="figsub">点按任一部分查看它补偿的是什么。切换股票类型，看构成如何变化。</p>
+    <div class="seg-btns" role="group" aria-label="股票类型">
+      <button type="button" data-cp="big" aria-pressed="true">大盘股（实证估计）</button>
+      <button type="button" data-cp="small" aria-pressed="false">信息不透明的小盘股（示意）</button>
+    </div>
+    <div class="cp" id="cp" data-anim>
+      <div class="cp-bar" id="cp-bar">
+        <button type="button" data-k="op"><span>订单处理</span><em></em></button>
+        <button type="button" data-k="inv"><span>存货</span><em></em></button>
+        <button type="button" data-k="adv"><span>逆向选择</span><em></em></button>
+      </div>
+      <div class="cp-d" id="cp-d" aria-live="polite"></div>
+    </div>
+  </div>
+  <figcaption>大盘股一组依据 Huang 与 Stoll（1997）对 1992 年主要市场指数 20 只成分股（纽约证券交易所的交易与报价数据）的估计（原文为 61.8%、28.7%、9.6%），取整并调整为合计 100；小盘股一组只为说明方向，不是实证估计。</figcaption>
+</figure>
+<style>
+.cp-bar{display:flex;height:58px;border-radius:10px;overflow:hidden;gap:2px}
+.cp-bar button{font:inherit;border:0;cursor:pointer;color:#fff;display:flex;flex-direction:column;justify-content:center;align-items:center;font-size:13px;min-width:0;transition:flex-grow .7s ease,filter .2s;flex-grow:0;flex-basis:0;overflow:hidden;white-space:nowrap}
+.cp-bar button em{font-style:normal;font-size:12px;opacity:.9}
+.cp-bar [data-k="op"]{background:var(--gray-mark)} .cp-bar [data-k="inv"]{background:var(--blue)} .cp-bar [data-k="adv"]{background:var(--warm)}
+.cp-bar button.sel{filter:brightness(1.12);box-shadow:inset 0 0 0 3px rgba(255,255,255,.6)}
+.cp-d{margin-top:12px;background:var(--quote);border-radius:10px;padding:10px 14px;font-size:14px;line-height:1.7;min-height:5em}
+</style>
+<script>
+(function(){
+  const V={big:{op:62,inv:28,adv:10},small:{op:40,inv:25,adv:35}};
+  const T={op:['订单处理成本','系统、人员、交易所与清算费用等固定开支，摊到每笔交易上。交易越活跃，摊到每笔上的越少。'],
+           inv:['存货成本','做市商被动积累一方的头寸，在卖出之前承担价格波动的风险。波动越大、头寸越难转手，这部分越高。'],
+           adv:['逆向选择成本','对手方可能掌握做市商不知道的信息。与知情者交易注定亏损，只能从其他交易者那里赚回来。信息越不透明，这部分越高。']};
+  const bs=[...document.querySelectorAll('#cp-bar button')], d=document.getElementById('cp-d');
+  let cur='big';
+  function set(k){cur=k;document.querySelectorAll('[data-cp]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.cp===k)));
+    bs.forEach(b=>{const v=V[k][b.dataset.k];b.style.flexGrow=v;b.querySelector('em').textContent=(k==='big'?'约 ':'')+v+'%';});}
+  function show(key){bs.forEach(b=>b.classList.toggle('sel',b.dataset.k===key));d.innerHTML=`<b>${T[key][0]}</b>：${T[key][1]}`;}
+  bs.forEach(b=>b.addEventListener('click',()=>show(b.dataset.k)));
+  document.querySelectorAll('[data-cp]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.cp)));
+  document.getElementById('cp').addEventListener('anim-in',()=>{bs.forEach(b=>b.style.flexGrow=0);setTimeout(()=>set(cur),50);});
+  set('big'); show('adv');
+})();
+</script>

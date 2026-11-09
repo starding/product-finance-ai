@@ -1,0 +1,32 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Decomposition and derivation: two ways of writing</p><p class="figsub">Switch between the two to see each one's starting point, how it proceeds, and the questions it is suited to answer.</p></div><button class="replay" type="button" data-replay="mt">Replay</button></div>
+    <div class="seg-btns" role="group" aria-label="Way of writing">
+      <button type="button" data-mt="d" aria-pressed="true">Decomposition</button>
+      <button type="button" data-mt="g" aria-pressed="false">Derivation</button>
+    </div>
+    <div class="mt" id="mt" data-anim></div>
+    <p class="mt-msg" id="mt-msg" aria-live="polite"></p>
+  </div>
+</figure>
+<style>
+.mt{display:flex;align-items:stretch;gap:6px;flex-wrap:wrap}
+.mt-s{flex:1 1 110px;background:var(--quote);border-radius:9px;padding:10px;font-size:13px;line-height:1.5;position:relative;opacity:0;transform:translateY(6px);transition:opacity .4s,transform .4s;transition-delay:calc(var(--i)*.3s)}
+.mt.in .mt-s{opacity:1;transform:none}
+.mt-s em{display:block;font-style:normal;font-size:11px;color:var(--faint)}
+.mt-s.end{background:var(--accent-soft)}
+.mt-msg{font-size:14px;margin:12px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const T={d:[['Starting point','An observable result, such as realized return'],['Proceeds by','Breaking it into terms that do not overlap and together are complete'],['Checks','Every term has a return side and a risk side'],['Suited to','Checking which term a product is missing']],
+    g:[['Starting point','A world with nothing in it'],['Proceeds by','Adding only one constraint at each step'],['Responds','A constraint forces out a mechanism, and the mechanism leaves a new problem'],['Suited to','Imagining what new products will grow when constraints change']]};
+  const M={d:'The strength of decomposition is that completeness can be checked: once every term is written out, any missing term is obvious.',g:'The strength of derivation is that it transfers: change a parameter and rerun, and you can see which institutions would change.'};
+  const box=document.getElementById('mt'),msg=document.getElementById('mt-msg');
+  function set(k){document.querySelectorAll('[data-mt]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mt===k)));
+    box.innerHTML=T[k].map(([a,b],i)=>`<div class="mt-s${i===3?' end':''}" style="--i:${i}"><em>${a}</em>${b}</div>`).join('');msg.textContent=M[k];box.classList.remove('in');void box.offsetWidth;box.classList.add('in');}
+  document.querySelectorAll('[data-mt]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.mt)));
+  box.addEventListener('anim-in',()=>{set('d');setTimeout(()=>set('g'),2600);});
+  set('d');box.classList.remove('in');
+})();
+</script>

@@ -1,0 +1,41 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">Writing promises task by task</p>
+    <p class="figsub">Choose a kind of task to see what the product should promise, which measure it is judged by, and how it is checked.</p>
+    <div class="seg-btns" role="group" aria-label="Task">
+      <button type="button" data-tk="0" aria-pressed="true">Look up a figure</button>
+      <button type="button" data-tk="1" aria-pressed="false">Research a company</button>
+      <button type="button" data-tk="2" aria-pressed="false">Ongoing monitoring</button>
+      <button type="button" data-tk="3" aria-pressed="false">Manage a portfolio to a goal</button>
+    </div>
+    <div class="tk" id="tk" data-anim>
+      <div class="tk-c" style="--c:var(--accent)"><em>Promise</em><p id="tk-p"></p></div>
+      <div class="tk-c" style="--c:var(--blue)"><em>Measure</em><p id="tk-m"></p></div>
+      <div class="tk-c" style="--c:var(--gold)"><em>How it is checked</em><p id="tk-v"></p></div>
+      <div class="tk-c no" style="--c:var(--warm)"><em>Not promised</em><p id="tk-n"></p></div>
+    </div>
+  </div>
+  <figcaption>Illustrative. Measures and methods of checking should be written down before the task begins, and users should be able to view them at any time.</figcaption>
+</figure>
+<style>
+.tk{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.tk-c{background:var(--quote);border-radius:10px;padding:10px 12px;border-left:3px solid var(--c);opacity:0;transform:translateY(6px);transition:opacity .35s,transform .35s}
+.tk-c.on{opacity:1;transform:none}
+.tk-c em{font-style:normal;font-size:11.5px;color:var(--faint)}
+.tk-c p{margin:4px 0 0;font-size:13.5px;line-height:1.65}
+@media (max-width:640px){.tk{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const T=[['Figures are accurate and timely, with source and cut-off time noted','Share matching authoritative sources; data latency','Randomly sample answers and compare with sources; every figure links to its origin','Judgments beyond the figures'],
+    ['Evidence can be traced; the conclusion states the conditions under which it would be overturned','Share of citations that can be checked; whether key assumptions and contrary evidence are listed','Open each citation; check whether the conclusion changes as the assumptions change','That the conclusion is right, or that the share price will move as concluded'],
+    ['Every cycle completes the checks within the agreed scope, distinguishing "no change", "check blocked" and "awaiting confirmation"','Cycle completion rate; missed-alert rate; false-alert rate','Review each cycle\'s check record; periodically mix in known events to test for misses','Finding every event that will affect prices'],
+    ['Always observe the agreed goals and constraints, refer departures to the user, and execute at reasonable cost','Constraint compliance rate; allocation drift; trading costs; the user\'s money-weighted return','Check holdings and trade records against the agreement monthly; reconcile with a third-party custodian','Beating some index, or earning some return each year']];
+  const cs=[...document.querySelectorAll('.tk-c')],ids=['tk-p','tk-m','tk-v','tk-n'];
+  function set(i){document.querySelectorAll('[data-tk]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.tk===i)));
+    cs.forEach(c=>c.classList.remove('on'));ids.forEach((id,j)=>document.getElementById(id).textContent=T[i][j]);cs.forEach((c,j)=>setTimeout(()=>c.classList.add('on'),60+j*120));}
+  document.querySelectorAll('[data-tk]').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.tk)));
+  document.getElementById('tk').addEventListener('anim-in',()=>{[0,1,2,3].forEach(i=>setTimeout(()=>set(i),i*2000));});
+  set(0);
+})();
+</script>

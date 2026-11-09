@@ -1,0 +1,45 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">委托书没有写到的情形</p><p class="figsub">一年中发生的八件事，其中三件委托书没有覆盖。选择没有写到时的默认规则，看结果。</p></div><button class="replay" type="button" data-replay="gpp">重播</button></div>
+    <div class="seg-btns" role="group" aria-label="默认规则">
+      <button type="button" data-gpp="self" aria-pressed="false">按代理自己的判断</button>
+      <button type="button" data-gpp="stop" aria-pressed="false">停下等待，不作说明</button>
+      <button type="button" data-gpp="safe" aria-pressed="true">保守处理并请示</button>
+    </div>
+    <div class="gpp" id="gpp" data-anim></div>
+    <div class="gpp-out"><div><span>越出委托的操作</span><b id="gpp-a"></b></div><div><span>打扰委托人的次数</span><b id="gpp-b"></b></div><div><span>延误的处理</span><b id="gpp-c"></b></div></div>
+    <p class="gpp-msg" id="gpp-msg" aria-live="polite"></p>
+  </div>
+  <figcaption>示意。合同的不完全与剩余决定权见 Grossman 与 Hart（1986）。</figcaption>
+</figure>
+<style>
+.gpp{display:grid;gap:4px}
+.gpp-r{display:grid;grid-template-columns:minmax(0,1fr) 92px minmax(0,1fr);gap:8px;align-items:center;font-size:12.5px;background:var(--quote);border-radius:7px;padding:6px 9px;opacity:0;transform:translateY(4px);transition:opacity .3s,transform .3s;transition-delay:calc(var(--i)*.1s)}
+.gpp-r.on{opacity:1;transform:none}
+.gpp-r em{font-style:normal;font-size:11px;border-radius:5px;padding:2px 6px;text-align:center}
+.gpp-r em.c{background:var(--accent-soft);color:var(--accent)} .gpp-r em.u{background:var(--warm-soft);color:var(--warm)}
+.gpp-r span:last-child{color:var(--muted)}
+.gpp-out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.gpp-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.gpp-out span{display:block;font-size:12px;color:var(--faint)} .gpp-out b{font-size:19px;font-variant-numeric:tabular-nums}
+.gpp-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+@media (max-width:640px){.gpp-r{grid-template-columns:1fr 80px}.gpp-r span:last-child{grid-column:1/-1}.gpp-out{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  const E=[['季度再平衡日',1,'按约定比例再平衡','按约定比例再平衡','按约定比例再平衡'],['一只持仓公告分红',1,'按约定再投资','按约定再投资','按约定再投资'],
+    ['持有的公司收到收购要约',0,'自行接受要约并卖出','停下等待，不作说明，要约期限错过','暂不操作，列出接受与拒绝的影响请示'],['市场单日下跌 7%',1,'按约定不追加操作','按约定不追加操作','按约定不追加操作'],
+    ['行情数据源中断两天',0,'用过期数据继续交易','停下等待，不说明原因','暂停交易，说明受阻原因并请示'],['计划内的每月定投',1,'按约定执行','按约定执行','按约定执行'],
+    ['委托人的账户被要求补充身份材料',0,'自行填写并提交','停下等待，不提醒本人','不代填，提醒本人处理'],['年度复核日',1,'提交复核材料','提交复核材料','提交复核材料']];
+  const box=document.getElementById('gpp');
+  const M={self:'按自己的判断行事：三件没有写到的事里，有两件越出了委托的范围，用过期数据交易更是可能直接造成损失。',stop:'没有写到的事一律停下、不作说明：没有越权，也没有打扰委托人，但收购要约的期限被错过，补充材料的要求无人处理，委托人也不知道交易为什么停了。',safe:'保守处理并请示：没有越权，只在三件没有写到的事上打扰委托人，并且每次都附上了可选的方案。'};
+  function set(k){document.querySelectorAll('[data-gpp]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.gpp===k)));const j=k==='self'?2:k==='stop'?3:4;
+    box.innerHTML=E.map((e,i)=>`<div class="gpp-r" style="--i:${i}"><span>${e[0]}</span><em class="${e[1]?'c':'u'}">${e[1]?'委托书已覆盖':'没有写到'}</em><span>${e[j]}</span></div>`).join('');
+    setTimeout(()=>box.querySelectorAll('.gpp-r').forEach(r=>r.classList.add('on')),40);
+    const v={self:[2,0,0],stop:[0,0,2],safe:[0,3,0]}[k];['a','b','c'].forEach((x,i)=>document.getElementById('gpp-'+x).textContent=v[i]+' 次');
+    document.getElementById('gpp-msg').textContent=M[k];}
+  document.querySelectorAll('[data-gpp]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.gpp)));
+  box.addEventListener('anim-in',()=>{['self','stop','safe'].forEach((k,i)=>setTimeout(()=>set(k),i*2600));});
+  set('safe');
+})();
+</script>

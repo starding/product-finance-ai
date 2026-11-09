@@ -1,0 +1,50 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">一只“跑赢市场”的基金，收益从哪里来</p>
+    <p class="figsub">某基金过去十年每年比无风险利率多赚 9%，同期市场多赚 6%。切换解释方式，看真正的超额收益还剩多少。</p>
+    <div class="seg-btns" role="group" aria-label="解释方式">
+      <button type="button" data-dc="one" aria-pressed="true">只用市场解释</button>
+      <button type="button" data-dc="multi" aria-pressed="false">用多因子解释</button>
+      <button type="button" data-dc="fee" aria-pressed="false">再扣除管理费</button>
+    </div>
+    <div class="dc6" id="dc6" data-anim>
+      <div class="dc6-bar" id="dc6-bar"></div>
+      <div class="dc6-scale"><span>0</span><span>3%</span><span>6%</span><span>9%</span></div>
+      <div class="dc6-leg" id="dc6-leg"></div>
+      <p class="dc6-msg" id="dc6-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>示意数字：基金对市场、规模、价值、动量因子的暴露分别为 1.0、0.4、0.5、0.2，同期各因子年收益分别为 6%、2%、2.5%、3%；管理费每年 1%。</figcaption>
+</figure>
+<style>
+.dc6-bar{display:flex;height:44px;border-radius:8px;overflow:hidden;background:var(--quote)}
+.dc6-bar i{display:flex;align-items:center;justify-content:center;font-style:normal;font-size:12px;color:#fff;transition:width .7s ease;white-space:nowrap;overflow:hidden}
+.dc6-scale{display:flex;justify-content:space-between;font-size:11px;color:var(--faint);margin:4px 0 8px}
+.dc6-leg{display:flex;flex-wrap:wrap;gap:10px;font-size:12.5px}
+.dc6-leg span{display:inline-flex;align-items:center;gap:6px}
+.dc6-leg b{display:inline-block;width:10px;height:10px;border-radius:2px}
+.dc6-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const C={mkt:'var(--gray-mark)',smb:'var(--blue)',hml:'var(--gold)',mom:'#7a5ea8',alpha:'var(--accent)',fee:'var(--warm)'};
+  const N={mkt:'市场 6.0%',smb:'规模 0.8%',hml:'价值 1.25%',mom:'动量 0.6%'};
+  const S={
+    one:{parts:[['mkt',6,'市场 6.0%'],['alpha',3,'超额收益 3.0%']],m:'只用市场解释：基金每年多赚 3%，看起来管理人很有本事。'},
+    multi:{parts:[['mkt',6,N.mkt],['smb',0.8,N.smb],['hml',1.25,N.hml],['mom',0.6,N.mom],['alpha',0.35,'超额收益 0.35%']],m:'用多因子解释：多赚的 3% 中，2.65% 来自持有更多小盘股、价值股与近期强势股，这些都可以用低成本的因子产品复制；真正的超额收益只剩 0.35%。'},
+    fee:{parts:[['mkt',6,N.mkt],['smb',0.8,N.smb],['hml',1.25,N.hml],['mom',0.6,N.mom],['fee',0,'']],m:'再扣除每年 1% 的管理费：超额收益变为 −0.65%。投资者为一份可以便宜复制的因子暴露，支付了主动管理的价格。'}
+  };
+  const bar=document.getElementById('dc6-bar'), leg=document.getElementById('dc6-leg');
+  function set(k){
+    document.querySelectorAll('[data-dc]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.dc===k)));
+    const s=S[k];
+    bar.innerHTML=s.parts.map(([c,v,t])=>`<i style="background:${C[c]};width:0" data-w="${v/9*100}">${v>=0.8?t:''}</i>`).join('');
+    setTimeout(()=>bar.querySelectorAll('i').forEach(i=>i.style.width=i.dataset.w+'%'),40);
+    leg.innerHTML=s.parts.filter(p=>p[2]).map(([c,v,t])=>`<span><b style="background:${C[c]}"></b>${t}</span>`).join('')+(k==='fee'?`<span><b style="background:${C.fee}"></b>扣费后超额收益 −0.65%</span>`:'');
+    document.getElementById('dc6-msg').textContent=s.m;
+  }
+  document.querySelectorAll('[data-dc]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.dc)));
+  document.getElementById('dc6').addEventListener('anim-in',()=>{set('one');setTimeout(()=>set('multi'),2400);setTimeout(()=>set('fee'),5200);});
+  set('one');
+})();
+</script>

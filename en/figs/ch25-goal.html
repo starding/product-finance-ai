@@ -1,0 +1,41 @@
+<figure>
+  <div class="card">
+    <p class="figtitle">One wish, three ways to measure it</p>
+    <p class="figsub">The principal asks for "steady growth". Choose a measure and see the allocation the agent derives from it (illustrative).</p>
+    <div class="seg-btns" role="group" aria-label="Measure">
+      <button type="button" data-gl="dd" aria-pressed="true">Max drawdown ≤ 10%</button>
+      <button type="button" data-gl="vol" aria-pressed="false">Annualized volatility ≤ 8%</button>
+      <button type="button" data-gl="cap" aria-pressed="false">Never lose principal</button>
+    </div>
+    <div class="gl" id="gl" data-anim>
+      <div class="gl-bar" id="gl-bar"></div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Stocks</span><span><i style="background:var(--blue)"></i>Bonds</span><span><i style="background:var(--gold)"></i>Deposits and money market funds</span></div>
+      <div class="gl-out"><div><span>Expected long-run annual return (illustrative)</span><b id="gl-r"></b></div><div><span>Worst year in history (illustrative)</span><b id="gl-w"></b></div></div>
+      <p class="gl-msg" id="gl-msg" aria-live="polite"></p>
+    </div>
+  </div>
+  <figcaption>Illustrative numbers. The long-run returns and drawdowns of stocks and bonds show direction only and do not correspond to estimates for any market.</figcaption>
+</figure>
+<style>
+.gl-bar{display:flex;height:36px;border-radius:8px;overflow:hidden}
+.gl-bar i{display:flex;align-items:center;justify-content:center;font-style:normal;font-size:12px;color:#fff;transition:width .6s ease;white-space:nowrap;overflow:hidden}
+.gl-out{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.gl-out div{background:var(--quote);border-radius:8px;padding:8px 12px}
+.gl-out span{display:block;font-size:12px;color:var(--faint)} .gl-out b{font-size:19px;font-variant-numeric:tabular-nums}
+.gl-msg{font-size:14px;margin:8px 0 0;min-height:3.4em}
+</style>
+<script>
+(function(){
+  const S={dd:[[25,'var(--accent)'],[55,'var(--blue)'],[20,'var(--gold)'],4.1,'−9%','A drawdown limit constrains the worst stretch of decline: stocks can be only about a quarter, with the rest in bonds and cash.'],
+    vol:[[40,'var(--accent)'],[50,'var(--blue)'],[10,'var(--gold)'],5.0,'−16%','A volatility limit constrains the average swings: stocks can be a larger share, but the worst year may fall further than the principal expected.'],
+    cap:[[0,'var(--accent)'],[15,'var(--blue)'],[85,'var(--gold)'],2.2,'0%','Never losing principal rules out almost every risky asset: the principal is safe, but long-run returns may not keep pace with inflation.']};
+  const bar=document.getElementById('gl-bar');
+  function set(k){document.querySelectorAll('[data-gl]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.gl===k)));const s=S[k];
+    bar.innerHTML=[s[0],s[1],s[2]].map(([w,c])=>`<i style="background:${c};width:0" data-w="${w}">${w>=12?w+'%':''}</i>`).join('');
+    setTimeout(()=>bar.querySelectorAll('i').forEach(i=>i.style.width=i.dataset.w+'%'),40);
+    document.getElementById('gl-r').textContent=s[3].toFixed(1)+'%';document.getElementById('gl-w').textContent=s[4];document.getElementById('gl-msg').textContent=s[5];}
+  document.querySelectorAll('[data-gl]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.gl)));
+  document.getElementById('gl').addEventListener('anim-in',()=>{['dd','vol','cap','dd'].forEach((k,i)=>setTimeout(()=>set(k),i*2000));});
+  set('dd');
+})();
+</script>

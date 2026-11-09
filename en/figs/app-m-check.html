@@ -1,0 +1,15 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Fact-checking results for the Decomposition view</p><p class="figsub">About 520 citations and numbers were checked one by one; every item found wrong or unverifiable was revised or deleted.</p></div><button class="replay" type="button" data-replay="mc">Replay</button></div>
+    <div class="mc" id="mc" data-anim>
+      <div class="mc-bar"><i style="--w:89%;background:var(--accent)"></i><i style="--w:7.9%;background:var(--warm)"></i><i style="--w:3.3%;background:var(--gold)"></i></div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>Correct: 463</span><span><i style="background:var(--warm)"></i>Wrong: 41, corrected</span><span><i style="background:var(--gold)"></i>Unverifiable: 17, source added, rewritten or deleted</span></div>
+    </div>
+  </div>
+  <figcaption>Checked in six batches; details in the manuscript fact-checking report. "Wrong" covers errors in bibliographic details, paraphrases that did not match the original, illustrative numbers presented as empirical results, and in-text citations that did not match the reference list.</figcaption>
+</figure>
+<style>
+.mc-bar{display:flex;height:26px;border-radius:6px;overflow:hidden;background:var(--quote)}
+.mc-bar i{display:block;height:100%;width:0;transition:width 1s ease}
+.mc.in .mc-bar i{width:var(--w)}
+</style>

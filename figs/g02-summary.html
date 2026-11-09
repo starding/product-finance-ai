@@ -1,0 +1,16 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">本章小结：两个人之间的金融</p><p class="figsub">四条结论，各自对应本章的一个机制。</p></div><button class="replay" type="button" data-replay="g02summary">重播</button></div>
+    <div class="g02summary" id="g02summary" data-anim><div class="g02summary-c" style="--i:0"><em>借贷</em><b>借出就是不会损耗的储藏</b><p>缺的时间不同的两个人互相借用，粮食不必在仓里腐坏。</p></div><div class="g02summary-c" style="--i:1"><em>约束</em><b>好处来自时间错开</b><p>两人同时缺粮，借贷帮不上忙；错开半年，好处最大。</p></div><div class="g02summary-c warn" style="--i:2"><em>利息</em><b>时间的价格有上下限</b><p>下限是出借人的其他选择，上限是借款人的处境；储藏会损耗时，下限可以为负。</p></div><div class="g02summary-c warn" style="--i:3"><em>承诺</em><b>借贷要求对方将来能还</b><p>借出的是今天的粮食，换回的是关于将来的承诺，它可能落空。</p></div></div>
+  </div>
+</figure>
+<style>
+.g02summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.g02summary-c{background:var(--quote);border-radius:10px;padding:12px 14px;border-left:3px solid var(--accent);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s;transition-delay:calc(var(--i)*.35s)}
+.g02summary-c.warn{border-left-color:var(--warm)}
+.g02summary-c em{font-style:normal;font-size:11px;color:var(--faint)}
+.g02summary-c b{display:block;font-size:15px;margin:2px 0 4px}
+.g02summary-c p{margin:0;font-size:13px;line-height:1.6;color:var(--muted)}
+.g02summary.in .g02summary-c{opacity:1;transform:none}
+@media (max-width:640px){.g02summary{grid-template-columns:1fr}}
+</style>

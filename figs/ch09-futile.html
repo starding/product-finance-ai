@@ -1,0 +1,41 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">交易越多，收益越少</p><p class="figsub">两项关于个人投资者的大样本研究。</p></div><button class="replay" type="button" data-replay="ft">重播</button></div>
+    <div class="ft" id="ft" data-anim>
+      <div class="ft-p">
+        <p class="ft-h">美国约 6.6 万个家庭账户，1991—1996 年，年均净收益</p>
+        <div class="ft-row" style="--i:0;--v:17.9"><span>同期市场</span><div class="ft-t"><i></i></div><b>17.9%</b></div>
+        <div class="ft-row" style="--i:1;--v:11.4"><span>交易最频繁的 20% 家庭</span><div class="ft-t"><i class="w"></i></div><b>11.4%</b></div>
+        <p class="ft-src">Barber 与 Odean（2000）</p>
+      </div>
+      <div class="ft-p">
+        <p class="ft-h">台湾日内交易者中，扣除费用后能够稳定获利的比例</p>
+        <div class="ft-dots" id="ft-dots" aria-label="一百人中不足一人"></div>
+        <p class="ft-src">每个点代表 1% 的日内交易者；橙色不足一个点。Barber、Lee、Liu 与 Odean（2014）</p>
+      </div>
+    </div>
+  </div>
+</figure>
+<style>
+.ft{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ft-p{background:var(--quote);border-radius:10px;padding:12px 14px}
+.ft-h{margin:0 0 10px;font-size:13px;font-weight:700;line-height:1.5}
+.ft-row{display:grid;grid-template-columns:96px 1fr 52px;gap:8px;align-items:center;font-size:12px;margin:8px 0}
+.ft-row b{text-align:right;font-size:15px;font-variant-numeric:tabular-nums}
+.ft-t{height:18px;background:var(--surface);border-radius:5px;overflow:hidden}
+.ft-t i{display:block;height:100%;width:0;background:var(--accent);border-radius:5px;transition:width .9s ease;transition-delay:calc(var(--i)*.5s)}
+.ft-t i.w{background:var(--warm)}
+.ft.in .ft-t i{width:calc(var(--v)/20*100%)}
+.ft-src{margin:8px 0 0;font-size:11px;color:var(--faint)}
+.ft-dots{display:grid;grid-template-columns:repeat(20,1fr);gap:3px}
+.ft-dots i{aspect-ratio:1;border-radius:50%;background:var(--gray-mark);opacity:0;transition:opacity .2s}
+.ft.in .ft-dots i{opacity:.6;transition-delay:calc(var(--k)*10ms)}
+.ft-dots i.w{background:linear-gradient(90deg,var(--warm) 70%,var(--gray-mark) 70%);opacity:1}
+.ft.in .ft-dots i.w{opacity:1}
+@media (max-width:640px){.ft{grid-template-columns:1fr}}
+</style>
+<script>
+(function(){
+  document.getElementById('ft-dots').innerHTML=Array.from({length:100},(_,k)=>`<i class="${k===0?'w':''}" style="--k:${k}"></i>`).join('');
+})();
+</script>

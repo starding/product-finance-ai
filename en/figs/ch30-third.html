@@ -1,0 +1,32 @@
+<figure>
+  <div class="card">
+    <div class="figbar"><div><p class="figtitle">Who supplies the evidence changes its diagnostic power</p><p class="figsub">The likelihood ratios of five kinds of evidence, and roughly how many pieces of each kind are needed to raise the belief from 30% to 85%. Tap a kind to see the explanation.</p></div><button class="replay" type="button" data-replay="td">Replay</button></div>
+    <div class="td" id="td" data-anim></div>
+    <p class="td-msg" id="td-msg" aria-live="polite">Tap a kind of evidence.</p>
+  </div>
+  <figcaption>Illustrative likelihood ratios. The value of an audit comes from the auditor's independence and reputation; see DeAngelo (1981). Pieces needed = log of the factor by which the odds of belief must rise ÷ log of the likelihood ratio of one piece.</figcaption>
+</figure>
+<style>
+.td{display:grid;gap:5px}
+.td-r{font:inherit;width:100%;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1.4fr) 48px 70px;gap:10px;align-items:center;text-align:left;background:var(--quote);border:1.5px solid transparent;border-radius:8px;padding:6px 10px;font-size:12.5px;color:var(--ink);cursor:pointer}
+.td-r.sel{border-color:var(--ink)}
+.td-t{height:14px;background:var(--surface);border-radius:7px;overflow:hidden}
+.td-t i{display:block;height:100%;width:0;border-radius:7px;transition:width .6s ease;transition-delay:calc(var(--i)*.12s)}
+.td-r b{text-align:right;font-variant-numeric:tabular-nums}
+.td-r em{font-style:normal;font-size:11.5px;color:var(--muted);text-align:right}
+.td-msg{font-size:14px;margin:10px 0 0;min-height:3.4em}
+@media (max-width:640px){.td-r{grid-template-columns:1fr 48px 64px}.td-t{grid-column:1/-1;grid-row:2}}
+</style>
+<script>
+(function(){
+  const E=[['The product\'s own word: "all fine this month"',1.1,'An unreliable party could say the same, so it has almost no diagnostic power.'],['Reports made by the product itself',1.5,'They contain specific numbers, but the product decides the definitions and what to include.'],['Raw data and basis the user can open',2.5,'The user can check them independently, which raises the cost of faking.'],['Statements issued by the custodian',6,'Issued by an independent custodian; the product cannot alter them.'],['Independent audit report',8,'The auditor vouches with its own reputation and independence.']];
+  const need=lr=>Math.ceil(Math.log((.85/.15)/(.3/.7))/Math.log(lr));
+  const box=document.getElementById('td');
+  box.innerHTML=E.map(([n,lr],i)=>`<button type="button" class="td-r" data-i="${i}"><span>${n}</span><div class="td-t"><i style="--i:${i};background:${lr>=5?'var(--accent)':lr>=2?'var(--blue)':'var(--gold)'}" data-w="${Math.log(lr)/Math.log(8)*100}"></i></div><b>${lr}</b><em>${need(lr)} needed</em></button>`).join('');
+  const rs=[...box.children],is=[...box.querySelectorAll('.td-t i')];
+  rs.forEach((r,i)=>r.addEventListener('click',()=>{rs.forEach(x=>x.classList.toggle('sel',x===r));document.getElementById('td-msg').textContent=E[i][0]+': '+E[i][2]+` Raising the belief from 30% to 85% takes about ${need(E[i][1])} pieces.`;}));
+  const fill=()=>is.forEach(i=>i.style.width=i.dataset.w+'%');
+  box.addEventListener('anim-in',()=>{is.forEach(i=>i.style.width='0');setTimeout(fill,60);});
+  fill();
+})();
+</script>
