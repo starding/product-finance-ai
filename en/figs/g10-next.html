@@ -22,9 +22,9 @@
 </style>
 <script>
 (function(){
-  const Q=[['Managers may misappropriate principals\' assets','Chapter 11: Regulation & custody','Assumption: the ship shares stay in the manager\'s hands, untouched. How can principals confirm they are still there?'],
-    ['Sellers know more','Chapter 11: Regulation & custody','Assumption: the manager explains the risks truthfully. He may talk only about returns, or recommend unsuitable products to people they do not suit.'],
-    ['Principals make their own mistakes','Chapter 12: Defaults','Assumption: principals will stick to holding for the long term. Switching managers to chase performance and redeeming in falls often leave them with lower returns than the fund itself.'],
+  const Q=[['Managers may misappropriate principals\' assets','Chapter 11 · Regulation & custody','Assumption: the ship shares stay in the manager\'s hands, untouched. How can principals confirm they are still there?'],
+    ['Sellers know more','Chapter 11 · Regulation & custody','Assumption: the manager explains the risks truthfully. He may talk only about returns, or recommend unsuitable products to people they do not suit.'],
+    ['Principals make their own mistakes','Chapter 12 · Defaults','Assumption: principals will stick to holding for the long term. Switching managers to chase performance and redeeming in falls often leave them with lower returns than the fund itself.'],
     ['Delegation itself is expensive','Part Two','Assumption: the costs of research, monitoring and fees stay fixed. If these costs fell sharply, how would the boundary of delegation shift?']];
   const l=document.getElementById('nx10-l'),msg=document.getElementById('nx10-msg');
   l.innerHTML=Q.map((q,i)=>`<button type="button" class="nx-i" style="--i:${i}" data-i="${i}"><span>${q[0]}</span><em>→ ${q[1]}</em></button>`).join('');

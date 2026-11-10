@@ -59,7 +59,7 @@
     bl.dataset.bl=k; btns.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.bl===k)));
     R.forEach((r,i)=>{
       const rg=k==='norm'?r.norm:r.act;
-      place(document.getElementById('bl-b'+i),document.getElementById('bl-be'+i),rg,k==='norm'?'Standard workflow':(rg?'Actual':'Not done before'));
+      place(document.getElementById('bl-b'+i),document.getElementById('bl-be'+i),rg,k==='norm'?'Standard':(rg?'Actual':'Not done before'));
       place(document.getElementById('bl-d'+i),document.getElementById('bl-de'+i),r.del,'After delegation');
       document.getElementById('bl-o'+i).innerHTML=r.out[k];
     });

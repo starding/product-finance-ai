@@ -22,10 +22,10 @@
 </style>
 <script>
 (function(){
-  const Q=[['Savers want access at any time; borrowers need long-term funds','Chapter 6 Banks','Hidden assumption: reserves and the common store can both be drawn on at any time. Yet those clearing land or planting orchards need to borrow for many years.'],
-    ['The risk of a large project is too much for one household','Chapter 7 Shares','Hidden assumption: each household farms only its own land. Building a ship or opening new land can succeed or fail on a large scale.'],
-    ['Who bears the risk that cannot be diversified away','Chapter 7 Shares','Hidden assumption: someone is always willing to bear the village\'s shared risk. A way is needed for those who bear risk to share in the gains in proportion to their stake.'],
-    ['Less care once insured; higher risks keener to insure','Chapter 11 Regulation and custody','Hidden assumption: the common store knows how careful each household is and how high its risk. Asymmetric information becomes sharper when managing money for others.']];
+  const Q=[['Savers want access at any time; borrowers need long-term funds','Chapter 6 · Bank','Hidden assumption: reserves and the common store can both be drawn on at any time. Yet those clearing land or planting orchards need to borrow for many years.'],
+    ['The risk of a large project is too much for one household','Chapter 7 · Shares','Hidden assumption: each household farms only its own land. Building a ship or opening new land can succeed or fail on a large scale.'],
+    ['Who bears the risk that cannot be diversified away','Chapter 7 · Shares','Hidden assumption: someone is always willing to bear the village\'s shared risk. A way is needed for those who bear risk to share in the gains in proportion to their stake.'],
+    ['Less care once insured; higher risks keener to insure','Chapter 11 · Regulation & custody','Hidden assumption: the common store knows how careful each household is and how high its risk. Asymmetric information becomes sharper when managing money for others.']];
   const l=document.getElementById('nx5-l'),msg=document.getElementById('nx5-msg');
   l.innerHTML=Q.map((q,i)=>`<button type="button" class="nx-i" style="--i:${i}" data-i="${i}"><span>${q[0]}</span><em>→ ${q[1]}</em></button>`).join('');
   const bs=[...l.children];

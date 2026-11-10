@@ -80,9 +80,16 @@ Type: 理论 → Theory; 理论模型 → Theoretical model; 定理 → Theorem;
 - Number formatting in JS: if code builds Chinese strings such as `第 ${n} 年`, rewrite to `Year ${n}`; `${x} 万` style must be converted consistently with the numbers shown.
 - After editing, extract the `<script>` contents and run `node --check` on them; every figure must pass.
 - Links inside figures (e.g. `href="estimates.html"`, `href="g-12.html"`) stay unchanged; the English site has the same file names.
-- Simulator rule tags (`cs-rules`): 储蓄 Saving; 留种 Seed; 借贷 Lending; 承诺 Commitment; 货币 Money; 保险 Insurance; 银行 Bank; 股份 Shares; 市场 Market; 价格中的信息 Information in prices; 委托 Delegation; 监管与托管 Regulation & custody; 默认选项 Defaults; 参数：认知劳动的价格 Parameter: price of cognitive labour; 专属代理 Personal agent; 代理的担保 Guaranteeing agents; 人人都有分析师 Analysts for all; 代理成为市场参与者 Agents as market participants; 代理与人的偏差 Agents and human bias; 没有改变的东西 What did not change; 产品：承诺什么 Product: what to promise; 产品：委托参数与授权 Product: mandate and authority; 产品：过程记录与可核对的证据 Product: process records and verifiable evidence; 产品：上限、确认与赔付 Product: limits, confirmation and compensation; 产品：信任的建立路径 Product: the path to trust. `· 第 N 章` lock suffix → `· Ch. N`.
+- Simulator rule tags (`cs-rules`): 储蓄 Saving; 留种 Seed; 借贷 Lending; 承诺 Commitment; 货币 Money; 保险 Insurance; 银行 Bank; 股份 Shares; 市场 Market; 价格中的信息 Information in prices; 委托 Delegation; 监管与托管 Regulation & custody; 默认选项 Defaults; 参数：认知劳动的价格 Parameter: price of cognitive labour; 专属代理 Personal agent; 代理的担保 Guaranteeing agents; 人人都有分析师 Analysts for all; 代理成为市场参与者 Agents as market participants; 代理与人的偏差 Agents and human bias; 没有改变的东西 What did not change; 产品：承诺什么 Product: what to promise; 产品：委托参数与授权 Product: mandate and authority; 产品：过程记录与可核对的证据 Product: process records and verifiable evidence; 产品：上限、确认与赔付 Product: limits, confirmation and compensation; 产品：信任的建立路径 Product: the path to trust. `· 第 N 章` lock suffix → `· Ch. N`. Locked product tags carry the `Product: ` prefix too (`Product: mandate and authority · Ch. 21`), so a tag reads the same before and after it unlocks; always use the full `Product: process records and verifiable evidence`.
+- Simulator titles: `文明模拟器 · 第 N 章：…` → `Civilization Simulator · Chapter N: …`, lower case after the colon (`Civilization Simulator · Chapter 6: the village granary`).
+- Next-step figures in Part One of the Derivation view (`g01-next`…`g11-next`) label the chapter they point to as `Chapter N · <rule tag>`, using the rule tag names above (`Chapter 6 · Bank`, `Chapter 11 · Regulation & custody`).
+- Chapter titles that appear in figures (part maps, next-step figures, preface figures) must match the `title` in the front matter of the chapter they name.
 
 ## Glossary
+
+Spelling: Oxford style, i.e. -ize/-ization (realize, organize, civilization) with British -our, -re and -ll- (behaviour, labour, defence, modelling). Proper names and titles in references keep their published spelling.
+
+Part names in `part:` strings: Part One sections as in the build table (Section Six `The premise of delivery: trust and regulation`); Part Two `Users: what people want and what they can bear`; Part Three `AI: how much an agent can do on people's behalf`.
 
 Book and views
 - 产品×金融×AI → Product × Finance × AI
@@ -99,30 +106,34 @@ Book and views
 - 新的约束只有一个 → There is one new constraint
 
 Generative world
-- 岛 / 村 → the island / the village; 村民 → villager; 我 (narrator) → I
+- 岛 / 村 → the island / the village; 账房 (Derivation, Ch. 14) → steward; 村民 → villager; 我 (narrator) → I
 - 收成 → harvest; 年景 → a run of years (one simulated history of good and bad years); 风暴 → storm
 - 粮食 / 份 → grain / portion; 种子 / 留种 → seed / keeping seed
 - 粮仓 → the granary; 互助公仓 → mutual granary
 - 船 / 船队 → ship / fleet; 船股 → ship shares; 稳妥份额 → safe holdings
-- 集市 → the market square (or the market); 账房 → counting house
+- 集市 → the market square (or the market)
 - 书记员 → scribe (plural scribes); 运营者 → operator; 委托人 → principal (or "the villager" where the source says 这位村民); 受托人 → trustee / fiduciary (follow context)
 - 约定 → the agreement (the written mandate between principal and scribe); 三本账 → the three accounts: 应急 emergency, 盖房 house, 养老 retirement
 - 授权四级：自行处理、事后告知、事前确认、禁止 → act on its own; act, then tell; confirm first; forbidden
 
 Finance and economics
-- 时间补偿 → time compensation; 风险补偿 → risk compensation; 信息优势 → information advantage; 交易成本 → trading costs; 运气 → luck; 承诺得到兑现 → promises kept
+- 时间补偿 → time compensation; 风险补偿 → risk compensation; 信息优势 → information advantage; 交易成本 → trading costs (market sense, Part One Section Four); Coase's 交易成本 → transaction costs; 运气 → luck; 承诺得到兑现 → promises kept
 - 实际回报 → realized return; 净价值 → net value
 - 波动拖累 → volatility drag; 因子 → factors; 买卖价差 → bid-ask spread; 做市商 → market maker
 - 主动管理的算术 → the arithmetic of active management
 - 放大倍数 → amplification factor; 可达份额 → reachable share; 适用比例 → applicable share
+- 兑现的前提 → the premise of delivery (Part One Section Six); 以代理为核心的理财产品 → a wealth-management product built around an agent
 - 委托参数 → mandate parameters; 委托书 → mandate; 授权 → authority / authorization; 不可逆敞口 → irreversible exposure
 - 能力装配 → capability assembly; 过程可见 → process visibility; 保障强度 → assurance level
 - 时点记录 / 当时知道什么 → point-in-time record / what was known at the time
 - 风险承受力的三个面 → the three faces of risk tolerance: capacity (能承受), willingness (愿意承受), behaviour (实际承受)
 - 画像 → profile
+- 任务 (Decomposition Part Two, jobs to be done) → job; 事务 (Part Three, what is handed to AI) → task
+- 投资顾问 → adviser (robo-adviser); O*NET occupation names keep "Advisors"
 - 适当性 → suitability; 受托义务 → fiduciary duty; 全权委托账户 → discretionary account
 - 现状的稳态 / 理想的稳态 → the steady state of current practice / the steady state of the ideal; 先尊重，再邀请 → respect first, then invite
 - 自由主义的家长制 → libertarian paternalism
+- 诺贝尔经济学奖 → Nobel Memorial Prize in Economic Sciences (reference entries keep nobelprize.org's full title)
 
 Principle names (use exactly)
 - 现在物品与将来物品的价值差 → Present goods are worth more than future goods

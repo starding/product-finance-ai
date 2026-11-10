@@ -4,7 +4,7 @@
     <div class="th3" id="th3" data-anim>
       <button type="button" class="th3-c" data-i="0" style="--i:0"><b>Reputation</b><span>Make the borrower care about the future</span></button>
       <button type="button" class="th3-c" data-i="1" style="--i:1"><b>Collateral</b><span>Give the borrower something to lose</span></button>
-      <button type="button" class="th3-c" data-i="2" style="--i:2"><b>Third-party enforcement</b><span>Enforced by someone both sides recognise</span></button>
+      <button type="button" class="th3-c" data-i="2" style="--i:2"><b>Third-party enforcement</b><span>Enforced by someone both sides recognize</span></button>
     </div>
     <dl class="th3-d" id="th3-d" aria-live="polite"></dl>
   </div>
@@ -24,7 +24,7 @@
   const K=['Relies on','Suits','Cost','Shut out','Today\'s counterpart'];
   const D=[['Repeated dealings, and records of default that spread','Small, recurring loans between acquaintances','Requires long-term relationships and shared records; newcomers have no record','Newcomers with no record','Credit records, credit scores'],
     ['Something the borrower owns and is willing to pledge','People with assets; larger loans','Collateral must be valued and kept; its value can change','People without assets','Mortgages, car loans, securities-backed lending and margin'],
-    ['A contract, and elders, a court or authorities able to enforce it','Larger loans between strangers','Recording, hearing and enforcing all cost something; the enforcer must itself be trustworthy','Small loans that cannot bear the cost of enforcement','Loan contracts, notarisation, court judgments']];
+    ['A contract, and elders, a court or authorities able to enforce it','Larger loans between strangers','Recording, hearing and enforcing all cost something; the enforcer must itself be trustworthy','Small loans that cannot bear the cost of enforcement','Loan contracts, notarization, court judgments']];
   const d=document.getElementById('th3-d'),bs=[...document.querySelectorAll('.th3-c')];
   function set(i){bs.forEach((b,j)=>b.classList.toggle('sel',j===i));d.innerHTML=K.map((k,j)=>`<dt>${k}</dt><dd>${D[i][j]}</dd>`).join('');}
   bs.forEach((b,i)=>b.addEventListener('click',()=>set(i)));

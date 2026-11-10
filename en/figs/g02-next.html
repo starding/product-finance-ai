@@ -22,10 +22,10 @@
 </style>
 <script>
 (function(){
-  const Q=[['Grain that is lent out may not come back','Chapter 3: Commitment','Hidden assumption: the borrower always repays principal and interest as agreed. What is lent is today\'s grain; what comes back is only a promise about the future.'],
-    ['Finding the right counterpart is not easy','Chapter 4: Money','Hidden assumption: each of the two can see plainly what the other needs. With many people, some way is needed to match needs with each other.'],
-    ['The problem of old age is still unsolved','Chapter 4: Money','Hidden assumption: the other party still has income decades later. The youngest generation can find no younger people to lend to.'],
-    ['Who sets the interest rate','Chapter 8: Market','Hidden assumption: the interest rate is settled by two people negotiating. With many people, it must be set by the lending and borrowing of many together.']];
+  const Q=[['Grain that is lent out may not come back','Chapter 3 · Commitment','Hidden assumption: the borrower always repays principal and interest as agreed. What is lent is today\'s grain; what comes back is only a promise about the future.'],
+    ['Finding the right counterpart is not easy','Chapter 4 · Money','Hidden assumption: each of the two can see plainly what the other needs. With many people, some way is needed to match needs with each other.'],
+    ['The problem of old age is still unsolved','Chapter 4 · Money','Hidden assumption: the other party still has income decades later. The youngest generation can find no younger people to lend to.'],
+    ['Who sets the interest rate','Chapter 8 · Market','Hidden assumption: the interest rate is settled by two people negotiating. With many people, it must be set by the lending and borrowing of many together.']];
   const l=document.getElementById('nx2-l'),msg=document.getElementById('nx2-msg');
   l.innerHTML=Q.map((q,i)=>`<button type="button" class="nx-i" style="--i:${i}" data-i="${i}"><span>${q[0]}</span><em>→ ${q[1]}</em></button>`).join('');
   const bs=[...l.children];

@@ -22,10 +22,10 @@
 </style>
 <script>
 (function(){
-  const Q=[['Finding the right counterparty is still hard','Chapter 4 Money','Hidden assumption: everyone knows who has surplus grain and who lacks it. With many people, exchange itself has a cost.'],
-    ['Old age is still unsolved','Chapter 4 Money','Hidden assumption: the other party will still have income decades from now. However credible promises are, the youngest generation cannot find anyone younger to lend to.'],
-    ['Default from inability remains','Chapter 5 Insurance','Hidden assumption: harvests always arrive as expected. Once a harvest fails, even the most trustworthy cannot repay.'],
-    ['People without assets are shut out','Chapter 6 Banks','Hidden assumption: lenders can only judge household by household. Could pooling many people\'s stored grain and lending it out across many households lower both the risk and the barrier to borrowing?']];
+  const Q=[['Finding the right counterparty is still hard','Chapter 4 · Money','Hidden assumption: everyone knows who has surplus grain and who lacks it. With many people, exchange itself has a cost.'],
+    ['Old age is still unsolved','Chapter 4 · Money','Hidden assumption: the other party will still have income decades from now. However credible promises are, the youngest generation cannot find anyone younger to lend to.'],
+    ['Default from inability remains','Chapter 5 · Insurance','Hidden assumption: harvests always arrive as expected. Once a harvest fails, even the most trustworthy cannot repay.'],
+    ['People without assets are shut out','Chapter 6 · Bank','Hidden assumption: lenders can only judge household by household. Could pooling many people\'s stored grain and lending it out across many households lower both the risk and the barrier to borrowing?']];
   const l=document.getElementById('nx3-l'),msg=document.getElementById('nx3-msg');
   l.innerHTML=Q.map((q,i)=>`<button type="button" class="nx-i" style="--i:${i}" data-i="${i}"><span>${q[0]}</span><em>→ ${q[1]}</em></button>`).join('');
   const bs=[...l.children];

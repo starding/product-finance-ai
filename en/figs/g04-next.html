@@ -22,10 +22,10 @@
 </style>
 <script>
 (function(){
-  const Q=[['Harvests are uncertain','Chapter 5 Insurance','Hidden assumption: harvests always arrive as expected. Money makes saving more convenient but cannot prevent crop failure.'],
-    ['Maturities do not match','Chapter 6 Banks','Hidden assumption: savers and borrowers want the same timing. Savers want to withdraw at any time; those clearing land need to borrow for many years.'],
-    ['The value of money depends on belief and on the issuer','Chapter 11 Regulation and custody','Hidden assumption: issuance is disciplined and the ledger will not be tampered with. Who ensures this?'],
-    ['Who sets prices','Chapter 8 Markets','Hidden assumption: a yardstick brings prices with it. Prices still have to be determined jointly by the buying and selling of many people.']];
+  const Q=[['Harvests are uncertain','Chapter 5 · Insurance','Hidden assumption: harvests always arrive as expected. Money makes saving more convenient but cannot prevent crop failure.'],
+    ['Maturities do not match','Chapter 6 · Bank','Hidden assumption: savers and borrowers want the same timing. Savers want to withdraw at any time; those clearing land need to borrow for many years.'],
+    ['The value of money depends on belief and on the issuer','Chapter 11 · Regulation & custody','Hidden assumption: issuance is disciplined and the ledger will not be tampered with. Who ensures this?'],
+    ['Who sets prices','Chapter 8 · Market','Hidden assumption: a yardstick brings prices with it. Prices still have to be determined jointly by the buying and selling of many people.']];
   const l=document.getElementById('nx4-l'),msg=document.getElementById('nx4-msg');
   l.innerHTML=Q.map((q,i)=>`<button type="button" class="nx-i" style="--i:${i}" data-i="${i}"><span>${q[0]}</span><em>→ ${q[1]}</em></button>`).join('');
   const bs=[...l.children];

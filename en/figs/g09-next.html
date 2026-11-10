@@ -22,10 +22,10 @@
 </style>
 <script>
 (function(){
-  const Q=[['Ordinary people have neither the time nor the expertise','Chapter 10: Delegation','Assumption: every household can decide for itself whether to dig for news or hold passively. Judging that itself takes time and expertise.'],
-    ['People who dig for news and trade for others may not do their duty','Chapter 10: Delegation','Assumption: the trustee acts in the principal\'s interest. The principal can hardly tell whether he is trying, or whether he keeps the gains for himself.'],
-    ['Inside information and deception','Chapter 11: Regulation & custody','Assumption: everyone follows the same rules. Some trade on information others cannot possibly have; some spread false news.'],
-    ['People make their own mistakes','Chapter 12: Defaults','Assumption: people who know passive holding is better will do it. People still chase rises, sell into falls and trade too often.']];
+  const Q=[['Ordinary people have neither the time nor the expertise','Chapter 10 · Delegation','Assumption: every household can decide for itself whether to dig for news or hold passively. Judging that itself takes time and expertise.'],
+    ['People who dig for news and trade for others may not do their duty','Chapter 10 · Delegation','Assumption: the trustee acts in the principal\'s interest. The principal can hardly tell whether he is trying, or whether he keeps the gains for himself.'],
+    ['Inside information and deception','Chapter 11 · Regulation & custody','Assumption: everyone follows the same rules. Some trade on information others cannot possibly have; some spread false news.'],
+    ['People make their own mistakes','Chapter 12 · Defaults','Assumption: people who know passive holding is better will do it. People still chase rises, sell into falls and trade too often.']];
   const l=document.getElementById('nx9-l'),msg=document.getElementById('nx9-msg');
   l.innerHTML=Q.map((q,i)=>`<button type="button" class="nx-i" style="--i:${i}" data-i="${i}"><span>${q[0]}</span><em>→ ${q[1]}</em></button>`).join('');
   const bs=[...l.children];

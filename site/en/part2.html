@@ -257,13 +257,13 @@ html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
 <header class="book"><a class="booklink" href="index.html">Product × Finance × AI: Financial Products in the Age of AI</a><span>Part Two</span><a class="langlink" href="../part2.html" hreflang="zh-CN">中文</a></header>
 
 <div class="partno">Part Two</div><h1>What people want and what they can bear<small>The second set of constraints: the nature of users</small></h1>
-<blockquote><p>Part One showed what the market can offer. In the same market, different people get very different outcomes. What a person actually gets from a financial product depends first on the task to be accomplished; second on how decisions are made, since decision biases eat into the outcome that could have been had; third on what the person can bear, since plans that exceed it are often abandoned midway; and all of this rests on the premise that there is reason to trust the promise. Part Two takes these four factors apart one by one.</p></blockquote>
+<blockquote><p>Part One showed what the market can offer. In the same market, different people get very different outcomes. What a person actually gets from a financial product depends first on the job to be done; second on how decisions are made, since decision biases eat into the outcome that could have been had; third on what the person can bear, since plans that exceed it are often abandoned midway; and all of this rests on the premise that there is reason to trust the promise. Part Two takes these four factors apart one by one.</p></blockquote>
 <h2 id="sec-1">One decomposition</h2>
-<div class="formula"><span>Outcome the user actually gets ＝ outcome the task requires － losses from decision biases</span><span class="bar"></span><span class="den">Constraint: within what the user can bear　·　Premise: the user has reason to trust the promise</span></div>
-<p>The four factors differ in nature. The task sets the goal and is the yardstick for every outcome. Decision biases are losses that can be reduced. The capacity to bear risk is a hard constraint: a plan that exceeds it will not be carried through. Trust is the gate: without it, the task never begins.</p>
+<div class="formula"><span>Outcome the user actually gets ＝ outcome the job requires － losses from decision biases</span><span class="bar"></span><span class="den">Constraint: within what the user can bear　·　Premise: the user has reason to trust the promise</span></div>
+<p>The four factors differ in nature. The job sets the goal and is the yardstick for every outcome. Decision biases are losses that can be reduced. The capacity to bear risk is a hard constraint: a plan that exceeds it will not be carried through. Trust is the gate: without it, the job never begins.</p>
 <figure>
   <div class="card">
-    <div class="figbar"><div><p class="figtitle">What determines the outcome a user actually gets</p><p class="figsub">Start from the outcome the task requires and switch scenarios to see how decision biases, capacity to bear risk, and trust each change the final outcome. The corresponding chapters are below.</p></div><button class="replay" type="button" data-replay="pm2">Replay</button></div>
+    <div class="figbar"><div><p class="figtitle">What determines the outcome a user actually gets</p><p class="figsub">Start from the outcome the job requires and switch scenarios to see how decision biases, capacity to bear risk, and trust each change the final outcome. The corresponding chapters are below.</p></div><button class="replay" type="button" data-replay="pm2">Replay</button></div>
     <div class="seg-btns" role="group" aria-label="Scenario">
       <button type="button" data-p2="ok" aria-pressed="true">All in place</button>
       <button type="button" data-p2="bias" aria-pressed="false">Decision biases</button>
@@ -271,13 +271,13 @@ html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
       <button type="button" data-p2="trust" aria-pressed="false">No trust</button>
     </div>
     <div class="pm2" id="pm2" data-anim>
-      <svg viewBox="0 0 640 200" role="img" aria-label="Decomposition from the outcome the task requires to the actual outcome">
+      <svg viewBox="0 0 640 200" role="img" aria-label="Decomposition from the outcome the job requires to the actual outcome">
         <g id="pm2-g"></g>
       </svg>
       <p class="pm2-msg" id="pm2-msg" aria-live="polite"></p>
     </div>
     <div class="pm2-cols">
-      <div class="pm2-c" style="--c:var(--accent)"><b>Task</b><span>What is to be done, and what counts as done</span><a href="ch15.html"><em>15</em>The tasks users need to accomplish</a></div>
+      <div class="pm2-c" style="--c:var(--accent)"><b>Job</b><span>What is to be done, and what counts as done</span><a href="ch15.html"><em>15</em>The jobs users need done</a></div>
       <div class="pm2-c" style="--c:var(--warm)"><b>Decisions</b><span>How decisions are made, and where the biases lie</span><a href="ch16.html"><em>16</em>How users make decisions</a></div>
       <div class="pm2-c" style="--c:var(--blue)"><b>Capacity to bear</b><span>How large a loss and how much volatility can be borne</span><a href="ch17.html"><em>17</em>What users can bear</a></div>
       <div class="pm2-c" style="--c:var(--gold)"><b>Trust</b><span>How beliefs update with evidence</span><a href="ch18.html"><em>18</em>How users judge and trust</a></div>
@@ -303,13 +303,13 @@ html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
 <script>
 (function(){
   const S={
-    ok:{bias:0,cap:false,trust:true,m:'The task is clear, decisions are largely free of bias, the plan is within what the user can bear, and the user trusts the promise: the actual outcome comes close to what the task requires.'},
+    ok:{bias:0,cap:false,trust:true,m:'The job is clear, decisions are largely free of bias, the plan is within what the user can bear, and the user trusts the promise: the actual outcome comes close to what the job requires.'},
     bias:{bias:28,cap:false,trust:true,m:'Decision biases such as chasing rallies and selling in slumps, trading too often and concentrating too heavily eat up part of the outcome that could have been had. This loss can be reduced by design.'},
     cap:{bias:0,cap:true,trust:true,m:'The plan demands bearing a drawdown beyond the user\'s capacity; the user abandons the plan during the decline, and the outcome stops halfway. Capacity to bear risk is a hard constraint.'},
-    trust:{bias:0,cap:false,trust:false,m:'The user does not believe the promise, the task never begins, and the outcome is zero. Trust is a gate, not a term that can be deducted bit by bit.'}};
+    trust:{bias:0,cap:false,trust:false,m:'The user does not believe the promise, the job never begins, and the outcome is zero. Trust is a gate, not a term that can be deducted bit by bit.'}};
   const X=[50,200,350,500],W=90,YB=170,YT=24,h=v=>v/112*(YB-YT);
   const g=document.getElementById('pm2-g');
-  const lab=['Task requires','Decision biases','Within capacity','Actual outcome'];
+  const lab=['Job requires','Decision biases','Within capacity','Actual outcome'];
   let base=`<line x1="30" y1="${YB}" x2="620" y2="${YB}" class="s-faint"/>`;
   lab.forEach((l,i)=>base+=`<text x="${X[i]+W/2}" y="${YB+18}" text-anchor="middle" font-size="12" class="t-ink">${l}</text>`);
   base+=`<rect id="b0" class="pm2-b" x="${X[0]}" width="${W}" rx="4" fill="var(--accent)"/>`+
@@ -375,7 +375,7 @@ html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
 <script>
 (function(){
   const R=[
-    ['','Task','15',{c:'Users want to get something done; financial tasks arise from arranging income and spending over a lifetime; outcomes are affected by luck, so the standard of completion rests on the process.',p:'Ask about the task before recommending a product; write down the goal, constraints and method of checking in advance; deliver completely, and account for every cycle of an ongoing task.',a:'AI is well suited to clarifying the task, keeping a record of the process, and checking and reporting cycle by cycle in ongoing tasks.'}],
+    ['','Job','15',{c:'Users want to get something done; financial jobs arise from arranging income and spending over a lifetime; outcomes are affected by luck, so the standard of completion rests on the process.',p:'Ask about the job before recommending a product; write down the goal, constraints and method of checking in advance; deliver completely, and account for every cycle of an ongoing job.',a:'AI is well suited to clarifying the job, keeping a record of the process, and checking and reporting cycle by cycle in ongoing jobs.'}],
     ['－','Decision biases','16',{c:'Attention is limited; gains and losses are judged against a reference point, and a loss weighs about twice as much as an equal gain; biases have a direction and can be changed by presentation and defaults.',p:'Put the information relevant to the goal first; match the frequency of evaluation to the horizon; set defaults on the user\'s side.',a:'AI can supply goal-relevant information at the moment the user decides, but it can equally be used to induce trading, so its objectives must be constrained.'}],
     ['Constraint','Capacity to bear','17',{c:'Risk tolerance has three faces, capacity, willingness and behaviour, and a plan must follow the lowest; willingness changes, so a profile can only be a statistical description.',p:'Learn each of the three faces separately, follow the lowest and review it regularly; describe profiles only in statistical terms.',a:'AI can keep watching the behavioural record and talk to users before a decline, but it cannot assert how much an individual can bear.'}],
     ['Premise','Trust','18',{c:'Trust is the belief that a trustee will not act in its own interest when unobserved, and it updates with evidence by Bayes\' rule; return evidence has very low diagnostic power and serious failures very high, so trust is built slowly and lost quickly; whether to hand over also depends on whether the stakes cross a threshold.',p:'Provide process evidence with high diagnostic power; avoid integrity failures, and state and remedy competence failures honestly; do not lift exposure limits as trust grows; aim for trust proportionate to trustworthiness.',a:'An AI agent is a new trustee with a weak prior, and changes in model version partly invalidate the old record, so trust has to be rebuilt through diagnosable records.'}]

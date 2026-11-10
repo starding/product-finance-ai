@@ -22,10 +22,10 @@
 </style>
 <script>
 (function(){
-  const Q=[['No grain in months of poor harvest or illness, and storage spoils','Chapter 2: Lending','Hidden assumption: there is only one person on the island. As soon as there is someone else who runs short at a different time, the two can lend to each other.'],
-    ['No harvest in old age, so saving must span decades','Chapter 4: Money','Hidden assumption: nothing can be kept without loss for decades. Could one lend to someone younger? And whom does the youngest generation lend to?'],
-    ['Harvests may be good or bad','Chapter 5: Insurance','Hidden assumption: the harvest is the same every year. In the real world, a bad year can wipe out savings.'],
-    ['People do not necessarily act according to plan','Chapter 12: Defaults','Hidden assumption: he always follows the best plan. Eating too much in autumn is common.']];
+  const Q=[['No grain in months of poor harvest or illness, and storage spoils','Chapter 2 · Lending','Hidden assumption: there is only one person on the island. As soon as there is someone else who runs short at a different time, the two can lend to each other.'],
+    ['No harvest in old age, so saving must span decades','Chapter 4 · Money','Hidden assumption: nothing can be kept without loss for decades. Could one lend to someone younger? And whom does the youngest generation lend to?'],
+    ['Harvests may be good or bad','Chapter 5 · Insurance','Hidden assumption: the harvest is the same every year. In the real world, a bad year can wipe out savings.'],
+    ['People do not necessarily act according to plan','Chapter 12 · Defaults','Hidden assumption: he always follows the best plan. Eating too much in autumn is common.']];
   const l=document.getElementById('nx1-l'),msg=document.getElementById('nx1-msg');
   l.innerHTML=Q.map((q,i)=>`<button type="button" class="nx-i" style="--i:${i}" data-i="${i}"><span>${q[0]}</span><em>→ ${q[1]}</em></button>`).join('');
   const bs=[...l.children];

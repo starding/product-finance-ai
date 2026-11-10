@@ -254,7 +254,7 @@ html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
 <button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="Open contents" title="Contents"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
 <div class="scrim" data-close></div>
 <div class="wrap">
-<header class="book"><a class="booklink" href="index.html">Product × Finance × AI: Financial Products in the Age of AI</a><span>Part Three  AI: how much an agent can do for people</span><a class="langlink" href="../ch23.html" hreflang="zh-CN">中文</a></header>
+<header class="book"><a class="booklink" href="index.html">Product × Finance × AI: Financial Products in the Age of AI</a><span>Part Three  AI: how much an agent can do on people's behalf</span><a class="langlink" href="../ch23.html" hreflang="zh-CN">中文</a></header>
 
 <div class="chapno">Chapter 23</div><h1>The special constraints of finance<small>Markets respond, and mistakes are hard to undo</small></h1>
 <blockquote><p>In most fields, the better an agent works, the more its principal gains. Finance differs in four ways. First, the baseline for comparison should be the actual behaviour of individual investors, not the standard workflow of professionals; many people do no research at all, so an agent changes the depth of their research rather than the time it takes. Second, the market responds: the more people use the same kind of analysis, the less that analysis earns, and any edge in prediction shrinks as it spreads. Third, trading errors are hard to undo; a single mistake can cause enormous losses within minutes. Fourth, many agents use similar methods to reach similar judgments, and may act in the same direction at the same moment. The lasting value of a financial agent therefore lies not in prediction but in lowering costs, maintaining discipline, reducing behavioural bias, and making possible what people could not otherwise do.</p></blockquote>
@@ -321,7 +321,7 @@ html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
     bl.dataset.bl=k; btns.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.bl===k)));
     R.forEach((r,i)=>{
       const rg=k==='norm'?r.norm:r.act;
-      place(document.getElementById('bl-b'+i),document.getElementById('bl-be'+i),rg,k==='norm'?'Standard workflow':(rg?'Actual':'Not done before'));
+      place(document.getElementById('bl-b'+i),document.getElementById('bl-be'+i),rg,k==='norm'?'Standard':(rg?'Actual':'Not done before'));
       place(document.getElementById('bl-d'+i),document.getElementById('bl-de'+i),r.del,'After delegation');
       document.getElementById('bl-o'+i).innerHTML=r.out[k];
     });
