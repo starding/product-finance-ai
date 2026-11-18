@@ -205,6 +205,7 @@ header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
 html[lang=en] body{line-height:1.7}
 html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
 </style>
+<script>(()=>{if(navigator.webdriver)return;const S='https://xinghua-stats.xinghua-space.workers.dev',P=location.pathname;const got=location.hostname==='xinghua.space'?fetch(S+'/c',{method:'POST',keepalive:true,body:JSON.stringify({p:P,r:document.referrer,w:innerWidth,l:navigator.language})}):fetch(S+'/v?p='+encodeURIComponent(P));const ready=new Promise(r=>document.readyState==='loading'?addEventListener('DOMContentLoaded',r):r());Promise.all([got.then(r=>r.ok?r.json():null),ready]).then(([d])=>{const n=d&&d.page.views;if(!n)return;for(const e of document.querySelectorAll('[data-stat="page-views"]')){e.textContent=n.toLocaleString('en');e.closest('[hidden]')?.removeAttribute('hidden')}}).catch(()=>{})})()</script>
 </head>
 <body data-page="ch28">
 <script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
@@ -254,7 +255,7 @@ html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
 <button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="展开目录" title="目录"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
 <div class="scrim" data-close></div>
 <div class="wrap">
-<header class="book"><a class="booklink" href="index.html">产品×金融×AI：AI 时代的金融产品</a><span>第四部分 · 实现层　如何兑现</span><a class="langlink" href="en/ch28.html" hreflang="en">English</a></header>
+<header class="book"><a class="booklink" href="index.html">产品×金融×AI：AI 时代的金融产品</a><span>第四部分 · 实现层　如何兑现<span class="views" hidden> · <span data-stat="page-views"></span> 次阅读</span></span><a class="langlink" href="en/ch28.html" hreflang="en">English</a></header>
 
 <div class="chapno">第 28 章</div><h1>能力装配与过程可见<small>用什么完成任务，怎样让过程可被核查</small></h1>
 <blockquote><p>实现层回答两个问题：用什么能力完成任务，以及怎样让过程可以被看到、被核查。能力分两类：理解、计划、检索、执行程序、定时运行与通知这些通用能力，决定事情能不能做成；行情与基本面数据、组合计算、适当性检查、交易接口与合规表述检查这些金融专有能力，决定事情能不能做对。能力的组织方式取决于任务：路径不确定、依赖个人情况的任务由代理现场装配，路径固定、服务许多人、要求质量一致的任务用固定流程。持续的关系不能只存在于一次次会话里，委托书、组合与履约记录要存为长期的对象，并按时点记录当时知道什么；用户要能一眼看到什么在进行、什么在等待自己，并能回放过去的每一次决定。</p></blockquote>

@@ -205,6 +205,7 @@ header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
 html[lang=en] body{line-height:1.7}
 html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
 </style>
+<script>(()=>{if(navigator.webdriver)return;const S='https://xinghua-stats.xinghua-space.workers.dev',P=location.pathname;const got=location.hostname==='xinghua.space'?fetch(S+'/c',{method:'POST',keepalive:true,body:JSON.stringify({p:P,r:document.referrer,w:innerWidth,l:navigator.language})}):fetch(S+'/v?p='+encodeURIComponent(P));const ready=new Promise(r=>document.readyState==='loading'?addEventListener('DOMContentLoaded',r):r());Promise.all([got.then(r=>r.ok?r.json():null),ready]).then(([d])=>{const n=d&&d.page.views;if(!n)return;for(const e of document.querySelectorAll('[data-stat="page-views"]')){e.textContent=n.toLocaleString('en');e.closest('[hidden]')?.removeAttribute('hidden')}}).catch(()=>{})})()</script>
 </head>
 <body data-page="ch18">
 <script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
@@ -254,7 +255,7 @@ html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
 <button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="Open contents" title="Contents"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
 <div class="scrim" data-close></div>
 <div class="wrap">
-<header class="book"><a class="booklink" href="index.html">Product × Finance × AI: Financial Products in the Age of AI</a><span>Part Two  Users: what people want and what they can bear</span><a class="langlink" href="../ch18.html" hreflang="zh-CN">中文</a></header>
+<header class="book"><a class="booklink" href="index.html">Product × Finance × AI: Financial Products in the Age of AI</a><span>Part Two  Users: what people want and what they can bear<span class="views" hidden> · <span data-stat="page-views"></span> views</span></span><a class="langlink" href="../ch18.html" hreflang="zh-CN">中文</a></header>
 
 <div class="chapno">Chapter 18</div><h1>How users judge and trust<small>Trust is a belief that updates with evidence</small></h1>
 <blockquote><p>For A to trust B is for A to believe that B will act in A's interest even when A cannot monitor B. This is a belief, and it updates with evidence. Before there is any record, the belief comes from a prior: institutional safeguards, the brand and what others say. After that, every act of fulfilment is a piece of evidence. How far a piece of evidence moves the belief depends on its diagnostic power, that is, on how different the probabilities are of seeing it from a reliable trustee and from an unreliable one. The difficulty in finance is that the evidence people use most often, short-term returns, has almost no diagnostic power. What does have diagnostic power is the process record and serious failures, which also explains why trust is built slowly and lost quickly. Beyond being a belief, trust is also a decision: the larger the stakes, the stronger the belief required. Good trust is trust that matches how trustworthy the other party actually is.</p></blockquote>

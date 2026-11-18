@@ -205,6 +205,7 @@ header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
 html[lang=en] body{line-height:1.7}
 html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
 </style>
+<script>(()=>{if(navigator.webdriver)return;const S='https://xinghua-stats.xinghua-space.workers.dev',P=location.pathname;const got=location.hostname==='xinghua.space'?fetch(S+'/c',{method:'POST',keepalive:true,body:JSON.stringify({p:P,r:document.referrer,w:innerWidth,l:navigator.language})}):fetch(S+'/v?p='+encodeURIComponent(P));const ready=new Promise(r=>document.readyState==='loading'?addEventListener('DOMContentLoaded',r):r());Promise.all([got.then(r=>r.ok?r.json():null),ready]).then(([d])=>{const n=d&&d.page.views;if(!n)return;for(const e of document.querySelectorAll('[data-stat="page-views"]')){e.textContent=n.toLocaleString('en');e.closest('[hidden]')?.removeAttribute('hidden')}}).catch(()=>{})})()</script>
 </head>
 <body data-page="ch25">
 <script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
@@ -254,7 +255,7 @@ html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
 <button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="Open contents" title="Contents"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
 <div class="scrim" data-close></div>
 <div class="wrap">
-<header class="book"><a class="booklink" href="index.html">Product × Finance × AI: Financial Products in the Age of AI</a><span>Part Four · Contract layer  On what terms</span><a class="langlink" href="../ch25.html" hreflang="zh-CN">中文</a></header>
+<header class="book"><a class="booklink" href="index.html">Product × Finance × AI: Financial Products in the Age of AI</a><span>Part Four · Contract layer  On what terms<span class="views" hidden> · <span data-stat="page-views"></span> views</span></span><a class="langlink" href="../ch25.html" hreflang="zh-CN">中文</a></header>
 
 <div class="chapno">Chapter 25</div><h1>Mandate parameters<small>The goals and constraints handed over</small></h1>
 <blockquote><p>"Look after this money for me" is not a mandate that can be executed: it can be read as dozens of entirely different courses of action. What is handed to an agent should be a mandate that states at least four things: what the goal is and how it is measured; what must not be done; what to do in situations the mandate does not cover; and when the mandate needs to be reviewed. The goal should be measurable, but measurable goals get gamed: if the only test is whether the benchmark is beaten, an agent may quietly take on risks no one can see. Nor can a mandate ever be complete; situations it does not cover need a default rule: act conservatively, and stop to ask.</p></blockquote>

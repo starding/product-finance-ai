@@ -205,6 +205,7 @@ header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
 html[lang=en] body{line-height:1.7}
 html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
 </style>
+<script>(()=>{if(navigator.webdriver)return;const S='https://xinghua-stats.xinghua-space.workers.dev',P=location.pathname;const got=location.hostname==='xinghua.space'?fetch(S+'/c',{method:'POST',keepalive:true,body:JSON.stringify({p:P,r:document.referrer,w:innerWidth,l:navigator.language})}):fetch(S+'/v?p='+encodeURIComponent(P));const ready=new Promise(r=>document.readyState==='loading'?addEventListener('DOMContentLoaded',r):r());Promise.all([got.then(r=>r.ok?r.json():null),ready]).then(([d])=>{const n=d&&d.page.views;if(!n)return;for(const e of document.querySelectorAll('[data-stat="page-views"]')){e.textContent=n.toLocaleString('en');e.closest('[hidden]')?.removeAttribute('hidden')}}).catch(()=>{})})()</script>
 </head>
 <body data-page="ch24">
 <script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
@@ -254,7 +255,7 @@ html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
 <button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="展开目录" title="目录"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
 <div class="scrim" data-close></div>
 <div class="wrap">
-<header class="book"><a class="booklink" href="index.html">产品×金融×AI：AI 时代的金融产品</a><span>第四部分 · 价值层　承诺什么</span><a class="langlink" href="en/ch24.html" hreflang="en">English</a></header>
+<header class="book"><a class="booklink" href="index.html">产品×金融×AI：AI 时代的金融产品</a><span>第四部分 · 价值层　承诺什么<span class="views" hidden> · <span data-stat="page-views"></span> 次阅读</span></span><a class="langlink" href="en/ch24.html" hreflang="en">English</a></header>
 
 <div class="chapno">第 24 章</div><h1>承诺什么<small>可兑现、可核验的价值</small></h1>
 <blockquote><p>一个金融产品承诺什么，决定了它会被怎样评价，也决定了它会被怎样设计。好的承诺满足三个条件：市场能够提供，产品自己能够兑现，用户能够核验。超额收益与价格方向不满足第一条；短期收益不满足第三条，因为它主要由运气决定。可以承诺的，是成本、执行质量、对约定的遵守、持续任务的覆盖，以及结果与过程的可核查。承诺还要按净价值来定：把用户的投入与承担的风险算进去，并按用户要完成的任务分别写出。最容易损害信任的，是用精选的回测与排名制造无法兑现的期望。</p></blockquote>

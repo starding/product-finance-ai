@@ -205,6 +205,7 @@ header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
 html[lang=en] body{line-height:1.7}
 html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
 </style>
+<script>(()=>{if(navigator.webdriver)return;const S='https://xinghua-stats.xinghua-space.workers.dev',P=location.pathname;const got=location.hostname==='xinghua.space'?fetch(S+'/c',{method:'POST',keepalive:true,body:JSON.stringify({p:P,r:document.referrer,w:innerWidth,l:navigator.language})}):fetch(S+'/v?p='+encodeURIComponent(P));const ready=new Promise(r=>document.readyState==='loading'?addEventListener('DOMContentLoaded',r):r());Promise.all([got.then(r=>r.ok?r.json():null),ready]).then(([d])=>{const n=d&&d.page.views;if(!n)return;for(const e of document.querySelectorAll('[data-stat="page-views"]')){e.textContent=n.toLocaleString('en');e.closest('[hidden]')?.removeAttribute('hidden')}}).catch(()=>{})})()</script>
 </head>
 <body data-page="ch01">
 <script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
@@ -254,7 +255,7 @@ html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
 <button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="展开目录" title="目录"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
 <div class="scrim" data-close></div>
 <div class="wrap">
-<header class="book"><a class="booklink" href="index.html">产品×金融×AI：AI 时代的金融产品</a><span>第一部分 · 引子</span><a class="langlink" href="en/ch01.html" hreflang="en">English</a></header>
+<header class="book"><a class="booklink" href="index.html">产品×金融×AI：AI 时代的金融产品</a><span>第一部分 · 引子<span class="views" hidden> · <span data-stat="page-views"></span> 次阅读</span></span><a class="langlink" href="en/ch01.html" hreflang="en">English</a></header>
 
 <div class="chapno">第 1 章</div><h1>金融产品卖的是什么<small>时间、风险与信任</small></h1>
 <blockquote><p>金融产品交付的不是商品，而是承诺：用今天的钱，换取未来在某些情况下得到的钱。任何承诺都由三个要素构成：时间、风险与信任。投资者从这份承诺中实际拿到的回报，可以拆成五项：时间补偿、风险补偿、信息优势、交易成本与运气；前提是承诺能够兑现。金融产品设计的核心，是把承诺说清楚，让它与用户的需要匹配，并让它可信。</p></blockquote>

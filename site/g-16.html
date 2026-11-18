@@ -205,6 +205,7 @@ header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
 html[lang=en] body{line-height:1.7}
 html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
 </style>
+<script>(()=>{if(navigator.webdriver)return;const S='https://xinghua-stats.xinghua-space.workers.dev',P=location.pathname;const got=location.hostname==='xinghua.space'?fetch(S+'/c',{method:'POST',keepalive:true,body:JSON.stringify({p:P,r:document.referrer,w:innerWidth,l:navigator.language})}):fetch(S+'/v?p='+encodeURIComponent(P));const ready=new Promise(r=>document.readyState==='loading'?addEventListener('DOMContentLoaded',r):r());Promise.all([got.then(r=>r.ok?r.json():null),ready]).then(([d])=>{const n=d&&d.page.views;if(!n)return;for(const e of document.querySelectorAll('[data-stat="page-views"]')){e.textContent=n.toLocaleString('en');e.closest('[hidden]')?.removeAttribute('hidden')}}).catch(()=>{})})()</script>
 </head>
 <body data-page="g-16">
 <script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
@@ -246,7 +247,7 @@ html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
 <button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="展开目录" title="目录"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
 <div class="scrim" data-close></div>
 <div class="wrap">
-<header class="book"><a class="booklink" href="index.html">产品×金融×AI：AI 时代的金融产品</a><span>第二部分　改变一个参数</span><a class="langlink" href="en/g-16.html" hreflang="en">English</a></header>
+<header class="book"><a class="booklink" href="index.html">产品×金融×AI：AI 时代的金融产品</a><span>第二部分　改变一个参数<span class="views" hidden> · <span data-stat="page-views"></span> 次阅读</span></span><a class="langlink" href="en/g-16.html" hreflang="en">English</a></header>
 
 <div class="chapno">第 16 章</div><h1>如果人人都有分析师<small>信息优势的再次消耗与新的不对称</small></h1>
 <blockquote><p>过去，只有少数人家花得起时间去打听消息、分析船队，知情者因此能从不知情者那里赚到一点好处。现在每户都有书记员，它几分钟就能读完所有的报告。打听的人多了，价格反映得更快、更充分，读报告的好处随之摊薄，直到几乎为零。可是竞赛并没有结束：抢先一刻知道的人仍能赚到别人的钱，人人便竞相抢先，耗费的资源却不创造任何价值。信息多到读不完，稀缺的东西变成了注意力；写报告的一方也学会了为书记员写作。新的不对称，转移到了不公开的数据上。</p></blockquote>

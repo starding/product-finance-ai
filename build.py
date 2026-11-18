@@ -24,7 +24,7 @@ UI_EN = {
     "在学科中的位置": "Standing in the field", "回应的约束": "Constraint it answers", "成立的前提": "Premises", "提出者": "Proposed by",
     "留下的问题": "Open question", "重跑之后": "After the rerun", "学科": "Discipline", "类型": "Type",
     "时间补偿": "Time compensation", "风险补偿": "Risk compensation", "信息优势": "Information advantage", "交易成本": "Trading costs", "运气": "Luck",
-    "交互式网页书": "An interactive web book", "English": "中文",
+    "交互式网页书": "An interactive web book", "次阅读": "views", "English": "中文",
 }
 def ui(t):
     return UI_EN.get(t, t) if LANG == "en" else t
@@ -160,7 +160,9 @@ def term_strip(term):
     return f'<div class="eqstrip" aria-label="{ui("本章在回报等式中的位置")}"><span class="lbl">{ui("实际回报 ＝")}</span>' + "".join(items) + f'<span class="keep">{keep}</span></div>'
 
 
-
+# 访问统计：与博客 xinghua.space 同一个自建统计服务（不用 cookie、不存 IP）。正式域名上每打开一页计一次并取回这一页的累计数，
+# 本地预览只读不计；页头显示「N 次阅读」，取不到就不显示。
+STATS = """<script>(()=>{if(navigator.webdriver)return;const S='https://xinghua-stats.xinghua-space.workers.dev',P=location.pathname;const got=location.hostname==='xinghua.space'?fetch(S+'/c',{method:'POST',keepalive:true,body:JSON.stringify({p:P,r:document.referrer,w:innerWidth,l:navigator.language})}):fetch(S+'/v?p='+encodeURIComponent(P));const ready=new Promise(r=>document.readyState==='loading'?addEventListener('DOMContentLoaded',r):r());Promise.all([got.then(r=>r.ok?r.json():null),ready]).then(([d])=>{const n=d&&d.page.views;if(!n)return;for(const e of document.querySelectorAll('[data-stat="page-views"]')){e.textContent=n.toLocaleString('en');e.closest('[hidden]')?.removeAttribute('hidden')}}).catch(()=>{})})()</script>"""
 
 HEAD = """<!doctype html>
 <html lang="{lang}">
@@ -174,6 +176,7 @@ HEAD = """<!doctype html>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 {css}</style>
+{stats}
 </head>
 <body data-page="{page}">
 <script>try{{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}}catch(e){{}}</script>
@@ -181,7 +184,7 @@ HEAD = """<!doctype html>
 <button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="{l_open}" title="{l_toc}"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
 <div class="scrim" data-close></div>
 {pre}<div class="wrap">
-<header class="book"><a class="booklink" href="{home}">{book}</a><span>{part}</span><a class="langlink" href="{other}" hreflang="{olang}">{olabel}</a></header>
+<header class="book"><a class="booklink" href="{home}">{book}</a><span>{part}<span class="views" hidden> · <span data-stat="page-views"></span> {l_views}</span></span><a class="langlink" href="{other}" hreflang="{olang}">{olabel}</a></header>
 """
 
 TAIL = """</div>
@@ -339,7 +342,7 @@ def nav(current):
 def langbits(f):
     """HEAD 中与语言有关的字段：html lang、目录按钮文字、切换到另一语言同名页面的链接"""
     other = f"../{f}.html" if LANG == "en" else f"en/{f}.html"
-    return dict(lang="en" if LANG == "en" else "zh-CN", l_open=ui("展开目录"), l_toc=ui("目录"), other=other,
+    return dict(lang="en" if LANG == "en" else "zh-CN", l_open=ui("展开目录"), l_toc=ui("目录"), l_views=ui("次阅读"), stats=STATS, other=other,
                 olang="zh-CN" if LANG == "en" else "en", olabel="中文" if LANG == "en" else "English")
 
 def build_page(path):

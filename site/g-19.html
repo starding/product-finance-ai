@@ -205,6 +205,7 @@ header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
 html[lang=en] body{line-height:1.7}
 html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
 </style>
+<script>(()=>{if(navigator.webdriver)return;const S='https://xinghua-stats.xinghua-space.workers.dev',P=location.pathname;const got=location.hostname==='xinghua.space'?fetch(S+'/c',{method:'POST',keepalive:true,body:JSON.stringify({p:P,r:document.referrer,w:innerWidth,l:navigator.language})}):fetch(S+'/v?p='+encodeURIComponent(P));const ready=new Promise(r=>document.readyState==='loading'?addEventListener('DOMContentLoaded',r):r());Promise.all([got.then(r=>r.ok?r.json():null),ready]).then(([d])=>{const n=d&&d.page.views;if(!n)return;for(const e of document.querySelectorAll('[data-stat="page-views"]')){e.textContent=n.toLocaleString('en');e.closest('[hidden]')?.removeAttribute('hidden')}}).catch(()=>{})})()</script>
 </head>
 <body data-page="g-19">
 <script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
@@ -246,7 +247,7 @@ html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
 <button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="展开目录" title="目录"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
 <div class="scrim" data-close></div>
 <div class="wrap">
-<header class="book"><a class="booklink" href="index.html">产品×金融×AI：AI 时代的金融产品</a><span>第二部分　改变一个参数</span><a class="langlink" href="en/g-19.html" hreflang="en">English</a></header>
+<header class="book"><a class="booklink" href="index.html">产品×金融×AI：AI 时代的金融产品</a><span>第二部分　改变一个参数<span class="views" hidden> · <span data-stat="page-views"></span> 次阅读</span></span><a class="langlink" href="en/g-19.html" hreflang="en">English</a></header>
 
 <div class="chapno">第 19 章</div><h1>没有改变的东西<small>时间、风险与不可逆</small></h1>
 <blockquote><p>书记员让研究、核对与执行几乎免费，让每户都请得起专属的代理，还能在恐慌时请人等一等。可是有几件事，它一点也改变不了。粮食仍要一年一收，存够养老的粮食仍要几十年；分散能去掉的只是一户一家的坏运气，全村一起遇到的旱灾仍会到来，承担它的人才有补偿；有些损失一旦发生，就再也挽回不了。凡是在重新推演之后仍然存在的约束，就不是这项技术能够解决的，而它们恰恰是金融最初要处理的问题。</p></blockquote>

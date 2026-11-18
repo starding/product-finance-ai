@@ -205,6 +205,7 @@ header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
 html[lang=en] body{line-height:1.7}
 html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
 </style>
+<script>(()=>{if(navigator.webdriver)return;const S='https://xinghua-stats.xinghua-space.workers.dev',P=location.pathname;const got=location.hostname==='xinghua.space'?fetch(S+'/c',{method:'POST',keepalive:true,body:JSON.stringify({p:P,r:document.referrer,w:innerWidth,l:navigator.language})}):fetch(S+'/v?p='+encodeURIComponent(P));const ready=new Promise(r=>document.readyState==='loading'?addEventListener('DOMContentLoaded',r):r());Promise.all([got.then(r=>r.ok?r.json():null),ready]).then(([d])=>{const n=d&&d.page.views;if(!n)return;for(const e of document.querySelectorAll('[data-stat="page-views"]')){e.textContent=n.toLocaleString('en');e.closest('[hidden]')?.removeAttribute('hidden')}}).catch(()=>{})})()</script>
 </head>
 <body data-page="ch30">
 <script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
@@ -254,7 +255,7 @@ html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
 <button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="Open contents" title="Contents"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
 <div class="scrim" data-close></div>
 <div class="wrap">
-<header class="book"><a class="booklink" href="index.html">Product × Finance × AI: Financial Products in the Age of AI</a><span>Part Four · Trust  The long-term relationship</span><a class="langlink" href="../ch30.html" hreflang="zh-CN">中文</a></header>
+<header class="book"><a class="booklink" href="index.html">Product × Finance × AI: Financial Products in the Age of AI</a><span>Part Four · Trust  The long-term relationship<span class="views" hidden> · <span data-stat="page-views"></span> views</span></span><a class="langlink" href="../ch30.html" hreflang="zh-CN">中文</a></header>
 
 <div class="chapno">Chapter 30</div><h1>How trust is built<small>Working on every term of belief updating</small></h1>
 <blockquote><p>A user's trust is a belief that is updated by evidence. Whether the user hands over a task depends on whether that belief crosses a threshold proportionate to the stakes. A product cannot change the belief directly, but it can be designed around each term of the updating. The prior: borrow institutions such as custody, regulation and third-party audit, and begin with low-stakes tasks so that the first step is easy to take. The evidence: make sure the highly diagnostic process records are actually seen by the user rather than hidden in the back end. The likelihood ratio: have evidence verified by third parties, so that an unreliable party finds it hard to fake. Mistakes: disclose them before the user discovers them. The threshold: make leaving and withdrawing easy, and the threshold for starting falls. The aim of these designs is not to make users trust more, but to make their trust match how trustworthy the product actually is.</p></blockquote>

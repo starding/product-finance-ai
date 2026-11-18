@@ -205,6 +205,7 @@ header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
 html[lang=en] body{line-height:1.7}
 html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
 </style>
+<script>(()=>{if(navigator.webdriver)return;const S='https://xinghua-stats.xinghua-space.workers.dev',P=location.pathname;const got=location.hostname==='xinghua.space'?fetch(S+'/c',{method:'POST',keepalive:true,body:JSON.stringify({p:P,r:document.referrer,w:innerWidth,l:navigator.language})}):fetch(S+'/v?p='+encodeURIComponent(P));const ready=new Promise(r=>document.readyState==='loading'?addEventListener('DOMContentLoaded',r):r());Promise.all([got.then(r=>r.ok?r.json():null),ready]).then(([d])=>{const n=d&&d.page.views;if(!n)return;for(const e of document.querySelectorAll('[data-stat="page-views"]')){e.textContent=n.toLocaleString('en');e.closest('[hidden]')?.removeAttribute('hidden')}}).catch(()=>{})})()</script>
 </head>
 <body data-page="ch29">
 <script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
@@ -254,7 +255,7 @@ html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
 <button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="展开目录" title="目录"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
 <div class="scrim" data-close></div>
 <div class="wrap">
-<header class="book"><a class="booklink" href="index.html">产品×金融×AI：AI 时代的金融产品</a><span>第四部分 · 实现层　如何兑现</span><a class="langlink" href="en/ch29.html" hreflang="en">English</a></header>
+<header class="book"><a class="booklink" href="index.html">产品×金融×AI：AI 时代的金融产品</a><span>第四部分 · 实现层　如何兑现<span class="views" hidden> · <span data-stat="page-views"></span> 次阅读</span></span><a class="langlink" href="en/ch29.html" hreflang="en">English</a></header>
 
 <div class="chapno">第 29 章</div><h1>保障强度<small>按后果与验证难度分配保障</small></h1>
 <blockquote><p>保障是让承诺得以兑现的工程手段：测试、评测、审核、监控与发布控制。保障不是越多越好，它的强度应当随两件事而定：出了错后果有多严重，结果有多难验证。一份行情摘要与一笔自动下单，需要的保障相差几个量级。AI 系统给保障带来两个新问题：同样的输入可能得到不同的输出，所以不能靠一次测试判断对错，而要用足够大的评测集作统计验证；它在常见情形上表现很好，却可能在少见而关键的情形上出错，所以评测必须专门覆盖这些情形。上线之后，市场与用户都会变化，保障还要延续为持续的监控与分级发布。最后，保障本身有成本，过度保障会拖慢迭代，强度要与风险相称。</p></blockquote>

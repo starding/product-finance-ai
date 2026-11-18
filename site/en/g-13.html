@@ -205,6 +205,7 @@ header.book .langlink:hover{color:var(--ink);border-color:var(--ink)}
 html[lang=en] body{line-height:1.7}
 html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
 </style>
+<script>(()=>{if(navigator.webdriver)return;const S='https://xinghua-stats.xinghua-space.workers.dev',P=location.pathname;const got=location.hostname==='xinghua.space'?fetch(S+'/c',{method:'POST',keepalive:true,body:JSON.stringify({p:P,r:document.referrer,w:innerWidth,l:navigator.language})}):fetch(S+'/v?p='+encodeURIComponent(P));const ready=new Promise(r=>document.readyState==='loading'?addEventListener('DOMContentLoaded',r):r());Promise.all([got.then(r=>r.ok?r.json():null),ready]).then(([d])=>{const n=d&&d.page.views;if(!n)return;for(const e of document.querySelectorAll('[data-stat="page-views"]')){e.textContent=n.toLocaleString('en');e.closest('[hidden]')?.removeAttribute('hidden')}}).catch(()=>{})})()</script>
 </head>
 <body data-page="g-13">
 <script>try{if(document.body.dataset.page==='index'||localStorage.getItem('book-side')==='c')document.body.classList.add('side-collapsed');}catch(e){}</script>
@@ -246,7 +247,7 @@ html[lang=en] .chapno,html[lang=en] .partno{letter-spacing:.04em}
 <button class="sidetoggle" type="button" aria-controls="sidenav" aria-expanded="false" aria-label="Open contents" title="Contents"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2.5"/><line x1="7.5" y1="3.5" x2="7.5" y2="16.5"/><path class="chev" d="M11 7.5 L13.5 10 L11 12.5"/></svg></button>
 <div class="scrim" data-close></div>
 <div class="wrap">
-<header class="book"><a class="booklink" href="index.html">Product × Finance × AI: Financial Products in the Age of AI</a><span>Part Two  Changing one parameter</span><a class="langlink" href="../g-13.html" hreflang="zh-CN">中文</a></header>
+<header class="book"><a class="booklink" href="index.html">Product × Finance × AI: Financial Products in the Age of AI</a><span>Part Two  Changing one parameter<span class="views" hidden> · <span data-stat="page-views"></span> views</span></span><a class="langlink" href="../g-13.html" hreflang="zh-CN">中文</a></header>
 
 <div class="chapno">Chapter 13</div><h1>A new parameter: the cost of cognitive labour collapses<small>Which part of the cost falls</small></h1>
 <blockquote><p>A group of scribes has arrived on the island. They can read every fleet's report, work out every household's accounts and draft every letter; they ask almost nothing in return and never tire. The price of having someone read, calculate and write on your behalf has suddenly fallen to a few hundredths of what it was, or less. But the cost of a delegation is not made up only of this kind of labour. Someone still has to check whether the scribe got it right, and someone has to bear responsibility when things go wrong, while the scribes themselves have neither property to pledge nor a name built up over years. Their abilities are also uneven: some tasks that look hard they do very well, while some that look easy they get wrong. Once the cost of cognitive labour collapses, which part of the cost has actually fallen?</p></blockquote>
